@@ -1,0 +1,10 @@
+version: "3.8"
+
+services:
+  backend:
+    image: ${DOCKERHUB_USERNAME}/gdsc-server:${DOCKERHUB_IMAGE_TAG}
+    container_name: gdsc-server
+    restart: always
+    network_mode: host
+    env_file:
+      - .env
