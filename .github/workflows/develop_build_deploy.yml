@@ -3,9 +3,6 @@ name: Build and Deploy to Develop
 on:
   push:
     branches: [ "develop" ]
-  pull_request:
-    branches: [ "develop" ]
-
 
 jobs:
   build:
@@ -72,7 +69,23 @@ jobs:
           source: docker-compose.yml
           target: /home/ubuntu/
 
-      # TODO: 슬랙으로 build scan report 전송하는 워크플로 추가
+      # 디스코드로 gradle build scan 결과 발송
+      - name: Send Gradle Build Scan Result to Discord
+        uses: Ilshidur/action-discord@master
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          # must matches with discord embed syntax, which is {
+          #  "embeds": [{
+          #    "title": "Google it!",
+          #    "url": "Gradle Build Scan Result goes here"
+          #  }]
+          #}
+          DISCORD_EMBEDS: '[
+            {
+              "title": "Gradle Build Scan Result",
+              "url": "${{ steps.gradle.outputs.build-scan-url }}"
+            }
+          ]'
 
   deploy:
     runs-on: ubuntu-latest
