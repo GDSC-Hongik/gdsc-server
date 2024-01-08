@@ -63,7 +63,7 @@ jobs:
 
       # docker-compose.yml 파일을 EC2 서버로 전송
       - name: Copy docker-compose.yml to EC2 server
-        uses: appleboy/scp-action@0.1.7
+        uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
