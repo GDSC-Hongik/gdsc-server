@@ -88,6 +88,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
+          envs: DOCKERHUB_USERNAME,DOCKERHUB_IMAGE_TAG  # docker-compose.yml 에서 사용할 환경 변수
           script: |
             echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
             docker pull ${{ env.DOCKERHUB_USERNAME }}/gdsc-server:${{ env.DOCKERHUB_IMAGE_TAG }}
