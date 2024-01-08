@@ -47,6 +47,10 @@ jobs:
             --scan
           cache-read-only: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop' }} # feature 브랜치는 캐시를 읽기 전용으로 설정
 
+      # Docker Buildx 세팅
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
       # Dockerhub 로그인
       - name: Login to Dockerhub
         uses: docker/login-action@v3
