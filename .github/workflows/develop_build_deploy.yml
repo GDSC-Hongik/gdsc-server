@@ -40,7 +40,7 @@ jobs:
 
       # Gradle 빌드
       - name: Build with Gradle
-        uses: gradle/gradle-build-action@v3
+        uses: gradle/gradle-build-action@v2
         with:
           arguments: |
             build
