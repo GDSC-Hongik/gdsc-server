@@ -76,12 +76,6 @@ jobs:
         uses: Ilshidur/action-discord@master
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-          # must matches with discord embed syntax, which is {
-          #  "embeds": [{
-          #    "title": "Google it!",
-          #    "url": "Gradle Build Scan Result goes here"
-          #  }]
-          #}
           DISCORD_EMBEDS: '[
             {
               "title": "Gradle Build Scan Result",
