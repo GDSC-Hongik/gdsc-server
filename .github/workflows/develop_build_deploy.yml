@@ -39,6 +39,7 @@ jobs:
 
       # Gradle 빌드
       - name: Build with Gradle
+        id: gradle
         uses: gradle/gradle-build-action@v2
         with:
           arguments: |
