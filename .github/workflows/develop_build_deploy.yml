@@ -91,5 +91,5 @@ jobs:
           script: |
             echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/gdsc-server:${{ needs.build.outputs.image-tag }}
-            docker-compose -f /home/ubuntu/docker-compose.yml up -d
+            docker compose -f /home/ubuntu/docker-compose.yml up -d
             docker image prune -a -f
