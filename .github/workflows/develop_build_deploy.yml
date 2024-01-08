@@ -90,6 +90,6 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
             echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/gdsc-server:${{ needs.build.outputs.image-tag }}
+            docker pull ${{ env.DOCKERHUB_USERNAME }}/gdsc-server:${{ env.DOCKERHUB_IMAGE_TAG }}
             docker compose -f /home/ubuntu/docker-compose.yml up -d
             docker image prune -a -f
