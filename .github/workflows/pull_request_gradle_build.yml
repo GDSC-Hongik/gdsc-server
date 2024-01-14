@@ -1,0 +1,41 @@
+name : Pull Request Gradle Build 테스트
+
+on:
+  pull_request:
+    types: [opened, synchronize, closed]
+
+permissions: read-all
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v3.0.2
+
+      - uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            application:
+            - 'build.gradle'
+            - '**/src/**'
+
+      - name: JDK 설치
+        if: steps.changes.outputs.application == 'true'
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: 'gradle'
+
+      - name: gradlew 권한 부여
+        run: chmod +x ./gradlew
+        
+      - name: Gradle Build
+        if: steps.changes.outputs.application == 'true'
+        run: |
+          ./gradlew build --no-build-cache
