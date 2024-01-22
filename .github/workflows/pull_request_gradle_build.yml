@@ -2,7 +2,7 @@ name : Pull Request Gradle Build 테스트
 
 on:
   pull_request:
-    types: [opened, synchronize, closed]
+    branches: [ "develop" ]
 
 permissions: read-all
 
