@@ -16,16 +16,7 @@ jobs:
       - name: Git Checkout
         uses: actions/checkout@v3.0.2
 
-      - uses: dorny/paths-filter@v2
-        id: changes
-        with:
-          filters: |
-            application:
-            - 'build.gradle'
-            - '**/src/**'
-
       - name: JDK 설치
-        if: steps.changes.outputs.application == 'true'
         uses: actions/setup-java@v3
         with:
           distribution: temurin
@@ -36,6 +27,5 @@ jobs:
         run: chmod +x ./gradlew
         
       - name: Gradle Build
-        if: steps.changes.outputs.application == 'true'
         run: |
           ./gradlew build --no-build-cache
