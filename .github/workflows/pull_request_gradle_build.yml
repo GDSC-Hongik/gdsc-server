@@ -1,4 +1,4 @@
-name : Pull Request Gradle Build 테스트
+name : Check Style and Test to Develop
 
 on:
   pull_request:
