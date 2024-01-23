@@ -1,0 +1,28 @@
+name : Check Style and Test to Develop
+
+on:
+  pull_request:
+    branches: [ "develop" ]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v3.0.2
+
+      - name: JDK 설치
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: gradlew 권한 부여
+        run: chmod +x ./gradlew
+        
+      - name: Gradle Build
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: check
+          cache-read-only: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop' }}
