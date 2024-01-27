@@ -10,10 +10,11 @@ spring:
             client-secret: ${GITHUB_CLIENT_SECRET:}
 
 jwt:
-  access-token:
-    secret: ${JWT_ACCESS_TOKEN_SECRET:}
-    expiration-time: ${JWT_ACCESS_TOKEN_EXPIRATION_TIME:7200}
-  refresh-token:
-    secret: ${JWT_REFRESH_TOKEN_SECRET:}
-    expiration-time: ${JWT_REFRESH_TOKEN_EXPIRATION_TIME:604800}
+  token:
+    ACCESS_TOKEN:
+      secret: ${JWT_ACCESS_TOKEN_SECRET:}
+      expiration-time: ${JWT_ACCESS_TOKEN_EXPIRATION_TIME:7200}
+    REFRESH_TOKEN:
+      secret: ${JWT_REFRESH_TOKEN_SECRET:}
+      expiration-time: ${JWT_REFRESH_TOKEN_EXPIRATION_TIME:604800}
   issuer: ${JWT_ISSUER:}
