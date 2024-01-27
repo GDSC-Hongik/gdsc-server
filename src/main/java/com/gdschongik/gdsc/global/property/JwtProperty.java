@@ -1,6 +1,6 @@
 package com.gdschongik.gdsc.global.property;
 
-import com.gdschongik.gdsc.domain.auth.domain.TokenType;
+import com.gdschongik.gdsc.global.common.constant.JwtConstant;
 import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,7 +11,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "jwt")
 public class JwtProperty {
 
-    private final Map<TokenType, TokenProperty> token;
+    private final Map<JwtConstant, TokenProperty> token;
     private final String issuer;
 
     public record TokenProperty(String secret, Long expirationTime) {

@@ -1,8 +1,6 @@
 package com.gdschongik.gdsc.global.util;
 
-import static com.gdschongik.gdsc.global.common.constant.SecurityConstant.*;
-
-import com.gdschongik.gdsc.domain.auth.domain.TokenType;
+import com.gdschongik.gdsc.global.common.constant.JwtConstant;
 import com.gdschongik.gdsc.global.property.JwtProperty;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -26,15 +24,15 @@ public class CookieUtil {
         String sameSite = "None";
 
         ResponseCookie accessTokenCookie = generateCookie(
-                ACCESS_TOKEN_COOKIE_NAME,
+                JwtConstant.ACCESS_TOKEN.getCookieName(),
                 accessToken,
-                jwtProperty.getToken().get(TokenType.ACCESS_TOKEN).expirationTime(),
+                jwtProperty.getToken().get(JwtConstant.ACCESS_TOKEN).expirationTime(),
                 sameSite);
 
         ResponseCookie refreshTokenCookie = generateCookie(
-                REFRESH_TOKEN_COOKIE_NAME,
+                JwtConstant.REFRESH_TOKEN.getCookieName(),
                 refreshToken,
-                jwtProperty.getToken().get(TokenType.REFRESH_TOKEN).expirationTime(),
+                jwtProperty.getToken().get(JwtConstant.REFRESH_TOKEN).expirationTime(),
                 sameSite);
 
         HttpHeaders headers = new HttpHeaders();
