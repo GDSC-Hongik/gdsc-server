@@ -80,4 +80,12 @@ public class Member extends BaseTimeEntity {
 		this.lastLoginAt = lastLoginAt;
 		this.univEmail = univEmail;
 	}
+
+	public static Member createGuestMember(String oauthId) {
+		return Member.builder()
+			.oauthId(oauthId)
+			.role(MemberRole.GUEST)
+			.status(MemberStatus.NORMAL)
+			.build();
+	}
 }
