@@ -65,9 +65,8 @@ spotless {
     }
 
     java {
-        importOrder()
         removeUnusedImports()
-        googleJavaFormat().aosp()
+        palantirJavaFormat()
         formatAnnotations()
     }
 }
