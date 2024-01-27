@@ -3,6 +3,7 @@ package com.gdschongik.gdsc.global.security;
 import static com.gdschongik.gdsc.global.common.constant.SecurityConstant.*;
 
 import com.gdschongik.gdsc.global.util.CookieUtil;
+import com.gdschongik.gdsc.global.util.JwtUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,6 +17,7 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 @RequiredArgsConstructor
 public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
+    private final JwtUtil jwtUtil;
     private final CookieUtil cookieUtil;
 
     @Override
@@ -29,8 +31,8 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         response.setHeader(REGISTRATION_REQUIRED_HEADER, oAuth2User.isGuest() ? "true" : "false");
 
         // 토큰 생성 후 쿠키에 저장
-        String accessToken = "accessToken";
-        String refreshToken = "refreshToken";
+        String accessToken = jwtUtil.generateAccessToken(oAuth2User.getMemberId(), oAuth2User.getMemberRole());
+        String refreshToken = jwtUtil.generateRefreshToken(oAuth2User.getMemberId());
         cookieUtil.addTokenCookies(response, accessToken, refreshToken);
     }
 }
