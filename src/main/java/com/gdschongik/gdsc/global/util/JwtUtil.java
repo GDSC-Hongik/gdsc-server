@@ -3,6 +3,8 @@ package com.gdschongik.gdsc.global.util;
 import static com.gdschongik.gdsc.global.common.constant.SecurityConstant.*;
 
 import com.gdschongik.gdsc.domain.auth.domain.TokenType;
+import com.gdschongik.gdsc.domain.auth.dto.AccessTokenDto;
+import com.gdschongik.gdsc.domain.auth.dto.RefreshTokenDto;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import com.gdschongik.gdsc.global.property.JwtProperty;
 import io.jsonwebtoken.JwtBuilder;
@@ -24,20 +26,25 @@ public class JwtUtil {
 
     private final JwtProperty jwtProperty;
 
-    public String generateAccessToken(Long memberId, MemberRole memberRole) {
+    public AccessTokenDto generateAccessToken(Long memberId, MemberRole memberRole) {
         Date issuedAt = new Date();
         Date expiredAt = new Date(issuedAt.getTime()
                 + jwtProperty.getToken().get(TokenType.ACCESS_TOKEN).expirationMilliTime());
         Key key = getKey(TokenType.ACCESS_TOKEN);
-        return buildToken(memberId, memberRole, issuedAt, expiredAt, key);
+
+        String tokenValue = buildToken(memberId, memberRole, issuedAt, expiredAt, key);
+        return new AccessTokenDto(memberId, memberRole, tokenValue);
     }
 
-    public String generateRefreshToken(Long memberId) {
+    public RefreshTokenDto generateRefreshToken(Long memberId) {
         Date issuedAt = new Date();
+        JwtProperty.TokenProperty refreshTokenProperty = jwtProperty.getToken().get(TokenType.REFRESH_TOKEN);
         Date expiredAt = new Date(issuedAt.getTime()
-                + jwtProperty.getToken().get(TokenType.REFRESH_TOKEN).expirationMilliTime());
+                + refreshTokenProperty.expirationMilliTime());
         Key key = getKey(TokenType.REFRESH_TOKEN);
-        return buildToken(memberId, null, issuedAt, expiredAt, key);
+
+        String tokenValue = buildToken(memberId, null, issuedAt, expiredAt, key);
+        return new RefreshTokenDto(memberId, tokenValue, refreshTokenProperty.expirationTime());
     }
 
     private String buildToken(Long memberId, MemberRole memberRole, Date issuedAt, Date expiredAt, Key key) {
