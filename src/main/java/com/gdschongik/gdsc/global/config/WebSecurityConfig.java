@@ -1,4 +1,4 @@
-package com.gdschongik.gdsc.common.config;
+package com.gdschongik.gdsc.global.config;
 
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;

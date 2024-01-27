@@ -1,4 +1,4 @@
-package com.gdschongik.gdsc.common.config;
+package com.gdschongik.gdsc.global.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
