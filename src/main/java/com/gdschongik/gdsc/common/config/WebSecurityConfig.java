@@ -13,14 +13,13 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class WebSecurityConfig {
 
-	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-		return httpSecurity
-			.csrf(AbstractHttpConfigurer::disable)
-			.headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
-			.authorizeHttpRequests(authorize -> authorize
-				.requestMatchers(PathRequest.toH2Console())
-				.permitAll())
-			.build();
-	}
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+        return httpSecurity
+                .csrf(AbstractHttpConfigurer::disable)
+                .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
+                .authorizeHttpRequests(authorize ->
+                        authorize.requestMatchers(PathRequest.toH2Console()).permitAll())
+                .build();
+    }
 }

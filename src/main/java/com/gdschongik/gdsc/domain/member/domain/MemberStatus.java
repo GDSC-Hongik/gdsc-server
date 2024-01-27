@@ -6,10 +6,9 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum MemberStatus {
+    NORMAL("NORMAL"),
+    DELETED("DELETED"),
+    FORBIDDEN("FORBIDDEN");
 
-	NORMAL("NORMAL"),
-	DELETED("DELETED"),
-	FORBIDDEN("FORBIDDEN");
-
-	private final String value;
+    private final String value;
 }

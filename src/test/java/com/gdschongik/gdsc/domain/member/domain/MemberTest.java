@@ -6,27 +6,27 @@ import org.junit.jupiter.api.Test;
 
 class MemberTest {
 
-	@Test
-	void 회원가입시_MemberRole은_GUEST이다() {
-		// given
-		Member member = Member.createGuestMember("testOauthId");
+    @Test
+    void 회원가입시_MemberRole은_GUEST이다() {
+        // given
+        Member member = Member.createGuestMember("testOauthId");
 
-		// when
-		MemberRole role = member.getRole();
+        // when
+        MemberRole role = member.getRole();
 
-		// then
-		assertThat(role).isEqualTo(MemberRole.GUEST);
-	}
+        // then
+        assertThat(role).isEqualTo(MemberRole.GUEST);
+    }
 
-	@Test
-	void 회원가입시_MemberStatus는_NORMAL이다() {
-		// given
-		Member member = Member.createGuestMember("testOauthId");
+    @Test
+    void 회원가입시_MemberStatus는_NORMAL이다() {
+        // given
+        Member member = Member.createGuestMember("testOauthId");
 
-		// when
-		MemberStatus status = member.getStatus();
+        // when
+        MemberStatus status = member.getStatus();
 
-		// then
-		assertThat(status).isEqualTo(MemberStatus.NORMAL);
-	}
+        // then
+        assertThat(status).isEqualTo(MemberStatus.NORMAL);
+    }
 }
