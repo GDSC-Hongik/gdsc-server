@@ -13,6 +13,11 @@ import java.util.Date;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+/**
+ * JWT 토큰을 생성하고 파싱하는 유틸 클래스<br>
+ * 토큰 저장, 재발급 등의 기능은 {@link com.gdschongik.gdsc.domain.auth.application.JwtService}에서 담당한다.<br>
+ * JWT 토큰을 사용하기 위해서는 해당 클래스를 사용해야 하며, JwtUtil을 직접 사용하지 않도록 주의한다.
+ */
 @Component
 @RequiredArgsConstructor
 public class JwtUtil {
