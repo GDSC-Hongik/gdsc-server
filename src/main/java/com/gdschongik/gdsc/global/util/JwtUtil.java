@@ -39,8 +39,7 @@ public class JwtUtil {
     public RefreshTokenDto generateRefreshToken(Long memberId) {
         Date issuedAt = new Date();
         JwtProperty.TokenProperty refreshTokenProperty = jwtProperty.getToken().get(TokenType.REFRESH_TOKEN);
-        Date expiredAt = new Date(issuedAt.getTime()
-                + refreshTokenProperty.expirationMilliTime());
+        Date expiredAt = new Date(issuedAt.getTime() + refreshTokenProperty.expirationMilliTime());
         Key key = getKey(TokenType.REFRESH_TOKEN);
 
         String tokenValue = buildToken(memberId, null, issuedAt, expiredAt, key);

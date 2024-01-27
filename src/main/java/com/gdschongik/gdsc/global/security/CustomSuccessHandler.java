@@ -2,12 +2,13 @@ package com.gdschongik.gdsc.global.security;
 
 import static com.gdschongik.gdsc.global.common.constant.SecurityConstant.*;
 
+import com.gdschongik.gdsc.domain.auth.application.JwtService;
+import com.gdschongik.gdsc.domain.auth.dto.AccessTokenDto;
+import com.gdschongik.gdsc.domain.auth.dto.RefreshTokenDto;
 import com.gdschongik.gdsc.global.util.CookieUtil;
-import com.gdschongik.gdsc.global.util.JwtUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -17,13 +18,13 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 @RequiredArgsConstructor
 public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-    private final JwtUtil jwtUtil;
+    private final JwtService jwtService;
     private final CookieUtil cookieUtil;
 
     @Override
     public void onAuthenticationSuccess(
             HttpServletRequest request, HttpServletResponse response, Authentication authentication)
-            throws IOException, ServletException {
+            throws ServletException {
 
         CustomOAuth2User oAuth2User = (CustomOAuth2User) authentication.getPrincipal();
 
@@ -31,8 +32,9 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         response.setHeader(REGISTRATION_REQUIRED_HEADER, oAuth2User.isGuest() ? "true" : "false");
 
         // 토큰 생성 후 쿠키에 저장
-        String accessToken = jwtUtil.generateAccessToken(oAuth2User.getMemberId(), oAuth2User.getMemberRole());
-        String refreshToken = jwtUtil.generateRefreshToken(oAuth2User.getMemberId());
-        cookieUtil.addTokenCookies(response, accessToken, refreshToken);
+        AccessTokenDto accessTokenDto =
+                jwtService.createAccessToken(oAuth2User.getMemberId(), oAuth2User.getMemberRole());
+        RefreshTokenDto refreshTokenDto = jwtService.createRefreshToken(oAuth2User.getMemberId());
+        cookieUtil.addTokenCookies(response, accessTokenDto.tokenValue(), refreshTokenDto.tokenValue());
     }
 }
