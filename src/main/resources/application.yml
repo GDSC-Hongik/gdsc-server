@@ -1,9 +1,4 @@
 spring:
-  profiles:
-    group:
-      dev: "database"
-      local: "database"
-
   security:
     oauth2:
       client:
@@ -16,6 +11,12 @@ spring:
       host: ${REDIS_HOST:localhost}
       port: ${REDIS_PORT:6379}
       password: ${REDIS_PASSWORD:}
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${MYSQL_DATABASE}
+    username: ${MYSQL_USER}
+    password: ${MYSQL_PASSWORD}
+
 
 jwt:
   token:
