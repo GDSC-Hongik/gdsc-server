@@ -1,5 +1,7 @@
 package com.gdschongik.gdsc.global.security;
 
+import static com.gdschongik.gdsc.global.common.constant.SecurityConstant.GITHUB_NAME_ATTR_KEY;
+
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import lombok.Getter;
@@ -13,7 +15,7 @@ public class CustomOAuth2User extends DefaultOAuth2User {
     private final MemberRole memberRole;
 
     public CustomOAuth2User(OAuth2User oAuth2User, Member member) {
-        super(oAuth2User.getAuthorities(), oAuth2User.getAttributes(), oAuth2User.getName());
+        super(oAuth2User.getAuthorities(), oAuth2User.getAttributes(), GITHUB_NAME_ATTR_KEY);
         this.memberId = member.getId();
         this.memberRole = member.getRole();
     }
