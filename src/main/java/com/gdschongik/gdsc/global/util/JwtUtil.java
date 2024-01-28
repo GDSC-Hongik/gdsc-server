@@ -7,12 +7,16 @@ import com.gdschongik.gdsc.domain.auth.dto.RefreshTokenDto;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import com.gdschongik.gdsc.global.common.constant.JwtConstant;
 import com.gdschongik.gdsc.global.property.JwtProperty;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import java.security.Key;
 import java.util.Date;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 /**
@@ -20,6 +24,7 @@ import org.springframework.stereotype.Component;
  * 토큰 저장, 재발급 등의 기능은 {@link com.gdschongik.gdsc.domain.auth.application.JwtService}에서 담당한다.<br>
  * JWT 토큰을 사용하기 위해서는 해당 클래스를 사용해야 하며, JwtUtil을 직접 사용하지 않도록 주의한다.
  */
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtUtil {
@@ -67,7 +72,42 @@ public class JwtUtil {
                 jwtProperty.getToken().get(jwtConstant).secret().getBytes());
     }
 
-    public AccessTokenDto parseAccessToken(String accessTokenValue) {}
+    public AccessTokenDto parseAccessToken(String accessTokenValue) throws ExpiredJwtException {
+        try {
+            Jws<Claims> claims = getClaims(JwtConstant.ACCESS_TOKEN, accessTokenValue);
 
-    public RefreshTokenDto parseRefreshToken(String refreshTokenValue) {}
+            return new AccessTokenDto(
+                    Long.parseLong(claims.getBody().getSubject()),
+                    MemberRole.valueOf(claims.getBody().get(TOKEN_ROLE_NAME, String.class)),
+                    accessTokenValue);
+        } catch (ExpiredJwtException e) {
+            throw e;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public RefreshTokenDto parseRefreshToken(String refreshTokenValue) throws ExpiredJwtException {
+        try {
+            Jws<Claims> claims = getClaims(JwtConstant.REFRESH_TOKEN, refreshTokenValue);
+
+            return new RefreshTokenDto(
+                    Long.parseLong(claims.getBody().getSubject()),
+                    refreshTokenValue,
+                    jwtProperty.getToken().get(JwtConstant.REFRESH_TOKEN).expirationTime());
+        } catch (ExpiredJwtException e) {
+            throw e;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private Jws<Claims> getClaims(JwtConstant tokenType, String tokenValue) {
+        Key key = getKey(tokenType);
+        return Jwts.parserBuilder()
+                .requireIssuer(jwtProperty.getIssuer())
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(tokenValue);
+    }
 }
