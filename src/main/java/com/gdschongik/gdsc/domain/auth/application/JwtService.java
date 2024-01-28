@@ -45,13 +45,16 @@ public class JwtService {
         try {
             return jwtUtil.parseAccessToken(accessTokenValue);
         } catch (Exception e) {
-            log.error("엑세스 토큰 파싱에 실패했습니다: {}", accessTokenValue);
             return null;
         }
     }
 
     public RefreshTokenDto retrieveRefreshToken(String refreshTokenValue) {
         RefreshTokenDto refreshTokenDto = parseRefreshToken(refreshTokenValue);
+
+        if (refreshTokenDto == null) {
+            return null;
+        }
 
         // 파싱된 DTO와 일치하는 토큰이 Redis에 저장되어 있는지 확인
         Optional<RefreshToken> refreshToken = getRefreshTokenFromRedis(refreshTokenDto.memberId());
@@ -75,7 +78,6 @@ public class JwtService {
         try {
             return jwtUtil.parseRefreshToken(refreshTokenValue);
         } catch (Exception e) {
-            log.error("리프레시 토큰 파싱에 실패했습니다: {}", refreshTokenValue);
             return null;
         }
     }
