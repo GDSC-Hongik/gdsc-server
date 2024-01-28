@@ -7,6 +7,7 @@ import com.gdschongik.gdsc.domain.auth.dto.RefreshTokenDto;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import com.gdschongik.gdsc.global.util.JwtUtil;
+import io.jsonwebtoken.ExpiredJwtException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -76,6 +77,15 @@ public class JwtService {
         } catch (Exception e) {
             log.error("리프레시 토큰 파싱에 실패했습니다: {}", refreshTokenValue);
             return null;
+        }
+    }
+
+    public boolean isAccessTokenExpired(String accessTokenValue) {
+        try {
+            jwtUtil.parseAccessToken(accessTokenValue);
+            return false;
+        } catch (ExpiredJwtException e) {
+            return true;
         }
     }
 }
