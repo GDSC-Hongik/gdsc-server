@@ -23,17 +23,11 @@ public class CookieUtil {
         // TODO: Prod profile일 때는 Strict, 아니면 None으로 설정
         String sameSite = "None";
 
-        ResponseCookie accessTokenCookie = generateCookie(
-                JwtConstant.ACCESS_TOKEN.getCookieName(),
-                accessToken,
-                jwtProperty.getToken().get(JwtConstant.ACCESS_TOKEN).expirationTime(),
-                sameSite);
+        ResponseCookie accessTokenCookie =
+                generateCookie(JwtConstant.ACCESS_TOKEN.getCookieName(), accessToken, sameSite);
 
-        ResponseCookie refreshTokenCookie = generateCookie(
-                JwtConstant.REFRESH_TOKEN.getCookieName(),
-                refreshToken,
-                jwtProperty.getToken().get(JwtConstant.REFRESH_TOKEN).expirationTime(),
-                sameSite);
+        ResponseCookie refreshTokenCookie =
+                generateCookie(JwtConstant.REFRESH_TOKEN.getCookieName(), refreshToken, sameSite);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.SET_COOKIE, accessTokenCookie.toString());
@@ -42,10 +36,9 @@ public class CookieUtil {
         return headers;
     }
 
-    private ResponseCookie generateCookie(String cookieName, String tokenValue, Long expiration, String sameSite) {
+    private ResponseCookie generateCookie(String cookieName, String tokenValue, String sameSite) {
         return ResponseCookie.from(cookieName, tokenValue)
                 .path("/")
-                .maxAge(expiration)
                 .secure(true)
                 .sameSite(sameSite)
                 .httpOnly(false)
