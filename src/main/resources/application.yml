@@ -1,4 +1,9 @@
 spring:
+  profiles:
+    group:
+      dev: "database"
+      local: "database"
+
   security:
     oauth2:
       client:
