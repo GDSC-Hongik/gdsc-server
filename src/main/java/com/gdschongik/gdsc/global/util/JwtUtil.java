@@ -66,4 +66,8 @@ public class JwtUtil {
         return Keys.hmacShaKeyFor(
                 jwtProperty.getToken().get(jwtConstant).secret().getBytes());
     }
+
+    public AccessTokenDto parseAccessToken(String accessTokenValue) {}
+
+    public RefreshTokenDto parseRefreshToken(String refreshTokenValue) {}
 }
