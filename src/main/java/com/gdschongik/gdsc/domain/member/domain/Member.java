@@ -1,6 +1,6 @@
 package com.gdschongik.gdsc.domain.member.domain;
 
-import com.gdschongik.gdsc.common.model.BaseTimeEntity;
+import com.gdschongik.gdsc.domain.common.model.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

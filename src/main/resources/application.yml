@@ -1,3 +1,25 @@
 spring:
   datasource:
     url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false;MODE=MYSQL
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            client-id: ${GITHUB_CLIENT_ID:default}
+            client-secret: ${GITHUB_CLIENT_SECRET:default}
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+
+jwt:
+  token:
+    ACCESS_TOKEN:
+      secret: ${JWT_ACCESS_TOKEN_SECRET:}
+      expiration-time: ${JWT_ACCESS_TOKEN_EXPIRATION_TIME:7200}
+    REFRESH_TOKEN:
+      secret: ${JWT_REFRESH_TOKEN_SECRET:}
+      expiration-time: ${JWT_REFRESH_TOKEN_EXPIRATION_TIME:604800}
+  issuer: ${JWT_ISSUER:}

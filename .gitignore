@@ -38,3 +38,6 @@ out/
 
 ### ETC ###
 .DS_Store
+
+### Secrets ###
+.env
