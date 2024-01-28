@@ -6,7 +6,6 @@ import com.gdschongik.gdsc.domain.auth.dao.RefreshTokenRepository;
 import com.gdschongik.gdsc.domain.auth.domain.RefreshToken;
 import com.gdschongik.gdsc.domain.auth.dto.AccessTokenDto;
 import com.gdschongik.gdsc.domain.auth.dto.RefreshTokenDto;
-import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import com.gdschongik.gdsc.global.util.JwtUtil;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -21,7 +20,6 @@ import org.springframework.stereotype.Service;
 public class JwtService {
 
     private final JwtUtil jwtUtil;
-    private final MemberRepository memberRepository;
     private final RefreshTokenRepository refreshTokenRepository;
 
     public AccessTokenDto createAccessToken(Long memberId, MemberRole memberRole) {
@@ -81,15 +79,6 @@ public class JwtService {
             return jwtUtil.parseRefreshToken(refreshTokenValue);
         } catch (Exception e) {
             return null;
-        }
-    }
-
-    public boolean isAccessTokenExpired(String accessTokenValue) {
-        try {
-            jwtUtil.parseAccessToken(accessTokenValue);
-            return false;
-        } catch (ExpiredJwtException e) {
-            return true;
         }
     }
 
