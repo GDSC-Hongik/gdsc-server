@@ -1,5 +1,7 @@
 package com.gdschongik.gdsc.domain.auth.application;
 
+import static com.gdschongik.gdsc.global.common.constant.SecurityConstant.*;
+
 import com.gdschongik.gdsc.domain.auth.dao.RefreshTokenRepository;
 import com.gdschongik.gdsc.domain.auth.domain.RefreshToken;
 import com.gdschongik.gdsc.domain.auth.dto.AccessTokenDto;
@@ -88,6 +90,18 @@ public class JwtService {
             return false;
         } catch (ExpiredJwtException e) {
             return true;
+        }
+    }
+
+    public AccessTokenDto reissueAccessTokenIfExpired(String accessTokenValue) {
+        // AT가 만료된 경우 AT를 재발급, 만료되지 않은 경우 null 반환
+        try {
+            jwtUtil.parseAccessToken(accessTokenValue);
+            return null;
+        } catch (ExpiredJwtException e) {
+            Long memberId = Long.parseLong(e.getClaims().getSubject());
+            MemberRole memberRole = MemberRole.valueOf(e.getClaims().get(TOKEN_ROLE_NAME, String.class));
+            return createAccessToken(memberId, memberRole);
         }
     }
 }
