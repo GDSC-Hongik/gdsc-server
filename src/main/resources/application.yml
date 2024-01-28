@@ -6,8 +6,8 @@ spring:
       client:
         registration:
           github:
-            client-id: ${GITHUB_CLIENT_ID:}
-            client-secret: ${GITHUB_CLIENT_SECRET:}
+            client-id: ${GITHUB_CLIENT_ID:default}
+            client-secret: ${GITHUB_CLIENT_SECRET:default}
   data:
     redis:
       host: ${REDIS_HOST:localhost}
