@@ -74,7 +74,7 @@ public class JwtUtil {
                 jwtProperty.getToken().get(jwtConstant).secret().getBytes());
     }
 
-    public AccessTokenDto parseAccessToken(String accessTokenValue) throws ExpiredJwtException {
+    public AccessTokenDto parseAccessToken(String accessTokenValue) {
         try {
             Jws<Claims> claims = getClaims(JwtConstant.ACCESS_TOKEN, accessTokenValue);
 
