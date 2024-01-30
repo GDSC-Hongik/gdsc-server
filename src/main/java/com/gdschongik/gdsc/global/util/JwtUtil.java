@@ -83,7 +83,7 @@ public class JwtUtil {
                     MemberRole.valueOf(claims.getBody().get(TOKEN_ROLE_NAME, String.class)),
                     accessTokenValue);
         } catch (ExpiredJwtException e) {
-            throw new CustomException(ErrorCode.Expired_JWT_TOKEN);
+            throw new CustomException(ErrorCode.EXPIRED_JWT_TOKEN);
         } catch (Exception e) {
             throw new CustomException(ErrorCode.INVALID_JWT_TOKEN);
         }
