@@ -42,11 +42,7 @@ public class JwtService {
     }
 
     public AccessTokenDto retrieveAccessToken(String accessTokenValue) {
-        try {
-            return jwtUtil.parseAccessToken(accessTokenValue);
-        } catch (Exception e) {
-            return null;
-        }
+        return jwtUtil.parseAccessToken(accessTokenValue);
     }
 
     public RefreshTokenDto retrieveRefreshToken(String refreshTokenValue) {
