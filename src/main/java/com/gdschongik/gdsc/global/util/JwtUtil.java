@@ -74,7 +74,7 @@ public class JwtUtil {
                 jwtProperty.getToken().get(jwtConstant).secret().getBytes());
     }
 
-    public AccessTokenDto parseAccessToken(String accessTokenValue) {
+    public AccessTokenDto parseAccessToken(String accessTokenValue) throws ExpiredJwtException {
         try {
             Jws<Claims> claims = getClaims(JwtConstant.ACCESS_TOKEN, accessTokenValue);
 
@@ -83,7 +83,7 @@ public class JwtUtil {
                     MemberRole.valueOf(claims.getBody().get(TOKEN_ROLE_NAME, String.class)),
                     accessTokenValue);
         } catch (ExpiredJwtException e) {
-            throw new CustomException(ErrorCode.EXPIRED_JWT_TOKEN);
+            throw e;
         } catch (Exception e) {
             throw new CustomException(ErrorCode.INVALID_JWT_TOKEN);
         }
