@@ -1,5 +1,7 @@
 package com.gdschongik.gdsc.global.config;
 
+import static com.gdschongik.gdsc.global.common.constant.UrlConstant.*;
+import static org.springframework.http.HttpHeaders.*;
 import static org.springframework.security.config.Customizer.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,6 +12,7 @@ import com.gdschongik.gdsc.global.security.CustomUserService;
 import com.gdschongik.gdsc.global.security.JwtExceptionFilter;
 import com.gdschongik.gdsc.global.security.JwtFilter;
 import com.gdschongik.gdsc.global.util.CookieUtil;
+import com.gdschongik.gdsc.global.util.EnvironmentUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +22,9 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -29,24 +35,24 @@ public class WebSecurityConfig {
     private final JwtService jwtService;
     private final CookieUtil cookieUtil;
     private final ObjectMapper objectMapper;
+    private final EnvironmentUtil environmentUtil;
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity
-                .httpBasic(AbstractHttpConfigurer::disable)
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.httpBasic(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-        httpSecurity.oauth2Login(
+        http.oauth2Login(
                 oauth2 -> oauth2.userInfoEndpoint(userInfo -> userInfo.userService(customUserService(memberRepository)))
                         .successHandler(customSuccessHandler(jwtService, cookieUtil)));
 
-        httpSecurity.addFilterBefore(jwtFilter(jwtService, cookieUtil), UsernamePasswordAuthenticationFilter.class);
-        httpSecurity.addFilterBefore(jwtExceptionFilter(objectMapper), JwtFilter.class);
+        http.addFilterBefore(jwtFilter(jwtService, cookieUtil), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtExceptionFilter(objectMapper), JwtFilter.class);
 
-        return httpSecurity.build();
+        return http.build();
     }
 
     @Bean
@@ -67,5 +73,29 @@ public class WebSecurityConfig {
     @Bean
     public JwtExceptionFilter jwtExceptionFilter(ObjectMapper objectMapper) {
         return new JwtExceptionFilter(objectMapper);
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+
+        if (environmentUtil.isProdProfile()) {
+            configuration.addAllowedOriginPattern(PROD_CLIENT_URL);
+        }
+
+        if (environmentUtil.isDevProfile()) {
+            configuration.addAllowedOriginPattern(DEV_CLIENT_URL);
+            configuration.addAllowedOriginPattern(LOCAL_REACT_CLIENT_URL);
+            configuration.addAllowedOriginPattern(LOCAL_VITE_CLIENT_URL);
+        }
+
+        configuration.addAllowedHeader("*");
+        configuration.addAllowedMethod("*");
+        configuration.setAllowCredentials(true);
+        configuration.addExposedHeader(SET_COOKIE);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 }
