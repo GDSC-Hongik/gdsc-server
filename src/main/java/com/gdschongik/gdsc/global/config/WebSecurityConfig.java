@@ -7,19 +7,28 @@ import static org.springframework.security.config.Customizer.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gdschongik.gdsc.domain.auth.application.JwtService;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
+import com.gdschongik.gdsc.global.common.constant.SwaggerUrlConstant;
+import com.gdschongik.gdsc.global.property.SwaggerProperty;
 import com.gdschongik.gdsc.global.security.CustomSuccessHandler;
 import com.gdschongik.gdsc.global.security.CustomUserService;
 import com.gdschongik.gdsc.global.security.JwtExceptionFilter;
 import com.gdschongik.gdsc.global.security.JwtFilter;
 import com.gdschongik.gdsc.global.util.CookieUtil;
 import com.gdschongik.gdsc.global.util.EnvironmentUtil;
+import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -36,6 +45,7 @@ public class WebSecurityConfig {
     private final CookieUtil cookieUtil;
     private final ObjectMapper objectMapper;
     private final EnvironmentUtil environmentUtil;
+    private final SwaggerProperty swaggerProperty;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -49,10 +59,37 @@ public class WebSecurityConfig {
                 oauth2 -> oauth2.userInfoEndpoint(userInfo -> userInfo.userService(customUserService(memberRepository)))
                         .successHandler(customSuccessHandler(jwtService, cookieUtil)));
 
+        if (environmentUtil.isProdAndDevProfile()) {
+            http.authorizeHttpRequests(authorize -> authorize
+                            .requestMatchers(HttpMethod.GET, getSwaggerUrls())
+                            .authenticated())
+                    .httpBasic(withDefaults());
+        }
+
         http.addFilterBefore(jwtFilter(jwtService, cookieUtil), UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(jwtExceptionFilter(objectMapper), JwtFilter.class);
 
         return http.build();
+    }
+
+    private static String[] getSwaggerUrls() {
+        return Arrays.stream(SwaggerUrlConstant.values())
+                .map(SwaggerUrlConstant::getValue)
+                .toArray(String[]::new);
+    }
+
+    @Bean
+    public InMemoryUserDetailsManager inMemoryUserDetailsManager() {
+        UserDetails user = User.withUsername(swaggerProperty.getUsername())
+                .password(passwordEncoder().encode(swaggerProperty.getPassword()))
+                .roles("SWAGGER")
+                .build();
+        return new InMemoryUserDetailsManager(user);
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
