@@ -3,6 +3,8 @@ package com.gdschongik.gdsc.domain.member.dao;
 import static com.gdschongik.gdsc.domain.member.domain.QMember.*;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
+import com.gdschongik.gdsc.global.exception.CustomException;
+import com.gdschongik.gdsc.global.exception.ErrorCode;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -21,18 +23,18 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
     public Page<Member> findAll(String keyword, String type, Pageable pageable) {
         List<Member> fetch = queryFactory
                 .selectFrom(member)
-                .where(nameContains(keyword, type))
+                .where(queryOption(keyword, type))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
         JPAQuery<Long> countQuery =
-                queryFactory.select(member.count()).from(member).where(nameContains(keyword, type));
+                queryFactory.select(member.count()).from(member).where(queryOption(keyword, type));
 
         return PageableExecutionUtils.getPage(fetch, pageable, countQuery::fetchOne);
     }
 
-    private BooleanExpression nameContains(String keyword, String type) {
+    private BooleanExpression queryOption(String keyword, String type) {
         if (keyword != null && type != null) {
             return switch (type) {
                 case "student-id" -> member.studentId.containsIgnoreCase(keyword);
