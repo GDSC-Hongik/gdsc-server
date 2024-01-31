@@ -3,6 +3,7 @@ package com.gdschongik.gdsc.global.util;
 import com.gdschongik.gdsc.global.common.constant.JwtConstant;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.web.server.Cookie;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
@@ -38,8 +39,8 @@ public class CookieUtil {
 
     private String determineSameSitePolicy() {
         if (environmentUtil.isProdProfile()) {
-            return "Strict";
+            return Cookie.SameSite.STRICT.attributeValue();
         }
-        return "None";
+        return Cookie.SameSite.NONE.attributeValue();
     }
 }
