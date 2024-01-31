@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class EnviromentUtil {
+public class EnvironmentUtil {
 
     private final Environment environment;
 

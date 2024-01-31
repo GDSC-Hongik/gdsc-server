@@ -1,6 +1,5 @@
 package com.gdschongik.gdsc.global.config;
 
-import static com.gdschongik.gdsc.global.common.constant.EnvironmentConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.UrlConstant.*;
 import static org.springframework.http.HttpHeaders.*;
 import static org.springframework.security.config.Customizer.*;
@@ -13,7 +12,7 @@ import com.gdschongik.gdsc.global.security.CustomUserService;
 import com.gdschongik.gdsc.global.security.JwtExceptionFilter;
 import com.gdschongik.gdsc.global.security.JwtFilter;
 import com.gdschongik.gdsc.global.util.CookieUtil;
-import com.gdschongik.gdsc.global.util.EnviromentUtil;
+import com.gdschongik.gdsc.global.util.EnvironmentUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,12 +35,11 @@ public class WebSecurityConfig {
     private final JwtService jwtService;
     private final CookieUtil cookieUtil;
     private final ObjectMapper objectMapper;
-    private final EnviromentUtil enviromentUtil;
+    private final EnvironmentUtil environmentUtil;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .httpBasic(AbstractHttpConfigurer::disable)
+        http.httpBasic(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(withDefaults())
@@ -81,11 +79,11 @@ public class WebSecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        if (enviromentUtil.isProdProfile()) {
+        if (environmentUtil.isProdProfile()) {
             configuration.addAllowedOriginPattern(PROD_CLIENT_URL);
         }
 
-        if (enviromentUtil.isDevProfile()) {
+        if (environmentUtil.isDevProfile()) {
             configuration.addAllowedOriginPattern(DEV_CLIENT_URL);
             configuration.addAllowedOriginPattern(LOCAL_REACT_CLIENT_URL);
             configuration.addAllowedOriginPattern(LOCAL_VITE_CLIENT_URL);
