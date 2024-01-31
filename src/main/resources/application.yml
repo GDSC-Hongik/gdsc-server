@@ -1,28 +1,14 @@
 spring:
   profiles:
     group:
-        local: "datasource"
-        dev: "datasource"
-        test: "test"
-  security:
-    oauth2:
-      client:
-        registration:
-          github:
-            client-id: ${GITHUB_CLIENT_ID:default}
-            client-secret: ${GITHUB_CLIENT_SECRET:default}
-  data:
-    redis:
-      host: ${REDIS_HOST:localhost}
-      port: ${REDIS_PORT:6379}
-      password: ${REDIS_PASSWORD:}
+      test: "test"
+      local: "local, datasource"
+      dev: "dev, datasource"
+    include:
+      - redis
+      - storage
+      - security
 
-jwt:
-  token:
-    ACCESS_TOKEN:
-      secret: ${JWT_ACCESS_TOKEN_SECRET:}
-      expiration-time: ${JWT_ACCESS_TOKEN_EXPIRATION_TIME:7200}
-    REFRESH_TOKEN:
-      secret: ${JWT_REFRESH_TOKEN_SECRET:}
-      expiration-time: ${JWT_REFRESH_TOKEN_EXPIRATION_TIME:604800}
-  issuer: ${JWT_ISSUER:}
+logging:
+  level:
+    com.gdschongik.gdsc.domain.*.api.*: debug
