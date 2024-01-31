@@ -50,7 +50,7 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         Optional<AccessTokenDto> reissueAccessToken =
-                Optional.ofNullable(jwtService.reissueAccessTokenIfExpired(refreshTokenValue));
+                Optional.ofNullable(jwtService.reissueAccessTokenIfExpired(accessTokenValue));
         RefreshTokenDto refreshTokenDto = jwtService.retrieveRefreshToken(refreshTokenValue);
 
         // AT가 만료되었고, RT가 유효하면 AT, RT 재발급

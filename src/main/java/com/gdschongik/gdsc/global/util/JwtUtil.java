@@ -6,6 +6,8 @@ import com.gdschongik.gdsc.domain.auth.dto.AccessTokenDto;
 import com.gdschongik.gdsc.domain.auth.dto.RefreshTokenDto;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import com.gdschongik.gdsc.global.common.constant.JwtConstant;
+import com.gdschongik.gdsc.global.exception.CustomException;
+import com.gdschongik.gdsc.global.exception.ErrorCode;
 import com.gdschongik.gdsc.global.property.JwtProperty;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -83,7 +85,7 @@ public class JwtUtil {
         } catch (ExpiredJwtException e) {
             throw e;
         } catch (Exception e) {
-            return null;
+            throw new CustomException(ErrorCode.INVALID_JWT_TOKEN);
         }
     }
 

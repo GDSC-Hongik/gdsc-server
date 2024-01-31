@@ -44,7 +44,7 @@ public class JwtService {
     public AccessTokenDto retrieveAccessToken(String accessTokenValue) {
         try {
             return jwtUtil.parseAccessToken(accessTokenValue);
-        } catch (Exception e) {
+        } catch (ExpiredJwtException e) {
             return null;
         }
     }
@@ -71,7 +71,7 @@ public class JwtService {
 
     private Optional<RefreshToken> getRefreshTokenFromRedis(Long memberId) {
         // TODO: CustomException으로 바꾸기
-        return refreshTokenRepository.findByMemberId(memberId);
+        return refreshTokenRepository.findById(memberId);
     }
 
     private RefreshTokenDto parseRefreshToken(String refreshTokenValue) {
