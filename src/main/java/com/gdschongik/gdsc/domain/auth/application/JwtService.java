@@ -71,7 +71,7 @@ public class JwtService {
 
     private Optional<RefreshToken> getRefreshTokenFromRedis(Long memberId) {
         // TODO: CustomException으로 바꾸기
-        return refreshTokenRepository.findByMemberId(memberId);
+        return refreshTokenRepository.findById(memberId);
     }
 
     private RefreshTokenDto parseRefreshToken(String refreshTokenValue) {
