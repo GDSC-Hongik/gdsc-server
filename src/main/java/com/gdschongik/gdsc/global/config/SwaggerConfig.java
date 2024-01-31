@@ -1,11 +1,16 @@
 package com.gdschongik.gdsc.global.config;
 
+import static com.gdschongik.gdsc.global.common.constant.EnvironmentConstant.*;
+import static com.gdschongik.gdsc.global.common.constant.UrlConstant.*;
 import static org.springframework.http.HttpHeaders.*;
 
+import com.gdschongik.gdsc.global.util.EnvironmentUtil;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.servers.Server;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,9 +19,27 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 public class SwaggerConfig {
 
+    private final EnvironmentUtil environmentUtil;
+
     @Bean
     public OpenAPI openAPI() {
-        return new OpenAPI().addSecurityItem(securityRequirement()).components(authSetting());
+        return new OpenAPI()
+                .servers(swaggerServers())
+                .addSecurityItem(securityRequirement())
+                .components(authSetting());
+    }
+
+    private List<Server> swaggerServers() {
+        Server server = new Server().url(getServerUrl());
+        return List.of(server);
+    }
+
+    private String getServerUrl() {
+        return switch (environmentUtil.getCurrentProfile()) {
+            case PROD -> PROD_SERVER_URL;
+            case DEV -> DEV_SERVER_URL;
+            default -> LOCAL_SERVER_URL;
+        };
     }
 
     private Components authSetting() {
