@@ -13,7 +13,7 @@ public class CookieUtil {
 
     private final EnvironmentUtil environmentUtil;
 
-    public HttpServletResponse addTokenCookies(HttpServletResponse response, String accessToken, String refreshToken) {
+    public void addTokenCookies(HttpServletResponse response, String accessToken, String refreshToken) {
 
         String sameSite = determineSameSitePolicy();
 
@@ -25,8 +25,6 @@ public class CookieUtil {
 
         response.addHeader(HttpHeaders.SET_COOKIE, accessTokenCookie.toString());
         response.addHeader(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString());
-
-        return response;
     }
 
     private ResponseCookie generateCookie(String cookieName, String tokenValue, String sameSite) {
