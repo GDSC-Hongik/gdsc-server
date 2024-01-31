@@ -3,6 +3,9 @@ package com.gdschongik.gdsc.global.common.constant;
 import java.util.List;
 
 public class EnvironmentConstant {
+
+    private EnvironmentConstant() {}
+
     public static final String PROD = "prod";
     public static final String DEV = "dev";
     public static final String LOCAL = "local";
