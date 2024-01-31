@@ -39,22 +39,22 @@ public class WebSecurityConfig {
     private final EnviromentUtil enviromentUtil;
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-        httpSecurity.oauth2Login(
+        http.oauth2Login(
                 oauth2 -> oauth2.userInfoEndpoint(userInfo -> userInfo.userService(customUserService(memberRepository)))
                         .successHandler(customSuccessHandler(jwtService, cookieUtil)));
 
-        httpSecurity.addFilterBefore(jwtFilter(jwtService, cookieUtil), UsernamePasswordAuthenticationFilter.class);
-        httpSecurity.addFilterBefore(jwtExceptionFilter(objectMapper), JwtFilter.class);
+        http.addFilterBefore(jwtFilter(jwtService, cookieUtil), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtExceptionFilter(objectMapper), JwtFilter.class);
 
-        return httpSecurity.build();
+        return http.build();
     }
 
     @Bean
