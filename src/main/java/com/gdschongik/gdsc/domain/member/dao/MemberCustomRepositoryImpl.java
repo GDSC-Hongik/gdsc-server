@@ -42,7 +42,7 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
                 case "email" -> member.email.containsIgnoreCase(keyword);
                 case "discord-username" -> member.discordUsername.containsIgnoreCase(keyword);
                 case "discord-nickname" -> member.nickname.containsIgnoreCase(keyword);
-                default -> null;
+                default -> throw new CustomException(ErrorCode.INVALID_QUERY_PARAMETER);
             };
         }
 
