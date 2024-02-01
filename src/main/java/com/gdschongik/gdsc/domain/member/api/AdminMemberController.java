@@ -1,6 +1,7 @@
 package com.gdschongik.gdsc.domain.member.api;
 
 import com.gdschongik.gdsc.domain.member.application.MemberService;
+import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.AdminMemberFindAllResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,11 +21,19 @@ public class AdminMemberController {
 
     @GetMapping
     public ResponseEntity<Page<AdminMemberFindAllResponse>> getMembers(
-            @RequestParam(value = "keyword", required = false) String keyword,
-            @RequestParam(value = "type", required = false) String type,
+            @RequestParam(value = "student-id", required = false) String studentId,
+            @RequestParam(value = "name", required = false) String name,
+            @RequestParam(value = "phone", required = false) String phone,
+            @RequestParam(value = "department", required = false) String department,
+            @RequestParam(value = "email", required = false) String email,
+            @RequestParam(value = "discord-username", required = false) String discordUsername,
+            @RequestParam(value = "discord-nickname", required = false) String discordNickname,
             Pageable pageable) {
 
-        Page<AdminMemberFindAllResponse> response = memberService.findAll(keyword, type, pageable);
+        MemberQueryRequest queryRequest =
+                MemberQueryRequest.of(studentId, name, phone, department, email, discordUsername, discordNickname);
+
+        Page<AdminMemberFindAllResponse> response = memberService.findAll(queryRequest, pageable);
         return ResponseEntity.ok().body(response);
     }
 }
