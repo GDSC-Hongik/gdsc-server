@@ -3,7 +3,8 @@ package com.gdschongik.gdsc.domain.member.dao;
 import static com.gdschongik.gdsc.domain.member.domain.QMember.*;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
-import com.gdschongik.gdsc.domain.member.domain.MemberQueryOption;
+import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryRequest;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -19,33 +20,58 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<Member> findAll(String keyword, MemberQueryOption queryOption, Pageable pageable) {
+    public Page<Member> findAll(MemberQueryRequest queryRequest, Pageable pageable) {
         List<Member> fetch = queryFactory
                 .selectFrom(member)
-                .where(queryOption(keyword, queryOption))
+                .where(queryOption(queryRequest))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
         JPAQuery<Long> countQuery =
-                queryFactory.select(member.count()).from(member).where(queryOption(keyword, queryOption));
+                queryFactory.select(member.count()).from(member).where(queryOption(queryRequest));
 
         return PageableExecutionUtils.getPage(fetch, pageable, countQuery::fetchOne);
     }
 
-    private BooleanExpression queryOption(String keyword, MemberQueryOption queryOption) {
-        if (keyword != null && queryOption != null) {
-            return switch (queryOption) {
-                case STUDENT_ID -> member.studentId.containsIgnoreCase(keyword);
-                case NAME -> member.name.containsIgnoreCase(keyword);
-                case PHONE -> member.phone.containsIgnoreCase(keyword);
-                case DEPARTMENT -> member.department.containsIgnoreCase(keyword);
-                case EMAIL -> member.email.containsIgnoreCase(keyword);
-                case DISCORD_USERNAME -> member.discordUsername.containsIgnoreCase(keyword);
-                case DISCORD_NICKNAME -> member.nickname.containsIgnoreCase(keyword);
-            };
-        }
+    private BooleanBuilder queryOption(MemberQueryRequest queryRequest) {
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
 
-        return null;
+        return booleanBuilder
+                .and(eqStudentId(queryRequest.studentId()))
+                .and(eqName(queryRequest.name()))
+                .and(eqPhone(queryRequest.phone()))
+                .and(eqDepartment(queryRequest.department()))
+                .and(eqEmail(queryRequest.email()))
+                .and(eqDiscordUsername(queryRequest.discordUsername()))
+                .and(eqDiscordNickname(queryRequest.discordNickname()));
+    }
+
+    private BooleanExpression eqStudentId(String studentId) {
+        return studentId != null ? member.studentId.containsIgnoreCase(studentId) : null;
+    }
+
+    private BooleanExpression eqName(String name) {
+        return name != null ? member.name.containsIgnoreCase(name) : null;
+    }
+
+    private BooleanExpression eqPhone(String phone) {
+        return phone != null ? member.phone.containsIgnoreCase(phone) : null;
+    }
+
+    private BooleanExpression eqDepartment(String department) {
+        return department != null ? member.department.containsIgnoreCase(department) : null;
+    }
+
+    private BooleanExpression eqEmail(String email) {
+        return email != null ? member.email.containsIgnoreCase(email) : null;
+    }
+
+    private BooleanExpression eqDiscordUsername(String discordUsername) {
+        return discordUsername != null ? member.discordUsername.containsIgnoreCase(discordUsername) : null;
+    }
+
+    private BooleanExpression eqDiscordNickname(String discordNickname) {
+        return discordNickname != null ? member.nickname.containsIgnoreCase(discordNickname) : null;
     }
 }
