@@ -3,8 +3,7 @@ package com.gdschongik.gdsc.domain.member.dao;
 import static com.gdschongik.gdsc.domain.member.domain.QMember.*;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
-import com.gdschongik.gdsc.global.exception.CustomException;
-import com.gdschongik.gdsc.global.exception.ErrorCode;
+import com.gdschongik.gdsc.domain.member.domain.MemberQueryOption;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -20,31 +19,30 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<Member> findAll(String keyword, String type, Pageable pageable) {
+    public Page<Member> findAll(String keyword, MemberQueryOption queryOption, Pageable pageable) {
         List<Member> fetch = queryFactory
                 .selectFrom(member)
-                .where(queryOption(keyword, type))
+                .where(queryOption(keyword, queryOption))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
         JPAQuery<Long> countQuery =
-                queryFactory.select(member.count()).from(member).where(queryOption(keyword, type));
+                queryFactory.select(member.count()).from(member).where(queryOption(keyword, queryOption));
 
         return PageableExecutionUtils.getPage(fetch, pageable, countQuery::fetchOne);
     }
 
-    private BooleanExpression queryOption(String keyword, String type) {
-        if (keyword != null && type != null) {
-            return switch (type) {
-                case "student-id" -> member.studentId.containsIgnoreCase(keyword);
-                case "name" -> member.name.containsIgnoreCase(keyword);
-                case "phone" -> member.phone.containsIgnoreCase(keyword);
-                case "department" -> member.department.containsIgnoreCase(keyword);
-                case "email" -> member.email.containsIgnoreCase(keyword);
-                case "discord-username" -> member.discordUsername.containsIgnoreCase(keyword);
-                case "discord-nickname" -> member.nickname.containsIgnoreCase(keyword);
-                default -> throw new CustomException(ErrorCode.INVALID_QUERY_PARAMETER);
+    private BooleanExpression queryOption(String keyword, MemberQueryOption queryOption) {
+        if (keyword != null && queryOption != null) {
+            return switch (queryOption) {
+                case STUDENT_ID -> member.studentId.containsIgnoreCase(keyword);
+                case NAME -> member.name.containsIgnoreCase(keyword);
+                case PHONE -> member.phone.containsIgnoreCase(keyword);
+                case DEPARTMENT -> member.department.containsIgnoreCase(keyword);
+                case EMAIL -> member.email.containsIgnoreCase(keyword);
+                case DISCORD_USERNAME -> member.discordUsername.containsIgnoreCase(keyword);
+                case DISCORD_NICKNAME -> member.nickname.containsIgnoreCase(keyword);
             };
         }
 
