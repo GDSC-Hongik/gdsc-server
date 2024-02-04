@@ -21,4 +21,9 @@ public class MemberService {
         Page<Member> members = memberRepository.findAll(queryRequest, pageable);
         return members.map(MemberFindAllResponse::of);
     }
+
+    @Transactional
+    public void withdrawMember(Long memberId) {
+        memberRepository.deleteById(memberId);
+    }
 }
