@@ -2,7 +2,7 @@ package com.gdschongik.gdsc.domain.member.dto.response;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
 
-public record AdminMemberFindAllResponse(
+public record MemberFindAllResponse(
         Long memberId,
         String studentId,
         String name,
@@ -12,8 +12,8 @@ public record AdminMemberFindAllResponse(
         String discordUsername,
         String nickname) {
 
-    public static AdminMemberFindAllResponse of(Member member) {
-        return new AdminMemberFindAllResponse(
+    public static MemberFindAllResponse of(Member member) {
+        return new MemberFindAllResponse(
                 member.getId(),
                 member.getStudentId(),
                 member.getName(),
