@@ -19,8 +19,7 @@ public class AdminMemberController {
     private final MemberService memberService;
 
     @GetMapping
-    public ResponseEntity<Page<MemberFindAllResponse>> getMembers(
-            MemberQueryRequest queryRequest, Pageable pageable) {
+    public ResponseEntity<Page<MemberFindAllResponse>> getMembers(MemberQueryRequest queryRequest, Pageable pageable) {
         Page<MemberFindAllResponse> response = memberService.findAll(queryRequest, pageable);
         return ResponseEntity.ok().body(response);
     }
