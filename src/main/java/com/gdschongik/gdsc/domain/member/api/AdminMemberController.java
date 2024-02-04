@@ -3,6 +3,8 @@ package com.gdschongik.gdsc.domain.member.api;
 import com.gdschongik.gdsc.domain.member.application.MemberService;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberFindAllResponse;
+import com.gdschongik.gdsc.global.util.CookieUtil;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AdminMemberController {
 
     private final MemberService memberService;
+    private final CookieUtil cookieUtil;
 
     @GetMapping
     public ResponseEntity<Page<MemberFindAllResponse>> getMembers(MemberQueryRequest queryRequest, Pageable pageable) {
@@ -27,8 +30,9 @@ public class AdminMemberController {
     }
 
     @DeleteMapping("/{memberId}")
-    public ResponseEntity<Void> withdrawMember(@PathVariable Long memberId) {
+    public ResponseEntity<Void> withdrawMember(@PathVariable Long memberId, HttpServletResponse response) {
         memberService.withdrawMember(memberId);
+        cookieUtil.addTokenCookies(response, "", "");
         return ResponseEntity.ok().build();
     }
 }
