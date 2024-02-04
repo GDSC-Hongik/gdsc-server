@@ -12,11 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class MemberService {
 
     private final MemberRepository memberRepository;
 
-    @Transactional(readOnly = true)
     public Page<AdminMemberFindAllResponse> findAll(MemberQueryRequest queryRequest, Pageable pageable) {
         Page<Member> members = memberRepository.findAll(queryRequest, pageable);
         return members.map(AdminMemberFindAllResponse::of);
