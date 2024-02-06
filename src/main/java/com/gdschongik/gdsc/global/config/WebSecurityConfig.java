@@ -30,7 +30,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -51,23 +51,33 @@ public class WebSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.httpBasic(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
+                .logout(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         http.oauth2Login(
                 oauth2 -> oauth2.userInfoEndpoint(userInfo -> userInfo.userService(customUserService(memberRepository)))
-                        .successHandler(customSuccessHandler(jwtService, cookieUtil)));
+                        .successHandler(customSuccessHandler(jwtService, cookieUtil))
+                        .failureHandler((request, response, exception) -> response.setStatus(401)));
 
-        if (environmentUtil.isProdAndDevProfile()) {
-            http.authorizeHttpRequests(authorize -> authorize
-                            .requestMatchers(HttpMethod.GET, getSwaggerUrls())
-                            .authenticated())
-                    .httpBasic(withDefaults());
-        }
+        // if (environmentUtil.isProdAndDevProfile()) {
+        //     http.authorizeHttpRequests(authorize -> authorize
+        //                     .requestMatchers(HttpMethod.GET, getSwaggerUrls())
+        //                     .authenticated())
+        //             .httpBasic(withDefaults());
+        // }
 
-        http.addFilterBefore(jwtFilter(jwtService, cookieUtil), UsernamePasswordAuthenticationFilter.class);
-        http.addFilterBefore(jwtExceptionFilter(objectMapper), JwtFilter.class);
+        // http.authorizeHttpRequests(authorize -> authorize
+        //                 .requestMatchers(HttpMethod.GET, getSwaggerUrls())
+        //                 .authenticated())
+        //         .httpBasic(withDefaults());
+
+        http.authorizeHttpRequests(authorize ->
+                authorize.requestMatchers("/oauth2/**").permitAll().anyRequest().authenticated());
+
+        http.addFilterAfter(jwtExceptionFilter(objectMapper), LogoutFilter.class);
+        http.addFilterAfter(jwtFilter(jwtService, cookieUtil), LogoutFilter.class);
 
         return http.build();
     }
