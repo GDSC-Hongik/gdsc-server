@@ -1,6 +1,7 @@
 package com.gdschongik.gdsc.domain.member.domain;
 
 import com.gdschongik.gdsc.domain.common.model.BaseTimeEntity;
+import com.gdschongik.gdsc.domain.member.dto.request.MemberUpdateRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -85,5 +86,58 @@ public class Member extends BaseTimeEntity {
                 .role(MemberRole.GUEST)
                 .status(MemberStatus.NORMAL)
                 .build();
+    }
+
+    public void updateMemberInfo(MemberUpdateRequest request) {
+        updateStudentId(request.studentId());
+        updateName(request.name());
+        updatePhone(request.phone());
+        updateDepartment(request.department());
+        updateEmail(request.email());
+        updateDiscordUsername(request.discordUsername());
+        updateNickname(request.discordNickname());
+    }
+
+    private void updateStudentId(String studentId) {
+        if (studentId != null) {
+            this.studentId = studentId;
+        }
+    }
+
+    private void updateName(String name) {
+        if (name != null) {
+            this.name = name;
+        }
+    }
+
+    private void updatePhone(String phone) {
+        if (phone != null) {
+            this.name = phone;
+        }
+    }
+
+    private void updateDepartment(String department) {
+        if (department != null) {
+            this.department = department;
+        }
+    }
+
+
+    private void updateEmail(String email) {
+        if (email != null) {
+            this.email = email;
+        }
+    }
+
+    private void updateDiscordUsername(String discordUsername) {
+        if (discordUsername != null) {
+            this.discordUsername = discordUsername;
+        }
+    }
+
+    private void updateNickname(String nickname) {
+        if (nickname != null) {
+            this.nickname = nickname;
+        }
     }
 }
