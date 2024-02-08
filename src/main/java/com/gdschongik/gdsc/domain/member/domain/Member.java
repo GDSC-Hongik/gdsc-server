@@ -1,7 +1,11 @@
 package com.gdschongik.gdsc.domain.member.domain;
 
+import static com.gdschongik.gdsc.global.common.constant.RegexConstant.*;
+
 import com.gdschongik.gdsc.domain.common.model.BaseTimeEntity;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberUpdateRequest;
+import com.gdschongik.gdsc.global.exception.CustomException;
+import com.gdschongik.gdsc.global.exception.ErrorCode;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -99,44 +103,60 @@ public class Member extends BaseTimeEntity {
     }
 
     private void updateStudentId(String studentId) {
-        if (studentId != null) {
+        validateStringNotNull(studentId);
+        validateRegex(studentId, STUDENT_ID);
+
+        if (!this.studentId.equals(studentId)) {
             this.studentId = studentId;
         }
     }
 
     private void updateName(String name) {
-        if (name != null) {
+        validateStringNotNull(name);
+
+        if (!this.name.equals(name)) {
             this.name = name;
         }
     }
 
     private void updatePhone(String phone) {
-        if (phone != null) {
-            this.name = phone;
+        validateStringNotNull(phone);
+        validateRegex(phone, PHONE);
+
+        if (!this.phone.equals(phone)) {
+            this.phone = phone;
         }
     }
 
     private void updateDepartment(String department) {
-        if (department != null) {
+        validateStringNotNull(department);
+
+        if (!this.department.equals(department)) {
             this.department = department;
         }
     }
 
-
     private void updateEmail(String email) {
-        if (email != null) {
+        validateStringNotNull(email);
+
+        if (!this.email.equals(email)) {
             this.email = email;
         }
     }
 
     private void updateDiscordUsername(String discordUsername) {
-        if (discordUsername != null) {
+        validateStringNotNull(discordUsername);
+
+        if (!this.discordUsername.equals(discordUsername)) {
             this.discordUsername = discordUsername;
         }
     }
 
     private void updateNickname(String nickname) {
-        if (nickname != null) {
+        validateStringNotNull(nickname);
+        validateRegex(nickname, NICKNAME);
+
+        if (!this.nickname.equals(nickname)) {
             this.nickname = nickname;
         }
     }
