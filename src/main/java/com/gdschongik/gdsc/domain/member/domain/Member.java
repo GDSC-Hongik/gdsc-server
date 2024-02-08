@@ -99,7 +99,7 @@ public class Member extends BaseTimeEntity {
         updateDepartment(request.department());
         updateEmail(request.email());
         updateDiscordUsername(request.discordUsername());
-        updateNickname(request.discordNickname());
+        updateNickname(request.nickname());
     }
 
     private void updateStudentId(String studentId) {
