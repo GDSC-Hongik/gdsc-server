@@ -2,12 +2,17 @@ package com.gdschongik.gdsc.domain.member.api;
 
 import com.gdschongik.gdsc.domain.member.application.MemberService;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryRequest;
+import com.gdschongik.gdsc.domain.member.dto.request.MemberUpdateRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberFindAllResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,5 +27,12 @@ public class AdminMemberController {
     public ResponseEntity<Page<MemberFindAllResponse>> getMembers(MemberQueryRequest queryRequest, Pageable pageable) {
         Page<MemberFindAllResponse> response = memberService.findAll(queryRequest, pageable);
         return ResponseEntity.ok().body(response);
+    }
+
+    @PutMapping("/{memberId}")
+    public ResponseEntity<Void> withdrawMember(
+            @PathVariable Long memberId, @Valid @RequestBody MemberUpdateRequest request) {
+        memberService.updateMember(memberId, request);
+        return ResponseEntity.ok().build();
     }
 }
