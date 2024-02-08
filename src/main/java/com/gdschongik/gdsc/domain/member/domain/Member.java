@@ -86,4 +86,8 @@ public class Member extends BaseTimeEntity {
                 .status(MemberStatus.NORMAL)
                 .build();
     }
+
+    public void softDelete() {
+        this.status = MemberStatus.DELETED;
+    }
 }
