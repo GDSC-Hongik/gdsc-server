@@ -1,11 +1,11 @@
 package com.gdschongik.gdsc.domain.member.domain;
 
 import static com.gdschongik.gdsc.global.common.constant.RegexConstant.*;
+import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.common.model.BaseTimeEntity;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberUpdateRequest;
 import com.gdschongik.gdsc.global.exception.CustomException;
-import com.gdschongik.gdsc.global.exception.ErrorCode;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -163,13 +163,19 @@ public class Member extends BaseTimeEntity {
 
     private void validateStringNotNull(String value) {
         if (value == null) {
-            throw new CustomException(ErrorCode.METHOD_ARGUMENT_NULL);
+            throw new CustomException(METHOD_ARGUMENT_NULL);
         }
     }
 
     private void validateRegex(String value, String regex) {
         if (!value.matches(regex)) {
-            throw new CustomException(ErrorCode.REGEX_VIOLATION);
+            throw new CustomException(REGEX_VIOLATION);
+        }
+    }
+
+    public void validateStatus() {
+        if (this.status == MemberStatus.DELETED) {
+            throw new CustomException(MEMBER_DELETED);
         }
     }
 }
