@@ -13,4 +13,4 @@ public record MemberUpdateRequest(
         @NotNull String department,
         @NotNull @Email String email,
         @NotNull String discordUsername,
-        @NotNull @Pattern(regexp = DISCORD_NICKNAME) String discordNickname) {}
+        @NotNull @Pattern(regexp = NICKNAME) String discordNickname) {}
