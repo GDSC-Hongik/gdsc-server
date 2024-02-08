@@ -140,4 +140,16 @@ public class Member extends BaseTimeEntity {
             this.nickname = nickname;
         }
     }
+
+    private void validateStringNotNull(String value) {
+        if (value == null) {
+            throw new CustomException(ErrorCode.METHOD_ARGUMENT_NULL);
+        }
+    }
+
+    private void validateRegex(String value, String regex) {
+        if (!value.matches(regex)) {
+            throw new CustomException(ErrorCode.REGEX_VIOLATION);
+        }
+    }
 }
