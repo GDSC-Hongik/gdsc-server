@@ -91,8 +91,8 @@ public class Member extends BaseTimeEntity {
     }
 
     public void softDelete() {
-        if (this.status == MemberStatus.DELETED) {
-            throw new CustomException(MEMBER_ALREADY_SOFT_DELETED);
+        if (this.status.isDeleted()) {
+            throw new CustomException(MEMBER_SOFT_DELETED);
         }
         this.status = MemberStatus.DELETED;
     }
