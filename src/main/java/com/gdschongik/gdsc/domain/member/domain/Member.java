@@ -90,7 +90,7 @@ public class Member extends BaseTimeEntity {
                 .build();
     }
 
-    public void softDelete() {
+    public void withdraw() {
         if (isDeleted()) {
             throw new CustomException(MEMBER_DELETED);
         }

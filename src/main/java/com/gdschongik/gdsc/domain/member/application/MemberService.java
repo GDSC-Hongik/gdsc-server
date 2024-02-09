@@ -30,6 +30,6 @@ public class MemberService {
     @Transactional
     public void withdrawMember(Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
-        member.softDelete();
+        member.withdraw();
     }
 }
