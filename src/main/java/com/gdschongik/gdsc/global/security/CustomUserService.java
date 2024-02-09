@@ -2,6 +2,8 @@ package com.gdschongik.gdsc.global.security;
 
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
+import com.gdschongik.gdsc.global.exception.CustomException;
+import com.gdschongik.gdsc.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -23,7 +25,12 @@ public class CustomUserService extends DefaultOAuth2UserService {
     }
 
     private Member fetchOrCreate(OAuth2User oAuth2User) {
-        return memberRepository.findByOauthId(oAuth2User.getName()).orElseGet(() -> registerMember(oAuth2User));
+        Member member =
+                memberRepository.findByOauthId(oAuth2User.getName()).orElseGet(() -> registerMember(oAuth2User));
+        if (member.isDeleted()) {
+            throw new CustomException(ErrorCode.MEMBER_SOFT_DELETED);
+        }
+        return member;
     }
 
     private Member registerMember(OAuth2User oAuth2User) {

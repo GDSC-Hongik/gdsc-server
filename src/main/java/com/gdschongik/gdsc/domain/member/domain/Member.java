@@ -96,4 +96,8 @@ public class Member extends BaseTimeEntity {
         }
         this.status = MemberStatus.DELETED;
     }
+
+    public boolean isDeleted() {
+        return this.status.isDeleted();
+    }
 }
