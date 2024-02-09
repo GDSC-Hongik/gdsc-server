@@ -116,60 +116,39 @@ public class Member extends BaseTimeEntity {
     private void updateStudentId(String studentId) {
         validateStringNotNull(studentId);
         validateRegex(studentId, STUDENT_ID);
-
-        if (!this.studentId.equals(studentId)) {
-            this.studentId = studentId;
-        }
+        this.studentId = studentId;
     }
 
     private void updateName(String name) {
         validateStringNotNull(name);
-
-        if (!this.name.equals(name)) {
-            this.name = name;
-        }
+        this.name = name;
     }
 
     private void updatePhone(String phone) {
         validateStringNotNull(phone);
         validateRegex(phone, PHONE);
-
-        if (!this.phone.equals(phone)) {
-            this.phone = phone;
-        }
+        this.phone = phone;
     }
 
     private void updateDepartment(String department) {
         validateStringNotNull(department);
-
-        if (!this.department.equals(department)) {
-            this.department = department;
-        }
+        this.department = department;
     }
 
     private void updateEmail(String email) {
         validateStringNotNull(email);
-
-        if (!this.email.equals(email)) {
-            this.email = email;
-        }
+        this.email = email;
     }
 
     private void updateDiscordUsername(String discordUsername) {
         validateStringNotNull(discordUsername);
-
-        if (!this.discordUsername.equals(discordUsername)) {
-            this.discordUsername = discordUsername;
-        }
+        this.discordUsername = discordUsername;
     }
 
     private void updateNickname(String nickname) {
         validateStringNotNull(nickname);
         validateRegex(nickname, NICKNAME);
-
-        if (!this.nickname.equals(nickname)) {
-            this.nickname = nickname;
-        }
+        this.nickname = nickname;
     }
 
     private void validateStringNotNull(String value) {
