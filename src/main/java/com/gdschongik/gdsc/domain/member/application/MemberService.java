@@ -1,5 +1,7 @@
 package com.gdschongik.gdsc.domain.member.application;
 
+import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
+
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryRequest;
@@ -23,6 +25,12 @@ public class MemberService {
     public Page<MemberFindAllResponse> findAll(MemberQueryRequest queryRequest, Pageable pageable) {
         Page<Member> members = memberRepository.findAll(queryRequest, pageable);
         return members.map(MemberFindAllResponse::of);
+    }
+
+    @Transactional
+    public void withdrawMember(Long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
+        member.withdraw();
     }
 
     @Transactional

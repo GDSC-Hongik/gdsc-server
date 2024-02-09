@@ -92,6 +92,17 @@ public class Member extends BaseTimeEntity {
                 .build();
     }
 
+    public void withdraw() {
+        if (isDeleted()) {
+            throw new CustomException(MEMBER_DELETED);
+        }
+        this.status = MemberStatus.DELETED;
+    }
+
+    public boolean isDeleted() {
+        return this.status.isDeleted();
+    }
+
     public void updateMemberInfo(MemberUpdateRequest request) {
         updateStudentId(request.studentId());
         updateName(request.name());

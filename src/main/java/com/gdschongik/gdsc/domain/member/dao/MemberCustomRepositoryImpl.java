@@ -3,12 +3,14 @@ package com.gdschongik.gdsc.domain.member.dao;
 import static com.gdschongik.gdsc.domain.member.domain.QMember.*;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
+import com.gdschongik.gdsc.domain.member.domain.MemberStatus;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryRequest;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,6 +34,22 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
                 queryFactory.select(member.count()).from(member).where(queryOption(queryRequest));
 
         return PageableExecutionUtils.getPage(fetch, pageable, countQuery::fetchOne);
+    }
+
+    @Override
+    public Optional<Member> findNormalByOauthId(String oauthId) {
+        return Optional.ofNullable(queryFactory
+                .selectFrom(member)
+                .where(eqOauthId(oauthId), eqStatus(MemberStatus.NORMAL))
+                .fetchOne());
+    }
+
+    private BooleanExpression eqOauthId(String oauthId) {
+        return member.oauthId.eq(oauthId);
+    }
+
+    private BooleanExpression eqStatus(MemberStatus status) {
+        return member.status.eq(status);
     }
 
     private BooleanBuilder queryOption(MemberQueryRequest queryRequest) {
