@@ -18,7 +18,7 @@ public enum ErrorCode {
 
     // Member
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다."),
-    MEMBER_DELETED(HttpStatus.BAD_REQUEST, "탈퇴한 회원입니다.");
+    MEMBER_DELETED(HttpStatus.CONFLICT, "탈퇴한 회원입니다.");
 
     private final HttpStatus status;
     private final String message;
