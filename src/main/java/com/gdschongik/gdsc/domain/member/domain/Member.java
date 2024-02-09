@@ -164,7 +164,7 @@ public class Member extends BaseTimeEntity {
     }
 
     public void validateStatus() {
-        if (this.status == MemberStatus.DELETED) {
+        if (isDeleted()) {
             throw new CustomException(MEMBER_DELETED);
         }
     }
