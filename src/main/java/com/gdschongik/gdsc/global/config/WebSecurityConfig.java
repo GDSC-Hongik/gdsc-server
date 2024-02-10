@@ -136,7 +136,9 @@ public class WebSecurityConfig {
         if (environmentUtil.isDevProfile()) {
             configuration.addAllowedOriginPattern(DEV_CLIENT_URL);
             configuration.addAllowedOriginPattern(LOCAL_REACT_CLIENT_URL);
+            configuration.addAllowedOriginPattern(LOCAL_REACT_CLIENT_SECURE_URL);
             configuration.addAllowedOriginPattern(LOCAL_VITE_CLIENT_URL);
+            configuration.addAllowedOriginPattern(LOCAL_VITE_CLIENT_SECURE_URL);
         }
 
         configuration.addAllowedHeader("*");

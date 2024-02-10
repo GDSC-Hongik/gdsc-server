@@ -33,7 +33,7 @@ public class CookieUtil {
                 .path("/")
                 .secure(true)
                 .sameSite(sameSite)
-                .httpOnly(false)
+                .httpOnly(true)
                 .build();
     }
 
