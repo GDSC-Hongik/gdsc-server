@@ -11,4 +11,8 @@ public enum MemberStatus {
     FORBIDDEN("FORBIDDEN");
 
     private final String value;
+
+    public boolean isDeleted() {
+        return this.equals(DELETED);
+    }
 }

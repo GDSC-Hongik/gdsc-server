@@ -23,7 +23,7 @@ public class CustomUserService extends DefaultOAuth2UserService {
     }
 
     private Member fetchOrCreate(OAuth2User oAuth2User) {
-        return memberRepository.findByOauthId(oAuth2User.getName()).orElseGet(() -> registerMember(oAuth2User));
+        return memberRepository.findNormalByOauthId(oAuth2User.getName()).orElseGet(() -> registerMember(oAuth2User));
     }
 
     private Member registerMember(OAuth2User oAuth2User) {

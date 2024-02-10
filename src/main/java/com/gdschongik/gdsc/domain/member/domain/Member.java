@@ -1,6 +1,9 @@
 package com.gdschongik.gdsc.domain.member.domain;
 
+import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
+
 import com.gdschongik.gdsc.domain.common.model.BaseTimeEntity;
+import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -85,5 +88,16 @@ public class Member extends BaseTimeEntity {
                 .role(MemberRole.GUEST)
                 .status(MemberStatus.NORMAL)
                 .build();
+    }
+
+    public void withdraw() {
+        if (isDeleted()) {
+            throw new CustomException(MEMBER_DELETED);
+        }
+        this.status = MemberStatus.DELETED;
+    }
+
+    public boolean isDeleted() {
+        return this.status.isDeleted();
     }
 }
