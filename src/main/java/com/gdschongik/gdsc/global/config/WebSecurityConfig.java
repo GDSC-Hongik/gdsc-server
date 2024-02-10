@@ -17,6 +17,7 @@ import com.gdschongik.gdsc.global.util.CookieUtil;
 import com.gdschongik.gdsc.global.util.EnvironmentUtil;
 import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -58,14 +59,13 @@ public class WebSecurityConfig {
 
     @Bean
     @Order(1)
+    @ConditionalOnProperty(name = "spring.profiles.active", havingValue = "dev")
     public SecurityFilterChain swaggerSecurityFilterChain(HttpSecurity http) throws Exception {
         defaultFilterChain(http);
 
-        if (environmentUtil.isDevProfile()) {
-            http.securityMatcher(getSwaggerUrls())
-                    .authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated())
-                    .httpBasic(withDefaults());
-        }
+        http.securityMatcher(getSwaggerUrls())
+                .authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated())
+                .httpBasic(withDefaults());
 
         return http.build();
     }
