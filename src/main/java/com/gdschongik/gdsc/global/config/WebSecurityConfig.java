@@ -19,7 +19,7 @@ import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -47,34 +47,37 @@ public class WebSecurityConfig {
     private final EnvironmentUtil environmentUtil;
     private final SwaggerProperty swaggerProperty;
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    private static void defaultFilterChain(HttpSecurity http) throws Exception {
         http.httpBasic(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .logout(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+    }
+
+    @Bean
+    @Order(1)
+    public SecurityFilterChain swaggerSecurityFilterChain(HttpSecurity http) throws Exception {
+        defaultFilterChain(http);
+
+        if (environmentUtil.isDevProfile()) {
+            http.securityMatcher(getSwaggerUrls())
+                    .authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated())
+                    .httpBasic(withDefaults());
+        }
+
+        return http.build();
+    }
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        defaultFilterChain(http);
 
         http.oauth2Login(
                 oauth2 -> oauth2.userInfoEndpoint(userInfo -> userInfo.userService(customUserService(memberRepository)))
                         .successHandler(customSuccessHandler(jwtService, cookieUtil))
                         .failureHandler((request, response, exception) -> response.setStatus(401)));
-
-        // if (environmentUtil.isProdAndDevProfile()) {
-        //     http.authorizeHttpRequests(authorize -> authorize
-        //                     .requestMatchers(HttpMethod.GET, getSwaggerUrls())
-        //                     .authenticated())
-        //             .httpBasic(withDefaults());
-        // }
-
-        // http.authorizeHttpRequests(authorize -> authorize
-        //                 .requestMatchers(HttpMethod.GET, getSwaggerUrls())
-        //                 .authenticated())
-        //         .httpBasic(withDefaults());
-
-        http.authorizeHttpRequests(authorize ->
-                authorize.requestMatchers("/oauth2/**").permitAll().anyRequest().authenticated());
 
         http.addFilterAfter(jwtExceptionFilter(objectMapper), LogoutFilter.class);
         http.addFilterAfter(jwtFilter(jwtService, cookieUtil), LogoutFilter.class);
