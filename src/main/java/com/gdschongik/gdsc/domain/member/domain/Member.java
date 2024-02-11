@@ -3,14 +3,19 @@ package com.gdschongik.gdsc.domain.member.domain;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.common.model.BaseTimeEntity;
+import com.gdschongik.gdsc.domain.requirement.domain.Requirement;
 import com.gdschongik.gdsc.global.exception.CustomException;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -54,6 +59,10 @@ public class Member extends BaseTimeEntity {
 
     private String univEmail;
 
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JoinColumn(name = "requirement_id")
+    private Requirement requirement;
+
     @Builder(access = AccessLevel.PRIVATE)
     private Member(
             MemberRole role,
@@ -67,7 +76,8 @@ public class Member extends BaseTimeEntity {
             String nickname,
             String oauthId,
             LocalDateTime lastLoginAt,
-            String univEmail) {
+            String univEmail,
+            Requirement requirement) {
         this.role = role;
         this.status = status;
         this.name = name;
@@ -80,13 +90,16 @@ public class Member extends BaseTimeEntity {
         this.oauthId = oauthId;
         this.lastLoginAt = lastLoginAt;
         this.univEmail = univEmail;
+        this.requirement = requirement;
     }
 
     public static Member createGuestMember(String oauthId) {
+        Requirement requirement = Requirement.createInstance();
         return Member.builder()
                 .oauthId(oauthId)
                 .role(MemberRole.GUEST)
                 .status(MemberStatus.NORMAL)
+                .requirement(requirement)
                 .build();
     }
 
