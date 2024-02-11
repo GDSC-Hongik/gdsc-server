@@ -87,8 +87,8 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private String extractAccessTokenFromHeader(HttpServletRequest request) {
         return Optional.ofNullable(request.getHeader(HttpHeaders.AUTHORIZATION))
-                .filter(header -> header.startsWith(TOKEN_HEADER_PREFIX))
-                .map(header -> header.replace(TOKEN_HEADER_PREFIX, ""))
+                .filter(header -> header.startsWith(ACCESS_TOKEN_HEADER_PREFIX))
+                .map(header -> header.replace(ACCESS_TOKEN_HEADER_PREFIX, ""))
                 .orElse(null);
     }
 
