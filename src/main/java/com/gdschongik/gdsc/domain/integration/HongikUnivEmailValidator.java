@@ -12,7 +12,6 @@ public class HongikUnivEmailValidator {
 
     private static final String HONGIK_UNIV_MAIL_DOMAIN = "@g.hongik.ac.kr";
 
-    // 이 불가능하고
     private static final String EMAIL_REGEX = "^[^\\W&=_'-+,<>]+(\\.[^\\W&=_'-+,<>]+)*@g\\.hongik\\.ac\\.kr$";
 
     public void validate(String email) {
