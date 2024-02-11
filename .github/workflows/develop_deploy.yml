@@ -1,0 +1,29 @@
+name: Deploy to Develop
+
+on:
+  workflow_dispatch:
+    inputs:
+      commit_hash:
+        description: 'commit_hash'
+        required: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: develop
+    steps:
+      - name: Deploy to EC2 Server
+        uses: appleboy/ssh-action@master
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_IMAGE_TAG: ${{ github.event.inputs.commit_hash }}
+        with:
+            host: ${{ secrets.EC2_HOST }}
+            username: ${{ secrets.EC2_USERNAME }}
+            key: ${{ secrets.EC2_PRIVATE_KEY }}
+            envs: DOCKERHUB_USERNAME,DOCKERHUB_IMAGE_TAG  # docker-compose.yml 에서 사용할 환경 변수
+            script: |
+              echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+              docker pull ${{ env.DOCKERHUB_USERNAME }}/gdsc-server:${{ env.DOCKERHUB_IMAGE_TAG }}
+              docker compose -f /home/ubuntu/docker-compose.yml up -d
+              docker image prune -a -f
