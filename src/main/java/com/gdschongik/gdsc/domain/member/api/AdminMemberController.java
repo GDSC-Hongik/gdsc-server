@@ -5,6 +5,8 @@ import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberUpdateRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberFindAllResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberPendingFindAllResponse;
+
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -37,6 +39,7 @@ public class AdminMemberController {
         return ResponseEntity.ok().build();
     }
 
+    @Operation(summary = "대기중인 회원 목록 조회", description = "대기중인 회원 목록을 조회합니다.")
     @GetMapping("/pending")
     public ResponseEntity<Page<MemberPendingFindAllResponse>> getPendingMembers(Pageable pageable) {
         Page<MemberPendingFindAllResponse> response = memberService.findAllPendingMembers(pageable);
