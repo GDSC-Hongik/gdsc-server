@@ -15,22 +15,27 @@ public class MemberUtil {
 
     private final MemberRepository memberRepository;
 
-    private Long getCurrentMemberIdFromSecurityContext() {
+    public Long getCurrentMemberId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        validateAuthenticationNotNull(authentication);
+
         try {
             return Long.parseLong(authentication.getName());
-        } catch (Exception e) {
-            throw new CustomException(ErrorCode.AUTH_NOT_FOUND);
+        } catch (NumberFormatException e) {
+            throw new CustomException(ErrorCode.AUTH_NOT_PARSABLE);
         }
     }
 
-    public Long getCurrentMemberId() {
-        return getCurrentMemberIdFromSecurityContext();
+    private void validateAuthenticationNotNull(Authentication authentication) {
+        if (authentication == null) {
+            throw new CustomException(ErrorCode.AUTH_NOT_EXIST);
+        }
     }
 
     public Member getCurrentMember() {
         return memberRepository
-                .findById(getCurrentMemberIdFromSecurityContext())
+                .findById(getCurrentMemberId())
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
     }
 }
