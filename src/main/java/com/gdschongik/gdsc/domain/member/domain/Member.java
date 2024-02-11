@@ -108,6 +108,8 @@ public class Member extends BaseTimeEntity {
     }
 
     public void updateMemberInfo(MemberUpdateRequest request) {
+        validateStatusUpdatable();
+
         updateStudentId(request.studentId());
         updateName(request.name());
         updatePhone(request.phone());
@@ -155,7 +157,7 @@ public class Member extends BaseTimeEntity {
         }
     }
 
-    public void validateStatusUpdatable() {
+    private void validateStatusUpdatable() {
         if (isDeleted()) {
             throw new CustomException(MEMBER_DELETED);
         }

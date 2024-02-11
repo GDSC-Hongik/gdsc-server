@@ -37,8 +37,6 @@ public class MemberService {
     public void updateMember(Long memberId, MemberUpdateRequest request) {
         Member member =
                 memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
-
-        member.validateStatusUpdatable();
         member.updateMemberInfo(request);
     }
 }
