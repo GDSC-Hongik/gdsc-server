@@ -1,5 +1,6 @@
 package com.gdschongik.gdsc.domain.integration;
 
+import java.time.Duration;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -11,8 +12,8 @@ public class VerificationMailContentWriter {
         + "<h3> 감사힙니다. </h3> <br>"
         + "CODE : <strong>";
 
-    public String writeContentWithVerificationCode(String verificationCode, int codeAliveTime) {
-        return String.format(NOTIFICATION_MESSAGE, codeAliveTime)
+    public String writeContentWithVerificationCode(String verificationCode, Duration codeAliveTime) {
+        return String.format(NOTIFICATION_MESSAGE, codeAliveTime.toMinutes())
             + verificationCode;
     }
 }
