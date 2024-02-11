@@ -8,6 +8,7 @@ spring:
       - redis
       - storage
       - security
+      - swagger
 
 logging:
   level:

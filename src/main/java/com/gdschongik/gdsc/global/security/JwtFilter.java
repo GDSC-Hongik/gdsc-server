@@ -1,5 +1,7 @@
 package com.gdschongik.gdsc.global.security;
 
+import static com.gdschongik.gdsc.global.common.constant.SecurityConstant.*;
+
 import com.gdschongik.gdsc.domain.auth.application.JwtService;
 import com.gdschongik.gdsc.domain.auth.dto.AccessTokenDto;
 import com.gdschongik.gdsc.domain.auth.dto.RefreshTokenDto;
@@ -14,6 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,8 +34,19 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
+        String accessTokenHeaderValue = extractAccessTokenFromHeader(request);
         String accessTokenValue = extractTokenValue(JwtConstant.ACCESS_TOKEN, request);
         String refreshTokenValue = extractTokenValue(JwtConstant.REFRESH_TOKEN, request);
+
+        // 헤더에 AT가 있으면 우선적으로 검증 (Swagger 테스트 전용)
+        if (accessTokenHeaderValue != null) {
+            AccessTokenDto accessTokenDto = jwtService.retrieveAccessToken(accessTokenHeaderValue);
+            if (accessTokenDto != null) {
+                setAuthenticationToContext(accessTokenDto.memberId(), accessTokenDto.memberRole());
+                filterChain.doFilter(request, response);
+                return;
+            }
+        }
 
         // AT와 RT 중 하나라도 없으면 실패
         if (accessTokenValue == null || refreshTokenValue == null) {
@@ -68,6 +82,13 @@ public class JwtFilter extends OncePerRequestFilter {
     private String extractTokenValue(JwtConstant jwtConstant, HttpServletRequest request) {
         return Optional.ofNullable(WebUtils.getCookie(request, jwtConstant.getCookieName()))
                 .map(Cookie::getValue)
+                .orElse(null);
+    }
+
+    private String extractAccessTokenFromHeader(HttpServletRequest request) {
+        return Optional.ofNullable(request.getHeader(HttpHeaders.AUTHORIZATION))
+                .filter(header -> header.startsWith(ACCESS_TOKEN_HEADER_PREFIX))
+                .map(header -> header.replace(ACCESS_TOKEN_HEADER_PREFIX, ""))
                 .orElse(null);
     }
 
