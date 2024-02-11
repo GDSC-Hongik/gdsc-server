@@ -2,27 +2,18 @@ package com.gdschongik.gdsc.domain.requirement.domain;
 
 import static com.gdschongik.gdsc.domain.requirement.domain.RequirementStatus.*;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
+import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity
+@Embeddable
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Requirement {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "requirement_id")
-    private Long id;
 
     @Enumerated(EnumType.STRING)
     private RequirementStatus univStatus;
@@ -41,7 +32,7 @@ public class Requirement {
         this.paymentStatus = paymentStatus;
     }
 
-    public static Requirement createInstance() {
+    public static Requirement createRequirement() {
         return Requirement.builder()
                 .univStatus(PENDING)
                 .discordStatus(PENDING)
