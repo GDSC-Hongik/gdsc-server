@@ -127,8 +127,9 @@ public class Member extends BaseTimeEntity {
     }
 
     private void updatePhone(String phone) {
-        validateRegex(phone, PHONE);
-        this.phone = phone;
+        String phoneNumber = phone.replaceAll("-", "");
+        validateRegex(phoneNumber, PHONE_WITHOUT_HYPHEN);
+        this.phone = phoneNumber;
     }
 
     private void updateDepartment(String department) {
