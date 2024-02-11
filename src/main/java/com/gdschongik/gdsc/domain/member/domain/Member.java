@@ -1,6 +1,5 @@
 package com.gdschongik.gdsc.domain.member.domain;
 
-import static com.gdschongik.gdsc.global.common.constant.RegexConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.common.model.BaseTimeEntity;
