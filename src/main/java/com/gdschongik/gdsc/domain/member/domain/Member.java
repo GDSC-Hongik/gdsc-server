@@ -4,8 +4,11 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.common.model.BaseTimeEntity;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberUpdateRequest;
+
+import com.gdschongik.gdsc.domain.requirement.domain.Requirement;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -55,6 +58,9 @@ public class Member extends BaseTimeEntity {
 
     private String univEmail;
 
+    @Embedded
+    private Requirement requirement;
+
     @Builder(access = AccessLevel.PRIVATE)
     private Member(
             MemberRole role,
@@ -68,7 +74,8 @@ public class Member extends BaseTimeEntity {
             String nickname,
             String oauthId,
             LocalDateTime lastLoginAt,
-            String univEmail) {
+            String univEmail,
+            Requirement requirement) {
         this.role = role;
         this.status = status;
         this.name = name;
@@ -81,13 +88,16 @@ public class Member extends BaseTimeEntity {
         this.oauthId = oauthId;
         this.lastLoginAt = lastLoginAt;
         this.univEmail = univEmail;
+        this.requirement = requirement;
     }
 
     public static Member createGuestMember(String oauthId) {
+        Requirement requirement = Requirement.createRequirement();
         return Member.builder()
                 .oauthId(oauthId)
                 .role(MemberRole.GUEST)
                 .status(MemberStatus.NORMAL)
+                .requirement(requirement)
                 .build();
     }
 

@@ -12,9 +12,11 @@ public enum ErrorCode {
     METHOD_ARGUMENT_NOT_VALID(HttpStatus.BAD_REQUEST, "인자가 유효하지 않습니다."),
     REGEX_VIOLATION(HttpStatus.BAD_REQUEST, "정규표현식을 위반했습니다."),
 
-    // Jwt
+    // Auth
     INVALID_JWT_TOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않은 JWT 토큰입니다."),
     EXPIRED_JWT_TOKEN(HttpStatus.UNAUTHORIZED, "만료된 JWT 토큰입니다."),
+    AUTH_NOT_EXIST(HttpStatus.INTERNAL_SERVER_ERROR, "시큐리티 인증 정보가 존재하지 않습니다."),
+    AUTH_NOT_PARSABLE(HttpStatus.INTERNAL_SERVER_ERROR, "시큐리티 인증 정보 파싱에 실패했습니다."),
 
     // Member
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다."),
