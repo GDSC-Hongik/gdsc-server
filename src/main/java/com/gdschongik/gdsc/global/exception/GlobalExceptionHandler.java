@@ -33,6 +33,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         log.error("METHOD_ARGUMENT_NOT_VALID : {}", e.getMessage(), e);
         String errorMessage = e.getBindingResult().getAllErrors().get(0).getDefaultMessage();
         return ResponseEntity.status(status.value())
-                .body(ErrorResponse.of(ErrorCode.METHOD_ARGUMENT_NOT_VALID.name(), errorMessage));
+                .body(ErrorResponse.of(ErrorCode.METHOD_ARGUMENT_NOT_VALID, errorMessage));
     }
 }
