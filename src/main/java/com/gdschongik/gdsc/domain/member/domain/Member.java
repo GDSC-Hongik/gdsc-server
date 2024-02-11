@@ -3,6 +3,7 @@ package com.gdschongik.gdsc.domain.member.domain;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.common.model.BaseTimeEntity;
+import com.gdschongik.gdsc.domain.member.dto.request.MemberUpdateRequest;
 import com.gdschongik.gdsc.domain.requirement.domain.Requirement;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.persistence.Column;
@@ -106,7 +107,32 @@ public class Member extends BaseTimeEntity {
         this.status = MemberStatus.DELETED;
     }
 
-    public boolean isDeleted() {
+    private boolean isDeleted() {
         return this.status.isDeleted();
+    }
+
+    private boolean isForbidden() {
+        return this.status.isForbidden();
+    }
+
+    public void updateMemberInfo(MemberUpdateRequest request) {
+        validateStatusUpdatable();
+
+        this.studentId = request.studentId();
+        this.name = request.name();
+        this.phone = request.phone();
+        this.department = request.department();
+        this.email = request.email();
+        this.discordUsername = request.discordUsername();
+        this.nickname = request.nickname();
+    }
+
+    private void validateStatusUpdatable() {
+        if (isDeleted()) {
+            throw new CustomException(MEMBER_DELETED);
+        }
+        if (isForbidden()) {
+            throw new CustomException(MEMBER_FORBIDDEN);
+        }
     }
 }
