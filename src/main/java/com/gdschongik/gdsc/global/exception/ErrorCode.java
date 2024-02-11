@@ -18,7 +18,16 @@ public enum ErrorCode {
 
     // Member
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다."),
-    MEMBER_DELETED(HttpStatus.CONFLICT, "탈퇴한 회원입니다.");
+    MEMBER_DELETED(HttpStatus.CONFLICT, "탈퇴한 회원입니다."),
+
+    // Univ Email Verification
+    UNIV_EMAIL_DUPLICATED(HttpStatus.CONFLICT, "이미 가입된 Univ Email 입니다."),
+    UNIV_EMAIL_FORMAT_MISMATCH(HttpStatus.BAD_REQUEST, "형식에 맞지 않는 Univ Email 입니다."),
+    UNIV_EMAIL_DOMAIN_MISMATCH(HttpStatus.BAD_REQUEST, "Univ Email의 도메인이 맞지 않습니다."),
+
+    VERIFICATION_CODE_NOT_FOUND(HttpStatus.NOT_FOUND, "Univ Email 인증 코드가 존재하지 않습니다."),
+    UNIV_EMAIL_VERIFICATION_CODE_NOT_MATCH(HttpStatus.BAD_REQUEST, "Email 인증 번호가 불일치합니다."),
+    ;
 
     private final HttpStatus status;
     private final String message;
