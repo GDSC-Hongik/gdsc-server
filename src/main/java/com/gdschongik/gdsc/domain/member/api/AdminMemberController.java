@@ -37,7 +37,7 @@ public class AdminMemberController {
     }
 
     @PutMapping("/{memberId}")
-    public ResponseEntity<Void> withdrawMember(
+    public ResponseEntity<Void> updateMember(
             @PathVariable Long memberId, @Valid @RequestBody MemberUpdateRequest request) {
         memberService.updateMember(memberId, request);
         return ResponseEntity.ok().build();
