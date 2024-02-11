@@ -110,51 +110,13 @@ public class Member extends BaseTimeEntity {
     public void updateMemberInfo(MemberUpdateRequest request) {
         validateStatusUpdatable();
 
-        updateStudentId(request.studentId());
-        updateName(request.name());
-        updatePhone(request.phone());
-        updateDepartment(request.department());
-        updateEmail(request.email());
-        updateDiscordUsername(request.discordUsername());
-        updateNickname(request.nickname());
-    }
-
-    private void updateStudentId(String studentId) {
-        validateRegex(studentId, STUDENT_ID);
-        this.studentId = studentId;
-    }
-
-    private void updateName(String name) {
-        this.name = name;
-    }
-
-    private void updatePhone(String phone) {
-        String phoneNumber = phone.replaceAll("-", "");
-        validateRegex(phoneNumber, PHONE_WITHOUT_HYPHEN);
-        this.phone = phoneNumber;
-    }
-
-    private void updateDepartment(String department) {
-        this.department = department;
-    }
-
-    private void updateEmail(String email) {
-        this.email = email;
-    }
-
-    private void updateDiscordUsername(String discordUsername) {
-        this.discordUsername = discordUsername;
-    }
-
-    private void updateNickname(String nickname) {
-        validateRegex(nickname, NICKNAME);
-        this.nickname = nickname;
-    }
-
-    private void validateRegex(String value, String regex) {
-        if (!value.matches(regex)) {
-            throw new CustomException(REGEX_VIOLATION);
-        }
+        this.studentId = request.studentId();
+        this.name = request.name();
+        this.phone = request.phone();
+        this.department = request.department();
+        this.email = request.email();
+        this.discordUsername = request.discordUsername();
+        this.nickname = request.nickname();
     }
 
     private void validateStatusUpdatable() {
