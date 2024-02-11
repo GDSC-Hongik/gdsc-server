@@ -6,7 +6,6 @@ spring:
       dev: "dev, datasource"
     include:
       - redis
-      - storage
       - security
       - swagger
 
