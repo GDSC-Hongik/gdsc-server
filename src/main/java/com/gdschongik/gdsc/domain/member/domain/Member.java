@@ -114,47 +114,34 @@ public class Member extends BaseTimeEntity {
     }
 
     private void updateStudentId(String studentId) {
-        validateStringNotNull(studentId);
         validateRegex(studentId, STUDENT_ID);
         this.studentId = studentId;
     }
 
     private void updateName(String name) {
-        validateStringNotNull(name);
         this.name = name;
     }
 
     private void updatePhone(String phone) {
-        validateStringNotNull(phone);
         validateRegex(phone, PHONE);
         this.phone = phone;
     }
 
     private void updateDepartment(String department) {
-        validateStringNotNull(department);
         this.department = department;
     }
 
     private void updateEmail(String email) {
-        validateStringNotNull(email);
         this.email = email;
     }
 
     private void updateDiscordUsername(String discordUsername) {
-        validateStringNotNull(discordUsername);
         this.discordUsername = discordUsername;
     }
 
     private void updateNickname(String nickname) {
-        validateStringNotNull(nickname);
         validateRegex(nickname, NICKNAME);
         this.nickname = nickname;
-    }
-
-    private void validateStringNotNull(String value) {
-        if (value == null) {
-            throw new CustomException(METHOD_ARGUMENT_NULL);
-        }
     }
 
     private void validateRegex(String value, String regex) {
