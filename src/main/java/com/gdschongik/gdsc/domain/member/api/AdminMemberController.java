@@ -3,6 +3,7 @@ package com.gdschongik.gdsc.domain.member.api;
 import com.gdschongik.gdsc.domain.member.application.MemberService;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberFindAllResponse;
+import com.gdschongik.gdsc.domain.member.dto.response.MemberPendingFindAllResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,5 +31,11 @@ public class AdminMemberController {
     public ResponseEntity<Void> withdrawMember(@PathVariable Long memberId) {
         memberService.withdrawMember(memberId);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/pending")
+    public ResponseEntity<Page<MemberPendingFindAllResponse>> getPendingMembers(Pageable pageable) {
+        Page<MemberPendingFindAllResponse> response = memberService.findAllPendingMembers(pageable);
+        return ResponseEntity.ok().body(response);
     }
 }
