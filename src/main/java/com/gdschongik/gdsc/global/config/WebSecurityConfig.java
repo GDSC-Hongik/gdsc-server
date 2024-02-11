@@ -64,6 +64,7 @@ public class WebSecurityConfig {
         defaultFilterChain(http);
 
         http.securityMatcher(getSwaggerUrls())
+                .oauth2Login(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated())
                 .httpBasic(withDefaults());
 
