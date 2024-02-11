@@ -1,6 +1,5 @@
 package com.gdschongik.gdsc.domain.integration;
 
-import java.time.Duration;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.data.annotation.Id;
@@ -18,6 +17,5 @@ public class EmailVerificationCode {
     private String verificationCode;
 
     @TimeToLive
-    private static final long TIME_TO_LIVE = Duration.ofMinutes(10)
-        .toSeconds();
+    private long timeToLiveInSeconds;
 }
