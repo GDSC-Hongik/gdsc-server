@@ -82,6 +82,18 @@ public class WebSecurityConfig {
         http.addFilterAfter(jwtExceptionFilter(objectMapper), LogoutFilter.class);
         http.addFilterAfter(jwtFilter(jwtService, cookieUtil), LogoutFilter.class);
 
+        http.authorizeHttpRequests(authorize -> authorize
+                .requestMatchers("/oauth2/**")
+                .permitAll()
+                .requestMatchers("/gdsc-actuator/**")
+                .permitAll()
+                .requestMatchers("/onboarding/**")
+                .authenticated()
+                .requestMatchers("/admin/**")
+                .hasRole("ADMIN")
+                .anyRequest()
+                .authenticated());
+
         return http.build();
     }
 
