@@ -8,6 +8,7 @@ spring:
       - redis
       - security
       - swagger
+      - actuator
 
 logging:
   level:
