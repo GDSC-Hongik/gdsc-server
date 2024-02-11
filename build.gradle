@@ -58,6 +58,9 @@ dependencies {
 
     // Swagger
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
+
+    // Discord
+    implementation 'net.dv8tion:JDA:5.0.0-beta.20'
 }
 
 tasks.named('test') {
