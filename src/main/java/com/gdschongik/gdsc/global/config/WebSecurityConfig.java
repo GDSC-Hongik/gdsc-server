@@ -80,6 +80,9 @@ public class WebSecurityConfig {
                         .successHandler(customSuccessHandler(jwtService, cookieUtil))
                         .failureHandler((request, response, exception) -> response.setStatus(401)));
 
+        http.exceptionHandling(exception ->
+                exception.authenticationEntryPoint((request, response, authException) -> response.setStatus(401)));
+
         http.addFilterAfter(jwtExceptionFilter(objectMapper), LogoutFilter.class);
         http.addFilterAfter(jwtFilter(jwtService, cookieUtil), LogoutFilter.class);
 
