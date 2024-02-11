@@ -4,6 +4,7 @@ import com.gdschongik.gdsc.domain.member.application.MemberService;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberUpdateRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberFindAllResponse;
+import com.gdschongik.gdsc.domain.member.dto.response.MemberPendingFindAllResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -39,6 +40,13 @@ public class AdminMemberController {
     public ResponseEntity<Void> withdrawMember(@PathVariable Long memberId) {
         memberService.withdrawMember(memberId);
         return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "대기중인 회원 목록 조회", description = "대기중인 회원 목록을 조회합니다.")
+    @GetMapping("/pending")
+    public ResponseEntity<Page<MemberPendingFindAllResponse>> getPendingMembers(Pageable pageable) {
+        Page<MemberPendingFindAllResponse> response = memberService.findAllPendingMembers(pageable);
+        return ResponseEntity.ok().body(response);
     }
 
     @Operation(summary = "회원 정보 수정", description = "회원 정보를 수정합니다.")
