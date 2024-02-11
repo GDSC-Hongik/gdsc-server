@@ -38,7 +38,7 @@ public class MemberService {
         Member member =
                 memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
-        member.validateStatus();
+        member.validateUpdatable();
         member.updateMemberInfo(request);
     }
 }

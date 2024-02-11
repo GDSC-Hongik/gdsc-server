@@ -150,7 +150,7 @@ public class Member extends BaseTimeEntity {
         }
     }
 
-    public void validateStatus() {
+    public void validateUpdatable() {
         if (isDeleted()) {
             throw new CustomException(MEMBER_DELETED);
         }
