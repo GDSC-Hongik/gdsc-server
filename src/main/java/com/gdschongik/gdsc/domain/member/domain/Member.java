@@ -3,7 +3,6 @@ package com.gdschongik.gdsc.domain.member.domain;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.common.model.BaseTimeEntity;
-import com.gdschongik.gdsc.domain.requirement.domain.Requirement;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
