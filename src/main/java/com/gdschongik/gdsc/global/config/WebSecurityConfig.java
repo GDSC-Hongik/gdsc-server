@@ -60,7 +60,7 @@ public class WebSecurityConfig {
     @Bean
     @Order(1)
     @ConditionalOnProperty(name = "spring.profiles.active", havingValue = "dev")
-    public SecurityFilterChain swaggerSecurityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain swaggerFilterChain(HttpSecurity http) throws Exception {
         defaultFilterChain(http);
 
         http.securityMatcher(getSwaggerUrls())
