@@ -15,4 +15,8 @@ public enum MemberStatus {
     public boolean isDeleted() {
         return this.equals(DELETED);
     }
+
+    public boolean isForbidden() {
+        return this.equals(FORBIDDEN);
+    }
 }
