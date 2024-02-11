@@ -99,8 +99,12 @@ public class Member extends BaseTimeEntity {
         this.status = MemberStatus.DELETED;
     }
 
-    public boolean isDeleted() {
+    private boolean isDeleted() {
         return this.status.isDeleted();
+    }
+
+    private boolean isForbidden() {
+        return this.status.isForbidden();
     }
 
     public void updateMemberInfo(MemberUpdateRequest request) {
@@ -153,6 +157,9 @@ public class Member extends BaseTimeEntity {
     public void validateUpdatable() {
         if (isDeleted()) {
             throw new CustomException(MEMBER_DELETED);
+        }
+        if (isForbidden()) {
+            throw new CustomException(MEMBER_FORBIDDEN);
         }
     }
 }
