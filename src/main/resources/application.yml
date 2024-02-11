@@ -13,3 +13,7 @@ spring:
 logging:
   level:
     com.gdschongik.gdsc.domain.*.api.*: debug
+
+gmail:
+  id: ${GMAIL_ID}
+  password: ${GMAIL_PASSWORD}
