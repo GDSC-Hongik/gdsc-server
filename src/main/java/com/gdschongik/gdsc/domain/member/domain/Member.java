@@ -103,9 +103,7 @@ public class Member extends BaseTimeEntity {
             String name,
             String phone,
             String department,
-            String email,
-            String discordUsername,
-            String nickname) {
+            String email) {
         validateStatusUpdatable();
         validateUnivStatus();
 
@@ -114,8 +112,6 @@ public class Member extends BaseTimeEntity {
         this.phone = phone;
         this.department = department;
         this.email = email;
-        this.discordUsername = discordUsername;
-        this.nickname = nickname;
     }
 
     public void withdraw() {

@@ -22,8 +22,6 @@ public class OnboardingMemberService {
                 request.name(),
                 request.phone(),
                 request.department(),
-                request.email(),
-                request.discordUsername(),
-                request.nickname());
+                request.email());
     }
 }
