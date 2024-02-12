@@ -12,12 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class MemberServiceTest {
+class AdminMemberServiceTest {
     @Autowired
     private MemberRepository memberRepository;
 
     @Autowired
-    private MemberService memberService;
+    private AdminMemberService adminMemberService;
 
     @Test
     void status가_DELETED라면_예외_발생() {
@@ -29,7 +29,7 @@ class MemberServiceTest {
         // when & then
         MemberUpdateRequest requestBody = new MemberUpdateRequest(
                 "A111111", "name", "010-1234-5678", "department", "email@email.com", "discordUsername", "한글");
-        assertThatThrownBy(() -> memberService.updateMember(member.getId(), requestBody))
+        assertThatThrownBy(() -> adminMemberService.updateMember(member.getId(), requestBody))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(ErrorCode.MEMBER_DELETED.getMessage());
     }

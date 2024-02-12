@@ -39,4 +39,8 @@ public class Requirement {
                 .paymentStatus(PENDING)
                 .build();
     }
+
+    public boolean isUnivPending() {
+        return this.univStatus == PENDING;
+    }
 }
