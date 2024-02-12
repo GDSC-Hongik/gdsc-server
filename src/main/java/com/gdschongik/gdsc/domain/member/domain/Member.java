@@ -98,12 +98,7 @@ public class Member extends BaseTimeEntity {
                 .build();
     }
 
-    public void signup(
-            String studentId,
-            String name,
-            String phone,
-            String department,
-            String email) {
+    public void signup(String studentId, String name, String phone, String department, String email) {
         validateStatusUpdatable();
         validateUnivStatus();
 
