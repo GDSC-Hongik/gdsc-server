@@ -59,6 +59,9 @@ dependencies {
     // Swagger
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
 
+    // Actuator
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
     // Discord
     implementation 'net.dv8tion:JDA:5.0.0-beta.20'
 }
