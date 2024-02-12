@@ -4,6 +4,7 @@ import static com.gdschongik.gdsc.domain.member.domain.QMember.*;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberStatus;
+import com.gdschongik.gdsc.domain.member.domain.RequirementStatus;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryRequest;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -44,6 +45,34 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
                 .fetchOne());
     }
 
+    @Override
+    public Optional<Member> findVerifiedById(Long id) {
+        return Optional.ofNullable(queryFactory
+                .selectFrom(member)
+                .where(eqId(id), requirementVerified())
+                .fetchOne());
+    }
+
+    private BooleanBuilder requirementVerified() {
+        return new BooleanBuilder().and(discordVerified()).and(univVerified()).and(paymentVerified());
+    }
+
+    private BooleanExpression discordVerified() {
+        return member.requirement.discordStatus.eq(RequirementStatus.VERIFIED);
+    }
+
+    private BooleanExpression univVerified() {
+        return member.requirement.univStatus.eq(RequirementStatus.VERIFIED);
+    }
+
+    private BooleanExpression paymentVerified() {
+        return member.requirement.paymentStatus.eq(RequirementStatus.VERIFIED);
+    }
+
+    private BooleanExpression eqId(Long id) {
+        return member.id.eq(id);
+    }
+
     private BooleanExpression eqOauthId(String oauthId) {
         return member.oauthId.eq(oauthId);
     }
@@ -62,7 +91,7 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
                 .and(eqDepartment(queryRequest.department()))
                 .and(eqEmail(queryRequest.email()))
                 .and(eqDiscordUsername(queryRequest.discordUsername()))
-                .and(eqDiscordNickname(queryRequest.discordNickname()));
+                .and(eqNickname(queryRequest.nickname()));
     }
 
     private BooleanExpression eqStudentId(String studentId) {
@@ -89,7 +118,7 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
         return discordUsername != null ? member.discordUsername.containsIgnoreCase(discordUsername) : null;
     }
 
-    private BooleanExpression eqDiscordNickname(String discordNickname) {
-        return discordNickname != null ? member.nickname.containsIgnoreCase(discordNickname) : null;
+    private BooleanExpression eqNickname(String nickname) {
+        return nickname != null ? member.nickname.containsIgnoreCase(nickname) : null;
     }
 }

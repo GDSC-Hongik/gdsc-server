@@ -5,6 +5,7 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import com.gdschongik.gdsc.domain.common.model.BaseTimeEntity;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -54,6 +55,9 @@ public class Member extends BaseTimeEntity {
 
     private String univEmail;
 
+    @Embedded
+    private Requirement requirement;
+
     @Builder(access = AccessLevel.PRIVATE)
     private Member(
             MemberRole role,
@@ -67,7 +71,8 @@ public class Member extends BaseTimeEntity {
             String nickname,
             String oauthId,
             LocalDateTime lastLoginAt,
-            String univEmail) {
+            String univEmail,
+            Requirement requirement) {
         this.role = role;
         this.status = status;
         this.name = name;
@@ -80,14 +85,28 @@ public class Member extends BaseTimeEntity {
         this.oauthId = oauthId;
         this.lastLoginAt = lastLoginAt;
         this.univEmail = univEmail;
+        this.requirement = requirement;
     }
 
     public static Member createGuestMember(String oauthId) {
+        Requirement requirement = Requirement.createRequirement();
         return Member.builder()
                 .oauthId(oauthId)
                 .role(MemberRole.GUEST)
                 .status(MemberStatus.NORMAL)
+                .requirement(requirement)
                 .build();
+    }
+
+    public void signup(String studentId, String name, String phone, String department, String email) {
+        validateStatusUpdatable();
+        validateUnivStatus();
+
+        this.studentId = studentId;
+        this.name = name;
+        this.phone = phone;
+        this.department = department;
+        this.email = email;
     }
 
     public void withdraw() {
@@ -97,7 +116,49 @@ public class Member extends BaseTimeEntity {
         this.status = MemberStatus.DELETED;
     }
 
-    public boolean isDeleted() {
+    private boolean isDeleted() {
         return this.status.isDeleted();
+    }
+
+    private boolean isForbidden() {
+        return this.status.isForbidden();
+    }
+
+    public void updateMemberInfo(
+            String studentId,
+            String name,
+            String phone,
+            String department,
+            String email,
+            String discordUsername,
+            String nickname) {
+        validateStatusUpdatable();
+
+        this.studentId = studentId;
+        this.name = name;
+        this.phone = phone;
+        this.department = department;
+        this.email = email;
+        this.discordUsername = discordUsername;
+        this.nickname = nickname;
+    }
+
+    private void validateStatusUpdatable() {
+        if (isDeleted()) {
+            throw new CustomException(MEMBER_DELETED);
+        }
+        if (isForbidden()) {
+            throw new CustomException(MEMBER_FORBIDDEN);
+        }
+    }
+
+    private void validateUnivStatus() {
+        if (this.requirement.isUnivPending()) {
+            throw new CustomException(UNIV_NOT_VERIFIED);
+        }
+    }
+
+    public void grant() {
+        this.role = MemberRole.USER;
     }
 }

@@ -28,8 +28,8 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         CustomOAuth2User oAuth2User = (CustomOAuth2User) authentication.getPrincipal();
 
-        // 게스트 유저이면 회원가입 필요하므로 헤더 설정
-        response.setHeader(REGISTRATION_REQUIRED_HEADER, oAuth2User.isGuest() ? "true" : "false");
+        // 랜딩 페이지 결정에 필요한 정보를 헤더에 추가
+        response.setHeader(LANDING_STATUS_HEADER, oAuth2User.getLandingStatus().name());
 
         // 토큰 생성 후 쿠키에 저장
         AccessTokenDto accessTokenDto =
