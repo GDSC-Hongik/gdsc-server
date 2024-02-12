@@ -107,6 +107,7 @@ public class Member extends BaseTimeEntity {
             String discordUsername,
             String nickname) {
         validateStatusUpdatable();
+        validateUnivStatus();
 
         this.studentId = studentId;
         this.name = name;
@@ -157,6 +158,12 @@ public class Member extends BaseTimeEntity {
         }
         if (isForbidden()) {
             throw new CustomException(MEMBER_FORBIDDEN);
+        }
+    }
+
+    private void validateUnivStatus() {
+        if (this.requirement.isUnivPending()) {
+            throw new CustomException(UNIV_NOT_VERIFIED);
         }
     }
 
