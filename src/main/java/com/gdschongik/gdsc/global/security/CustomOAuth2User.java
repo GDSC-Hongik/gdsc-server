@@ -21,8 +21,4 @@ public class CustomOAuth2User extends DefaultOAuth2User {
         this.memberRole = member.getRole();
         this.landingStatus = LandingStatus.of(member);
     }
-
-    public boolean isGuest() {
-        return memberRole == MemberRole.GUEST;
-    }
 }
