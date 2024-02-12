@@ -1,5 +1,7 @@
 package com.gdschongik.gdsc.domain.integration;
 
+import com.gdschongik.gdsc.global.exception.CustomException;
+import com.gdschongik.gdsc.global.exception.ErrorCode;
 import jakarta.mail.Message.RecipientType;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
@@ -20,30 +22,45 @@ public class JavaMailSender implements MailSender {
 
     @Override
     public void send(String recipient, String content) {
-        try {
-            MimeMessage message = writeMimeMessage(recipient, content);
-            javaMailSender.send(message);
-        } catch (MessagingException e) {
-            throw new RuntimeException(e);
-        }
+        MimeMessage message = writeMimeMessage(recipient, content);
+        javaMailSender.send(message);
     }
 
-    private MimeMessage writeMimeMessage(String recipient, String content)
-        throws MessagingException {
+    private MimeMessage writeMimeMessage(String recipient, String content) {
         MimeMessage message = javaMailSender.createMimeMessage();
-
-        message.addRecipients(RecipientType.TO, recipient);
-        message.setSubject(MESSAGE_SUBJECT);
-        message.setText(content, "utf-8", "html");
-        message.setFrom(getInternetAddress());
+        addRecipients(message, recipient);
+        setMessageAttributes(message, content);
         return message;
     }
 
-    private InternetAddress getInternetAddress() {
+    private void addRecipients(MimeMessage message, String recipient) {
+        try {
+            message.addRecipients(RecipientType.TO, recipient);
+        } catch (MessagingException e) {
+            throwCustomExceptionWithAdditionalMessage(ErrorCode.MESSAGING_EXCEPTION, e.getMessage());
+        }
+    }
+
+    private void setMessageAttributes(MimeMessage message, String content) {
+        try {
+            message.setSubject(MESSAGE_SUBJECT);
+            message.setText(content, "utf-8", "html");
+            message.setFrom(getInternetAddress());
+        } catch (MessagingException e) {
+            throwCustomExceptionWithAdditionalMessage(ErrorCode.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+
+    private InternetAddress getInternetAddress() throws MessagingException {
         try {
             return new InternetAddress(SENDER_ADDRESS, SENDER_PERSONAL);
         } catch (UnsupportedEncodingException unsupportedEncodingException) {
-            return new InternetAddress();
+            throw new MessagingException("UnsupportedEncodingException");
         }
+    }
+
+    private void throwCustomExceptionWithAdditionalMessage(ErrorCode errorCode, String additionalMessage) {
+        String errorMessage = errorCode.getMessage() + " : " + additionalMessage;
+        throw new CustomException(errorCode, errorMessage);
     }
 }

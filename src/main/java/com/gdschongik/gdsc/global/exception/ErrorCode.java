@@ -27,6 +27,8 @@ public enum ErrorCode {
 
     VERIFICATION_CODE_NOT_FOUND(HttpStatus.NOT_FOUND, "Univ Email 인증 코드가 존재하지 않습니다."),
     UNIV_EMAIL_VERIFICATION_CODE_NOT_MATCH(HttpStatus.BAD_REQUEST, "Email 인증 번호가 불일치합니다."),
+    MESSAGING_EXCEPTION(HttpStatus.BAD_REQUEST, "수신자 이메일이 올바르지 않습니다."),
+
     ;
 
     private final HttpStatus status;
