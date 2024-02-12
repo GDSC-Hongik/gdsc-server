@@ -98,14 +98,7 @@ public class Member extends BaseTimeEntity {
                 .build();
     }
 
-    public void signup(
-            String studentId,
-            String name,
-            String phone,
-            String department,
-            String email,
-            String discordUsername,
-            String nickname) {
+    public void signup(String studentId, String name, String phone, String department, String email) {
         validateStatusUpdatable();
         validateUnivStatus();
 
@@ -114,8 +107,6 @@ public class Member extends BaseTimeEntity {
         this.phone = phone;
         this.department = department;
         this.email = email;
-        this.discordUsername = discordUsername;
-        this.nickname = nickname;
     }
 
     public void withdraw() {

@@ -18,12 +18,6 @@ public class OnboardingMemberService {
     public void signupMember(MemberSignupRequest request) {
         Member currentMember = memberUtil.getCurrentMember();
         currentMember.signup(
-                request.studentId(),
-                request.name(),
-                request.phone(),
-                request.department(),
-                request.email(),
-                request.discordUsername(),
-                request.nickname());
+                request.studentId(), request.name(), request.phone(), request.department(), request.email());
     }
 }

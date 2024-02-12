@@ -18,9 +18,4 @@ public record MemberSignupRequest(
                 @Schema(description = "전화번호", pattern = PHONE)
                 String phone,
         @NotBlank @Schema(description = "학과") String department,
-        @NotBlank @Email @Schema(description = "이메일") String email,
-        @NotBlank @Schema(description = "discord username") String discordUsername,
-        @NotBlank
-                @Pattern(regexp = NICKNAME, message = "닉네임은 " + NICKNAME + " 형식이어야 합니다.")
-                @Schema(description = "커뮤니티 닉네임", pattern = NICKNAME)
-                String nickname) {}
+        @NotBlank @Email @Schema(description = "이메일") String email) {}
