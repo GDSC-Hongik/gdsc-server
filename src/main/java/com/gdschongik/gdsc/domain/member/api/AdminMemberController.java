@@ -1,9 +1,11 @@
 package com.gdschongik.gdsc.domain.member.api;
 
 import com.gdschongik.gdsc.domain.member.application.MemberService;
+import com.gdschongik.gdsc.domain.member.dto.request.MemberGrantRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberUpdateRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberFindAllResponse;
+import com.gdschongik.gdsc.domain.member.dto.response.MemberGrantResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberPendingFindAllResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -55,5 +57,12 @@ public class AdminMemberController {
             @PathVariable Long memberId, @Valid @RequestBody MemberUpdateRequest request) {
         memberService.updateMember(memberId, request);
         return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "회원 승인", description = "회원의 가입을 승인합니다.")
+    @PutMapping("/grant")
+    public ResponseEntity<MemberGrantResponse> grantMember(@Valid @RequestBody MemberGrantRequest request) {
+        MemberGrantResponse response = memberService.grantMember(request);
+        return ResponseEntity.ok().body(response);
     }
 }

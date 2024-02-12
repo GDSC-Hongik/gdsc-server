@@ -10,4 +10,6 @@ public interface MemberCustomRepository {
     Page<Member> findAll(MemberQueryRequest queryRequest, Pageable pageable);
 
     Optional<Member> findNormalByOauthId(String oauthId);
+
+    Optional<Member> findVerifiedById(Long id);
 }

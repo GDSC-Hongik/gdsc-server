@@ -4,6 +4,7 @@ import static com.gdschongik.gdsc.domain.member.domain.QMember.*;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberStatus;
+import com.gdschongik.gdsc.domain.member.domain.RequirementStatus;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryRequest;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -42,6 +43,34 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
                 .selectFrom(member)
                 .where(eqOauthId(oauthId), eqStatus(MemberStatus.NORMAL))
                 .fetchOne());
+    }
+
+    @Override
+    public Optional<Member> findVerifiedById(Long id) {
+        return Optional.ofNullable(queryFactory
+                .selectFrom(member)
+                .where(eqId(id), requirementVerified())
+                .fetchOne());
+    }
+
+    private BooleanBuilder requirementVerified() {
+        return new BooleanBuilder().and(discordVerified()).and(univVerified()).and(paymentVerified());
+    }
+
+    private BooleanExpression discordVerified() {
+        return member.requirement.discordStatus.eq(RequirementStatus.VERIFIED);
+    }
+
+    private BooleanExpression univVerified() {
+        return member.requirement.univStatus.eq(RequirementStatus.VERIFIED);
+    }
+
+    private BooleanExpression paymentVerified() {
+        return member.requirement.paymentStatus.eq(RequirementStatus.VERIFIED);
+    }
+
+    private BooleanExpression eqId(Long id) {
+        return member.id.eq(id);
     }
 
     private BooleanExpression eqOauthId(String oauthId) {
