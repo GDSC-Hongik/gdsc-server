@@ -134,4 +134,8 @@ public class Member extends BaseTimeEntity {
             throw new CustomException(MEMBER_FORBIDDEN);
         }
     }
+
+    public void grant() {
+        this.role = MemberRole.USER;
+    }
 }
