@@ -11,4 +11,4 @@ public record MemberQueryRequest(
         @Schema(description = "학과") String department,
         @Schema(description = "이메일") String email,
         @Schema(description = "discord username") String discordUsername,
-        @Schema(description = "커뮤니티 닉네임", pattern = NICKNAME) String discordNickname) {}
+        @Schema(description = "커뮤니티 닉네임", pattern = NICKNAME) String nickname) {}

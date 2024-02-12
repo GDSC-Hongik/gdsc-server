@@ -62,7 +62,7 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
                 .and(eqDepartment(queryRequest.department()))
                 .and(eqEmail(queryRequest.email()))
                 .and(eqDiscordUsername(queryRequest.discordUsername()))
-                .and(eqDiscordNickname(queryRequest.discordNickname()));
+                .and(eqNickname(queryRequest.nickname()));
     }
 
     private BooleanExpression eqStudentId(String studentId) {
@@ -89,7 +89,7 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
         return discordUsername != null ? member.discordUsername.containsIgnoreCase(discordUsername) : null;
     }
 
-    private BooleanExpression eqDiscordNickname(String discordNickname) {
-        return discordNickname != null ? member.nickname.containsIgnoreCase(discordNickname) : null;
+    private BooleanExpression eqNickname(String nickname) {
+        return nickname != null ? member.nickname.containsIgnoreCase(nickname) : null;
     }
 }
