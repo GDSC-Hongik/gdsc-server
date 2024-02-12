@@ -15,7 +15,7 @@ public class OnboardingMemberService {
     private final MemberUtil memberUtil;
 
     @Transactional
-    public void signup(MemberSignupRequest request) {
+    public void signupMember(MemberSignupRequest request) {
         Member currentMember = memberUtil.getCurrentMember();
         currentMember.signup(
                 request.studentId(),

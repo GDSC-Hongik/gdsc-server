@@ -22,8 +22,8 @@ public class OnboardingMemberController {
 
     @Operation(summary = "회원 가입 신청", description = "회원 가입을 신청합니다.")
     @PostMapping
-    public ResponseEntity<Void> onboarding(@Valid @RequestBody MemberSignupRequest request) {
-        onboardingMemberService.signup(request);
+    public ResponseEntity<Void> signupMember(@Valid @RequestBody MemberSignupRequest request) {
+        onboardingMemberService.signupMember(request);
         return ResponseEntity.ok().build();
     }
 }
