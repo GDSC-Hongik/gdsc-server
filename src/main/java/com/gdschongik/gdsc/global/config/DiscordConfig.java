@@ -30,6 +30,7 @@ public class DiscordConfig {
     }
 
     @Bean
+    @ConditionalOnBean(JDA.class)
     public ListenerBeanPostProcessor listenerBeanPostProcessor(JDA jda) {
         return new ListenerBeanPostProcessor(jda);
     }
