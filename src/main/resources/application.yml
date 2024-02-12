@@ -2,13 +2,14 @@ spring:
   profiles:
     group:
       test: "test"
-      local: "local, datasource, discord"
-      dev: "dev, datasource, discord"
+      local: "local, datasource"
+      dev: "dev, datasource"
     include:
       - redis
       - security
       - swagger
       - actuator
+      - discord
 
 logging:
   level:
