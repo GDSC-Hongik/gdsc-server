@@ -1,6 +1,6 @@
-package com.gdschongik.gdsc.domain.requirement.domain;
+package com.gdschongik.gdsc.domain.member.domain;
 
-import static com.gdschongik.gdsc.domain.requirement.domain.RequirementStatus.*;
+import static com.gdschongik.gdsc.domain.member.domain.RequirementStatus.*;
 
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
