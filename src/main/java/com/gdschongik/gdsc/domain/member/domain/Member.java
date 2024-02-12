@@ -3,7 +3,6 @@ package com.gdschongik.gdsc.domain.member.domain;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.common.model.BaseTimeEntity;
-import com.gdschongik.gdsc.domain.member.dto.request.MemberUpdateRequest;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -114,16 +113,23 @@ public class Member extends BaseTimeEntity {
         return this.status.isForbidden();
     }
 
-    public void updateMemberInfo(MemberUpdateRequest request) {
+    public void updateMemberInfo(
+            String studentId,
+            String name,
+            String phone,
+            String department,
+            String email,
+            String discordUsername,
+            String nickname) {
         validateStatusUpdatable();
 
-        this.studentId = request.studentId();
-        this.name = request.name();
-        this.phone = request.phone();
-        this.department = request.department();
-        this.email = request.email();
-        this.discordUsername = request.discordUsername();
-        this.nickname = request.nickname();
+        this.studentId = studentId;
+        this.name = name;
+        this.phone = phone;
+        this.department = department;
+        this.email = email;
+        this.discordUsername = discordUsername;
+        this.nickname = nickname;
     }
 
     private void validateStatusUpdatable() {

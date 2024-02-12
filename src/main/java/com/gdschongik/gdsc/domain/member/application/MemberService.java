@@ -39,7 +39,14 @@ public class MemberService {
     public void updateMember(Long memberId, MemberUpdateRequest request) {
         Member member =
                 memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
-        member.updateMemberInfo(request);
+        member.updateMemberInfo(
+                request.studentId(),
+                request.name(),
+                request.phone(),
+                request.department(),
+                request.email(),
+                request.discordUsername(),
+                request.nickname());
     }
 
     public Page<MemberPendingFindAllResponse> findAllPendingMembers(Pageable pageable) {
