@@ -60,10 +60,11 @@ public class WebSecurityConfig {
     @Bean
     @Order(1)
     @ConditionalOnProperty(name = "spring.profiles.active", havingValue = "dev")
-    public SecurityFilterChain swaggerSecurityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain swaggerFilterChain(HttpSecurity http) throws Exception {
         defaultFilterChain(http);
 
         http.securityMatcher(getSwaggerUrls())
+                .oauth2Login(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated())
                 .httpBasic(withDefaults());
 
@@ -78,6 +79,9 @@ public class WebSecurityConfig {
                 oauth2 -> oauth2.userInfoEndpoint(userInfo -> userInfo.userService(customUserService(memberRepository)))
                         .successHandler(customSuccessHandler(jwtService, cookieUtil))
                         .failureHandler((request, response, exception) -> response.setStatus(401)));
+
+        http.exceptionHandling(exception ->
+                exception.authenticationEntryPoint((request, response, authException) -> response.setStatus(401)));
 
         http.addFilterAfter(jwtExceptionFilter(objectMapper), LogoutFilter.class);
         http.addFilterAfter(jwtFilter(jwtService, cookieUtil), LogoutFilter.class);
