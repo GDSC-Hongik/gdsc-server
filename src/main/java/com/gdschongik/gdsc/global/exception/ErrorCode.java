@@ -24,7 +24,10 @@ public enum ErrorCode {
     MEMBER_FORBIDDEN(HttpStatus.CONFLICT, "차단된 회원입니다."),
 
     // Parameter
-    INVALID_QUERY_PARAMETER(HttpStatus.BAD_REQUEST, "잘못된 쿼리 파라미터입니다.");
+    INVALID_QUERY_PARAMETER(HttpStatus.BAD_REQUEST, "잘못된 쿼리 파라미터입니다."),
+
+    // Requirement
+    UNIV_NOT_VERIFIED(HttpStatus.CONFLICT, "재학생 인증이 되지 않았습니다.");
 
     private final HttpStatus status;
     private final String message;

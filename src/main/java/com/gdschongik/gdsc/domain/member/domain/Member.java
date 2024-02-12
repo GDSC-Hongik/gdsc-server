@@ -98,6 +98,26 @@ public class Member extends BaseTimeEntity {
                 .build();
     }
 
+    public void signup(
+            String studentId,
+            String name,
+            String phone,
+            String department,
+            String email,
+            String discordUsername,
+            String nickname) {
+        validateStatusUpdatable();
+        validateUnivStatus();
+
+        this.studentId = studentId;
+        this.name = name;
+        this.phone = phone;
+        this.department = department;
+        this.email = email;
+        this.discordUsername = discordUsername;
+        this.nickname = nickname;
+    }
+
     public void withdraw() {
         if (isDeleted()) {
             throw new CustomException(MEMBER_DELETED);
@@ -138,6 +158,12 @@ public class Member extends BaseTimeEntity {
         }
         if (isForbidden()) {
             throw new CustomException(MEMBER_FORBIDDEN);
+        }
+    }
+
+    private void validateUnivStatus() {
+        if (this.requirement.isUnivPending()) {
+            throw new CustomException(UNIV_NOT_VERIFIED);
         }
     }
 
