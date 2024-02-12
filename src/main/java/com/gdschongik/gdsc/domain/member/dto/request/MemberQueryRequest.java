@@ -7,4 +7,4 @@ public record MemberQueryRequest(
         String department,
         String email,
         String discordUsername,
-        String discordNickname) {}
+        String nickname) {}
