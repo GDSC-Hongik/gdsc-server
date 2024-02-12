@@ -13,14 +13,12 @@ public class CustomOAuth2User extends DefaultOAuth2User {
 
     private final Long memberId;
     private final MemberRole memberRole;
+    private final LandingStatus landingStatus;
 
     public CustomOAuth2User(OAuth2User oAuth2User, Member member) {
         super(oAuth2User.getAuthorities(), oAuth2User.getAttributes(), GITHUB_NAME_ATTR_KEY);
         this.memberId = member.getId();
         this.memberRole = member.getRole();
-    }
-
-    public boolean isGuest() {
-        return memberRole == MemberRole.GUEST;
+        this.landingStatus = LandingStatus.of(member);
     }
 }
