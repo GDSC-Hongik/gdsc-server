@@ -24,4 +24,9 @@ public class DiscordConfig {
                 .setMemberCachePolicy(MemberCachePolicy.ALL)
                 .build();
     }
+
+    @Bean
+    public ListenerBeanPostProcessor listenerBeanPostProcessor(JDA jda) {
+        return new ListenerBeanPostProcessor(jda);
+    }
 }
