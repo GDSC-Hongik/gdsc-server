@@ -47,16 +47,14 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
 
     @Override
     public Optional<Member> findVerifiedById(Long id) {
-        return Optional.ofNullable(
-                queryFactory.selectFrom(member).where(requirementVerified(id)).fetchOne());
+        return Optional.ofNullable(queryFactory
+                .selectFrom(member)
+                .where(eqId(id), requirementVerified())
+                .fetchOne());
     }
 
-    private BooleanBuilder requirementVerified(Long id) {
-        return new BooleanBuilder()
-                .and(eqId(id))
-                .and(discordVerified())
-                .and(univVerified())
-                .and(paymentVerified());
+    private BooleanBuilder requirementVerified() {
+        return new BooleanBuilder().and(discordVerified()).and(univVerified()).and(paymentVerified());
     }
 
     private BooleanExpression discordVerified() {
