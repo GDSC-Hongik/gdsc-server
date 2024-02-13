@@ -1,8 +1,7 @@
 package com.gdschongik.gdsc.domain.integration;
 
-import static com.gdschongik.gdsc.domain.integration.VerificationMailConstant.MESSAGE_SUBJECT;
-import static com.gdschongik.gdsc.domain.integration.VerificationMailConstant.SENDER_ADDRESS;
-import static com.gdschongik.gdsc.domain.integration.VerificationMailConstant.SENDER_PERSONAL;
+import static com.gdschongik.gdsc.global.common.constant.GdscEmailConstant.SENDER_ADDRESS;
+import static com.gdschongik.gdsc.global.common.constant.GdscEmailConstant.SENDER_PERSONAL;
 
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
@@ -21,15 +20,15 @@ public class JavaMailSender implements MailSender {
     private final org.springframework.mail.javamail.JavaMailSender javaMailSender;
 
     @Override
-    public void send(String recipient, String content) {
-        MimeMessage message = writeMimeMessage(recipient, content);
+    public void send(String recipient, String subject, String content) {
+        MimeMessage message = writeMimeMessage(recipient, subject, content);
         javaMailSender.send(message);
     }
 
-    private MimeMessage writeMimeMessage(String recipient, String content) {
+    private MimeMessage writeMimeMessage(String recipient, String subject, String content) {
         MimeMessage message = javaMailSender.createMimeMessage();
         addRecipients(message, recipient);
-        setMessageAttributes(message, content);
+        setMessageAttributes(message, subject, content);
         return message;
     }
 
@@ -42,9 +41,9 @@ public class JavaMailSender implements MailSender {
         }
     }
 
-    private void setMessageAttributes(MimeMessage message, String content) {
+    private void setMessageAttributes(MimeMessage message, String subject, String content) {
         try {
-            message.setSubject(MESSAGE_SUBJECT);
+            message.setSubject(subject);
             message.setText(content, "utf-8", "html");
             message.setFrom(getInternetAddress());
         } catch (MessagingException e) {
