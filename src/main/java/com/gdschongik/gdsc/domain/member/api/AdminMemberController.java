@@ -6,7 +6,6 @@ import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberUpdateRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberFindAllResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberGrantResponse;
-import com.gdschongik.gdsc.domain.member.dto.response.MemberGrantableFindAllResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberPendingFindAllResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -69,8 +68,8 @@ public class AdminMemberController {
 
     @Operation(summary = "승인 가능 회원 전체 조회", description = "승인 가능한 회원 전체를 조회합니다.")
     @GetMapping("/grantable")
-    public ResponseEntity<Page<MemberGrantableFindAllResponse>> getGrantableMembers(Pageable pageable) {
-        Page<MemberGrantableFindAllResponse> response = adminMemberService.getGrantableMembers(pageable);
+    public ResponseEntity<Page<MemberFindAllResponse>> getGrantableMembers(Pageable pageable) {
+        Page<MemberFindAllResponse> response = adminMemberService.getGrantableMembers(pageable);
         return ResponseEntity.ok().body(response);
     }
 }

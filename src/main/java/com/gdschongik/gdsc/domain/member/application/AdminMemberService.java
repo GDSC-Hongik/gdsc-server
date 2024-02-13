@@ -10,7 +10,6 @@ import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberUpdateRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberFindAllResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberGrantResponse;
-import com.gdschongik.gdsc.domain.member.dto.response.MemberGrantableFindAllResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberPendingFindAllResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
@@ -75,8 +74,8 @@ public class AdminMemberService {
                 .toList();
     }
 
-    public Page<MemberGrantableFindAllResponse> getGrantableMembers(Pageable pageable) {
+    public Page<MemberFindAllResponse> getGrantableMembers(Pageable pageable) {
         Page<Member> members = memberRepository.findAllGrantable(pageable);
-        return members.map(MemberGrantableFindAllResponse::of);
+        return members.map(MemberFindAllResponse::of);
     }
 }
