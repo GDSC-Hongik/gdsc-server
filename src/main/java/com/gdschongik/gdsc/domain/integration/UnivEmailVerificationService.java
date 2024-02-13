@@ -30,16 +30,15 @@ public class UnivEmailVerificationService {
     }
 
     private void sendMail(String email, String verificationCode) {
-        String mailContent = verificationMailContentWriter
-            .writeContentWithVerificationCode(verificationCode, VERIFICATION_CODE_TIME_TO_LIVE);
+        String mailContent = verificationMailContentWriter.writeContentWithVerificationCode(
+                verificationCode, VERIFICATION_CODE_TIME_TO_LIVE);
 
-        mailSender.send(email, mailContent);
+        mailSender.send(email, "GDSC Hongik 이메일 인증 코드입니다.", mailContent);
     }
 
     private void saveVerificationCode(String email, String verificationCode) {
-        EmailVerificationCode emailVerificationCode = new EmailVerificationCode(
-            email, verificationCode, VERIFICATION_CODE_TIME_TO_LIVE.toSeconds()
-        );
+        EmailVerificationCode emailVerificationCode =
+                new EmailVerificationCode(email, verificationCode, VERIFICATION_CODE_TIME_TO_LIVE.toSeconds());
 
         emailVerificationCodeRepository.save(emailVerificationCode);
     }
@@ -53,8 +52,9 @@ public class UnivEmailVerificationService {
     }
 
     private String getVerificationCodeByEmail(String email) {
-        return emailVerificationCodeRepository.findById(email)
-            .orElseThrow(() -> new CustomException(ErrorCode.VERIFICATION_CODE_NOT_FOUND))
-            .getVerificationCode();
+        return emailVerificationCodeRepository
+                .findById(email)
+                .orElseThrow(() -> new CustomException(ErrorCode.VERIFICATION_CODE_NOT_FOUND))
+                .getVerificationCode();
     }
 }

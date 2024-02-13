@@ -6,6 +6,5 @@ public class EmailConstant {
 
     public static final String SENDER_ADDRESS = "gdsc.hongik@gmail.com";
 
-    private EmailConstant() {
-    }
+    private EmailConstant() {}
 }

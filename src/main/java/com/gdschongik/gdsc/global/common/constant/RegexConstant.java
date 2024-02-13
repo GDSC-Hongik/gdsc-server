@@ -9,6 +9,5 @@ public class RegexConstant {
 
     public static final String HONGIK_EMAIL_REGEX = "^[^\\W&=_'-+,<>]+(\\.[^\\W&=_'-+,<>]+)*@g\\.hongik\\.ac\\.kr$";
 
-    private RegexConstant() {
-    }
+    private RegexConstant() {}
 }

@@ -36,8 +36,7 @@ public class JavaMailSender implements MailSender {
         try {
             message.addRecipients(RecipientType.TO, recipient);
         } catch (MessagingException e) {
-            throwCustomExceptionWithAdditionalMessage(
-                ErrorCode.MESSAGING_EXCEPTION, e.getMessage());
+            throwCustomExceptionWithAdditionalMessage(ErrorCode.MESSAGING_EXCEPTION, e.getMessage());
         }
     }
 
@@ -47,8 +46,7 @@ public class JavaMailSender implements MailSender {
             message.setText(content, "utf-8", "html");
             message.setFrom(getInternetAddress());
         } catch (MessagingException e) {
-            throwCustomExceptionWithAdditionalMessage(
-                ErrorCode.INTERNAL_SERVER_ERROR, e.getMessage());
+            throwCustomExceptionWithAdditionalMessage(ErrorCode.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 
@@ -60,8 +58,7 @@ public class JavaMailSender implements MailSender {
         }
     }
 
-    private void throwCustomExceptionWithAdditionalMessage(ErrorCode errorCode,
-        String additionalMessage) {
+    private void throwCustomExceptionWithAdditionalMessage(ErrorCode errorCode, String additionalMessage) {
         String errorMessage = errorCode.getMessage() + " : " + additionalMessage;
         throw new CustomException(errorCode, errorMessage);
     }
