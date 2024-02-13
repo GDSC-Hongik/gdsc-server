@@ -15,6 +15,7 @@ logging:
   level:
     com.gdschongik.gdsc.domain.*.api.*: debug
 
-gmail:
-  id: ${GMAIL_ID}
-  password: ${GMAIL_PASSWORD}
+email:
+  google:
+    login-email: ${GOOGLE_LOGIN_EMAIL}
+    password: ${GOOGLE_PASSWORD}
