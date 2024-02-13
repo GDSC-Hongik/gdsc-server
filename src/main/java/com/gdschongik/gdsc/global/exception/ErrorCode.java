@@ -27,7 +27,11 @@ public enum ErrorCode {
     INVALID_QUERY_PARAMETER(HttpStatus.BAD_REQUEST, "잘못된 쿼리 파라미터입니다."),
 
     // Requirement
-    UNIV_NOT_VERIFIED(HttpStatus.CONFLICT, "재학생 인증이 되지 않았습니다.");
+    UNIV_NOT_VERIFIED(HttpStatus.CONFLICT, "재학생 인증이 되지 않았습니다."),
+
+    // Discord
+    DISCORD_INVALID_CODE_RANGE(HttpStatus.INTERNAL_SERVER_ERROR, "디스코드 인증코드는 4자리 숫자여야 합니다."),
+    ;
 
     private final HttpStatus status;
     private final String message;
