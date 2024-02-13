@@ -161,4 +161,11 @@ public class Member extends BaseTimeEntity {
     public void grant() {
         this.role = MemberRole.USER;
     }
+
+    public void updateDiscordInfo(String discordUsername, String nickname) {
+        validateStatusUpdatable();
+
+        this.discordUsername = discordUsername;
+        this.nickname = nickname;
+    }
 }
