@@ -29,8 +29,8 @@ public class OnboardingMemberController {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "회원 정보 수정", description = "회원 정보를 수정합니다.")
-    @PutMapping
+    @Operation(summary = "디스코드 회원 정보 수정", description = "디스코드 회원 정보를 수정합니다.")
+    @PutMapping("/me/discord")
     public ResponseEntity<Void> updateMember(@Valid @RequestBody OnboardingMemberUpdateRequest request) {
         onboardingMemberService.updateMember(request);
         return ResponseEntity.ok().build();
