@@ -1,28 +1,26 @@
 package com.gdschongik.gdsc.domain.integration;
 
+import com.gdschongik.gdsc.global.property.EmailProperty;
 import java.util.Properties;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 @Configuration
+@RequiredArgsConstructor
 public class JavaMailSenderConfig {
 
-    @Value("${gmail.id}")
-    private String id;
-
-    @Value("${gmail.password}")
-    private String password;
+    private final EmailProperty emailProperty;
 
     @Bean
     public JavaMailSender javaMailSenderBean() {
         JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
         javaMailSender.setHost("smtp.gmail.com");
         javaMailSender.setPort(456);
-        javaMailSender.setUsername(id);
-        javaMailSender.setPassword(password);
+        javaMailSender.setUsername(emailProperty.getLoginEmail());
+        javaMailSender.setPassword(emailProperty.getPassword());
         javaMailSender.setJavaMailProperties(getMailProperties());
         javaMailSender.setDefaultEncoding("UTF-8");
         return javaMailSender;
