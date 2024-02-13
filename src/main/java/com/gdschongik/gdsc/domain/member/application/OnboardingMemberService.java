@@ -2,6 +2,7 @@ package com.gdschongik.gdsc.domain.member.application;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberSignupRequest;
+import com.gdschongik.gdsc.domain.member.dto.response.MemberInfoResponse;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,5 +20,10 @@ public class OnboardingMemberService {
         Member currentMember = memberUtil.getCurrentMember();
         currentMember.signup(
                 request.studentId(), request.name(), request.phone(), request.department(), request.email());
+    }
+
+    public MemberInfoResponse getMemberInfo() {
+        Member currentMember = memberUtil.getCurrentMember();
+        return MemberInfoResponse.of(currentMember);
     }
 }
