@@ -30,7 +30,7 @@ public class OnboardingMemberController {
     }
 
     @Operation(summary = "회원 정보 조회", description = "회원 정보를 조회합니다.")
-    @GetMapping
+    @GetMapping("/me")
     public ResponseEntity<MemberInfoResponse> getMemberInfo() {
         MemberInfoResponse response = onboardingMemberService.getMemberInfo();
         return ResponseEntity.ok().body(response);
