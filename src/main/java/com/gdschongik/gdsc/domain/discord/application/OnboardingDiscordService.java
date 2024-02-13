@@ -45,4 +45,15 @@ public class OnboardingDiscordService {
                 .orElseThrow();
     }
 
+    public void verifyDiscordCode(String discordUsername, String code) {
+        DiscordVerificationCode discordVerificationCode =
+                discordVerificationCodeRepository.findById(discordUsername).orElseThrow();
+
+        // TODO: 4자리 숫자의 문자열로 비교
+        if (!discordVerificationCode.getCode().toString().equals(code)) {
+            // TODO: throw exception
+        }
+
+        discordVerificationCodeRepository.delete(discordVerificationCode);
+    }
 }
