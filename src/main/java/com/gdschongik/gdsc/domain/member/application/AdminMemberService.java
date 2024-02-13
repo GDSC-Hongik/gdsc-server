@@ -73,4 +73,9 @@ public class AdminMemberService {
                 .map(Optional::get)
                 .toList();
     }
+
+    public Page<MemberFindAllResponse> getGrantableMembers(Pageable pageable) {
+        Page<Member> members = memberRepository.findAllGrantable(pageable);
+        return members.map(MemberFindAllResponse::of);
+    }
 }
