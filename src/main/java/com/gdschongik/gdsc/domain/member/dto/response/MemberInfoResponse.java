@@ -15,6 +15,7 @@ public record MemberInfoResponse(
         String discordUsername,
         String nickname,
         @Schema(description = "회비 입금 상태") RequirementStatus paymentStatus,
+        @Schema(description = "디스코드 연동 상태") RequirementStatus discordStatus,
         @Schema(description = "가입 상태") MemberRole role) {
 
     public static MemberInfoResponse of(Member member) {
@@ -28,6 +29,7 @@ public record MemberInfoResponse(
                 member.getDiscordUsername(),
                 member.getNickname(),
                 member.getRequirement().getPaymentStatus(),
+                member.getRequirement().getDiscordStatus(),
                 member.getRole());
     }
 }
