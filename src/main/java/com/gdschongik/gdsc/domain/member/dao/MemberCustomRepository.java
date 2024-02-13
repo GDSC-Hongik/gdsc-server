@@ -12,4 +12,6 @@ public interface MemberCustomRepository {
     Optional<Member> findNormalByOauthId(String oauthId);
 
     Optional<Member> findVerifiedById(Long id);
+
+    Page<Member> findAllGrantable(Pageable pageable);
 }
