@@ -3,6 +3,7 @@ package com.gdschongik.gdsc.domain.member.dao;
 import static com.gdschongik.gdsc.domain.member.domain.QMember.*;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
+import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import com.gdschongik.gdsc.domain.member.domain.MemberStatus;
 import com.gdschongik.gdsc.domain.member.domain.RequirementStatus;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryRequest;
@@ -51,6 +52,27 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
                 .selectFrom(member)
                 .where(eqId(id), requirementVerified())
                 .fetchOne());
+    }
+
+    @Override
+    public Page<Member> findAllGrantable(Pageable pageable) {
+        List<Member> fetch = queryFactory
+                .selectFrom(member)
+                .where(eqStatus(MemberStatus.NORMAL), eqRole(MemberRole.GUEST), requirementVerified())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        JPAQuery<Long> countQuery = queryFactory
+                .select(member.count())
+                .from(member)
+                .where(eqStatus(MemberStatus.NORMAL), eqRole(MemberRole.GUEST), requirementVerified());
+
+        return PageableExecutionUtils.getPage(fetch, pageable, countQuery::fetchOne);
+    }
+
+    private BooleanExpression eqRole(MemberRole role) {
+        return member.role.eq(role);
     }
 
     private BooleanBuilder requirementVerified() {
