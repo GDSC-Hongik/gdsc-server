@@ -1,7 +1,7 @@
 package com.gdschongik.gdsc.domain.integration;
 
-import static com.gdschongik.gdsc.global.common.constant.GdscEmailConstant.SENDER_ADDRESS;
-import static com.gdschongik.gdsc.global.common.constant.GdscEmailConstant.SENDER_PERSONAL;
+import static com.gdschongik.gdsc.global.common.constant.EmailConstant.SENDER_ADDRESS;
+import static com.gdschongik.gdsc.global.common.constant.EmailConstant.SENDER_PERSONAL;
 
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
