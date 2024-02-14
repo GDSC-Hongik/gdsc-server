@@ -19,7 +19,7 @@ public class UnivEmailVerificationService {
     private final VerificationMailContentWriter verificationMailContentWriter;
 
     private final MailSender mailSender;
-    private final EmailVerificationCodeRepository emailVerificationCodeRepository;
+    private final VerificationCodeAndEmailRepository verificationCodeAndEmailRepository;
 
     public static final Duration VERIFICATION_CODE_TIME_TO_LIVE = Duration.ofMinutes(10);
 
@@ -29,7 +29,7 @@ public class UnivEmailVerificationService {
         String verificationCode = verificationCodeGenerator.generate();
         sendVerificationLink(email, verificationCode);
 
-        saveVerificationCode(email, verificationCode);
+        saveVerificationCodeAndEmail(email, verificationCode);
     }
 
     private void sendVerificationLink(String email, String verificationCode) {
@@ -39,11 +39,11 @@ public class UnivEmailVerificationService {
         mailSender.send(email, VERIFICATION_EMAIL_SUBJECT, mailContent);
     }
 
-    private void saveVerificationCode(String email, String verificationCode) {
-        EmailVerificationCode emailVerificationCode =
-                new EmailVerificationCode(email, verificationCode, VERIFICATION_CODE_TIME_TO_LIVE.toSeconds());
+    private void saveVerificationCodeAndEmail(String email, String verificationCode) {
+        VerificationCodeAndEmail verificationCodeAndEmail =
+                new VerificationCodeAndEmail(verificationCode, email, VERIFICATION_CODE_TIME_TO_LIVE.toSeconds());
 
-        emailVerificationCodeRepository.save(emailVerificationCode);
+        verificationCodeAndEmailRepository.save(verificationCodeAndEmail);
     }
 
     public void validateCodeMatch(String email, String userInputCode) {
@@ -55,7 +55,7 @@ public class UnivEmailVerificationService {
     }
 
     private String getVerificationCodeByEmail(String email) {
-        return emailVerificationCodeRepository
+        return verificationCodeAndEmailRepository
                 .findById(email)
                 .orElseThrow(() -> new CustomException(ErrorCode.VERIFICATION_CODE_NOT_FOUND))
                 .getVerificationCode();
