@@ -33,7 +33,7 @@ public class UnivEmailVerificationService {
     }
 
     private void sendVerificationLink(String email, String verificationCode) {
-        String verificationLink = verificationLinkUtil.getLink(verificationCode);
+        String verificationLink = verificationLinkUtil.createLink(verificationCode);
         String mailContent = verificationMailContentWriter.write(verificationLink, VERIFICATION_CODE_TIME_TO_LIVE);
 
         mailSender.send(email, VERIFICATION_EMAIL_SUBJECT, mailContent);

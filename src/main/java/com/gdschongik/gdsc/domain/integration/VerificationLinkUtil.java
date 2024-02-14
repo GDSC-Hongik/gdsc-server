@@ -18,7 +18,7 @@ public class VerificationLinkUtil {
 
     private final EnvironmentUtil environmentUtil;
 
-    public String getLink(String verificationCode) {
+    public String createLink(String verificationCode) {
         return getClientUrl() + VERIFY_EMAIL_ENDPOINT + VERIFY_EMAIL_QUERY_STRING_KEY + verificationCode;
     }
 
