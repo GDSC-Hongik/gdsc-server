@@ -43,4 +43,8 @@ public class Requirement {
     public boolean isUnivPending() {
         return this.univStatus == PENDING;
     }
+
+    public void updateUnivState(RequirementStatus univStatus) {
+        this.univStatus = univStatus;
+    }
 }

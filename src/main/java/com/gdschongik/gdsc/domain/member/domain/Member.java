@@ -143,6 +143,10 @@ public class Member extends BaseTimeEntity {
         this.nickname = nickname;
     }
 
+    public void updateUnivRequirementStatus(RequirementStatus univStatus) {
+        requirement.updateUnivState(univStatus);
+    }
+
     private void validateStatusUpdatable() {
         if (isDeleted()) {
             throw new CustomException(MEMBER_DELETED);
