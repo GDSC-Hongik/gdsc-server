@@ -1,7 +1,7 @@
 package com.gdschongik.gdsc.domain.integration;
 
-import static com.gdschongik.gdsc.domain.integration.UnivMailVerificationConstant.VERIFY_EMAIL_QUERY_STRING_KEY;
 import static com.gdschongik.gdsc.domain.integration.UnivMailVerificationConstant.VERIFY_EMAIL_ENDPOINT;
+import static com.gdschongik.gdsc.domain.integration.UnivMailVerificationConstant.VERIFY_EMAIL_QUERY_STRING_KEY;
 import static com.gdschongik.gdsc.global.common.constant.EnvironmentConstant.DEV;
 import static com.gdschongik.gdsc.global.common.constant.EnvironmentConstant.PROD;
 import static com.gdschongik.gdsc.global.common.constant.UrlConstant.DEV_CLIENT_URL;
@@ -19,10 +19,7 @@ public class VerificationLinkUtil {
     private final EnvironmentUtil environmentUtil;
 
     public String getLink(String verificationCode) {
-        return getClientUrl()
-            + VERIFY_EMAIL_ENDPOINT
-            + VERIFY_EMAIL_QUERY_STRING_KEY
-            + verificationCode;
+        return getClientUrl() + VERIFY_EMAIL_ENDPOINT + VERIFY_EMAIL_QUERY_STRING_KEY + verificationCode;
     }
 
     private String getClientUrl() {

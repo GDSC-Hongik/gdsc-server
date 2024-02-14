@@ -16,6 +16,28 @@ logging:
     com.gdschongik.gdsc.domain.*.api.*: debug
 
 email:
-  google:
+  gmail:
     login-email: ${GOOGLE_LOGIN_EMAIL}
     password: ${GOOGLE_PASSWORD}
+
+  host: "smtp.gmail.com"
+  port: 465
+  encoding: "UTF-8"
+
+  java-mail-properties:
+    smtp-auth:
+      key: "mail.smtp.auth"
+      value: true
+
+    socket-factory:
+      port:
+        key: "mail.smtp.socketFactory.port"
+        value: 465
+
+      fallback:
+        key: "mail.smtp.socketFactory.fallback"
+        value: false
+
+      class-info:
+        key: "mail.smtp.socketFactory.class"
+        value: "javax.net.ssl.SSLSocketFactory"
