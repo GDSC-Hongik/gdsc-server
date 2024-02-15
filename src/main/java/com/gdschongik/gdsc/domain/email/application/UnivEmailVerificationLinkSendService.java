@@ -31,18 +31,18 @@ public class UnivEmailVerificationLinkSendService {
     private final MemberUtil memberUtil;
     public static final Duration VERIFICATION_CODE_TIME_TO_LIVE = Duration.ofMinutes(10);
 
-    public void send(String email) {
-        hongikUnivEmailValidator.validate(email);
-        validateUnivEmailNotVerified(email);
+    public void send(String univEmail) {
+        hongikUnivEmailValidator.validate(univEmail);
+        validateUnivEmailNotVerified(univEmail);
 
         String verificationCode = verificationCodeGenerator.generate();
-        sendVerificationLink(email, verificationCode);
+        sendVerificationLink(univEmail, verificationCode);
 
-        saveUnivEmailVerification(verificationCode, email);
+        saveUnivEmailVerification(verificationCode, univEmail);
     }
 
-    private void validateUnivEmailNotVerified(String email) {
-        univEmailVerificationRepository.findByUnivEmail(email).ifPresent(univEmailVerification -> {
+    private void validateUnivEmailNotVerified(String univEmail) {
+        univEmailVerificationRepository.findByUnivEmail(univEmail).ifPresent(univEmailVerification -> {
             throw new CustomException(ErrorCode.UNIV_EMAIL_ALREADY_VERIFIED);
         });
     }
@@ -54,10 +54,10 @@ public class UnivEmailVerificationLinkSendService {
         mailSender.send(email, UnivMailVerificationConstant.VERIFICATION_EMAIL_SUBJECT, mailContent);
     }
 
-    private void saveUnivEmailVerification(String email, String verificationCode) {
+    private void saveUnivEmailVerification(String univEmail, String verificationCode) {
         Long currentMemberId = memberUtil.getCurrentMemberId();
         UnivEmailVerification univEmailVerification = new UnivEmailVerification(
-                verificationCode, email, currentMemberId, VERIFICATION_CODE_TIME_TO_LIVE.toSeconds());
+                verificationCode, univEmail, currentMemberId, VERIFICATION_CODE_TIME_TO_LIVE.toSeconds());
 
         univEmailVerificationRepository.save(univEmailVerification);
     }
