@@ -47,8 +47,8 @@ public class UnivEmailVerificationLinkSendService {
 
     private void saveUnivEmailVerification(String email, String verificationCode) {
         Long currentMemberId = memberUtil.getCurrentMemberId();
-        UnivEmailVerification univEmailVerification =
-                new UnivEmailVerification(verificationCode, email, currentMemberId, VERIFICATION_CODE_TIME_TO_LIVE.toSeconds());
+        UnivEmailVerification univEmailVerification = new UnivEmailVerification(
+                verificationCode, email, currentMemberId, VERIFICATION_CODE_TIME_TO_LIVE.toSeconds());
 
         univEmailVerificationRepository.save(univEmailVerification);
     }

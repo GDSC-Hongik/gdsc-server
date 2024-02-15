@@ -1,6 +1,7 @@
 package com.gdschongik.gdsc.domain.email.application;
 
 import com.gdschongik.gdsc.domain.email.dao.UnivEmailVerificationRepository;
+import com.gdschongik.gdsc.domain.email.domain.UnivEmailVerification;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.RequirementStatus;
@@ -19,21 +20,18 @@ public class UnivEmailVerificationService {
     private final UnivEmailVerificationRepository univEmailVerificationRepository;
 
     public void verifyMemberUnivEmail(String verificationCode) {
-        String univEmail = getUnivEmailByVerificationCode(verificationCode);
-        Member member = getMemberByUnivMail(univEmail);
+        UnivEmailVerification univEmailByVerificationCode = getUnivEmailVerification(verificationCode);
+        Member member = getMemberById(univEmailByVerificationCode.getMemberId());
         member.updateUnivRequirementStatus(RequirementStatus.VERIFIED);
     }
 
-    private String getUnivEmailByVerificationCode(String verificationCode) {
+    private UnivEmailVerification getUnivEmailVerification(String verificationCode) {
         return univEmailVerificationRepository
                 .findById(verificationCode)
-                .orElseThrow(() -> new CustomException(ErrorCode.VERIFICATION_CODE_NOT_FOUND))
-                .getUnivEmail();
+                .orElseThrow(() -> new CustomException(ErrorCode.VERIFICATION_CODE_NOT_FOUND));
     }
 
-    private Member getMemberByUnivMail(String univEmail) {
-        return memberRepository
-                .findByUnivEmail(univEmail)
-                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+    private Member getMemberById(Long id) {
+        return memberRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
     }
 }
