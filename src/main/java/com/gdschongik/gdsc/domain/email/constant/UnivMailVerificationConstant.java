@@ -1,4 +1,4 @@
-package com.gdschongik.gdsc.domain.integration.constant;
+package com.gdschongik.gdsc.domain.email.constant;
 
 public class UnivMailVerificationConstant {
 

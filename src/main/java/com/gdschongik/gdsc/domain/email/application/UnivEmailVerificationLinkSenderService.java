@@ -1,16 +1,15 @@
-package com.gdschongik.gdsc.domain.integration.application;
+package com.gdschongik.gdsc.domain.email.application;
 
-import static com.gdschongik.gdsc.domain.integration.constant.UnivMailVerificationConstant.VERIFICATION_EMAIL_SUBJECT;
-
-import com.gdschongik.gdsc.domain.integration.dao.VerificationCodeAndEmailRepository;
-import com.gdschongik.gdsc.domain.integration.domain.VerificationCodeAndEmail;
-import com.gdschongik.gdsc.domain.integration.util.VerificationCodeGenerator;
-import com.gdschongik.gdsc.domain.integration.util.VerificationLinkUtil;
-import com.gdschongik.gdsc.domain.integration.util.VerificationMailContentWriter;
+import com.gdschongik.gdsc.domain.email.constant.UnivMailVerificationConstant;
+import com.gdschongik.gdsc.domain.email.dao.VerificationCodeAndEmailRepository;
+import com.gdschongik.gdsc.domain.email.domain.VerificationCodeAndEmail;
+import com.gdschongik.gdsc.domain.email.util.VerificationCodeGenerator;
+import com.gdschongik.gdsc.domain.email.util.VerificationLinkUtil;
+import com.gdschongik.gdsc.domain.email.util.VerificationMailContentWriter;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.global.util.MemberUtil;
-import com.gdschongik.gdsc.global.util.mail.HongikUnivEmailValidator;
-import com.gdschongik.gdsc.global.util.mail.MailSender;
+import com.gdschongik.gdsc.global.util.email.HongikUnivEmailValidator;
+import com.gdschongik.gdsc.global.util.email.MailSender;
 import java.time.Duration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -49,7 +48,7 @@ public class UnivEmailVerificationLinkSenderService {
         String verificationLink = verificationLinkUtil.createLink(verificationCode);
         String mailContent = verificationMailContentWriter.write(verificationLink, VERIFICATION_CODE_TIME_TO_LIVE);
 
-        mailSender.send(email, VERIFICATION_EMAIL_SUBJECT, mailContent);
+        mailSender.send(email, UnivMailVerificationConstant.VERIFICATION_EMAIL_SUBJECT, mailContent);
     }
 
     private void saveVerificationCodeAndEmail(String email, String verificationCode) {

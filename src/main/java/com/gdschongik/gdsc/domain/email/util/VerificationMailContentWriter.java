@@ -1,4 +1,4 @@
-package com.gdschongik.gdsc.domain.integration.util;
+package com.gdschongik.gdsc.domain.email.util;
 
 import java.time.Duration;
 import org.springframework.stereotype.Component;

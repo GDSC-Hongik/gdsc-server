@@ -1,4 +1,4 @@
-package com.gdschongik.gdsc.domain.integration.domain;
+package com.gdschongik.gdsc.domain.email.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

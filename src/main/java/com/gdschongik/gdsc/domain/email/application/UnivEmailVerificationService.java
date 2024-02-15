@@ -1,6 +1,6 @@
-package com.gdschongik.gdsc.domain.integration.application;
+package com.gdschongik.gdsc.domain.email.application;
 
-import com.gdschongik.gdsc.domain.integration.dao.VerificationCodeAndEmailRepository;
+import com.gdschongik.gdsc.domain.email.dao.VerificationCodeAndEmailRepository;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.RequirementStatus;
