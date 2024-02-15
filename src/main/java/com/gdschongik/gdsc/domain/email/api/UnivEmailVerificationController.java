@@ -1,6 +1,6 @@
 package com.gdschongik.gdsc.domain.email.api;
 
-import static com.gdschongik.gdsc.domain.email.constant.UnivMailVerificationConstant.VERIFY_EMAIL_REQUEST_PARAMETER_KEY;
+import static com.gdschongik.gdsc.domain.email.constant.UnivEmailVerificationConstant.VERIFY_EMAIL_REQUEST_PARAMETER_KEY;
 
 import com.gdschongik.gdsc.domain.email.application.UnivEmailVerificationService;
 import io.swagger.v3.oas.annotations.Operation;

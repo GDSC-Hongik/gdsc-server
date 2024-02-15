@@ -1,6 +1,6 @@
 package com.gdschongik.gdsc.domain.email.application;
 
-import com.gdschongik.gdsc.domain.email.constant.UnivMailVerificationConstant;
+import com.gdschongik.gdsc.domain.email.constant.UnivEmailVerificationConstant;
 import com.gdschongik.gdsc.domain.email.dao.UnivEmailVerificationRepository;
 import com.gdschongik.gdsc.domain.email.domain.UnivEmailVerification;
 import com.gdschongik.gdsc.domain.email.util.VerificationCodeGenerator;
@@ -51,7 +51,7 @@ public class UnivEmailVerificationLinkSendService {
         String verificationLink = verificationLinkUtil.createLink(verificationCode);
         String mailContent = verificationMailContentWriter.write(verificationLink, VERIFICATION_CODE_TIME_TO_LIVE);
 
-        mailSender.send(email, UnivMailVerificationConstant.VERIFICATION_EMAIL_SUBJECT, mailContent);
+        mailSender.send(email, UnivEmailVerificationConstant.VERIFICATION_EMAIL_SUBJECT, mailContent);
     }
 
     private void saveUnivEmailVerification(String univEmail, String verificationCode) {
