@@ -4,7 +4,6 @@ import com.gdschongik.gdsc.domain.email.dao.UnivEmailVerificationRepository;
 import com.gdschongik.gdsc.domain.email.domain.UnivEmailVerification;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
-import com.gdschongik.gdsc.domain.member.domain.RequirementStatus;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +21,7 @@ public class UnivEmailVerificationService {
     public void verifyMemberUnivEmail(String verificationCode) {
         UnivEmailVerification univEmailByVerificationCode = getUnivEmailVerification(verificationCode);
         Member member = getMemberById(univEmailByVerificationCode.getMemberId());
-        member.updateUnivRequirementStatus(RequirementStatus.VERIFIED);
+        member.completeUnivEmailVerification(univEmailByVerificationCode.getUnivEmail());
     }
 
     private UnivEmailVerification getUnivEmailVerification(String verificationCode) {

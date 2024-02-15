@@ -143,8 +143,9 @@ public class Member extends BaseTimeEntity {
         this.nickname = nickname;
     }
 
-    public void updateUnivRequirementStatus(RequirementStatus univStatus) {
-        requirement.updateUnivState(univStatus);
+    public void completeUnivEmailVerification(String univEmail) {
+        this.univEmail = univEmail;
+        requirement.updateUnivState(RequirementStatus.VERIFIED);
     }
 
     private void validateStatusUpdatable() {
