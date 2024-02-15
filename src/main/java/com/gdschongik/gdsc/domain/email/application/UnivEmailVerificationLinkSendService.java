@@ -6,6 +6,8 @@ import com.gdschongik.gdsc.domain.email.domain.UnivEmailVerification;
 import com.gdschongik.gdsc.domain.email.util.VerificationCodeGenerator;
 import com.gdschongik.gdsc.domain.email.util.VerificationLinkUtil;
 import com.gdschongik.gdsc.domain.email.util.VerificationMailContentWriter;
+import com.gdschongik.gdsc.global.exception.CustomException;
+import com.gdschongik.gdsc.global.exception.ErrorCode;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import com.gdschongik.gdsc.global.util.email.HongikUnivEmailValidator;
 import com.gdschongik.gdsc.global.util.email.MailSender;
@@ -31,11 +33,18 @@ public class UnivEmailVerificationLinkSendService {
 
     public void send(String email) {
         hongikUnivEmailValidator.validate(email);
+        validateUnivEmailNotVerified(email);
 
         String verificationCode = verificationCodeGenerator.generate();
         sendVerificationLink(email, verificationCode);
 
         saveUnivEmailVerification(verificationCode, email);
+    }
+
+    private void validateUnivEmailNotVerified(String email) {
+        univEmailVerificationRepository.findByUnivEmail(email).ifPresent(univEmailVerification -> {
+            throw new CustomException(ErrorCode.UNIV_EMAIL_ALREADY_VERIFIED);
+        });
     }
 
     private void sendVerificationLink(String verificationCode, String email) {
