@@ -19,7 +19,8 @@ public class VerificationLinkUtil {
 
     public String createLink(String verificationCode) {
         String verifyEmailApiEndpoint = String.format(
-            UnivMailVerificationConstant.VERIFY_EMAIL_API_ENDPOINT, UnivMailVerificationConstant.VERIFY_EMAIL_QUERY_STRING_KEY);
+                UnivMailVerificationConstant.VERIFY_EMAIL_API_ENDPOINT,
+                UnivMailVerificationConstant.VERIFY_EMAIL_REQUEST_PARAMETER_KEY);
         return getClientUrl() + verifyEmailApiEndpoint + verificationCode;
     }
 
