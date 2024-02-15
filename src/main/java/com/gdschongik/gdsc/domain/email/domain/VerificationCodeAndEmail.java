@@ -16,6 +16,8 @@ public class VerificationCodeAndEmail {
 
     private String email;
 
+    private Long memberId;
+
     @TimeToLive
     private long timeToLiveInSeconds;
 }

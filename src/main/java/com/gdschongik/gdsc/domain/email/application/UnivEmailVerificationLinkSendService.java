@@ -6,6 +6,7 @@ import com.gdschongik.gdsc.domain.email.domain.VerificationCodeAndEmail;
 import com.gdschongik.gdsc.domain.email.util.VerificationCodeGenerator;
 import com.gdschongik.gdsc.domain.email.util.VerificationLinkUtil;
 import com.gdschongik.gdsc.domain.email.util.VerificationMailContentWriter;
+import com.gdschongik.gdsc.global.util.MemberUtil;
 import com.gdschongik.gdsc.global.util.email.HongikUnivEmailValidator;
 import com.gdschongik.gdsc.global.util.email.MailSender;
 import java.time.Duration;
@@ -25,6 +26,7 @@ public class UnivEmailVerificationLinkSendService {
     private final VerificationCodeGenerator verificationCodeGenerator;
     private final VerificationLinkUtil verificationLinkUtil;
     private final VerificationMailContentWriter verificationMailContentWriter;
+    private final MemberUtil memberUtil;
     public static final Duration VERIFICATION_CODE_TIME_TO_LIVE = Duration.ofMinutes(10);
 
     public void send(String email) {
@@ -44,8 +46,9 @@ public class UnivEmailVerificationLinkSendService {
     }
 
     private void saveVerificationCodeAndEmail(String email, String verificationCode) {
+        Long currentMemberId = memberUtil.getCurrentMemberId();
         VerificationCodeAndEmail verificationCodeAndEmail =
-                new VerificationCodeAndEmail(verificationCode, email, VERIFICATION_CODE_TIME_TO_LIVE.toSeconds());
+                new VerificationCodeAndEmail(verificationCode, email, currentMemberId, VERIFICATION_CODE_TIME_TO_LIVE.toSeconds());
 
         verificationCodeAndEmailRepository.save(verificationCodeAndEmail);
     }
