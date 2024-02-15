@@ -1,11 +1,18 @@
-package com.gdschongik.gdsc.domain.integration;
+package com.gdschongik.gdsc.domain.integration.application;
 
-import static com.gdschongik.gdsc.domain.integration.UnivMailVerificationConstant.VERIFICATION_EMAIL_SUBJECT;
+import static com.gdschongik.gdsc.domain.integration.constant.UnivMailVerificationConstant.VERIFICATION_EMAIL_SUBJECT;
 
+import com.gdschongik.gdsc.global.util.mail.MailSender;
+import com.gdschongik.gdsc.domain.integration.domain.VerificationCodeAndEmail;
+import com.gdschongik.gdsc.domain.integration.dao.VerificationCodeAndEmailRepository;
+import com.gdschongik.gdsc.domain.integration.util.VerificationCodeGenerator;
+import com.gdschongik.gdsc.domain.integration.util.VerificationLinkUtil;
+import com.gdschongik.gdsc.domain.integration.util.VerificationMailContentWriter;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
+import com.gdschongik.gdsc.global.util.mail.HongikUnivEmailValidator;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import java.time.Duration;
 import lombok.RequiredArgsConstructor;

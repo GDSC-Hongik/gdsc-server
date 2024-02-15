@@ -1,4 +1,4 @@
-package com.gdschongik.gdsc.domain.integration;
+package com.gdschongik.gdsc.global.util.mail;
 
 public interface MailSender {
 

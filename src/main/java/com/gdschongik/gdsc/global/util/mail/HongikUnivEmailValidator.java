@@ -1,6 +1,6 @@
-package com.gdschongik.gdsc.domain.integration;
+package com.gdschongik.gdsc.global.util.mail;
 
-import static com.gdschongik.gdsc.domain.integration.UnivMailVerificationConstant.HONGIK_UNIV_MAIL_DOMAIN;
+import static com.gdschongik.gdsc.global.common.constant.EmailConstant.HONGIK_UNIV_MAIL_DOMAIN;
 import static com.gdschongik.gdsc.global.common.constant.RegexConstant.HONGIK_EMAIL_REGEX;
 
 import com.gdschongik.gdsc.global.exception.CustomException;

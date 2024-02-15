@@ -1,4 +1,4 @@
-package com.gdschongik.gdsc.domain.integration;
+package com.gdschongik.gdsc.global.util.mail;
 
 import static com.gdschongik.gdsc.global.common.constant.EmailConstant.SENDER_ADDRESS;
 import static com.gdschongik.gdsc.global.common.constant.EmailConstant.SENDER_PERSONAL;

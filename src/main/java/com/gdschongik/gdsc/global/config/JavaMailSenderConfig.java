@@ -1,4 +1,4 @@
-package com.gdschongik.gdsc.domain.integration;
+package com.gdschongik.gdsc.global.config;
 
 import com.gdschongik.gdsc.global.property.email.EmailProperty;
 import com.gdschongik.gdsc.global.property.email.Gmail;
