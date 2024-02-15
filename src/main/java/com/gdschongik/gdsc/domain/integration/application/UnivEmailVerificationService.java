@@ -26,14 +26,14 @@ public class UnivEmailVerificationService {
 
     private String getUnivEmailByVerificationCode(String verificationCode) {
         return verificationCodeAndEmailRepository
-            .findById(verificationCode)
-            .orElseThrow(() -> new CustomException(ErrorCode.VERIFICATION_CODE_NOT_FOUND))
-            .getEmail();
+                .findById(verificationCode)
+                .orElseThrow(() -> new CustomException(ErrorCode.VERIFICATION_CODE_NOT_FOUND))
+                .getEmail();
     }
 
     private Member getMemberByUnivMail(String univEmail) {
         return memberRepository
-            .findByUnivEmail(univEmail)
-            .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+                .findByUnivEmail(univEmail)
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
     }
 }

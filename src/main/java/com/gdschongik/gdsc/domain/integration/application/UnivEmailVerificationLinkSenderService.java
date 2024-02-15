@@ -2,9 +2,8 @@ package com.gdschongik.gdsc.domain.integration.application;
 
 import static com.gdschongik.gdsc.domain.integration.constant.UnivMailVerificationConstant.VERIFICATION_EMAIL_SUBJECT;
 
-import com.gdschongik.gdsc.global.util.mail.MailSender;
-import com.gdschongik.gdsc.domain.integration.domain.VerificationCodeAndEmail;
 import com.gdschongik.gdsc.domain.integration.dao.VerificationCodeAndEmailRepository;
+import com.gdschongik.gdsc.domain.integration.domain.VerificationCodeAndEmail;
 import com.gdschongik.gdsc.domain.integration.util.VerificationCodeGenerator;
 import com.gdschongik.gdsc.domain.integration.util.VerificationLinkUtil;
 import com.gdschongik.gdsc.domain.integration.util.VerificationMailContentWriter;
@@ -12,8 +11,9 @@ import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
-import com.gdschongik.gdsc.global.util.mail.HongikUnivEmailValidator;
 import com.gdschongik.gdsc.global.util.MemberUtil;
+import com.gdschongik.gdsc.global.util.mail.HongikUnivEmailValidator;
+import com.gdschongik.gdsc.global.util.mail.MailSender;
 import java.time.Duration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -38,8 +38,8 @@ public class UnivEmailVerificationLinkSenderService {
     public void send() {
         Long currentMemberId = memberUtil.getCurrentMemberId();
         Member member = memberRepository
-            .findById(currentMemberId)
-            .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+                .findById(currentMemberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
         sendVerificationLink(member.getUnivEmail());
     }
@@ -55,16 +55,14 @@ public class UnivEmailVerificationLinkSenderService {
 
     private void sendVerificationLink(String verificationCode, String email) {
         String verificationLink = verificationLinkUtil.createLink(verificationCode);
-        String mailContent = verificationMailContentWriter.write(verificationLink,
-            VERIFICATION_CODE_TIME_TO_LIVE);
+        String mailContent = verificationMailContentWriter.write(verificationLink, VERIFICATION_CODE_TIME_TO_LIVE);
 
         mailSender.send(email, VERIFICATION_EMAIL_SUBJECT, mailContent);
     }
 
     private void saveVerificationCodeAndEmail(String email, String verificationCode) {
         VerificationCodeAndEmail verificationCodeAndEmail =
-            new VerificationCodeAndEmail(verificationCode, email,
-                VERIFICATION_CODE_TIME_TO_LIVE.toSeconds());
+                new VerificationCodeAndEmail(verificationCode, email, VERIFICATION_CODE_TIME_TO_LIVE.toSeconds());
 
         verificationCodeAndEmailRepository.save(verificationCodeAndEmail);
     }
