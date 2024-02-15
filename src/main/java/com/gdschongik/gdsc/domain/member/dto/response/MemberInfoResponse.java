@@ -23,7 +23,7 @@ public record MemberInfoResponse(
                 member.getId(),
                 member.getStudentId(),
                 member.getName(),
-                member.getPhone(),
+                member.getPhone().getNumber(),
                 member.getDepartment(),
                 member.getEmail(),
                 member.getDiscordUsername(),
