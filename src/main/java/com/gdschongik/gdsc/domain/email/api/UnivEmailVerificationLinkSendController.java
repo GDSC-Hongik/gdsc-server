@@ -1,6 +1,6 @@
 package com.gdschongik.gdsc.domain.email.api;
 
-import com.gdschongik.gdsc.domain.email.application.UnivEmailVerificationLinkSenderService;
+import com.gdschongik.gdsc.domain.email.application.UnivEmailVerificationLinkSendService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UnivEmailVerificationLinkSendController {
 
-    private final UnivEmailVerificationLinkSenderService univEmailVerificationLinkSenderService;
+    private final UnivEmailVerificationLinkSendService univEmailVerificationLinkSendService;
 
     @Operation(summary = "학교 인증 메일 발송 요청", description = "학교 인증 메일 발송을 요청합니다.")
     @PostMapping
     public ResponseEntity<Void> sendUnivEmailVerificationLink() {
-        univEmailVerificationLinkSenderService.send();
+        univEmailVerificationLinkSendService.send();
         return ResponseEntity.ok().build();
     }
 }

@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class UnivEmailVerificationLinkSenderService {
+public class UnivEmailVerificationLinkSendService {
 
     private final VerificationCodeAndEmailRepository verificationCodeAndEmailRepository;
 
