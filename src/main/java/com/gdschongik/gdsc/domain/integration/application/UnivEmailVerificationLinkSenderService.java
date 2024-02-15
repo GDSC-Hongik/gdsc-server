@@ -7,10 +7,7 @@ import com.gdschongik.gdsc.domain.integration.domain.VerificationCodeAndEmail;
 import com.gdschongik.gdsc.domain.integration.util.VerificationCodeGenerator;
 import com.gdschongik.gdsc.domain.integration.util.VerificationLinkUtil;
 import com.gdschongik.gdsc.domain.integration.util.VerificationMailContentWriter;
-import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
-import com.gdschongik.gdsc.global.exception.CustomException;
-import com.gdschongik.gdsc.global.exception.ErrorCode;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import com.gdschongik.gdsc.global.util.mail.HongikUnivEmailValidator;
 import com.gdschongik.gdsc.global.util.mail.MailSender;
@@ -24,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class UnivEmailVerificationLinkSenderService {
 
-    private final MemberRepository memberRepository;
     private final VerificationCodeAndEmailRepository verificationCodeAndEmailRepository;
 
     private final MemberUtil memberUtil;
@@ -36,12 +32,8 @@ public class UnivEmailVerificationLinkSenderService {
     public static final Duration VERIFICATION_CODE_TIME_TO_LIVE = Duration.ofMinutes(10);
 
     public void send() {
-        Long currentMemberId = memberUtil.getCurrentMemberId();
-        Member member = memberRepository
-                .findById(currentMemberId)
-                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
-
-        sendVerificationLink(member.getUnivEmail());
+        Member currnetMember = memberUtil.getCurrentMember();
+        sendVerificationLink(currnetMember.getUnivEmail());
     }
 
     private void sendVerificationLink(String email) {
