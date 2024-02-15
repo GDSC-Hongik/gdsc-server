@@ -1,6 +1,6 @@
 package com.gdschongik.gdsc.domain.email.application;
 
-import com.gdschongik.gdsc.domain.email.dao.VerificationCodeAndEmailRepository;
+import com.gdschongik.gdsc.domain.email.dao.UnivEmailVerificationRepository;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.RequirementStatus;
@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UnivEmailVerificationService {
 
     private final MemberRepository memberRepository;
-    private final VerificationCodeAndEmailRepository verificationCodeAndEmailRepository;
+    private final UnivEmailVerificationRepository univEmailVerificationRepository;
 
     public void verifyMemberUnivEmail(String verificationCode) {
         String univEmail = getUnivEmailByVerificationCode(verificationCode);
@@ -25,10 +25,10 @@ public class UnivEmailVerificationService {
     }
 
     private String getUnivEmailByVerificationCode(String verificationCode) {
-        return verificationCodeAndEmailRepository
+        return univEmailVerificationRepository
                 .findById(verificationCode)
                 .orElseThrow(() -> new CustomException(ErrorCode.VERIFICATION_CODE_NOT_FOUND))
-                .getEmail();
+                .getUnivEmail();
     }
 
     private Member getMemberByUnivMail(String univEmail) {

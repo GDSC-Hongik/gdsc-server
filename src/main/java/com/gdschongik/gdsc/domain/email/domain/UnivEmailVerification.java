@@ -8,13 +8,13 @@ import org.springframework.data.redis.core.TimeToLive;
 
 @Getter
 @AllArgsConstructor
-@RedisHash(value = "verificationCodeAndEmail")
-public class VerificationCodeAndEmail {
+@RedisHash(value = "univEmailVerification")
+public class UnivEmailVerification {
 
     @Id
     private String verificationCode;
 
-    private String email;
+    private String univEmail;
 
     private Long memberId;
 

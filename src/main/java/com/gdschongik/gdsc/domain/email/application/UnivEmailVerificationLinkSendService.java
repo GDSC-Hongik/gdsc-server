@@ -1,8 +1,8 @@
 package com.gdschongik.gdsc.domain.email.application;
 
 import com.gdschongik.gdsc.domain.email.constant.UnivMailVerificationConstant;
-import com.gdschongik.gdsc.domain.email.dao.VerificationCodeAndEmailRepository;
-import com.gdschongik.gdsc.domain.email.domain.VerificationCodeAndEmail;
+import com.gdschongik.gdsc.domain.email.dao.UnivEmailVerificationRepository;
+import com.gdschongik.gdsc.domain.email.domain.UnivEmailVerification;
 import com.gdschongik.gdsc.domain.email.util.VerificationCodeGenerator;
 import com.gdschongik.gdsc.domain.email.util.VerificationLinkUtil;
 import com.gdschongik.gdsc.domain.email.util.VerificationMailContentWriter;
@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class UnivEmailVerificationLinkSendService {
 
-    private final VerificationCodeAndEmailRepository verificationCodeAndEmailRepository;
+    private final UnivEmailVerificationRepository univEmailVerificationRepository;
 
     private final MailSender mailSender;
     private final HongikUnivEmailValidator hongikUnivEmailValidator;
@@ -35,7 +35,7 @@ public class UnivEmailVerificationLinkSendService {
         String verificationCode = verificationCodeGenerator.generate();
         sendVerificationLink(email, verificationCode);
 
-        saveVerificationCodeAndEmail(verificationCode, email);
+        saveUnivEmailVerification(verificationCode, email);
     }
 
     private void sendVerificationLink(String verificationCode, String email) {
@@ -45,11 +45,11 @@ public class UnivEmailVerificationLinkSendService {
         mailSender.send(email, UnivMailVerificationConstant.VERIFICATION_EMAIL_SUBJECT, mailContent);
     }
 
-    private void saveVerificationCodeAndEmail(String email, String verificationCode) {
+    private void saveUnivEmailVerification(String email, String verificationCode) {
         Long currentMemberId = memberUtil.getCurrentMemberId();
-        VerificationCodeAndEmail verificationCodeAndEmail =
-                new VerificationCodeAndEmail(verificationCode, email, currentMemberId, VERIFICATION_CODE_TIME_TO_LIVE.toSeconds());
+        UnivEmailVerification univEmailVerification =
+                new UnivEmailVerification(verificationCode, email, currentMemberId, VERIFICATION_CODE_TIME_TO_LIVE.toSeconds());
 
-        verificationCodeAndEmailRepository.save(verificationCodeAndEmail);
+        univEmailVerificationRepository.save(univEmailVerification);
     }
 }
