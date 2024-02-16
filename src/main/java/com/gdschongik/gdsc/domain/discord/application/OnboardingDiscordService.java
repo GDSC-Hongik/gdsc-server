@@ -5,7 +5,6 @@ import static com.gdschongik.gdsc.domain.discord.domain.DiscordVerificationCode.
 import com.gdschongik.gdsc.domain.discord.dao.DiscordVerificationCodeRepository;
 import com.gdschongik.gdsc.domain.discord.domain.DiscordVerificationCode;
 import com.gdschongik.gdsc.domain.discord.dto.response.DiscordVerificationCodeResponse;
-import com.gdschongik.gdsc.global.util.MemberUtil;
 import java.security.SecureRandom;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -19,7 +18,6 @@ public class OnboardingDiscordService {
 
     public static final long DISCORD_CODE_TTL_SECONDS = 300L;
 
-    private final MemberUtil memberUtil;
     private final DiscordVerificationCodeRepository discordVerificationCodeRepository;
 
     @Transactional
