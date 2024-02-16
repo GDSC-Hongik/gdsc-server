@@ -23,8 +23,8 @@ public class UnivEmailVerificationLinkSendController {
     @Operation(summary = "학교 인증 메일 발송 요청", description = "학교 인증 메일 발송을 요청합니다.")
     @PostMapping
     public ResponseEntity<Void> sendUnivEmailVerificationLink(
-            @Valid @RequestBody UnivEmailVerificationLinkSendRequest univEmailVerificationLinkSendRequest) {
-        univEmailVerificationLinkSendService.send(univEmailVerificationLinkSendRequest.univEmail());
+            @Valid @RequestBody UnivEmailVerificationLinkSendRequest request) {
+        univEmailVerificationLinkSendService.send(request.univEmail());
         return ResponseEntity.ok().build();
     }
 }

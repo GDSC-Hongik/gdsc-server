@@ -145,7 +145,7 @@ public class Member extends BaseTimeEntity {
 
     public void completeUnivEmailVerification(String univEmail) {
         this.univEmail = univEmail;
-        requirement.updateUnivState(RequirementStatus.VERIFIED);
+        requirement.updateUnivStatus(RequirementStatus.VERIFIED);
     }
 
     private void validateStatusUpdatable() {

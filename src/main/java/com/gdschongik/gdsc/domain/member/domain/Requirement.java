@@ -44,7 +44,7 @@ public class Requirement {
         return this.univStatus == PENDING;
     }
 
-    public void updateUnivState(RequirementStatus univStatus) {
+    public void updateUnivStatus(RequirementStatus univStatus) {
         this.univStatus = univStatus;
     }
 }

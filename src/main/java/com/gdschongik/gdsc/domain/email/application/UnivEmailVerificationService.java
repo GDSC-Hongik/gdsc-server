@@ -19,9 +19,9 @@ public class UnivEmailVerificationService {
     private final UnivEmailVerificationRepository univEmailVerificationRepository;
 
     public void verifyMemberUnivEmail(String verificationCode) {
-        UnivEmailVerification univEmailByVerificationCode = getUnivEmailVerification(verificationCode);
-        Member member = getMemberById(univEmailByVerificationCode.getMemberId());
-        member.completeUnivEmailVerification(univEmailByVerificationCode.getUnivEmail());
+        UnivEmailVerification univEmailVerification = getUnivEmailVerification(verificationCode);
+        Member member = getMemberById(univEmailVerification.getMemberId());
+        member.completeUnivEmailVerification(univEmailVerification.getUnivEmail());
     }
 
     private UnivEmailVerification getUnivEmailVerification(String verificationCode) {
