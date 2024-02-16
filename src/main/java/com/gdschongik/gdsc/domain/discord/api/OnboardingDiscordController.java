@@ -1,12 +1,11 @@
 package com.gdschongik.gdsc.domain.discord.api;
 
 import com.gdschongik.gdsc.domain.discord.application.OnboardingDiscordService;
-import com.gdschongik.gdsc.domain.discord.dto.response.DiscordVerificationCodeResponse;
+import com.gdschongik.gdsc.domain.discord.dto.response.LinkDiscordResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,10 +17,10 @@ public class OnboardingDiscordController {
 
     private final OnboardingDiscordService onboardingDiscordService;
 
-    @Operation(summary = "디스코드 연동 인증코드 발급하기", description = "디스코드 연동을 위한 인증코드를 발급합니다.")
-    @GetMapping("/discord-verification-code")
-    public ResponseEntity<DiscordVerificationCodeResponse> getVerificationCode() {
-        DiscordVerificationCodeResponse response = onboardingDiscordService.createVerificationCode();
-        return ResponseEntity.ok().body(response);
+    @Operation(summary = "디스코드 연동하기", description = "디스코드 봇으로 발급받은 인증코드와 현재 사용자의 디스코드 계정을 연동합니다.")
+    @RequestMapping("/link-discord")
+    public ResponseEntity<LinkDiscordResponse> linkDiscord() {
+        // TODO: 디스코드 연동하기
+        return ResponseEntity.ok(new LinkDiscordResponse());
     }
 }
