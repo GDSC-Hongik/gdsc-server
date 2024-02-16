@@ -5,7 +5,6 @@ import static com.gdschongik.gdsc.domain.discord.domain.DiscordVerificationCode.
 import com.gdschongik.gdsc.domain.discord.dao.DiscordVerificationCodeRepository;
 import com.gdschongik.gdsc.domain.discord.domain.DiscordVerificationCode;
 import com.gdschongik.gdsc.domain.discord.dto.response.DiscordVerificationCodeResponse;
-import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import java.security.SecureRandom;
 import lombok.RequiredArgsConstructor;
@@ -24,17 +23,15 @@ public class OnboardingDiscordService {
     private final DiscordVerificationCodeRepository discordVerificationCodeRepository;
 
     @Transactional
-    public DiscordVerificationCodeResponse createVerificationCode() {
-        Member member = memberUtil.getCurrentMember();
+    public DiscordVerificationCodeResponse createVerificationCode(String discordUsername) {
 
-        String discordUsername = member.getDiscordUsername();
         Long code = generateRandomCode();
         DiscordVerificationCode discordVerificationCode =
                 DiscordVerificationCode.create(discordUsername, code, DISCORD_CODE_TTL_SECONDS);
 
         discordVerificationCodeRepository.save(discordVerificationCode);
 
-        return DiscordVerificationCodeResponse.of(code);
+        return DiscordVerificationCodeResponse.of(code, DISCORD_CODE_TTL_SECONDS);
     }
 
     @SneakyThrows

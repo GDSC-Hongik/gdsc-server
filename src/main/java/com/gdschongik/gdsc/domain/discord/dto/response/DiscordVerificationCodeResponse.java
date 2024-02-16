@@ -1,8 +1,10 @@
 package com.gdschongik.gdsc.domain.discord.dto.response;
 
-public record DiscordVerificationCodeResponse(Long code) {
+import java.time.Duration;
 
-    public static DiscordVerificationCodeResponse of(Long code) {
-        return new DiscordVerificationCodeResponse(code);
+public record DiscordVerificationCodeResponse(Long code, Duration ttl) {
+
+    public static DiscordVerificationCodeResponse of(Long code, Long ttlSeconds) {
+        return new DiscordVerificationCodeResponse(code, Duration.ofSeconds(ttlSeconds));
     }
 }
