@@ -40,7 +40,7 @@ public class UnivEmailVerificationLinkSendService {
         String verificationCode = verificationCodeGenerator.generate();
         sendVerificationLink(univEmail, verificationCode);
 
-        saveUnivEmailVerification(verificationCode, univEmail);
+        saveUnivEmailVerification(univEmail, verificationCode);
     }
 
     private void validateUnivEmailNotVerified(String univEmail) {
@@ -49,11 +49,11 @@ public class UnivEmailVerificationLinkSendService {
         });
     }
 
-    private void sendVerificationLink(String verificationCode, String email) {
+    private void sendVerificationLink(String univEmail, String verificationCode) {
         String verificationLink = verificationLinkUtil.createLink(verificationCode);
         String mailContent = verificationMailContentWriter.write(verificationLink, VERIFICATION_CODE_TIME_TO_LIVE);
 
-        mailSender.send(email, UnivEmailVerificationConstant.VERIFICATION_EMAIL_SUBJECT, mailContent);
+        mailSender.send(univEmail, UnivEmailVerificationConstant.VERIFICATION_EMAIL_SUBJECT, mailContent);
     }
 
     private void saveUnivEmailVerification(String univEmail, String verificationCode) {
