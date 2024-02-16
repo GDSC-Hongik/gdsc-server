@@ -35,7 +35,7 @@ public class OnboardingDiscordService {
     @SneakyThrows
     private static Long generateRandomCode() {
         return SecureRandom.getInstanceStrong()
-                .longs(MIN_CODE_RANGE, MAX_CODE_RANGE + 1)
+                .longs(MIN_CODE_RANGE, MAX_CODE_RANGE + 1L)
                 .findFirst()
                 .orElseThrow();
     }
