@@ -40,6 +40,8 @@ public class OnboardingDiscordService {
                 .orElseThrow();
     }
 
+
+    // TODO: 디스코드 연동하기 피쳐에서 구현
     public void verifyDiscordCode(String discordUsername, String code) {
         DiscordVerificationCode discordVerificationCode =
                 discordVerificationCodeRepository.findById(discordUsername).orElseThrow();
