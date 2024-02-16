@@ -2,12 +2,16 @@ package com.gdschongik.gdsc.domain.member.api;
 
 import com.gdschongik.gdsc.domain.member.application.OnboardingMemberService;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberSignupRequest;
+import com.gdschongik.gdsc.domain.member.dto.request.OnboardingMemberUpdateRequest;
+import com.gdschongik.gdsc.domain.member.dto.response.MemberInfoResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,5 +29,19 @@ public class OnboardingMemberController {
     public ResponseEntity<Void> signupMember(@Valid @RequestBody MemberSignupRequest request) {
         onboardingMemberService.signupMember(request);
         return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "디스코드 회원 정보 수정", description = "디스코드 회원 정보를 수정합니다.")
+    @PutMapping("/me/discord")
+    public ResponseEntity<Void> updateMember(@Valid @RequestBody OnboardingMemberUpdateRequest request) {
+        onboardingMemberService.updateMember(request);
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "회원 정보 조회", description = "회원 정보를 조회합니다.")
+    @GetMapping("/me")
+    public ResponseEntity<MemberInfoResponse> getMemberInfo() {
+        MemberInfoResponse response = onboardingMemberService.getMemberInfo();
+        return ResponseEntity.ok().body(response);
     }
 }

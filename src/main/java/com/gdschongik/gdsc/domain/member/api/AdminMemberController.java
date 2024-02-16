@@ -65,4 +65,11 @@ public class AdminMemberController {
         MemberGrantResponse response = adminMemberService.grantMember(request);
         return ResponseEntity.ok().body(response);
     }
+
+    @Operation(summary = "승인 가능 회원 전체 조회", description = "승인 가능한 회원 전체를 조회합니다.")
+    @GetMapping("/grantable")
+    public ResponseEntity<Page<MemberFindAllResponse>> getGrantableMembers(Pageable pageable) {
+        Page<MemberFindAllResponse> response = adminMemberService.getGrantableMembers(pageable);
+        return ResponseEntity.ok().body(response);
+    }
 }
