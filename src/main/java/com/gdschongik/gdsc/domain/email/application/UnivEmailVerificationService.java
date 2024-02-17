@@ -11,13 +11,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class UnivEmailVerificationService {
 
     private final MemberRepository memberRepository;
     private final UnivEmailVerificationRepository univEmailVerificationRepository;
 
+    @Transactional
     public void verifyMemberUnivEmail(String verificationCode) {
         UnivEmailVerification univEmailVerification = getUnivEmailVerification(verificationCode);
         Member member = getMemberById(univEmailVerification.getMemberId());
