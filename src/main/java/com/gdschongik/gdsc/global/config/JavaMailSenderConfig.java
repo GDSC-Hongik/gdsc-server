@@ -19,7 +19,7 @@ public class JavaMailSenderConfig {
     private final EmailProperty emailProperty;
 
     @Bean
-    public JavaMailSender javaMailSenderBean() {
+    public JavaMailSender javaMailSender() {
         JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
         javaMailSender.setHost(emailProperty.host());
         javaMailSender.setPort(emailProperty.port());
