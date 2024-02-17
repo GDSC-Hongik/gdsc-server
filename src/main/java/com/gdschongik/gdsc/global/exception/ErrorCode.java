@@ -30,12 +30,12 @@ public enum ErrorCode {
     UNIV_NOT_VERIFIED(HttpStatus.CONFLICT, "재학생 인증이 되지 않았습니다."),
 
     // Univ Email Verification
-    UNIV_EMAIL_ALREADY_VERIFIED(HttpStatus.CONFLICT, "이미 가입된 Univ Email 입니다."),
-    UNIV_EMAIL_FORMAT_MISMATCH(HttpStatus.BAD_REQUEST, "형식에 맞지 않는 Univ Email 입니다."),
-    UNIV_EMAIL_DOMAIN_MISMATCH(HttpStatus.BAD_REQUEST, "Univ Email의 도메인이 맞지 않습니다."),
+    UNIV_EMAIL_ALREADY_VERIFIED(HttpStatus.CONFLICT, "이미 가입된 재학생 메일입니다."),
+    UNIV_EMAIL_FORMAT_MISMATCH(HttpStatus.BAD_REQUEST, "형식에 맞지 않는 재학생 메일입니다."),
+    UNIV_EMAIL_DOMAIN_MISMATCH(HttpStatus.BAD_REQUEST, "재학생 메일의 도메인이 맞지 않습니다."),
     MESSAGING_EXCEPTION(HttpStatus.BAD_REQUEST, "수신자 이메일이 올바르지 않습니다."),
 
-    VERIFICATION_CODE_NOT_FOUND(HttpStatus.NOT_FOUND, "Univ Email 인증 코드가 존재하지 않습니다."),
+    VERIFICATION_CODE_NOT_FOUND(HttpStatus.NOT_FOUND, "재학생 인증 코드가 존재하지 않습니다."),
     ;
 
     private final HttpStatus status;
