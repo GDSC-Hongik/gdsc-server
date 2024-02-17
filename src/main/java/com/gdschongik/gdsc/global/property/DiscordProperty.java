@@ -10,4 +10,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class DiscordProperty {
 
     private final String token;
+    private final String serverId;
 }
