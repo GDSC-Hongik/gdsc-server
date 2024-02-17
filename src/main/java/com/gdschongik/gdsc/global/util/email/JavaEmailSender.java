@@ -2,6 +2,9 @@ package com.gdschongik.gdsc.global.util.email;
 
 import static com.gdschongik.gdsc.global.common.constant.EmailConstant.SENDER_ADDRESS;
 import static com.gdschongik.gdsc.global.common.constant.EmailConstant.SENDER_PERSONAL;
+import static com.gdschongik.gdsc.global.common.constant.EnvironmentConstant.DEV;
+import static com.gdschongik.gdsc.global.common.constant.EnvironmentConstant.LOCAL;
+import static com.gdschongik.gdsc.global.common.constant.EnvironmentConstant.PROD;
 
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
@@ -11,13 +14,16 @@ import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import java.io.UnsupportedEncodingException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
 @Component
+@Profile({PROD, DEV, LOCAL})
 @RequiredArgsConstructor
-public class JavaMailSender implements MailSender {
+public class JavaEmailSender implements MailSender {
 
-    private final org.springframework.mail.javamail.JavaMailSender javaMailSender;
+    private final JavaMailSender javaMailSender;
 
     @Override
     public void send(String recipient, String subject, String content) {
