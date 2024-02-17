@@ -42,6 +42,8 @@ public class Member extends BaseTimeEntity {
 
     private String email;
 
+    private String phone;
+
     private String discordUsername;
 
     private String nickname;
@@ -54,9 +56,6 @@ public class Member extends BaseTimeEntity {
     private String univEmail;
 
     @Embedded
-    private Phone phone;
-
-    @Embedded
     private Requirement requirement;
 
     @Builder(access = AccessLevel.PRIVATE)
@@ -67,7 +66,7 @@ public class Member extends BaseTimeEntity {
             String studentId,
             String department,
             String email,
-            Phone phone,
+            String phone,
             String discordUsername,
             String nickname,
             String oauthId,
@@ -105,7 +104,7 @@ public class Member extends BaseTimeEntity {
 
         this.studentId = studentId;
         this.name = name;
-        this.phone = new Phone(phone);
+        this.phone = phone.replaceAll("-", "");
         this.department = department;
         this.email = email;
     }
@@ -137,7 +136,7 @@ public class Member extends BaseTimeEntity {
 
         this.studentId = studentId;
         this.name = name;
-        this.phone = new Phone(phone);
+        this.phone = phone.replaceAll("-", "");
         this.department = department;
         this.email = email;
         this.discordUsername = discordUsername;

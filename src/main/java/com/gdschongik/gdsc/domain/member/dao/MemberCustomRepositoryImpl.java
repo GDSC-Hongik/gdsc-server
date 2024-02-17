@@ -125,7 +125,7 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
     }
 
     private BooleanExpression eqPhone(String phone) {
-        return phone != null ? member.phone.number.contains(phone) : null;
+        return phone != null ? member.phone.contains(phone.replaceAll("-", "")) : null;
     }
 
     private BooleanExpression eqDepartment(String department) {
