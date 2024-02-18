@@ -16,7 +16,8 @@ public record MemberInfoResponse(
         String nickname,
         @Schema(description = "회비 입금 상태") RequirementStatus paymentStatus,
         @Schema(description = "디스코드 연동 상태") RequirementStatus discordStatus,
-        @Schema(description = "가입 상태") MemberRole role) {
+        @Schema(description = "가입 상태") MemberRole role,
+        @Schema(description = "입금자명") String depositorName) {
 
     public static MemberInfoResponse of(Member member) {
         return new MemberInfoResponse(
@@ -30,6 +31,7 @@ public record MemberInfoResponse(
                 member.getNickname(),
                 member.getRequirement().getPaymentStatus(),
                 member.getRequirement().getDiscordStatus(),
-                member.getRole());
+                member.getRole(),
+                String.format("%s%s", member.getName(), member.getPhone().substring(7)));
     }
 }
