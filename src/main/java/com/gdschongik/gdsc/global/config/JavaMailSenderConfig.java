@@ -1,9 +1,9 @@
 package com.gdschongik.gdsc.global.config;
 
 import com.gdschongik.gdsc.global.property.email.EmailProperty;
-import com.gdschongik.gdsc.global.property.email.Gmail;
-import com.gdschongik.gdsc.global.property.email.JavaMailProperty;
-import com.gdschongik.gdsc.global.property.email.SocketFactory;
+import com.gdschongik.gdsc.global.property.email.EmailProperty.Gmail;
+import com.gdschongik.gdsc.global.property.email.EmailProperty.JavaMailProperty;
+import com.gdschongik.gdsc.global.property.email.EmailProperty.SocketFactory;
 import com.gdschongik.gdsc.global.util.Pair;
 import java.util.Properties;
 import lombok.RequiredArgsConstructor;
@@ -21,9 +21,9 @@ public class JavaMailSenderConfig {
     @Bean
     public JavaMailSender javaMailSender() {
         JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
-        javaMailSender.setHost(emailProperty.host());
-        javaMailSender.setPort(emailProperty.port());
-        javaMailSender.setDefaultEncoding(emailProperty.encoding());
+        javaMailSender.setHost(emailProperty.getHost());
+        javaMailSender.setPort(emailProperty.getPort());
+        javaMailSender.setDefaultEncoding(emailProperty.getEncoding());
 
         setGmailProperty(javaMailSender);
         setJavaMailProperties(javaMailSender);
@@ -31,13 +31,13 @@ public class JavaMailSenderConfig {
     }
 
     private void setGmailProperty(JavaMailSenderImpl javaMailSender) {
-        Gmail gmail = emailProperty.gmail();
+        Gmail gmail = emailProperty.getGmail();
         javaMailSender.setUsername(gmail.loginEmail());
         javaMailSender.setPassword(gmail.password());
     }
 
     private void setJavaMailProperties(JavaMailSenderImpl javaMailSender) {
-        JavaMailProperty javaMailProperty = emailProperty.javaMailProperty();
+        JavaMailProperty javaMailProperty = emailProperty.getJavaMailProperty();
         Properties javaMailProperties = getJavaMailProperties(javaMailProperty);
         javaMailSender.setJavaMailProperties(javaMailProperties);
     }
