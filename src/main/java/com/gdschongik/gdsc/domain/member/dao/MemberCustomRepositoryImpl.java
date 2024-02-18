@@ -71,6 +71,21 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
         return PageableExecutionUtils.getPage(fetch, pageable, countQuery::fetchOne);
     }
 
+    @Override
+    public Page<Member> findAllByRole(MemberRole role, Pageable pageable) {
+        List<Member> fetch = queryFactory
+                .selectFrom(member)
+                .where(eqRole(role), eqStatus(MemberStatus.NORMAL))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        JPAQuery<Long> countQuery =
+                queryFactory.select(member.count()).from(member).where(eqRole(role), eqStatus(MemberStatus.NORMAL));
+
+        return PageableExecutionUtils.getPage(fetch, pageable, countQuery::fetchOne);
+    }
+
     private BooleanExpression eqRole(MemberRole role) {
         return member.role.eq(role);
     }
