@@ -27,7 +27,7 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
     public Page<Member> findAll(MemberQueryRequest queryRequest, Pageable pageable) {
         List<Member> fetch = queryFactory
                 .selectFrom(member)
-                .where(queryOption(queryRequest))
+                .where(queryOption(queryRequest), eqStatus(MemberStatus.NORMAL))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
