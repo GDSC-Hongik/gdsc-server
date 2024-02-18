@@ -37,10 +37,6 @@ public class UnivEmailVerificationLinkSendService {
             + "<h3> 감사합니다. </h3> <br>"
             + "CODE : <strong>";
 
-    public String write(String verificationLink, Duration codeAliveTime) {
-        return String.format(NOTIFICATION_MESSAGE, codeAliveTime.toMinutes()) + verificationLink;
-    }
-
     public void send(String univEmail) {
         hongikUnivEmailValidator.validate(univEmail);
         validateUnivEmailNotVerified(univEmail);
