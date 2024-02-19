@@ -78,4 +78,9 @@ public class AdminMemberService {
         Page<Member> members = memberRepository.findAllGrantable(pageable);
         return members.map(MemberFindAllResponse::of);
     }
+
+    public Page<MemberFindAllResponse> getUnpaidMembers(Pageable pageable) {
+        Page<Member> members = memberRepository.findAllUnpaid(pageable);
+        return members.map(MemberFindAllResponse::of);
+    }
 }

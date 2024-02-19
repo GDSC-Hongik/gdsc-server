@@ -72,4 +72,11 @@ public class AdminMemberController {
         Page<MemberFindAllResponse> response = adminMemberService.getGrantableMembers(pageable);
         return ResponseEntity.ok().body(response);
     }
+
+    @Operation(summary = "회비 미납 회원 전체 조회", description = "회비 미납 상태인 회원 전체를 조회합니다.")
+    @GetMapping("/unpaid")
+    public ResponseEntity<Page<MemberFindAllResponse>> getUnpaidMembers(Pageable pageable) {
+        Page<MemberFindAllResponse> response = adminMemberService.getUnpaidMembers(pageable);
+        return ResponseEntity.ok().body(response);
+    }
 }

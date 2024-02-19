@@ -17,4 +17,6 @@ public interface MemberCustomRepository {
     Page<Member> findAllGrantable(Pageable pageable);
 
     Page<Member> findAllByRole(MemberRole role, Pageable pageable);
+
+    Page<Member> findAllUnpaid(Pageable pageable);
 }

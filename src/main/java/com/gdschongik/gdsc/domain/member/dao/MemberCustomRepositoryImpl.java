@@ -1,6 +1,7 @@
 package com.gdschongik.gdsc.domain.member.dao;
 
 import static com.gdschongik.gdsc.domain.member.domain.QMember.*;
+import static com.gdschongik.gdsc.domain.member.domain.RequirementStatus.*;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
@@ -89,24 +90,42 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
         return PageableExecutionUtils.getPage(fetch, pageable, countQuery::fetchOne);
     }
 
+    @Override
+    public Page<Member> findAllUnpaid(Pageable pageable) {
+        List<Member> fetch = queryFactory
+                .selectFrom(member)
+                .where(eqStatus(MemberStatus.NORMAL), eqPaymentStatus(PENDING))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .orderBy(member.createdAt.desc())
+                .fetch();
+
+        JPAQuery<Long> countQuery = queryFactory
+                .select(member.count())
+                .from(member)
+                .where(eqStatus(MemberStatus.NORMAL), eqPaymentStatus(PENDING));
+
+        return PageableExecutionUtils.getPage(fetch, pageable, countQuery::fetchOne);
+    }
+
     private BooleanExpression eqRole(MemberRole role) {
         return member.role.eq(role);
     }
 
     private BooleanBuilder requirementVerified() {
-        return new BooleanBuilder().and(discordVerified()).and(univVerified()).and(paymentVerified());
+        return new BooleanBuilder().and(discordVerified()).and(univVerified()).and(eqPaymentStatus(VERIFIED));
     }
 
     private BooleanExpression discordVerified() {
-        return member.requirement.discordStatus.eq(RequirementStatus.VERIFIED);
+        return member.requirement.discordStatus.eq(VERIFIED);
     }
 
     private BooleanExpression univVerified() {
-        return member.requirement.univStatus.eq(RequirementStatus.VERIFIED);
+        return member.requirement.univStatus.eq(VERIFIED);
     }
 
-    private BooleanExpression paymentVerified() {
-        return member.requirement.paymentStatus.eq(RequirementStatus.VERIFIED);
+    private BooleanExpression eqPaymentStatus(RequirementStatus paymentStatus) {
+        return member.requirement.paymentStatus.eq(paymentStatus);
     }
 
     private BooleanExpression eqId(Long id) {
