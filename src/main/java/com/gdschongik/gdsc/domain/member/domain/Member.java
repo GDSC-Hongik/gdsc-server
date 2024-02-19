@@ -168,4 +168,8 @@ public class Member extends BaseTimeEntity {
         this.discordUsername = discordUsername;
         this.nickname = nickname;
     }
+
+    public RequirementStatus getUnivStatus() {
+        return this.requirement.getUnivStatus();
+    }
 }
