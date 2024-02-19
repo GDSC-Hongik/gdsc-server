@@ -37,6 +37,6 @@ public class OnboardingMemberService {
 
     public MemberUnivStatusResponse checkUnivVerificationStatus() {
         Member currentMember = memberUtil.getCurrentMember();
-        return new MemberUnivStatusResponse(currentMember.getUnivStatus());
+        return MemberUnivStatusResponse.from(currentMember);
     }
 }
