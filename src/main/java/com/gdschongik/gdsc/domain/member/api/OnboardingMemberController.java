@@ -4,6 +4,7 @@ import com.gdschongik.gdsc.domain.member.application.OnboardingMemberService;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberSignupRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.OnboardingMemberUpdateRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberInfoResponse;
+import com.gdschongik.gdsc.domain.member.dto.response.MemberUnivStatusResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -42,6 +43,13 @@ public class OnboardingMemberController {
     @GetMapping("/me")
     public ResponseEntity<MemberInfoResponse> getMemberInfo() {
         MemberInfoResponse response = onboardingMemberService.getMemberInfo();
+        return ResponseEntity.ok().body(response);
+    }
+
+    @Operation(summary = "재학생 인증 여부 확인", description = "재학생 인증 여부를 확인합니다.")
+    @GetMapping("/me/univ-verification")
+    public ResponseEntity<MemberUnivStatusResponse> checkUnivVerification() {
+        MemberUnivStatusResponse response = onboardingMemberService.checkUnivVerificationStatus();
         return ResponseEntity.ok().body(response);
     }
 }
