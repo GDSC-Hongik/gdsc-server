@@ -30,6 +30,7 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
                 .where(queryOption(queryRequest), eqStatus(MemberStatus.NORMAL))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
+                .orderBy(member.createdAt.desc())
                 .fetch();
 
         JPAQuery<Long> countQuery =
@@ -61,6 +62,7 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
                 .where(eqStatus(MemberStatus.NORMAL), eqRole(MemberRole.GUEST), requirementVerified())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
+                .orderBy(member.createdAt.desc())
                 .fetch();
 
         JPAQuery<Long> countQuery = queryFactory
@@ -78,6 +80,7 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
                 .where(eqRole(role), eqStatus(MemberStatus.NORMAL))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
+                .orderBy(member.createdAt.desc())
                 .fetch();
 
         JPAQuery<Long> countQuery =
