@@ -11,6 +11,7 @@ import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberUpdateRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberFindAllResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberGrantResponse;
+import com.gdschongik.gdsc.domain.member.dto.response.MemberPaymentFindAllResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberPendingFindAllResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
@@ -80,8 +81,9 @@ public class AdminMemberService {
         return members.map(MemberFindAllResponse::of);
     }
 
-    public Page<MemberFindAllResponse> getMembersByPaymentStatus(RequirementStatus paymentStatus, Pageable pageable) {
+    public Page<MemberPaymentFindAllResponse> getMembersByPaymentStatus(
+            RequirementStatus paymentStatus, Pageable pageable) {
         Page<Member> members = memberRepository.findAllByPaymentStatus(paymentStatus, pageable);
-        return members.map(MemberFindAllResponse::of);
+        return members.map(MemberPaymentFindAllResponse::from);
     }
 }

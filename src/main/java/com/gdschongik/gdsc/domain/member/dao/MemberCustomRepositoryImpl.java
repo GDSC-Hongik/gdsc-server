@@ -126,7 +126,7 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
 
     private BooleanExpression eqRequirementStatus(
             EnumPath<RequirementStatus> requirement, RequirementStatus requirementStatus) {
-        return requirement.eq(requirementStatus);
+        return requirementStatus != null ? requirement.eq(requirementStatus) : null;
     }
 
     private BooleanExpression eqId(Long id) {
