@@ -66,8 +66,12 @@ public class WebSecurityConfig {
 
         http.securityMatcher(getSwaggerUrls())
                 .oauth2Login(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated())
                 .httpBasic(withDefaults());
+
+        http.authorizeHttpRequests(
+                environmentUtil.isDevProfile()
+                        ? authorize -> authorize.anyRequest().authenticated()
+                        : authorize -> authorize.anyRequest().permitAll());
 
         return http.build();
     }
