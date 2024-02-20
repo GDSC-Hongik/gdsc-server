@@ -28,11 +28,12 @@ public class OnboardingMemberService {
                 request.studentId(), request.name(), request.phone(), request.department(), request.email());
     }
 
+    @Deprecated
     @Transactional
     public void updateMember(OnboardingMemberUpdateRequest request) {
         Member currentMember = memberUtil.getCurrentMember();
         validateDiscordUsernameDuplicate(currentMember);
-        currentMember.updateDiscordInfo(request.discordUsername(), request.nickname());
+        currentMember.verifyDiscord(request.discordUsername(), request.nickname());
     }
 
     private void validateDiscordUsernameDuplicate(Member member) {
