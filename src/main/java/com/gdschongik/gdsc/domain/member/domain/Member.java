@@ -162,9 +162,10 @@ public class Member extends BaseTimeEntity {
         this.role = MemberRole.USER;
     }
 
-    public void updateDiscordInfo(String discordUsername, String nickname) {
+    public void verifyDiscord(String discordUsername, String nickname) {
         validateStatusUpdatable();
 
+        this.requirement.verifyDiscord();
         this.discordUsername = discordUsername;
         this.nickname = nickname;
     }
@@ -173,8 +174,8 @@ public class Member extends BaseTimeEntity {
         return this.requirement.getUnivStatus();
     }
 
-    public void verifyPayment(RequirementStatus status) {
+    public void updatePaymentStatus(RequirementStatus status) {
         validateStatusUpdatable();
-        this.requirement.verifyPayment(status);
+        this.requirement.updatePaymentStatus(status);
     }
 }

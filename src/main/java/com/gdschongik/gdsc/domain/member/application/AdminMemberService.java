@@ -91,6 +91,6 @@ public class AdminMemberService {
     @Transactional
     public void verifyPayment(Long memberId, MemberPaymentRequest request) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
-        member.verifyPayment(request.status());
+        member.updatePaymentStatus(request.status());
     }
 }
