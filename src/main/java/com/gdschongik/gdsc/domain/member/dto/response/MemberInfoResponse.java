@@ -24,7 +24,11 @@ public record MemberInfoResponse(
                 member.getId(),
                 member.getStudentId(),
                 member.getName(),
-                member.getPhone(),
+                String.format(
+                        "%s-%s-%s",
+                        member.getPhone().substring(0, 3),
+                        member.getPhone().substring(3, 7),
+                        member.getPhone().substring(7)),
                 member.getDepartment(),
                 member.getEmail(),
                 member.getDiscordUsername(),

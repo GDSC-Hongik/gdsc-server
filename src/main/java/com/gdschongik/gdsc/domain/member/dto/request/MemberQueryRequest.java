@@ -7,7 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 public record MemberQueryRequest(
         @Schema(description = "학번", pattern = STUDENT_ID) String studentId,
         @Schema(description = "이름") String name,
-        @Schema(description = "전화번호", pattern = PHONE) String phone,
+        @Schema(description = "전화번호", pattern = PHONE_WITHOUT_HYPHEN) String phone,
         @Schema(description = "학과") String department,
         @Schema(description = "이메일") String email,
         @Schema(description = "discord username") String discordUsername,
