@@ -57,7 +57,7 @@ public class OnboardingDiscordService {
         discordVerificationCodeRepository.delete(discordVerificationCode);
 
         final Member currentMember = memberUtil.getCurrentMember();
-        currentMember.verifyDiscord(request.discordUsername(), request.discordUsername());
+        currentMember.verifyDiscord(request.discordUsername(), request.nickname());
     }
 
     private void validateDiscordCodeMatches(
