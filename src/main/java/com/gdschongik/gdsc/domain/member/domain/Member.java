@@ -173,7 +173,8 @@ public class Member extends BaseTimeEntity {
         return this.requirement.getUnivStatus();
     }
 
-    public void verifyPayment() {
-        this.requirement.verifyPayment();
+    public void verifyPayment(RequirementStatus status) {
+        validateStatusUpdatable();
+        this.requirement.verifyPayment(status);
     }
 }

@@ -5,14 +5,12 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
-import com.gdschongik.gdsc.domain.member.domain.MemberStatus;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberGrantRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberPaymentRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberUpdateRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberFindAllResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberGrantResponse;
-import com.gdschongik.gdsc.domain.member.dto.response.MemberPaymentResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberPendingFindAllResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
@@ -83,15 +81,8 @@ public class AdminMemberService {
     }
 
     @Transactional
-    public MemberPaymentResponse verifyPayment(MemberPaymentRequest request) {
-        List<Member> members = getNormalMembersByIdList(request.memberIdList());
-        members.forEach(Member::verifyPayment);
-        return MemberPaymentResponse.from(members);
-    }
-
-    private List<Member> getNormalMembersByIdList(List<Long> memberIdList) {
-        return memberRepository.findAllById(memberIdList).stream()
-                .filter(member -> member.getStatus() == MemberStatus.NORMAL)
-                .toList();
+    public void verifyPayment(Long memberId, MemberPaymentRequest request) {
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
+        member.verifyPayment(request.status());
     }
 }

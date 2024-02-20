@@ -7,7 +7,6 @@ import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberUpdateRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberFindAllResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberGrantResponse;
-import com.gdschongik.gdsc.domain.member.dto.response.MemberPaymentResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberPendingFindAllResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -75,10 +74,11 @@ public class AdminMemberController {
         return ResponseEntity.ok().body(response);
     }
 
-    @Operation(summary = "회비 납부 처리", description = "회비 납부 완료 처리합니다.")
-    @PutMapping("/payment")
-    public ResponseEntity<MemberPaymentResponse> verifyPayment(@Valid @RequestBody MemberPaymentRequest request) {
-        MemberPaymentResponse response = adminMemberService.verifyPayment(request);
-        return ResponseEntity.ok().body(response);
+    @Operation(summary = "회비 납부 상태 변경", description = "회비 납부 상태를 변경합니다.")
+    @PutMapping("/payment/{memberId}")
+    public ResponseEntity<Void> verifyPayment(
+            @PathVariable Long memberId, @Valid @RequestBody MemberPaymentRequest request) {
+        adminMemberService.verifyPayment(memberId, request);
+        return ResponseEntity.ok().build();
     }
 }
