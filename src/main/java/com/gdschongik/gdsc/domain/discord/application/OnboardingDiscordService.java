@@ -78,7 +78,7 @@ public class OnboardingDiscordService {
 
     private void validateDiscordCodeMatches(
             DiscordLinkRequest request, DiscordVerificationCode discordVerificationCode) {
-        if (!Objects.equals(discordVerificationCode.getCode(), request.code())) {
+        if (!discordVerificationCode.matchesCode(request.code())) {
             throw new CustomException(ErrorCode.DISCORD_CODE_MISMATCH);
         }
     }

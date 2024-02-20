@@ -44,4 +44,8 @@ public class DiscordVerificationCode {
                 .ttl(ttl)
                 .build();
     }
+
+    public boolean matchesCode(Integer code) {
+        return this.code.equals(code);
+    }
 }
