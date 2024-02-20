@@ -11,6 +11,7 @@ import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import java.security.SecureRandom;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
@@ -62,7 +63,7 @@ public class OnboardingDiscordService {
 
     private void validateDiscordCodeMatches(
             DiscordLinkRequest request, DiscordVerificationCode discordVerificationCode) {
-        if (!discordVerificationCode.getCode().equals(request.code())) {
+        if (!Objects.equals(discordVerificationCode.getCode(), request.code())) {
             throw new CustomException(ErrorCode.DISCORD_CODE_MISMATCH);
         }
     }
