@@ -3,6 +3,7 @@ package com.gdschongik.gdsc.domain.member.api;
 import com.gdschongik.gdsc.domain.member.application.AdminMemberService;
 import com.gdschongik.gdsc.domain.member.domain.RequirementStatus;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberGrantRequest;
+import com.gdschongik.gdsc.domain.member.dto.request.MemberPaymentRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberUpdateRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberFindAllResponse;
@@ -81,5 +82,13 @@ public class AdminMemberController {
             @RequestParam(name = "status") RequirementStatus paymentStatus, Pageable pageable) {
         Page<MemberFindAllResponse> response = adminMemberService.getMembersByPaymentStatus(paymentStatus, pageable);
         return ResponseEntity.ok().body(response);
+    }
+
+    @Operation(summary = "회비 납부 상태 변경", description = "회비 납부 상태를 변경합니다.")
+    @PutMapping("/payment/{memberId}")
+    public ResponseEntity<Void> verifyPayment(
+            @PathVariable Long memberId, @Valid @RequestBody MemberPaymentRequest request) {
+        adminMemberService.verifyPayment(memberId, request);
+        return ResponseEntity.ok().build();
     }
 }

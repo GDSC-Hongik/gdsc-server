@@ -7,6 +7,7 @@ import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import com.gdschongik.gdsc.domain.member.domain.RequirementStatus;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberGrantRequest;
+import com.gdschongik.gdsc.domain.member.dto.request.MemberPaymentRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberUpdateRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberFindAllResponse;
@@ -83,5 +84,11 @@ public class AdminMemberService {
     public Page<MemberFindAllResponse> getMembersByPaymentStatus(RequirementStatus paymentStatus, Pageable pageable) {
         Page<Member> members = memberRepository.findAllByPaymentStatus(paymentStatus, pageable);
         return members.map(MemberFindAllResponse::of);
+    }
+
+    @Transactional
+    public void verifyPayment(Long memberId, MemberPaymentRequest request) {
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
+        member.verifyPayment(request.status());
     }
 }
