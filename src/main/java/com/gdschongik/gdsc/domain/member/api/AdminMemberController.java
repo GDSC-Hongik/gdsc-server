@@ -76,7 +76,7 @@ public class AdminMemberController {
         return ResponseEntity.ok().body(response);
     }
 
-    @Operation(summary = "회원 회비 납부 정보 전체 조회", description = "회원 회비 납부 정보 전체를 조회합니다.")
+    @Operation(summary = "회비 납부 상태에 따른 회원 전체 조회", description = "회비 납부 상태에 따라 회원 목록을 조회합니다.")
     @GetMapping("/payment")
     public ResponseEntity<Page<MemberPaymentFindAllResponse>> getMembersByPaymentStatus(
             @RequestParam(name = "status", required = false) RequirementStatus paymentStatus, Pageable pageable) {
