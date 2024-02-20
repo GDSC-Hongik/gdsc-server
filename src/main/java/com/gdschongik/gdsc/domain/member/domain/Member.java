@@ -104,7 +104,7 @@ public class Member extends BaseTimeEntity {
 
         this.studentId = studentId;
         this.name = name;
-        this.phone = phone.replaceAll("-", "");
+        this.phone = phone;
         this.department = department;
         this.email = email;
     }
@@ -136,7 +136,7 @@ public class Member extends BaseTimeEntity {
 
         this.studentId = studentId;
         this.name = name;
-        this.phone = phone.replaceAll("-", "");
+        this.phone = phone;
         this.department = department;
         this.email = email;
         this.discordUsername = discordUsername;
