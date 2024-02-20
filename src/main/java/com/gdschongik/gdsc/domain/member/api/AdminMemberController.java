@@ -2,10 +2,12 @@ package com.gdschongik.gdsc.domain.member.api;
 
 import com.gdschongik.gdsc.domain.member.application.AdminMemberService;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberGrantRequest;
+import com.gdschongik.gdsc.domain.member.dto.request.MemberPaymentRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberUpdateRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberFindAllResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberGrantResponse;
+import com.gdschongik.gdsc.domain.member.dto.response.MemberPaymentResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberPendingFindAllResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -70,6 +72,13 @@ public class AdminMemberController {
     @GetMapping("/grantable")
     public ResponseEntity<Page<MemberFindAllResponse>> getGrantableMembers(Pageable pageable) {
         Page<MemberFindAllResponse> response = adminMemberService.getGrantableMembers(pageable);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @Operation(summary = "회비 납부 처리", description = "회비 납부 완료 처리합니다.")
+    @PutMapping("/payment")
+    public ResponseEntity<MemberPaymentResponse> verifyPayment(@Valid @RequestBody MemberPaymentRequest request) {
+        MemberPaymentResponse response = adminMemberService.verifyPayment(request);
         return ResponseEntity.ok().body(response);
     }
 }
