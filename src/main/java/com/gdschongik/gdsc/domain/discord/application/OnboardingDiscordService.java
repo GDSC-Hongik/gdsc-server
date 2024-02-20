@@ -29,7 +29,7 @@ public class OnboardingDiscordService {
     @Transactional
     public DiscordVerificationCodeResponse createVerificationCode(String discordUsername) {
 
-        Long code = generateRandomCode();
+        Integer code = generateRandomCode();
         DiscordVerificationCode discordVerificationCode =
                 DiscordVerificationCode.create(discordUsername, code, DISCORD_CODE_TTL_SECONDS);
 
@@ -39,9 +39,9 @@ public class OnboardingDiscordService {
     }
 
     @SneakyThrows
-    private static Long generateRandomCode() {
+    private static Integer generateRandomCode() {
         return SecureRandom.getInstanceStrong()
-                .longs(MIN_CODE_RANGE, MAX_CODE_RANGE + 1L)
+                .ints(MIN_CODE_RANGE, MAX_CODE_RANGE + 1)
                 .findFirst()
                 .orElseThrow();
     }

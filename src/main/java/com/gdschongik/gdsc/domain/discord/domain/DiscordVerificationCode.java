@@ -18,26 +18,26 @@ public class DiscordVerificationCode {
     @Id
     private String discordUsername;
 
-    private Long code;
+    private Integer code;
 
     @TimeToLive
     private Long ttl;
 
     @Builder
-    private DiscordVerificationCode(String discordUsername, Long code, Long ttl) {
+    private DiscordVerificationCode(String discordUsername, Integer code, Long ttl) {
         validateCodeRange(code);
         this.discordUsername = discordUsername;
         this.code = code;
         this.ttl = ttl;
     }
 
-    private static void validateCodeRange(Long code) {
+    private static void validateCodeRange(Integer code) {
         if (code < MIN_CODE_RANGE || code > MAX_CODE_RANGE) {
             throw new CustomException(ErrorCode.DISCORD_INVALID_CODE_RANGE);
         }
     }
 
-    public static DiscordVerificationCode create(String discordUsername, Long code, Long ttl) {
+    public static DiscordVerificationCode create(String discordUsername, Integer code, Long ttl) {
         return DiscordVerificationCode.builder()
                 .discordUsername(discordUsername)
                 .code(code)
