@@ -4,7 +4,12 @@ import static com.gdschongik.gdsc.domain.discord.domain.DiscordVerificationCode.
 
 import com.gdschongik.gdsc.domain.discord.dao.DiscordVerificationCodeRepository;
 import com.gdschongik.gdsc.domain.discord.domain.DiscordVerificationCode;
+import com.gdschongik.gdsc.domain.discord.dto.request.DiscordLinkRequest;
 import com.gdschongik.gdsc.domain.discord.dto.response.DiscordVerificationCodeResponse;
+import com.gdschongik.gdsc.domain.member.domain.Member;
+import com.gdschongik.gdsc.global.exception.CustomException;
+import com.gdschongik.gdsc.global.exception.ErrorCode;
+import com.gdschongik.gdsc.global.util.MemberUtil;
 import java.security.SecureRandom;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -19,6 +24,7 @@ public class OnboardingDiscordService {
     public static final long DISCORD_CODE_TTL_SECONDS = 300L;
 
     private final DiscordVerificationCodeRepository discordVerificationCodeRepository;
+    private final MemberUtil memberUtil;
 
     @Transactional
     public DiscordVerificationCodeResponse createVerificationCode(String discordUsername) {
@@ -40,16 +46,24 @@ public class OnboardingDiscordService {
                 .orElseThrow();
     }
 
-    // TODO: 디스코드 연동하기 피쳐에서 구현
-    public void verifyDiscordCode(String discordUsername, String code) {
-        DiscordVerificationCode discordVerificationCode =
-                discordVerificationCodeRepository.findById(discordUsername).orElseThrow();
+    @Transactional
+    public void verifyDiscordCode(DiscordLinkRequest request) {
+        DiscordVerificationCode discordVerificationCode = discordVerificationCodeRepository
+                .findById(request.discordUsername())
+                .orElseThrow(() -> new CustomException(ErrorCode.DISCORD_CODE_NOT_FOUND));
 
-        // TODO: 4자리 숫자의 문자열로 비교
-        if (!discordVerificationCode.getCode().toString().equals(code)) {
-            // TODO: throw exception
-        }
+        validateDiscordCodeMatches(request, discordVerificationCode);
 
         discordVerificationCodeRepository.delete(discordVerificationCode);
+
+        final Member currentMember = memberUtil.getCurrentMember();
+        currentMember.verifyDiscord(request.discordUsername(), request.discordUsername());
+    }
+
+    private void validateDiscordCodeMatches(
+            DiscordLinkRequest request, DiscordVerificationCode discordVerificationCode) {
+        if (!discordVerificationCode.getCode().equals(request.code())) {
+            throw new CustomException(ErrorCode.DISCORD_CODE_MISMATCH);
+        }
     }
 }

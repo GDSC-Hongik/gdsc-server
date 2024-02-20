@@ -22,6 +22,7 @@ public enum ErrorCode {
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다."),
     MEMBER_DELETED(HttpStatus.CONFLICT, "탈퇴한 회원입니다."),
     MEMBER_FORBIDDEN(HttpStatus.CONFLICT, "차단된 회원입니다."),
+    MEMBER_ALREADY_VERIFIED(HttpStatus.CONFLICT, "이미 인증된 상태입니다."),
     MEMBER_DISCORD_USERNAME_DUPLICATE(HttpStatus.CONFLICT, "이미 등록된 디스코드 유저네임입니다."),
 
     // Parameter
@@ -31,8 +32,10 @@ public enum ErrorCode {
     UNIV_NOT_VERIFIED(HttpStatus.CONFLICT, "재학생 인증이 되지 않았습니다."),
     REQUIREMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "일치하는 가입조건이 없습니다."),
 
-    // Discord (Always 500)
+    // Discord
     DISCORD_INVALID_CODE_RANGE(HttpStatus.INTERNAL_SERVER_ERROR, "디스코드 인증코드는 4자리 숫자여야 합니다."),
+    DISCORD_CODE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 유저네임으로 발급된 디스코드 인증코드가 존재하지 않습니다."),
+    DISCORD_CODE_MISMATCH(HttpStatus.CONFLICT, "디스코드 인증코드가 일치하지 않습니다."),
     ;
 
     private final HttpStatus status;

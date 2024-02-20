@@ -43,4 +43,8 @@ public class Requirement {
     public boolean isUnivPending() {
         return this.univStatus == PENDING;
     }
+
+    public void verifyDiscord() {
+        this.discordStatus = VERIFIED;
+    }
 }
