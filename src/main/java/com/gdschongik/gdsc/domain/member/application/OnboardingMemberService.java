@@ -4,6 +4,7 @@ import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberSignupRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.OnboardingMemberUpdateRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberInfoResponse;
+import com.gdschongik.gdsc.domain.member.dto.response.MemberUnivStatusResponse;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,5 +33,10 @@ public class OnboardingMemberService {
     public MemberInfoResponse getMemberInfo() {
         Member currentMember = memberUtil.getCurrentMember();
         return MemberInfoResponse.of(currentMember);
+    }
+
+    public MemberUnivStatusResponse checkUnivVerificationStatus() {
+        Member currentMember = memberUtil.getCurrentMember();
+        return MemberUnivStatusResponse.from(currentMember);
     }
 }

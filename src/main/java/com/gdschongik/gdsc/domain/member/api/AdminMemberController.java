@@ -1,6 +1,7 @@
 package com.gdschongik.gdsc.domain.member.api;
 
 import com.gdschongik.gdsc.domain.member.application.AdminMemberService;
+import com.gdschongik.gdsc.domain.member.domain.RequirementStatus;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberGrantRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberUpdateRequest;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "Admin Member", description = "어드민 회원 관리 API입니다.")
@@ -70,6 +72,14 @@ public class AdminMemberController {
     @GetMapping("/grantable")
     public ResponseEntity<Page<MemberFindAllResponse>> getGrantableMembers(Pageable pageable) {
         Page<MemberFindAllResponse> response = adminMemberService.getGrantableMembers(pageable);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @Operation(summary = "회비 미납 회원 전체 조회", description = "회비 미납 상태인 회원 전체를 조회합니다.")
+    @GetMapping("/payment")
+    public ResponseEntity<Page<MemberFindAllResponse>> getMembersByPaymentStatus(
+            @RequestParam(name = "status") RequirementStatus paymentStatus, Pageable pageable) {
+        Page<MemberFindAllResponse> response = adminMemberService.getMembersByPaymentStatus(paymentStatus, pageable);
         return ResponseEntity.ok().body(response);
     }
 }

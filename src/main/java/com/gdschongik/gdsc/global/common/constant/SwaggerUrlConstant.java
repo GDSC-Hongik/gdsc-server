@@ -1,5 +1,6 @@
 package com.gdschongik.gdsc.global.common.constant;
 
+import java.util.Arrays;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -12,4 +13,10 @@ public enum SwaggerUrlConstant {
     ;
 
     private final String value;
+
+    public static String[] getSwaggerUrls() {
+        return Arrays.stream(SwaggerUrlConstant.values())
+                .map(SwaggerUrlConstant::getValue)
+                .toArray(String[]::new);
+    }
 }

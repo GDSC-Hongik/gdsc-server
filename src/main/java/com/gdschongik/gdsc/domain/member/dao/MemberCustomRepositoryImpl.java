@@ -1,6 +1,7 @@
 package com.gdschongik.gdsc.domain.member.dao;
 
 import static com.gdschongik.gdsc.domain.member.domain.QMember.*;
+import static com.gdschongik.gdsc.domain.member.domain.RequirementStatus.*;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
@@ -9,6 +10,7 @@ import com.gdschongik.gdsc.domain.member.domain.RequirementStatus;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryRequest;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.EnumPath;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
@@ -27,9 +29,10 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
     public Page<Member> findAll(MemberQueryRequest queryRequest, Pageable pageable) {
         List<Member> fetch = queryFactory
                 .selectFrom(member)
-                .where(queryOption(queryRequest))
+                .where(queryOption(queryRequest), eqStatus(MemberStatus.NORMAL))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
+                .orderBy(member.createdAt.desc())
                 .fetch();
 
         JPAQuery<Long> countQuery =
@@ -61,6 +64,7 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
                 .where(eqStatus(MemberStatus.NORMAL), eqRole(MemberRole.GUEST), requirementVerified())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
+                .orderBy(member.createdAt.desc())
                 .fetch();
 
         JPAQuery<Long> countQuery = queryFactory
@@ -71,24 +75,58 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
         return PageableExecutionUtils.getPage(fetch, pageable, countQuery::fetchOne);
     }
 
+    @Override
+    public Page<Member> findAllByRole(MemberRole role, Pageable pageable) {
+        List<Member> fetch = queryFactory
+                .selectFrom(member)
+                .where(eqRole(role), eqStatus(MemberStatus.NORMAL))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .orderBy(member.createdAt.desc())
+                .fetch();
+
+        JPAQuery<Long> countQuery =
+                queryFactory.select(member.count()).from(member).where(eqRole(role), eqStatus(MemberStatus.NORMAL));
+
+        return PageableExecutionUtils.getPage(fetch, pageable, countQuery::fetchOne);
+    }
+
+    @Override
+    public Page<Member> findAllByPaymentStatus(RequirementStatus paymentStatus, Pageable pageable) {
+        List<Member> fetch = queryFactory
+                .selectFrom(member)
+                .where(
+                        eqStatus(MemberStatus.NORMAL),
+                        eqRequirementStatus(member.requirement.paymentStatus, paymentStatus))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .orderBy(member.createdAt.desc())
+                .fetch();
+
+        JPAQuery<Long> countQuery = queryFactory
+                .select(member.count())
+                .from(member)
+                .where(
+                        eqStatus(MemberStatus.NORMAL),
+                        eqRequirementStatus(member.requirement.paymentStatus, paymentStatus));
+
+        return PageableExecutionUtils.getPage(fetch, pageable, countQuery::fetchOne);
+    }
+
     private BooleanExpression eqRole(MemberRole role) {
         return member.role.eq(role);
     }
 
     private BooleanBuilder requirementVerified() {
-        return new BooleanBuilder().and(discordVerified()).and(univVerified()).and(paymentVerified());
+        return new BooleanBuilder()
+                .and(eqRequirementStatus(member.requirement.discordStatus, VERIFIED))
+                .and(eqRequirementStatus(member.requirement.univStatus, VERIFIED))
+                .and(eqRequirementStatus(member.requirement.paymentStatus, VERIFIED));
     }
 
-    private BooleanExpression discordVerified() {
-        return member.requirement.discordStatus.eq(RequirementStatus.VERIFIED);
-    }
-
-    private BooleanExpression univVerified() {
-        return member.requirement.univStatus.eq(RequirementStatus.VERIFIED);
-    }
-
-    private BooleanExpression paymentVerified() {
-        return member.requirement.paymentStatus.eq(RequirementStatus.VERIFIED);
+    private BooleanExpression eqRequirementStatus(
+            EnumPath<RequirementStatus> requirement, RequirementStatus requirementStatus) {
+        return requirement.eq(requirementStatus);
     }
 
     private BooleanExpression eqId(Long id) {

@@ -28,6 +28,7 @@ public enum ErrorCode {
 
     // Requirement
     UNIV_NOT_VERIFIED(HttpStatus.CONFLICT, "재학생 인증이 되지 않았습니다."),
+    REQUIREMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "일치하는 가입조건이 없습니다."),
 
     // Discord (Always 500)
     DISCORD_INVALID_CODE_RANGE(HttpStatus.INTERNAL_SERVER_ERROR, "디스코드 인증코드는 4자리 숫자여야 합니다."),

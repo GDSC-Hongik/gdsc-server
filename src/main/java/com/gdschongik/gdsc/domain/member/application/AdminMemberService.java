@@ -5,6 +5,7 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
+import com.gdschongik.gdsc.domain.member.domain.RequirementStatus;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberGrantRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberUpdateRequest;
@@ -76,6 +77,11 @@ public class AdminMemberService {
 
     public Page<MemberFindAllResponse> getGrantableMembers(Pageable pageable) {
         Page<Member> members = memberRepository.findAllGrantable(pageable);
+        return members.map(MemberFindAllResponse::of);
+    }
+
+    public Page<MemberFindAllResponse> getMembersByPaymentStatus(RequirementStatus paymentStatus, Pageable pageable) {
+        Page<Member> members = memberRepository.findAllByPaymentStatus(paymentStatus, pageable);
         return members.map(MemberFindAllResponse::of);
     }
 }
