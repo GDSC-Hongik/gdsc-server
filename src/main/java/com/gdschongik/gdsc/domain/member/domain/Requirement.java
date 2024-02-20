@@ -44,7 +44,7 @@ public class Requirement {
         return this.univStatus == PENDING;
     }
 
-    public void verifyPayment(RequirementStatus status) {
+    public void updatePaymentStatus(RequirementStatus status) {
         this.paymentStatus = status;
     }
 
