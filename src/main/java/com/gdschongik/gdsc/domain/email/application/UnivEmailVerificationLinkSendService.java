@@ -6,12 +6,14 @@ import com.gdschongik.gdsc.domain.email.domain.UnivEmailVerification;
 import com.gdschongik.gdsc.domain.email.util.VerificationCodeGenerator;
 import com.gdschongik.gdsc.domain.email.util.VerificationLinkUtil;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
+import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import com.gdschongik.gdsc.global.util.email.HongikUnivEmailValidator;
 import com.gdschongik.gdsc.global.util.email.MailSender;
 import java.time.Duration;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,9 +52,10 @@ public class UnivEmailVerificationLinkSendService {
     }
 
     private void validateUnivEmailNotVerified(String univEmail) {
-        memberRepository.findByUnivEmail(univEmail).ifPresent(univEmailVerification -> {
+        Optional<Member> member = memberRepository.findByUnivEmail(univEmail);
+        if (member.isPresent()) {
             throw new CustomException(ErrorCode.UNIV_EMAIL_ALREADY_VERIFIED);
-        });
+        }
     }
 
     private String writeMailContentWithVerificationLink(String verificationLink) {
