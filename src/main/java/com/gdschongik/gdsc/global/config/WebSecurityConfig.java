@@ -1,5 +1,7 @@
 package com.gdschongik.gdsc.global.config;
 
+import static com.gdschongik.gdsc.global.common.constant.EnvironmentConstant.*;
+import static com.gdschongik.gdsc.global.common.constant.SwaggerUrlConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.UrlConstant.*;
 import static org.springframework.http.HttpHeaders.*;
 import static org.springframework.security.config.Customizer.*;
@@ -7,7 +9,7 @@ import static org.springframework.security.config.Customizer.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gdschongik.gdsc.domain.auth.application.JwtService;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
-import com.gdschongik.gdsc.global.common.constant.SwaggerUrlConstant;
+import com.gdschongik.gdsc.global.annotation.ConditionalOnProfile;
 import com.gdschongik.gdsc.global.property.SwaggerProperty;
 import com.gdschongik.gdsc.global.security.CustomSuccessHandler;
 import com.gdschongik.gdsc.global.security.CustomUserService;
@@ -15,9 +17,7 @@ import com.gdschongik.gdsc.global.security.JwtExceptionFilter;
 import com.gdschongik.gdsc.global.security.JwtFilter;
 import com.gdschongik.gdsc.global.util.CookieUtil;
 import com.gdschongik.gdsc.global.util.EnvironmentUtil;
-import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -59,14 +59,18 @@ public class WebSecurityConfig {
 
     @Bean
     @Order(1)
-    @ConditionalOnProperty(name = "spring.profiles.active", havingValue = "dev")
+    @ConditionalOnProfile({DEV, LOCAL})
     public SecurityFilterChain swaggerFilterChain(HttpSecurity http) throws Exception {
         defaultFilterChain(http);
 
         http.securityMatcher(getSwaggerUrls())
                 .oauth2Login(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated())
                 .httpBasic(withDefaults());
+
+        http.authorizeHttpRequests(
+                environmentUtil.isDevProfile()
+                        ? authorize -> authorize.anyRequest().authenticated()
+                        : authorize -> authorize.anyRequest().permitAll());
 
         return http.build();
     }
@@ -99,12 +103,6 @@ public class WebSecurityConfig {
                 .authenticated());
 
         return http.build();
-    }
-
-    private static String[] getSwaggerUrls() {
-        return Arrays.stream(SwaggerUrlConstant.values())
-                .map(SwaggerUrlConstant::getValue)
-                .toArray(String[]::new);
     }
 
     @Bean

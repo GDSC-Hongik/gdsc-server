@@ -1,6 +1,6 @@
 package com.gdschongik.gdsc.global.config;
 
-import static com.gdschongik.gdsc.global.common.constant.EnvironmentConstant.*;
+import static com.gdschongik.gdsc.global.common.constant.EnvironmentConstant.Constants.*;
 import static com.gdschongik.gdsc.global.common.constant.UrlConstant.*;
 import static org.springframework.http.HttpHeaders.*;
 
@@ -36,8 +36,8 @@ public class SwaggerConfig {
 
     private String getServerUrl() {
         return switch (environmentUtil.getCurrentProfile()) {
-            case PROD -> PROD_SERVER_URL;
-            case DEV -> DEV_SERVER_URL;
+            case PROD_ENV -> PROD_SERVER_URL;
+            case DEV_ENV -> DEV_SERVER_URL;
             default -> LOCAL_SERVER_URL;
         };
     }
