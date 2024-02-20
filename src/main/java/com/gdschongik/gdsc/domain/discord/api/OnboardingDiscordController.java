@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,7 +22,7 @@ public class OnboardingDiscordController {
 
     @Operation(summary = "디스코드 연동하기", description = "디스코드 봇으로 발급받은 인증코드와 현재 사용자의 디스코드 계정을 연동합니다.")
     @PostMapping("/link-discord")
-    public ResponseEntity<Void> linkDiscord(@Valid DiscordLinkRequest request) {
+    public ResponseEntity<Void> linkDiscord(@Valid @RequestBody DiscordLinkRequest request) {
         onboardingDiscordService.verifyDiscordCode(request);
         return ResponseEntity.ok().build();
     }
