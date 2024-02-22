@@ -118,8 +118,9 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
                 .transform(groupBy(requirementVerified()).as(list(member)));
 
         Map<Boolean, List<Member>> classifiedMember = new HashMap<>();
-        classifiedMember.put(true, groupByVerified.getOrDefault(true, new ArrayList<>()));
-        classifiedMember.put(false, groupByVerified.getOrDefault(false, new ArrayList<>()));
+        List<Member> emptyList = new ArrayList<>();
+        classifiedMember.put(true, groupByVerified.getOrDefault(true, emptyList));
+        classifiedMember.put(false, groupByVerified.getOrDefault(false, emptyList));
         return classifiedMember;
     }
 
