@@ -4,8 +4,6 @@ import static com.gdschongik.gdsc.global.common.constant.DiscordConstant.*;
 
 import com.gdschongik.gdsc.domain.discord.application.OnboardingDiscordService;
 import com.gdschongik.gdsc.domain.discord.dto.response.DiscordVerificationCodeResponse;
-import com.gdschongik.gdsc.global.exception.CustomException;
-import com.gdschongik.gdsc.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -29,10 +27,6 @@ public class IssuingCodeHandler implements DiscordEventHandler {
         String discordUsername = event.getUser().getName();
         DiscordVerificationCodeResponse verificationCode =
                 onboardingDiscordService.createVerificationCode(discordUsername);
-
-        if (discordUsername != null) {
-            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
-        }
 
         String message = String.format(
                 REPLY_MESSAGE_ISSUING_CODE,
