@@ -8,7 +8,6 @@ import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import com.gdschongik.gdsc.domain.member.domain.MemberStatus;
 import com.gdschongik.gdsc.domain.member.domain.RequirementStatus;
-import com.gdschongik.gdsc.domain.member.dto.request.MemberGrantRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryRequest;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -111,10 +110,10 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
     }
 
     @Override
-    public Map<Boolean, List<Member>> groupByVerified(MemberGrantRequest request) {
+    public Map<Boolean, List<Member>> groupByVerified(List<Long> memberIdList) {
         Map<Boolean, List<Member>> groupByVerified = queryFactory
                 .selectFrom(member)
-                .where(member.id.in(request.memberIdList()))
+                .where(member.id.in(memberIdList))
                 .transform(groupBy(requirementVerified()).as(list(member)));
 
         Map<Boolean, List<Member>> classifiedMember = new HashMap<>();

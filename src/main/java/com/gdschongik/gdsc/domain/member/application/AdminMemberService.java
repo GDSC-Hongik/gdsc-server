@@ -63,7 +63,7 @@ public class AdminMemberService {
 
     @Transactional
     public MemberGrantResponse grantMember(MemberGrantRequest request) {
-        Map<Boolean, List<Member>> classifiedMember = memberRepository.groupByVerified(request);
+        Map<Boolean, List<Member>> classifiedMember = memberRepository.groupByVerified(request.memberIdList());
         List<Member> verifiedMembers = classifiedMember.get(true);
         verifiedMembers.forEach(Member::grant);
         return MemberGrantResponse.from(classifiedMember);
