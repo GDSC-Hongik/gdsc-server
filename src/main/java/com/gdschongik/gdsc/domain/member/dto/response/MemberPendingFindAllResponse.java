@@ -15,15 +15,19 @@ public record MemberPendingFindAllResponse(
         Requirement requirement) {
 
     public static MemberPendingFindAllResponse of(Member member) {
+        String phone = null;
+        if (member.getPhone() != null) {
+            phone = String.format(
+                    "%s-%s-%s",
+                    member.getPhone().substring(0, 3),
+                    member.getPhone().substring(3, 7),
+                    member.getPhone().substring(7));
+        }
         return new MemberPendingFindAllResponse(
                 member.getId(),
                 member.getStudentId(),
                 member.getName(),
-                String.format(
-                        "%s-%s-%s",
-                        member.getPhone().substring(0, 3),
-                        member.getPhone().substring(3, 7),
-                        member.getPhone().substring(7)),
+                phone,
                 member.getDepartment(),
                 member.getEmail(),
                 member.getDiscordUsername(),
