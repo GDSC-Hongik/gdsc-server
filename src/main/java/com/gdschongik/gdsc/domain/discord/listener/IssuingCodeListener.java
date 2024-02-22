@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 @Listener
 @RequiredArgsConstructor
-public class RegisterCommandListener extends ListenerAdapter {
+public class IssuingCodeListener extends ListenerAdapter {
 
     private final IssuingCodeHandler issuingCodeHandler;
 
