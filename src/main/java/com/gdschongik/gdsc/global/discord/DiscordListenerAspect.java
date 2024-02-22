@@ -17,6 +17,9 @@ public class DiscordListenerAspect {
     @Around(
             "execution(* com.gdschongik.gdsc.domain.discord.handler.DiscordEventHandler.delegate(*)) && args(genericEvent)")
     public Object doAround(ProceedingJoinPoint joinPoint, GenericEvent genericEvent) throws Throwable {
+        // TODO: 외부 의존성인 디스코드 클래스에 대한 어댑터 추가
+        // TODO: 이벤트 객체를 인자로 받는 디스코드 에러 핸들러 추가
+
         try {
             return joinPoint.proceed();
         } catch (CustomException e) {
