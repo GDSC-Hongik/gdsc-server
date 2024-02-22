@@ -17,7 +17,7 @@ import com.gdschongik.gdsc.domain.member.dto.response.MemberPendingFindAllRespon
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -63,25 +63,10 @@ public class AdminMemberService {
 
     @Transactional
     public MemberGrantResponse grantMember(MemberGrantRequest request) {
-        List<Member> verifiedMembers = getVerifiedMembers(request.memberIdList());
-        List<Member> notVerifiedMembers = getNotVerifiedMembers(request.memberIdList(), verifiedMembers);
+        Map<Boolean, List<Member>> classifiedMember = memberRepository.groupByVerified(request);
+        List<Member> verifiedMembers = classifiedMember.get(true);
         verifiedMembers.forEach(Member::grant);
-        return MemberGrantResponse.of(verifiedMembers, notVerifiedMembers);
-    }
-
-    private List<Member> getVerifiedMembers(List<Long> memberIdList) {
-        return memberIdList.stream()
-                .map(memberRepository::findVerifiedById)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .toList();
-    }
-
-    private List<Member> getNotVerifiedMembers(List<Long> memberIdList, List<Member> verifiedMembers) {
-        List<Member> members = memberRepository.findAllById(memberIdList);
-        return members.stream()
-                .filter(member -> !verifiedMembers.contains(member))
-                .toList();
+        return MemberGrantResponse.from(classifiedMember);
     }
 
     public Page<MemberFindAllResponse> getGrantableMembers(Pageable pageable) {

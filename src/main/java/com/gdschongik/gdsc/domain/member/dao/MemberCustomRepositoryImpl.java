@@ -2,11 +2,13 @@ package com.gdschongik.gdsc.domain.member.dao;
 
 import static com.gdschongik.gdsc.domain.member.domain.QMember.*;
 import static com.gdschongik.gdsc.domain.member.domain.RequirementStatus.*;
+import static com.querydsl.core.group.GroupBy.*;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import com.gdschongik.gdsc.domain.member.domain.MemberStatus;
 import com.gdschongik.gdsc.domain.member.domain.RequirementStatus;
+import com.gdschongik.gdsc.domain.member.dto.request.MemberGrantRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryRequest;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -14,6 +16,7 @@ import com.querydsl.core.types.dsl.EnumPath;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -46,14 +49,6 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
         return Optional.ofNullable(queryFactory
                 .selectFrom(member)
                 .where(eqOauthId(oauthId), eqStatus(MemberStatus.NORMAL))
-                .fetchOne());
-    }
-
-    @Override
-    public Optional<Member> findVerifiedById(Long id) {
-        return Optional.ofNullable(queryFactory
-                .selectFrom(member)
-                .where(eqId(id), requirementVerified())
                 .fetchOne());
     }
 
@@ -111,6 +106,15 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
                         eqRequirementStatus(member.requirement.paymentStatus, paymentStatus));
 
         return PageableExecutionUtils.getPage(fetch, pageable, countQuery::fetchOne);
+    }
+
+    @Override
+    public Map<Boolean, List<Member>> groupByVerified(MemberGrantRequest request) {
+        Map<Boolean, List<Member>> transform = queryFactory
+                .selectFrom(member)
+                .where(member.id.in(request.memberIdList()))
+                .transform(groupBy(requirementVerified()).as(list(member)));
+        return transform;
     }
 
     private BooleanExpression eqRole(MemberRole role) {
