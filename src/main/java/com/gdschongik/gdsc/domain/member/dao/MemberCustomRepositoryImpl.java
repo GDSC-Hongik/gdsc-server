@@ -15,6 +15,8 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.EnumPath;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -110,10 +112,15 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
 
     @Override
     public Map<Boolean, List<Member>> groupByVerified(MemberGrantRequest request) {
-        return queryFactory
+        Map<Boolean, List<Member>> groupByVerified = queryFactory
                 .selectFrom(member)
                 .where(member.id.in(request.memberIdList()))
                 .transform(groupBy(requirementVerified()).as(list(member)));
+
+        Map<Boolean, List<Member>> classifiedMember = new HashMap<>();
+        classifiedMember.put(true, groupByVerified.getOrDefault(true, new ArrayList<>()));
+        classifiedMember.put(false, groupByVerified.getOrDefault(false, new ArrayList<>()));
+        return classifiedMember;
     }
 
     private BooleanExpression eqRole(MemberRole role) {
