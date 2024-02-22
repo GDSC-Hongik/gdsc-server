@@ -19,9 +19,15 @@ public class DiscordListenerAspect {
     public Object doAround(ProceedingJoinPoint joinPoint, GenericEvent genericEvent) throws Throwable {
         try {
             return joinPoint.proceed();
-        } catch (Throwable e) {
-            log.error("DiscordListenerAspect : {}", e.getMessage(), e);
-            event.reply(e.getMessage()).setEphemeral(true).queue();
+        } catch (CustomException e) {
+            log.error("DiscordException: {}", e.getMessage());
+            GenericCommandInteractionEvent event = (GenericCommandInteractionEvent) genericEvent;
+            event.getHook().sendMessage(e.getMessage()).setEphemeral(true).queue();
+            return null;
+        } catch (Exception e) {
+            log.error("DiscordException: {}", e.getMessage());
+            GenericCommandInteractionEvent event = (GenericCommandInteractionEvent) genericEvent;
+            event.getHook().sendMessage("알 수 없는 오류가 발생했습니다.").setEphemeral(true).queue();
             return null;
         }
     }
