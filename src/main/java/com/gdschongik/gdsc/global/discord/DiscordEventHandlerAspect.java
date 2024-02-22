@@ -28,7 +28,7 @@ public class DiscordEventHandlerAspect {
             event.getHook().sendMessage(e.getMessage()).setEphemeral(true).queue();
             return null;
         } catch (Exception e) {
-            log.error("DiscordException: {}", e.getMessage());
+            log.error("Exception: {}", e.getMessage());
             GenericCommandInteractionEvent event = (GenericCommandInteractionEvent) genericEvent;
             event.getHook().sendMessage("알 수 없는 오류가 발생했습니다.").setEphemeral(true).queue();
             return null;
