@@ -110,11 +110,10 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
 
     @Override
     public Map<Boolean, List<Member>> groupByVerified(MemberGrantRequest request) {
-        Map<Boolean, List<Member>> transform = queryFactory
+        return queryFactory
                 .selectFrom(member)
                 .where(member.id.in(request.memberIdList()))
                 .transform(groupBy(requirementVerified()).as(list(member)));
-        return transform;
     }
 
     private BooleanExpression eqRole(MemberRole role) {
