@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Aspect
 @Component
-public class DiscordListenerAspect {
+public class DiscordEventHandlerAspect {
 
     @Around(
             "execution(* com.gdschongik.gdsc.domain.discord.handler.DiscordEventHandler.delegate(*)) && args(genericEvent)")
