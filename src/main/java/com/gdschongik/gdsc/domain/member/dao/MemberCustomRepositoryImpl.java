@@ -8,13 +8,14 @@ import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import com.gdschongik.gdsc.domain.member.domain.MemberStatus;
 import com.gdschongik.gdsc.domain.member.domain.RequirementStatus;
-import com.gdschongik.gdsc.domain.member.dto.request.MemberGrantRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryRequest;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.EnumPath;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -109,11 +110,21 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
     }
 
     @Override
-    public Map<Boolean, List<Member>> groupByVerified(MemberGrantRequest request) {
-        return queryFactory
+    public Map<Boolean, List<Member>> groupByVerified(List<Long> memberIdList) {
+        Map<Boolean, List<Member>> groupByVerified = queryFactory
                 .selectFrom(member)
-                .where(member.id.in(request.memberIdList()))
+                .where(member.id.in(memberIdList))
                 .transform(groupBy(requirementVerified()).as(list(member)));
+
+        return replaceNullByEmptyList(groupByVerified);
+    }
+
+    private Map<Boolean, List<Member>> replaceNullByEmptyList(Map<Boolean, List<Member>> groupByVerified) {
+        Map<Boolean, List<Member>> classifiedMember = new HashMap<>();
+        List<Member> emptyList = new ArrayList<>();
+        classifiedMember.put(true, groupByVerified.getOrDefault(true, emptyList));
+        classifiedMember.put(false, groupByVerified.getOrDefault(false, emptyList));
+        return classifiedMember;
     }
 
     private BooleanExpression eqRole(MemberRole role) {
