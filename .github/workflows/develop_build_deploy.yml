@@ -22,7 +22,7 @@ jobs:
         java-version: [ 17 ]
         distribution: [ 'temurin' ]
     outputs:
-      image-tag: ${{ steps.image-tag.outputs.value }}
+      image-full-url: ${{ steps.metadata.outputs.tags }}
       s3-copy-path: ${{ steps.s3-copy.outputs.S3_COPY_PATH }}
     steps:
       # 체크아웃
@@ -140,13 +140,12 @@ jobs:
         uses: appleboy/ssh-action@master
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_IMAGE_TAG: ${{ needs.build.outputs.image-tag }}
-          IMAGE_FULL_URL: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ needs.build.outputs.image-tag }}
+          IMAGE_FULL_URL: ${{ needs.build.outputs.image-full-url }}
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
-          envs: DOCKERHUB_USERNAME,DOCKERHUB_IMAGE_TAG  # docker-compose.yml 에서 사용할 환경 변수
+          envs: IMAGE_FULL_URL  # docker-compose.yml 에서 사용할 환경 변수
           script: |
             aws s3 cp ${{ needs.build.outputs.s3-copy-path }} docker-compose.yml
             echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
