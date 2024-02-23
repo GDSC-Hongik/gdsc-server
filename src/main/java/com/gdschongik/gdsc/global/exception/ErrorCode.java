@@ -19,7 +19,7 @@ public enum ErrorCode {
     AUTH_NOT_PARSABLE(HttpStatus.INTERNAL_SERVER_ERROR, "시큐리티 인증 정보 파싱에 실패했습니다."),
 
     // Member
-    MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다."),
+    MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 커뮤니티 멤버입니다."),
     MEMBER_DELETED(HttpStatus.CONFLICT, "탈퇴한 회원입니다."),
     MEMBER_FORBIDDEN(HttpStatus.CONFLICT, "차단된 회원입니다."),
     MEMBER_ALREADY_VERIFIED(HttpStatus.CONFLICT, "이미 인증된 상태입니다."),
