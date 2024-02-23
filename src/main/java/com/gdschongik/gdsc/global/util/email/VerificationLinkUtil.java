@@ -1,12 +1,13 @@
-package com.gdschongik.gdsc.domain.email.util;
+package com.gdschongik.gdsc.global.util.email;
 
+import static com.gdschongik.gdsc.global.common.constant.EmailConstant.VERIFY_EMAIL_API_ENDPOINT;
+import static com.gdschongik.gdsc.global.common.constant.EmailConstant.VERIFY_EMAIL_REQUEST_PARAMETER_KEY;
 import static com.gdschongik.gdsc.global.common.constant.EnvironmentConstant.DEV;
 import static com.gdschongik.gdsc.global.common.constant.EnvironmentConstant.PROD;
 import static com.gdschongik.gdsc.global.common.constant.UrlConstant.DEV_CLIENT_URL;
 import static com.gdschongik.gdsc.global.common.constant.UrlConstant.LOCAL_VITE_CLIENT_SECURE_URL;
 import static com.gdschongik.gdsc.global.common.constant.UrlConstant.PROD_CLIENT_URL;
 
-import com.gdschongik.gdsc.domain.email.constant.UnivEmailVerificationConstant;
 import com.gdschongik.gdsc.global.util.EnvironmentUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -18,9 +19,7 @@ public class VerificationLinkUtil {
     private final EnvironmentUtil environmentUtil;
 
     public String createLink(String verificationCode) {
-        String verifyEmailApiEndpoint = String.format(
-                UnivEmailVerificationConstant.VERIFY_EMAIL_API_ENDPOINT,
-                UnivEmailVerificationConstant.VERIFY_EMAIL_REQUEST_PARAMETER_KEY);
+        String verifyEmailApiEndpoint = String.format(VERIFY_EMAIL_API_ENDPOINT, VERIFY_EMAIL_REQUEST_PARAMETER_KEY);
         return getClientUrl() + verifyEmailApiEndpoint + verificationCode;
     }
 

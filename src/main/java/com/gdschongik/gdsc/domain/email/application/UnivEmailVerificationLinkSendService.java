@@ -1,10 +1,9 @@
 package com.gdschongik.gdsc.domain.email.application;
 
-import com.gdschongik.gdsc.domain.email.constant.UnivEmailVerificationConstant;
+import static com.gdschongik.gdsc.global.common.constant.EmailConstant.VERIFICATION_EMAIL_SUBJECT;
+
 import com.gdschongik.gdsc.domain.email.dao.UnivEmailVerificationRepository;
 import com.gdschongik.gdsc.domain.email.domain.UnivEmailVerification;
-import com.gdschongik.gdsc.domain.email.util.VerificationCodeGenerator;
-import com.gdschongik.gdsc.domain.email.util.VerificationLinkUtil;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.global.exception.CustomException;
@@ -12,6 +11,8 @@ import com.gdschongik.gdsc.global.exception.ErrorCode;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import com.gdschongik.gdsc.global.util.email.HongikUnivEmailValidator;
 import com.gdschongik.gdsc.global.util.email.MailSender;
+import com.gdschongik.gdsc.global.util.email.VerificationCodeGenerator;
+import com.gdschongik.gdsc.global.util.email.VerificationLinkUtil;
 import java.time.Duration;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -46,7 +47,7 @@ public class UnivEmailVerificationLinkSendService {
         String verificationCode = verificationCodeGenerator.generate();
         String verificationLink = verificationLinkUtil.createLink(verificationCode);
         String mailContent = writeMailContentWithVerificationLink(verificationLink);
-        mailSender.send(univEmail, UnivEmailVerificationConstant.VERIFICATION_EMAIL_SUBJECT, mailContent);
+        mailSender.send(univEmail, VERIFICATION_EMAIL_SUBJECT, mailContent);
 
         saveUnivEmailVerification(univEmail, verificationCode);
     }

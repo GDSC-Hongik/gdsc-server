@@ -1,4 +1,4 @@
-package com.gdschongik.gdsc.domain.email.util;
+package com.gdschongik.gdsc.global.util.email;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Component;

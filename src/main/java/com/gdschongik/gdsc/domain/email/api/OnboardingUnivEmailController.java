@@ -1,6 +1,6 @@
 package com.gdschongik.gdsc.domain.email.api;
 
-import static com.gdschongik.gdsc.domain.email.constant.UnivEmailVerificationConstant.VERIFY_EMAIL_REQUEST_PARAMETER_KEY;
+import static com.gdschongik.gdsc.global.common.constant.EmailConstant.VERIFY_EMAIL_REQUEST_PARAMETER_KEY;
 
 import com.gdschongik.gdsc.domain.email.application.UnivEmailVerificationLinkSendService;
 import com.gdschongik.gdsc.domain.email.application.UnivEmailVerificationService;
@@ -29,7 +29,7 @@ public class OnboardingUnivEmailController {
     @Operation(summary = "학교 인증 메일 발송 요청", description = "학교 인증 메일 발송을 요청합니다.")
     @PostMapping("/send-verify-email")
     public ResponseEntity<Void> sendUnivEmailVerificationLink(
-        @Valid @RequestBody UnivEmailVerificationLinkSendRequest request) {
+            @Valid @RequestBody UnivEmailVerificationLinkSendRequest request) {
         univEmailVerificationLinkSendService.send(request.univEmail());
         return ResponseEntity.ok().build();
     }
@@ -37,7 +37,7 @@ public class OnboardingUnivEmailController {
     @Operation(summary = "학교 인증 메일 인증하기", description = "학교 인증 메일을 인증합니다.")
     @GetMapping("/verify-email")
     public ResponseEntity<Void> sendUnivEmailVerificationLink(
-        @RequestParam(VERIFY_EMAIL_REQUEST_PARAMETER_KEY) String verificationCode) {
+            @RequestParam(VERIFY_EMAIL_REQUEST_PARAMETER_KEY) String verificationCode) {
         univEmailVerificationService.verifyMemberUnivEmail(verificationCode);
         return ResponseEntity.ok().build();
     }
