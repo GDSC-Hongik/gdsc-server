@@ -38,6 +38,7 @@ public class DiscordConfig {
         Objects.requireNonNull(jda.awaitReady().getGuildById(discordProperty.getServerId()))
                 .updateCommands()
                 .addCommands(Commands.slash(COMMAND_NAME_ISSUING_CODE, COMMAND_DESCRIPTION_ISSUING_CODE))
+                .addCommands(Commands.slash(COMMAND_NAME_JOIN, COMMAND_DESCRIPTION_JOIN))
                 .queue();
 
         return jda;
