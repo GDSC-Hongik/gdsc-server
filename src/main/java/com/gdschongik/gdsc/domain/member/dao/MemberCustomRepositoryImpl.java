@@ -4,6 +4,7 @@ import static com.gdschongik.gdsc.domain.member.domain.QMember.*;
 import static com.gdschongik.gdsc.domain.member.domain.RequirementStatus.*;
 import static com.querydsl.core.group.GroupBy.*;
 
+import com.gdschongik.gdsc.domain.member.domain.Department;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import com.gdschongik.gdsc.domain.member.domain.MemberStatus;
@@ -180,8 +181,8 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
         return phone != null ? member.phone.contains(phone.replaceAll("-", "")) : null;
     }
 
-    private BooleanExpression eqDepartment(String department) {
-        return department != null ? member.department.containsIgnoreCase(department) : null;
+    private BooleanExpression eqDepartment(Department department) {
+        return department != null ? member.department.eq(department) : null;
     }
 
     private BooleanExpression eqEmail(String email) {
