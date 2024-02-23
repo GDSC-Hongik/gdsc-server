@@ -1,0 +1,109 @@
+name: Build and Deploy to Production
+
+on:
+  push:
+    tags:
+      - v*.*.*
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: production
+    strategy:
+      matrix:
+        java-version: [ 17 ]
+        distribution: [ 'temurin' ]
+    outputs:
+      image-tag: ${{ steps.image-tag.outputs.value }}
+    steps:
+      # 체크아웃
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Docker 이미지 태그 세팅
+      - name: Set up image-tag by GITHUB_SHA
+        id: image-tag
+        run: echo "value=$(cut -d'v' -f2 <<< ${GITHUB_REF#refs/*/})" >> $GITHUB_OUTPUT
+
+      # JDK 17 버전으로 세팅
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ matrix.java-version }}
+          distribution: ${{ matrix.distribution }}
+
+      # Gradlew 실행 허용
+      - name: Run chmod to make gradlew executable
+        run: chmod +x ./gradlew
+
+      # Redis 컨테이너 실행
+      - name: Start containers
+        run: docker-compose -f ./docker-compose-test.yaml up -d
+
+      # Gradle 빌드
+      - name: Build with Gradle
+        id: gradle
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: |
+            build
+            --scan
+          cache-read-only: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop' }} # feature 브랜치는 캐시를 읽기 전용으로 설정
+
+      # Dockerhub 로그인
+      - name: Login to Dockerhub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # 이미지 빌드 및 Dockerhub에 푸시
+      - name: Docker Build and Push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/gdsc-server:${{ steps.image-tag.outputs.value }}
+
+      # docker-compose.yml 파일을 EC2 서버로 전송
+      - name: Copy docker-compose.yml to EC2 server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          source: docker-compose.yml
+          target: /home/ubuntu/
+
+      # 디스코드 둘기봇으로 gradle build scan 결과 발송
+      - name: Send Gradle Build Scan Result to Discord
+        uses: Ilshidur/action-discord@master
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          DISCORD_EMBEDS: '[
+            {
+              "title": "푸드덕푸드덕푸드덕",
+              "description": "구구구구국 구구...: ${{ steps.gradle.outputs.build-scan-url }}"
+            }
+          ]'
+
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    needs: build
+    steps:
+      - name: Deploy to EC2 Server
+        uses: appleboy/ssh-action@master
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_IMAGE_TAG: ${{ needs.build.outputs.image-tag }}
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          envs: DOCKERHUB_USERNAME,DOCKERHUB_IMAGE_TAG  # docker-compose.yml 에서 사용할 환경 변수
+          script: |
+            echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+            docker pull ${{ env.DOCKERHUB_USERNAME }}/gdsc-server:${{ env.DOCKERHUB_IMAGE_TAG }}
+            docker compose -f /home/ubuntu/docker-compose.yml up -d
+            docker image prune -a -f
