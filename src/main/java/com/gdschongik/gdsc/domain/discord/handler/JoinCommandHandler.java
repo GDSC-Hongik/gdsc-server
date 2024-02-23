@@ -27,10 +27,13 @@ public class JoinCommandHandler implements DiscordEventHandler {
         event.deferReply().setEphemeral(true).setContent(DEFER_MESSAGE_JOIN).queue();
 
         String discordUsername = event.getUser().getName();
-        // onboardingDiscordService.checkDiscordRoleAssignable(discordUsername);
+        onboardingDiscordService.checkDiscordRoleAssignable(discordUsername);
 
+        User user = event.getUser();
+        Role role = discordUtil.findRoleByName(MEMBER_ROLE_NAME);
+        Guild guild = Objects.requireNonNull(event.getGuild());
 
-		// TODO: 커뮤니티 멤버 역할 부여
+        guild.addRoleToMember(user, role).queue();
 
         event.getHook().sendMessage(REPLY_MESSAGE_JOIN).setEphemeral(true).queue();
     }
