@@ -10,6 +10,9 @@ permissions:
   id-token: write
   pull-requests: write
 
+env:
+  IMAGE_NAME: gdsc-server
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -18,8 +21,6 @@ jobs:
       matrix:
         java-version: [ 17 ]
         distribution: [ 'temurin' ]
-    env:
-      IMAGE_NAME: gdsc-server
     outputs:
       image-tag: ${{ steps.image-tag.outputs.value }}
       s3-copy-path: ${{ steps.s3-copy.outputs.S3_COPY_PATH }}
@@ -140,6 +141,7 @@ jobs:
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           DOCKERHUB_IMAGE_TAG: ${{ needs.build.outputs.image-tag }}
+          IMAGE_FULL_URL: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ needs.build.outputs.image-tag }}
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
@@ -148,6 +150,6 @@ jobs:
           script: |
             aws s3 cp ${{ needs.build.outputs.s3-copy-path }} docker-compose.yml
             echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
-            docker pull ${{ env.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.DOCKERHUB_IMAGE_TAG }}
+            docker pull ${{ env.IMAGE_FULL_URL }}
             docker compose up -d
             docker image prune -a -f
