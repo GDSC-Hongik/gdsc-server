@@ -4,6 +4,7 @@ import static com.gdschongik.gdsc.global.common.constant.DiscordConstant.*;
 
 import com.gdschongik.gdsc.global.discord.ListenerBeanPostProcessor;
 import com.gdschongik.gdsc.global.property.DiscordProperty;
+import com.gdschongik.gdsc.global.util.DiscordUtil;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -48,5 +49,11 @@ public class DiscordConfig {
     @ConditionalOnBean(JDA.class)
     public ListenerBeanPostProcessor listenerBeanPostProcessor(JDA jda) {
         return new ListenerBeanPostProcessor(jda);
+    }
+
+    @Bean
+    @ConditionalOnBean(JDA.class)
+    public DiscordUtil discordUtil(JDA jda) {
+        return new DiscordUtil(jda);
     }
 }
