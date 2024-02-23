@@ -51,4 +51,8 @@ public class Requirement {
     public void verifyDiscord() {
         this.discordStatus = VERIFIED;
     }
+
+    public boolean isAllStatusVerified() {
+        return this.univStatus == VERIFIED && this.discordStatus == VERIFIED && this.paymentStatus == VERIFIED;
+    }
 }
