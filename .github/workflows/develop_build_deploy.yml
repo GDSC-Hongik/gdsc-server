@@ -14,16 +14,16 @@ env:
   IMAGE_NAME: gdsc-server
 
 jobs:
-  build:
+  build-deploy:
     runs-on: ubuntu-latest
     environment: develop
     strategy:
       matrix:
         java-version: [ 17 ]
         distribution: [ 'temurin' ]
-    outputs:
-      image-full-url: ${{ steps.metadata.outputs.tags }}
-      s3-copy-path: ${{ steps.s3-copy.outputs.S3_COPY_PATH }}
+#    outputs:
+#      image-full-url: ${{ steps.metadata.outputs.tags }}
+#      s3-copy-path: ${{ steps.s3-copy.outputs.S3_COPY_PATH }}
     steps:
       # 체크아웃
       - name: Checkout
@@ -131,17 +131,19 @@ jobs:
             }
           ]'
 
-  deploy:
-    runs-on: ubuntu-latest
-    environment: develop
-    needs: build
-    steps:
+#  deploy:
+#    runs-on: ubuntu-latest
+#    environment: develop
+#    needs: build
+#    steps:
       - name: Deploy to EC2 Server
         uses: appleboy/ssh-action@master
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          IMAGE_FULL_URL: ${{ needs.build.outputs.image-full-url }}
-          S3_COPY_PATH: ${{ needs.build.outputs.s3-copy-path }}
+#          IMAGE_FULL_URL: ${{ needs.build.outputs.image-full-url }}
+          IMAGE_FULL_URL: ${{ steps.metadata.outputs.tags }}
+#          S3_COPY_PATH: ${{ needs.build.outputs.s3-copy-path }}
+          S3_COPY_PATH: ${{ steps.s3-copy.outputs.S3_COPY_PATH }}
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
