@@ -37,6 +37,7 @@ public enum ErrorCode {
     DISCORD_INVALID_CODE_RANGE(HttpStatus.INTERNAL_SERVER_ERROR, "디스코드 인증코드는 4자리 숫자여야 합니다."),
     DISCORD_CODE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 유저네임으로 발급된 디스코드 인증코드가 존재하지 않습니다."),
     DISCORD_CODE_MISMATCH(HttpStatus.CONFLICT, "디스코드 인증코드가 일치하지 않습니다."),
+    DISCORD_ROLE_UNASSIGNABLE(HttpStatus.INTERNAL_SERVER_ERROR, "디스코드 역할 부여가 불가능합니다. 가입 조건을 확인해주세요."),
     ;
 
     private final HttpStatus status;
