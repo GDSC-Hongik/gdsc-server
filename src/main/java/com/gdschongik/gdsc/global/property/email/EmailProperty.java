@@ -1,6 +1,6 @@
 package com.gdschongik.gdsc.global.property.email;
 
-import com.gdschongik.gdsc.global.util.Pair;
+import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -14,11 +14,7 @@ public class EmailProperty {
     private final String host;
     private final int port;
     private final String encoding;
-    private final JavaMailProperty javaMailProperty;
+    private final Map<String, Object> javaMailProperty;
 
     public record Gmail(String loginEmail, String password) {}
-
-    public record JavaMailProperty(Pair<Boolean> smtpAuth, SocketFactory socketFactory) {}
-
-    public record SocketFactory(Pair<Integer> port, Pair<Boolean> fallback, Pair<String> classInfo) {}
 }

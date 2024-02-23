@@ -2,9 +2,6 @@ package com.gdschongik.gdsc.global.config;
 
 import com.gdschongik.gdsc.global.property.email.EmailProperty;
 import com.gdschongik.gdsc.global.property.email.EmailProperty.Gmail;
-import com.gdschongik.gdsc.global.property.email.EmailProperty.JavaMailProperty;
-import com.gdschongik.gdsc.global.property.email.EmailProperty.SocketFactory;
-import com.gdschongik.gdsc.global.util.Pair;
 import java.util.Properties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -37,22 +34,8 @@ public class JavaMailSenderConfig {
     }
 
     private void setJavaMailProperties(JavaMailSenderImpl javaMailSender) {
-        JavaMailProperty javaMailProperty = emailProperty.getJavaMailProperty();
-        Properties javaMailProperties = getJavaMailProperties(javaMailProperty);
-        javaMailSender.setJavaMailProperties(javaMailProperties);
-    }
-
-    private Properties getJavaMailProperties(JavaMailProperty javaMailProperty) {
         Properties properties = new Properties();
-        SocketFactory socketFactory = javaMailProperty.socketFactory();
-        putProperty(properties, javaMailProperty.smtpAuth());
-        putProperty(properties, socketFactory.port());
-        putProperty(properties, socketFactory.fallback());
-        putProperty(properties, socketFactory.classInfo());
-        return properties;
-    }
-
-    private void putProperty(Properties properties, Pair property) {
-        properties.put(property.key(), property.value());
+        properties.putAll(emailProperty.getJavaMailProperty());
+        javaMailSender.setJavaMailProperties(properties);
     }
 }
