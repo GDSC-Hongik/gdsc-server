@@ -21,18 +21,10 @@ jobs:
       matrix:
         java-version: [ 17 ]
         distribution: [ 'temurin' ]
-#    outputs:
-#      image-full-url: ${{ steps.metadata.outputs.tags }}
-#      s3-copy-path: ${{ steps.s3-copy.outputs.S3_COPY_PATH }}
     steps:
       # 체크아웃
       - name: Checkout
         uses: actions/checkout@v4
-
-#      # Docker 이미지 태그 세팅
-#      - name: Set up image-tag by GITHUB_SHA
-#        id: image-tag
-#        run: echo "value=$(echo ${GITHUB_SHA::7})" >> $GITHUB_OUTPUT
 
       # JDK 17 버전으로 세팅
       - name: Set up JDK 17
@@ -98,19 +90,8 @@ jobs:
           aws-region: ap-northeast-2
           output-config: true
 
-#      # docker-compose.yml 파일을 EC2 서버로 전송
-#      - name: Copy docker-compose.yml to EC2 server
-#        uses: appleboy/scp-action@v0.1.7
-#        with:
-#          host: ${{ secrets.EC2_HOST }}
-#          username: ${{ secrets.EC2_USERNAME }}
-#          key: ${{ secrets.EC2_PRIVATE_KEY }}
-#          source: docker-compose.yml
-#          target: /home/ubuntu/
-
       # 복사 경로 환경변수 설정
       - name: Set up S3 copy path
-        id: s3-copy
         env:
           S3_DEPLOY_BUCKET_NAME: ${{ secrets.S3_DEPLOY_BUCKET_NAME }}
         run: echo "S3_COPY_PATH=$(echo s3://${S3_DEPLOY_BUCKET_NAME}/gdsc/docker-compose-dev.yml)" >> $GITHUB_OUTPUT
@@ -140,10 +121,7 @@ jobs:
         uses: appleboy/ssh-action@master
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-#          IMAGE_FULL_URL: ${{ needs.build.outputs.image-full-url }}
           IMAGE_FULL_URL: ${{ steps.metadata.outputs.tags }}
-#          S3_COPY_PATH: ${{ needs.build.outputs.s3-copy-path }}
-          S3_COPY_PATH: ${{ steps.s3-copy.outputs.S3_COPY_PATH }}
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
