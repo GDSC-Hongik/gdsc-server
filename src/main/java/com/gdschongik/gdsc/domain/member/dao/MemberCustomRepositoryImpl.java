@@ -116,10 +116,10 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
                 .where(member.id.in(memberIdList))
                 .transform(groupBy(requirementVerified()).as(list(member)));
 
-        return ensureNonNull(groupByVerified);
+        return replaceNullByEmptyList(groupByVerified);
     }
 
-    private Map<Boolean, List<Member>> ensureNonNull(Map<Boolean, List<Member>> groupByVerified) {
+    private Map<Boolean, List<Member>> replaceNullByEmptyList(Map<Boolean, List<Member>> groupByVerified) {
         Map<Boolean, List<Member>> classifiedMember = new HashMap<>();
         List<Member> emptyList = new ArrayList<>();
         classifiedMember.put(true, groupByVerified.getOrDefault(true, emptyList));
