@@ -4,6 +4,9 @@ on:
   push:
     branches: [ "develop" ]
 
+permissions:
+  id-token: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -12,17 +15,20 @@ jobs:
       matrix:
         java-version: [ 17 ]
         distribution: [ 'temurin' ]
+    env:
+      IMAGE_NAME: gdsc-server
     outputs:
       image-tag: ${{ steps.image-tag.outputs.value }}
+      s3-copy-path: ${{ steps.s3-copy.outputs.S3_COPY_PATH }}
     steps:
       # 체크아웃
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Docker 이미지 태그 세팅
-      - name: Set up image-tag by GITHUB_SHA
-        id: image-tag
-        run: echo "value=$(echo ${GITHUB_SHA::7})" >> $GITHUB_OUTPUT
+#      # Docker 이미지 태그 세팅
+#      - name: Set up image-tag by GITHUB_SHA
+#        id: image-tag
+#        run: echo "value=$(echo ${GITHUB_SHA::7})" >> $GITHUB_OUTPUT
 
       # JDK 17 버전으로 세팅
       - name: Set up JDK 17
@@ -42,12 +48,17 @@ jobs:
       # Gradle 빌드
       - name: Build with Gradle
         id: gradle
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/actions/setup-gradle@v3
         with:
           arguments: |
             build
-            --scan
+            --configuration-cache
           cache-read-only: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop' }} # feature 브랜치는 캐시를 읽기 전용으로 설정
+          cache-encryption-key: ${{ secrets.GRADLE_CACHE_ENCRYPTION_KEY }}
+          add-job-summary-as-pr-comment: always
+          build-scan-publish: true
+          build-scan-terms-of-service-url: "https://gradle.com/terms-of-service"
+          build-scan-terms-of-service-agree: "yes"
 
       # Dockerhub 로그인
       - name: Login to Dockerhub
@@ -56,23 +67,53 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      # Docker 메타데이터 추출
+      - name: Extract Docker metadata
+        id: metadata
+        uses: docker/metadata-action@v5.5.0
+        env:
+          DOCKERHUB_IMAGE_FULL_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}
+        with:
+          images: ${{ env.DOCKERHUB_IMAGE_FULL_NAME }}
+          tags: |
+            type=sha,prefix=
+
       # 이미지 빌드 및 Dockerhub에 푸시
       - name: Docker Build and Push
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/gdsc-server:${{ steps.image-tag.outputs.value }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ steps.image-tag.outputs.value }}
 
-      # docker-compose.yml 파일을 EC2 서버로 전송
-      - name: Copy docker-compose.yml to EC2 server
-        uses: appleboy/scp-action@v0.1.7
+      # AWS 로그인
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USERNAME }}
-          key: ${{ secrets.EC2_PRIVATE_KEY }}
-          source: docker-compose.yml
-          target: /home/ubuntu/
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-region: ap-northeast-2
+          output-config: true
+
+#      # docker-compose.yml 파일을 EC2 서버로 전송
+#      - name: Copy docker-compose.yml to EC2 server
+#        uses: appleboy/scp-action@v0.1.7
+#        with:
+#          host: ${{ secrets.EC2_HOST }}
+#          username: ${{ secrets.EC2_USERNAME }}
+#          key: ${{ secrets.EC2_PRIVATE_KEY }}
+#          source: docker-compose.yml
+#          target: /home/ubuntu/
+
+      # 복사 경로 환경변수 설정
+      - name: Set up S3 copy path
+        id: s3-copy
+        env:
+          S3_DEPLOY_BUCKET_NAME: ${{ secrets.S3_DEPLOY_BUCKET_NAME }}
+        run: echo "S3_COPY_PATH=$(echo s3://${S3_DEPLOY_BUCKET_NAME}/gdsc/docker-compose-dev.yml)" >> $GITHUB_OUTPUT
+
+      # S3로 docker-compose 파일 전송
+      - name: Copy docker-compose file to S3
+        run: aws s3 cp docker-compose.yml ${{ steps.s3-copy.outputs.S3_COPY_PATH }}
 
       # 디스코드 둘기봇으로 gradle build scan 결과 발송
       - name: Send Gradle Build Scan Result to Discord
@@ -102,7 +143,8 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           envs: DOCKERHUB_USERNAME,DOCKERHUB_IMAGE_TAG  # docker-compose.yml 에서 사용할 환경 변수
           script: |
+            aws s3 cp ${{ needs.build.outputs.s3-copy-path }} docker-compose.yml
             echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
-            docker pull ${{ env.DOCKERHUB_USERNAME }}/gdsc-server:${{ env.DOCKERHUB_IMAGE_TAG }}
-            docker compose -f /home/ubuntu/docker-compose.yml up -d
+            docker pull ${{ env.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.DOCKERHUB_IMAGE_TAG }}
+            docker compose up -d
             docker image prune -a -f
