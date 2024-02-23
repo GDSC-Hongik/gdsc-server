@@ -64,6 +64,9 @@ dependencies {
 
     // Discord
     implementation 'net.dv8tion:JDA:5.0.0-beta.20'
+
+    // Spring AOP
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
 }
 
 tasks.named('test') {
