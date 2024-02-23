@@ -1,8 +1,7 @@
 package com.gdschongik.gdsc.domain.member.dao;
 
-import java.util.Optional;
-
 import com.gdschongik.gdsc.domain.member.domain.Member;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MemberRepository extends JpaRepository<Member, Long>, MemberCustomRepository {
@@ -10,5 +9,5 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberCus
 
     boolean existsByNickname(String nickname);
 
-	Optional<Member> findByDiscordUsername(String discordUsername);
+    Optional<Member> findByDiscordUsername(String discordUsername);
 }
