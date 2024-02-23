@@ -94,11 +94,11 @@ jobs:
       - name: Set up S3 copy path
         env:
           S3_DEPLOY_BUCKET_NAME: ${{ secrets.S3_DEPLOY_BUCKET_NAME }}
-        run: echo "S3_COPY_PATH=$(echo s3://${S3_DEPLOY_BUCKET_NAME}/gdsc/docker-compose-dev.yml)" >> $GITHUB_OUTPUT
+        run: echo "S3_COPY_PATH=$(echo s3://${S3_DEPLOY_BUCKET_NAME}/gdsc/docker-compose-dev.yml)" >> $GITHUB_ENV
 
       # S3로 docker-compose 파일 전송
       - name: Copy docker-compose file to S3
-        run: aws s3 cp docker-compose.yml ${{ steps.s3-copy.outputs.S3_COPY_PATH }}
+        run: aws s3 cp docker-compose.yml ${{ env.S3_COPY_PATH }}
 
       # 디스코드 둘기봇으로 gradle build scan 결과 발송
       - name: Send Gradle Build Scan Result to Discord
