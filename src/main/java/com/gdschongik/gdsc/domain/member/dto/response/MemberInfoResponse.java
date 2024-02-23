@@ -29,7 +29,7 @@ public record MemberInfoResponse(
                         member.getPhone().substring(0, 3),
                         member.getPhone().substring(3, 7),
                         member.getPhone().substring(7)),
-                member.getDepartment(),
+                member.getDepartment().getDepartmentName(),
                 member.getEmail(),
                 member.getDiscordUsername(),
                 member.getNickname(),
