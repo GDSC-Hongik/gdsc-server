@@ -141,13 +141,14 @@ jobs:
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           IMAGE_FULL_URL: ${{ needs.build.outputs.image-full-url }}
+          S3_COPY_PATH: ${{ needs.build.outputs.s3-copy-path }}
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           envs: IMAGE_FULL_URL  # docker-compose.yml 에서 사용할 환경 변수
           script: |
-            aws s3 cp ${{ needs.build.outputs.s3-copy-path }} docker-compose.yml
+            aws s3 cp ${{ env.S3_COPY_PATH }} docker-compose.yml
             echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
             docker pull ${{ env.IMAGE_FULL_URL }}
             docker compose up -d
