@@ -1,6 +1,8 @@
 package com.gdschongik.gdsc.global.security;
 
 import static com.gdschongik.gdsc.global.common.constant.SecurityConstant.*;
+import static com.gdschongik.gdsc.global.common.constant.UrlConstant.*;
+import static org.springframework.http.HttpHeaders.*;
 
 import com.gdschongik.gdsc.domain.auth.application.JwtService;
 import com.gdschongik.gdsc.domain.auth.dto.AccessTokenDto;
@@ -9,6 +11,7 @@ import com.gdschongik.gdsc.global.util.CookieUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -24,7 +27,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     @Override
     public void onAuthenticationSuccess(
             HttpServletRequest request, HttpServletResponse response, Authentication authentication)
-            throws ServletException {
+            throws ServletException, IOException {
 
         CustomOAuth2User oAuth2User = (CustomOAuth2User) authentication.getPrincipal();
 
@@ -36,5 +39,9 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                 jwtService.createAccessToken(oAuth2User.getMemberId(), oAuth2User.getMemberRole());
         RefreshTokenDto refreshTokenDto = jwtService.createRefreshToken(oAuth2User.getMemberId());
         cookieUtil.addTokenCookies(response, accessTokenDto.tokenValue(), refreshTokenDto.tokenValue());
+
+        String baseUrl = determineTargetUrl(request, response);
+        String redirectUrl = String.format(SOCIAL_LOGIN_REDIRECT_URL, baseUrl);
+        getRedirectStrategy().sendRedirect(request, response, redirectUrl);
     }
 }
