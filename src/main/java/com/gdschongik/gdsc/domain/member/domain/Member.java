@@ -125,33 +125,22 @@ public class Member extends BaseTimeEntity {
     }
 
     /**
-     * 디스코드 인증 여부를 검증합니다.
+     * 회원 승인 가능 여부를 검증합니다.
      */
-    private void validateDiscordStatus() {
-        if (this.requirement.isDiscordVerified() && this.discordUsername != null) {
-            return;
+    private void validateGrantAvailable() {
+        if (isGranted()) {
+            throw new CustomException(MEMBER_ALREADY_GRANTED);
         }
-        throw new CustomException(DISCORD_NOT_VERIFIED);
-    }
 
-    /**
-     * 회비 납부 여부를 검증합니다.
-     */
-    private void validatePaymentStatus() {
-        if (this.requirement.isPaymentVerified()) {
-            return;
+        if (!this.requirement.isPaymentVerified()) {
+            throw new CustomException(PAYMENT_NOT_VERIFIED);
         }
-        throw new CustomException(PAYMENT_NOT_VERIFIED);
-    }
 
-    /**
-     * 모든 가입조건이 인증되었는지 검증합니다.
-     */
-    public void validateAllRequirmentVerified() {
-        if (this.requirement.isAllVerified()) {
-            return;
+        if (!this.requirement.isDiscordVerified() || this.discordUsername == null || this.nickname == null) {
+            throw new CustomException(DISCORD_NOT_VERIFIED);
         }
-        throw new CustomException(MEMBER_NOT_GRANTABLE);
+
+        validateUnivStatus();
     }
 
     // 회원 가입상태 변경 로직
@@ -176,6 +165,7 @@ public class Member extends BaseTimeEntity {
      */
     public void grant() {
         validateStatusUpdatable();
+        validateGrantAvailable();
 
         if (isGranted()) {
             throw new CustomException(MEMBER_ALREADY_GRANTED);
