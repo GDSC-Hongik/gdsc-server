@@ -82,4 +82,14 @@ public class OnboardingDiscordService {
             throw new CustomException(DISCORD_CODE_MISMATCH);
         }
     }
+
+    public void checkDiscordRoleAssignable(String discordUsername) {
+        Member member = memberRepository
+                .findByDiscordUsername(discordUsername)
+                .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
+
+        if (!member.isGranted()) {
+            throw new CustomException(DISCORD_ROLE_UNASSIGNABLE);
+        }
+    }
 }

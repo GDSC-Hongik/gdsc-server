@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class IssuingCodeHandler implements DiscordEventHandler {
+public class IssuingCodeCommandHandler implements DiscordEventHandler {
 
     private final OnboardingDiscordService onboardingDiscordService;
 
