@@ -223,4 +223,13 @@ public class Member extends BaseTimeEntity {
     public boolean isGranted() {
         return role.equals(MemberRole.USER);
     }
+
+    public boolean isGrantAvailable() {
+        try {
+            validateGrantAvailable();
+            return true;
+        } catch (CustomException e) {
+            return false;
+        }
+    }
 }
