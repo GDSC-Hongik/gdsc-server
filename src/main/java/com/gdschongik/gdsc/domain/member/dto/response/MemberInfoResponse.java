@@ -17,7 +17,8 @@ public record MemberInfoResponse(
         @Schema(description = "회비 입금 상태") RequirementStatus paymentStatus,
         @Schema(description = "디스코드 연동 상태") RequirementStatus discordStatus,
         @Schema(description = "가입 상태") MemberRole role,
-        @Schema(description = "입금자명") String depositorName) {
+        @Schema(description = "입금자명") String depositorName,
+        @Schema(description = "가입 상태") RegistrationStatus registrationStatus) {
 
     public static MemberInfoResponse of(Member member) {
         return new MemberInfoResponse(
@@ -36,6 +37,23 @@ public record MemberInfoResponse(
                 member.getRequirement().getPaymentStatus(),
                 member.getRequirement().getDiscordStatus(),
                 member.getRole(),
-                String.format("%s%s", member.getName(), member.getPhone().substring(7)));
+                String.format("%s%s", member.getName(), member.getPhone().substring(7)),
+                RegistrationStatus.getRegistrationStatus(member));
+    }
+
+    enum RegistrationStatus {
+        APPLIED,
+        PENDING,
+        GRANTED;
+
+        static RegistrationStatus getRegistrationStatus(Member member) {
+            if (member.isGranted()) {
+                return GRANTED;
+            }
+            if (member.isGrantAvailable()) {
+                return PENDING;
+            }
+            return APPLIED;
+        }
     }
 }
