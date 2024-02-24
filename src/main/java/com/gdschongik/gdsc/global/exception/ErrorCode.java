@@ -23,7 +23,6 @@ public enum ErrorCode {
     MEMBER_DELETED(HttpStatus.CONFLICT, "탈퇴한 회원입니다."),
     MEMBER_FORBIDDEN(HttpStatus.CONFLICT, "차단된 회원입니다."),
     MEMBER_ALREADY_GRANTED(HttpStatus.CONFLICT, "이미 승인된 회원입니다."),
-    MEMBER_NOT_GRANTABLE(HttpStatus.CONFLICT, "승인될 수 없는 회원입니다."),
     MEMBER_ALREADY_VERIFIED(HttpStatus.CONFLICT, "이미 인증된 상태입니다."),
     MEMBER_DISCORD_USERNAME_DUPLICATE(HttpStatus.CONFLICT, "이미 등록된 디스코드 유저네임입니다."),
     MEMBER_NICKNAME_DUPLICATE(HttpStatus.CONFLICT, "이미 사용중인 닉네임입니다."),
@@ -32,7 +31,9 @@ public enum ErrorCode {
     INVALID_QUERY_PARAMETER(HttpStatus.BAD_REQUEST, "잘못된 쿼리 파라미터입니다."),
 
     // Requirement
-    UNIV_NOT_VERIFIED(HttpStatus.CONFLICT, "재학생 인증이 되지 않았습니다."),
+    UNIV_NOT_VERIFIED(HttpStatus.CONFLICT, "재학생 인증이 완료되지 않았습니다."),
+    DISCORD_NOT_VERIFIED(HttpStatus.CONFLICT, "디스코드 인증이 완료되지 않았습니다."),
+    PAYMENT_NOT_VERIFIED(HttpStatus.CONFLICT, "회비 납부가 완료되지 않았습니다."),
     REQUIREMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "일치하는 가입조건이 없습니다."),
 
     // Discord
