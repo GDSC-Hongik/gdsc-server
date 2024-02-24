@@ -17,5 +17,5 @@ public class DiscordConstant {
     public static final String COMMAND_NAME_JOIN = "가입하기";
     public static final String COMMAND_DESCRIPTION_JOIN = "가입 신청이 승인된 멤버에게 역할을 부여합니다.";
     public static final String DEFER_MESSAGE_JOIN = "가입 신청을 처리하는 중입니다...";
-    public static final String REPLY_MESSAGE_JOIN = "가입 신청이 승인되었습니다. 환영합니다!";
+    public static final String REPLY_MESSAGE_JOIN = "가입 신청이 승인되었습니다. GDSC Hongik에 합류하신 것을 환영합니다!";
 }
