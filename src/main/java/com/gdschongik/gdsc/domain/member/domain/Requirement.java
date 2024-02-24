@@ -59,8 +59,4 @@ public class Requirement {
     public boolean isPaymentVerified() {
         return this.paymentStatus == VERIFIED;
     }
-
-    public boolean isAllVerified() {
-        return isUnivVerified() && isDiscordVerified() && isPaymentVerified();
-    }
 }
