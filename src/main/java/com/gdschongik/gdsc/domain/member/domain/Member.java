@@ -98,7 +98,7 @@ public class Member extends BaseTimeEntity {
                 .build();
     }
 
-    // 회원 상태 검증 로직
+    // 회원 검증 로직
 
     /**
      * 회원 상태를 변경할 수 있는지 검증합니다. 삭제되거나 차단된 회원은 상태를 변경할 수 없습니다.<br>
@@ -113,7 +113,48 @@ public class Member extends BaseTimeEntity {
         }
     }
 
-    // 회원 상태 변경 로직
+    /**
+     * 재학생 인증 여부를 검증합니다.
+     */
+    private void validateUnivStatus() {
+        if (this.requirement.isUnivVerified() && this.univEmail != null) {
+            return;
+        }
+
+        throw new CustomException(UNIV_NOT_VERIFIED);
+    }
+
+    /**
+     * 디스코드 인증 여부를 검증합니다.
+     */
+    private void validateDiscordStatus() {
+        if (this.requirement.isDiscordVerified() && this.discordUsername != null) {
+            return;
+        }
+        throw new CustomException(DISCORD_NOT_VERIFIED);
+    }
+
+    /**
+     * 회비 납부 여부를 검증합니다.
+     */
+    private void validatePaymentStatus() {
+        if (this.requirement.isPaymentVerified()) {
+            return;
+        }
+        throw new CustomException(PAYMENT_NOT_VERIFIED);
+    }
+
+    /**
+     * 모든 가입조건이 인증되었는지 검증합니다.
+     */
+    public void validateAllRequirmentVerified() {
+        if (this.requirement.isAllVerified()) {
+            return;
+        }
+        throw new CustomException(MEMBER_NOT_GRANTABLE);
+    }
+
+    // 회원 가입상태 변경 로직
 
     /**
      * 가입 신청 시 작성한 정보를 저장합니다. 재학생 인증을 완료한 회원만 신청할 수 있습니다.
@@ -130,19 +171,17 @@ public class Member extends BaseTimeEntity {
     }
 
     /**
-     * 가입 신청을 승인합니다. 이미 승인된 회원은 다시 승인할 수 없습니다.
+     * 가입 신청을 승인합니다. 이미 승인된 회원은 다시 승인할 수 없습니다.<br>
+     * 어드민만 사용할 수 있어야 합니다.
      */
     public void grant() {
         validateStatusUpdatable();
 
         if (isGranted()) {
-            throw new CustomException(MEMBER_ALREADY_VERIFIED);
+            throw new CustomException(MEMBER_ALREADY_GRANTED);
         }
 
-        if (!this.requirement.isAllStatusVerified()) {
-            throw new CustomException(MEMBER_NOT_GRANTABLE);
-        }
-
+        validateAllRequirmentVerified();
         this.role = MemberRole.USER;
     }
 
@@ -178,11 +217,7 @@ public class Member extends BaseTimeEntity {
         this.nickname = nickname;
     }
 
-    private void validateUnivStatus() {
-        if (this.requirement.isUnivPending()) {
-            throw new CustomException(UNIV_NOT_VERIFIED);
-        }
-    }
+    // 가입조건 인증 로직
 
     public void verifyDiscord(String discordUsername, String nickname) {
         validateStatusUpdatable();
