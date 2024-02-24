@@ -21,15 +21,6 @@ public record MemberInfoResponse(
         @Schema(description = "가입 상태") RegistrationStatus registrationStatus) {
 
     public static MemberInfoResponse of(Member member) {
-        RegistrationStatus registrationStatus;
-        if (member.isGranted()) {
-            registrationStatus = RegistrationStatus.GRANTED;
-        } else if (member.isGrantAvailable()) {
-            registrationStatus = RegistrationStatus.PENDING;
-        } else {
-            registrationStatus = RegistrationStatus.APPLIED;
-        }
-
         return new MemberInfoResponse(
                 member.getId(),
                 member.getStudentId(),
@@ -47,12 +38,22 @@ public record MemberInfoResponse(
                 member.getRequirement().getDiscordStatus(),
                 member.getRole(),
                 String.format("%s%s", member.getName(), member.getPhone().substring(7)),
-                registrationStatus);
+                RegistrationStatus.getRegistrationStatus(member));
     }
 
     enum RegistrationStatus {
         APPLIED,
         PENDING,
         GRANTED;
+
+        static RegistrationStatus getRegistrationStatus(Member member) {
+            if (member.isGranted()) {
+                return GRANTED;
+            }
+            if (member.isGrantAvailable()) {
+                return PENDING;
+            }
+            return APPLIED;
+        }
     }
 }
