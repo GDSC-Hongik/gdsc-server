@@ -3,6 +3,7 @@ package com.gdschongik.gdsc.domain.member.application;
 import static org.assertj.core.api.Assertions.*;
 
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
+import com.gdschongik.gdsc.domain.member.domain.Department;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberUpdateRequest;
 import com.gdschongik.gdsc.global.exception.CustomException;
@@ -30,7 +31,7 @@ class AdminMemberServiceTest {
 
         // when & then
         MemberUpdateRequest requestBody = new MemberUpdateRequest(
-                "A111111", "name", "010-1234-5678", "department", "email@email.com", "discordUsername", "한글");
+                "A111111", "name", "010-1234-5678", Department.D001, "email@email.com", "discordUsername", "한글");
         assertThatThrownBy(() -> adminMemberService.updateMember(member.getId(), requestBody))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(ErrorCode.MEMBER_DELETED.getMessage());

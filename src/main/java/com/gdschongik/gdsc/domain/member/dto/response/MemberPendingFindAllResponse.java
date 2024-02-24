@@ -28,7 +28,7 @@ public record MemberPendingFindAllResponse(
                 member.getStudentId(),
                 member.getName(),
                 phone,
-                member.getDepartment(),
+                member.getDepartment().getDepartmentName(),
                 member.getEmail(),
                 member.getDiscordUsername(),
                 member.getNickname(),
