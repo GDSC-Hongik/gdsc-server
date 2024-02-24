@@ -192,10 +192,6 @@ public class Member extends BaseTimeEntity {
         this.nickname = nickname;
     }
 
-    public RequirementStatus getUnivStatus() {
-        return this.requirement.getUnivStatus();
-    }
-
     public void updatePaymentStatus(RequirementStatus status) {
         validateStatusUpdatable();
         this.requirement.updatePaymentStatus(status);

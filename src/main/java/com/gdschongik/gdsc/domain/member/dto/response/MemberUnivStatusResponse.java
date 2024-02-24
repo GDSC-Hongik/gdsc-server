@@ -6,6 +6,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 public record MemberUnivStatusResponse(@Schema(description = "재학생 인증 완료 여부") RequirementStatus univStatus) {
     public static MemberUnivStatusResponse from(Member member) {
-        return new MemberUnivStatusResponse(member.getUnivStatus());
+        return new MemberUnivStatusResponse(member.getRequirement().getUnivStatus());
     }
 }

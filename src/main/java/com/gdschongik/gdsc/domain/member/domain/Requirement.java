@@ -40,10 +40,6 @@ public class Requirement {
                 .build();
     }
 
-    public boolean isUnivPending() {
-        return this.univStatus == PENDING;
-    }
-
     public void updatePaymentStatus(RequirementStatus status) {
         this.paymentStatus = status;
     }
@@ -52,7 +48,19 @@ public class Requirement {
         this.discordStatus = VERIFIED;
     }
 
-    public boolean isAllStatusVerified() {
-        return this.univStatus == VERIFIED && this.discordStatus == VERIFIED && this.paymentStatus == VERIFIED;
+    public boolean isUnivVerified() {
+        return this.univStatus == VERIFIED;
+    }
+
+    public boolean isDiscordVerified() {
+        return this.discordStatus == VERIFIED;
+    }
+
+    public boolean isPaymentVerified() {
+        return this.paymentStatus == VERIFIED;
+    }
+
+    public boolean isAllVerified() {
+        return isUnivVerified() && isDiscordVerified() && isPaymentVerified();
     }
 }
