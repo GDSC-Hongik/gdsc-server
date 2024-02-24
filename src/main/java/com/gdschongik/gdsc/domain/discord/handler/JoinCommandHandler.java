@@ -8,8 +8,8 @@ import com.gdschongik.gdsc.global.util.DiscordUtil;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import org.springframework.stereotype.Component;
@@ -30,11 +30,11 @@ public class JoinCommandHandler implements DiscordEventHandler {
         String discordUsername = event.getUser().getName();
         DiscordNicknameResponse response = onboardingDiscordService.checkDiscordRoleAssignable(discordUsername);
 
-        User user = event.getUser();
+        Member member = event.getMember();
         Role role = discordUtil.findRoleByName(MEMBER_ROLE_NAME);
         Guild guild = Objects.requireNonNull(event.getGuild());
 
-        guild.addRoleToMember(user, role).queue();
+        guild.addRoleToMember(member, role).queue();
 
         event.getHook().sendMessage(REPLY_MESSAGE_JOIN).setEphemeral(true).queue();
     }
