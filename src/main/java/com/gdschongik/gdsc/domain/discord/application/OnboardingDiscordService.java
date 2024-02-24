@@ -88,7 +88,7 @@ public class OnboardingDiscordService {
                 .findByDiscordUsername(discordUsername)
                 .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
 
-        if (!member.isDiscordRoleAssignable()) {
+        if (!member.isGranted()) {
             throw new CustomException(DISCORD_ROLE_UNASSIGNABLE);
         }
     }

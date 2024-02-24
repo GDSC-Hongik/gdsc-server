@@ -159,6 +159,8 @@ public class Member extends BaseTimeEntity {
     }
 
     public void grant() {
+        validateStatusUpdatable();
+        this.requirement.isAllStatusVerified();
         this.role = MemberRole.USER;
     }
 
@@ -179,12 +181,7 @@ public class Member extends BaseTimeEntity {
         this.requirement.updatePaymentStatus(status);
     }
 
-    public boolean isDiscordRoleAssignable() {
-        validateStatusUpdatable();
-        return isGranted() && this.requirement.isAllStatusVerified();
-    }
-
-    private boolean isGranted() {
+    public boolean isGranted() {
         return role.equals(MemberRole.USER);
     }
 }
