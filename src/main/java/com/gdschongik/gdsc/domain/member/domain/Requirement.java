@@ -24,12 +24,19 @@ public class Requirement {
     @Enumerated(EnumType.STRING)
     private RequirementStatus paymentStatus;
 
+    @Enumerated(EnumType.STRING)
+    private RequirementStatus bevyStatus;
+
     @Builder(access = AccessLevel.PRIVATE)
     private Requirement(
-            RequirementStatus univStatus, RequirementStatus discordStatus, RequirementStatus paymentStatus) {
+            RequirementStatus univStatus,
+            RequirementStatus discordStatus,
+            RequirementStatus paymentStatus,
+            RequirementStatus bevyStatus) {
         this.univStatus = univStatus;
         this.discordStatus = discordStatus;
         this.paymentStatus = paymentStatus;
+        this.bevyStatus = bevyStatus;
     }
 
     public static Requirement createRequirement() {
@@ -37,6 +44,7 @@ public class Requirement {
                 .univStatus(PENDING)
                 .discordStatus(PENDING)
                 .paymentStatus(PENDING)
+                .bevyStatus(PENDING)
                 .build();
     }
 
@@ -46,6 +54,10 @@ public class Requirement {
 
     public void verifyDiscord() {
         this.discordStatus = VERIFIED;
+    }
+
+    public void verifyBevy() {
+        this.bevyStatus = VERIFIED;
     }
 
     public boolean isUnivVerified() {
@@ -58,5 +70,9 @@ public class Requirement {
 
     public boolean isPaymentVerified() {
         return this.paymentStatus == VERIFIED;
+    }
+
+    public boolean isBevyVerified() {
+        return this.bevyStatus == VERIFIED;
     }
 }
