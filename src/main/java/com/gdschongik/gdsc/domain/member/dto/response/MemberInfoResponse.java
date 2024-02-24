@@ -40,7 +40,7 @@ public record MemberInfoResponse(
                 member.getRequirement().getBevyStatus(),
                 member.getRole(),
                 String.format("%s%s", member.getName(), member.getPhone().substring(7)),
-                RegistrationStatus.getRegistrationStatus(member));
+                RegistrationStatus.from(member));
     }
 
     enum RegistrationStatus {
@@ -48,7 +48,7 @@ public record MemberInfoResponse(
         PENDING,
         GRANTED;
 
-        static RegistrationStatus getRegistrationStatus(Member member) {
+        static RegistrationStatus from(Member member) {
             if (member.isGranted()) {
                 return GRANTED;
             }
