@@ -75,7 +75,7 @@ jobs:
         with:
           images: ${{ env.DOCKERHUB_IMAGE_FULL_NAME }}
           tags: |
-            type=raw, value=${{ steps.image-tag.outputs.value }}
+            type=semver,pattern={{version}}
 
       # 이미지 빌드 및 Dockerhub에 푸시
       - name: Docker Build and Push
