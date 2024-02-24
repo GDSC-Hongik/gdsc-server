@@ -35,6 +35,7 @@ public class JoinCommandHandler implements DiscordEventHandler {
         Guild guild = Objects.requireNonNull(event.getGuild());
 
         guild.addRoleToMember(member, role).queue();
+        guild.modifyNickname(member, response.nickname()).queue();
 
         event.getHook().sendMessage(REPLY_MESSAGE_JOIN).setEphemeral(true).queue();
     }
