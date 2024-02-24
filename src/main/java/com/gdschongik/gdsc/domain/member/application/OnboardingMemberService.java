@@ -52,6 +52,7 @@ public class OnboardingMemberService {
         return MemberUnivStatusResponse.from(currentMember);
     }
 
+    @Transactional
     public void verifyBevyStatus() {
         Member currentMember = memberUtil.getCurrentMember();
         currentMember.verifyBevy();
