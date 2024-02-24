@@ -98,6 +98,26 @@ public class Member extends BaseTimeEntity {
                 .build();
     }
 
+    // 회원 상태 검증 로직
+
+    /**
+     * 회원 상태를 변경할 수 있는지 검증합니다. 삭제되거나 차단된 회원은 상태를 변경할 수 없습니다.<br>
+     * 대부분의 상태 변경 로직에서 사용됩니다.
+     */
+    private void validateStatusUpdatable() {
+        if (this.status.isDeleted()) {
+            throw new CustomException(MEMBER_DELETED);
+        }
+        if (this.status.isForbidden()) {
+            throw new CustomException(MEMBER_FORBIDDEN);
+        }
+    }
+
+    // 회원 상태 변경 로직
+
+    /**
+     * 가입 신청 시 작성한 정보를 저장합니다. 재학생 인증을 완료한 회원만 신청할 수 있습니다.
+     */
     public void signup(String studentId, String name, String phone, String department, String email) {
         validateStatusUpdatable();
         validateUnivStatus();
@@ -109,21 +129,36 @@ public class Member extends BaseTimeEntity {
         this.email = email;
     }
 
+    /**
+     * 가입 신청을 승인합니다. 이미 승인된 회원은 다시 승인할 수 없습니다.
+     */
+    public void grant() {
+        validateStatusUpdatable();
+
+        if (isGranted()) {
+            throw new CustomException(MEMBER_ALREADY_VERIFIED);
+        }
+
+        if (!this.requirement.isAllStatusVerified()) {
+            throw new CustomException(MEMBER_NOT_GRANTABLE);
+        }
+
+        this.role = MemberRole.USER;
+    }
+
+    /**
+     * 회원 탈퇴를 수행합니다. 이미 탈퇴된 회원은 다시 탈퇴할 수 없습니다.
+     */
     public void withdraw() {
-        if (isDeleted()) {
+        if (this.status.isDeleted()) {
             throw new CustomException(MEMBER_DELETED);
         }
         this.status = MemberStatus.DELETED;
     }
 
-    private boolean isDeleted() {
-        return this.status.isDeleted();
-    }
-
-    private boolean isForbidden() {
-        return this.status.isForbidden();
-    }
-
+    /**
+     * 회원 정보를 수정합니다. 어드민만 사용할 수 있어야 합니다.
+     */
     public void updateMemberInfo(
             String studentId,
             String name,
@@ -143,25 +178,10 @@ public class Member extends BaseTimeEntity {
         this.nickname = nickname;
     }
 
-    private void validateStatusUpdatable() {
-        if (isDeleted()) {
-            throw new CustomException(MEMBER_DELETED);
-        }
-        if (isForbidden()) {
-            throw new CustomException(MEMBER_FORBIDDEN);
-        }
-    }
-
     private void validateUnivStatus() {
         if (this.requirement.isUnivPending()) {
             throw new CustomException(UNIV_NOT_VERIFIED);
         }
-    }
-
-    public void grant() {
-        validateStatusUpdatable();
-        this.requirement.isAllStatusVerified();
-        this.role = MemberRole.USER;
     }
 
     public void verifyDiscord(String discordUsername, String nickname) {
