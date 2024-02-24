@@ -16,6 +16,7 @@ public record MemberInfoResponse(
         String nickname,
         @Schema(description = "회비 입금 상태") RequirementStatus paymentStatus,
         @Schema(description = "디스코드 연동 상태") RequirementStatus discordStatus,
+        @Schema(description = "GDSC Bevy 가입 상태") RequirementStatus bevyStatus,
         @Schema(description = "가입 상태") MemberRole role,
         @Schema(description = "입금자명") String depositorName,
         @Schema(description = "가입 상태") RegistrationStatus registrationStatus) {
@@ -36,9 +37,10 @@ public record MemberInfoResponse(
                 member.getNickname(),
                 member.getRequirement().getPaymentStatus(),
                 member.getRequirement().getDiscordStatus(),
+                member.getRequirement().getBevyStatus(),
                 member.getRole(),
                 String.format("%s%s", member.getName(), member.getPhone().substring(7)),
-                RegistrationStatus.getRegistrationStatus(member));
+                RegistrationStatus.from(member));
     }
 
     enum RegistrationStatus {
@@ -46,7 +48,7 @@ public record MemberInfoResponse(
         PENDING,
         GRANTED;
 
-        static RegistrationStatus getRegistrationStatus(Member member) {
+        static RegistrationStatus from(Member member) {
             if (member.isGranted()) {
                 return GRANTED;
             }

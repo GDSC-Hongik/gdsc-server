@@ -141,6 +141,10 @@ public class Member extends BaseTimeEntity {
             throw new CustomException(DISCORD_NOT_VERIFIED);
         }
 
+        if (!this.requirement.isBevyVerified()) {
+            throw new CustomException(BEVY_NOT_VERIFIED);
+        }
+
         validateUnivStatus();
     }
 
@@ -216,6 +220,11 @@ public class Member extends BaseTimeEntity {
     public void updatePaymentStatus(RequirementStatus status) {
         validateStatusUpdatable();
         this.requirement.updatePaymentStatus(status);
+    }
+
+    public void verifyBevy() {
+        validateStatusUpdatable();
+        this.requirement.verifyBevy();
     }
 
     // 데이터 전달 로직
