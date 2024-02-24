@@ -2,7 +2,6 @@ package com.gdschongik.gdsc.global.security;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
-import com.gdschongik.gdsc.domain.member.domain.RequirementStatus;
 
 public enum LandingStatus {
     TO_ADMIN, // 어드민 페이지로 랜딩
@@ -18,7 +17,7 @@ public enum LandingStatus {
         }
 
         // 아직 재학생 인증을 하지 않았다면 재학생 인증 페이지로 랜딩
-        if (member.getRequirement().getUnivStatus() == RequirementStatus.PENDING) {
+        if (!member.getRequirement().isUnivVerified()) {
             return TO_STUDENT_AUTHENTICATION;
         }
 
