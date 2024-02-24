@@ -222,6 +222,11 @@ public class Member extends BaseTimeEntity {
         this.requirement.updatePaymentStatus(status);
     }
 
+    public void verifyBevy() {
+        validateStatusUpdatable();
+        this.requirement.verifyBevy();
+    }
+
     // 데이터 전달 로직
 
     public boolean isGranted() {
