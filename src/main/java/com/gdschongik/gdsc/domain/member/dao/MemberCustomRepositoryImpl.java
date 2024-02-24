@@ -72,26 +72,30 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
     }
 
     @Override
-    public Page<Member> findAllByRole(MemberRole role, Pageable pageable) {
+    public Page<Member> findAllByRole(MemberQueryRequest queryRequest, MemberRole role, Pageable pageable) {
         List<Member> fetch = queryFactory
                 .selectFrom(member)
-                .where(eqRole(role), eqStatus(MemberStatus.NORMAL))
+                .where(queryOption(queryRequest), eqRole(role), eqStatus(MemberStatus.NORMAL))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(member.createdAt.desc())
                 .fetch();
 
-        JPAQuery<Long> countQuery =
-                queryFactory.select(member.count()).from(member).where(eqRole(role), eqStatus(MemberStatus.NORMAL));
+        JPAQuery<Long> countQuery = queryFactory
+                .select(member.count())
+                .from(member)
+                .where(queryOption(queryRequest), eqRole(role), eqStatus(MemberStatus.NORMAL));
 
         return PageableExecutionUtils.getPage(fetch, pageable, countQuery::fetchOne);
     }
 
     @Override
-    public Page<Member> findAllByPaymentStatus(RequirementStatus paymentStatus, Pageable pageable) {
+    public Page<Member> findAllByPaymentStatus(
+            MemberQueryRequest queryRequest, RequirementStatus paymentStatus, Pageable pageable) {
         List<Member> fetch = queryFactory
                 .selectFrom(member)
                 .where(
+                        queryOption(queryRequest),
                         eqStatus(MemberStatus.NORMAL),
                         eqRequirementStatus(member.requirement.paymentStatus, paymentStatus))
                 .offset(pageable.getOffset())
@@ -103,6 +107,7 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
                 .select(member.count())
                 .from(member)
                 .where(
+                        queryOption(queryRequest),
                         eqStatus(MemberStatus.NORMAL),
                         eqRequirementStatus(member.requirement.paymentStatus, paymentStatus));
 

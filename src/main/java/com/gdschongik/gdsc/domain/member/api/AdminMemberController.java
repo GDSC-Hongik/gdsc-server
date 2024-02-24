@@ -50,8 +50,9 @@ public class AdminMemberController {
 
     @Operation(summary = "대기중인 회원 목록 조회", description = "대기중인 회원 목록을 조회합니다.")
     @GetMapping("/pending")
-    public ResponseEntity<Page<MemberPendingFindAllResponse>> getPendingMembers(Pageable pageable) {
-        Page<MemberPendingFindAllResponse> response = adminMemberService.findAllPendingMembers(pageable);
+    public ResponseEntity<Page<MemberPendingFindAllResponse>> getPendingMembers(
+            MemberQueryRequest queryRequest, Pageable pageable) {
+        Page<MemberPendingFindAllResponse> response = adminMemberService.findAllPendingMembers(queryRequest, pageable);
         return ResponseEntity.ok().body(response);
     }
 
@@ -80,9 +81,11 @@ public class AdminMemberController {
     @Operation(summary = "회비 납부 상태에 따른 회원 전체 조회", description = "회비 납부 상태에 따라 회원 목록을 조회합니다.")
     @GetMapping("/payment")
     public ResponseEntity<Page<MemberPaymentFindAllResponse>> getMembersByPaymentStatus(
-            @RequestParam(name = "status", required = false) RequirementStatus paymentStatus, Pageable pageable) {
+            MemberQueryRequest queryRequest,
+            @RequestParam(name = "status", required = false) RequirementStatus paymentStatus,
+            Pageable pageable) {
         Page<MemberPaymentFindAllResponse> response =
-                adminMemberService.getMembersByPaymentStatus(paymentStatus, pageable);
+                adminMemberService.getMembersByPaymentStatus(queryRequest, paymentStatus, pageable);
         return ResponseEntity.ok().body(response);
     }
 

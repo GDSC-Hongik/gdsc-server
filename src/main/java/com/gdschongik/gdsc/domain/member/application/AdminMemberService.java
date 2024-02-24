@@ -56,8 +56,9 @@ public class AdminMemberService {
                 request.nickname());
     }
 
-    public Page<MemberPendingFindAllResponse> findAllPendingMembers(Pageable pageable) {
-        Page<Member> members = memberRepository.findAllByRole(MemberRole.GUEST, pageable);
+    public Page<MemberPendingFindAllResponse> findAllPendingMembers(
+            MemberQueryRequest queryRequest, Pageable pageable) {
+        Page<Member> members = memberRepository.findAllByRole(queryRequest, MemberRole.GUEST, pageable);
         return members.map(MemberPendingFindAllResponse::of);
     }
 
@@ -75,8 +76,8 @@ public class AdminMemberService {
     }
 
     public Page<MemberPaymentFindAllResponse> getMembersByPaymentStatus(
-            RequirementStatus paymentStatus, Pageable pageable) {
-        Page<Member> members = memberRepository.findAllByPaymentStatus(paymentStatus, pageable);
+            MemberQueryRequest queryRequest, RequirementStatus paymentStatus, Pageable pageable) {
+        Page<Member> members = memberRepository.findAllByPaymentStatus(queryRequest, paymentStatus, pageable);
         return members.map(MemberPaymentFindAllResponse::from);
     }
 
