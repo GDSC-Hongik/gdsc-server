@@ -1,4 +1,4 @@
-package com.gdschongik.gdsc.domain.discord.listener;
+package com.gdschongik.gdsc.global.discord.listener;
 
 import com.gdschongik.gdsc.global.discord.Listener;
 import lombok.extern.slf4j.Slf4j;

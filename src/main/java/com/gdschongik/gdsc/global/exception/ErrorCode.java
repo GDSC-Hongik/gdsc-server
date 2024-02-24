@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 @AllArgsConstructor
 public enum ErrorCode {
-    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 에러입니다."),
+    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "내부 서버 에러가 발생했습니다. 관리자에게 문의 바랍니다."),
     METHOD_ARGUMENT_NULL(HttpStatus.BAD_REQUEST, "인자는 null이 될 수 없습니다."),
     METHOD_ARGUMENT_NOT_VALID(HttpStatus.BAD_REQUEST, "인자가 유효하지 않습니다."),
     REGEX_VIOLATION(HttpStatus.BAD_REQUEST, "정규표현식을 위반했습니다."),
@@ -25,17 +25,25 @@ public enum ErrorCode {
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다."),
     MEMBER_DELETED(HttpStatus.CONFLICT, "탈퇴한 회원입니다."),
     MEMBER_FORBIDDEN(HttpStatus.CONFLICT, "차단된 회원입니다."),
+    MEMBER_ALREADY_VERIFIED(HttpStatus.CONFLICT, "이미 인증된 상태입니다."),
+    MEMBER_DISCORD_USERNAME_DUPLICATE(HttpStatus.CONFLICT, "이미 등록된 디스코드 유저네임입니다."),
+    MEMBER_NICKNAME_DUPLICATE(HttpStatus.CONFLICT, "이미 사용중인 닉네임입니다."),
 
     // Requirement
     UNIV_NOT_VERIFIED(HttpStatus.CONFLICT, "재학생 인증이 되지 않았습니다."),
+    REQUIREMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "일치하는 가입조건이 없습니다."),
 
     // Univ Email Verification
     UNIV_EMAIL_ALREADY_VERIFIED(HttpStatus.CONFLICT, "이미 가입된 재학생 메일입니다."),
     UNIV_EMAIL_FORMAT_MISMATCH(HttpStatus.BAD_REQUEST, "형식에 맞지 않는 재학생 메일입니다."),
     UNIV_EMAIL_DOMAIN_MISMATCH(HttpStatus.BAD_REQUEST, "재학생 메일의 도메인이 맞지 않습니다."),
     MESSAGING_EXCEPTION(HttpStatus.BAD_REQUEST, "수신자 이메일이 올바르지 않습니다."),
-
     VERIFICATION_CODE_NOT_FOUND(HttpStatus.NOT_FOUND, "재학생 인증 코드가 존재하지 않습니다."),
+
+    // Discord
+    DISCORD_INVALID_CODE_RANGE(HttpStatus.INTERNAL_SERVER_ERROR, "디스코드 인증코드는 4자리 숫자여야 합니다."),
+    DISCORD_CODE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 유저네임으로 발급된 디스코드 인증코드가 존재하지 않습니다."),
+    DISCORD_CODE_MISMATCH(HttpStatus.CONFLICT, "디스코드 인증코드가 일치하지 않습니다."),
     ;
 
     private final HttpStatus status;

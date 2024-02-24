@@ -47,4 +47,12 @@ public class Requirement {
     public void updateUnivStatus(RequirementStatus univStatus) {
         this.univStatus = univStatus;
     }
+
+    public void updatePaymentStatus(RequirementStatus status) {
+        this.paymentStatus = status;
+    }
+
+    public void verifyDiscord() {
+        this.discordStatus = VERIFIED;
+    }
 }

@@ -38,7 +38,8 @@ public class Member extends BaseTimeEntity {
 
     private String studentId;
 
-    private String department;
+    @Enumerated(EnumType.STRING)
+    private Department department;
 
     private String email;
 
@@ -64,7 +65,7 @@ public class Member extends BaseTimeEntity {
             MemberStatus status,
             String name,
             String studentId,
-            String department,
+            Department department,
             String email,
             String phone,
             String discordUsername,
@@ -98,7 +99,7 @@ public class Member extends BaseTimeEntity {
                 .build();
     }
 
-    public void signup(String studentId, String name, String phone, String department, String email) {
+    public void signup(String studentId, String name, String phone, Department department, String email) {
         validateStatusUpdatable();
         validateUnivStatus();
 
@@ -128,7 +129,7 @@ public class Member extends BaseTimeEntity {
             String studentId,
             String name,
             String phone,
-            String department,
+            Department department,
             String email,
             String discordUsername,
             String nickname) {
@@ -165,5 +166,22 @@ public class Member extends BaseTimeEntity {
 
     public void grant() {
         this.role = MemberRole.USER;
+    }
+
+    public void verifyDiscord(String discordUsername, String nickname) {
+        validateStatusUpdatable();
+
+        this.requirement.verifyDiscord();
+        this.discordUsername = discordUsername;
+        this.nickname = nickname;
+    }
+
+    public RequirementStatus getUnivStatus() {
+        return this.requirement.getUnivStatus();
+    }
+
+    public void updatePaymentStatus(RequirementStatus status) {
+        validateStatusUpdatable();
+        this.requirement.updatePaymentStatus(status);
     }
 }

@@ -2,8 +2,8 @@ package com.gdschongik.gdsc.global.util.email;
 
 import static com.gdschongik.gdsc.global.common.constant.EmailConstant.VERIFY_EMAIL_API_ENDPOINT;
 import static com.gdschongik.gdsc.global.common.constant.EmailConstant.VERIFY_EMAIL_REQUEST_PARAMETER_KEY;
-import static com.gdschongik.gdsc.global.common.constant.EnvironmentConstant.DEV;
-import static com.gdschongik.gdsc.global.common.constant.EnvironmentConstant.PROD;
+import static com.gdschongik.gdsc.global.common.constant.EnvironmentConstant.Constants.DEV_ENV;
+import static com.gdschongik.gdsc.global.common.constant.EnvironmentConstant.Constants.PROD_ENV;
 import static com.gdschongik.gdsc.global.common.constant.UrlConstant.DEV_CLIENT_URL;
 import static com.gdschongik.gdsc.global.common.constant.UrlConstant.LOCAL_VITE_CLIENT_SECURE_URL;
 import static com.gdschongik.gdsc.global.common.constant.UrlConstant.PROD_CLIENT_URL;
@@ -25,8 +25,8 @@ public class VerificationLinkUtil {
 
     private String getClientUrl() {
         return switch (environmentUtil.getCurrentProfile()) {
-            case PROD -> PROD_CLIENT_URL;
-            case DEV -> DEV_CLIENT_URL;
+            case PROD_ENV -> PROD_CLIENT_URL;
+            case DEV_ENV -> DEV_CLIENT_URL;
             default -> LOCAL_VITE_CLIENT_SECURE_URL;
         };
     }

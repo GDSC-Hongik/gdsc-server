@@ -5,16 +5,19 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
+import com.gdschongik.gdsc.domain.member.domain.RequirementStatus;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberGrantRequest;
+import com.gdschongik.gdsc.domain.member.dto.request.MemberPaymentRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberUpdateRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberFindAllResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberGrantResponse;
+import com.gdschongik.gdsc.domain.member.dto.response.MemberPaymentFindAllResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberPendingFindAllResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -53,24 +56,34 @@ public class AdminMemberService {
                 request.nickname());
     }
 
-    public Page<MemberPendingFindAllResponse> findAllPendingMembers(Pageable pageable) {
-        Page<Member> members = memberRepository.findAllByRole(MemberRole.GUEST, pageable);
+    public Page<MemberPendingFindAllResponse> findAllPendingMembers(
+            MemberQueryRequest queryRequest, Pageable pageable) {
+        Page<Member> members = memberRepository.findAllByRole(queryRequest, MemberRole.GUEST, pageable);
         return members.map(MemberPendingFindAllResponse::of);
     }
 
     @Transactional
     public MemberGrantResponse grantMember(MemberGrantRequest request) {
-        List<Member> verifiedMembers = getVerifiedMembers(request);
+        Map<Boolean, List<Member>> classifiedMember = memberRepository.groupByVerified(request.memberIdList());
+        List<Member> verifiedMembers = classifiedMember.get(true);
         verifiedMembers.forEach(Member::grant);
-        return MemberGrantResponse.of(verifiedMembers);
+        return MemberGrantResponse.from(classifiedMember);
     }
 
-    private List<Member> getVerifiedMembers(MemberGrantRequest request) {
-        List<Long> memberIdList = request.memberIdList();
-        return memberIdList.stream()
-                .map(memberRepository::findVerifiedById)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .toList();
+    public Page<MemberFindAllResponse> getGrantableMembers(Pageable pageable) {
+        Page<Member> members = memberRepository.findAllGrantable(pageable);
+        return members.map(MemberFindAllResponse::of);
+    }
+
+    public Page<MemberPaymentFindAllResponse> getMembersByPaymentStatus(
+            MemberQueryRequest queryRequest, RequirementStatus paymentStatus, Pageable pageable) {
+        Page<Member> members = memberRepository.findAllByPaymentStatus(queryRequest, paymentStatus, pageable);
+        return members.map(MemberPaymentFindAllResponse::from);
+    }
+
+    @Transactional
+    public void verifyPayment(Long memberId, MemberPaymentRequest request) {
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
+        member.updatePaymentStatus(request.status());
     }
 }
