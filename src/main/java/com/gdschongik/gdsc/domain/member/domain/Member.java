@@ -160,23 +160,18 @@ public class Member extends BaseTimeEntity {
     }
 
     /**
-     * 가입 신청을 승인합니다. 이미 승인된 회원은 다시 승인할 수 없습니다.<br>
+     * 가입 신청을 승인합니다.<br>
      * 어드민만 사용할 수 있어야 합니다.
      */
     public void grant() {
         validateStatusUpdatable();
         validateGrantAvailable();
 
-        if (isGranted()) {
-            throw new CustomException(MEMBER_ALREADY_GRANTED);
-        }
-
-        validateAllRequirmentVerified();
         this.role = MemberRole.USER;
     }
 
     /**
-     * 회원 탈퇴를 수행합니다. 이미 탈퇴된 회원은 다시 탈퇴할 수 없습니다.
+     * 해당 회원을 탈퇴 처리합니다.
      */
     public void withdraw() {
         if (this.status.isDeleted()) {
@@ -221,6 +216,8 @@ public class Member extends BaseTimeEntity {
         validateStatusUpdatable();
         this.requirement.updatePaymentStatus(status);
     }
+
+    // 데이터 전달 로직
 
     public boolean isGranted() {
         return role.equals(MemberRole.USER);
