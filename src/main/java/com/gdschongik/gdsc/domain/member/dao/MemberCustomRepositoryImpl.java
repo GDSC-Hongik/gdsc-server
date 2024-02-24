@@ -141,7 +141,8 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
         return new BooleanBuilder()
                 .and(eqRequirementStatus(member.requirement.discordStatus, VERIFIED))
                 .and(eqRequirementStatus(member.requirement.univStatus, VERIFIED))
-                .and(eqRequirementStatus(member.requirement.paymentStatus, VERIFIED));
+                .and(eqRequirementStatus(member.requirement.paymentStatus, VERIFIED))
+                .and(eqRequirementStatus(member.requirement.bevyStatus, VERIFIED));
     }
 
     private BooleanExpression eqRequirementStatus(

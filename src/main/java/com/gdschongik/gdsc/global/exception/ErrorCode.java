@@ -34,7 +34,7 @@ public enum ErrorCode {
     UNIV_NOT_VERIFIED(HttpStatus.CONFLICT, "재학생 인증이 완료되지 않았습니다."),
     DISCORD_NOT_VERIFIED(HttpStatus.CONFLICT, "디스코드 인증이 완료되지 않았습니다."),
     PAYMENT_NOT_VERIFIED(HttpStatus.CONFLICT, "회비 납부가 완료되지 않았습니다."),
-    REQUIREMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "일치하는 가입조건이 없습니다."),
+    BEVY_NOT_VERIFIED(HttpStatus.CONFLICT, "GDSC Bevy 가입이 완료되지 않았습니다."),
 
     // Discord
     DISCORD_INVALID_CODE_RANGE(HttpStatus.INTERNAL_SERVER_ERROR, "디스코드 인증코드는 4자리 숫자여야 합니다."),

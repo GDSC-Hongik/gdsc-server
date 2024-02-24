@@ -141,6 +141,10 @@ public class Member extends BaseTimeEntity {
             throw new CustomException(DISCORD_NOT_VERIFIED);
         }
 
+        if (!this.requirement.isBevyVerified()) {
+            throw new CustomException(BEVY_NOT_VERIFIED);
+        }
+
         validateUnivStatus();
     }
 
