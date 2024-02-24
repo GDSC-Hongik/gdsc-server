@@ -3,12 +3,13 @@ package com.gdschongik.gdsc.domain.discord.handler;
 import static com.gdschongik.gdsc.global.common.constant.DiscordConstant.*;
 
 import com.gdschongik.gdsc.domain.discord.application.OnboardingDiscordService;
+import com.gdschongik.gdsc.domain.discord.dto.response.DiscordNicknameResponse;
 import com.gdschongik.gdsc.global.util.DiscordUtil;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import org.springframework.stereotype.Component;
@@ -27,13 +28,14 @@ public class JoinCommandHandler implements DiscordEventHandler {
         event.deferReply().setEphemeral(true).setContent(DEFER_MESSAGE_JOIN).queue();
 
         String discordUsername = event.getUser().getName();
-        onboardingDiscordService.checkDiscordRoleAssignable(discordUsername);
+        DiscordNicknameResponse response = onboardingDiscordService.checkDiscordRoleAssignable(discordUsername);
 
-        User user = event.getUser();
+        Member member = event.getMember();
         Role role = discordUtil.findRoleByName(MEMBER_ROLE_NAME);
         Guild guild = Objects.requireNonNull(event.getGuild());
 
-        guild.addRoleToMember(user, role).queue();
+        guild.addRoleToMember(member, role).queue();
+        guild.modifyNickname(member, response.nickname()).queue();
 
         event.getHook().sendMessage(REPLY_MESSAGE_JOIN).setEphemeral(true).queue();
     }
