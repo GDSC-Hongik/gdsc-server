@@ -17,9 +17,10 @@ public interface MemberCustomRepository {
 
     Page<Member> findAllGrantable(Pageable pageable);
 
-    Page<Member> findAllByRole(MemberRole role, Pageable pageable);
+    Page<Member> findAllByRole(MemberQueryRequest queryRequest, MemberRole role, Pageable pageable);
 
-    Page<Member> findAllByPaymentStatus(RequirementStatus paymentStatus, Pageable pageable);
+    Page<Member> findAllByPaymentStatus(
+            MemberQueryRequest queryRequest, RequirementStatus paymentStatus, Pageable pageable);
 
     Map<Boolean, List<Member>> groupByVerified(List<Long> memberIdList);
 }

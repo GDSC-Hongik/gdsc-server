@@ -38,7 +38,8 @@ public class Member extends BaseTimeEntity {
 
     private String studentId;
 
-    private String department;
+    @Enumerated(EnumType.STRING)
+    private Department department;
 
     private String email;
 
@@ -64,7 +65,7 @@ public class Member extends BaseTimeEntity {
             MemberStatus status,
             String name,
             String studentId,
-            String department,
+            Department department,
             String email,
             String phone,
             String discordUsername,
@@ -148,7 +149,7 @@ public class Member extends BaseTimeEntity {
     /**
      * 가입 신청 시 작성한 정보를 저장합니다. 재학생 인증을 완료한 회원만 신청할 수 있습니다.
      */
-    public void signup(String studentId, String name, String phone, String department, String email) {
+    public void signup(String studentId, String name, String phone, Department department, String email) {
         validateStatusUpdatable();
         validateUnivStatus();
 
@@ -187,7 +188,7 @@ public class Member extends BaseTimeEntity {
             String studentId,
             String name,
             String phone,
-            String department,
+            Department department,
             String email,
             String discordUsername,
             String nickname) {
