@@ -88,9 +88,9 @@ public class AdminMemberController {
 
     @Operation(summary = "회비 납부 상태 변경", description = "회비 납부 상태를 변경합니다.")
     @PutMapping("/payment/{memberId}")
-    public ResponseEntity<Void> verifyPayment(
+    public ResponseEntity<Void> updatePayment(
             @PathVariable Long memberId, @Valid @RequestBody MemberPaymentRequest request) {
-        adminMemberService.verifyPayment(memberId, request);
+        adminMemberService.updatePaymentStatus(memberId, request);
         return ResponseEntity.ok().build();
     }
 }
