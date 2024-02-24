@@ -1,12 +1,12 @@
-name: Build and Deploy to Develop
+name: Build and Deploy to Production
 
 on:
   push:
-    branches: [ "develop" ]
+    tags:
+      - v*.*.*
 
 permissions:
   id-token: write
-  pull-requests: write
 
 env:
   IMAGE_NAME: gdsc-server
@@ -14,7 +14,7 @@ env:
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
-    environment: develop
+    environment: production
     strategy:
       matrix:
         java-version: [ 17 ]
@@ -23,6 +23,11 @@ jobs:
       # 체크아웃
       - name: Checkout
         uses: actions/checkout@v4
+
+      # Docker 이미지 태그 세팅
+      - name: Set up image-tag by GITHUB_SHA
+        id: image-tag
+        run: echo "value=$(cut -d'v' -f2 <<< ${GITHUB_REF#refs/*/})" >> $GITHUB_OUTPUT
 
       # JDK 17 버전으로 세팅
       - name: Set up JDK 17
@@ -70,7 +75,7 @@ jobs:
         with:
           images: ${{ env.DOCKERHUB_IMAGE_FULL_NAME }}
           tags: |
-            type=sha,prefix=
+            type=semver,pattern={{version}}
 
       # 이미지 빌드 및 Dockerhub에 푸시
       - name: Docker Build and Push
@@ -78,7 +83,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ steps.metadata.outputs.tags }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/gdsc-server:${{ steps.image-tag.outputs.value }}
 
       # AWS 로그인
       - name: Configure AWS Credentials
@@ -110,7 +115,6 @@ jobs:
             }
           ]'
 
-      # EC2로 배포
       - name: Deploy to EC2 Server
         uses: appleboy/ssh-action@master
         env:
