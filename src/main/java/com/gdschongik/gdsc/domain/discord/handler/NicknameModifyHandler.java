@@ -26,6 +26,10 @@ public class NicknameModifyHandler implements DiscordEventHandler {
 
         String originalNickname = commonDiscordService.getNicknameByDiscordUsername(discordUsername);
 
+        if (originalNickname == null) {
+            return;
+        }
+
         guild.modifyNickname(member, originalNickname).queue();
     }
 }
