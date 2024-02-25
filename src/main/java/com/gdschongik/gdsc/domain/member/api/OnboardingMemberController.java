@@ -53,4 +53,11 @@ public class OnboardingMemberController {
         MemberUnivStatusResponse response = onboardingMemberService.checkUnivVerificationStatus();
         return ResponseEntity.ok().body(response);
     }
+
+    @Operation(summary = "GDSC Bevy 연동하기", description = "GDSC Bevy 가입 상태를 업데이트합니다.")
+    @PostMapping("/me/link-bevy")
+    public ResponseEntity<Void> linkBevy() {
+        onboardingMemberService.verifyBevyStatus();
+        return ResponseEntity.ok().build();
+    }
 }

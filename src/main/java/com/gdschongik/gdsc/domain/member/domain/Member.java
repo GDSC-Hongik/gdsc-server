@@ -99,6 +99,60 @@ public class Member extends BaseTimeEntity {
                 .build();
     }
 
+    // 회원 검증 로직
+
+    /**
+     * 회원 상태를 변경할 수 있는지 검증합니다. 삭제되거나 차단된 회원은 상태를 변경할 수 없습니다.<br>
+     * 대부분의 상태 변경 로직에서 사용됩니다.
+     */
+    private void validateStatusUpdatable() {
+        if (this.status.isDeleted()) {
+            throw new CustomException(MEMBER_DELETED);
+        }
+        if (this.status.isForbidden()) {
+            throw new CustomException(MEMBER_FORBIDDEN);
+        }
+    }
+
+    /**
+     * 재학생 인증 여부를 검증합니다.
+     */
+    private void validateUnivStatus() {
+        if (this.requirement.isUnivVerified() && this.univEmail != null) {
+            return;
+        }
+
+        throw new CustomException(UNIV_NOT_VERIFIED);
+    }
+
+    /**
+     * 회원 승인 가능 여부를 검증합니다.
+     */
+    private void validateGrantAvailable() {
+        if (isGranted()) {
+            throw new CustomException(MEMBER_ALREADY_GRANTED);
+        }
+
+        if (!this.requirement.isPaymentVerified()) {
+            throw new CustomException(PAYMENT_NOT_VERIFIED);
+        }
+
+        if (!this.requirement.isDiscordVerified() || this.discordUsername == null || this.nickname == null) {
+            throw new CustomException(DISCORD_NOT_VERIFIED);
+        }
+
+        if (!this.requirement.isBevyVerified()) {
+            throw new CustomException(BEVY_NOT_VERIFIED);
+        }
+
+        validateUnivStatus();
+    }
+
+    // 회원 가입상태 변경 로직
+
+    /**
+     * 가입 신청 시 작성한 정보를 저장합니다. 재학생 인증을 완료한 회원만 신청할 수 있습니다.
+     */
     public void signup(String studentId, String name, String phone, Department department, String email) {
         validateStatusUpdatable();
         validateUnivStatus();
@@ -110,21 +164,30 @@ public class Member extends BaseTimeEntity {
         this.email = email;
     }
 
+    /**
+     * 가입 신청을 승인합니다.<br>
+     * 어드민만 사용할 수 있어야 합니다.
+     */
+    public void grant() {
+        validateStatusUpdatable();
+        validateGrantAvailable();
+
+        this.role = MemberRole.USER;
+    }
+
+    /**
+     * 해당 회원을 탈퇴 처리합니다.
+     */
     public void withdraw() {
-        if (isDeleted()) {
+        if (this.status.isDeleted()) {
             throw new CustomException(MEMBER_DELETED);
         }
         this.status = MemberStatus.DELETED;
     }
 
-    private boolean isDeleted() {
-        return this.status.isDeleted();
-    }
-
-    private boolean isForbidden() {
-        return this.status.isForbidden();
-    }
-
+    /**
+     * 회원 정보를 수정합니다. 어드민만 사용할 수 있어야 합니다.
+     */
     public void updateMemberInfo(
             String studentId,
             String name,
@@ -149,25 +212,26 @@ public class Member extends BaseTimeEntity {
         requirement.updateUnivStatus(RequirementStatus.VERIFIED);
     }
 
-    private void validateStatusUpdatable() {
-        if (isDeleted()) {
-            throw new CustomException(MEMBER_DELETED);
-        }
-        if (isForbidden()) {
-            throw new CustomException(MEMBER_FORBIDDEN);
-        }
-    }
+    //    private void validateStatusUpdatable() {
+    //        if (isDeleted()) {
+    //            throw new CustomException(MEMBER_DELETED);
+    //        }
+    //        if (isForbidden()) {
+    //            throw new CustomException(MEMBER_FORBIDDEN);
+    //        }
+    //    }
 
-    private void validateUnivStatus() {
-        if (this.requirement.isUnivPending()) {
-            throw new CustomException(UNIV_NOT_VERIFIED);
-        }
-    }
+    //    private void validateUnivStatus() {
+    //        if (this.requirement.isUnivPending()) {
+    //            throw new CustomException(UNIV_NOT_VERIFIED);
+    //        }
+    //    }
 
-    public void grant() {
-        this.role = MemberRole.USER;
-    }
+    //    public void grant() {
+    //        this.role = MemberRole.USER;
+    //    }
 
+    // 가입조건 인증 로직
     public void verifyDiscord(String discordUsername, String nickname) {
         validateStatusUpdatable();
 
@@ -176,12 +240,28 @@ public class Member extends BaseTimeEntity {
         this.nickname = nickname;
     }
 
-    public RequirementStatus getUnivStatus() {
-        return this.requirement.getUnivStatus();
-    }
-
     public void updatePaymentStatus(RequirementStatus status) {
         validateStatusUpdatable();
         this.requirement.updatePaymentStatus(status);
+    }
+
+    public void verifyBevy() {
+        validateStatusUpdatable();
+        this.requirement.verifyBevy();
+    }
+
+    // 데이터 전달 로직
+
+    public boolean isGranted() {
+        return role.equals(MemberRole.USER);
+    }
+
+    public boolean isGrantAvailable() {
+        try {
+            validateGrantAvailable();
+            return true;
+        } catch (CustomException e) {
+            return false;
+        }
     }
 }
