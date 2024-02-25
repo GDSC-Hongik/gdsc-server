@@ -48,7 +48,7 @@ public class WebSecurityConfig {
     private final EnvironmentUtil environmentUtil;
     private final SwaggerProperty swaggerProperty;
 
-    private static void defaultFilterChain(HttpSecurity http) throws Exception {
+    private void defaultFilterChain(HttpSecurity http) throws Exception {
         http.httpBasic(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .logout(AbstractHttpConfigurer::disable)
