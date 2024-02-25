@@ -7,7 +7,7 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.events.GenericEvent;
-import net.dv8tion.jda.api.events.interaction.command.GenericCommandInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 public class DiscordExceptionDispatcher {
 
     private static final Map<Class<? extends GenericEvent>, DiscordExceptionHandler> exceptionHandlerMap =
-            Map.of(GenericCommandInteractionEvent.class, new CommandExceptionHandler());
+            Map.of(SlashCommandInteractionEvent.class, new CommandExceptionHandler());
 
     private static final DefaultExceptionHandler defaultExceptionHandler = new DefaultExceptionHandler();
 
