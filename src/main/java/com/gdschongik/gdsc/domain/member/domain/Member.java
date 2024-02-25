@@ -1,5 +1,6 @@
 package com.gdschongik.gdsc.domain.member.domain;
 
+import static com.gdschongik.gdsc.domain.member.domain.MemberRole.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.common.model.BaseTimeEntity;
@@ -234,7 +235,7 @@ public class Member extends BaseTimeEntity {
     // 데이터 전달 로직
 
     public boolean isGranted() {
-        return role.equals(MemberRole.USER);
+        return role.equals(USER) || role.equals(MemberRole.ADMIN);
     }
 
     public boolean isGrantAvailable() {
