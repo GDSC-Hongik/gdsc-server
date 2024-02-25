@@ -207,8 +207,31 @@ public class Member extends BaseTimeEntity {
         this.nickname = nickname;
     }
 
-    // 가입조건 인증 로직
+    public void completeUnivEmailVerification(String univEmail) {
+        this.univEmail = univEmail;
+        requirement.updateUnivStatus(RequirementStatus.VERIFIED);
+    }
 
+    //    private void validateStatusUpdatable() {
+    //        if (isDeleted()) {
+    //            throw new CustomException(MEMBER_DELETED);
+    //        }
+    //        if (isForbidden()) {
+    //            throw new CustomException(MEMBER_FORBIDDEN);
+    //        }
+    //    }
+
+    //    private void validateUnivStatus() {
+    //        if (this.requirement.isUnivPending()) {
+    //            throw new CustomException(UNIV_NOT_VERIFIED);
+    //        }
+    //    }
+
+    //    public void grant() {
+    //        this.role = MemberRole.USER;
+    //    }
+
+    // 가입조건 인증 로직
     public void verifyDiscord(String discordUsername, String nickname) {
         validateStatusUpdatable();
 

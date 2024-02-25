@@ -67,6 +67,9 @@ dependencies {
 
     // Spring AOP
     implementation 'org.springframework.boot:spring-boot-starter-aop'
+
+    // Mail
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
 }
 
 tasks.named('test') {

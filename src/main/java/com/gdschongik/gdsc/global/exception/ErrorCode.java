@@ -18,6 +18,9 @@ public enum ErrorCode {
     AUTH_NOT_EXIST(HttpStatus.INTERNAL_SERVER_ERROR, "시큐리티 인증 정보가 존재하지 않습니다."),
     AUTH_NOT_PARSABLE(HttpStatus.INTERNAL_SERVER_ERROR, "시큐리티 인증 정보 파싱에 실패했습니다."),
 
+    // Parameter
+    INVALID_QUERY_PARAMETER(HttpStatus.BAD_REQUEST, "잘못된 쿼리 파라미터입니다."),
+
     // Member
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 커뮤니티 멤버입니다."),
     MEMBER_DELETED(HttpStatus.CONFLICT, "탈퇴한 회원입니다."),
@@ -27,14 +30,18 @@ public enum ErrorCode {
     MEMBER_DISCORD_USERNAME_DUPLICATE(HttpStatus.CONFLICT, "이미 등록된 디스코드 유저네임입니다."),
     MEMBER_NICKNAME_DUPLICATE(HttpStatus.CONFLICT, "이미 사용중인 닉네임입니다."),
 
-    // Parameter
-    INVALID_QUERY_PARAMETER(HttpStatus.BAD_REQUEST, "잘못된 쿼리 파라미터입니다."),
-
     // Requirement
     UNIV_NOT_VERIFIED(HttpStatus.CONFLICT, "재학생 인증이 완료되지 않았습니다."),
     DISCORD_NOT_VERIFIED(HttpStatus.CONFLICT, "디스코드 인증이 완료되지 않았습니다."),
     PAYMENT_NOT_VERIFIED(HttpStatus.CONFLICT, "회비 납부가 완료되지 않았습니다."),
     BEVY_NOT_VERIFIED(HttpStatus.CONFLICT, "GDSC Bevy 가입이 완료되지 않았습니다."),
+
+    // Univ Email Verification
+    UNIV_EMAIL_ALREADY_VERIFIED(HttpStatus.CONFLICT, "이미 가입된 재학생 메일입니다."),
+    UNIV_EMAIL_FORMAT_MISMATCH(HttpStatus.BAD_REQUEST, "형식에 맞지 않는 재학생 메일입니다."),
+    UNIV_EMAIL_DOMAIN_MISMATCH(HttpStatus.BAD_REQUEST, "재학생 메일의 도메인이 맞지 않습니다."),
+    MESSAGING_EXCEPTION(HttpStatus.BAD_REQUEST, "수신자 이메일이 올바르지 않습니다."),
+    VERIFICATION_CODE_NOT_FOUND(HttpStatus.NOT_FOUND, "재학생 인증 코드가 존재하지 않습니다."),
 
     // Discord
     DISCORD_INVALID_CODE_RANGE(HttpStatus.INTERNAL_SERVER_ERROR, "디스코드 인증코드는 4자리 숫자여야 합니다."),

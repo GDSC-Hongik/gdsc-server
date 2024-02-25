@@ -11,6 +11,7 @@ spring:
       - swagger
       - actuator
       - discord
+      - email
 
 logging:
   level:

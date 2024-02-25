@@ -48,6 +48,10 @@ public class Requirement {
                 .build();
     }
 
+    public void updateUnivStatus(RequirementStatus univStatus) {
+        this.univStatus = univStatus;
+    }
+
     public void updatePaymentStatus(RequirementStatus status) {
         this.paymentStatus = status;
     }
