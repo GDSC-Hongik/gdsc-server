@@ -173,7 +173,7 @@ public class Member extends BaseTimeEntity {
         validateStatusUpdatable();
         validateGrantAvailable();
 
-        this.role = MemberRole.USER;
+        this.role = USER;
     }
 
     /**
