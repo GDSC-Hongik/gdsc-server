@@ -23,12 +23,17 @@ public record MemberPendingFindAllResponse(
                     member.getPhone().substring(3, 7),
                     member.getPhone().substring(7));
         }
+
+        String department = null;
+        if (member.getDepartment() != null) {
+            department = member.getDepartment().getDepartmentName();
+        }
         return new MemberPendingFindAllResponse(
                 member.getId(),
                 member.getStudentId(),
                 member.getName(),
                 phone,
-                member.getDepartment().getDepartmentName(),
+                department,
                 member.getEmail(),
                 member.getDiscordUsername(),
                 member.getNickname(),
