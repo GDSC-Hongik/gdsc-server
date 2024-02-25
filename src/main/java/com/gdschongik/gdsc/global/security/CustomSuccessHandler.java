@@ -12,17 +12,21 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
 @Slf4j
-@RequiredArgsConstructor
 public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final JwtService jwtService;
     private final CookieUtil cookieUtil;
+
+    public CustomSuccessHandler(JwtService jwtService, CookieUtil cookieUtil) {
+        this.jwtService = jwtService;
+        this.cookieUtil = cookieUtil;
+        this.setUseReferer(true);
+    }
 
     @Override
     public void onAuthenticationSuccess(
