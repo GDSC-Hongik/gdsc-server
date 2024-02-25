@@ -1,7 +1,9 @@
 package com.gdschongik.gdsc.domain.member.dto.response;
 
+import com.gdschongik.gdsc.domain.member.domain.Department;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.Requirement;
+import java.util.Optional;
 
 public record MemberPendingFindAllResponse(
         Long memberId,
@@ -23,17 +25,14 @@ public record MemberPendingFindAllResponse(
                     member.getPhone().substring(3, 7),
                     member.getPhone().substring(7));
         }
-
-        String department = null;
-        if (member.getDepartment() != null) {
-            department = member.getDepartment().getDepartmentName();
-        }
         return new MemberPendingFindAllResponse(
                 member.getId(),
                 member.getStudentId(),
                 member.getName(),
                 phone,
-                department,
+                Optional.ofNullable(member.getDepartment())
+                        .map(Department::getDepartmentName)
+                        .orElse(null),
                 member.getEmail(),
                 member.getDiscordUsername(),
                 member.getNickname(),
