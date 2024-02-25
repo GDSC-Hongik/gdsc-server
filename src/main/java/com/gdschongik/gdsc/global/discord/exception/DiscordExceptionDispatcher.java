@@ -15,6 +15,8 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class DiscordExceptionDispatcher {
 
+    // TODO: instanceof로 대체
+
     private static final Map<Class<? extends GenericEvent>, DiscordExceptionHandler> exceptionHandlerMap =
             Map.of(SlashCommandInteractionEvent.class, new CommandExceptionHandler());
 
