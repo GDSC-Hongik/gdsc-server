@@ -1,4 +1,4 @@
-package com.gdschongik.gdsc.global.discord;
+package com.gdschongik.gdsc.global.discord.exception;
 
 import com.gdschongik.gdsc.global.exception.CustomException;
 import lombok.extern.slf4j.Slf4j;
