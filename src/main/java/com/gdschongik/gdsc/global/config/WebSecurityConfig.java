@@ -102,8 +102,6 @@ public class WebSecurityConfig {
                 .anyRequest()
                 .authenticated());
 
-        http.cors(corsConfig -> corsConfig.configurationSource(corsConfigurationSource()));
-
         return http.build();
     }
 
