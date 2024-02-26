@@ -1,6 +1,8 @@
 package com.gdschongik.gdsc.domain.discord.handler;
 
 import com.gdschongik.gdsc.domain.discord.application.CommonDiscordService;
+import com.gdschongik.gdsc.global.exception.CustomException;
+import com.gdschongik.gdsc.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.entities.Guild;
@@ -27,8 +29,12 @@ public class NicknameModifyHandler implements DiscordEventHandler {
         String originalNickname = commonDiscordService.getNicknameByDiscordUsername(discordUsername);
         String newNickname = event.getNewNickname();
 
-        if (originalNickname == null || newNickname == null) {
-            return;
+        if (originalNickname == null) {
+            throw new CustomException(ErrorCode.DISCORD_NOT_SIGNUP);
+        }
+
+        if (newNickname == null) {
+            throw new CustomException(ErrorCode.DISCORD_NICKNAME_NOTNULL);
         }
 
         if (newNickname.equals(originalNickname)) {
