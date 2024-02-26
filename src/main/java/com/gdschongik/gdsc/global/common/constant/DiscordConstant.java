@@ -5,7 +5,7 @@ public class DiscordConstant {
     private DiscordConstant() {}
 
     // 공통 상수
-    public static final String MEMBER_ROLE_NAME = "커뮤니티 멤버";
+    public static final String MEMBER_ROLE_NAME = "커뮤니티-멤버";
 
     // 인증코드 발급 커맨드
     public static final String COMMAND_NAME_ISSUING_CODE = "인증코드";
