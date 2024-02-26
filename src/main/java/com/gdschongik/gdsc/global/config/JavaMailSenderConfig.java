@@ -21,6 +21,7 @@ public class JavaMailSenderConfig {
         javaMailSender.setHost(emailProperty.getHost());
         javaMailSender.setPort(emailProperty.getPort());
         javaMailSender.setDefaultEncoding(emailProperty.getEncoding());
+        javaMailSender.setProtocol(emailProperty.getProtocol());
 
         setGmailProperty(javaMailSender);
         setJavaMailProperties(javaMailSender);

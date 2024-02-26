@@ -6,6 +6,7 @@ email:
   host: "smtp.gmail.com"
   port: 465
   encoding: "UTF-8"
+  protocol: "smtps"
 
   java-mail-property:
     smtp-auth:
