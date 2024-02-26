@@ -15,7 +15,7 @@ public interface MemberCustomRepository {
 
     Optional<Member> findNormalByOauthId(String oauthId);
 
-    Page<Member> findAllGrantable(Pageable pageable);
+    Page<Member> findAllGrantable(MemberQueryRequest queryRequest, Pageable pageable);
 
     Page<Member> findAllByRole(MemberQueryRequest queryRequest, MemberRole role, Pageable pageable);
 
