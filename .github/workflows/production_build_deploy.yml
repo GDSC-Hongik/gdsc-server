@@ -77,11 +77,20 @@ jobs:
           tags: |
             type=semver,pattern={{version}}
 
+      # 멀티 아키텍처 지원을 위한 QEMU 설정
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      # 도커 확장 빌드를 위한 Buildx 설정
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
       # 이미지 빌드 및 Dockerhub에 푸시
       - name: Docker Build and Push
         uses: docker/build-push-action@v5
         with:
           context: .
+          platforms: linux/arm64/v8
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/gdsc-server:${{ steps.image-tag.outputs.value }}
 
@@ -97,7 +106,7 @@ jobs:
       - name: Set up S3 copy path
         env:
           S3_DEPLOY_BUCKET_NAME: ${{ secrets.S3_DEPLOY_BUCKET_NAME }}
-        run: echo "S3_COPY_PATH=$(echo s3://${S3_DEPLOY_BUCKET_NAME}/gdsc/docker-compose-dev.yml)" >> $GITHUB_ENV
+        run: echo "S3_COPY_PATH=$(echo s3://${S3_DEPLOY_BUCKET_NAME}/gdsc/docker-compose-prod.yml)" >> $GITHUB_ENV
 
       # S3로 docker-compose 파일 전송
       - name: Copy docker-compose file to S3

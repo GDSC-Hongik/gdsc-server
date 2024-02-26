@@ -6,6 +6,7 @@ import com.gdschongik.gdsc.domain.member.domain.Department;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
 public record MemberSignupRequest(
@@ -18,8 +19,5 @@ public record MemberSignupRequest(
                 @Pattern(regexp = PHONE_WITHOUT_HYPHEN, message = "전화번호는 " + PHONE_WITHOUT_HYPHEN + " 형식이어야 합니다.")
                 @Schema(description = "전화번호", pattern = PHONE_WITHOUT_HYPHEN)
                 String phone,
-        @NotBlank
-                @Pattern(regexp = DEPARTMENT, message = "학과는 " + DEPARTMENT + " 형식이어야 합니다.")
-                @Schema(description = "학과", pattern = DEPARTMENT)
-                Department department,
+        @NotNull @Schema(description = "학과") Department department,
         @NotBlank @Email @Schema(description = "이메일") String email) {}
