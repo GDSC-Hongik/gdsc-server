@@ -30,7 +30,7 @@ public class CommonMemberController {
     @Operation(summary = "학과 검색하기", description = "학과를 검색합니다.")
     @GetMapping("/departments/search")
     public ResponseEntity<List<MemberDepartmentResponse>> searchDepartments(
-            @RequestParam(required = false) String departmentName) {
+            @RequestParam(name = "department", required = false) String departmentName) {
         List<MemberDepartmentResponse> response = commonMemberService.searchDepartments(departmentName);
         return ResponseEntity.ok().body(response);
     }
