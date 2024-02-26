@@ -18,4 +18,15 @@ public class CommonMemberService {
                 .map(MemberDepartmentResponse::from)
                 .toList();
     }
+
+    public List<MemberDepartmentResponse> searchDepartments(String departmentName) {
+        if (departmentName == null) {
+            return getDepartments();
+        }
+
+        return Arrays.stream(Department.values())
+                .filter(department -> department.getDepartmentName().contains(departmentName))
+                .map(MemberDepartmentResponse::from)
+                .toList();
+    }
 }
