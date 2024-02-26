@@ -15,10 +15,9 @@ public record MemberSignupRequest(
                 @Schema(description = "학번", pattern = STUDENT_ID)
                 String studentId,
         @NotBlank @Schema(description = "이름") String name,
-        @NotNull @Pattern(regexp = PHONE_WITHOUT_HYPHEN, message = "전화번호는 " + PHONE_WITHOUT_HYPHEN + " 형식이어야 합니다.")
+        @NotBlank
+                @Pattern(regexp = PHONE_WITHOUT_HYPHEN, message = "전화번호는 " + PHONE_WITHOUT_HYPHEN + " 형식이어야 합니다.")
                 @Schema(description = "전화번호", pattern = PHONE_WITHOUT_HYPHEN)
                 String phone,
-        @NotNull @Pattern(regexp = DEPARTMENT, message = "학과는 " + DEPARTMENT + " 형식이어야 합니다.")
-                @Schema(description = "학과", pattern = DEPARTMENT)
-                Department department,
-        @NotNull @Email @Schema(description = "이메일") String email) {}
+        @NotNull @Schema(description = "학과") Department department,
+        @NotBlank @Email @Schema(description = "이메일") String email) {}
