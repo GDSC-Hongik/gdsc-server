@@ -1,0 +1,32 @@
+name : Check Style and Test to Develop
+
+on:
+  pull_request:
+    branches: [ "develop" ]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v3.0.2
+
+      - name: JDK 설치
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: gradlew 권한 부여
+        run: chmod +x ./gradlew
+
+      # Redis 컨테이너 실행
+      - name: Start containers
+        run: docker-compose -f ./docker-compose-test.yaml up -d
+
+      - name: Gradle Build
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: check
+          cache-read-only: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop' }}

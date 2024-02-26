@@ -1,0 +1,22 @@
+spring:
+  config:
+    activate:
+      on-profile: "security"
+
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            client-id: ${GITHUB_CLIENT_ID:default}
+            client-secret: ${GITHUB_CLIENT_SECRET:default}
+
+jwt:
+  token:
+    ACCESS_TOKEN:
+      secret: ${JWT_ACCESS_TOKEN_SECRET:}
+      expiration-time: ${JWT_ACCESS_TOKEN_EXPIRATION_TIME:7200}
+    REFRESH_TOKEN:
+      secret: ${JWT_REFRESH_TOKEN_SECRET:}
+      expiration-time: ${JWT_REFRESH_TOKEN_EXPIRATION_TIME:604800}
+  issuer: ${JWT_ISSUER:}
