@@ -2,7 +2,6 @@ package com.gdschongik.gdsc.global.security;
 
 import static com.gdschongik.gdsc.global.common.constant.SecurityConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.UrlConstant.*;
-import static org.springframework.http.HttpHeaders.*;
 
 import com.gdschongik.gdsc.domain.auth.application.JwtService;
 import com.gdschongik.gdsc.domain.auth.dto.AccessTokenDto;
@@ -35,17 +34,20 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         CustomOAuth2User oAuth2User = (CustomOAuth2User) authentication.getPrincipal();
 
-        // 랜딩 페이지 결정에 필요한 정보를 헤더에 추가
-        response.setHeader(LANDING_STATUS_HEADER, oAuth2User.getLandingStatus().name());
-
         // 토큰 생성 후 쿠키에 저장
         AccessTokenDto accessTokenDto =
                 jwtService.createAccessToken(oAuth2User.getMemberId(), oAuth2User.getMemberRole());
         RefreshTokenDto refreshTokenDto = jwtService.createRefreshToken(oAuth2User.getMemberId());
         cookieUtil.addTokenCookies(response, accessTokenDto.tokenValue(), refreshTokenDto.tokenValue());
 
+        // 랜딩 상태를 파라미터로 추가하여 리다이렉트
         String baseUrl = determineTargetUrl(request, response);
-        String redirectUrl = String.format(SOCIAL_LOGIN_REDIRECT_URL, baseUrl);
+        String redirectUrl = String.format(
+                SOCIAL_LOGIN_REDIRECT_URL,
+                baseUrl,
+                LANDING_STATUS_PARAM,
+                oAuth2User.getLandingStatus().name());
+
         getRedirectStrategy().sendRedirect(request, response, redirectUrl);
     }
 }
