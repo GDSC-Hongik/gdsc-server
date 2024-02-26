@@ -1,5 +1,6 @@
 package com.gdschongik.gdsc.domain.member.domain;
 
+import static com.gdschongik.gdsc.domain.member.domain.MemberRole.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.common.model.BaseTimeEntity;
@@ -172,7 +173,7 @@ public class Member extends BaseTimeEntity {
         validateStatusUpdatable();
         validateGrantAvailable();
 
-        this.role = MemberRole.USER;
+        this.role = USER;
     }
 
     /**
@@ -212,25 +213,6 @@ public class Member extends BaseTimeEntity {
         requirement.updateUnivStatus(RequirementStatus.VERIFIED);
     }
 
-    //    private void validateStatusUpdatable() {
-    //        if (isDeleted()) {
-    //            throw new CustomException(MEMBER_DELETED);
-    //        }
-    //        if (isForbidden()) {
-    //            throw new CustomException(MEMBER_FORBIDDEN);
-    //        }
-    //    }
-
-    //    private void validateUnivStatus() {
-    //        if (this.requirement.isUnivPending()) {
-    //            throw new CustomException(UNIV_NOT_VERIFIED);
-    //        }
-    //    }
-
-    //    public void grant() {
-    //        this.role = MemberRole.USER;
-    //    }
-
     // 가입조건 인증 로직
     public void verifyDiscord(String discordUsername, String nickname) {
         validateStatusUpdatable();
@@ -253,7 +235,7 @@ public class Member extends BaseTimeEntity {
     // 데이터 전달 로직
 
     public boolean isGranted() {
-        return role.equals(MemberRole.USER);
+        return role.equals(USER) || role.equals(MemberRole.ADMIN);
     }
 
     public boolean isGrantAvailable() {
