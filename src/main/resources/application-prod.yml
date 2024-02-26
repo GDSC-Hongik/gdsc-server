@@ -4,7 +4,7 @@ spring:
       on-profile: "prod"
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
 
 logging:
   level:

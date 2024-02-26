@@ -55,10 +55,14 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
     }
 
     @Override
-    public Page<Member> findAllGrantable(Pageable pageable) {
+    public Page<Member> findAllGrantable(MemberQueryRequest queryRequest, Pageable pageable) {
         List<Member> fetch = queryFactory
                 .selectFrom(member)
-                .where(eqStatus(MemberStatus.NORMAL), eqRole(MemberRole.GUEST), requirementVerified())
+                .where(
+                        queryOption(queryRequest),
+                        eqStatus(MemberStatus.NORMAL),
+                        eqRole(MemberRole.GUEST),
+                        requirementVerified())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(member.createdAt.desc())
@@ -67,7 +71,11 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
         JPAQuery<Long> countQuery = queryFactory
                 .select(member.count())
                 .from(member)
-                .where(eqStatus(MemberStatus.NORMAL), eqRole(MemberRole.GUEST), requirementVerified());
+                .where(
+                        queryOption(queryRequest),
+                        eqStatus(MemberStatus.NORMAL),
+                        eqRole(MemberRole.GUEST),
+                        requirementVerified());
 
         return PageableExecutionUtils.getPage(fetch, pageable, countQuery::fetchOne);
     }
