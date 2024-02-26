@@ -40,8 +40,12 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         RefreshTokenDto refreshTokenDto = jwtService.createRefreshToken(oAuth2User.getMemberId());
         cookieUtil.addTokenCookies(response, accessTokenDto.tokenValue(), refreshTokenDto.tokenValue());
 
+        // 임시로 헤더에 엑세스 토큰 추가
+        response.addHeader(ACCESS_TOKEN_HEADER_NAME, ACCESS_TOKEN_HEADER_PREFIX + accessTokenDto.tokenValue());
+
         // 랜딩 상태를 파라미터로 추가하여 리다이렉트
-        String baseUrl = determineTargetUrl(request, response);
+        // String baseUrl = determineTargetUrl(request, response);
+        String baseUrl = PROD_CLIENT_URL + "/";
         String redirectUrl = String.format(
                 SOCIAL_LOGIN_REDIRECT_URL,
                 baseUrl,

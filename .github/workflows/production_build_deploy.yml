@@ -138,5 +138,5 @@ jobs:
             aws s3 cp ${{ env.S3_COPY_PATH }} docker-compose.yml
             echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
             docker pull ${{ env.IMAGE_FULL_URL }}
-            docker compose up -d
+            docker-compose up -d
             docker image prune -a -f
