@@ -13,6 +13,7 @@ public class EmailProperty {
     private final Gmail gmail;
     private final String host;
     private final int port;
+    private final String protocol;
     private final String encoding;
     private final Map<String, Object> javaMailProperty;
 
