@@ -70,8 +70,8 @@ public class AdminMemberService {
         return MemberGrantResponse.from(classifiedMember);
     }
 
-    public Page<MemberFindAllResponse> getGrantableMembers(Pageable pageable) {
-        Page<Member> members = memberRepository.findAllGrantable(pageable);
+    public Page<MemberFindAllResponse> getGrantableMembers(MemberQueryRequest queryRequest, Pageable pageable) {
+        Page<Member> members = memberRepository.findAllGrantable(queryRequest, pageable);
         return members.map(MemberFindAllResponse::of);
     }
 
