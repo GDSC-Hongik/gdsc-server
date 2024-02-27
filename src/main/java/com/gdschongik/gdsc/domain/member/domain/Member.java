@@ -246,4 +246,10 @@ public class Member extends BaseTimeEntity {
             return false;
         }
     }
+
+    // 기타 로직
+
+    public void updateLastLoginAt() {
+        this.lastLoginAt = LocalDateTime.now();
+    }
 }

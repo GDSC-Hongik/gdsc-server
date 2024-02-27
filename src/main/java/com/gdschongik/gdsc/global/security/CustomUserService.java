@@ -19,6 +19,7 @@ public class CustomUserService extends DefaultOAuth2UserService {
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);
         Member member = fetchOrCreate(oAuth2User);
+        member.updateLastLoginAt();
         return new CustomOAuth2User(oAuth2User, member);
     }
 
