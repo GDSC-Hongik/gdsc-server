@@ -5,6 +5,7 @@ public class DiscordConstant {
     private DiscordConstant() {}
 
     // 공통 상수
+    public static final String DISCORD_BOT_STATUS_CONTENT = "정상영업";
     public static final String MEMBER_ROLE_NAME = "커뮤니티-멤버";
     public static final String ADMIN_ROLE_NAME = "운영진";
 
