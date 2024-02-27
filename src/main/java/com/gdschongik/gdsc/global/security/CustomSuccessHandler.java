@@ -50,7 +50,11 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                 SOCIAL_LOGIN_REDIRECT_URL,
                 baseUrl,
                 LANDING_STATUS_PARAM,
-                oAuth2User.getLandingStatus().name());
+                oAuth2User.getLandingStatus().name(),
+                "access",
+                accessTokenDto.tokenValue(),
+                "refresh",
+                refreshTokenDto.tokenValue());
 
         getRedirectStrategy().sendRedirect(request, response, redirectUrl);
     }
