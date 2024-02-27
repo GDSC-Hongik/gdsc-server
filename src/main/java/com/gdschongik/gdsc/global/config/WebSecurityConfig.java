@@ -95,7 +95,7 @@ public class WebSecurityConfig {
                 .permitAll()
                 .requestMatchers("/gdsc-actuator/**")
                 .permitAll()
-                .requestMatchers("/onboarding//verify-email")
+                .requestMatchers("/onboarding/verify-email")
                 .permitAll()
                 .requestMatchers("/onboarding/**")
                 .authenticated()
