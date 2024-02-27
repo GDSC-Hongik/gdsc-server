@@ -31,7 +31,7 @@ public class DiscordConfig {
     @ConditionalOnProperty(value = "discord.enabled", havingValue = "true", matchIfMissing = true)
     public JDA jda() {
         JDA jda = JDABuilder.createDefault(discordProperty.getToken())
-                .setActivity(Activity.playing("테스트"))
+                .setActivity(Activity.playing(DISCORD_BOT_STATUS_CONTENT))
                 .enableIntents(GatewayIntent.GUILD_MESSAGES, GatewayIntent.MESSAGE_CONTENT, GatewayIntent.GUILD_MEMBERS)
                 .setMemberCachePolicy(MemberCachePolicy.ALL)
                 .build();
