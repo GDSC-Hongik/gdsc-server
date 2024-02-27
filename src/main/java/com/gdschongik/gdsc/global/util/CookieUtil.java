@@ -39,7 +39,7 @@ public class CookieUtil {
 
     private String determineSameSitePolicy() {
         if (environmentUtil.isProdProfile()) {
-            return Cookie.SameSite.STRICT.attributeValue();
+            return Cookie.SameSite.LAX.attributeValue();
         }
         return Cookie.SameSite.NONE.attributeValue();
     }
