@@ -75,7 +75,7 @@ jobs:
         with:
           images: ${{ env.DOCKERHUB_IMAGE_FULL_NAME }}
           tags: |
-            type=semver,pattern={{version}}, value=${{ steps.image-tag.outputs.value }}
+            type=semver,pattern={{version}}
           flavor: |
             latest=false
 
