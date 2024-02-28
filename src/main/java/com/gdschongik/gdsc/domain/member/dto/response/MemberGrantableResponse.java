@@ -4,7 +4,7 @@ import com.gdschongik.gdsc.domain.member.domain.Department;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import java.util.Optional;
 
-public record MemberFindAllResponse(
+public record MemberGrantableResponse(
         Long memberId,
         String studentId,
         String name,
@@ -14,8 +14,8 @@ public record MemberFindAllResponse(
         String discordUsername,
         String nickname) {
 
-    public static MemberFindAllResponse of(Member member) {
-        return new MemberFindAllResponse(
+    public static MemberGrantableResponse from(Member member) {
+        return new MemberGrantableResponse(
                 member.getId(),
                 member.getStudentId(),
                 member.getName(),
