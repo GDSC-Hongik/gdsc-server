@@ -20,7 +20,7 @@ public class CustomUserService extends DefaultOAuth2UserService {
         OAuth2User oAuth2User = super.loadUser(userRequest);
         Member member = fetchOrCreate(oAuth2User);
         member.updateLastLoginAt();
-        return new CustomOAuth2User(oAuth2User, member);
+        memberRepository.save(member);
     }
 
     private Member fetchOrCreate(OAuth2User oAuth2User) {
