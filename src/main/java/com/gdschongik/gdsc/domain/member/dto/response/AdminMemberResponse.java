@@ -10,7 +10,7 @@ public record AdminMemberResponse(
         String studentId,
         String name,
         String phone,
-        DepartmentResponse department,
+        DepartmentDto department,
         String email,
         String discordUsername,
         String nickname,
@@ -25,18 +25,18 @@ public record AdminMemberResponse(
                         .map(phone -> String.format(
                                 "%s-%s-%s", phone.substring(0, 3), phone.substring(3, 7), phone.substring(7)))
                         .orElse(null),
-                DepartmentResponse.from(member.getDepartment()),
+                DepartmentDto.from(member.getDepartment()),
                 member.getEmail(),
                 member.getDiscordUsername(),
                 member.getNickname(),
                 member.getRequirement());
     }
 
-    record DepartmentResponse(Department code, String name) {
-        public static DepartmentResponse from(Department department) {
+    record DepartmentDto(Department code, String name) {
+        public static DepartmentDto from(Department department) {
             return Optional.ofNullable(department)
-                    .map(code -> new DepartmentResponse(code, code.getDepartmentName()))
-                    .orElse(new DepartmentResponse(null, null));
+                    .map(code -> new DepartmentDto(code, code.getDepartmentName()))
+                    .orElse(new DepartmentDto(null, null));
         }
     }
 }
