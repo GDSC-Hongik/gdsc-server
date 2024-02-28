@@ -5,19 +5,19 @@ import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.Requirement;
 import java.util.Optional;
 
-public record MemberPendingFindAllResponse(
+public record AdminMemberResponse(
         Long memberId,
         String studentId,
         String name,
         String phone,
-        String department,
+        DepartmentResponse department,
         String email,
         String discordUsername,
         String nickname,
         Requirement requirement) {
 
-    public static MemberPendingFindAllResponse of(Member member) {
-        return new MemberPendingFindAllResponse(
+    public static AdminMemberResponse from(Member member) {
+        return new AdminMemberResponse(
                 member.getId(),
                 member.getStudentId(),
                 member.getName(),
@@ -25,12 +25,18 @@ public record MemberPendingFindAllResponse(
                         .map(phone -> String.format(
                                 "%s-%s-%s", phone.substring(0, 3), phone.substring(3, 7), phone.substring(7)))
                         .orElse(null),
-                Optional.ofNullable(member.getDepartment())
-                        .map(Department::getDepartmentName)
-                        .orElse(null),
+                DepartmentResponse.from(member.getDepartment()),
                 member.getEmail(),
                 member.getDiscordUsername(),
                 member.getNickname(),
                 member.getRequirement());
+    }
+
+    record DepartmentResponse(Department code, String name) {
+        public static DepartmentResponse from(Department department) {
+            return Optional.ofNullable(department)
+                    .map(code -> new DepartmentResponse(code, code.getDepartmentName()))
+                    .orElse(new DepartmentResponse(null, null));
+        }
     }
 }
