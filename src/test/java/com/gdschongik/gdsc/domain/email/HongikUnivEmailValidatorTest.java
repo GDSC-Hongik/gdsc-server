@@ -60,8 +60,8 @@ public class HongikUnivEmailValidatorTest {
                 "te<st@g.hongik.ac.kr",
                 "te>st@g.hongik.ac.kr"
             })
-    @DisplayName("Email의 '@' 앞 부분에 '&', '=', '_', ''', '-', '+', ',', '<', '>'가 포함되는 경우 예외를 발생시킨다.")
     public void validateEmailFormatMismatchTest(String email) {
+    @DisplayName("Email의 '@' 앞 부분에 '&', '=', ''', '-', '+', ',', '<', '>'가 포함되는 경우 예외를 발생시킨다.")
         assertThatThrownBy(() -> hongikUnivEmailValidator.validate(email))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(ErrorCode.UNIV_EMAIL_FORMAT_MISMATCH.getMessage());
