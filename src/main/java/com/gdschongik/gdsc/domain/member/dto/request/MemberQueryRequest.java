@@ -2,11 +2,7 @@ package com.gdschongik.gdsc.domain.member.dto.request;
 
 import static com.gdschongik.gdsc.global.common.constant.RegexConstant.*;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.gdschongik.gdsc.domain.member.domain.Department;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.Arrays;
-import java.util.List;
 
 public record MemberQueryRequest(
         @Schema(description = "학번", pattern = STUDENT_ID) String studentId,
@@ -15,12 +11,4 @@ public record MemberQueryRequest(
         @Schema(description = "학과") String department,
         @Schema(description = "이메일") String email,
         @Schema(description = "디스코드 유저네임") String discordUsername,
-        @Schema(description = "커뮤니티 닉네임", pattern = NICKNAME) String nickname) {
-
-    @JsonIgnore
-    public List<Department> getDepartmentCodes() {
-        return Arrays.stream(Department.values())
-                .filter(department -> department.getDepartmentName().contains(department()))
-                .toList();
-    }
-}
+        @Schema(description = "커뮤니티 닉네임", pattern = NICKNAME) String nickname) {}

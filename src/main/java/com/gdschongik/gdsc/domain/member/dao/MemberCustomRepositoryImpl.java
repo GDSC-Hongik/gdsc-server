@@ -177,7 +177,7 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
                 .and(eqStudentId(queryRequest.studentId()))
                 .and(eqName(queryRequest.name()))
                 .and(eqPhone(queryRequest.phone()))
-                .and(inDepartmentList(queryRequest.getDepartmentCodes()))
+                .and(inDepartmentList(Department.getDepartmentCodes(queryRequest.department())))
                 .and(eqEmail(queryRequest.email()))
                 .and(eqDiscordUsername(queryRequest.discordUsername()))
                 .and(eqNickname(queryRequest.nickname()));
