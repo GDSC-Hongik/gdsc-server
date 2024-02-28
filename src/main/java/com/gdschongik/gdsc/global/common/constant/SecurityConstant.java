@@ -7,8 +7,8 @@ public class SecurityConstant {
     public static final String GITHUB_NAME_ATTR_KEY = "id";
     public static final String ACCESS_TOKEN_HEADER_PREFIX = "Bearer ";
     public static final String ACCESS_TOKEN_HEADER_NAME = "Authorization";
-    public static final String OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME = "oauth2_auth_request";
-    public static final String REDIRECT_URI = "redirect-uri";
+    public static final String OAUTH_REDIRECT_URI_COOKIE_NAME = "oauth-redirect-uri";
+    public static final String REDIRECT_URI_PARAM = "redirect-uri";
 
     private SecurityConstant() {}
 }

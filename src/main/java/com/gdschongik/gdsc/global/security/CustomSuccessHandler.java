@@ -20,15 +20,10 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
     private final JwtService jwtService;
     private final CookieUtil cookieUtil;
-    private final CustomAuthorizationRequestRepository customAuthorizationRequestRepository;
 
-    public CustomSuccessHandler(
-            JwtService jwtService,
-            CookieUtil cookieUtil,
-            CustomAuthorizationRequestRepository customAuthorizationRequestRepository) {
+    public CustomSuccessHandler(JwtService jwtService, CookieUtil cookieUtil) {
         this.jwtService = jwtService;
         this.cookieUtil = cookieUtil;
-        this.customAuthorizationRequestRepository = customAuthorizationRequestRepository;
     }
 
     @Override
@@ -48,7 +43,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         response.addHeader(ACCESS_TOKEN_HEADER_NAME, ACCESS_TOKEN_HEADER_PREFIX + accessTokenDto.tokenValue());
 
         // 랜딩 상태를 파라미터로 추가하여 리다이렉트
-        String baseUrl = determineTargetUrl(request, response);
+        String baseUrl = oAuth2User.getRedirectUri();
         String redirectUrl = String.format(
                 SOCIAL_LOGIN_REDIRECT_URL,
                 baseUrl,
@@ -59,20 +54,6 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                 "refresh",
                 refreshTokenDto.tokenValue());
 
-        clearAuthenticationAttributes(request, response);
         getRedirectStrategy().sendRedirect(request, response, redirectUrl);
-    }
-
-    @Override
-    protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response) {
-        return cookieUtil
-                .getCookie(request, OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME)
-                .map(jakarta.servlet.http.Cookie::getValue)
-                .orElse(getDefaultTargetUrl());
-    }
-
-    protected void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {
-        super.clearAuthenticationAttributes(request);
-        customAuthorizationRequestRepository.removeAuthorizationRequest(request, response);
     }
 }
