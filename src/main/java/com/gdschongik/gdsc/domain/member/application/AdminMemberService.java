@@ -10,8 +10,9 @@ import com.gdschongik.gdsc.domain.member.dto.request.MemberGrantRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberPaymentRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberUpdateRequest;
-import com.gdschongik.gdsc.domain.member.dto.response.MemberFindAllResponse;
+import com.gdschongik.gdsc.domain.member.dto.response.MemberFindResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberGrantResponse;
+import com.gdschongik.gdsc.domain.member.dto.response.MemberGrantableResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberPaymentFindAllResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberPendingFindAllResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
@@ -31,9 +32,9 @@ public class AdminMemberService {
 
     private final MemberRepository memberRepository;
 
-    public Page<MemberFindAllResponse> findAll(MemberQueryRequest queryRequest, Pageable pageable) {
+    public Page<MemberFindResponse> findAll(MemberQueryRequest queryRequest, Pageable pageable) {
         Page<Member> members = memberRepository.findAll(queryRequest, pageable);
-        return members.map(MemberFindAllResponse::of);
+        return members.map(MemberFindResponse::from);
     }
 
     @Transactional
@@ -70,9 +71,9 @@ public class AdminMemberService {
         return MemberGrantResponse.from(classifiedMember);
     }
 
-    public Page<MemberFindAllResponse> getGrantableMembers(MemberQueryRequest queryRequest, Pageable pageable) {
+    public Page<MemberGrantableResponse> getGrantableMembers(MemberQueryRequest queryRequest, Pageable pageable) {
         Page<Member> members = memberRepository.findAllGrantable(queryRequest, pageable);
-        return members.map(MemberFindAllResponse::of);
+        return members.map(MemberGrantableResponse::from);
     }
 
     public Page<MemberPaymentFindAllResponse> getMembersByPaymentStatus(

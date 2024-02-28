@@ -6,8 +6,9 @@ import com.gdschongik.gdsc.domain.member.dto.request.MemberGrantRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberPaymentRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberUpdateRequest;
-import com.gdschongik.gdsc.domain.member.dto.response.MemberFindAllResponse;
+import com.gdschongik.gdsc.domain.member.dto.response.MemberFindResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberGrantResponse;
+import com.gdschongik.gdsc.domain.member.dto.response.MemberGrantableResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberPaymentFindAllResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberPendingFindAllResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,8 +37,8 @@ public class AdminMemberController {
 
     @Operation(summary = "전체 회원 목록 조회", description = "전체 회원 목록을 조회합니다.")
     @GetMapping
-    public ResponseEntity<Page<MemberFindAllResponse>> getMembers(MemberQueryRequest queryRequest, Pageable pageable) {
-        Page<MemberFindAllResponse> response = adminMemberService.findAll(queryRequest, pageable);
+    public ResponseEntity<Page<MemberFindResponse>> getMembers(MemberQueryRequest queryRequest, Pageable pageable) {
+        Page<MemberFindResponse> response = adminMemberService.findAll(queryRequest, pageable);
         return ResponseEntity.ok().body(response);
     }
 
@@ -73,9 +74,9 @@ public class AdminMemberController {
 
     @Operation(summary = "승인 가능 회원 전체 조회", description = "승인 가능한 회원 전체를 조회합니다.")
     @GetMapping("/grantable")
-    public ResponseEntity<Page<MemberFindAllResponse>> getGrantableMembers(
+    public ResponseEntity<Page<MemberGrantableResponse>> getGrantableMembers(
             MemberQueryRequest queryRequest, Pageable pageable) {
-        Page<MemberFindAllResponse> response = adminMemberService.getGrantableMembers(queryRequest, pageable);
+        Page<MemberGrantableResponse> response = adminMemberService.getGrantableMembers(queryRequest, pageable);
         return ResponseEntity.ok().body(response);
     }
 
