@@ -177,10 +177,14 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
                 .and(eqStudentId(queryRequest.studentId()))
                 .and(eqName(queryRequest.name()))
                 .and(eqPhone(queryRequest.phone()))
-                .and(eqDepartment(queryRequest.department()))
+                .and(inDepartmentList(Department.getDepartmentCodes(queryRequest.department())))
                 .and(eqEmail(queryRequest.email()))
                 .and(eqDiscordUsername(queryRequest.discordUsername()))
                 .and(eqNickname(queryRequest.nickname()));
+    }
+
+    private BooleanExpression inDepartmentList(List<Department> departmentCodes) {
+        return departmentCodes != null ? member.department.in(departmentCodes) : null;
     }
 
     private BooleanExpression eqStudentId(String studentId) {
@@ -193,10 +197,6 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
 
     private BooleanExpression eqPhone(String phone) {
         return phone != null ? member.phone.contains(phone.replaceAll("-", "")) : null;
-    }
-
-    private BooleanExpression eqDepartment(Department department) {
-        return department != null ? member.department.eq(department) : null;
     }
 
     private BooleanExpression eqEmail(String email) {
