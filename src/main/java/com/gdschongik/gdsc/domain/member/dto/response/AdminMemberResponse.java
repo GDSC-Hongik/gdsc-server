@@ -14,7 +14,7 @@ public record AdminMemberResponse(
         String email,
         String discordUsername,
         String nickname,
-        Requirement requirement) {
+        RequirementDto requirement) {
 
     public static AdminMemberResponse from(Member member) {
         return new AdminMemberResponse(
@@ -29,7 +29,7 @@ public record AdminMemberResponse(
                 member.getEmail(),
                 member.getDiscordUsername(),
                 member.getNickname(),
-                member.getRequirement());
+                RequirementDto.from(member.getRequirement()));
     }
 
     record DepartmentDto(Department code, String name) {
@@ -37,6 +37,16 @@ public record AdminMemberResponse(
             return Optional.ofNullable(department)
                     .map(code -> new DepartmentDto(code, code.getDepartmentName()))
                     .orElse(new DepartmentDto(null, null));
+        }
+    }
+
+    record RequirementDto(String univStatus, String discordStatus, String paymentStatus, String bevyStatus) {
+        public static RequirementDto from(Requirement requirement) {
+            return new RequirementDto(
+                    requirement.getUnivStatus().name(),
+                    requirement.getDiscordStatus().name(),
+                    requirement.getPaymentStatus().name(),
+                    requirement.getBevyStatus().name());
         }
     }
 }
