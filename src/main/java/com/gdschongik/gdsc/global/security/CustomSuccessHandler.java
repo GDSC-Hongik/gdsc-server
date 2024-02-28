@@ -45,7 +45,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         // 랜딩 상태를 파라미터로 추가하여 리다이렉트
         // String baseUrl = determineTargetUrl(request, response);
-        String baseUrl = PROD_CLIENT_URL + "/";
+        String baseUrl = PROD_CLIENT_ONBOARDING_URL + "/";
         String redirectUrl = String.format(
                 SOCIAL_LOGIN_REDIRECT_URL,
                 baseUrl,

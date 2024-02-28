@@ -6,8 +6,10 @@ public class UrlConstant {
 
     private UrlConstant() {}
 
-    public static final String PROD_CLIENT_URL = "https://onboarding.gdschongik.com";
-    public static final String DEV_CLIENT_URL = "https://dev-onboarding.gdschongik.com";
+    public static final String PROD_CLIENT_ONBOARDING_URL = "https://onboarding.gdschongik.com";
+    public static final String PROD_CLIENT_ADMIN_URL = "https://admin.gdschongik.com";
+    public static final String DEV_CLIENT_ONBOARDING_URL = "https://dev-onboarding.gdschongik.com";
+    public static final String DEV_CLIENT_ADMIN_URL = "https://dev-admin.gdschongik.com";
     public static final String LOCAL_REACT_CLIENT_URL = "http://localhost:3000";
     public static final String LOCAL_REACT_CLIENT_SECURE_URL = "https://localhost:3000";
     public static final String LOCAL_VITE_CLIENT_URL = "http://localhost:5173";
