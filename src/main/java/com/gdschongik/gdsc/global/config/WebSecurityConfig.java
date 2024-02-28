@@ -11,6 +11,7 @@ import com.gdschongik.gdsc.domain.auth.application.JwtService;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.global.annotation.ConditionalOnProfile;
 import com.gdschongik.gdsc.global.property.SwaggerProperty;
+import com.gdschongik.gdsc.global.security.CustomAuthorizationRequestRepository;
 import com.gdschongik.gdsc.global.security.CustomSuccessHandler;
 import com.gdschongik.gdsc.global.security.CustomUserService;
 import com.gdschongik.gdsc.global.security.JwtExceptionFilter;
@@ -79,10 +80,10 @@ public class WebSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         defaultFilterChain(http);
 
-        http.oauth2Login(
-                oauth2 -> oauth2.userInfoEndpoint(userInfo -> userInfo.userService(customUserService(memberRepository)))
-                        .successHandler(customSuccessHandler(jwtService, cookieUtil))
-                        .failureHandler((request, response, exception) -> response.setStatus(401)));
+        http.oauth2Login(oauth2 -> oauth2.userInfoEndpoint(
+                        userInfo -> userInfo.userService(customUserService(memberRepository)))
+                .successHandler(customSuccessHandler(jwtService, cookieUtil, customAuthorizationRequestRepository()))
+                .failureHandler((request, response, exception) -> response.setStatus(401)));
 
         http.exceptionHandling(exception ->
                 exception.authenticationEntryPoint((request, response, authException) -> response.setStatus(401)));
@@ -127,8 +128,16 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public CustomSuccessHandler customSuccessHandler(JwtService jwtService, CookieUtil cookieUtil) {
-        return new CustomSuccessHandler(jwtService, cookieUtil);
+    public CustomAuthorizationRequestRepository customAuthorizationRequestRepository() {
+        return new CustomAuthorizationRequestRepository(cookieUtil);
+    }
+
+    @Bean
+    public CustomSuccessHandler customSuccessHandler(
+            JwtService jwtService,
+            CookieUtil cookieUtil,
+            CustomAuthorizationRequestRepository customAuthorizationRequestRepository) {
+        return new CustomSuccessHandler(jwtService, cookieUtil, customAuthorizationRequestRepository);
     }
 
     @Bean
