@@ -20,13 +20,12 @@ public class CustomUserService extends DefaultOAuth2UserService {
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);
-        String redirectUri = (String) userRequest.getAdditionalParameters().get(OAUTH_REDIRECT_URI_COOKIE_NAME);
 
         Member member = fetchOrCreate(oAuth2User);
         member.updateLastLoginAt();
         memberRepository.save(member);
 
-        return new CustomOAuth2User(oAuth2User, member, redirectUri);
+        return new CustomOAuth2User(oAuth2User, member);
     }
 
     private Member fetchOrCreate(OAuth2User oAuth2User) {
