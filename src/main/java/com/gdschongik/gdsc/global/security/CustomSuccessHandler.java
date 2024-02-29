@@ -14,6 +14,7 @@ import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Slf4j
 public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
@@ -30,6 +31,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     public void onAuthenticationSuccess(
             HttpServletRequest request, HttpServletResponse response, Authentication authentication)
             throws ServletException, IOException {
+        String baseUri = determineTargetUrl(request, response);
 
         CustomOAuth2User oAuth2User = (CustomOAuth2User) authentication.getPrincipal();
 
@@ -55,5 +57,25 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                 refreshTokenDto.tokenValue());
 
         getRedirectStrategy().sendRedirect(request, response, redirectUrl);
+    @Override
+    protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response) {
+        Cookie baseUriCookie = cookieUtil
+            .findCookie(request, OAUTH_BASE_URI_COOKIE_NAME)
+            .orElseThrow(() -> new CustomException(ErrorCode.BASE_URI_COOKIE_NOT_FOUND));
+
+        String baseUri = baseUriCookie.getValue();
+        validateBaseUri(baseUri);
+
+        cookieUtil.deleteCookie(baseUriCookie);
+        return baseUri;
+    }
+
+    private void validateBaseUri(String baseUri) {
+        if (baseUri.endsWith(ROOT_DOMAIN) || LOCAL_CLIENT_URLS.contains(baseUri)) {
+            return;
+        }
+
+        log.error("허용되지 않은 BASE URI로의 리다이렉트 요청 발생: {}", baseUri);
+        throw new CustomException(ErrorCode.NOT_ALLOWED_BASE_URI);
     }
 }
