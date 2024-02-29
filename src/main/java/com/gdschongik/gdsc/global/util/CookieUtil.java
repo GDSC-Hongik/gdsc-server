@@ -53,7 +53,10 @@ public class CookieUtil {
                 .findFirst();
     }
 
-    public void deleteCookie(jakarta.servlet.http.Cookie cookie) {
+    public void deleteCookie(HttpServletResponse response, jakarta.servlet.http.Cookie cookie) {
+        cookie.setPath("/");
+        cookie.setValue("");
         cookie.setMaxAge(0);
+        response.addCookie(cookie);
     }
 }

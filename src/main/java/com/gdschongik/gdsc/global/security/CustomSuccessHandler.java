@@ -65,7 +65,8 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String baseUri = baseUriCookie.getValue();
         validateBaseUri(baseUri);
 
-        cookieUtil.deleteCookie(baseUriCookie);
+        cookieUtil.deleteCookie(response, baseUriCookie);
+
         return baseUri;
     }
 
