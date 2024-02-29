@@ -2,12 +2,12 @@ package com.gdschongik.gdsc.global.security;
 
 import static com.gdschongik.gdsc.global.common.constant.SecurityConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.UrlConstant.*;
+import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.auth.application.JwtService;
 import com.gdschongik.gdsc.domain.auth.dto.AccessTokenDto;
 import com.gdschongik.gdsc.domain.auth.dto.RefreshTokenDto;
 import com.gdschongik.gdsc.global.exception.CustomException;
-import com.gdschongik.gdsc.global.exception.ErrorCode;
 import com.gdschongik.gdsc.global.util.CookieUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -60,7 +60,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response) {
         Cookie baseUriCookie = cookieUtil
                 .findCookie(request, OAUTH_BASE_URI_COOKIE_NAME)
-                .orElseThrow(() -> new CustomException(ErrorCode.BASE_URI_COOKIE_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(BASE_URI_COOKIE_NOT_FOUND));
 
         String baseUri = baseUriCookie.getValue();
         validateBaseUri(baseUri);
@@ -76,6 +76,6 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         }
 
         log.error("허용되지 않은 BASE URI로의 리다이렉트 요청 발생: {}", baseUri);
-        throw new CustomException(ErrorCode.NOT_ALLOWED_BASE_URI);
+        throw new CustomException(NOT_ALLOWED_BASE_URI);
     }
 }
