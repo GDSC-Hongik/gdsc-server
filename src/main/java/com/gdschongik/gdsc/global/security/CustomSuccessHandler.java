@@ -6,8 +6,11 @@ import static com.gdschongik.gdsc.global.common.constant.UrlConstant.*;
 import com.gdschongik.gdsc.domain.auth.application.JwtService;
 import com.gdschongik.gdsc.domain.auth.dto.AccessTokenDto;
 import com.gdschongik.gdsc.domain.auth.dto.RefreshTokenDto;
+import com.gdschongik.gdsc.global.exception.CustomException;
+import com.gdschongik.gdsc.global.exception.ErrorCode;
 import com.gdschongik.gdsc.global.util.CookieUtil;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -44,19 +47,15 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         // 임시로 헤더에 엑세스 토큰 추가
         response.addHeader(ACCESS_TOKEN_HEADER_NAME, ACCESS_TOKEN_HEADER_PREFIX + accessTokenDto.tokenValue());
 
-        // 랜딩 상태를 파라미터로 추가하여 리다이렉트
-        String baseUrl = oAuth2User.getRedirectUri();
-        String redirectUrl = String.format(
-                SOCIAL_LOGIN_REDIRECT_URL,
-                baseUrl,
-                LANDING_STATUS_PARAM,
-                oAuth2User.getLandingStatus().name(),
-                "access",
-                accessTokenDto.tokenValue(),
-                "refresh",
-                refreshTokenDto.tokenValue());
+        String redirectUri = UriComponentsBuilder.fromHttpUrl(baseUri)
+                .queryParam(LANDING_STATUS_PARAM, oAuth2User.getLandingStatus().name())
+                .queryParam(ACCESS_TOKEN_PARAM, accessTokenDto.tokenValue())
+                .queryParam(REFRESH_TOKEN_PARAM, refreshTokenDto.tokenValue())
+                .toUriString();
 
-        getRedirectStrategy().sendRedirect(request, response, redirectUrl);
+        getRedirectStrategy().sendRedirect(request, response, redirectUri);
+    }
+
     @Override
     protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response) {
         Cookie baseUriCookie = cookieUtil
