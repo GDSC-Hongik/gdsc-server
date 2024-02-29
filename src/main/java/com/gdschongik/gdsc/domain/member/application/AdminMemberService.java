@@ -10,10 +10,8 @@ import com.gdschongik.gdsc.domain.member.dto.request.MemberGrantRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberPaymentRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberUpdateRequest;
-import com.gdschongik.gdsc.domain.member.dto.response.MemberFindAllResponse;
+import com.gdschongik.gdsc.domain.member.dto.response.AdminMemberResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberGrantResponse;
-import com.gdschongik.gdsc.domain.member.dto.response.MemberPaymentFindAllResponse;
-import com.gdschongik.gdsc.domain.member.dto.response.MemberPendingFindAllResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
 import java.util.List;
@@ -31,9 +29,9 @@ public class AdminMemberService {
 
     private final MemberRepository memberRepository;
 
-    public Page<MemberFindAllResponse> findAll(MemberQueryRequest queryRequest, Pageable pageable) {
+    public Page<AdminMemberResponse> findAll(MemberQueryRequest queryRequest, Pageable pageable) {
         Page<Member> members = memberRepository.findAll(queryRequest, pageable);
-        return members.map(MemberFindAllResponse::of);
+        return members.map(AdminMemberResponse::from);
     }
 
     @Transactional
@@ -56,10 +54,9 @@ public class AdminMemberService {
                 request.nickname());
     }
 
-    public Page<MemberPendingFindAllResponse> findAllPendingMembers(
-            MemberQueryRequest queryRequest, Pageable pageable) {
+    public Page<AdminMemberResponse> findAllPendingMembers(MemberQueryRequest queryRequest, Pageable pageable) {
         Page<Member> members = memberRepository.findAllByRole(queryRequest, MemberRole.GUEST, pageable);
-        return members.map(MemberPendingFindAllResponse::of);
+        return members.map(AdminMemberResponse::from);
     }
 
     @Transactional
@@ -70,15 +67,15 @@ public class AdminMemberService {
         return MemberGrantResponse.from(classifiedMember);
     }
 
-    public Page<MemberFindAllResponse> getGrantableMembers(MemberQueryRequest queryRequest, Pageable pageable) {
+    public Page<AdminMemberResponse> getGrantableMembers(MemberQueryRequest queryRequest, Pageable pageable) {
         Page<Member> members = memberRepository.findAllGrantable(queryRequest, pageable);
-        return members.map(MemberFindAllResponse::of);
+        return members.map(AdminMemberResponse::from);
     }
 
-    public Page<MemberPaymentFindAllResponse> getMembersByPaymentStatus(
+    public Page<AdminMemberResponse> getMembersByPaymentStatus(
             MemberQueryRequest queryRequest, RequirementStatus paymentStatus, Pageable pageable) {
         Page<Member> members = memberRepository.findAllByPaymentStatus(queryRequest, paymentStatus, pageable);
-        return members.map(MemberPaymentFindAllResponse::from);
+        return members.map(AdminMemberResponse::from);
     }
 
     @Transactional

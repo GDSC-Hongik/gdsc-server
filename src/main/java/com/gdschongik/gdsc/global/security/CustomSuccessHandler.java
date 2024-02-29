@@ -59,8 +59,8 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     @Override
     protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response) {
         Cookie baseUriCookie = cookieUtil
-            .findCookie(request, OAUTH_BASE_URI_COOKIE_NAME)
-            .orElseThrow(() -> new CustomException(ErrorCode.BASE_URI_COOKIE_NOT_FOUND));
+                .findCookie(request, OAUTH_BASE_URI_COOKIE_NAME)
+                .orElseThrow(() -> new CustomException(ErrorCode.BASE_URI_COOKIE_NOT_FOUND));
 
         String baseUri = baseUriCookie.getValue();
         validateBaseUri(baseUri);
