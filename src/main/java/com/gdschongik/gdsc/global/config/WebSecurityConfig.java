@@ -146,11 +146,13 @@ public class WebSecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         if (environmentUtil.isProdProfile()) {
-            configuration.addAllowedOriginPattern(PROD_CLIENT_URL);
+            configuration.addAllowedOriginPattern(PROD_CLIENT_ONBOARDING_URL);
+            configuration.addAllowedOriginPattern(PROD_CLIENT_ADMIN_URL);
         }
 
         if (environmentUtil.isDevProfile()) {
-            configuration.addAllowedOriginPattern(DEV_CLIENT_URL);
+            configuration.addAllowedOriginPattern(DEV_CLIENT_ONBOARDING_URL);
+            configuration.addAllowedOriginPattern(DEV_CLIENT_ADMIN_URL);
             configuration.addAllowedOriginPattern(LOCAL_REACT_CLIENT_URL);
             configuration.addAllowedOriginPattern(LOCAL_REACT_CLIENT_SECURE_URL);
             configuration.addAllowedOriginPattern(LOCAL_VITE_CLIENT_URL);
