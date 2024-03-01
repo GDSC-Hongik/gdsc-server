@@ -20,9 +20,13 @@ public class RefreshToken {
     private long ttl;
 
     @Builder(access = AccessLevel.PRIVATE)
-    public RefreshToken(Long memberId, String token, long ttl) {
+    private RefreshToken(Long memberId, String token, long ttl) {
         this.memberId = memberId;
         this.token = token;
         this.ttl = ttl;
+    }
+
+    public static RefreshToken create(Long memberId, String token, long ttl) {
+        return RefreshToken.builder().memberId(memberId).token(token).ttl(ttl).build();
     }
 }
