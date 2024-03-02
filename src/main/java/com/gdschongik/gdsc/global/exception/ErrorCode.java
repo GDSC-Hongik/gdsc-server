@@ -19,6 +19,8 @@ public enum ErrorCode {
     AUTH_NOT_PARSABLE(HttpStatus.INTERNAL_SERVER_ERROR, "시큐리티 인증 정보 파싱에 실패했습니다."),
     BASE_URI_COOKIE_NOT_FOUND(HttpStatus.NOT_FOUND, "Base URI 쿠키가 존재하지 않습니다."),
     NOT_ALLOWED_BASE_URI(HttpStatus.FORBIDDEN, "허용되지 않은 Base URI입니다."),
+    INVALID_PASSWORD(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
+    INVALID_ROLE(HttpStatus.FORBIDDEN, "권한이 없습니다."),
 
     // Parameter
     INVALID_QUERY_PARAMETER(HttpStatus.BAD_REQUEST, "잘못된 쿼리 파라미터입니다."),
