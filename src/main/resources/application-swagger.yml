@@ -4,5 +4,5 @@ spring:
       on-profile: "security"
 
 swagger:
-  username: ${SWAGGER_USER:default}
+  username: ${SWAGGER_USERNAME:default}
   password: ${SWAGGER_PASSWORD:default}
