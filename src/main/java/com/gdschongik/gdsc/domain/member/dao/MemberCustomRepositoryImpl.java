@@ -106,7 +106,8 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
                 .where(
                         queryOption(queryRequest),
                         eqStatus(MemberStatus.NORMAL),
-                        eqRequirementStatus(member.requirement.paymentStatus, paymentStatus))
+                        eqRequirementStatus(member.requirement.paymentStatus, paymentStatus),
+                        isStudentIdNotNull())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(member.createdAt.desc())
@@ -209,5 +210,9 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
 
     private BooleanExpression eqNickname(String nickname) {
         return nickname != null ? member.nickname.containsIgnoreCase(nickname) : null;
+    }
+
+    private BooleanExpression isStudentIdNotNull() {
+        return member.studentId.isNotNull();
     }
 }
