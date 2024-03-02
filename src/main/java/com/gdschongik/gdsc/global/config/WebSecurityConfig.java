@@ -76,6 +76,18 @@ public class WebSecurityConfig {
     }
 
     @Bean
+    @Order(2)
+    public SecurityFilterChain adminFilterChain(HttpSecurity http) throws Exception {
+        defaultFilterChain(http);
+
+        http.securityMatcher("/admin/**").httpBasic(withDefaults());
+
+        http.authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated());
+
+        return http.build();
+    }
+
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         defaultFilterChain(http);
 
