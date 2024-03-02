@@ -12,4 +12,6 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberCus
     Optional<Member> findByDiscordUsername(String discordUsername);
 
     Optional<Member> findByUnivEmail(String univEmail);
+
+    Optional<Member> findByEmail(String email);
 }
