@@ -34,7 +34,9 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     public void onAuthenticationSuccess(
             HttpServletRequest request, HttpServletResponse response, Authentication authentication)
             throws ServletException, IOException {
-        String baseUri = determineTargetUrl(request, response);
+        // TODO: 사파리 쿠키 이슈 해결 후 재활성화
+        // String baseUri = determineTargetUrl(request, response);
+        String baseUri = PROD_CLIENT_ONBOARDING_URL;
 
         CustomOAuth2User oAuth2User = (CustomOAuth2User) authentication.getPrincipal();
 
