@@ -84,7 +84,7 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
     public Page<Member> findAllByRole(MemberQueryRequest queryRequest, MemberRole role, Pageable pageable) {
         List<Member> fetch = queryFactory
                 .selectFrom(member)
-                .where(queryOption(queryRequest), eqRole(role), eqStatus(MemberStatus.NORMAL))
+                .where(queryOption(queryRequest), eqRole(role), eqStatus(MemberStatus.NORMAL), isStudentIdNotNull())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(member.createdAt.desc())
