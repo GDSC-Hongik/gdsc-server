@@ -95,4 +95,12 @@ public class AdminMemberController {
         adminMemberService.updatePaymentStatus(memberId, request);
         return ResponseEntity.ok().build();
     }
+
+    @Operation(summary = "승인된 회원 전체 조회", description = "승인된 회원 전체를 조회합니다.")
+    @GetMapping("/granted")
+    public ResponseEntity<Page<AdminMemberResponse>> getGrantedMembers(
+            MemberQueryRequest queryRequest, Pageable pageable) {
+        Page<AdminMemberResponse> response = adminMemberService.findAllGrantedMembers(queryRequest, pageable);
+        return ResponseEntity.ok().body(response);
+    }
 }
