@@ -15,6 +15,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.EnumPath;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,22 +30,6 @@ import org.springframework.data.support.PageableExecutionUtils;
 public class MemberCustomRepositoryImpl implements MemberCustomRepository {
 
     private final JPAQueryFactory queryFactory;
-
-    @Override
-    public Page<Member> findAll(MemberQueryRequest queryRequest, Pageable pageable) {
-        List<Member> fetch = queryFactory
-                .selectFrom(member)
-                .where(queryOption(queryRequest), eqStatus(MemberStatus.NORMAL))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .orderBy(member.createdAt.desc())
-                .fetch();
-
-        JPAQuery<Long> countQuery =
-                queryFactory.select(member.count()).from(member).where(queryOption(queryRequest));
-
-        return PageableExecutionUtils.getPage(fetch, pageable, countQuery::fetchOne);
-    }
 
     @Override
     public Optional<Member> findNormalByOauthId(String oauthId) {
@@ -81,10 +66,10 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
     }
 
     @Override
-    public Page<Member> findAllByRole(MemberQueryRequest queryRequest, MemberRole role, Pageable pageable) {
+    public Page<Member> findAllByRole(MemberQueryRequest queryRequest, Pageable pageable, @Nullable MemberRole role) {
         List<Member> fetch = queryFactory
                 .selectFrom(member)
-                .where(queryOption(queryRequest), eqRole(role), eqStatus(MemberStatus.NORMAL))
+                .where(queryOption(queryRequest), eqRole(role), eqStatus(MemberStatus.NORMAL), isStudentIdNotNull())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(member.createdAt.desc())
@@ -93,7 +78,7 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
         JPAQuery<Long> countQuery = queryFactory
                 .select(member.count())
                 .from(member)
-                .where(queryOption(queryRequest), eqRole(role), eqStatus(MemberStatus.NORMAL));
+                .where(queryOption(queryRequest), eqRole(role), eqStatus(MemberStatus.NORMAL), isStudentIdNotNull());
 
         return PageableExecutionUtils.getPage(fetch, pageable, countQuery::fetchOne);
     }
@@ -119,7 +104,8 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
                 .where(
                         queryOption(queryRequest),
                         eqStatus(MemberStatus.NORMAL),
-                        eqRequirementStatus(member.requirement.paymentStatus, paymentStatus));
+                        eqRequirementStatus(member.requirement.paymentStatus, paymentStatus),
+                        isStudentIdNotNull());
 
         return PageableExecutionUtils.getPage(fetch, pageable, countQuery::fetchOne);
     }
@@ -143,7 +129,7 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
     }
 
     private BooleanExpression eqRole(MemberRole role) {
-        return member.role.eq(role);
+        return role != null ? member.role.eq(role) : null;
     }
 
     private BooleanBuilder requirementVerified() {
