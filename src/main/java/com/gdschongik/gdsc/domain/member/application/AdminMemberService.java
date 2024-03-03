@@ -1,10 +1,10 @@
 package com.gdschongik.gdsc.domain.member.application;
 
+import static com.gdschongik.gdsc.domain.member.domain.MemberRole.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
-import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import com.gdschongik.gdsc.domain.member.domain.RequirementStatus;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberGrantRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberPaymentRequest;
@@ -55,7 +55,7 @@ public class AdminMemberService {
     }
 
     public Page<AdminMemberResponse> findAllPendingMembers(MemberQueryRequest queryRequest, Pageable pageable) {
-        Page<Member> members = memberRepository.findAllByRole(queryRequest, MemberRole.GUEST, pageable);
+        Page<Member> members = memberRepository.findAllByRole(queryRequest, pageable, GUEST);
         return members.map(AdminMemberResponse::from);
     }
 
@@ -82,5 +82,10 @@ public class AdminMemberService {
     public void updatePaymentStatus(Long memberId, MemberPaymentRequest request) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
         member.updatePaymentStatus(request.status());
+    }
+
+    public Page<AdminMemberResponse> findAllGrantedMembers(MemberQueryRequest queryRequest, Pageable pageable) {
+        Page<Member> members = memberRepository.findAllByRole(queryRequest, pageable, USER);
+        return members.map(AdminMemberResponse::from);
     }
 }

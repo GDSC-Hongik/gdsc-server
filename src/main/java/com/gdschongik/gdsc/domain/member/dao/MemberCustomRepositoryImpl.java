@@ -15,6 +15,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.EnumPath;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -81,7 +82,7 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
     }
 
     @Override
-    public Page<Member> findAllByRole(MemberQueryRequest queryRequest, MemberRole role, Pageable pageable) {
+    public Page<Member> findAllByRole(MemberQueryRequest queryRequest, Pageable pageable, @Nullable MemberRole role) {
         List<Member> fetch = queryFactory
                 .selectFrom(member)
                 .where(queryOption(queryRequest), eqRole(role), eqStatus(MemberStatus.NORMAL))
@@ -143,7 +144,7 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
     }
 
     private BooleanExpression eqRole(MemberRole role) {
-        return member.role.eq(role);
+        return role != null ? member.role.eq(role) : null;
     }
 
     private BooleanBuilder requirementVerified() {
