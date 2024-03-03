@@ -84,7 +84,7 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
     public Page<Member> findAllByRole(MemberQueryRequest queryRequest, MemberRole role, Pageable pageable) {
         List<Member> fetch = queryFactory
                 .selectFrom(member)
-                .where(queryOption(queryRequest), eqRole(role), eqStatus(MemberStatus.NORMAL))
+                .where(queryOption(queryRequest), eqRole(role), eqStatus(MemberStatus.NORMAL), isStudentIdNotNull())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(member.createdAt.desc())
@@ -93,7 +93,7 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
         JPAQuery<Long> countQuery = queryFactory
                 .select(member.count())
                 .from(member)
-                .where(queryOption(queryRequest), eqRole(role), eqStatus(MemberStatus.NORMAL));
+                .where(queryOption(queryRequest), eqRole(role), eqStatus(MemberStatus.NORMAL), isStudentIdNotNull());
 
         return PageableExecutionUtils.getPage(fetch, pageable, countQuery::fetchOne);
     }
@@ -119,7 +119,8 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
                 .where(
                         queryOption(queryRequest),
                         eqStatus(MemberStatus.NORMAL),
-                        eqRequirementStatus(member.requirement.paymentStatus, paymentStatus));
+                        eqRequirementStatus(member.requirement.paymentStatus, paymentStatus),
+                        isStudentIdNotNull());
 
         return PageableExecutionUtils.getPage(fetch, pageable, countQuery::fetchOne);
     }
