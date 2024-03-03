@@ -32,22 +32,6 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<Member> findAll(MemberQueryRequest queryRequest, Pageable pageable) {
-        List<Member> fetch = queryFactory
-                .selectFrom(member)
-                .where(queryOption(queryRequest), eqStatus(MemberStatus.NORMAL))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .orderBy(member.createdAt.desc())
-                .fetch();
-
-        JPAQuery<Long> countQuery =
-                queryFactory.select(member.count()).from(member).where(queryOption(queryRequest));
-
-        return PageableExecutionUtils.getPage(fetch, pageable, countQuery::fetchOne);
-    }
-
-    @Override
     public Optional<Member> findNormalByOauthId(String oauthId) {
         return Optional.ofNullable(queryFactory
                 .selectFrom(member)

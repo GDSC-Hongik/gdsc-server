@@ -30,7 +30,7 @@ public class AdminMemberService {
     private final MemberRepository memberRepository;
 
     public Page<AdminMemberResponse> findAll(MemberQueryRequest queryRequest, Pageable pageable) {
-        Page<Member> members = memberRepository.findAll(queryRequest, pageable);
+        Page<Member> members = memberRepository.findAllByRole(queryRequest, pageable, null);
         return members.map(AdminMemberResponse::from);
     }
 

@@ -12,8 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface MemberCustomRepository {
-    Page<Member> findAll(MemberQueryRequest queryRequest, Pageable pageable);
-
     Optional<Member> findNormalByOauthId(String oauthId);
 
     Page<Member> findAllGrantable(MemberQueryRequest queryRequest, Pageable pageable);
