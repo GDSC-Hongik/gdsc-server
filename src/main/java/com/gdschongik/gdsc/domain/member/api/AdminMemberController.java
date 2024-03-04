@@ -110,7 +110,7 @@ public class AdminMemberController {
     @Operation(summary = "회원 정보 엑셀 다운로드", description = "회원 정보를 엑셀로 다운로드합니다.")
     @GetMapping("/excel")
     public ResponseEntity<byte[]> createWorkbook() throws IOException {
-        byte[] response = adminMemberService.createWorkbook();
+        byte[] response = adminMemberService.createExcel();
         ContentDisposition contentDisposition =
                 ContentDisposition.builder("attachment").filename("members.xls").build();
         return ResponseEntity.ok()
