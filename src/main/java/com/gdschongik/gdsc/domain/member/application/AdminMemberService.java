@@ -1,7 +1,9 @@
 package com.gdschongik.gdsc.domain.member.application;
 
 import static com.gdschongik.gdsc.domain.member.domain.MemberRole.*;
+import static com.gdschongik.gdsc.global.common.constant.WorkbookConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
+import static com.gdschongik.gdsc.global.util.ExcelUtil.*;
 
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
@@ -14,8 +16,6 @@ import com.gdschongik.gdsc.domain.member.dto.response.AdminMemberResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberGrantResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
-import com.gdschongik.gdsc.global.util.WorkbookUtil;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +32,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class AdminMemberService {
 
     private final MemberRepository memberRepository;
-    private final WorkbookUtil workbookUtil;
 
     public Page<AdminMemberResponse> findAll(MemberQueryRequest queryRequest, Pageable pageable) {
         Page<Member> members = memberRepository.findAllByRole(queryRequest, pageable, null);
@@ -95,10 +94,10 @@ public class AdminMemberService {
     }
 
     public byte[] createWorkbook() throws IOException {
-        Workbook workbook = workbookUtil.createMemberWorkbook();
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        workbook.write(outputStream);
-        workbook.close();
-        return outputStream.toByteArray();
+        Workbook workbook = createMemberWorkbook();
+        createSheet(workbook, ALL_MEMBER_SHEET_NAME, memberRepository.findAllByRole(null));
+        createSheet(workbook, GRANTED_MEMBER_SHEET_NAME, memberRepository.findAllByRole(USER));
+
+        return createByteArray(workbook);
     }
 }
