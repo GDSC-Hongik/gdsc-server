@@ -14,6 +14,8 @@ import com.gdschongik.gdsc.domain.member.dto.response.AdminMemberResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberGrantResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
+import com.gdschongik.gdsc.global.util.ExcelUtil;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AdminMemberService {
 
     private final MemberRepository memberRepository;
+    private final ExcelUtil excelUtil;
 
     public Page<AdminMemberResponse> findAll(MemberQueryRequest queryRequest, Pageable pageable) {
         Page<Member> members = memberRepository.findAllByRole(queryRequest, pageable, null);
@@ -87,5 +90,9 @@ public class AdminMemberService {
     public Page<AdminMemberResponse> findAllGrantedMembers(MemberQueryRequest queryRequest, Pageable pageable) {
         Page<Member> members = memberRepository.findAllByRole(queryRequest, pageable, USER);
         return members.map(AdminMemberResponse::from);
+    }
+
+    public byte[] createExcel() throws IOException {
+        return excelUtil.createMemberExcel();
     }
 }

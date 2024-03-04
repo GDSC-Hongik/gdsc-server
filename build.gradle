@@ -70,6 +70,9 @@ dependencies {
 
     // Mail
     implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+    // Excel
+    implementation 'org.apache.poi:poi:5.2.5'
 }
 
 tasks.named('test') {

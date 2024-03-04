@@ -120,6 +120,15 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
         return replaceNullByEmptyList(groupByVerified);
     }
 
+    @Override
+    public List<Member> findAllByRole(MemberRole role) {
+        return queryFactory
+                .selectFrom(member)
+                .where(eqRole(role), eqStatus(MemberStatus.NORMAL), isStudentIdNotNull())
+                .orderBy(member.createdAt.desc())
+                .fetch();
+    }
+
     private Map<Boolean, List<Member>> replaceNullByEmptyList(Map<Boolean, List<Member>> groupByVerified) {
         Map<Boolean, List<Member>> classifiedMember = new HashMap<>();
         List<Member> emptyList = new ArrayList<>();
