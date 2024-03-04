@@ -76,6 +76,19 @@ public class WebSecurityConfig {
     }
 
     @Bean
+    @Order(2)
+    @ConditionalOnProfile(PROD)
+    public SecurityFilterChain prometheusFilterChain(HttpSecurity http) throws Exception {
+        defaultFilterChain(http);
+
+        http.securityMatcher("/gdsc-actuator/prometheus").httpBasic(withDefaults());
+
+        http.authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated());
+
+        return http.build();
+    }
+
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         defaultFilterChain(http);
 
