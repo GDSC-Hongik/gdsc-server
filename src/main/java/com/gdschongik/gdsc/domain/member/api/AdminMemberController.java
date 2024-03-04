@@ -11,9 +11,12 @@ import com.gdschongik.gdsc.domain.member.dto.response.MemberGrantResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -102,5 +105,20 @@ public class AdminMemberController {
             MemberQueryRequest queryRequest, Pageable pageable) {
         Page<AdminMemberResponse> response = adminMemberService.findAllGrantedMembers(queryRequest, pageable);
         return ResponseEntity.ok().body(response);
+    }
+
+    @Operation(summary = "회원 정보 엑셀 다운로드", description = "회원 정보를 엑셀로 다운로드합니다.")
+    @GetMapping("/excel")
+    public ResponseEntity<byte[]> createWorkbook() throws IOException {
+        byte[] response = adminMemberService.createWorkbook();
+        ContentDisposition contentDisposition =
+                ContentDisposition.builder("attachment").filename("members.xls").build();
+        return ResponseEntity.ok()
+                .headers(httpHeaders -> {
+                    httpHeaders.setContentDisposition(contentDisposition);
+                    httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+                    httpHeaders.setContentLength(response.length);
+                })
+                .body(response);
     }
 }
