@@ -16,9 +16,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
-public class WorkbookUtil {
-    private final MemberRepository memberRepository;
+public class ExcelUtil {
 
     public Workbook createMemberWorkbook() {
         HSSFWorkbook workbook = new HSSFWorkbook();
