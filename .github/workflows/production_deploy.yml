@@ -1,22 +1,22 @@
-name: Deploy to Develop
+name: Deploy to Production
 
 on:
   workflow_dispatch:
     inputs:
-      commit_hash:
-        description: 'commit_hash'
+      semver:
+        description: 'semver without v'
         required: true
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: develop
+    environment: production
     steps:
       - name: Deploy to EC2 Server
         uses: appleboy/ssh-action@master
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          IMAGE_FULL_URL: ${{ secrets.DOCKERHUB_USERNAME }}/gdsc-server:${{ github.event.inputs.commit_hash }}
+          IMAGE_FULL_URL: ${{ secrets.DOCKERHUB_USERNAME }}/gdsc-server:${{ github.event.inputs.semver }}
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
@@ -25,5 +25,5 @@ jobs:
           script: |
             echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
             docker pull ${{ env.IMAGE_FULL_URL }}
-            docker compose up -d
+            docker-compose up -d
             docker image prune -a -f
