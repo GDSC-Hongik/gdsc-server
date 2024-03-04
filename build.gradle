@@ -73,6 +73,9 @@ dependencies {
 
     // Excel
     implementation 'org.apache.poi:poi:5.2.5'
+
+    // Monitoring
+    implementation 'io.micrometer:micrometer-registry-prometheus'
 }
 
 tasks.named('test') {
