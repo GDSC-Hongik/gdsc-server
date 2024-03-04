@@ -125,7 +125,7 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
         return queryFactory
                 .selectFrom(member)
                 .where(eqRole(role), eqStatus(MemberStatus.NORMAL), isStudentIdNotNull())
-                .orderBy(member.createdAt.desc())
+                .orderBy(member.studentId.asc(), member.name.asc())
                 .fetch();
     }
 
