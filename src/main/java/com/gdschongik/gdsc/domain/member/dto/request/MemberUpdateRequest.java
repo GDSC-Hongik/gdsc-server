@@ -21,8 +21,7 @@ public record MemberUpdateRequest(
                 String phone,
         @NotNull @Schema(description = "학과") Department department,
         @NotBlank @Email @Schema(description = "이메일") String email,
-        @NotBlank @Schema(description = "디스코드 유저네임") String discordUsername,
-        @NotBlank
-                @Pattern(regexp = NICKNAME, message = "닉네임은 " + NICKNAME + " 형식이어야 합니다.")
+        @Schema(description = "디스코드 유저네임") String discordUsername,
+        @Pattern(regexp = NICKNAME, message = "닉네임은 " + NICKNAME + " 형식이어야 합니다.")
                 @Schema(description = "커뮤니티 닉네임", pattern = NICKNAME)
                 String nickname) {}
