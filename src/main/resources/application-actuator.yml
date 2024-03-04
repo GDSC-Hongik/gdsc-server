@@ -2,7 +2,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: health
+        include: health, prometheus
       base-path: /gdsc-actuator
     jmx:
       exposure:
