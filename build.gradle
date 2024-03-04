@@ -91,7 +91,7 @@ jar {
 
 spotless {
     format 'misc', {
-        target '**/*.yml', '**/*.gradle', '**/*.md'
+        target '**/*.gradle', '**/*.md'
         trimTrailingWhitespace()
         indentWithSpaces(4)
         endWithNewline()
@@ -101,6 +101,11 @@ spotless {
         removeUnusedImports()
         palantirJavaFormat()
         formatAnnotations()
+    }
+
+    yaml {
+        target '**/*.yml'
+        prettier()
     }
 }
 
