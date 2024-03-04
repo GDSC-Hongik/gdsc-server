@@ -22,4 +22,6 @@ public interface MemberCustomRepository {
             MemberQueryRequest queryRequest, RequirementStatus paymentStatus, Pageable pageable);
 
     Map<Boolean, List<Member>> groupByVerified(List<Long> memberIdList);
+
+    List<Member> findAllByRole(@Nullable MemberRole role);
 }
