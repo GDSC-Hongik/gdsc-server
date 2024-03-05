@@ -23,5 +23,5 @@ jwt:
   issuer: ${JWT_ISSUER:}
 
 auth:
-  username: ${SWAGGER_USER:default}
-  password: ${SWAGGER_PASSWORD:default}
+  username: ${BASIC_AUTH_USERNAME:default}
+  password: ${BASIC_AUTH_PASSWORD:default}
