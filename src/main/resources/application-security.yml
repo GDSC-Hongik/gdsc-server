@@ -21,3 +21,7 @@ jwt:
       secret: ${JWT_REFRESH_TOKEN_SECRET:}
       expiration-time: ${JWT_REFRESH_TOKEN_EXPIRATION_TIME:604800}
   issuer: ${JWT_ISSUER:}
+
+auth:
+  username: ${SWAGGER_USER:default}
+  password: ${SWAGGER_PASSWORD:default}
