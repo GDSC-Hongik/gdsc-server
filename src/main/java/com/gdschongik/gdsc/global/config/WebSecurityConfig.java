@@ -106,8 +106,6 @@ public class WebSecurityConfig {
         http.authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/oauth2/**")
                 .permitAll()
-                .requestMatchers("/auth/**")
-                .permitAll()
                 .requestMatchers("/gdsc-actuator/**")
                 .permitAll()
                 .requestMatchers("/onboarding/verify-email")
