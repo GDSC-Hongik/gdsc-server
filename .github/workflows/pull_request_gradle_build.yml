@@ -1,8 +1,8 @@
-name : Check Style and Test to Develop
+name: Check Style and Test to Develop
 
 on:
   pull_request:
-    branches: [ "develop" ]
+    branches: ["develop"]
 
 jobs:
   build-test:
