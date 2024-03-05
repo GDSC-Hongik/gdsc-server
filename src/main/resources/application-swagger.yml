@@ -1,8 +1,0 @@
-spring:
-  config:
-    activate:
-      on-profile: "swagger"
-
-swagger:
-  username: ${SWAGGER_USER:default}
-  password: ${SWAGGER_PASSWORD:default}
