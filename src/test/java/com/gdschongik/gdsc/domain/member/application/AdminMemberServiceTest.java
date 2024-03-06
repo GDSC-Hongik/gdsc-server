@@ -34,6 +34,6 @@ class AdminMemberServiceTest {
                 "A111111", "name", "010-1234-5678", Department.D001, "email@email.com", "discordUsername", "한글");
         assertThatThrownBy(() -> adminMemberService.updateMember(member.getId(), requestBody))
                 .isInstanceOf(CustomException.class)
-                .hasMessage(ErrorCode.MEMBER_DELETED.getMessage());
+                .hasMessage(ErrorCode.MEMBER_NOT_FOUND.getMessage());
     }
 }
