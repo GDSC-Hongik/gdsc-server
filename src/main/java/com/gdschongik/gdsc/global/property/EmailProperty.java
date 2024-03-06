@@ -1,4 +1,4 @@
-package com.gdschongik.gdsc.global.property.email;
+package com.gdschongik.gdsc.global.property;
 
 import java.util.Map;
 import lombok.AllArgsConstructor;
