@@ -141,16 +141,8 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
         return requirementStatus != null ? requirement.eq(requirementStatus) : null;
     }
 
-    private BooleanExpression eqId(Long id) {
-        return member.id.eq(id);
-    }
-
     private BooleanExpression eqOauthId(String oauthId) {
         return member.oauthId.eq(oauthId);
-    }
-
-    private BooleanExpression eqStatus(MemberStatus status) {
-        return member.status.eq(status);
     }
 
     private BooleanBuilder queryOption(MemberQueryRequest queryRequest) {
