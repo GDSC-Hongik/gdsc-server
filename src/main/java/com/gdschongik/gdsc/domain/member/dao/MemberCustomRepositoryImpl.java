@@ -97,7 +97,7 @@ public class MemberCustomRepositoryImpl extends MemberQueryMethod implements Mem
         Map<Boolean, List<Member>> groupByVerified = queryFactory
                 .selectFrom(member)
                 .where(member.id.in(memberIdList))
-                .transform(groupBy(requirementVerified()).as(list(member)));
+                .transform(groupBy(isGrantAvailable()).as(list(member)));
 
         return replaceNullByEmptyList(groupByVerified);
     }

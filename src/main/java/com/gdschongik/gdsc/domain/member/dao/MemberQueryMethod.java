@@ -59,7 +59,7 @@ public class MemberQueryMethod {
         return member.studentId.isNotNull();
     }
 
-    protected BooleanBuilder requirementVerified() {
+    protected BooleanBuilder isGrantAvailable() {
         return new BooleanBuilder()
                 .and(eqRequirementStatus(member.requirement.discordStatus, VERIFIED))
                 .and(eqRequirementStatus(member.requirement.univStatus, VERIFIED))
