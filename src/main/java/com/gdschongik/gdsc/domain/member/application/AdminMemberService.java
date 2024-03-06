@@ -8,7 +8,7 @@ import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.RequirementStatus;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberGrantRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberPaymentRequest;
-import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryRequest;
+import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryOption;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberUpdateRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.AdminMemberResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberGrantResponse;
@@ -32,8 +32,8 @@ public class AdminMemberService {
     private final MemberRepository memberRepository;
     private final ExcelUtil excelUtil;
 
-    public Page<AdminMemberResponse> findAll(MemberQueryRequest queryRequest, Pageable pageable) {
-        Page<Member> members = memberRepository.findAllByRole(queryRequest, pageable, null);
+    public Page<AdminMemberResponse> findAll(MemberQueryOption queryOption, Pageable pageable) {
+        Page<Member> members = memberRepository.findAllByRole(queryOption, pageable, null);
         return members.map(AdminMemberResponse::from);
     }
 
@@ -57,8 +57,8 @@ public class AdminMemberService {
                 request.nickname());
     }
 
-    public Page<AdminMemberResponse> findAllPendingMembers(MemberQueryRequest queryRequest, Pageable pageable) {
-        Page<Member> members = memberRepository.findAllByRole(queryRequest, pageable, GUEST);
+    public Page<AdminMemberResponse> findAllPendingMembers(MemberQueryOption queryOption, Pageable pageable) {
+        Page<Member> members = memberRepository.findAllByRole(queryOption, pageable, GUEST);
         return members.map(AdminMemberResponse::from);
     }
 
@@ -70,14 +70,14 @@ public class AdminMemberService {
         return MemberGrantResponse.from(classifiedMember);
     }
 
-    public Page<AdminMemberResponse> getGrantableMembers(MemberQueryRequest queryRequest, Pageable pageable) {
-        Page<Member> members = memberRepository.findAllGrantable(queryRequest, pageable);
+    public Page<AdminMemberResponse> getGrantableMembers(MemberQueryOption queryOption, Pageable pageable) {
+        Page<Member> members = memberRepository.findAllGrantable(queryOption, pageable);
         return members.map(AdminMemberResponse::from);
     }
 
     public Page<AdminMemberResponse> getMembersByPaymentStatus(
-            MemberQueryRequest queryRequest, RequirementStatus paymentStatus, Pageable pageable) {
-        Page<Member> members = memberRepository.findAllByPaymentStatus(queryRequest, paymentStatus, pageable);
+            MemberQueryOption queryOption, RequirementStatus paymentStatus, Pageable pageable) {
+        Page<Member> members = memberRepository.findAllByPaymentStatus(queryOption, paymentStatus, pageable);
         return members.map(AdminMemberResponse::from);
     }
 
@@ -87,8 +87,8 @@ public class AdminMemberService {
         member.updatePaymentStatus(request.status());
     }
 
-    public Page<AdminMemberResponse> findAllGrantedMembers(MemberQueryRequest queryRequest, Pageable pageable) {
-        Page<Member> members = memberRepository.findAllByRole(queryRequest, pageable, USER);
+    public Page<AdminMemberResponse> findAllGrantedMembers(MemberQueryOption queryOption, Pageable pageable) {
+        Page<Member> members = memberRepository.findAllByRole(queryOption, pageable, USER);
         return members.map(AdminMemberResponse::from);
     }
 
