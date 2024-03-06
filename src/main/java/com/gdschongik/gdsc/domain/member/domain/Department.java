@@ -87,7 +87,7 @@ public enum Department {
     D076("역사교육과"),
     D077("영어교육과");
 
-    private String departmentName;
+    private final String departmentName;
 
     public static List<Department> searchDepartments(String keyword) {
         if (keyword == null) {
