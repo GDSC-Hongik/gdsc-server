@@ -7,7 +7,6 @@ import static com.querydsl.core.group.GroupBy.*;
 import com.gdschongik.gdsc.domain.member.domain.Department;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
-import com.gdschongik.gdsc.domain.member.domain.MemberStatus;
 import com.gdschongik.gdsc.domain.member.domain.RequirementStatus;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryRequest;
 import com.querydsl.core.BooleanBuilder;
@@ -33,21 +32,15 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
 
     @Override
     public Optional<Member> findNormalByOauthId(String oauthId) {
-        return Optional.ofNullable(queryFactory
-                .selectFrom(member)
-                .where(eqOauthId(oauthId), eqStatus(MemberStatus.NORMAL))
-                .fetchOne());
+        return Optional.ofNullable(
+                queryFactory.selectFrom(member).where(eqOauthId(oauthId)).fetchOne());
     }
 
     @Override
     public Page<Member> findAllGrantable(MemberQueryRequest queryRequest, Pageable pageable) {
         List<Member> fetch = queryFactory
                 .selectFrom(member)
-                .where(
-                        queryOption(queryRequest),
-                        eqStatus(MemberStatus.NORMAL),
-                        eqRole(MemberRole.GUEST),
-                        requirementVerified())
+                .where(queryOption(queryRequest), eqRole(MemberRole.GUEST), requirementVerified())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(member.createdAt.desc())
@@ -56,11 +49,7 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
         JPAQuery<Long> countQuery = queryFactory
                 .select(member.count())
                 .from(member)
-                .where(
-                        queryOption(queryRequest),
-                        eqStatus(MemberStatus.NORMAL),
-                        eqRole(MemberRole.GUEST),
-                        requirementVerified());
+                .where(queryOption(queryRequest), eqRole(MemberRole.GUEST), requirementVerified());
 
         return PageableExecutionUtils.getPage(fetch, pageable, countQuery::fetchOne);
     }
@@ -69,7 +58,7 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
     public Page<Member> findAllByRole(MemberQueryRequest queryRequest, Pageable pageable, @Nullable MemberRole role) {
         List<Member> fetch = queryFactory
                 .selectFrom(member)
-                .where(queryOption(queryRequest), eqRole(role), eqStatus(MemberStatus.NORMAL), isStudentIdNotNull())
+                .where(queryOption(queryRequest), eqRole(role), isStudentIdNotNull())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(member.createdAt.desc())
@@ -78,7 +67,7 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
         JPAQuery<Long> countQuery = queryFactory
                 .select(member.count())
                 .from(member)
-                .where(queryOption(queryRequest), eqRole(role), eqStatus(MemberStatus.NORMAL), isStudentIdNotNull());
+                .where(queryOption(queryRequest), eqRole(role), isStudentIdNotNull());
 
         return PageableExecutionUtils.getPage(fetch, pageable, countQuery::fetchOne);
     }
@@ -90,7 +79,6 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
                 .selectFrom(member)
                 .where(
                         queryOption(queryRequest),
-                        eqStatus(MemberStatus.NORMAL),
                         eqRequirementStatus(member.requirement.paymentStatus, paymentStatus),
                         isStudentIdNotNull())
                 .offset(pageable.getOffset())
@@ -103,7 +91,6 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
                 .from(member)
                 .where(
                         queryOption(queryRequest),
-                        eqStatus(MemberStatus.NORMAL),
                         eqRequirementStatus(member.requirement.paymentStatus, paymentStatus),
                         isStudentIdNotNull());
 
@@ -124,7 +111,7 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
     public List<Member> findAllByRole(MemberRole role) {
         return queryFactory
                 .selectFrom(member)
-                .where(eqRole(role), eqStatus(MemberStatus.NORMAL), isStudentIdNotNull())
+                .where(eqRole(role), isStudentIdNotNull())
                 .orderBy(member.studentId.asc(), member.name.asc())
                 .fetch();
     }
