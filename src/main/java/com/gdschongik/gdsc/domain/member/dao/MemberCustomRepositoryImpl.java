@@ -4,14 +4,10 @@ import static com.gdschongik.gdsc.domain.member.domain.QMember.*;
 import static com.gdschongik.gdsc.domain.member.domain.RequirementStatus.*;
 import static com.querydsl.core.group.GroupBy.*;
 
-import com.gdschongik.gdsc.domain.member.domain.Department;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import com.gdschongik.gdsc.domain.member.domain.RequirementStatus;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryRequest;
-import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.EnumPath;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.annotation.Nullable;
@@ -26,7 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 
 @RequiredArgsConstructor
-public class MemberCustomRepositoryImpl implements MemberCustomRepository {
+public class MemberCustomRepositoryImpl extends MemberQueryMethod implements MemberCustomRepository {
 
     private final JPAQueryFactory queryFactory;
 
@@ -124,69 +120,5 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
         return classifiedMember;
     }
 
-    private BooleanExpression eqRole(MemberRole role) {
-        return role != null ? member.role.eq(role) : null;
-    }
-
-    private BooleanBuilder requirementVerified() {
-        return new BooleanBuilder()
-                .and(eqRequirementStatus(member.requirement.discordStatus, VERIFIED))
-                .and(eqRequirementStatus(member.requirement.univStatus, VERIFIED))
-                .and(eqRequirementStatus(member.requirement.paymentStatus, VERIFIED))
-                .and(eqRequirementStatus(member.requirement.bevyStatus, VERIFIED));
-    }
-
-    private BooleanExpression eqRequirementStatus(
-            EnumPath<RequirementStatus> requirement, RequirementStatus requirementStatus) {
-        return requirementStatus != null ? requirement.eq(requirementStatus) : null;
-    }
-
-    private BooleanExpression eqOauthId(String oauthId) {
-        return member.oauthId.eq(oauthId);
-    }
-
-    private BooleanBuilder queryOption(MemberQueryRequest queryRequest) {
-        BooleanBuilder booleanBuilder = new BooleanBuilder();
-
-        return booleanBuilder
-                .and(eqStudentId(queryRequest.studentId()))
-                .and(eqName(queryRequest.name()))
-                .and(eqPhone(queryRequest.phone()))
-                .and(inDepartmentList(Department.getDepartmentCodes(queryRequest.department())))
-                .and(eqEmail(queryRequest.email()))
-                .and(eqDiscordUsername(queryRequest.discordUsername()))
-                .and(eqNickname(queryRequest.nickname()));
-    }
-
-    private BooleanExpression inDepartmentList(List<Department> departmentCodes) {
-        return departmentCodes != null ? member.department.in(departmentCodes) : null;
-    }
-
-    private BooleanExpression eqStudentId(String studentId) {
-        return studentId != null ? member.studentId.containsIgnoreCase(studentId) : null;
-    }
-
-    private BooleanExpression eqName(String name) {
-        return name != null ? member.name.containsIgnoreCase(name) : null;
-    }
-
-    private BooleanExpression eqPhone(String phone) {
-        return phone != null ? member.phone.contains(phone.replaceAll("-", "")) : null;
-    }
-
-    private BooleanExpression eqEmail(String email) {
-        return email != null ? member.email.containsIgnoreCase(email) : null;
-    }
-
-    private BooleanExpression eqDiscordUsername(String discordUsername) {
-        return discordUsername != null ? member.discordUsername.containsIgnoreCase(discordUsername) : null;
-    }
-
-    private BooleanExpression eqNickname(String nickname) {
-        return nickname != null ? member.nickname.containsIgnoreCase(nickname) : null;
-    }
-
-    private BooleanExpression isStudentIdNotNull() {
-        return member.studentId.isNotNull();
     }
 }
