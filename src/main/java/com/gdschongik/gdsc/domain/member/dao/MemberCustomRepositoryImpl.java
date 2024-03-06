@@ -103,15 +103,6 @@ public class MemberCustomRepositoryImpl extends MemberQueryMethod implements Mem
         return replaceNullByEmptyList(groupByVerified);
     }
 
-    @Override
-    public List<Member> findAllByRole(MemberRole role) {
-        return queryFactory
-                .selectFrom(member)
-                .where(eqRole(role), isStudentIdNotNull())
-                .orderBy(member.studentId.asc(), member.name.asc())
-                .fetch();
-    }
-
     private Map<Boolean, List<Member>> replaceNullByEmptyList(Map<Boolean, List<Member>> groupByVerified) {
         Map<Boolean, List<Member>> classifiedMember = new HashMap<>();
         List<Member> emptyList = new ArrayList<>();
@@ -120,5 +111,12 @@ public class MemberCustomRepositoryImpl extends MemberQueryMethod implements Mem
         return classifiedMember;
     }
 
+    @Override
+    public List<Member> findAllByRole(MemberRole role) {
+        return queryFactory
+                .selectFrom(member)
+                .where(eqRole(role), isStudentIdNotNull())
+                .orderBy(member.studentId.asc(), member.name.asc())
+                .fetch();
     }
 }
