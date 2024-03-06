@@ -6,7 +6,7 @@ import static com.gdschongik.gdsc.domain.member.domain.RequirementStatus.*;
 import com.gdschongik.gdsc.domain.member.domain.Department;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import com.gdschongik.gdsc.domain.member.domain.RequirementStatus;
-import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryRequest;
+import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryOption;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.EnumPath;
@@ -59,7 +59,7 @@ public class MemberQueryMethod {
         return member.studentId.isNotNull();
     }
 
-    protected BooleanBuilder requirementVerified() {
+    protected BooleanBuilder isGrantAvailable() {
         return new BooleanBuilder()
                 .and(eqRequirementStatus(member.requirement.discordStatus, VERIFIED))
                 .and(eqRequirementStatus(member.requirement.univStatus, VERIFIED))
@@ -67,14 +67,14 @@ public class MemberQueryMethod {
                 .and(eqRequirementStatus(member.requirement.bevyStatus, VERIFIED));
     }
 
-    protected BooleanBuilder queryOption(MemberQueryRequest queryRequest) {
+    protected BooleanBuilder matchesQueryOption(MemberQueryOption queryOption) {
         return new BooleanBuilder()
-                .and(eqStudentId(queryRequest.studentId()))
-                .and(eqName(queryRequest.name()))
-                .and(eqPhone(queryRequest.phone()))
-                .and(inDepartmentList(Department.searchDepartments(queryRequest.department())))
-                .and(eqEmail(queryRequest.email()))
-                .and(eqDiscordUsername(queryRequest.discordUsername()))
-                .and(eqNickname(queryRequest.nickname()));
+                .and(eqStudentId(queryOption.studentId()))
+                .and(eqName(queryOption.name()))
+                .and(eqPhone(queryOption.phone()))
+                .and(inDepartmentList(Department.searchDepartments(queryOption.department())))
+                .and(eqEmail(queryOption.email()))
+                .and(eqDiscordUsername(queryOption.discordUsername()))
+                .and(eqNickname(queryOption.nickname()));
     }
 }

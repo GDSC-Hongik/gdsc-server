@@ -4,7 +4,7 @@ import com.gdschongik.gdsc.domain.member.application.AdminMemberService;
 import com.gdschongik.gdsc.domain.member.domain.RequirementStatus;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberGrantRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberPaymentRequest;
-import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryRequest;
+import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryOption;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberUpdateRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.AdminMemberResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberGrantResponse;
@@ -37,8 +37,8 @@ public class AdminMemberController {
 
     @Operation(summary = "전체 회원 목록 조회", description = "전체 회원 목록을 조회합니다.")
     @GetMapping
-    public ResponseEntity<Page<AdminMemberResponse>> getMembers(MemberQueryRequest queryRequest, Pageable pageable) {
-        Page<AdminMemberResponse> response = adminMemberService.findAll(queryRequest, pageable);
+    public ResponseEntity<Page<AdminMemberResponse>> getMembers(MemberQueryOption queryOption, Pageable pageable) {
+        Page<AdminMemberResponse> response = adminMemberService.findAll(queryOption, pageable);
         return ResponseEntity.ok().body(response);
     }
 
@@ -52,8 +52,8 @@ public class AdminMemberController {
     @Operation(summary = "대기중인 회원 목록 조회", description = "대기중인 회원 목록을 조회합니다.")
     @GetMapping("/pending")
     public ResponseEntity<Page<AdminMemberResponse>> getPendingMembers(
-            MemberQueryRequest queryRequest, Pageable pageable) {
-        Page<AdminMemberResponse> response = adminMemberService.findAllPendingMembers(queryRequest, pageable);
+            MemberQueryOption queryOption, Pageable pageable) {
+        Page<AdminMemberResponse> response = adminMemberService.findAllPendingMembers(queryOption, pageable);
         return ResponseEntity.ok().body(response);
     }
 
@@ -75,19 +75,19 @@ public class AdminMemberController {
     @Operation(summary = "승인 가능 회원 전체 조회", description = "승인 가능한 회원 전체를 조회합니다.")
     @GetMapping("/grantable")
     public ResponseEntity<Page<AdminMemberResponse>> getGrantableMembers(
-            MemberQueryRequest queryRequest, Pageable pageable) {
-        Page<AdminMemberResponse> response = adminMemberService.getGrantableMembers(queryRequest, pageable);
+            MemberQueryOption queryOption, Pageable pageable) {
+        Page<AdminMemberResponse> response = adminMemberService.getGrantableMembers(queryOption, pageable);
         return ResponseEntity.ok().body(response);
     }
 
     @Operation(summary = "회비 납부 상태에 따른 회원 전체 조회", description = "회비 납부 상태에 따라 회원 목록을 조회합니다.")
     @GetMapping("/payment")
     public ResponseEntity<Page<AdminMemberResponse>> getMembersByPaymentStatus(
-            MemberQueryRequest queryRequest,
+            MemberQueryOption queryOption,
             @RequestParam(name = "status", required = false) RequirementStatus paymentStatus,
             Pageable pageable) {
         Page<AdminMemberResponse> response =
-                adminMemberService.getMembersByPaymentStatus(queryRequest, paymentStatus, pageable);
+                adminMemberService.getMembersByPaymentStatus(queryOption, paymentStatus, pageable);
         return ResponseEntity.ok().body(response);
     }
 
@@ -102,8 +102,8 @@ public class AdminMemberController {
     @Operation(summary = "승인된 회원 전체 조회", description = "승인된 회원 전체를 조회합니다.")
     @GetMapping("/granted")
     public ResponseEntity<Page<AdminMemberResponse>> getGrantedMembers(
-            MemberQueryRequest queryRequest, Pageable pageable) {
-        Page<AdminMemberResponse> response = adminMemberService.findAllGrantedMembers(queryRequest, pageable);
+            MemberQueryOption queryOption, Pageable pageable) {
+        Page<AdminMemberResponse> response = adminMemberService.findAllGrantedMembers(queryOption, pageable);
         return ResponseEntity.ok().body(response);
     }
 

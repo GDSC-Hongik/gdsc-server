@@ -240,6 +240,11 @@ public class Member extends BaseTimeEntity {
         return role.equals(USER) || role.equals(MemberRole.ADMIN);
     }
 
+    /**
+     * 회원 승인 가능 여부를 반환합니다.
+     *
+     * @see com.gdschongik.gdsc.domain.member.dao.MemberQueryMethod#isGrantAvailable()
+     */
     public boolean isGrantAvailable() {
         try {
             validateGrantAvailable();

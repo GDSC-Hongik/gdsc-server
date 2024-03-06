@@ -1,13 +1,12 @@
 package com.gdschongik.gdsc.domain.member.dao;
 
 import static com.gdschongik.gdsc.domain.member.domain.QMember.*;
-import static com.gdschongik.gdsc.domain.member.domain.RequirementStatus.*;
 import static com.querydsl.core.group.GroupBy.*;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import com.gdschongik.gdsc.domain.member.domain.RequirementStatus;
-import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryRequest;
+import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryOption;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.annotation.Nullable;
@@ -33,10 +32,10 @@ public class MemberCustomRepositoryImpl extends MemberQueryMethod implements Mem
     }
 
     @Override
-    public Page<Member> findAllGrantable(MemberQueryRequest queryRequest, Pageable pageable) {
+    public Page<Member> findAllGrantable(MemberQueryOption queryOption, Pageable pageable) {
         List<Member> fetch = queryFactory
                 .selectFrom(member)
-                .where(queryOption(queryRequest), eqRole(MemberRole.GUEST), requirementVerified())
+                .where(matchesQueryOption(queryOption), eqRole(MemberRole.GUEST), isGrantAvailable())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(member.createdAt.desc())
@@ -45,16 +44,16 @@ public class MemberCustomRepositoryImpl extends MemberQueryMethod implements Mem
         JPAQuery<Long> countQuery = queryFactory
                 .select(member.count())
                 .from(member)
-                .where(queryOption(queryRequest), eqRole(MemberRole.GUEST), requirementVerified());
+                .where(matchesQueryOption(queryOption), eqRole(MemberRole.GUEST), isGrantAvailable());
 
         return PageableExecutionUtils.getPage(fetch, pageable, countQuery::fetchOne);
     }
 
     @Override
-    public Page<Member> findAllByRole(MemberQueryRequest queryRequest, Pageable pageable, @Nullable MemberRole role) {
+    public Page<Member> findAllByRole(MemberQueryOption queryOption, Pageable pageable, @Nullable MemberRole role) {
         List<Member> fetch = queryFactory
                 .selectFrom(member)
-                .where(queryOption(queryRequest), eqRole(role), isStudentIdNotNull())
+                .where(matchesQueryOption(queryOption), eqRole(role), isStudentIdNotNull())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(member.createdAt.desc())
@@ -63,18 +62,18 @@ public class MemberCustomRepositoryImpl extends MemberQueryMethod implements Mem
         JPAQuery<Long> countQuery = queryFactory
                 .select(member.count())
                 .from(member)
-                .where(queryOption(queryRequest), eqRole(role), isStudentIdNotNull());
+                .where(matchesQueryOption(queryOption), eqRole(role), isStudentIdNotNull());
 
         return PageableExecutionUtils.getPage(fetch, pageable, countQuery::fetchOne);
     }
 
     @Override
     public Page<Member> findAllByPaymentStatus(
-            MemberQueryRequest queryRequest, RequirementStatus paymentStatus, Pageable pageable) {
+            MemberQueryOption queryOption, RequirementStatus paymentStatus, Pageable pageable) {
         List<Member> fetch = queryFactory
                 .selectFrom(member)
                 .where(
-                        queryOption(queryRequest),
+                        matchesQueryOption(queryOption),
                         eqRequirementStatus(member.requirement.paymentStatus, paymentStatus),
                         isStudentIdNotNull())
                 .offset(pageable.getOffset())
@@ -86,7 +85,7 @@ public class MemberCustomRepositoryImpl extends MemberQueryMethod implements Mem
                 .select(member.count())
                 .from(member)
                 .where(
-                        queryOption(queryRequest),
+                        matchesQueryOption(queryOption),
                         eqRequirementStatus(member.requirement.paymentStatus, paymentStatus),
                         isStudentIdNotNull());
 
@@ -98,7 +97,7 @@ public class MemberCustomRepositoryImpl extends MemberQueryMethod implements Mem
         Map<Boolean, List<Member>> groupByVerified = queryFactory
                 .selectFrom(member)
                 .where(member.id.in(memberIdList))
-                .transform(groupBy(requirementVerified()).as(list(member)));
+                .transform(groupBy(isGrantAvailable()).as(list(member)));
 
         return replaceNullByEmptyList(groupByVerified);
     }
