@@ -1,4 +1,4 @@
-package com.gdschongik.gdsc.integration;
+package com.gdschongik.gdsc.helper;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
