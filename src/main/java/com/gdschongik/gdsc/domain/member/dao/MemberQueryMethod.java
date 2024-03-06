@@ -67,7 +67,7 @@ public class MemberQueryMethod {
                 .and(eqRequirementStatus(member.requirement.bevyStatus, VERIFIED));
     }
 
-    protected BooleanBuilder queryOption(MemberQueryRequest queryRequest) {
+    protected BooleanBuilder matchesQueryOption(MemberQueryRequest queryRequest) {
         return new BooleanBuilder()
                 .and(eqStudentId(queryRequest.studentId()))
                 .and(eqName(queryRequest.name()))
