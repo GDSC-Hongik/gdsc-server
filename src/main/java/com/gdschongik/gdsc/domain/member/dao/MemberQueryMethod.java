@@ -72,7 +72,7 @@ public class MemberQueryMethod {
                 .and(eqStudentId(queryRequest.studentId()))
                 .and(eqName(queryRequest.name()))
                 .and(eqPhone(queryRequest.phone()))
-                .and(inDepartmentList(Department.getDepartmentCodes(queryRequest.department())))
+                .and(inDepartmentList(Department.searchDepartments(queryRequest.department())))
                 .and(eqEmail(queryRequest.email()))
                 .and(eqDiscordUsername(queryRequest.discordUsername()))
                 .and(eqNickname(queryRequest.nickname()));
