@@ -1,5 +1,7 @@
 package com.gdschongik.gdsc.global.security;
 
+import static com.gdschongik.gdsc.global.common.constant.SecurityConstant.*;
+
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +20,11 @@ public class CustomUserService extends DefaultOAuth2UserService {
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);
+
         Member member = fetchOrCreate(oAuth2User);
+        member.updateLastLoginAt();
+        memberRepository.save(member);
+
         return new CustomOAuth2User(oAuth2User, member);
     }
 

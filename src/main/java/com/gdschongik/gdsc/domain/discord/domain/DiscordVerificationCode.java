@@ -2,6 +2,7 @@ package com.gdschongik.gdsc.domain.discord.domain;
 
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.annotation.Id;
@@ -23,7 +24,7 @@ public class DiscordVerificationCode {
     @TimeToLive
     private Long ttl;
 
-    @Builder
+    @Builder(access = AccessLevel.PRIVATE)
     private DiscordVerificationCode(String discordUsername, Integer code, Long ttl) {
         validateCodeRange(code);
         this.discordUsername = discordUsername;

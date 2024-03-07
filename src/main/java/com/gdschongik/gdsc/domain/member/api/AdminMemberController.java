@@ -4,18 +4,19 @@ import com.gdschongik.gdsc.domain.member.application.AdminMemberService;
 import com.gdschongik.gdsc.domain.member.domain.RequirementStatus;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberGrantRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberPaymentRequest;
-import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryRequest;
+import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryOption;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberUpdateRequest;
-import com.gdschongik.gdsc.domain.member.dto.response.MemberFindAllResponse;
+import com.gdschongik.gdsc.domain.member.dto.response.AdminMemberResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberGrantResponse;
-import com.gdschongik.gdsc.domain.member.dto.response.MemberPaymentFindAllResponse;
-import com.gdschongik.gdsc.domain.member.dto.response.MemberPendingFindAllResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,8 +37,8 @@ public class AdminMemberController {
 
     @Operation(summary = "전체 회원 목록 조회", description = "전체 회원 목록을 조회합니다.")
     @GetMapping
-    public ResponseEntity<Page<MemberFindAllResponse>> getMembers(MemberQueryRequest queryRequest, Pageable pageable) {
-        Page<MemberFindAllResponse> response = adminMemberService.findAll(queryRequest, pageable);
+    public ResponseEntity<Page<AdminMemberResponse>> getMembers(MemberQueryOption queryOption, Pageable pageable) {
+        Page<AdminMemberResponse> response = adminMemberService.findAll(queryOption, pageable);
         return ResponseEntity.ok().body(response);
     }
 
@@ -50,9 +51,9 @@ public class AdminMemberController {
 
     @Operation(summary = "대기중인 회원 목록 조회", description = "대기중인 회원 목록을 조회합니다.")
     @GetMapping("/pending")
-    public ResponseEntity<Page<MemberPendingFindAllResponse>> getPendingMembers(
-            MemberQueryRequest queryRequest, Pageable pageable) {
-        Page<MemberPendingFindAllResponse> response = adminMemberService.findAllPendingMembers(queryRequest, pageable);
+    public ResponseEntity<Page<AdminMemberResponse>> getPendingMembers(
+            MemberQueryOption queryOption, Pageable pageable) {
+        Page<AdminMemberResponse> response = adminMemberService.findAllPendingMembers(queryOption, pageable);
         return ResponseEntity.ok().body(response);
     }
 
@@ -73,20 +74,20 @@ public class AdminMemberController {
 
     @Operation(summary = "승인 가능 회원 전체 조회", description = "승인 가능한 회원 전체를 조회합니다.")
     @GetMapping("/grantable")
-    public ResponseEntity<Page<MemberFindAllResponse>> getGrantableMembers(
-            MemberQueryRequest queryRequest, Pageable pageable) {
-        Page<MemberFindAllResponse> response = adminMemberService.getGrantableMembers(queryRequest, pageable);
+    public ResponseEntity<Page<AdminMemberResponse>> getGrantableMembers(
+            MemberQueryOption queryOption, Pageable pageable) {
+        Page<AdminMemberResponse> response = adminMemberService.getGrantableMembers(queryOption, pageable);
         return ResponseEntity.ok().body(response);
     }
 
     @Operation(summary = "회비 납부 상태에 따른 회원 전체 조회", description = "회비 납부 상태에 따라 회원 목록을 조회합니다.")
     @GetMapping("/payment")
-    public ResponseEntity<Page<MemberPaymentFindAllResponse>> getMembersByPaymentStatus(
-            MemberQueryRequest queryRequest,
+    public ResponseEntity<Page<AdminMemberResponse>> getMembersByPaymentStatus(
+            MemberQueryOption queryOption,
             @RequestParam(name = "status", required = false) RequirementStatus paymentStatus,
             Pageable pageable) {
-        Page<MemberPaymentFindAllResponse> response =
-                adminMemberService.getMembersByPaymentStatus(queryRequest, paymentStatus, pageable);
+        Page<AdminMemberResponse> response =
+                adminMemberService.getMembersByPaymentStatus(queryOption, paymentStatus, pageable);
         return ResponseEntity.ok().body(response);
     }
 
@@ -96,5 +97,28 @@ public class AdminMemberController {
             @PathVariable Long memberId, @Valid @RequestBody MemberPaymentRequest request) {
         adminMemberService.updatePaymentStatus(memberId, request);
         return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "승인된 회원 전체 조회", description = "승인된 회원 전체를 조회합니다.")
+    @GetMapping("/granted")
+    public ResponseEntity<Page<AdminMemberResponse>> getGrantedMembers(
+            MemberQueryOption queryOption, Pageable pageable) {
+        Page<AdminMemberResponse> response = adminMemberService.findAllGrantedMembers(queryOption, pageable);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @Operation(summary = "회원 정보 엑셀 다운로드", description = "회원 정보를 엑셀로 다운로드합니다.")
+    @GetMapping("/excel")
+    public ResponseEntity<byte[]> createWorkbook() throws IOException {
+        byte[] response = adminMemberService.createExcel();
+        ContentDisposition contentDisposition =
+                ContentDisposition.builder("attachment").filename("members.xls").build();
+        return ResponseEntity.ok()
+                .headers(httpHeaders -> {
+                    httpHeaders.setContentDisposition(contentDisposition);
+                    httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+                    httpHeaders.setContentLength(response.length);
+                })
+                .body(response);
     }
 }

@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gdschongik.gdsc.domain.auth.application.JwtService;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.global.annotation.ConditionalOnProfile;
-import com.gdschongik.gdsc.global.property.SwaggerProperty;
+import com.gdschongik.gdsc.global.property.BasicAuthProperty;
 import com.gdschongik.gdsc.global.security.CustomSuccessHandler;
 import com.gdschongik.gdsc.global.security.CustomUserService;
 import com.gdschongik.gdsc.global.security.JwtExceptionFilter;
@@ -46,7 +46,7 @@ public class WebSecurityConfig {
     private final CookieUtil cookieUtil;
     private final ObjectMapper objectMapper;
     private final EnvironmentUtil environmentUtil;
-    private final SwaggerProperty swaggerProperty;
+    private final BasicAuthProperty basicAuthProperty;
 
     private void defaultFilterChain(HttpSecurity http) throws Exception {
         http.httpBasic(AbstractHttpConfigurer::disable)
@@ -76,6 +76,19 @@ public class WebSecurityConfig {
     }
 
     @Bean
+    @Order(2)
+    @ConditionalOnProfile(PROD)
+    public SecurityFilterChain prometheusFilterChain(HttpSecurity http) throws Exception {
+        defaultFilterChain(http);
+
+        http.securityMatcher("/gdsc-actuator/prometheus").httpBasic(withDefaults());
+
+        http.authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated());
+
+        return http.build();
+    }
+
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         defaultFilterChain(http);
 
@@ -95,6 +108,8 @@ public class WebSecurityConfig {
                 .permitAll()
                 .requestMatchers("/gdsc-actuator/**")
                 .permitAll()
+                .requestMatchers("/onboarding/verify-email")
+                .permitAll()
                 .requestMatchers("/onboarding/**")
                 .authenticated()
                 .requestMatchers("/admin/**")
@@ -107,8 +122,8 @@ public class WebSecurityConfig {
 
     @Bean
     public InMemoryUserDetailsManager inMemoryUserDetailsManager() {
-        UserDetails user = User.withUsername(swaggerProperty.getUsername())
-                .password(passwordEncoder().encode(swaggerProperty.getPassword()))
+        UserDetails user = User.withUsername(basicAuthProperty.getUsername())
+                .password(passwordEncoder().encode(basicAuthProperty.getPassword()))
                 .roles("SWAGGER")
                 .build();
         return new InMemoryUserDetailsManager(user);
@@ -144,11 +159,13 @@ public class WebSecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         if (environmentUtil.isProdProfile()) {
-            configuration.addAllowedOriginPattern(PROD_CLIENT_URL);
+            configuration.addAllowedOriginPattern(PROD_CLIENT_ONBOARDING_URL);
+            configuration.addAllowedOriginPattern(PROD_CLIENT_ADMIN_URL);
         }
 
         if (environmentUtil.isDevProfile()) {
-            configuration.addAllowedOriginPattern(DEV_CLIENT_URL);
+            configuration.addAllowedOriginPattern(DEV_CLIENT_ONBOARDING_URL);
+            configuration.addAllowedOriginPattern(DEV_CLIENT_ADMIN_URL);
             configuration.addAllowedOriginPattern(LOCAL_REACT_CLIENT_URL);
             configuration.addAllowedOriginPattern(LOCAL_REACT_CLIENT_SECURE_URL);
             configuration.addAllowedOriginPattern(LOCAL_VITE_CLIENT_URL);

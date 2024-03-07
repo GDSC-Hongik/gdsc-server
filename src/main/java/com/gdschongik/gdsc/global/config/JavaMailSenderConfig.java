@@ -1,7 +1,7 @@
 package com.gdschongik.gdsc.global.config;
 
-import com.gdschongik.gdsc.global.property.email.EmailProperty;
-import com.gdschongik.gdsc.global.property.email.EmailProperty.Gmail;
+import com.gdschongik.gdsc.global.property.EmailProperty;
+import com.gdschongik.gdsc.global.property.EmailProperty.Gmail;
 import java.util.Properties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

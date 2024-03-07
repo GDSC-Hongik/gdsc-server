@@ -31,11 +31,15 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'com.mysql:mysql-connector-j'
-    annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // Lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
 
     // Spring Security
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
@@ -70,6 +74,12 @@ dependencies {
 
     // Mail
     implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+    // Excel
+    implementation 'org.apache.poi:poi:5.2.5'
+
+    // Monitoring
+    implementation 'io.micrometer:micrometer-registry-prometheus'
 }
 
 tasks.named('test') {
@@ -88,7 +98,7 @@ jar {
 
 spotless {
     format 'misc', {
-        target '**/*.yml', '**/*.gradle', '**/*.md'
+        target '**/*.gradle', '**/*.md'
         trimTrailingWhitespace()
         indentWithSpaces(4)
         endWithNewline()
@@ -98,6 +108,11 @@ spotless {
         removeUnusedImports()
         palantirJavaFormat()
         formatAnnotations()
+    }
+
+    yaml {
+        target '**/*.yml'
+        prettier()
     }
 }
 

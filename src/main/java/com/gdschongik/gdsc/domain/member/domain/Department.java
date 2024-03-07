@@ -1,5 +1,8 @@
 package com.gdschongik.gdsc.domain.member.domain;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -84,5 +87,15 @@ public enum Department {
     D076("역사교육과"),
     D077("영어교육과");
 
-    private String departmentName;
+    private final String departmentName;
+
+    public static List<Department> searchDepartments(String keyword) {
+        if (keyword == null) {
+            return Collections.emptyList();
+        }
+
+        return Arrays.stream(Department.values())
+                .filter(department -> department.getDepartmentName().contains(keyword))
+                .toList();
+    }
 }

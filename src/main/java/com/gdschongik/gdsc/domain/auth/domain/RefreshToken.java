@@ -1,5 +1,6 @@
 package com.gdschongik.gdsc.domain.auth.domain;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.annotation.Id;
@@ -18,10 +19,14 @@ public class RefreshToken {
     @TimeToLive
     private long ttl;
 
-    @Builder
-    public RefreshToken(Long memberId, String token, long ttl) {
+    @Builder(access = AccessLevel.PRIVATE)
+    private RefreshToken(Long memberId, String token, long ttl) {
         this.memberId = memberId;
         this.token = token;
         this.ttl = ttl;
+    }
+
+    public static RefreshToken create(Long memberId, String token, long ttl) {
+        return RefreshToken.builder().memberId(memberId).token(token).ttl(ttl).build();
     }
 }

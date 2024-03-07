@@ -10,6 +10,7 @@ spring:
           github:
             client-id: ${GITHUB_CLIENT_ID:default}
             client-secret: ${GITHUB_CLIENT_SECRET:default}
+            redirect-uri: "https://{baseHost}{basePort}{basePath}/login/oauth2/code/{registrationId}"
 
 jwt:
   token:
@@ -20,3 +21,7 @@ jwt:
       secret: ${JWT_REFRESH_TOKEN_SECRET:}
       expiration-time: ${JWT_REFRESH_TOKEN_EXPIRATION_TIME:604800}
   issuer: ${JWT_ISSUER:}
+
+auth:
+  username: ${BASIC_AUTH_USERNAME:default}
+  password: ${BASIC_AUTH_PASSWORD:default}

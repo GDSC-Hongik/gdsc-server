@@ -33,11 +33,9 @@ public class JwtService {
     }
 
     private void saveRefreshTokenToRedis(RefreshTokenDto refreshTokenDto) {
-        RefreshToken refreshToken = RefreshToken.builder()
-                .memberId(refreshTokenDto.memberId())
-                .token(refreshTokenDto.tokenValue())
-                .ttl(refreshTokenDto.ttl())
-                .build();
+        RefreshToken refreshToken =
+                RefreshToken.create(refreshTokenDto.memberId(), refreshTokenDto.tokenValue(), refreshTokenDto.ttl());
+
         refreshTokenRepository.save(refreshToken);
     }
 

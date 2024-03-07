@@ -8,7 +8,6 @@ spring:
     include:
       - redis
       - security
-      - swagger
       - actuator
       - discord
       - email

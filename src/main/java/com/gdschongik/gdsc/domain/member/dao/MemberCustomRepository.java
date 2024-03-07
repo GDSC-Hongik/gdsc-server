@@ -3,7 +3,8 @@ package com.gdschongik.gdsc.domain.member.dao;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import com.gdschongik.gdsc.domain.member.domain.RequirementStatus;
-import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryRequest;
+import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryOption;
+import jakarta.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -11,16 +12,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface MemberCustomRepository {
-    Page<Member> findAll(MemberQueryRequest queryRequest, Pageable pageable);
-
     Optional<Member> findNormalByOauthId(String oauthId);
 
-    Page<Member> findAllGrantable(MemberQueryRequest queryRequest, Pageable pageable);
+    Page<Member> findAllGrantable(MemberQueryOption queryOption, Pageable pageable);
 
-    Page<Member> findAllByRole(MemberQueryRequest queryRequest, MemberRole role, Pageable pageable);
+    Page<Member> findAllByRole(MemberQueryOption queryOption, Pageable pageable, @Nullable MemberRole role);
 
     Page<Member> findAllByPaymentStatus(
-            MemberQueryRequest queryRequest, RequirementStatus paymentStatus, Pageable pageable);
+            MemberQueryOption queryOption, RequirementStatus paymentStatus, Pageable pageable);
 
     Map<Boolean, List<Member>> groupByVerified(List<Long> memberIdList);
+
+    List<Member> findAllByRole(@Nullable MemberRole role);
 }

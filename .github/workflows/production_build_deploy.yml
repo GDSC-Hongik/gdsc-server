@@ -17,8 +17,8 @@ jobs:
     environment: production
     strategy:
       matrix:
-        java-version: [ 17 ]
-        distribution: [ 'temurin' ]
+        java-version: [17]
+        distribution: ["temurin"]
     steps:
       # 체크아웃
       - name: Checkout
@@ -76,6 +76,8 @@ jobs:
           images: ${{ env.DOCKERHUB_IMAGE_FULL_NAME }}
           tags: |
             type=semver,pattern={{version}}
+          flavor: |
+            latest=false
 
       # 멀티 아키텍처 지원을 위한 QEMU 설정
       - name: Set up QEMU
@@ -117,12 +119,13 @@ jobs:
         uses: Ilshidur/action-discord@master
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-          DISCORD_EMBEDS: '[
-            {
-              "title": "푸드덕푸드덕푸드덕",
-              "description": "구구구구국 구구...: ${{ steps.gradle.outputs.build-scan-url }}"
-            }
-          ]'
+          DISCORD_EMBEDS: |
+            [
+              {
+                "title": "푸드덕푸드덕푸드덕",
+                "description": "구구구구국 구구...: ${{ steps.gradle.outputs.build-scan-url }}"
+              }
+            ]
 
       - name: Deploy to EC2 Server
         uses: appleboy/ssh-action@master
@@ -133,7 +136,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
-          envs: IMAGE_FULL_URL  # docker-compose.yml 에서 사용할 환경 변수
+          envs: IMAGE_FULL_URL # docker-compose.yml 에서 사용할 환경 변수
           script: |
             aws s3 cp ${{ env.S3_COPY_PATH }} docker-compose.yml
             echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin

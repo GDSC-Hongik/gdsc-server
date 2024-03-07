@@ -2,7 +2,7 @@ name: Build and Deploy to Develop
 
 on:
   push:
-    branches: [ "develop" ]
+    branches: ["develop"]
 
 permissions:
   id-token: write
@@ -17,8 +17,8 @@ jobs:
     environment: develop
     strategy:
       matrix:
-        java-version: [ 17 ]
-        distribution: [ 'temurin' ]
+        java-version: [17]
+        distribution: ["temurin"]
     steps:
       # 체크아웃
       - name: Checkout
@@ -103,12 +103,13 @@ jobs:
         uses: Ilshidur/action-discord@master
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-          DISCORD_EMBEDS: '[
-            {
-              "title": "푸드덕푸드덕푸드덕",
-              "description": "구구구구국 구구...: ${{ steps.gradle.outputs.build-scan-url }}"
-            }
-          ]'
+          DISCORD_EMBEDS: |
+            [
+              {
+                "title": "푸드덕푸드덕푸드덕",
+                "description": "구구구구국 구구...: ${{ steps.gradle.outputs.build-scan-url }}"
+              }
+            ]
 
       # EC2로 배포
       - name: Deploy to EC2 Server
@@ -120,7 +121,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
-          envs: IMAGE_FULL_URL  # docker-compose.yml 에서 사용할 환경 변수
+          envs: IMAGE_FULL_URL # docker-compose.yml 에서 사용할 환경 변수
           script: |
             aws s3 cp ${{ env.S3_COPY_PATH }} docker-compose.yml
             echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin

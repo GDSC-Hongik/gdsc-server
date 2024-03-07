@@ -1,21 +1,21 @@
 package com.gdschongik.gdsc.domain.member.application;
 
+import static com.gdschongik.gdsc.domain.member.domain.MemberRole.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
-import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import com.gdschongik.gdsc.domain.member.domain.RequirementStatus;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberGrantRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberPaymentRequest;
-import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryRequest;
+import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryOption;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberUpdateRequest;
-import com.gdschongik.gdsc.domain.member.dto.response.MemberFindAllResponse;
+import com.gdschongik.gdsc.domain.member.dto.response.AdminMemberResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberGrantResponse;
-import com.gdschongik.gdsc.domain.member.dto.response.MemberPaymentFindAllResponse;
-import com.gdschongik.gdsc.domain.member.dto.response.MemberPendingFindAllResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
+import com.gdschongik.gdsc.global.util.ExcelUtil;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -30,10 +30,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class AdminMemberService {
 
     private final MemberRepository memberRepository;
+    private final ExcelUtil excelUtil;
 
-    public Page<MemberFindAllResponse> findAll(MemberQueryRequest queryRequest, Pageable pageable) {
-        Page<Member> members = memberRepository.findAll(queryRequest, pageable);
-        return members.map(MemberFindAllResponse::of);
+    public Page<AdminMemberResponse> findAll(MemberQueryOption queryOption, Pageable pageable) {
+        Page<Member> members = memberRepository.findAllByRole(queryOption, pageable, null);
+        return members.map(AdminMemberResponse::from);
     }
 
     @Transactional
@@ -56,10 +57,9 @@ public class AdminMemberService {
                 request.nickname());
     }
 
-    public Page<MemberPendingFindAllResponse> findAllPendingMembers(
-            MemberQueryRequest queryRequest, Pageable pageable) {
-        Page<Member> members = memberRepository.findAllByRole(queryRequest, MemberRole.GUEST, pageable);
-        return members.map(MemberPendingFindAllResponse::of);
+    public Page<AdminMemberResponse> findAllPendingMembers(MemberQueryOption queryOption, Pageable pageable) {
+        Page<Member> members = memberRepository.findAllByRole(queryOption, pageable, GUEST);
+        return members.map(AdminMemberResponse::from);
     }
 
     @Transactional
@@ -70,20 +70,29 @@ public class AdminMemberService {
         return MemberGrantResponse.from(classifiedMember);
     }
 
-    public Page<MemberFindAllResponse> getGrantableMembers(MemberQueryRequest queryRequest, Pageable pageable) {
-        Page<Member> members = memberRepository.findAllGrantable(queryRequest, pageable);
-        return members.map(MemberFindAllResponse::of);
+    public Page<AdminMemberResponse> getGrantableMembers(MemberQueryOption queryOption, Pageable pageable) {
+        Page<Member> members = memberRepository.findAllGrantable(queryOption, pageable);
+        return members.map(AdminMemberResponse::from);
     }
 
-    public Page<MemberPaymentFindAllResponse> getMembersByPaymentStatus(
-            MemberQueryRequest queryRequest, RequirementStatus paymentStatus, Pageable pageable) {
-        Page<Member> members = memberRepository.findAllByPaymentStatus(queryRequest, paymentStatus, pageable);
-        return members.map(MemberPaymentFindAllResponse::from);
+    public Page<AdminMemberResponse> getMembersByPaymentStatus(
+            MemberQueryOption queryOption, RequirementStatus paymentStatus, Pageable pageable) {
+        Page<Member> members = memberRepository.findAllByPaymentStatus(queryOption, paymentStatus, pageable);
+        return members.map(AdminMemberResponse::from);
     }
 
     @Transactional
     public void updatePaymentStatus(Long memberId, MemberPaymentRequest request) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
         member.updatePaymentStatus(request.status());
+    }
+
+    public Page<AdminMemberResponse> findAllGrantedMembers(MemberQueryOption queryOption, Pageable pageable) {
+        Page<Member> members = memberRepository.findAllByRole(queryOption, pageable, USER);
+        return members.map(AdminMemberResponse::from);
+    }
+
+    public byte[] createExcel() throws IOException {
+        return excelUtil.createMemberExcel();
     }
 }

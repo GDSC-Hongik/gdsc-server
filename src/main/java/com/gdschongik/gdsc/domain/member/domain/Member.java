@@ -18,9 +18,11 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Getter
+@SQLRestriction("status='NORMAL'")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseTimeEntity {
 
@@ -238,6 +240,11 @@ public class Member extends BaseTimeEntity {
         return role.equals(USER) || role.equals(MemberRole.ADMIN);
     }
 
+    /**
+     * 회원 승인 가능 여부를 반환합니다.
+     *
+     * @see com.gdschongik.gdsc.domain.member.dao.MemberQueryMethod#isGrantAvailable()
+     */
     public boolean isGrantAvailable() {
         try {
             validateGrantAvailable();
@@ -245,5 +252,11 @@ public class Member extends BaseTimeEntity {
         } catch (CustomException e) {
             return false;
         }
+    }
+
+    // 기타 로직
+
+    public void updateLastLoginAt() {
+        this.lastLoginAt = LocalDateTime.now();
     }
 }
