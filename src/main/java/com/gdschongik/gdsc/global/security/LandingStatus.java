@@ -19,6 +19,11 @@ public enum LandingStatus {
             return ONBOARDING_NOT_OPENED;
         }
 
+        // 2차 모집기간 종료 이후 가입했다면 대기 페이지로 랜딩
+        if (member.getCreatedAt().isAfter(Constants.SECOND_RECRUITMENT_END_DATE.atStartOfDay())) {
+            return ONBOARDING_NOT_OPENED;
+        }
+
         // 아직 재학생 인증을 하지 않았다면 재학생 인증 페이지로 랜딩
         if (!member.getRequirement().isUnivVerified()) {
             return TO_STUDENT_AUTHENTICATION;
@@ -37,5 +42,6 @@ public enum LandingStatus {
     private static class Constants {
         private static final LocalDate FIRST_RECRUITMENT_END_DATE = LocalDate.of(2024, 3, 2);
         private static final LocalDate SECOND_RECRUITMENT_START_DATE = LocalDate.of(2024, 3, 4);
+        private static final LocalDate SECOND_RECRUITMENT_END_DATE = LocalDate.of(2024, 3, 9);
     }
 }
