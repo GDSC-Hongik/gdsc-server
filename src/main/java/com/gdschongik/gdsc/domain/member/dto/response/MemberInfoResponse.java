@@ -4,7 +4,6 @@ import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import com.gdschongik.gdsc.domain.member.domain.RequirementStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.Optional;
 
 public record MemberInfoResponse(
         Long memberId,
@@ -23,19 +22,15 @@ public record MemberInfoResponse(
         @Schema(description = "가입 상태") RegistrationStatus registrationStatus) {
 
     public static MemberInfoResponse of(Member member) {
-        String department = null;
-        if (member.getName() != null && member.getDepartment() != null) {
-            department =
-                    String.format("%s%s", member.getName(), member.getPhone().substring(7));
-        }
         return new MemberInfoResponse(
                 member.getId(),
                 member.getStudentId(),
                 member.getName(),
-                Optional.ofNullable(member.getPhone())
-                        .map(phone -> String.format(
-                                "%s-%s-%s", phone.substring(0, 3), phone.substring(3, 7), phone.substring(7)))
-                        .orElse(null),
+                String.format(
+                        "%s-%s-%s",
+                        member.getPhone().substring(0, 3),
+                        member.getPhone().substring(3, 7),
+                        member.getPhone().substring(7)),
                 member.getDepartment().getDepartmentName(),
                 member.getEmail(),
                 member.getDiscordUsername(),
@@ -44,7 +39,7 @@ public record MemberInfoResponse(
                 member.getRequirement().getDiscordStatus(),
                 member.getRequirement().getBevyStatus(),
                 member.getRole(),
-                department,
+                String.format("%s%s", member.getName(), member.getPhone().substring(7)),
                 RegistrationStatus.from(member));
     }
 

@@ -44,6 +44,9 @@ public class OnboardingMemberService {
 
     public MemberInfoResponse getMemberInfo() {
         Member currentMember = memberUtil.getCurrentMember();
+        if (currentMember.getStudentId() == null) {
+            throw new CustomException(ErrorCode.MEMBER_NOT_REGISTERED);
+        }
         return MemberInfoResponse.of(currentMember);
     }
 
