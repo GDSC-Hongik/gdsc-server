@@ -1,6 +1,7 @@
 package com.gdschongik.gdsc.global.security;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
+import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -22,6 +23,12 @@ public enum LandingStatus {
 
         // 2차 모집기간 종료일 12시 30분 이후, 신청서 미제출 상태면 마감 페이지로 랜딩
         if (LocalDateTime.now().isAfter(Constants.SECOND_RECRUITMENT_END_DATE.atTime(0, 30)) && !member.isApplied()) {
+            return ONBOARDING_CLOSED;
+        }
+
+        // 2차 모집기간 종료일 1시 이후, Guest를 마감 페이지로 랜딩.
+        if (LocalDateTime.now().isAfter(Constants.SECOND_RECRUITMENT_END_DATE.atTime(1, 0))
+                && member.getRole().equals(MemberRole.GUEST)) {
             return ONBOARDING_CLOSED;
         }
 
