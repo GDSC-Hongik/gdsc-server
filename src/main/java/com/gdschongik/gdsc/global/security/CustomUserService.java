@@ -1,7 +1,5 @@
 package com.gdschongik.gdsc.global.security;
 
-import static com.gdschongik.gdsc.global.common.constant.SecurityConstant.*;
-
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import lombok.RequiredArgsConstructor;
@@ -29,11 +27,20 @@ public class CustomUserService extends DefaultOAuth2UserService {
     }
 
     private Member fetchOrCreate(OAuth2User oAuth2User) {
-        return memberRepository.findNormalByOauthId(oAuth2User.getName()).orElseGet(() -> registerMember(oAuth2User));
+        Member member =
+                memberRepository.findNormalByOauthId(oAuth2User.getName()).orElseGet(() -> registerMember(oAuth2User));
+
+        String githubHandle = oAuth2User.getAttribute("login");
+        if (member.getGithubHandle().equals(githubHandle)) {
+            return member;
+        }
+
+        member.updateGithubHandle(githubHandle);
+        return member;
     }
 
     private Member registerMember(OAuth2User oAuth2User) {
-        Member guest = Member.createGuestMember(oAuth2User.getName());
+        Member guest = Member.createGuestMember(oAuth2User.getName(), oAuth2User.getAttribute("login"));
         return memberRepository.save(guest);
     }
 }

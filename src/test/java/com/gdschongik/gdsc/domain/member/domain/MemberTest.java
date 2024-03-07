@@ -9,7 +9,7 @@ class MemberTest {
     @Test
     void 회원가입시_MemberRole은_GUEST이다() {
         // given
-        Member member = Member.createGuestMember("testOauthId");
+        Member member = Member.createGuestMember("testOauthId", "testGithubHandle");
 
         // when
         MemberRole role = member.getRole();
@@ -21,7 +21,7 @@ class MemberTest {
     @Test
     void 회원가입시_MemberStatus는_NORMAL이다() {
         // given
-        Member member = Member.createGuestMember("testOauthId");
+        Member member = Member.createGuestMember("testOauthId", "testGithubHandle");
 
         // when
         MemberStatus status = member.getStatus();

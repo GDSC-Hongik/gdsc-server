@@ -55,6 +55,9 @@ public class Member extends BaseTimeEntity {
     @Column(nullable = false)
     private String oauthId;
 
+    @Column(nullable = false)
+    private String githubHandle;
+
     private LocalDateTime lastLoginAt;
 
     private String univEmail;
@@ -74,6 +77,7 @@ public class Member extends BaseTimeEntity {
             String discordUsername,
             String nickname,
             String oauthId,
+            String githubHandle,
             LocalDateTime lastLoginAt,
             String univEmail,
             Requirement requirement) {
@@ -87,15 +91,17 @@ public class Member extends BaseTimeEntity {
         this.discordUsername = discordUsername;
         this.nickname = nickname;
         this.oauthId = oauthId;
+        this.githubHandle = githubHandle;
         this.lastLoginAt = lastLoginAt;
         this.univEmail = univEmail;
         this.requirement = requirement;
     }
 
-    public static Member createGuestMember(String oauthId) {
+    public static Member createGuestMember(String oauthId, String githubHandle) {
         Requirement requirement = Requirement.createRequirement();
         return Member.builder()
                 .oauthId(oauthId)
+                .githubHandle(githubHandle)
                 .role(MemberRole.GUEST)
                 .status(MemberStatus.NORMAL)
                 .requirement(requirement)
@@ -265,5 +271,9 @@ public class Member extends BaseTimeEntity {
 
     public void updateLastLoginAt() {
         this.lastLoginAt = LocalDateTime.now();
+    }
+
+    public void updateGithubHandle(String githubHandle) {
+        this.githubHandle = githubHandle;
     }
 }
