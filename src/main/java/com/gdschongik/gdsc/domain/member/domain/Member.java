@@ -254,6 +254,13 @@ public class Member extends BaseTimeEntity {
         }
     }
 
+    /**
+     * 가입 신청서 제출 여부를 반환합니다.
+     */
+    public boolean isApplied() {
+        return studentId != null;
+    }
+
     // 기타 로직
 
     public void updateLastLoginAt() {
