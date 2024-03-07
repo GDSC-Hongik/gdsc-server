@@ -1,5 +1,7 @@
 package com.gdschongik.gdsc.domain.member.application;
 
+import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
+
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberSignupRequest;
@@ -7,7 +9,6 @@ import com.gdschongik.gdsc.domain.member.dto.request.OnboardingMemberUpdateReque
 import com.gdschongik.gdsc.domain.member.dto.response.MemberInfoResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberUnivStatusResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
-import com.gdschongik.gdsc.global.exception.ErrorCode;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -38,12 +39,15 @@ public class OnboardingMemberService {
 
     private void validateDiscordUsernameDuplicate(Member member) {
         if (memberRepository.existsByDiscordUsername(member.getDiscordUsername())) {
-            throw new CustomException(ErrorCode.MEMBER_DISCORD_USERNAME_DUPLICATE);
+            throw new CustomException(MEMBER_DISCORD_USERNAME_DUPLICATE);
         }
     }
 
     public MemberInfoResponse getMemberInfo() {
         Member currentMember = memberUtil.getCurrentMember();
+        if (!currentMember.isApplied()) {
+            throw new CustomException(MEMBER_NOT_APPLIED);
+        }
         return MemberInfoResponse.of(currentMember);
     }
 
