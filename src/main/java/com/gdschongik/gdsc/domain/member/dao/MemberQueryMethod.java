@@ -52,7 +52,7 @@ public class MemberQueryMethod {
     }
 
     protected BooleanExpression inDepartmentList(List<Department> departmentCodes) {
-        return departmentCodes != null ? member.department.in(departmentCodes) : null;
+        return departmentCodes.isEmpty() ? null :  member.department.in(departmentCodes);
     }
 
     protected BooleanExpression isStudentIdNotNull() {
