@@ -4,7 +4,7 @@ import static com.gdschongik.gdsc.global.common.constant.RegexConstant.*;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-public record MemberQueryRequest(
+public record MemberQueryOption(
         @Schema(description = "학번", pattern = STUDENT_ID) String studentId,
         @Schema(description = "이름") String name,
         @Schema(description = "전화번호", pattern = PHONE_WITHOUT_HYPHEN) String phone,
