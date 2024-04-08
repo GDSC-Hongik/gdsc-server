@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 
 @TestConfiguration
 public class TestQuerydslConfig {
+
     @PersistenceContext
     private EntityManager entityManager;
 
