@@ -130,5 +130,5 @@ jobs:
           SLACK_TITLE: Summary
           SLACK_MESSAGE: |
             :rocket: *[Develop] 배포 완료*
-            :package: *이미지*: `${{ steps.metadata.outputs.tags }}`
-            :globe_with_meridians: *빌드 스캔*: ${{ steps.gradle.outputs.build-scan-url }}
+            - *이미지 태그*: `${{ steps.metadata.outputs.tags }}`
+            - *빌드 스캔*: ${{ steps.gradle.outputs.build-scan-url }}
