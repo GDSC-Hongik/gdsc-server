@@ -11,12 +11,13 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     environment: develop
+    env:
+      IMAGE_FULL_URL: ${{ secrets.DOCKERHUB_USERNAME }}/gdsc-server:${{ github.event.inputs.commit_hash }}
     steps:
       - name: Deploy to EC2 Server
         uses: appleboy/ssh-action@master
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          IMAGE_FULL_URL: ${{ secrets.DOCKERHUB_USERNAME }}/gdsc-server:${{ github.event.inputs.commit_hash }}
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
@@ -27,3 +28,13 @@ jobs:
             docker pull ${{ env.IMAGE_FULL_URL }}
             docker compose up -d
             docker image prune -a -f
+
+      # Slack 알림
+      - name: Send Deploy Result to Slack
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_USERNAME: 둘기봇
+          SLACK_ICON: https://github.com/GDSC-Hongik/gdsc-server/assets/91878695/1d3861bd-672d-4ee7-8de4-f06c9a06f514
+          SLACK_TITLE: "Deploy Summary - Develop"
+          SLACK_MESSAGE: Manually deployed with `${{ env.IMAGE_FULL_URL }}`
