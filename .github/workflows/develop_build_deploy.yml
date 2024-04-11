@@ -2,7 +2,8 @@ name: Build and Deploy to Develop
 
 on:
   push:
-    branches: ["develop"]
+    branches:
+      - develop
 
 permissions:
   id-token: write
@@ -98,19 +99,6 @@ jobs:
       - name: Copy docker-compose file to S3
         run: aws s3 cp docker-compose.yml ${{ env.S3_COPY_PATH }}
 
-      # 디스코드 둘기봇으로 gradle build scan 결과 발송
-      - name: Send Gradle Build Scan Result to Discord
-        uses: Ilshidur/action-discord@master
-        env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-          DISCORD_EMBEDS: |
-            [
-              {
-                "title": "푸드덕푸드덕푸드덕",
-                "description": "구구구구국 구구...: ${{ steps.gradle.outputs.build-scan-url }}"
-              }
-            ]
-
       # EC2로 배포
       - name: Deploy to EC2 Server
         uses: appleboy/ssh-action@master
@@ -128,3 +116,15 @@ jobs:
             docker pull ${{ env.IMAGE_FULL_URL }}
             docker compose up -d
             docker image prune -a -f
+
+      # Slack 알림
+      - name: Send Deploy Result to Slack
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_USERNAME: 둘기봇
+          SLACK_ICON: https://github.com/GDSC-Hongik/gdsc-server/assets/91878695/1d3861bd-672d-4ee7-8de4-f06c9a06f514
+          SLACK_TITLE: "Deploy Summary - Develop"
+          SLACK_MESSAGE: |
+            - image tag: `${{ steps.metadata.outputs.tags }}`
+            - build scan report: ${{ steps.gradle.outputs.build-scan-url }}
