@@ -36,5 +36,5 @@ jobs:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_USERNAME: 둘기봇
           SLACK_ICON: https://github.com/GDSC-Hongik/gdsc-server/assets/91878695/1d3861bd-672d-4ee7-8de4-f06c9a06f514
-          SLACK_TITLE: "Deploy Summary - Develop"
+          SLACK_TITLE: "Deploy Summary - Production"
           SLACK_MESSAGE: Manually deployed with `${{ env.IMAGE_FULL_URL }}`
