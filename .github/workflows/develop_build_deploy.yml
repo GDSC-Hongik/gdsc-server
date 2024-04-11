@@ -2,7 +2,11 @@ name: Build and Deploy to Develop
 
 on:
   push:
-    branches: ["develop"]
+    branches:
+      - develop
+  pull_request:
+    branches:
+      - develop
 
 permissions:
   id-token: write
