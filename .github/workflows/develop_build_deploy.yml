@@ -129,3 +129,6 @@ jobs:
           SLACK_ICON: https://github.com/GDSC-Hongik/gdsc-server/assets/91878695/1d3861bd-672d-4ee7-8de4-f06c9a06f514
           SLACK_TITLE: Summary
           SLACK_MESSAGE: |
+            :rocket: *[Develop] 배포 완료*
+            :package: *이미지*: `${{ steps.metadata.outputs.tags }}`
+            :globe_with_meridians: *빌드 스캔*: ${{ steps.gradle.outputs.build-scan-url }}
