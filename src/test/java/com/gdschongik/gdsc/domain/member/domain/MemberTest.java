@@ -2,12 +2,8 @@ package com.gdschongik.gdsc.domain.member.domain;
 
 import static com.gdschongik.gdsc.domain.member.domain.Department.D022;
 import static org.assertj.core.api.Assertions.*;
-
-import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
-import com.gdschongik.gdsc.integration.IntegrationTest;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class MemberTest {
@@ -33,6 +29,32 @@ class MemberTest {
 
         // then
         assertThat(status).isEqualTo(MemberStatus.NORMAL);
+    }
+
+    @Test
+    void 회원가입시_재학생인증_되어있으면_성공() {
+        //given
+        Member member = Member.createGuestMember("testOauthId");
+
+        //when
+        member.completeUnivEmailVerification("test@g.hongik.ac.kr");
+        member.signup("C123456","김홍익","01012345678",D022,"test@g.hongik.ac.kr");
+
+        //then
+        assertThatNoException();
+    }
+
+    @Test
+    void 회원가입시_재학생인증_안되어있으면_실패() {
+        //given
+        Member member = Member.createGuestMember("testOauthId");
+
+        //then
+        assertThatThrownBy(() -> {
+            member.signup("C123456","김홍익","01012345678",D022,"test@g.hongik.ac.kr");
+        }).isInstanceOf(CustomException.class)
+                .hasMessage(ErrorCode.UNIV_NOT_VERIFIED.getMessage());
+
     }
 
     @Test
@@ -88,7 +110,6 @@ class MemberTest {
                 .hasMessage(ErrorCode.BEVY_NOT_VERIFIED.getMessage());
     }
 
-
     @Test
     void grant할때_회비_납부_디스코드인증_Bevy인증_재학생인증하면_성공() {
         //given
@@ -104,4 +125,50 @@ class MemberTest {
         //then
         assertThatNoException();
     }
+
+    @Test
+    void 회원탈퇴시_이미_삭제된_유저면_실패(){
+        //given
+        Member member = Member.createGuestMember("testOauthId");
+
+        //when
+        member.withdraw();
+
+        assertThatThrownBy(() -> {
+            member.grant();
+        }).isInstanceOf(CustomException.class)
+                .hasMessage(ErrorCode.MEMBER_DELETED.getMessage());
+
+
+
+    }
+
+    @Test
+    void 회원탈퇴시_존재하는_유저면_성공(){
+        //given
+        Member member = Member.createGuestMember("testOauthId");
+
+        //when
+        member.withdraw();
+
+        //then
+        assertThatNoException();
+    }
+    @Test
+    void 회원정보_수정시_탈퇴한_유저면_실패() {
+        //given
+        Member member = Member.createGuestMember("testOauthId");
+
+        //when
+        member.updateMemberInfo("C123456","김홍익","01012345678",D022,"test@g.hongik.ac.kr","dis","cord");
+
+        //then
+        assertThatNoException();
+
+    }
+
+
+
+
+
 }
