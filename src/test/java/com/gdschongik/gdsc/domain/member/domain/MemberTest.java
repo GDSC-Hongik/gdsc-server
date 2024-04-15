@@ -154,6 +154,8 @@ class MemberTest {
         //then
         assertThatNoException();
     }
+
+    //TODO updateMemberInfo
     @Test
     void 회원정보_수정시_탈퇴한_유저면_실패() {
         //given
@@ -167,8 +169,19 @@ class MemberTest {
 
     }
 
+    //TODO verifyDiscord - 이 세개 해야하나? 의견 묻기
+    @Test
+    void 디스코드인증시_
+
+    @Test
+    void 디스코드인증시_탈퇴한_유저면_실패(){
+
+    }
 
 
+    //TODO updatePaymentStatus
+
+    //TODO verifyBevy
 
 
 }
