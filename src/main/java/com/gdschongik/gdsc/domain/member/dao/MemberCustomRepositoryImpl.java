@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,12 +23,6 @@ import org.springframework.data.support.PageableExecutionUtils;
 public class MemberCustomRepositoryImpl extends MemberQueryMethod implements MemberCustomRepository {
 
     private final JPAQueryFactory queryFactory;
-
-    @Override
-    public Optional<Member> findNormalByOauthId(String oauthId) {
-        return Optional.ofNullable(
-                queryFactory.selectFrom(member).where(eqOauthId(oauthId)).fetchOne());
-    }
 
     @Override
     public Page<Member> findAllGrantable(MemberQueryOption queryOption, Pageable pageable) {

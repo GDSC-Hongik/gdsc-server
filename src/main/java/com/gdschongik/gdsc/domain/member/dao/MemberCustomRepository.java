@@ -7,13 +7,10 @@ import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryOption;
 import jakarta.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface MemberCustomRepository {
-    Optional<Member> findNormalByOauthId(String oauthId);
-
     Page<Member> findAllGrantable(MemberQueryOption queryOption, Pageable pageable);
 
     Page<Member> findAllByRole(MemberQueryOption queryOption, Pageable pageable, @Nullable MemberRole role);
