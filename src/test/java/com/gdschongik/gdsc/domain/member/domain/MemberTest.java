@@ -7,6 +7,7 @@ import com.gdschongik.gdsc.global.exception.ErrorCode;
 import org.junit.jupiter.api.Test;
 
 class MemberTest {
+    /* 회원가입 */
     @Test
     void 회원가입시_MemberRole은_GUEST이다() {
         // given
@@ -49,7 +50,7 @@ class MemberTest {
         //given
         Member member = Member.createGuestMember("testOauthId");
 
-        //then
+        //when & then
         assertThatThrownBy(() -> {
             member.signup("C123456","김홍익","01012345678",D022,"test@g.hongik.ac.kr");
         }).isInstanceOf(CustomException.class)
@@ -57,20 +58,21 @@ class MemberTest {
 
     }
 
+    /* grant() - 승인 */
     @Test
     void grant할때_회비를_납부하지_않았으면_에러_반환() {
         //given
-        Member guestMember = Member.createGuestMember("testOauthId");
+        Member member = Member.createGuestMember("testOauthId");
 
         //when
-        guestMember.verifyBevy();
-        guestMember.verifyDiscord("testDiscord","testNickname");
-        guestMember.completeUnivEmailVerification("test@g.hongik.ac.kr");
-        guestMember.signup("C123456","김홍익","01012345678",D022,"test@g.hongik.ac.kr");
+        member.verifyBevy();
+        member.verifyDiscord("testDiscord","testNickname");
+        member.completeUnivEmailVerification("test@g.hongik.ac.kr");
+        member.signup("C123456","김홍익","01012345678",D022,"test@g.hongik.ac.kr");
 
         //when & then
         assertThatThrownBy(() -> {
-            guestMember.grant();
+            member.grant();
         }).isInstanceOf(CustomException.class)
                 .hasMessage(ErrorCode.PAYMENT_NOT_VERIFIED.getMessage());
     }
@@ -78,17 +80,17 @@ class MemberTest {
     @Test
     void grant할때_디스코드_인증하지_않았으면_에러_반환() {
         //given
-        Member guestMember = Member.createGuestMember("testOauthId");
+        Member member = Member.createGuestMember("testOauthId");
 
         //when
-        guestMember.verifyBevy();
-        guestMember.updatePaymentStatus(RequirementStatus.VERIFIED);
-        guestMember.completeUnivEmailVerification("test@g.hongik.ac.kr");
-        guestMember.signup("C123456","김홍익","01012345678",D022,"test@g.hongik.ac.kr");
+        member.verifyBevy();
+        member.updatePaymentStatus(RequirementStatus.VERIFIED);
+        member.completeUnivEmailVerification("test@g.hongik.ac.kr");
+        member.signup("C123456","김홍익","01012345678",D022,"test@g.hongik.ac.kr");
 
         //when & then
         assertThatThrownBy(() -> {
-            guestMember.grant();
+            member.grant();
         }).isInstanceOf(CustomException.class)
                 .hasMessage(ErrorCode.DISCORD_NOT_VERIFIED.getMessage());
     }
@@ -96,36 +98,58 @@ class MemberTest {
     @Test
     void grant할때_Bevy_인증하지_않았으면_에러_반환() {
         //given
-        Member guestMember = Member.createGuestMember("testOauthId");
+        Member member = Member.createGuestMember("testOauthId");
 
         //when
-        guestMember.updatePaymentStatus(RequirementStatus.VERIFIED);
-        guestMember.verifyDiscord("testDiscord","testNickname");
-        guestMember.completeUnivEmailVerification("test@g.hongik.ac.kr");
+        member.updatePaymentStatus(RequirementStatus.VERIFIED);
+        member.verifyDiscord("testDiscord","testNickname");
+        member.completeUnivEmailVerification("test@g.hongik.ac.kr");
 
         //when & then
         assertThatThrownBy(() -> {
-            guestMember.grant();
+            member.grant();
         }).isInstanceOf(CustomException.class)
                 .hasMessage(ErrorCode.BEVY_NOT_VERIFIED.getMessage());
     }
 
     @Test
-    void grant할때_회비_납부_디스코드인증_Bevy인증_재학생인증하면_성공() {
+    void grant할때_회비납부_디스코드인증_Bevy인증_재학생인증하면_성공() {
         //given
-        Member guestMember = Member.createGuestMember("testOauthId");
+        Member member = Member.createGuestMember("testOauthId");
 
 
         //when
-        guestMember.verifyBevy();
-        guestMember.updatePaymentStatus(RequirementStatus.VERIFIED);
-        guestMember.verifyDiscord("testDiscord","testNickname");
-        guestMember.completeUnivEmailVerification("test@g.hongik.ac.kr");
+        member.verifyBevy();
+        member.updatePaymentStatus(RequirementStatus.VERIFIED);
+        member.verifyDiscord("testDiscord","testNickname");
+        member.completeUnivEmailVerification("test@g.hongik.ac.kr");
+        member.grant();
 
         //then
         assertThatNoException();
     }
 
+    @Test
+    void grant할때_이미_승인되어있으면_실패() {
+        //given
+        Member member = Member.createGuestMember("testOauthId");
+
+
+        //when
+        member.verifyBevy();
+        member.updatePaymentStatus(RequirementStatus.VERIFIED);
+        member.verifyDiscord("testDiscord","testNickname");
+        member.completeUnivEmailVerification("test@g.hongik.ac.kr");
+        member.grant();
+
+        //when & then
+        assertThatThrownBy(() -> {
+            member.grant();
+        }).isInstanceOf(CustomException.class)
+                .hasMessage(ErrorCode.MEMBER_ALREADY_GRANTED.getMessage());
+    }
+
+    /* 회원탈퇴 */
     @Test
     void 회원탈퇴시_이미_삭제된_유저면_실패(){
         //given
@@ -134,17 +158,15 @@ class MemberTest {
         //when
         member.withdraw();
 
+        //when & then
         assertThatThrownBy(() -> {
             member.grant();
         }).isInstanceOf(CustomException.class)
                 .hasMessage(ErrorCode.MEMBER_DELETED.getMessage());
-
-
-
     }
 
     @Test
-    void 회원탈퇴시_존재하는_유저면_성공(){
+    void 회원탈퇴시_이전에_탈퇴하지_않은_유저면_성공(){
         //given
         Member member = Member.createGuestMember("testOauthId");
 
@@ -155,9 +177,9 @@ class MemberTest {
         assertThatNoException();
     }
 
-    //TODO updateMemberInfo
+    /* 회원수정 */
     @Test
-    void 회원정보_수정시_탈퇴한_유저면_실패() {
+    void 회원수정시_탈퇴하지_않은_유저면_성공() {
         //given
         Member member = Member.createGuestMember("testOauthId");
 
@@ -166,22 +188,72 @@ class MemberTest {
 
         //then
         assertThatNoException();
+    }
+
+    @Test
+    void 회원수정시_탈퇴한_유저면_실패(){
+        //given
+        Member member = Member.createGuestMember("testOauthId");
+
+        //when
+        member.withdraw();
+
+        //when & then
+        assertThatThrownBy(() -> {
+            member.updateMemberInfo("C123456","김홍익","01012345678",D022,"test@g.hongik.ac.kr","dis","cord");
+        }).isInstanceOf(CustomException.class)
+                .hasMessage(ErrorCode.MEMBER_DELETED.getMessage());
 
     }
 
-    //TODO verifyDiscord - 이 세개 해야하나? 의견 묻기
-    @Test
-    void 디스코드인증시_
-
+    /* 디스코드 인증 */
     @Test
     void 디스코드인증시_탈퇴한_유저면_실패(){
+        //given
+        Member member = Member.createGuestMember("testOauthId");
+
+        //when
+        member.withdraw();
+
+        //when & then
+        assertThatThrownBy(() -> {
+            member.verifyDiscord("testDiscord","testNickname");
+        }).isInstanceOf(CustomException.class)
+                .hasMessage(ErrorCode.MEMBER_DELETED.getMessage());
+    }
+
+    /* 회의 납부 */
+    @Test
+    void 회비납부시_탈퇴한_유저면_실패(){
+        //given
+        Member member = Member.createGuestMember("testOauthId");
+
+        //when
+        member.withdraw();
+
+        //when & then
+        assertThatThrownBy(() -> {
+            member.updatePaymentStatus(RequirementStatus.VERIFIED);
+        }).isInstanceOf(CustomException.class)
+                .hasMessage(ErrorCode.MEMBER_DELETED.getMessage());
 
     }
 
+    /* Bevy 인증 */
+    @Test
+    void Bevy인증시_탈퇴한_유저면_실패(){
+        //given
+        Member member = Member.createGuestMember("testOauthId");
 
-    //TODO updatePaymentStatus
+        //when
+        member.withdraw();
 
-    //TODO verifyBevy
+        //when & then
+        assertThatThrownBy(() -> {
+            member.verifyBevy();
+        }).isInstanceOf(CustomException.class)
+                .hasMessage(ErrorCode.MEMBER_DELETED.getMessage());
 
+    }
 
 }
