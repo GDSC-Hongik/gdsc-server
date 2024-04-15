@@ -46,7 +46,7 @@ class MemberRepositoryTest extends RepositoryTest {
         }
 
         @Test
-        void 재학생_인증_미완료시_조회_실패한다() {
+        void 재학생_인증_미완료시_조회되지_않는다() {
             // given
             Member member = getMember();
             member.getRequirement().verifyDiscord();
@@ -61,7 +61,7 @@ class MemberRepositoryTest extends RepositoryTest {
         }
 
         @Test
-        void 디스코드_인증_미완료시_조회_실패한다() {
+        void 디스코드_인증_미완료시_조회되지_않는다() {
             // given
             Member member = getMember();
             member.getRequirement().updateUnivStatus(VERIFIED);
@@ -76,7 +76,7 @@ class MemberRepositoryTest extends RepositoryTest {
         }
 
         @Test
-        void 회비납부_미완료시_조회_실패한다() {
+        void 회비납부_미완료시_조회되지_않는다() {
             // given
             Member member = getMember();
             member.getRequirement().updateUnivStatus(VERIFIED);
@@ -91,7 +91,7 @@ class MemberRepositoryTest extends RepositoryTest {
         }
 
         @Test
-        void Bevy_연동_미완료시_조회_실패한다() {
+        void Bevy_연동_미완료시_조회되지_않는다() {
             // given
             Member member = getMember();
             member.getRequirement().updateUnivStatus(VERIFIED);
