@@ -208,7 +208,7 @@ class MemberTest {
                     "testNickname");
 
             // then
-            assertThat(member.getStudentId()).isEqualTo(GUEST_MEMBER_TEST_OAUTH_ID);
+            assertThat(member.getStudentId()).isEqualTo("C123458");
         }
 
         @Test
