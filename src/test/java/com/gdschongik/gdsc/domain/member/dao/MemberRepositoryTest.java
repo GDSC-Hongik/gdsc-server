@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.*;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryOption;
 import com.gdschongik.gdsc.repository.RepositoryTest;
+import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,6 +101,34 @@ class MemberRepositoryTest extends RepositoryTest {
 
             // when
             Page<Member> members = memberRepository.findAllGrantable(EMPTY_QUERY_OPTION, PageRequest.of(0, 10));
+
+            // then
+            assertThat(members).doesNotContain(member);
+        }
+    }
+
+    @Nested
+    class 멤버_상태에_따른_조회 {
+        @Test
+        void NORMAL이라면_조회_성공한다() {
+            // given
+            Member member = getMember();
+
+            // when
+            List<Member> members = memberRepository.findAll();
+
+            // then
+            assertThat(members).contains(member);
+        }
+
+        @Test
+        void DELETED라면_조회되지_않는다() {
+            // given
+            Member member = getMember();
+            member.withdraw();
+
+            // when
+            List<Member> members = memberRepository.findAll();
 
             // then
             assertThat(members).doesNotContain(member);
