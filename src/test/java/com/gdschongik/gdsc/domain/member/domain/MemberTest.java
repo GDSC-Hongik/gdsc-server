@@ -13,29 +13,39 @@ import org.junit.jupiter.api.Test;
 
 class MemberTest {
     private static final String GUEST_MEMBER_TEST_OAUTH_ID = "testOauthId";
+    private static final String TEST_UNIV_EMAIL = "test@g.hongik.ac.kr";
+    private static final String TEST_DISCORD_USERNAME = "testDiscord";
+    private static final String TEST_NICKNAME = "testNickname";
+    private static final String TEST_NAME = "김홍익";
+    private static final String TEST_STUDENT_ID = "C123456";
+    private static final String TEST_PHONE_NUMBER = "01012345678";
+    private static final String TEST_MODIFIED_STUDENT_ID = "C123458";
 
-    @Test
-    void 회원가입시_MemberRole은_GUEST이다() {
-        // given
-        Member member = Member.createGuestMember("testOauthId");
+    @Nested
+    class 회원가입시 {
+        @Test
+        void MemberRole은_GUEST이다() {
+            // given
+            Member member = Member.createGuestMember(GUEST_MEMBER_TEST_OAUTH_ID);
 
-        // when
-        MemberRole role = member.getRole();
+            // when
+            MemberRole role = member.getRole();
 
-        // then
-        assertThat(role).isEqualTo(MemberRole.GUEST);
-    }
+            // then
+            assertThat(role).isEqualTo(MemberRole.GUEST);
+        }
 
-    @Test
-    void 회원가입시_MemberStatus는_NORMAL이다() {
-        // given
-        Member member = Member.createGuestMember("testOauthId");
+        @Test
+        void MemberStatus는_NORMAL이다() {
+            // given
+            Member member = Member.createGuestMember(GUEST_MEMBER_TEST_OAUTH_ID);
 
-        // when
-        MemberStatus status = member.getStatus();
+            // when
+            MemberStatus status = member.getStatus();
 
-        // then
-        assertThat(status).isEqualTo(MemberStatus.NORMAL);
+            // then
+            assertThat(status).isEqualTo(MemberStatus.NORMAL);
+        }
     }
 
     @Nested
@@ -46,11 +56,11 @@ class MemberTest {
             Member member = Member.createGuestMember(GUEST_MEMBER_TEST_OAUTH_ID);
 
             // when
-            member.completeUnivEmailVerification("test@g.hongik.ac.kr");
-            member.signup("C123456", "김홍익", "01012345678", D022, "test@g.hongik.ac.kr");
+            member.completeUnivEmailVerification(TEST_UNIV_EMAIL);
+            member.signup(TEST_STUDENT_ID, TEST_NAME, TEST_PHONE_NUMBER, D022, TEST_UNIV_EMAIL);
 
             // then
-            assertThat(member.getStudentId()).isEqualTo("C123456");
+            assertThat(member.getStudentId()).isEqualTo(TEST_STUDENT_ID);
         }
 
         @Test
@@ -60,7 +70,7 @@ class MemberTest {
 
             // when & then
             assertThatThrownBy(() -> {
-                        member.signup("C123456", "김홍익", "01012345678", D022, "test@g.hongik.ac.kr");
+                        member.signup(TEST_STUDENT_ID, TEST_NAME, TEST_PHONE_NUMBER, D022, TEST_UNIV_EMAIL);
                     })
                     .isInstanceOf(CustomException.class)
                     .hasMessage(UNIV_NOT_VERIFIED.getMessage());
@@ -74,11 +84,11 @@ class MemberTest {
             // given
             Member member = Member.createGuestMember(GUEST_MEMBER_TEST_OAUTH_ID);
 
-            member.completeUnivEmailVerification("test@g.hongik.ac.kr");
-            member.verifyDiscord("testDiscord", "testNickname");
+            member.completeUnivEmailVerification(TEST_UNIV_EMAIL);
+            member.verifyDiscord(TEST_DISCORD_USERNAME, TEST_NICKNAME);
             member.verifyBevy();
 
-            member.signup("C123456", "김홍익", "01012345678", D022, "test@g.hongik.ac.kr");
+            member.signup(TEST_STUDENT_ID, TEST_NAME, TEST_PHONE_NUMBER, D022, TEST_UNIV_EMAIL);
 
             // when & then
             assertThatThrownBy(() -> {
@@ -93,11 +103,11 @@ class MemberTest {
             // given
             Member member = Member.createGuestMember(GUEST_MEMBER_TEST_OAUTH_ID);
 
-            member.completeUnivEmailVerification("test@g.hongik.ac.kr");
+            member.completeUnivEmailVerification(TEST_UNIV_EMAIL);
             member.updatePaymentStatus(VERIFIED);
             member.verifyBevy();
 
-            member.signup("C123456", "김홍익", "01012345678", D022, "test@g.hongik.ac.kr");
+            member.signup(TEST_STUDENT_ID, TEST_NAME, TEST_PHONE_NUMBER, D022, TEST_UNIV_EMAIL);
 
             // when & then
             assertThatThrownBy(() -> {
@@ -112,9 +122,9 @@ class MemberTest {
             // given
             Member member = Member.createGuestMember(GUEST_MEMBER_TEST_OAUTH_ID);
 
-            member.completeUnivEmailVerification("test@g.hongik.ac.kr");
+            member.completeUnivEmailVerification(TEST_UNIV_EMAIL);
             member.updatePaymentStatus(VERIFIED);
-            member.verifyDiscord("testDiscord", "testNickname");
+            member.verifyDiscord(TEST_DISCORD_USERNAME, TEST_NICKNAME);
 
             // when & then
             assertThatThrownBy(() -> {
@@ -129,9 +139,9 @@ class MemberTest {
             // given
             Member member = Member.createGuestMember(GUEST_MEMBER_TEST_OAUTH_ID);
 
-            member.completeUnivEmailVerification("test@g.hongik.ac.kr");
+            member.completeUnivEmailVerification(TEST_UNIV_EMAIL);
             member.updatePaymentStatus(VERIFIED);
-            member.verifyDiscord("testDiscord", "testNickname");
+            member.verifyDiscord(TEST_DISCORD_USERNAME, TEST_NICKNAME);
             member.verifyBevy();
 
             member.grant();
@@ -145,9 +155,9 @@ class MemberTest {
             // given
             Member member = Member.createGuestMember(GUEST_MEMBER_TEST_OAUTH_ID);
 
-            member.completeUnivEmailVerification("test@g.hongik.ac.kr");
+            member.completeUnivEmailVerification(TEST_UNIV_EMAIL);
             member.updatePaymentStatus(VERIFIED);
-            member.verifyDiscord("testDiscord", "testNickname");
+            member.verifyDiscord(TEST_DISCORD_USERNAME, TEST_NICKNAME);
             member.verifyBevy();
 
             member.grant();
@@ -199,16 +209,16 @@ class MemberTest {
             Member member = Member.createGuestMember(GUEST_MEMBER_TEST_OAUTH_ID);
 
             member.updateMemberInfo(
-                    "C123458",
-                    "김홍익",
-                    "01012345678",
+                    TEST_MODIFIED_STUDENT_ID,
+                    TEST_NAME,
+                    TEST_PHONE_NUMBER,
                     D022,
-                    "test@g.hongik.ac.kr",
-                    "testDiscordUsername",
-                    "testNickname");
+                    TEST_UNIV_EMAIL,
+                    TEST_DISCORD_USERNAME,
+                    TEST_NICKNAME);
 
             // then
-            assertThat(member.getStudentId()).isEqualTo("C123458");
+            assertThat(member.getStudentId()).isEqualTo(TEST_MODIFIED_STUDENT_ID);
         }
 
         @Test
@@ -221,7 +231,13 @@ class MemberTest {
             // when & then
             assertThatThrownBy(() -> {
                         member.updateMemberInfo(
-                                "C123458", "김홍익", "01012345678", D022, "test@g.hongik.ac.kr", "dis", "cord");
+                                TEST_STUDENT_ID,
+                                TEST_NAME,
+                                TEST_PHONE_NUMBER,
+                                D022,
+                                TEST_UNIV_EMAIL,
+                                TEST_DISCORD_USERNAME,
+                                TEST_NICKNAME);
                     })
                     .isInstanceOf(CustomException.class)
                     .hasMessage(MEMBER_DELETED.getMessage());
@@ -237,7 +253,7 @@ class MemberTest {
 
         // when & then
         assertThatThrownBy(() -> {
-                    member.verifyDiscord("testDiscord", "testNickname");
+                    member.verifyDiscord(TEST_DISCORD_USERNAME, TEST_NICKNAME);
                 })
                 .isInstanceOf(CustomException.class)
                 .hasMessage(MEMBER_DELETED.getMessage());
