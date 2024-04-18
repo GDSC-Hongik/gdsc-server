@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 class MemberTest {
-    private static final String GUEST_MEMBER_TEST_OAUTH_ID = "testOauthId";
+    private static final String OAUTH_ID = "testOauthId";
     private static final String UNIV_EMAIL = "test@g.hongik.ac.kr";
     private static final String DISCORD_USERNAME = "testDiscord";
     private static final String NICKNAME = "testNickname";
@@ -26,7 +26,7 @@ class MemberTest {
         @Test
         void MemberRole은_GUEST이다() {
             // given
-            Member member = Member.createGuestMember(GUEST_MEMBER_TEST_OAUTH_ID);
+            Member member = Member.createGuestMember(OAUTH_ID);
 
             // when
             MemberRole role = member.getRole();
@@ -38,7 +38,7 @@ class MemberTest {
         @Test
         void MemberStatus는_NORMAL이다() {
             // given
-            Member member = Member.createGuestMember(GUEST_MEMBER_TEST_OAUTH_ID);
+            Member member = Member.createGuestMember(OAUTH_ID);
 
             // when
             MemberStatus status = member.getStatus();
@@ -53,7 +53,7 @@ class MemberTest {
         @Test
         void 재학생인증_되어있으면_성공() {
             // given
-            Member member = Member.createGuestMember(GUEST_MEMBER_TEST_OAUTH_ID);
+            Member member = Member.createGuestMember(OAUTH_ID);
 
             // when
             member.completeUnivEmailVerification(UNIV_EMAIL);
@@ -66,7 +66,7 @@ class MemberTest {
         @Test
         void 재학생인증_안되어있으면_실패() {
             // given
-            Member member = Member.createGuestMember(GUEST_MEMBER_TEST_OAUTH_ID);
+            Member member = Member.createGuestMember(OAUTH_ID);
 
             // when & then
             assertThatThrownBy(() -> {
@@ -82,7 +82,7 @@ class MemberTest {
         @Test
         void 회비를_납부하지_않았으면_실패() {
             // given
-            Member member = Member.createGuestMember(GUEST_MEMBER_TEST_OAUTH_ID);
+            Member member = Member.createGuestMember(OAUTH_ID);
 
             member.completeUnivEmailVerification(UNIV_EMAIL);
             member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
@@ -101,7 +101,7 @@ class MemberTest {
         @Test
         void 디스코드_인증하지_않았으면_실패() {
             // given
-            Member member = Member.createGuestMember(GUEST_MEMBER_TEST_OAUTH_ID);
+            Member member = Member.createGuestMember(OAUTH_ID);
 
             member.completeUnivEmailVerification(UNIV_EMAIL);
             member.updatePaymentStatus(VERIFIED);
@@ -120,7 +120,7 @@ class MemberTest {
         @Test
         void Bevy_연동하지_않았으면_실패() {
             // given
-            Member member = Member.createGuestMember(GUEST_MEMBER_TEST_OAUTH_ID);
+            Member member = Member.createGuestMember(OAUTH_ID);
 
             member.completeUnivEmailVerification(UNIV_EMAIL);
             member.updatePaymentStatus(VERIFIED);
@@ -137,7 +137,7 @@ class MemberTest {
         @Test
         void 회비납부_디스코드인증_Bevy인증_재학생인증하면_성공() {
             // given
-            Member member = Member.createGuestMember(GUEST_MEMBER_TEST_OAUTH_ID);
+            Member member = Member.createGuestMember(OAUTH_ID);
 
             member.completeUnivEmailVerification(UNIV_EMAIL);
             member.updatePaymentStatus(VERIFIED);
@@ -153,7 +153,7 @@ class MemberTest {
         @Test
         void 이미_승인되어있으면_실패() {
             // given
-            Member member = Member.createGuestMember(GUEST_MEMBER_TEST_OAUTH_ID);
+            Member member = Member.createGuestMember(OAUTH_ID);
 
             member.completeUnivEmailVerification(UNIV_EMAIL);
             member.updatePaymentStatus(VERIFIED);
@@ -176,7 +176,7 @@ class MemberTest {
         @Test
         void 이미_탈퇴한_유저면_실패() {
             // given
-            Member member = Member.createGuestMember(GUEST_MEMBER_TEST_OAUTH_ID);
+            Member member = Member.createGuestMember(OAUTH_ID);
 
             member.withdraw();
 
@@ -191,7 +191,7 @@ class MemberTest {
         @Test
         void 회원탈퇴시_이전에_탈퇴하지_않은_유저면_성공() {
             // given
-            Member member = Member.createGuestMember(GUEST_MEMBER_TEST_OAUTH_ID);
+            Member member = Member.createGuestMember(OAUTH_ID);
 
             // when
             member.withdraw();
@@ -206,7 +206,7 @@ class MemberTest {
         @Test
         void 탈퇴하지_않은_유저면_성공() {
             // given
-            Member member = Member.createGuestMember(GUEST_MEMBER_TEST_OAUTH_ID);
+            Member member = Member.createGuestMember(OAUTH_ID);
 
             member.updateMemberInfo(
                     MODIFIED_STUDENT_ID, NAME, PHONE_NUMBER, D022, UNIV_EMAIL, DISCORD_USERNAME, NICKNAME);
@@ -218,7 +218,7 @@ class MemberTest {
         @Test
         void 탈퇴한_유저면_실패() {
             // given
-            Member member = Member.createGuestMember(GUEST_MEMBER_TEST_OAUTH_ID);
+            Member member = Member.createGuestMember(OAUTH_ID);
 
             member.withdraw();
 
@@ -235,7 +235,7 @@ class MemberTest {
     @Test
     void 디스코드인증시_탈퇴한_유저면_실패() {
         // given
-        Member member = Member.createGuestMember(GUEST_MEMBER_TEST_OAUTH_ID);
+        Member member = Member.createGuestMember(OAUTH_ID);
 
         member.withdraw();
 
@@ -250,7 +250,7 @@ class MemberTest {
     @Test
     void 회비납부시_탈퇴한_유저면_실패() {
         // given
-        Member member = Member.createGuestMember(GUEST_MEMBER_TEST_OAUTH_ID);
+        Member member = Member.createGuestMember(OAUTH_ID);
 
         member.withdraw();
 
@@ -265,7 +265,7 @@ class MemberTest {
     @Test
     void Bevy인증시_탈퇴한_유저면_실패() {
         // given
-        Member member = Member.createGuestMember(GUEST_MEMBER_TEST_OAUTH_ID);
+        Member member = Member.createGuestMember(OAUTH_ID);
 
         member.withdraw();
 
