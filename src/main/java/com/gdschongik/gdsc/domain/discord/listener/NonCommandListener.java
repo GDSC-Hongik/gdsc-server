@@ -1,6 +1,6 @@
 package com.gdschongik.gdsc.domain.discord.listener;
 
-import com.gdschongik.gdsc.domain.discord.handler.NonCommandHandler;
+import com.gdschongik.gdsc.domain.discord.application.handler.NonCommandHandler;
 import com.gdschongik.gdsc.global.property.DiscordProperty;
 import lombok.RequiredArgsConstructor;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;

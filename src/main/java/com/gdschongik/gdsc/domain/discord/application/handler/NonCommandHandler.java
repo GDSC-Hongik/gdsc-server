@@ -1,4 +1,4 @@
-package com.gdschongik.gdsc.domain.discord.handler;
+package com.gdschongik.gdsc.domain.discord.application.handler;
 
 import static com.gdschongik.gdsc.global.common.constant.DiscordConstant.*;
 
