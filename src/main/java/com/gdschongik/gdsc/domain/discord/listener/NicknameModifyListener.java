@@ -1,7 +1,7 @@
 package com.gdschongik.gdsc.domain.discord.listener;
 
 import com.gdschongik.gdsc.domain.discord.handler.NicknameModifyHandler;
-import com.gdschongik.gdsc.global.discord.Listener;
+
 import jakarta.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
 import net.dv8tion.jda.api.events.guild.member.update.GuildMemberUpdateNicknameEvent;
