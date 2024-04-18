@@ -1,4 +1,4 @@
-package com.gdschongik.gdsc.domain.discord.listener;
+package com.gdschongik.gdsc.domain.discord.application.listener;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -1,4 +1,4 @@
-package com.gdschongik.gdsc.domain.discord.listener;
+package com.gdschongik.gdsc.domain.discord.application.listener;
 
 import com.gdschongik.gdsc.domain.discord.application.handler.NonCommandHandler;
 import com.gdschongik.gdsc.global.property.DiscordProperty;

@@ -2,7 +2,7 @@ package com.gdschongik.gdsc.global.config;
 
 import static com.gdschongik.gdsc.global.common.constant.DiscordConstant.*;
 
-import com.gdschongik.gdsc.domain.discord.listener.ListenerBeanPostProcessor;
+import com.gdschongik.gdsc.domain.discord.application.listener.ListenerBeanPostProcessor;
 import com.gdschongik.gdsc.global.property.DiscordProperty;
 import com.gdschongik.gdsc.global.util.DiscordUtil;
 import java.util.Objects;
