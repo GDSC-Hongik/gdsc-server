@@ -1,6 +1,5 @@
-package com.gdschongik.gdsc.global.discord;
+package com.gdschongik.gdsc.domain.discord.listener;
 
-import com.gdschongik.gdsc.domain.discord.listener.Listener;
 import lombok.RequiredArgsConstructor;
 import net.dv8tion.jda.api.JDA;
 import org.springframework.beans.factory.config.BeanPostProcessor;
