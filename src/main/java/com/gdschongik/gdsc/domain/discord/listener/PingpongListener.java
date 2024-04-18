@@ -1,4 +1,4 @@
-package com.gdschongik.gdsc.global.discord.listener;
+package com.gdschongik.gdsc.domain.discord.listener;
 
 import static com.gdschongik.gdsc.global.common.constant.EnvironmentConstant.*;
 
