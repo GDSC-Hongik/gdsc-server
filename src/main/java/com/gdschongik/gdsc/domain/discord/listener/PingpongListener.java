@@ -3,7 +3,6 @@ package com.gdschongik.gdsc.domain.discord.listener;
 import static com.gdschongik.gdsc.global.common.constant.EnvironmentConstant.*;
 
 import com.gdschongik.gdsc.global.annotation.ConditionalOnProfile;
-
 import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;

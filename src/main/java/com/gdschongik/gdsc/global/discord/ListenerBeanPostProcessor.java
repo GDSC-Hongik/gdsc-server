@@ -1,10 +1,9 @@
 package com.gdschongik.gdsc.global.discord;
 
+import com.gdschongik.gdsc.domain.discord.listener.Listener;
 import lombok.RequiredArgsConstructor;
 import net.dv8tion.jda.api.JDA;
 import org.springframework.beans.factory.config.BeanPostProcessor;
-
-import com.gdschongik.gdsc.domain.discord.listener.Listener;
 
 @RequiredArgsConstructor
 public class ListenerBeanPostProcessor implements BeanPostProcessor {
