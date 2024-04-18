@@ -1,8 +1,9 @@
-package com.gdschongik.gdsc.global.discord.exception;
+package com.gdschongik.gdsc.domain.discord.exception;
 
-import com.gdschongik.gdsc.global.discord.exception.handler.CommandExceptionHandler;
-import com.gdschongik.gdsc.global.discord.exception.handler.DefaultExceptionHandler;
-import com.gdschongik.gdsc.global.discord.exception.handler.DiscordExceptionHandler;
+import com.gdschongik.gdsc.domain.discord.exception.handler.CommandExceptionHandler;
+import com.gdschongik.gdsc.domain.discord.exception.handler.DiscordExceptionHandler;
+import com.gdschongik.gdsc.domain.discord.exception.handler.DefaultExceptionHandler;
+
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

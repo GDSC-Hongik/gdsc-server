@@ -1,4 +1,4 @@
-package com.gdschongik.gdsc.global.discord.exception;
+package com.gdschongik.gdsc.domain.discord.exception;
 
 import lombok.RequiredArgsConstructor;
 import net.dv8tion.jda.api.events.GenericEvent;
