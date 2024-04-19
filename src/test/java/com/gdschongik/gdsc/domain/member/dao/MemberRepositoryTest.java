@@ -28,7 +28,7 @@ class MemberRepositoryTest extends RepositoryTest {
     }
 
     @Nested
-    class 승인_가능_멤버_조회 {
+    class 승인_가능_멤버를_조회할때 {
 
         @Test
         void 가입조건_모두_충족했다면_조회_성공한다() {
@@ -108,7 +108,7 @@ class MemberRepositoryTest extends RepositoryTest {
     }
 
     @Nested
-    class 멤버_상태에_따른_조회 {
+    class 멤버_상태로_조회할때 {
         @Test
         void NORMAL이라면_조회_성공한다() {
             // given
