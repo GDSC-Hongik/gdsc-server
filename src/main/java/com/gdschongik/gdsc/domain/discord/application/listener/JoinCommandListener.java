@@ -1,9 +1,8 @@
-package com.gdschongik.gdsc.global.discord.listener;
+package com.gdschongik.gdsc.domain.discord.application.listener;
 
 import static com.gdschongik.gdsc.global.common.constant.DiscordConstant.*;
 
-import com.gdschongik.gdsc.domain.discord.handler.JoinCommandHandler;
-import com.gdschongik.gdsc.global.discord.Listener;
+import com.gdschongik.gdsc.domain.discord.application.handler.JoinCommandHandler;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;

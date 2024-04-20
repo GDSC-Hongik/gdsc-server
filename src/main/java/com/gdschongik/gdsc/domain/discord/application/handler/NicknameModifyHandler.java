@@ -1,4 +1,4 @@
-package com.gdschongik.gdsc.domain.discord.handler;
+package com.gdschongik.gdsc.domain.discord.application.handler;
 
 import com.gdschongik.gdsc.domain.discord.application.CommonDiscordService;
 import com.gdschongik.gdsc.global.exception.CustomException;

@@ -1,4 +1,4 @@
-package com.gdschongik.gdsc.global.discord.exception;
+package com.gdschongik.gdsc.domain.discord.exception;
 
 import com.gdschongik.gdsc.global.exception.CustomException;
 

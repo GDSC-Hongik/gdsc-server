@@ -1,4 +1,4 @@
-package com.gdschongik.gdsc.global.discord.exception.handler;
+package com.gdschongik.gdsc.domain.discord.exception.handler;
 
 public class DefaultExceptionHandler implements DiscordExceptionHandler {
 

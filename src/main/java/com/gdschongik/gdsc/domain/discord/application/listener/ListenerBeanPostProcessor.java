@@ -1,4 +1,4 @@
-package com.gdschongik.gdsc.global.discord;
+package com.gdschongik.gdsc.domain.discord.application.listener;
 
 import lombok.RequiredArgsConstructor;
 import net.dv8tion.jda.api.JDA;

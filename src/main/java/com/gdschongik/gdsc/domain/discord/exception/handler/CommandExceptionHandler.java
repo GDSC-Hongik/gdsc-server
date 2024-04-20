@@ -1,6 +1,6 @@
-package com.gdschongik.gdsc.global.discord.exception.handler;
+package com.gdschongik.gdsc.domain.discord.exception.handler;
 
-import com.gdschongik.gdsc.global.discord.exception.DiscordExceptionMessageGenerator;
+import com.gdschongik.gdsc.domain.discord.exception.DiscordExceptionMessageGenerator;
 import net.dv8tion.jda.api.events.interaction.command.GenericCommandInteractionEvent;
 
 public class CommandExceptionHandler implements DiscordExceptionHandler {

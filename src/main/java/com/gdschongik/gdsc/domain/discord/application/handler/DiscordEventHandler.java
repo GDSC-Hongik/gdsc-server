@@ -1,4 +1,4 @@
-package com.gdschongik.gdsc.domain.discord.handler;
+package com.gdschongik.gdsc.domain.discord.application.handler;
 
 import net.dv8tion.jda.api.events.GenericEvent;
 
