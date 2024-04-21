@@ -42,7 +42,6 @@ jobs:
 
       # Gradle 빌드
       - name: Setup Gradle
-        id: gradle
         uses: gradle/actions/setup-gradle@v3
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop' }} # feature 브랜치는 캐시를 읽기 전용으로 설정
@@ -53,6 +52,7 @@ jobs:
           build-scan-terms-of-use-agree: "yes"
 
       - name: Build with Gradle
+        id: gradle
         run: ./gradlew build --configuration-cache
 
       # Dockerhub 로그인
