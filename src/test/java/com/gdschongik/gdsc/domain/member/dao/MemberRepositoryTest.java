@@ -1,5 +1,7 @@
 package com.gdschongik.gdsc.domain.member.dao;
 
+import static com.gdschongik.gdsc.domain.member.domain.Department.*;
+import static com.gdschongik.gdsc.domain.member.domain.MemberRole.*;
 import static com.gdschongik.gdsc.domain.member.domain.RequirementStatus.*;
 import static org.assertj.core.api.Assertions.*;
 
@@ -129,6 +131,80 @@ class MemberRepositoryTest extends RepositoryTest {
 
             // when
             List<Member> members = memberRepository.findAll();
+
+            // then
+            assertThat(members).doesNotContain(member);
+        }
+    }
+
+    @Nested
+    class 역할로_조회할때 {
+        private static final String UNIV_EMAIL = "test@g.hongik.ac.kr";
+        private static final String DISCORD_USERNAME = "testDiscord";
+        private static final String NICKNAME = "testNickname";
+        private static final String NAME = "김홍익";
+        private static final String STUDENT_ID = "C123456";
+        private static final String PHONE_NUMBER = "01012345678";
+
+        @Test
+        void 승인전이라면_GUEST로_조회된다() {
+            // given
+            Member member = getMember();
+            member.completeUnivEmailVerification(UNIV_EMAIL);
+            member.signup(STUDENT_ID, NAME, PHONE_NUMBER, D022, UNIV_EMAIL);
+
+            // when
+            Page<Member> members = memberRepository.findAllByRole(EMPTY_QUERY_OPTION, PageRequest.of(0, 10), GUEST);
+
+            // then
+            assertThat(members).contains(member);
+        }
+
+        @Test
+        void 승인전이라면_USER로_조회되지_않는다() {
+            // given
+            Member member = getMember();
+            member.completeUnivEmailVerification(UNIV_EMAIL);
+            member.signup(STUDENT_ID, NAME, PHONE_NUMBER, D022, UNIV_EMAIL);
+
+            // when
+            Page<Member> members = memberRepository.findAllByRole(EMPTY_QUERY_OPTION, PageRequest.of(0, 10), USER);
+
+            // then
+            assertThat(members).doesNotContain(member);
+        }
+
+        @Test
+        void 승인후라면_USER로_조회된다() {
+            // given
+            Member member = getMember();
+            member.completeUnivEmailVerification(UNIV_EMAIL);
+            member.signup(STUDENT_ID, NAME, PHONE_NUMBER, D022, UNIV_EMAIL);
+            member.updatePaymentStatus(VERIFIED);
+            member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
+            member.verifyBevy();
+            member.grant();
+
+            // when
+            Page<Member> members = memberRepository.findAllByRole(EMPTY_QUERY_OPTION, PageRequest.of(0, 10), USER);
+
+            // then
+            assertThat(members).contains(member);
+        }
+
+        @Test
+        void 승인후라면_GUEST로_조회되지_않는다() {
+            // given
+            Member member = getMember();
+            member.completeUnivEmailVerification(UNIV_EMAIL);
+            member.signup(STUDENT_ID, NAME, PHONE_NUMBER, D022, UNIV_EMAIL);
+            member.updatePaymentStatus(VERIFIED);
+            member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
+            member.verifyBevy();
+            member.grant();
+
+            // when
+            Page<Member> members = memberRepository.findAllByRole(EMPTY_QUERY_OPTION, PageRequest.of(0, 10), GUEST);
 
             // then
             assertThat(members).doesNotContain(member);
