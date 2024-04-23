@@ -54,13 +54,13 @@ public class DiscordConfig {
 
     @Bean
     @ConditionalOnBean(JDA.class)
-    public DiscordUtil discordUtil(JDA jda) {
-        return new DiscordUtil(jda);
+    public DiscordUtil discordUtil(JDA jda, DiscordProperty discordProperty) {
+        return new DiscordUtil(jda, discordProperty);
     }
 
     @Bean
     @Order(1)
     public DiscordUtil fallbackDiscordUtil() {
-        return new DiscordUtil(null);
+        return new DiscordUtil(null, null);
     }
 }
