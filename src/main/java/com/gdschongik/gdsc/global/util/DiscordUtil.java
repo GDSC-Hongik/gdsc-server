@@ -6,6 +6,7 @@ import com.gdschongik.gdsc.global.property.DiscordProperty;
 import lombok.RequiredArgsConstructor;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 
@@ -27,5 +28,11 @@ public class DiscordUtil {
 
     public TextChannel getAdminChannel() {
         return jda.getTextChannelById(discordProperty.getAdminChannelId());
+    }
+
+    public Member getMemberByUsername(String username) {
+        return getCurrentGuild().getMembersByName(username, true).stream()
+                .findFirst()
+                .orElseThrow(() -> new CustomException(ErrorCode.DISCORD_MEMBER_NOT_FOUND));
     }
 }
