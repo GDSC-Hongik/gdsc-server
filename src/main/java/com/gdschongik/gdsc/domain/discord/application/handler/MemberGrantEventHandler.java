@@ -3,8 +3,6 @@ package com.gdschongik.gdsc.domain.discord.application.handler;
 import static com.gdschongik.gdsc.global.common.constant.DiscordConstant.*;
 
 import com.gdschongik.gdsc.domain.member.domain.MemberGrantEvent;
-import com.gdschongik.gdsc.global.exception.CustomException;
-import com.gdschongik.gdsc.global.exception.ErrorCode;
 import com.gdschongik.gdsc.global.util.DiscordUtil;
 import lombok.RequiredArgsConstructor;
 import net.dv8tion.jda.api.entities.Guild;
