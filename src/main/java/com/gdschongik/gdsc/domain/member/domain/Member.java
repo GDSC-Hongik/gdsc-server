@@ -176,6 +176,7 @@ public class Member extends BaseTimeEntity {
         validateGrantAvailable();
 
         this.role = USER;
+        registerEvent(new MemberGrantEvent(discordUsername, nickname));
     }
 
     /**

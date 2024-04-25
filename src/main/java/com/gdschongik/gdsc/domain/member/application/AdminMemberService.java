@@ -67,6 +67,7 @@ public class AdminMemberService {
         Map<Boolean, List<Member>> classifiedMember = memberRepository.groupByVerified(request.memberIdList());
         List<Member> verifiedMembers = classifiedMember.get(true);
         verifiedMembers.forEach(Member::grant);
+        memberRepository.saveAll(verifiedMembers); // explicitly save to publish event
         return MemberGrantResponse.from(classifiedMember);
     }
 

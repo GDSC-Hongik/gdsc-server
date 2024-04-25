@@ -56,6 +56,7 @@ public enum ErrorCode {
     DISCORD_ROLE_NOT_FOUND(HttpStatus.NOT_FOUND, "디스코드 역할을 찾을 수 없습니다."),
     DISCORD_NOT_SIGNUP(HttpStatus.INTERNAL_SERVER_ERROR, "아직 가입신청서를 작성하지 않은 회원입니다."),
     DISCORD_NICKNAME_NOTNULL(HttpStatus.INTERNAL_SERVER_ERROR, "닉네임은 빈 값이 될 수 없습니다."),
+    DISCORD_MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "디스코드 멤버를 찾을 수 없습니다."),
     ;
 
     private final HttpStatus status;

@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
+@Deprecated
 @Listener
 @RequiredArgsConstructor
 public class JoinCommandListener extends ListenerAdapter {
