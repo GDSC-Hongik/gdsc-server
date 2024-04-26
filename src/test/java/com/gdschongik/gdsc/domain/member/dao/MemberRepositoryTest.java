@@ -29,6 +29,11 @@ class MemberRepositoryTest extends RepositoryTest {
         return memberRepository.save(member);
     }
 
+    private void flushAndClear() {
+        testEntityManager.flush();
+        testEntityManager.clear();
+    }
+
     @Nested
     class 승인_가능_멤버를_조회할때 {
 
@@ -154,10 +159,12 @@ class MemberRepositoryTest extends RepositoryTest {
             member.signup(STUDENT_ID, NAME, PHONE_NUMBER, D022, UNIV_EMAIL);
 
             // when
+            flushAndClear();
             Page<Member> members = memberRepository.findAllByRole(EMPTY_QUERY_OPTION, PageRequest.of(0, 10), GUEST);
 
             // then
-            assertThat(members).contains(member);
+            Member guest = memberRepository.findById(1L).get();
+            assertThat(members).contains(guest);
         }
 
         @Test
@@ -168,10 +175,12 @@ class MemberRepositoryTest extends RepositoryTest {
             member.signup(STUDENT_ID, NAME, PHONE_NUMBER, D022, UNIV_EMAIL);
 
             // when
+            flushAndClear();
             Page<Member> members = memberRepository.findAllByRole(EMPTY_QUERY_OPTION, PageRequest.of(0, 10), USER);
 
             // then
-            assertThat(members).doesNotContain(member);
+            Member guest = memberRepository.findById(1L).get();
+            assertThat(members).doesNotContain(guest);
         }
 
         @Test
@@ -186,10 +195,12 @@ class MemberRepositoryTest extends RepositoryTest {
             member.grant();
 
             // when
+            flushAndClear();
             Page<Member> members = memberRepository.findAllByRole(EMPTY_QUERY_OPTION, PageRequest.of(0, 10), USER);
 
             // then
-            assertThat(members).contains(member);
+            Member user = memberRepository.findById(1L).get();
+            assertThat(members).contains(user);
         }
 
         @Test
@@ -204,10 +215,12 @@ class MemberRepositoryTest extends RepositoryTest {
             member.grant();
 
             // when
+            flushAndClear();
             Page<Member> members = memberRepository.findAllByRole(EMPTY_QUERY_OPTION, PageRequest.of(0, 10), GUEST);
 
             // then
-            assertThat(members).doesNotContain(member);
+            Member user = memberRepository.findById(1L).get();
+            assertThat(members).doesNotContain(user);
         }
     }
 }
