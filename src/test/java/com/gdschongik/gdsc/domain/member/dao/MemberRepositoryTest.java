@@ -29,7 +29,7 @@ class MemberRepositoryTest extends RepositoryTest {
         return memberRepository.save(member);
     }
 
-    private void flushAndClear() {
+    private void flushAndClearBeforeExecute() {
         testEntityManager.flush();
         testEntityManager.clear();
     }
@@ -158,8 +158,9 @@ class MemberRepositoryTest extends RepositoryTest {
             member.completeUnivEmailVerification(UNIV_EMAIL);
             member.signup(STUDENT_ID, NAME, PHONE_NUMBER, D022, UNIV_EMAIL);
 
+            flushAndClearBeforeExecute();
+
             // when
-            flushAndClear();
             Page<Member> members = memberRepository.findAllByRole(EMPTY_QUERY_OPTION, PageRequest.of(0, 10), GUEST);
 
             // then
@@ -174,8 +175,9 @@ class MemberRepositoryTest extends RepositoryTest {
             member.completeUnivEmailVerification(UNIV_EMAIL);
             member.signup(STUDENT_ID, NAME, PHONE_NUMBER, D022, UNIV_EMAIL);
 
+            flushAndClearBeforeExecute();
+
             // when
-            flushAndClear();
             Page<Member> members = memberRepository.findAllByRole(EMPTY_QUERY_OPTION, PageRequest.of(0, 10), USER);
 
             // then
@@ -194,8 +196,9 @@ class MemberRepositoryTest extends RepositoryTest {
             member.verifyBevy();
             member.grant();
 
+            flushAndClearBeforeExecute();
+
             // when
-            flushAndClear();
             Page<Member> members = memberRepository.findAllByRole(EMPTY_QUERY_OPTION, PageRequest.of(0, 10), USER);
 
             // then
@@ -214,8 +217,9 @@ class MemberRepositoryTest extends RepositoryTest {
             member.verifyBevy();
             member.grant();
 
+            flushAndClearBeforeExecute();
+
             // when
-            flushAndClear();
             Page<Member> members = memberRepository.findAllByRole(EMPTY_QUERY_OPTION, PageRequest.of(0, 10), GUEST);
 
             // then
