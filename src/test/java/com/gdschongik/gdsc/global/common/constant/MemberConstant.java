@@ -3,6 +3,7 @@ package com.gdschongik.gdsc.global.common.constant;
 public class MemberConstant {
     public static final String OAUTH_ID = "testOauthId";
     public static final String UNIV_EMAIL = "test@g.hongik.ac.kr";
+    public static final String EMAIL = "test@email.com";
     public static final String DISCORD_USERNAME = "testDiscord";
     public static final String NICKNAME = "testNickname";
     public static final String NAME = "김홍익";
