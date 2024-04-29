@@ -3,6 +3,7 @@ package com.gdschongik.gdsc.domain.member.dao;
 import static com.gdschongik.gdsc.domain.member.domain.Department.*;
 import static com.gdschongik.gdsc.domain.member.domain.MemberRole.*;
 import static com.gdschongik.gdsc.domain.member.domain.RequirementStatus.*;
+import static com.gdschongik.gdsc.global.common.constant.MemberConstant.*;
 import static org.assertj.core.api.Assertions.*;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
@@ -17,7 +18,6 @@ import org.springframework.data.domain.PageRequest;
 
 class MemberRepositoryTest extends RepositoryTest {
 
-    private static final String TEST_OAUTH_ID = "testOauthId";
     private static final MemberQueryOption EMPTY_QUERY_OPTION =
             new MemberQueryOption(null, null, null, null, null, null, null);
 
@@ -25,7 +25,7 @@ class MemberRepositoryTest extends RepositoryTest {
     private MemberRepository memberRepository;
 
     private Member getMember() {
-        Member member = Member.createGuestMember(TEST_OAUTH_ID);
+        Member member = Member.createGuestMember(OAUTH_ID);
         return memberRepository.save(member);
     }
 
@@ -144,12 +144,6 @@ class MemberRepositoryTest extends RepositoryTest {
 
     @Nested
     class 역할로_조회할때 {
-        private static final String UNIV_EMAIL = "test@g.hongik.ac.kr";
-        private static final String DISCORD_USERNAME = "testDiscord";
-        private static final String NICKNAME = "testNickname";
-        private static final String NAME = "김홍익";
-        private static final String STUDENT_ID = "C123456";
-        private static final String PHONE_NUMBER = "01012345678";
 
         @Test
         void 승인전이라면_GUEST로_조회된다() {

@@ -1,5 +1,6 @@
 package com.gdschongik.gdsc.domain.member.application;
 
+import static com.gdschongik.gdsc.global.common.constant.MemberConstant.*;
 import static org.assertj.core.api.Assertions.*;
 
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
@@ -23,7 +24,7 @@ class AdminMemberServiceTest extends IntegrationTest {
     @Test
     void status가_DELETED라면_예외_발생() {
         // given
-        Member member = Member.createGuestMember("oAuthId");
+        Member member = Member.createGuestMember(OAUTH_ID);
         member.withdraw();
         memberRepository.save(member);
 

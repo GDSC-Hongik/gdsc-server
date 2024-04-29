@@ -4,6 +4,7 @@ import static com.gdschongik.gdsc.domain.member.domain.Department.*;
 import static com.gdschongik.gdsc.domain.member.domain.MemberRole.*;
 import static com.gdschongik.gdsc.domain.member.domain.MemberStatus.*;
 import static com.gdschongik.gdsc.domain.member.domain.RequirementStatus.*;
+import static com.gdschongik.gdsc.global.common.constant.MemberConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 
@@ -12,14 +13,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 class MemberTest {
-    private static final String OAUTH_ID = "testOauthId";
-    private static final String UNIV_EMAIL = "test@g.hongik.ac.kr";
-    private static final String DISCORD_USERNAME = "testDiscord";
-    private static final String NICKNAME = "testNickname";
-    private static final String NAME = "김홍익";
-    private static final String STUDENT_ID = "C123456";
-    private static final String PHONE_NUMBER = "01012345678";
-    private static final String MODIFIED_STUDENT_ID = "C123458";
 
     @Nested
     class 회원가입시 {

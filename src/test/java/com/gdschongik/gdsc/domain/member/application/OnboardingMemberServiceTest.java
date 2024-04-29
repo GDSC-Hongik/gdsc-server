@@ -1,5 +1,6 @@
 package com.gdschongik.gdsc.domain.member.application;
 
+import static com.gdschongik.gdsc.global.common.constant.MemberConstant.*;
 import static org.assertj.core.api.Assertions.*;
 
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
@@ -18,7 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 class OnboardingMemberServiceTest extends IntegrationTest {
 
     public static final MemberSignupRequest SIGNUP_REQUEST =
-            new MemberSignupRequest("C111001", "김홍익", "01012345678", Department.D015, "test@email.com");
+            new MemberSignupRequest(STUDENT_ID, NAME, PHONE_NUMBER, Department.D015, EMAIL);
 
     @Autowired
     private OnboardingMemberService onboardingMemberService;
@@ -27,13 +28,13 @@ class OnboardingMemberServiceTest extends IntegrationTest {
     private MemberRepository memberRepository;
 
     private void setFixture() {
-        Member member = Member.createGuestMember("testOauthId");
+        Member member = Member.createGuestMember(OAUTH_ID);
         memberRepository.save(member);
     }
 
     private void verifyEmail() {
         Member member = memberRepository.findById(1L).get();
-        member.completeUnivEmailVerification("test@g.hongik.ac.kr");
+        member.completeUnivEmailVerification(UNIV_EMAIL);
         memberRepository.save(member);
     }
 
