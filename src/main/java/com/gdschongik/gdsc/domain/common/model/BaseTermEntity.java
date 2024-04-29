@@ -1,6 +1,8 @@
 package com.gdschongik.gdsc.domain.common.model;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -13,10 +15,11 @@ public abstract class BaseTermEntity {
     private int year;
 
     @Column
-    private int semester;
+    @Enumerated(EnumType.STRING)
+    private Semester semester;
 
     @RequiredArgsConstructor
-    enum Semester {
+    public enum Semester {
         FIRST("1학기"),
         SECOND("2학기");
 
