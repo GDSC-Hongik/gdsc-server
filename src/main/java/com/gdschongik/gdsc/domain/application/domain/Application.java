@@ -38,4 +38,11 @@ public class Application extends BaseTermEntity {
         this.member = member;
         this.paymentStatus = paymentStatus;
     }
+
+    public static Application createApplication(Member member) {
+        return Application.builder()
+                .member(member)
+                .paymentStatus(RequirementStatus.PENDING)
+                .build();
+    }
 }
