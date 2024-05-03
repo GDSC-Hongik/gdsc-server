@@ -77,7 +77,7 @@ public class AdminMemberController {
         Page<AdminMemberResponse> response = adminMemberService.getGrantableMembers(queryOption, pageable);
         return ResponseEntity.ok().body(response);
     }
-    // 지워도 되는지
+
     @Operation(summary = "회비 납부 상태 변경", description = "회비 납부 상태를 변경합니다.")
     @PutMapping("/payment/{memberId}")
     public ResponseEntity<Void> updatePayment(
