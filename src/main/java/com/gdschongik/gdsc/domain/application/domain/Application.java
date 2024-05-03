@@ -3,6 +3,8 @@ package com.gdschongik.gdsc.domain.application.domain;
 import com.gdschongik.gdsc.domain.common.model.BaseTermEntity;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.RequirementStatus;
+import com.gdschongik.gdsc.global.exception.CustomException;
+import com.gdschongik.gdsc.global.exception.ErrorCode;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -42,9 +44,16 @@ public class Application extends BaseTermEntity {
     }
 
     public static Application createApplication(Member member) {
+        validateMemberGranted(member);
         return Application.builder()
                 .member(member)
                 .paymentStatus(RequirementStatus.PENDING)
                 .build();
+    }
+
+    private static void validateMemberGranted(Member member) {
+        if (!member.isGranted()) {
+            throw new CustomException(ErrorCode.MEMBER_NOT_GRANTED);
+        }
     }
 }
