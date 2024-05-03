@@ -24,12 +24,9 @@ class AdminApplicationRepositoryTest extends RepositoryTest {
     @Autowired
     private MemberRepository memberRepository;
 
-    private Member getMember() {
+    private Application setFixture() {
         Member member = Member.createGuestMember(OAUTH_ID);
-        return memberRepository.save(member);
-    }
-
-    private Application getApplication(Member member) {
+        Member newMember = memberRepository.save(member);
         Application application = Application.createApplication(member);
         return applicationRepository.save(application);
     }
@@ -44,8 +41,7 @@ class AdminApplicationRepositoryTest extends RepositoryTest {
         @Test
         void 회비납부_안했으면_PENDING으로_조회_성공() {
             // given
-            Member member = getMember();
-            Application application = getApplication(member);
+            Application application = setFixture();
 
             // when
             Page<Application> applications = applicationRepository.findAllByPaymentStatus(
@@ -58,8 +54,7 @@ class AdminApplicationRepositoryTest extends RepositoryTest {
         @Test
         void 회비납부_안헀으면_VERIFIED_조회되지_않는다() {
             // given
-            Member member = getMember();
-            Application application = getApplication(member);
+            Application application = setFixture();
 
             // when
             Page<Application> applications = applicationRepository.findAllByPaymentStatus(
