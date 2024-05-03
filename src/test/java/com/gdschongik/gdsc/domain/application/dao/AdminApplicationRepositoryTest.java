@@ -1,9 +1,9 @@
 package com.gdschongik.gdsc.domain.application.dao;
 
 import static com.gdschongik.gdsc.global.common.constant.MemberConstant.OAUTH_ID;
-import static org.junit.jupiter.api.Assertions.*;
 
 import com.gdschongik.gdsc.domain.application.domain.Application;
+import com.gdschongik.gdsc.domain.application.domain.dto.request.ApplicationQueryOption;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.RequirementStatus;
@@ -15,7 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
-class ApplicationRepositoryTest extends RepositoryTest {
+class AdminApplicationRepositoryTest extends RepositoryTest {
+    private ApplicationQueryOption EMPTY_QUERY_OPTION = new ApplicationQueryOption(null, null);
+
     @Autowired
     private ApplicationRepository applicationRepository;
 
@@ -46,8 +48,8 @@ class ApplicationRepositoryTest extends RepositoryTest {
             Application application = getApplication(member);
 
             // when
-            Page<Application> applications =
-                    applicationRepository.findAllByPaymentStatus(RequirementStatus.PENDING, PageRequest.of(0, 10));
+            Page<Application> applications = applicationRepository.findAllByPaymentStatus(
+                    EMPTY_QUERY_OPTION, RequirementStatus.PENDING, PageRequest.of(0, 10));
 
             // then
             Assertions.assertThat(applications).contains(application);
@@ -60,8 +62,8 @@ class ApplicationRepositoryTest extends RepositoryTest {
             Application application = getApplication(member);
 
             // when
-            Page<Application> applications =
-                    applicationRepository.findAllByPaymentStatus(RequirementStatus.VERIFIED, PageRequest.of(0, 10));
+            Page<Application> applications = applicationRepository.findAllByPaymentStatus(
+                    EMPTY_QUERY_OPTION, RequirementStatus.VERIFIED, PageRequest.of(0, 10));
 
             // then
             Assertions.assertThat(applications).doesNotContain(application);

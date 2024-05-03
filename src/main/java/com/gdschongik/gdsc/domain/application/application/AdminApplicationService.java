@@ -14,13 +14,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class ApplicationService {
+public class AdminApplicationService {
 
     private final ApplicationRepository applicationRepository;
 
     public Page<ApplicationResponse> getApplicationsByPaymentStatus(
             ApplicationQueryOption queryOption, RequirementStatus paymentStatus, Pageable pageable) {
-        Page<Application> applications = applicationRepository.findAllByPaymentStatus(queryOption, paymentStatus, pageable);
+        Page<Application> applications =
+                applicationRepository.findAllByPaymentStatus(queryOption, paymentStatus, pageable);
         return applications.map(ApplicationResponse::from);
     }
 }

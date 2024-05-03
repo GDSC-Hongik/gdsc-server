@@ -9,7 +9,7 @@ import lombok.Getter;
 @MappedSuperclass
 public abstract class BaseTermEntity {
 
-    private int year;
+    private Integer year;
 
     @Enumerated(EnumType.STRING)
     private Semester semester;
