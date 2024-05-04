@@ -52,7 +52,7 @@ class AdminApplicationRepositoryTest extends RepositoryTest {
         }
 
         @Test
-        void 회비납부_안헀으면_VERIFIED_조회되지_않는다() {
+        void 회비납부_안헀으면_VERIFIE로_조회되지_않는다() {
             // given
             Application application = setFixture();
 
