@@ -28,6 +28,6 @@ public class ApplicationQueryMethod {
     }
 
     protected BooleanBuilder matchesQueryOption(ApplicationQueryOption queryOption) {
-        return new BooleanBuilder().and(eqYear(queryOption.year())).and(eqSemester(queryOption.sememster()));
+        return new BooleanBuilder().and(eqYear(queryOption.year())).and(eqSemester(queryOption.semester()));
     }
 }
