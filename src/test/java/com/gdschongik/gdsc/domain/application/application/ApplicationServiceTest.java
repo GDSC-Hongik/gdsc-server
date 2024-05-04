@@ -29,7 +29,7 @@ public class ApplicationServiceTest extends IntegrationTest {
     @Nested
     class 가입신청_접수시 {
         @Test
-        void 역할이_GUEST라면_가입신청서_접수에_실패한다() {
+        void 승인되지_않은_멤버라면_가입신청서_접수에_실패한다() {
             // given
             setFixture();
             logoutAndReloginAs(1L, MemberRole.GUEST);
