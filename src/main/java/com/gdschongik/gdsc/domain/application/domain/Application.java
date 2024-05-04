@@ -52,8 +52,9 @@ public class Application extends BaseTermEntity {
     }
 
     private static void validateMemberGranted(Member member) {
-        if (!member.isGranted()) {
-            throw new CustomException(ErrorCode.MEMBER_NOT_GRANTED);
+        if (member.isGranted()) {
+            return;
         }
+        throw new CustomException(ErrorCode.MEMBER_NOT_GRANTED);
     }
 }
