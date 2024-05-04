@@ -72,6 +72,7 @@ public class AdminMemberController {
         Page<AdminMemberResponse> response = adminMemberService.getGrantableMembers(queryOption, pageable);
         return ResponseEntity.ok().body(response);
     }
+
     @Operation(summary = "회비 납부 상태에 따른 회원 전체 조회", description = "회비 납부 상태에 따라 회원 목록을 조회합니다.")
     @GetMapping("/payment")
     public ResponseEntity<Page<AdminMemberResponse>> getMembersByPaymentStatus(
