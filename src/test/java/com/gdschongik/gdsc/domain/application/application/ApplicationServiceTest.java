@@ -27,15 +27,15 @@ public class ApplicationServiceTest extends IntegrationTest {
     }
 
     @Nested
-    class 가입신청_생성시 {
+    class 가입신청_접수시 {
         @Test
-        void 역할이_GUEST라면_가입신청서_생성에_실패한다() {
+        void 역할이_GUEST라면_가입신청서_접수에_실패한다() {
             // given
             setFixture();
             logoutAndReloginAs(1L, MemberRole.GUEST);
 
             // when & then
-            assertThatThrownBy(() -> applicationService.apply())
+            assertThatThrownBy(() -> applicationService.receive())
                     .isInstanceOf(CustomException.class)
                     .hasMessage(ErrorCode.MEMBER_NOT_GRANTED.getMessage());
         }

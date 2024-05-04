@@ -17,10 +17,10 @@ public class ApplicationController {
 
     private final ApplicationService applicationService;
 
-    @Operation(summary = "새학기 가입 신청서 생성", description = "새학기 가입 신청서를 생성합니다.")
-    @PostMapping("/apply")
-    public ResponseEntity<Void> apply() {
-        applicationService.apply();
+    @Operation(summary = "새학기 가입 신청서 접수", description = "새학기 가입 신청서를 접수합니다.")
+    @PostMapping("/receive")
+    public ResponseEntity<Void> receive() {
+        applicationService.receive();
         return ResponseEntity.ok().build();
     }
 }

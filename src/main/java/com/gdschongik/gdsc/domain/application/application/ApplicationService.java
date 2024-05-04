@@ -16,7 +16,7 @@ public class ApplicationService {
     private final MemberUtil memberUtil;
     private final ApplicationRepository applicationRepository;
 
-    public void apply() {
+    public void receive() {
         Member currentMember = memberUtil.getCurrentMember();
         Application application = Application.createApplication(currentMember);
         applicationRepository.save(application);
