@@ -16,6 +16,7 @@ public class ApplicationService {
     private final MemberUtil memberUtil;
     private final ApplicationRepository applicationRepository;
 
+    @Transactional
     public void receive() {
         Member currentMember = memberUtil.getCurrentMember();
         Application application = Application.createApplication(currentMember);
