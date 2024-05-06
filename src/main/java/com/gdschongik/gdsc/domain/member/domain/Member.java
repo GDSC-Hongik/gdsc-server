@@ -51,6 +51,7 @@ public class Member extends BaseTimeEntity {
     private String discordUsername;
 
     private String nickname;
+    private String discordId;
 
     @Column(nullable = false)
     private String oauthId;
