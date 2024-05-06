@@ -268,4 +268,8 @@ public class Member extends BaseTimeEntity {
     public void updateLastLoginAt() {
         this.lastLoginAt = LocalDateTime.now();
     }
+
+    public void updateDiscordId(String discordId) {
+        this.discordId = discordId;
+    }
 }
