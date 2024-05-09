@@ -11,6 +11,7 @@ import com.gdschongik.gdsc.global.util.DiscordUtil;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +27,7 @@ public class CommonDiscordService {
                 .orElse(null);
     }
 
+    @Transactional
     public void batchDiscordId(RequirementStatus discordStatus) {
         List<Member> discordVerifiedMembers = memberRepository.findAllByDiscordStatus(discordStatus);
 
@@ -34,8 +36,6 @@ public class CommonDiscordService {
             String discordId = discordUtil.getMemberIdByUsername(discordUsername);
             member.updateDiscordId(discordId);
         });
-
-        memberRepository.saveAll(discordVerifiedMembers);
     }
 
     public void checkPermissionForCommand(String discordUsername) {
