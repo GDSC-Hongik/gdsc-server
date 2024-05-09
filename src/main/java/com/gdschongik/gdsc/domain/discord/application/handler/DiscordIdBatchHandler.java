@@ -20,6 +20,8 @@ public class DiscordIdBatchHandler implements DiscordEventHandler {
         SlashCommandInteractionEvent event = (SlashCommandInteractionEvent) genericEvent;
         event.deferReply(true).setContent(DEFER_MESSAGE_BATCH_DISCORD_ID).queue();
 
+        String discordUsername = event.getUser().getName();
+        commonDiscordService.checkPermissionForCommand(discordUsername);
         commonDiscordService.batchDiscordId(VERIFIED);
 
         event.getHook()
