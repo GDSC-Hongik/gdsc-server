@@ -66,7 +66,11 @@ public class OnboardingDiscordService {
         final Member currentMember = memberUtil.getCurrentMember();
         currentMember.verifyDiscord(request.discordUsername(), request.nickname());
 
-        String discordId = discordUtil.getMemberIdByUsername(request.discordUsername());
+        updateDiscordId(request.discordUsername(), currentMember);
+    }
+
+    private void updateDiscordId(String discordUsername, Member currentMember) {
+        String discordId = discordUtil.getMemberIdByUsername(discordUsername);
         currentMember.updateDiscordId(discordId);
     }
 
