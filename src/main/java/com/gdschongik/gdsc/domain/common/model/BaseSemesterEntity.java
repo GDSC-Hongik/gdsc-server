@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 @MappedSuperclass
-public abstract class BaseSemesterEntity {
+public abstract class BaseSemesterEntity extends BaseTimeEntity {
 
     private Integer academicYear;
 
