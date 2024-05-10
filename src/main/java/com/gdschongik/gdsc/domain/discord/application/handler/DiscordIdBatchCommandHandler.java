@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class DiscordIdBatchHandler implements DiscordEventHandler {
+public class DiscordIdBatchCommandHandler implements DiscordEventHandler {
 
     private final CommonDiscordService commonDiscordService;
 

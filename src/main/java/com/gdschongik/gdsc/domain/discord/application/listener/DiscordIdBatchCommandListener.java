@@ -1,6 +1,6 @@
 package com.gdschongik.gdsc.domain.discord.application.listener;
 
-import com.gdschongik.gdsc.domain.discord.application.handler.DiscordIdBatchHandler;
+import com.gdschongik.gdsc.domain.discord.application.handler.DiscordIdBatchCommandHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -12,11 +12,11 @@ import org.springframework.stereotype.Component;
 @Component
 @Listener
 @RequiredArgsConstructor
-public class DiscordIdBatchListener extends ListenerAdapter {
+public class DiscordIdBatchCommandListener extends ListenerAdapter {
 
-    private final DiscordIdBatchHandler discordIdBatchHandler;
+    private final DiscordIdBatchCommandHandler discordIdBatchCommandHandler;
 
     public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
-        discordIdBatchHandler.delegate(event);
+        discordIdBatchCommandHandler.delegate(event);
     }
 }
