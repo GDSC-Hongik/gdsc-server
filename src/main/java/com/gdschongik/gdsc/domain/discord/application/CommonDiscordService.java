@@ -43,7 +43,7 @@ public class CommonDiscordService {
                 .findByDiscordUsername(discordUsername)
                 .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
 
-        if (member.getRole() != MemberRole.ADMIN) {
+        if (!member.getRole().equals(MemberRole.ADMIN)) {
             throw new CustomException(INVALID_ROLE);
         }
     }
