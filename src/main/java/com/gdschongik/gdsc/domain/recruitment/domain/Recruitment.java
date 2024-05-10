@@ -22,17 +22,24 @@ public class Recruitment extends BaseSemesterEntity {
     @Column(name = "recruitment_id")
     private Long id;
 
+    private String name;
+
     private LocalDateTime startDate;
 
     private LocalDateTime endDate;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private Recruitment(LocalDateTime startDate, LocalDateTime endDate) {
+    private Recruitment(String name, LocalDateTime startDate, LocalDateTime endDate) {
+        this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
     }
 
-    public static Recruitment createRecruitment(LocalDateTime startDate, LocalDateTime endDate) {
-        return Recruitment.builder().startDate(startDate).endDate(endDate).build();
+    public static Recruitment createRecruitment(String name, LocalDateTime startDate, LocalDateTime endDate) {
+        return Recruitment.builder()
+                .name(name)
+                .startDate(startDate)
+                .endDate(endDate)
+                .build();
     }
 }
