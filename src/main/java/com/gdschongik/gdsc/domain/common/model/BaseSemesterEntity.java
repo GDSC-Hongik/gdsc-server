@@ -7,10 +7,10 @@ import lombok.Getter;
 
 @Getter
 @MappedSuperclass
-public abstract class BaseTermEntity {
+public abstract class BaseSemesterEntity {
 
     private Integer academicYear;
 
     @Enumerated(EnumType.STRING)
-    private Semester semester;
+    private SemesterType semesterType;
 }

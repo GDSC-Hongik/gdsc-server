@@ -1,6 +1,6 @@
 package com.gdschongik.gdsc.domain.recruitment.domain;
 
-import com.gdschongik.gdsc.domain.common.model.BaseTermEntity;
+import com.gdschongik.gdsc.domain.common.model.BaseSemesterEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Recruitment extends BaseTermEntity {
+public class Recruitment extends BaseSemesterEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

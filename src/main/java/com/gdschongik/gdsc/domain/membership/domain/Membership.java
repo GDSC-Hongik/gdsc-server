@@ -1,6 +1,6 @@
 package com.gdschongik.gdsc.domain.membership.domain;
 
-import com.gdschongik.gdsc.domain.common.model.BaseTermEntity;
+import com.gdschongik.gdsc.domain.common.model.BaseSemesterEntity;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.RequirementStatus;
 import jakarta.persistence.Column;
@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Membership extends BaseTermEntity {
+public class Membership extends BaseSemesterEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

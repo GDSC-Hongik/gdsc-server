@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum Semester {
+public enum SemesterType {
     FIRST("1학기"),
     SECOND("2학기");
 
