@@ -57,7 +57,7 @@ public enum ErrorCode {
     DISCORD_NICKNAME_NOTNULL(HttpStatus.INTERNAL_SERVER_ERROR, "닉네임은 빈 값이 될 수 없습니다."),
     DISCORD_MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "디스코드 멤버를 찾을 수 없습니다."),
 
-    // Application
+    // Membership
     PAYMENT_NOT_VERIFIED(HttpStatus.CONFLICT, "회비 납부가 완료되지 않았습니다."),
     ;
 
