@@ -23,7 +23,7 @@ public class DiscordConstant {
 
     // 디스코드 ID 저장 커맨드
     public static final String COMMAND_NAME_BATCH_DISCORD_ID = "디스코드id-배치실행";
-    public static final String COMMAND_DESCRIPTION_BATCH_DISCORD_ID = "디스코드 ID 배치를 진행합니다.";
+    public static final String COMMAND_DESCRIPTION_BATCH_DISCORD_ID = "디스코드 인증이 완료된 멤버들의 디스코드 ID를 저장합니다.";
     public static final String DEFER_MESSAGE_BATCH_DISCORD_ID = "디스코드 ID 배치를 진행하는 중입니다...";
     public static final String REPLY_MESSAGE_BATCH_DISCORD_ID = "디스코드 ID 배치가 완료되었습니다.";
 }
