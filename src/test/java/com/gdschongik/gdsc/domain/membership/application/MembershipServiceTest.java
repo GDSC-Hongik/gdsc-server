@@ -1,4 +1,4 @@
-package com.gdschongik.gdsc.domain.application.application;
+package com.gdschongik.gdsc.domain.membership.application;
 
 import static com.gdschongik.gdsc.global.common.constant.MemberConstant.*;
 import static org.assertj.core.api.Assertions.*;
@@ -13,10 +13,10 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class ApplicationServiceTest extends IntegrationTest {
+public class MembershipServiceTest extends IntegrationTest {
 
     @Autowired
-    private ApplicationService applicationService;
+    private MembershipService membershipService;
 
     @Autowired
     private MemberRepository memberRepository;
@@ -35,7 +35,7 @@ public class ApplicationServiceTest extends IntegrationTest {
             logoutAndReloginAs(1L, MemberRole.GUEST);
 
             // when & then
-            assertThatThrownBy(() -> applicationService.receive())
+            assertThatThrownBy(() -> membershipService.receive())
                     .isInstanceOf(CustomException.class)
                     .hasMessage(ErrorCode.MEMBER_NOT_GRANTED.getMessage());
         }
