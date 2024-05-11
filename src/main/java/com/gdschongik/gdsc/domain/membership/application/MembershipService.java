@@ -1,8 +1,8 @@
-package com.gdschongik.gdsc.domain.application.application;
+package com.gdschongik.gdsc.domain.membership.application;
 
-import com.gdschongik.gdsc.domain.application.dao.ApplicationRepository;
-import com.gdschongik.gdsc.domain.application.domain.Application;
 import com.gdschongik.gdsc.domain.member.domain.Member;
+import com.gdschongik.gdsc.domain.membership.dao.MembershipRepository;
+import com.gdschongik.gdsc.domain.membership.domain.Membership;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -11,15 +11,15 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class ApplicationService {
+public class MembershipService {
 
+    private final MembershipRepository membershipRepository;
     private final MemberUtil memberUtil;
-    private final ApplicationRepository applicationRepository;
 
     @Transactional
     public void receive() {
         Member currentMember = memberUtil.getCurrentMember();
-        Application application = Application.createApplication(currentMember);
-        applicationRepository.save(application);
+        Membership membership = Membership.createMembership(currentMember);
+        membershipRepository.save(membership);
     }
 }

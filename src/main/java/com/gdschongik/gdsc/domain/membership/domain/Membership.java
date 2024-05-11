@@ -1,6 +1,6 @@
-package com.gdschongik.gdsc.domain.application.domain;
+package com.gdschongik.gdsc.domain.membership.domain;
 
-import com.gdschongik.gdsc.domain.common.model.BaseTermEntity;
+import com.gdschongik.gdsc.domain.common.model.BaseSemesterEntity;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.RequirementStatus;
 import com.gdschongik.gdsc.global.exception.CustomException;
@@ -23,11 +23,11 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Application extends BaseTermEntity {
+public class Membership extends BaseSemesterEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "application_id")
+    @Column(name = "membership_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -38,14 +38,14 @@ public class Application extends BaseTermEntity {
     private RequirementStatus paymentStatus;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private Application(Member member, RequirementStatus paymentStatus) {
+    private Membership(Member member, RequirementStatus paymentStatus) {
         this.member = member;
         this.paymentStatus = paymentStatus;
     }
 
-    public static Application createApplication(Member member) {
+    public static Membership createMembership(Member member) {
         validateMemberGranted(member);
-        return Application.builder()
+        return Membership.builder()
                 .member(member)
                 .paymentStatus(RequirementStatus.PENDING)
                 .build();
