@@ -1,5 +1,6 @@
 package com.gdschongik.gdsc.domain.membership.dao;
 
+import static com.gdschongik.gdsc.domain.membership.domain.QMembership.membership;
 
 import com.gdschongik.gdsc.domain.common.model.SemesterType;
 import com.gdschongik.gdsc.domain.member.domain.RequirementStatus;
@@ -7,9 +8,6 @@ import com.gdschongik.gdsc.domain.membership.domain.dto.request.MembershipQueryO
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.EnumPath;
-
-import static com.gdschongik.gdsc.domain.membership.domain.QMembership.membership;
-
 
 public class MembershipQueryMethod {
     protected BooleanExpression eqRequirementStatus(
@@ -30,6 +28,8 @@ public class MembershipQueryMethod {
     }
 
     protected BooleanBuilder matchesQueryOption(MembershipQueryOption queryOption) {
-        return new BooleanBuilder().and(eqAcademicYear(queryOption.year())).and(eqSemesterType(queryOption.semesterType()));
+        return new BooleanBuilder()
+                .and(eqAcademicYear(queryOption.year()))
+                .and(eqSemesterType(queryOption.semesterType()));
     }
 }

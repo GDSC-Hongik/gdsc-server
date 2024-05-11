@@ -1,20 +1,17 @@
 package com.gdschongik.gdsc.domain.membership.dao;
 
+import static com.gdschongik.gdsc.domain.membership.domain.QMembership.membership;
+
 import com.gdschongik.gdsc.domain.member.domain.RequirementStatus;
 import com.gdschongik.gdsc.domain.membership.domain.Membership;
-import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.domain.membership.domain.dto.request.MembershipQueryOption;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
-
-import java.util.List;
-
-import static com.gdschongik.gdsc.domain.membership.domain.QMembership.membership;
-
 
 @RequiredArgsConstructor
 public class MembershipCustomRepositoryImpl extends MembershipQueryMethod implements MembershipCustomRepository {

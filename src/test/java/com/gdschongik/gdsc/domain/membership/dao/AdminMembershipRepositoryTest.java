@@ -1,5 +1,8 @@
 package com.gdschongik.gdsc.domain.membership.dao;
 
+import static com.gdschongik.gdsc.global.common.constant.MemberConstant.OAUTH_ID;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.RequirementStatus;
@@ -11,9 +14,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-
-import static com.gdschongik.gdsc.global.common.constant.MemberConstant.OAUTH_ID;
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class AdminMembershipRepositoryTest extends RepositoryTest {
     private MembershipQueryOption EMPTY_QUERY_OPTION = new MembershipQueryOption(null, null);

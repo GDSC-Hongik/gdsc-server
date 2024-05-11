@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class AdminMembershipService {
     private final MembershipRepository membershipRepository;
+
     public Page<MembershipResponse> getMembershipByPaymentStatus(
             MembershipQueryOption queryOption, RequirementStatus paymentStatus, Pageable pageable) {
         Page<Membership> applications =
