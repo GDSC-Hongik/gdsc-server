@@ -19,8 +19,8 @@ public class AdminMembershipService {
 
     public Page<MembershipResponse> getMembershipByPaymentStatus(
             MembershipQueryOption queryOption, RequirementStatus paymentStatus, Pageable pageable) {
-        Page<Membership> applications =
+        Page<Membership> memberships =
                 membershipRepository.findAllByPaymentStatus(queryOption, paymentStatus, pageable);
-        return applications.map(MembershipResponse::from);
+        return memberships.map(MembershipResponse::from);
     }
 }

@@ -15,16 +15,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "Membership", description = "가입 신청 API입니다.")
+@Tag(name = "AdminMembership", description = "가입 신청 API입니다.")
 @RestController
-@RequestMapping("/membership")
+@RequestMapping("/admin/membership")
 @RequiredArgsConstructor
 public class AdminMembershipController {
     private final AdminMembershipService adminMembershipService;
 
     @Operation(summary = "회비 납부 상태와 학기에 따른 멤버십 가입신청 전체 조회", description = "회비 납부 상태와 학기에 따른 멤버십 가입신청 목록을 조회합니다.")
     @GetMapping("/payment")
-    public ResponseEntity<Page<MembershipResponse>> getApplicationByPaymentStatus(
+    public ResponseEntity<Page<MembershipResponse>> getMembershipByPaymentStatus(
             MembershipQueryOption queryOption,
             @RequestParam(name = "status", required = false) RequirementStatus paymentStatus,
             Pageable pageable) {
