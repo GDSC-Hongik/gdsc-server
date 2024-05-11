@@ -3,9 +3,6 @@ package com.gdschongik.gdsc.domain.recruitment.domain;
 import com.gdschongik.gdsc.domain.common.model.BaseSemesterEntity;
 import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import jakarta.persistence.*;
-
-
-
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -33,9 +30,6 @@ public class Recruitment extends BaseSemesterEntity {
     }
 
     public static Recruitment createRecruitment(String name, Period period) {
-        return Recruitment.builder()
-                .name(name)
-                .period(period)
-                .build();
+        return Recruitment.builder().name(name).period(period).build();
     }
 }
