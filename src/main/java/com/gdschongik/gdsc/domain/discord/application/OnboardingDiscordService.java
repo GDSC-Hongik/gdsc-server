@@ -11,6 +11,7 @@ import com.gdschongik.gdsc.domain.discord.dto.response.DiscordVerificationCodeRe
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.global.exception.CustomException;
+import com.gdschongik.gdsc.global.util.DiscordUtil;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import java.security.SecureRandom;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ public class OnboardingDiscordService {
 
     private final DiscordVerificationCodeRepository discordVerificationCodeRepository;
     private final MemberUtil memberUtil;
+    private final DiscordUtil discordUtil;
     private final MemberRepository memberRepository;
 
     @Transactional
@@ -63,6 +65,13 @@ public class OnboardingDiscordService {
 
         final Member currentMember = memberUtil.getCurrentMember();
         currentMember.verifyDiscord(request.discordUsername(), request.nickname());
+
+        updateDiscordId(request.discordUsername(), currentMember);
+    }
+
+    private void updateDiscordId(String discordUsername, Member currentMember) {
+        String discordId = discordUtil.getMemberIdByUsername(discordUsername);
+        currentMember.updateDiscordId(discordId);
     }
 
     private void validateDiscordUsernameDuplicate(String discordUsername) {

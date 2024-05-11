@@ -21,4 +21,6 @@ public interface MemberCustomRepository {
     Map<Boolean, List<Member>> groupByVerified(List<Long> memberIdList);
 
     List<Member> findAllByRole(@Nullable MemberRole role);
+
+    List<Member> findAllByDiscordStatus(RequirementStatus discordStatus);
 }
