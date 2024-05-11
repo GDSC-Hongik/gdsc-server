@@ -20,7 +20,7 @@ public class MembershipController {
     @Operation(summary = "멤버십 가입 신청", description = "멤버십 가입을 신청합니다.")
     @PostMapping
     public ResponseEntity<Void> applyMembership() {
-        membershipService.apply();
+        membershipService.applyMembership();
         return ResponseEntity.ok().build();
     }
 }
