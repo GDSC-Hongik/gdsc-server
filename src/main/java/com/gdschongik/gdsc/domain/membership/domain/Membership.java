@@ -1,10 +1,12 @@
 package com.gdschongik.gdsc.domain.membership.domain;
 
+import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
+
 import com.gdschongik.gdsc.domain.common.model.BaseSemesterEntity;
 import com.gdschongik.gdsc.domain.member.domain.Member;
+import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import com.gdschongik.gdsc.domain.member.domain.RequirementStatus;
 import com.gdschongik.gdsc.global.exception.CustomException;
-import com.gdschongik.gdsc.global.exception.ErrorCode;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -44,17 +46,18 @@ public class Membership extends BaseSemesterEntity {
     }
 
     public static Membership createMembership(Member member) {
-        validateMemberGranted(member);
+        validateMembershipApplicable(member);
         return Membership.builder()
                 .member(member)
                 .paymentStatus(RequirementStatus.PENDING)
                 .build();
     }
 
-    private static void validateMemberGranted(Member member) {
-        if (member.isGranted()) {
+    private static void validateMembershipApplicable(Member member) {
+        if (member.getRole().equals(MemberRole.ASSOCIATE)) {
             return;
         }
-        throw new CustomException(ErrorCode.MEMBER_NOT_GRANTED);
+
+        throw new CustomException(MEMBERSHIP_NOT_APPLICABLE);
     }
 }

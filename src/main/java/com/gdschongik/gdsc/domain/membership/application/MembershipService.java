@@ -17,7 +17,7 @@ public class MembershipService {
     private final MemberUtil memberUtil;
 
     @Transactional
-    public void receive() {
+    public void apply() {
         Member currentMember = memberUtil.getCurrentMember();
         Membership membership = Membership.createMembership(currentMember);
         membershipRepository.save(membership);
