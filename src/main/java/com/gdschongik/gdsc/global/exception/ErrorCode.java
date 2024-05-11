@@ -60,6 +60,7 @@ public enum ErrorCode {
 
     // Membership
     PAYMENT_NOT_VERIFIED(HttpStatus.CONFLICT, "회비 납부가 완료되지 않았습니다."),
+    MEMBERSHIP_NOT_APPLICABLE(HttpStatus.CONFLICT, "멤버십 가입을 신청할 수 없는 회원입니다."),
     ;
 
     private final HttpStatus status;
