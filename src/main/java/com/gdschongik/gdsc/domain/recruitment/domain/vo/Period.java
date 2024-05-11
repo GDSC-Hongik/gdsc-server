@@ -1,15 +1,20 @@
 package com.gdschongik.gdsc.domain.recruitment.domain.vo;
 
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
+import com.gdschongik.gdsc.global.exception.CustomException;
+import com.gdschongik.gdsc.global.exception.ErrorCode;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.springframework.security.core.parameters.P;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Embeddable
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Period {
     private LocalDateTime startDate;
 
@@ -21,9 +26,16 @@ public class Period {
     }
 
     public static Period createPeriod(LocalDateTime startDate, LocalDateTime endDate) {
+        validateDate(startDate,endDate);
         return Period.builder()
                 .startDate(startDate)
                 .endDate(endDate)
                 .build();
+    }
+
+    private static void validateDate(LocalDateTime startDate, LocalDateTime endDate) {
+        if (startDate.isAfter(endDate)) {
+            throw new CustomException(ErrorCode.WRONG_DATE_ORDER);
+        }
     }
 }
