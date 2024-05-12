@@ -29,7 +29,7 @@ public class MembershipQueryMethod {
 
     protected BooleanBuilder matchesQueryOption(MembershipQueryOption queryOption) {
         return new BooleanBuilder()
-                .and(eqAcademicYear(queryOption.year()))
+                .and(eqAcademicYear(queryOption.academicYear()))
                 .and(eqSemesterType(queryOption.semesterType()));
     }
 }
