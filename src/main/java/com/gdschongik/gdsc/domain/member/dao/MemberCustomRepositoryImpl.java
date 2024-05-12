@@ -111,4 +111,12 @@ public class MemberCustomRepositoryImpl extends MemberQueryMethod implements Mem
                 .orderBy(member.studentId.asc(), member.name.asc())
                 .fetch();
     }
+
+    @Override
+    public List<Member> findAllByDiscordStatus(RequirementStatus discordStatus) {
+        return queryFactory
+                .selectFrom(member)
+                .where(eqRequirementStatus(member.requirement.discordStatus, discordStatus))
+                .fetch();
+    }
 }
