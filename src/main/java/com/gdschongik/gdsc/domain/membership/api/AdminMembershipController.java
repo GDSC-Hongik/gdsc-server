@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "AdminMembership", description = "가입 신청 API입니다.")
+@Tag(name = "AdminMembership", description = "어드민 멤버십 API입니다.")
 @RestController
 @RequestMapping("/admin/membership")
 @RequiredArgsConstructor

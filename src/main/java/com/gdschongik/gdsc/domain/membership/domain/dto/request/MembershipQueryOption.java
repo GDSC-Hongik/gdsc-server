@@ -6,5 +6,5 @@ import com.gdschongik.gdsc.domain.common.model.SemesterType;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 public record MembershipQueryOption(
-        @Schema(description = "년도", pattern = YEAR) Integer year,
+        @Schema(description = "학년도", pattern = YEAR) Integer academicYear,
         @Schema(description = "학기") SemesterType semesterType) {}
