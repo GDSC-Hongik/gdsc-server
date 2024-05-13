@@ -138,6 +138,10 @@ public class Member extends BaseTimeEntity {
             throw new CustomException(MEMBER_ALREADY_GRANTED);
         }
 
+        if (!this.requirement.isPaymentVerified()) {
+            throw new CustomException(PAYMENT_NOT_VERIFIED);
+        }
+
         if (!this.requirement.isDiscordVerified() || this.discordUsername == null || this.nickname == null) {
             throw new CustomException(DISCORD_NOT_VERIFIED);
         }
@@ -236,7 +240,7 @@ public class Member extends BaseTimeEntity {
     // 데이터 전달 로직
 
     public boolean isGranted() {
-        return role.equals(USER) || role.equals(MemberRole.ADMIN);
+        return role.equals(ASSOCIATE) || role.equals(MemberRole.ADMIN);
     }
 
     /**

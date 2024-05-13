@@ -140,7 +140,7 @@ class MemberTest {
             member.grant();
 
             // then
-            assertThat(member.getRole()).isEqualTo(USER);
+            assertThat(member.getRole()).isEqualTo(ASSOCIATE);
         }
 
         @Test
