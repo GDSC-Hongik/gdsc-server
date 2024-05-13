@@ -1,7 +1,7 @@
 package com.gdschongik.gdsc.domain.recruitment.domain;
 
 import static com.gdschongik.gdsc.global.common.constant.RecruitmentConstant.*;
-import static com.gdschongik.gdsc.global.exception.ErrorCode.WRONG_DATE_ORDER;
+import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 
 import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
@@ -28,30 +28,30 @@ class RecruitmentTest {
         }
 
         @Test
-        void 잘못된_Period_순서_입력되면_생성_실패() {
+        void 잘못된_Period_순서_입력되면_생성_실패한다() {
             // when & then
             assertThatThrownBy(() -> {
                         Recruitment.createRecruitment(RECRUITMENT_NAME, END_DATE, START_DATE);
                     })
                     .isInstanceOf(CustomException.class)
-                    .hasMessage(WRONG_DATE_ORDER.getMessage());
+                    .hasMessage(DATE_NOT_IN_SEQUENCE.getMessage());
         }
 
         @Test
-        void Period_같은날짜가_입력되면_생성_실패() {
+        void Period_같은날짜가_입력되면_생성_실패한다() {
             // when & then
             assertThatThrownBy(() -> {
                         Recruitment.createRecruitment(RECRUITMENT_NAME, START_DATE, START_DATE);
                     })
                     .isInstanceOf(CustomException.class)
-                    .hasMessage(WRONG_DATE_ORDER.getMessage());
+                    .hasMessage(DATE_NOT_IN_SEQUENCE.getMessage());
         }
     }
 
     @Nested
     class Period생성시 {
         @Test
-        void 시작일이_종료일보다_앞서면_성공() {
+        void 시작일이_종료일보다_앞서면_성공한다() {
             // when
             Period period = Period.createPeriod(START_DATE, END_DATE);
 
@@ -61,23 +61,23 @@ class RecruitmentTest {
         }
 
         @Test
-        void 종료일이_시작일보다_앞서면_실패() {
+        void 종료일이_시작일보다_앞서면_실패한다() {
             // when & then
             assertThatThrownBy(() -> {
                         Period.createPeriod(END_DATE, START_DATE);
                     })
                     .isInstanceOf(CustomException.class)
-                    .hasMessage(WRONG_DATE_ORDER.getMessage());
+                    .hasMessage(DATE_NOT_IN_SEQUENCE.getMessage());
         }
 
         @Test
-        void 종료일이_시작일과_같으면_실패() {
+        void 종료일이_시작일과_같으면_실패한다() {
             // when & then
             assertThatThrownBy(() -> {
                         Period.createPeriod(START_DATE, WRONG_END_DATE);
                     })
                     .isInstanceOf(CustomException.class)
-                    .hasMessage(WRONG_DATE_ORDER.getMessage());
+                    .hasMessage(DATE_NOT_IN_SEQUENCE.getMessage());
         }
     }
 }

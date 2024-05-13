@@ -24,14 +24,14 @@ public class Period {
         this.endDate = endDate;
     }
 
-    public static Period createPeriod(LocalDateTime startDate, LocalDateTime endDate) {
+    public static Period createPeriod(final LocalDateTime startDate, final LocalDateTime endDate) {
         validatePeriod(startDate, endDate);
         return Period.builder().startDate(startDate).endDate(endDate).build();
     }
 
-    private static void validatePeriod(LocalDateTime startDate, LocalDateTime endDate) {
+    private static void validatePeriod(final LocalDateTime startDate, final LocalDateTime endDate) {
         if (startDate.isAfter(endDate) || startDate.isEqual(endDate)) {
-            throw new CustomException(ErrorCode.WRONG_DATE_ORDER);
+            throw new CustomException(ErrorCode.DATE_NOT_IN_SEQUENCE);
         }
     }
 
