@@ -52,6 +52,8 @@ public class Member extends BaseTimeEntity {
 
     private String nickname;
 
+    private String discordId;
+
     @Column(nullable = false)
     private String oauthId;
 
@@ -266,5 +268,9 @@ public class Member extends BaseTimeEntity {
 
     public void updateLastLoginAt() {
         this.lastLoginAt = LocalDateTime.now();
+    }
+
+    public void updateDiscordId(String discordId) {
+        this.discordId = discordId;
     }
 }
