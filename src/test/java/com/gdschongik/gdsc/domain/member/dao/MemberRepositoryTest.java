@@ -193,7 +193,7 @@ class MemberRepositoryTest extends RepositoryTest {
             flushAndClearBeforeExecute();
 
             // when
-            Page<Member> members = memberRepository.findAllByRole(EMPTY_QUERY_OPTION, PageRequest.of(0, 10), USER);
+            Page<Member> members = memberRepository.findAllByRole(EMPTY_QUERY_OPTION, PageRequest.of(0, 10), ASSOCIATE);
 
             // then
             Member user = memberRepository.findById(1L).get();
