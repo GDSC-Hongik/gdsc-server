@@ -3,6 +3,7 @@ package com.gdschongik.gdsc.domain.recruitment.domain;
 import com.gdschongik.gdsc.domain.common.model.BaseSemesterEntity;
 import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,12 +25,13 @@ public class Recruitment extends BaseSemesterEntity {
     private Period period;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private Recruitment(String name, Period period) {
+    private Recruitment(String name, final Period period) {
         this.name = name;
         this.period = period;
     }
 
-    public static Recruitment createRecruitment(String name, Period period) {
+    public static Recruitment createRecruitment(String name, LocalDateTime startDate, LocalDateTime endDate) {
+        Period period = Period.createPeriod(startDate, endDate);
         return Recruitment.builder().name(name).period(period).build();
     }
 }

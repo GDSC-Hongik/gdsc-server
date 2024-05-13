@@ -61,7 +61,7 @@ public enum ErrorCode {
     PAYMENT_NOT_VERIFIED(HttpStatus.CONFLICT, "회비 납부가 완료되지 않았습니다."),
 
     // Recruitment
-    WRONG_DATE_ORDER(HttpStatus.BAD_REQUEST, "시간 설정이 잘못되었습니다.");
+    WRONG_DATE_ORDER(HttpStatus.BAD_REQUEST, "시간 설정이 잘못되었습니다. 종료일이 시작일보다 같거나 앞설 수 없습니다.");
 
     private final HttpStatus status;
     private final String message;
