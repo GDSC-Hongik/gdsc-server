@@ -31,7 +31,7 @@ public class Recruitment extends BaseSemesterEntity {
     }
 
     public static Recruitment createRecruitment(String name, LocalDateTime startDate, LocalDateTime endDate) {
-        final Period period = Period.createPeriod(startDate, endDate);
+        Period period = Period.createPeriod(startDate, endDate);
         return Recruitment.builder().name(name).period(period).build();
     }
 }

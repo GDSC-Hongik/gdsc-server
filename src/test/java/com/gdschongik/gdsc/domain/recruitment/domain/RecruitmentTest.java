@@ -34,7 +34,7 @@ class RecruitmentTest {
                         Recruitment.createRecruitment(RECRUITMENT_NAME, END_DATE, START_DATE);
                     })
                     .isInstanceOf(CustomException.class)
-                    .hasMessage(DATE_NOT_IN_SEQUENCE.getMessage());
+                    .hasMessage(DATE_PRECEDENCE_INVALID.getMessage());
         }
 
         @Test
@@ -44,40 +44,7 @@ class RecruitmentTest {
                         Recruitment.createRecruitment(RECRUITMENT_NAME, START_DATE, START_DATE);
                     })
                     .isInstanceOf(CustomException.class)
-                    .hasMessage(DATE_NOT_IN_SEQUENCE.getMessage());
-        }
-    }
-
-    @Nested
-    class Period생성시 {
-        @Test
-        void 시작일이_종료일보다_앞서면_성공한다() {
-            // when
-            Period period = Period.createPeriod(START_DATE, END_DATE);
-
-            // then
-            assertThat(period.getStartDate()).isEqualTo(START_DATE);
-            assertThat(period.getEndDate()).isEqualTo(END_DATE);
-        }
-
-        @Test
-        void 종료일이_시작일보다_앞서면_실패한다() {
-            // when & then
-            assertThatThrownBy(() -> {
-                        Period.createPeriod(END_DATE, START_DATE);
-                    })
-                    .isInstanceOf(CustomException.class)
-                    .hasMessage(DATE_NOT_IN_SEQUENCE.getMessage());
-        }
-
-        @Test
-        void 종료일이_시작일과_같으면_실패한다() {
-            // when & then
-            assertThatThrownBy(() -> {
-                        Period.createPeriod(START_DATE, WRONG_END_DATE);
-                    })
-                    .isInstanceOf(CustomException.class)
-                    .hasMessage(DATE_NOT_IN_SEQUENCE.getMessage());
+                    .hasMessage(DATE_PRECEDENCE_INVALID.getMessage());
         }
     }
 }
