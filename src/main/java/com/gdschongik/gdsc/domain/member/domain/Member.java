@@ -138,10 +138,6 @@ public class Member extends BaseTimeEntity {
             throw new CustomException(MEMBER_ALREADY_GRANTED);
         }
 
-        if (!this.requirement.isPaymentVerified()) {
-            throw new CustomException(PAYMENT_NOT_VERIFIED);
-        }
-
         if (!this.requirement.isDiscordVerified() || this.discordUsername == null || this.nickname == null) {
             throw new CustomException(DISCORD_NOT_VERIFIED);
         }
@@ -177,7 +173,7 @@ public class Member extends BaseTimeEntity {
         validateStatusUpdatable();
         validateGrantAvailable();
 
-        this.role = USER;
+        this.role = ASSOCIATE;
         registerEvent(new MemberGrantEvent(discordUsername, nickname));
     }
 
