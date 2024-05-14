@@ -1,5 +1,6 @@
 package com.gdschongik.gdsc.domain.membership.application;
 
+import static com.gdschongik.gdsc.domain.member.domain.RequirementStatus.*;
 import static com.gdschongik.gdsc.global.common.constant.MemberConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.RecruitmentConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
@@ -63,9 +64,10 @@ public class MembershipServiceTest extends IntegrationTest {
             // given
             setMemberFixture();
             setRecruitmentFixture();
-            logoutAndReloginAs(1L, MemberRole.ASSOCIATE);
+            // todo: Member.grant() 작업 후 ASSOCIATE로 로그인하는 것으로 변경
+            logoutAndReloginAs(1L, MemberRole.USER);
 
-
+            membershipService.applyMembership();
             // when & then
             assertThatThrownBy(() -> membershipService.applyMembership())
                     .isInstanceOf(CustomException.class)
