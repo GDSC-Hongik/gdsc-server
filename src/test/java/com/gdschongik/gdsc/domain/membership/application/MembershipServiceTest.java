@@ -29,6 +29,13 @@ public class MembershipServiceTest extends IntegrationTest {
 
     private void setMemberFixture() {
         Member member = Member.createGuestMember(OAUTH_ID);
+
+        member.completeUnivEmailVerification(UNIV_EMAIL);
+        member.updatePaymentStatus(VERIFIED);
+        member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
+        member.verifyBevy();
+
+        member.grant();
         memberRepository.save(member);
     }
 
