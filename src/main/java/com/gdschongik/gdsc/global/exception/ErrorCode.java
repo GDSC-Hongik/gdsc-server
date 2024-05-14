@@ -61,7 +61,11 @@ public enum ErrorCode {
     // Membership
     PAYMENT_NOT_VERIFIED(HttpStatus.CONFLICT, "회비 납부가 완료되지 않았습니다."),
     MEMBERSHIP_NOT_APPLICABLE(HttpStatus.CONFLICT, "멤버십 가입을 신청할 수 없는 회원입니다."),
-    ;
+    MEMBERSHIP_ALREADY_APPLIED(HttpStatus.CONFLICT, "이미 멤버십 가입을 신청한 회원입니다."),
+
+    // Recruitment
+    DATE_PRECEDENCE_INVALID(HttpStatus.BAD_REQUEST, "종료일이 시작일과 같거나 앞설 수 없습니다."),
+    RECRUITMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "열려있는 리크루트먼트가 없습니다.");
 
     private final HttpStatus status;
     private final String message;
