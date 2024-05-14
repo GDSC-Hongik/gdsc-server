@@ -15,6 +15,7 @@ public class MembershipService {
 
     private final MembershipRepository membershipRepository;
     private final MemberUtil memberUtil;
+    private final RecruitmentUtil recruitmentUtil;
 
     @Transactional
     public void applyMembership() {
