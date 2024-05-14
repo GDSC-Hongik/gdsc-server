@@ -41,7 +41,7 @@ public class MembershipServiceTest extends IntegrationTest {
     }
 
     private void setRecruitmentFixture() {
-        Recruitment recruitment = Recruitment.createRecruitment(RECRUITMENT_NAME, START_DATE, END_DATE);
+        Recruitment recruitment = Recruitment.createRecruitment(RECRUITMENT_NAME, NOW.minusDays(1L), NOW.plusDays(1L));
         recruitmentRepository.save(recruitment);
     }
 
