@@ -1,9 +1,14 @@
 package com.gdschongik.gdsc.domain.membership.application;
 
+import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
+
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.membership.dao.MembershipRepository;
 import com.gdschongik.gdsc.domain.membership.domain.Membership;
+import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
+import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
+import com.gdschongik.gdsc.global.util.RecruitmentUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +25,18 @@ public class MembershipService {
     @Transactional
     public void applyMembership() {
         Member currentMember = memberUtil.getCurrentMember();
-        Membership membership = Membership.createMembership(currentMember);
+        Recruitment recruitment = recruitmentUtil.getOpenRecruitment();
+        validateMembershipNotExists(currentMember, recruitment);
+
+        Membership membership = Membership.createMembership(
+                currentMember, recruitment.getAcademicYear(), recruitment.getSemesterType());
         membershipRepository.save(membership);
+    }
+
+    private void validateMembershipNotExists(Member currentMember, Recruitment recruitment) {
+        if (membershipRepository.existsByMemberAndAcademicYearAndSemesterType(
+                currentMember, recruitment.getAcademicYear(), recruitment.getSemesterType())) {
+            throw new CustomException(MEMBERSHIP_ALREADY_APPLIED);
+        }
     }
 }

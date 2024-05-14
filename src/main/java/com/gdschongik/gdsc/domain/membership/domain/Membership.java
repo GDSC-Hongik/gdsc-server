@@ -63,6 +63,11 @@ public class Membership extends BaseSemesterEntity {
             return;
         }
 
+        // todo: Member.grant() 작업 후 제거
+        if (member.getRole().equals(MemberRole.USER)) {
+            return;
+        }
+
         throw new CustomException(MEMBERSHIP_NOT_APPLICABLE);
     }
 }
