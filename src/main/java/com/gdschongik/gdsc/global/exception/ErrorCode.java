@@ -61,7 +61,8 @@ public enum ErrorCode {
     PAYMENT_NOT_VERIFIED(HttpStatus.CONFLICT, "회비 납부가 완료되지 않았습니다."),
 
     // Recruitment
-    DATE_PRECEDENCE_INVALID(HttpStatus.BAD_REQUEST, "종료일이 시작일과 같거나 앞설 수 없습니다.");
+    DATE_PRECEDENCE_INVALID(HttpStatus.BAD_REQUEST, "종료일이 시작일과 같거나 앞설 수 없습니다."),
+    PERIOD_DUPLICATE(HttpStatus.BAD_REQUEST, "모집 기간이 중복됩니다.");
 
     private final HttpStatus status;
     private final String message;
