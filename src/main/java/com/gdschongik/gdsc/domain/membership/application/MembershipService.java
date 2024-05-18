@@ -26,7 +26,7 @@ public class MembershipService {
     public void applyMembership() {
         Member currentMember = memberUtil.getCurrentMember();
         Recruitment recruitment = getOpenRecruitment();
-        validateMembershipNotExists(currentMember, recruitment);
+        validateCurrentSemesterMembershipNotExists(currentMember, recruitment);
 
         Membership membership = Membership.createMembership(
                 currentMember, recruitment.getAcademicYear(), recruitment.getSemesterType());
@@ -39,7 +39,7 @@ public class MembershipService {
                 .orElseThrow(() -> new CustomException(RECRUITMENT_NOT_FOUND));
     }
 
-    private void validateMembershipNotExists(Member currentMember, Recruitment recruitment) {
+    private void validateCurrentSemesterMembershipNotExists(Member currentMember, Recruitment recruitment) {
         if (membershipRepository.existsByMemberAndAcademicYearAndSemesterType(
                 currentMember, recruitment.getAcademicYear(), recruitment.getSemesterType())) {
             throw new CustomException(MEMBERSHIP_ALREADY_APPLIED);
