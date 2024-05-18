@@ -66,8 +66,8 @@ public class MembershipServiceTest extends IntegrationTest {
             setRecruitmentFixture();
             // todo: Member.grant() 작업 후 ASSOCIATE로 로그인하는 것으로 변경
             logoutAndReloginAs(1L, MemberRole.USER);
-
             membershipService.applyMembership();
+
             // when & then
             assertThatThrownBy(() -> membershipService.applyMembership())
                     .isInstanceOf(CustomException.class)
