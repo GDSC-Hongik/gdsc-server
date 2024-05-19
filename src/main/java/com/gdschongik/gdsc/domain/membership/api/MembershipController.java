@@ -17,7 +17,7 @@ public class MembershipController {
 
     private final MembershipService membershipService;
 
-    @Operation(summary = "멤버십 가입 신청", description = "멤버십 가입을 신청합니다.")
+    @Operation(summary = "멤버십 가입 신청 접수", description = "멤버십 가입 신청을 접수합니다.")
     @PostMapping
     public ResponseEntity<Void> applyMembership() {
         membershipService.applyMembership();
