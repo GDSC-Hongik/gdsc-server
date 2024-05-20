@@ -7,7 +7,6 @@ public class RecruitmentConstant {
     public static final LocalDateTime START_DATE = LocalDateTime.of(2024, 3, 02, 00, 0);
     public static final LocalDateTime WRONG_END_DATE = LocalDateTime.of(2024, 3, 02, 00, 0);
     public static final LocalDateTime END_DATE = LocalDateTime.of(2024, 3, 11, 00, 00);
-    public static final LocalDateTime NOW = LocalDateTime.now();
 
     private RecruitmentConstant() {}
 }

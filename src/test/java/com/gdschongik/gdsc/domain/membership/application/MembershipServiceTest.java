@@ -41,7 +41,7 @@ public class MembershipServiceTest extends IntegrationTest {
     }
 
     private Recruitment createRecruitment() {
-        Recruitment recruitment = Recruitment.createRecruitment(RECRUITMENT_NAME, NOW.minusDays(1L), NOW.plusDays(1L));
+        Recruitment recruitment = Recruitment.createRecruitment(RECRUITMENT_NAME, START_DATE, END_DATE);
         return recruitmentRepository.save(recruitment);
     }
 
