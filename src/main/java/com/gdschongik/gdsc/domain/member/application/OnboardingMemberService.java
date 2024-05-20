@@ -61,4 +61,11 @@ public class OnboardingMemberService {
         Member currentMember = memberUtil.getCurrentMember();
         currentMember.verifyBevy();
     }
+
+    @Transactional
+    public void registerAssociateMember(MemberSignupRequest request) {
+        Member currentMember = memberUtil.getCurrentMember();
+        currentMember.register(
+                request.studentId(), request.name(), request.phone(), request.department(), request.email());
+    }
 }

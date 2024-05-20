@@ -269,4 +269,91 @@ class MemberTest {
                 .isInstanceOf(CustomException.class)
                 .hasMessage(MEMBER_DELETED.getMessage());
     }
+
+    @Nested
+    class 재학생_인증시 {
+        @Test
+        void 나머지_조건이_만족안됐으면_멤버상태가_GUEST이다() {
+            // given
+            Member member = Member.createGuestMember(OAUTH_ID);
+
+            // when
+            member.completeUnivEmailVerification(UNIV_EMAIL);
+
+            // then
+            assertThat(member.getRole()).isEqualTo(GUEST);
+        }
+
+        @Test
+        void 나머지_조건이_만족됐으면_멤버상태가_ASOOCIATE이다() {
+            // given
+            Member member = Member.createGuestMember(OAUTH_ID);
+            member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
+            member.verifyBevy();
+
+            // when
+            member.completeUnivEmailVerification(UNIV_EMAIL);
+
+            // then
+            assertThat(member.getRole()).isEqualTo(ASSOCIATE);
+        }
+    }
+
+    @Nested
+    class 디스코드_인증시 {
+        @Test
+        void 나머지_조건이_만족안됐으면_멤버상태가_GUEST이다() {
+            // given
+            Member member = Member.createGuestMember(OAUTH_ID);
+
+            // when
+            member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
+
+            // then
+            assertThat(member.getRole()).isEqualTo(GUEST);
+        }
+
+        @Test
+        void 나머지_조건이_만족됐으면_멤버상태가_ASOOCIATE이다() {
+            // given
+            Member member = Member.createGuestMember(OAUTH_ID);
+            member.completeUnivEmailVerification(UNIV_EMAIL);
+            member.verifyBevy();
+
+            // when
+            member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
+
+            // then
+            assertThat(member.getRole()).isEqualTo(ASSOCIATE);
+        }
+    }
+
+    @Nested
+    class Bevy_인증시 {
+        @Test
+        void 나머지_조건이_만족안됐으면_멤버상태가_GUEST이다() {
+            // given
+            Member member = Member.createGuestMember(OAUTH_ID);
+
+            // when
+            member.verifyBevy();
+
+            // then
+            assertThat(member.getRole()).isEqualTo(GUEST);
+        }
+
+        @Test
+        void 나머지_조건이_만족됐으면_멤버상태가_ASOOCIATE이다() {
+            // given
+            Member member = Member.createGuestMember(OAUTH_ID);
+            member.completeUnivEmailVerification(UNIV_EMAIL);
+            member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
+
+            // when
+            member.verifyBevy();
+
+            // then
+            assertThat(member.getRole()).isEqualTo(ASSOCIATE);
+        }
+    }
 }

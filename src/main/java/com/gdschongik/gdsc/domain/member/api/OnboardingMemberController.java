@@ -60,4 +60,11 @@ public class OnboardingMemberController {
         onboardingMemberService.verifyBevyStatus();
         return ResponseEntity.ok().build();
     }
+
+    @Operation(summary = "가입 신청", description = "가입을 신청합니다.")
+    @PostMapping
+    public ResponseEntity<Void> registerAssociateMember(@Valid @RequestBody MemberSignupRequest request) {
+        onboardingMemberService.registerAssociateMember(request);
+        return ResponseEntity.ok().build();
+    }
 }

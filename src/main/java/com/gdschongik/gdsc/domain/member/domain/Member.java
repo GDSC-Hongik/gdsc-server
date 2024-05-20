@@ -170,6 +170,34 @@ public class Member extends BaseTimeEntity {
     }
 
     /**
+     * 가입 신청 시 작성한 정보를 저장한다.
+     *
+     */
+    public void register(String studentId, String name, String phone, Department department, String email) {
+        validateStatusUpdatable();
+
+        this.studentId = studentId;
+        this.name = name;
+        this.phone = phone;
+        this.department = department;
+        this.email = email;
+    }
+
+    /**
+     * 회원가입합니다
+     * 모든 조건을 충족하면 서버에서 각각의 인증과정에서 자동으로 signUp()호출된다
+     * 조건 1 : 재학생 인증
+     * 조건 2 : 디스코드 인증
+     * 조건 3 : Bevy 인증
+     */
+    public void signUp() {
+        validateStatusUpdatable();
+
+        this.role = ASSOCIATE;
+        registerEvent(new MemberGrantEvent(discordUsername, nickname));
+    }
+
+    /**
      * 가입 신청을 승인합니다.<br>
      * 어드민만 사용할 수 있어야 합니다.
      */
@@ -216,15 +244,44 @@ public class Member extends BaseTimeEntity {
     public void completeUnivEmailVerification(String univEmail) {
         this.univEmail = univEmail;
         requirement.updateUnivStatus(RequirementStatus.VERIFIED);
+        if (validateSignupAvailable()) {
+            signUp();
+        }
+    }
+
+    private boolean validateSignupAvailable() {
+        if (isSignedUp()) {
+            return false;
+        }
+
+        if (!this.requirement.isDiscordVerified() || this.discordUsername == null || this.nickname == null) {
+            return false;
+        }
+
+        if (!this.requirement.isBevyVerified()) {
+            return false;
+        }
+
+        if (!this.requirement.isUnivVerified() || this.univEmail == null) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isSignedUp() {
+        return role.equals(ASSOCIATE) || role.equals(MemberRole.ADMIN);
     }
 
     // 가입조건 인증 로직
     public void verifyDiscord(String discordUsername, String nickname) {
         validateStatusUpdatable();
-
         this.requirement.verifyDiscord();
         this.discordUsername = discordUsername;
         this.nickname = nickname;
+
+        if (validateSignupAvailable()) {
+            signUp();
+        }
     }
 
     public void updatePaymentStatus(RequirementStatus status) {
@@ -235,6 +292,9 @@ public class Member extends BaseTimeEntity {
     public void verifyBevy() {
         validateStatusUpdatable();
         this.requirement.verifyBevy();
+        if (validateSignupAvailable()) {
+            signUp();
+        }
     }
 
     // 데이터 전달 로직
