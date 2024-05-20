@@ -23,20 +23,16 @@ public class MembershipService {
     private final MemberUtil memberUtil;
 
     @Transactional
-    public void applyMembership() {
+    public void receiveMembership(Long recruitmentId) {
         Member currentMember = memberUtil.getCurrentMember();
-        Recruitment recruitment = getOpenRecruitment();
+        Recruitment recruitment = recruitmentRepository
+                .findById(recruitmentId)
+                .orElseThrow(() -> new CustomException(RECRUITMENT_NOT_FOUND));
         validateCurrentSemesterMembershipNotExists(currentMember, recruitment);
 
         Membership membership = Membership.createMembership(
                 currentMember, recruitment.getAcademicYear(), recruitment.getSemesterType());
         membershipRepository.save(membership);
-    }
-
-    private Recruitment getOpenRecruitment() {
-        return recruitmentRepository
-                .findOpenRecruitment()
-                .orElseThrow(() -> new CustomException(RECRUITMENT_NOT_FOUND));
     }
 
     private void validateCurrentSemesterMembershipNotExists(Member currentMember, Recruitment recruitment) {

@@ -40,21 +40,22 @@ public class MembershipServiceTest extends IntegrationTest {
         memberRepository.save(member);
     }
 
-    private void setRecruitmentFixture() {
+    private Recruitment createRecruitment() {
         Recruitment recruitment = Recruitment.createRecruitment(RECRUITMENT_NAME, NOW.minusDays(1L), NOW.plusDays(1L));
-        recruitmentRepository.save(recruitment);
+        return recruitmentRepository.save(recruitment);
     }
 
     @Nested
     class 멤버십_가입신청시 {
         @Test
-        void 열려있는_Recruitment가_없다면_실패한다() {
+        void Recruitment가_없다면_실패한다() {
             // given
             setMemberFixture();
             logoutAndReloginAs(1L, MemberRole.ASSOCIATE);
+            Long recruitmentId = 1L;
 
             // when & then
-            assertThatThrownBy(() -> membershipService.applyMembership())
+            assertThatThrownBy(() -> membershipService.receiveMembership(recruitmentId))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(RECRUITMENT_NOT_FOUND.getMessage());
         }
@@ -63,13 +64,13 @@ public class MembershipServiceTest extends IntegrationTest {
         void 열려있는_Recruitment에_Membership을_생성한_적이_있다면_실패한다() {
             // given
             setMemberFixture();
-            setRecruitmentFixture();
+            Recruitment recruitment = createRecruitment();
             // todo: Member.grant() 작업 후 ASSOCIATE로 로그인하는 것으로 변경
             logoutAndReloginAs(1L, MemberRole.USER);
-            membershipService.applyMembership();
+            membershipService.receiveMembership(recruitment.getId());
 
             // when & then
-            assertThatThrownBy(() -> membershipService.applyMembership())
+            assertThatThrownBy(() -> membershipService.receiveMembership(recruitment.getId()))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(MEMBERSHIP_ALREADY_APPLIED.getMessage());
         }
