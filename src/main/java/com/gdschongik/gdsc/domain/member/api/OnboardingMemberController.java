@@ -32,13 +32,6 @@ public class OnboardingMemberController {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "가입 신청", description = "회원 가입을 신청합니다.", deprecated = true)
-    @PostMapping
-    public ResponseEntity<Void> registerMember(@Valid @RequestBody MemberSignupRequest request) {
-        onboardingMemberService.registerAssociateMember(request);
-        return ResponseEntity.ok().build();
-    }
-
     @Deprecated
     @Operation(summary = "디스코드 회원 정보 수정", description = "디스코드 회원 정보를 수정합니다.")
     @PutMapping("/me/discord")
@@ -69,7 +62,7 @@ public class OnboardingMemberController {
     }
 
     @Operation(summary = "가입 신청", description = "가입을 신청합니다.")
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<Void> registerAssociateMember(@Valid @RequestBody MemberSignupRequest request) {
         onboardingMemberService.registerAssociateMember(request);
         return ResponseEntity.ok().build();
