@@ -61,7 +61,7 @@ public class MembershipServiceTest extends IntegrationTest {
         }
 
         @Test
-        void 열려있는_Recruitment에_Membership을_생성한_적이_있다면_실패한다() {
+        void Recruitment에_Membership을_생성한_적이_있다면_실패한다() {
             // given
             setMemberFixture();
             logoutAndReloginAs(1L, ASSOCIATE);
