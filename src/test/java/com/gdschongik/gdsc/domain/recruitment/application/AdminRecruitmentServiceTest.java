@@ -27,7 +27,7 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
             // when & then
             assertThatThrownBy(() -> adminRecruitmentService.createRecruitment(request))
                     .isInstanceOf(CustomException.class)
-                    .hasMessage(PERIOD_DUPLICATE.getMessage());
+                    .hasMessage(RECRUITMENT_PERIOD_OVERLAP.getMessage());
         }
     }
 }

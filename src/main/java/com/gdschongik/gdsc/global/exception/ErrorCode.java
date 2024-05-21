@@ -62,7 +62,7 @@ public enum ErrorCode {
 
     // Recruitment
     DATE_PRECEDENCE_INVALID(HttpStatus.BAD_REQUEST, "종료일이 시작일과 같거나 앞설 수 없습니다."),
-    PERIOD_DUPLICATE(HttpStatus.BAD_REQUEST, "모집 기간이 중복됩니다.");
+    RECRUITMENT_PERIOD_OVERLAP(HttpStatus.BAD_REQUEST, "모집 기간이 중복됩니다.");
 
     private final HttpStatus status;
     private final String message;
