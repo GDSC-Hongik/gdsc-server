@@ -18,7 +18,7 @@ public class MembershipController {
 
     private final MembershipService membershipService;
 
-    @Operation(summary = "멤버십 가입 신청 접수", description = "멤버십 가입 신청을 접수합니다.")
+    @Operation(summary = "멤버십 가입 신청 접수", description = "정회원 가입을 위해 멤버십 가입 신청을 접수합니다. 별도의 정회원 가입 조건을 만족해야 가입이 완료됩니다.")
     @PostMapping
     public ResponseEntity<Void> submitMembership(@RequestParam(name = "recruitmentId") Long recruitmentId) {
         membershipService.submitMembership(recruitmentId);
