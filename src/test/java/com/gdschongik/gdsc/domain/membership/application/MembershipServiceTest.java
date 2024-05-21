@@ -64,8 +64,8 @@ public class MembershipServiceTest extends IntegrationTest {
         void 열려있는_Recruitment에_Membership을_생성한_적이_있다면_실패한다() {
             // given
             setMemberFixture();
-            Recruitment recruitment = createRecruitment();
             logoutAndReloginAs(1L, ASSOCIATE);
+            Recruitment recruitment = createRecruitment();
             membershipService.receiveMembership(recruitment.getId());
 
             // when & then
