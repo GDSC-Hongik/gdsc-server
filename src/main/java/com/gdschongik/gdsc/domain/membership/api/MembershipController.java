@@ -20,8 +20,8 @@ public class MembershipController {
 
     @Operation(summary = "멤버십 가입 신청 접수", description = "멤버십 가입 신청을 접수합니다.")
     @PostMapping
-    public ResponseEntity<Void> receiveMembership(@RequestParam(name = "recruitmentId") Long recruitmentId) {
-        membershipService.receiveMembership(recruitmentId);
+    public ResponseEntity<Void> submitMembership(@RequestParam(name = "recruitmentId") Long recruitmentId) {
+        membershipService.submitMembership(recruitmentId);
         return ResponseEntity.ok().build();
     }
 }

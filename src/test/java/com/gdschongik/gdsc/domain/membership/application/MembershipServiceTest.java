@@ -68,7 +68,7 @@ public class MembershipServiceTest extends IntegrationTest {
             Long recruitmentId = 1L;
 
             // when & then
-            assertThatThrownBy(() -> membershipService.receiveMembership(recruitmentId))
+            assertThatThrownBy(() -> membershipService.submitMembership(recruitmentId))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(RECRUITMENT_NOT_FOUND.getMessage());
         }
@@ -82,7 +82,7 @@ public class MembershipServiceTest extends IntegrationTest {
             createMembership(member);
 
             // when & then
-            assertThatThrownBy(() -> membershipService.receiveMembership(recruitment.getId()))
+            assertThatThrownBy(() -> membershipService.submitMembership(recruitment.getId()))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(MEMBERSHIP_ALREADY_APPLIED.getMessage());
         }
@@ -95,7 +95,7 @@ public class MembershipServiceTest extends IntegrationTest {
             Recruitment recruitment = createRecruitment();
 
             // when & then
-            assertThatThrownBy(() -> membershipService.receiveMembership(recruitment.getId()))
+            assertThatThrownBy(() -> membershipService.submitMembership(recruitment.getId()))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(RECRUITMENT_NOT_OPEN.getMessage());
         }

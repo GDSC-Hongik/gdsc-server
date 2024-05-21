@@ -23,7 +23,7 @@ public class MembershipService {
     private final MemberUtil memberUtil;
 
     @Transactional
-    public void receiveMembership(Long recruitmentId) {
+    public void submitMembership(Long recruitmentId) {
         Member currentMember = memberUtil.getCurrentMember();
         Recruitment recruitment = recruitmentRepository
                 .findById(recruitmentId)
