@@ -1,8 +1,13 @@
 package com.gdschongik.gdsc.domain.membership.domain;
 
+import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
+
 import com.gdschongik.gdsc.domain.common.model.BaseSemesterEntity;
+import com.gdschongik.gdsc.domain.common.model.SemesterType;
 import com.gdschongik.gdsc.domain.member.domain.Member;
+import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import com.gdschongik.gdsc.domain.member.domain.RequirementStatus;
+import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -36,15 +41,33 @@ public class Membership extends BaseSemesterEntity {
     private RequirementStatus paymentStatus;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private Membership(Member member, RequirementStatus paymentStatus) {
+    private Membership(
+            Member member, RequirementStatus paymentStatus, Integer academicYear, SemesterType semesterType) {
+        super(academicYear, semesterType);
         this.member = member;
         this.paymentStatus = paymentStatus;
     }
 
-    public static Membership createMembership(Member member) {
+    public static Membership createMembership(Member member, Integer academicYear, SemesterType semesterType) {
+        validateMembershipApplicable(member);
         return Membership.builder()
                 .member(member)
                 .paymentStatus(RequirementStatus.PENDING)
+                .academicYear(academicYear)
+                .semesterType(semesterType)
                 .build();
+    }
+
+    private static void validateMembershipApplicable(Member member) {
+        if (member.getRole().equals(MemberRole.ASSOCIATE)) {
+            return;
+        }
+
+        // todo: Member.grant() 작업 후 제거
+        if (member.getRole().equals(MemberRole.USER)) {
+            return;
+        }
+
+        throw new CustomException(MEMBERSHIP_NOT_APPLICABLE);
     }
 }

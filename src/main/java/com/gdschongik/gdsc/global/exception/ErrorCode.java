@@ -34,6 +34,7 @@ public enum ErrorCode {
     MEMBER_DISCORD_USERNAME_DUPLICATE(HttpStatus.CONFLICT, "이미 등록된 디스코드 유저네임입니다."),
     MEMBER_NICKNAME_DUPLICATE(HttpStatus.CONFLICT, "이미 사용중인 닉네임입니다."),
     MEMBER_NOT_APPLIED(HttpStatus.CONFLICT, "가입신청서를 제출하지 않은 회원입니다."),
+    MEMBER_NOT_GRANTED(HttpStatus.CONFLICT, "승인되지 않은 회원입니다."),
 
     // Requirement
     UNIV_NOT_VERIFIED(HttpStatus.CONFLICT, "재학생 인증이 완료되지 않았습니다."),
@@ -59,9 +60,13 @@ public enum ErrorCode {
 
     // Membership
     PAYMENT_NOT_VERIFIED(HttpStatus.CONFLICT, "회비 납부가 완료되지 않았습니다."),
+    MEMBERSHIP_NOT_APPLICABLE(HttpStatus.CONFLICT, "멤버십 가입을 신청할 수 없는 회원입니다."),
+    MEMBERSHIP_ALREADY_APPLIED(HttpStatus.CONFLICT, "이미 이번 학기에 멤버십 가입을 신청한 회원입니다."),
 
     // Recruitment
-    DATE_PRECEDENCE_INVALID(HttpStatus.BAD_REQUEST, "종료일이 시작일과 같거나 앞설 수 없습니다.");
+    DATE_PRECEDENCE_INVALID(HttpStatus.BAD_REQUEST, "종료일이 시작일과 같거나 앞설 수 없습니다."),
+    RECRUITMENT_NOT_OPEN(HttpStatus.CONFLICT, "리크루트먼트 모집기간이 아닙니다."),
+    RECRUITMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "열려있는 리크루트먼트가 없습니다.");
 
     private final HttpStatus status;
     private final String message;
