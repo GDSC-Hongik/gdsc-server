@@ -29,10 +29,17 @@ public class MembershipService {
                 .findById(recruitmentId)
                 .orElseThrow(() -> new CustomException(RECRUITMENT_NOT_FOUND));
         validateCurrentSemesterMembershipNotExists(currentMember, recruitment);
+        validateRecruitmentOpen(recruitment);
 
         Membership membership = Membership.createMembership(
                 currentMember, recruitment.getAcademicYear(), recruitment.getSemesterType());
         membershipRepository.save(membership);
+    }
+
+    private void validateRecruitmentOpen(Recruitment recruitment) {
+        if (!recruitment.isOpen()) {
+            throw new CustomException(RECRUITMENT_NOT_OPEN);
+        }
     }
 
     private void validateCurrentSemesterMembershipNotExists(Member currentMember, Recruitment recruitment) {

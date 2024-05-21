@@ -46,4 +46,8 @@ public class Recruitment extends BaseSemesterEntity {
                 .semesterType(semesterType)
                 .build();
     }
+
+    public boolean isOpen() {
+        return this.period.isOpen();
+    }
 }
