@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 class MemberTest {
 
     @Nested
-    class 회원가입시 {
+    class 가입_신청_시 {
         @Test
         void MemberRole은_GUEST이다() {
             // given
@@ -42,54 +42,7 @@ class MemberTest {
     }
 
     @Nested
-    class 가입신청시 {
-        @Test
-        void 재학생인증_되어있으면_성공() {
-            // given
-            Member member = Member.createGuestMember(OAUTH_ID);
-
-            // when
-            member.completeUnivEmailVerification(UNIV_EMAIL);
-            member.signup(STUDENT_ID, NAME, PHONE_NUMBER, D022, UNIV_EMAIL);
-
-            // then
-            assertThat(member.getStudentId()).isEqualTo(STUDENT_ID);
-        }
-
-        @Test
-        void 재학생인증_안되어있으면_실패() {
-            // given
-            Member member = Member.createGuestMember(OAUTH_ID);
-
-            // when & then
-            assertThatThrownBy(() -> {
-                        member.signup(STUDENT_ID, NAME, PHONE_NUMBER, D022, UNIV_EMAIL);
-                    })
-                    .isInstanceOf(CustomException.class)
-                    .hasMessage(UNIV_NOT_VERIFIED.getMessage());
-        }
-    }
-
-    @Nested
-    class 가입승인시 {
-        @Test
-        void 회비를_납부하지_않았으면_실패() {
-            // given
-            Member member = Member.createGuestMember(OAUTH_ID);
-
-            member.completeUnivEmailVerification(UNIV_EMAIL);
-            member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
-            member.verifyBevy();
-
-            member.signup(STUDENT_ID, NAME, PHONE_NUMBER, D022, UNIV_EMAIL);
-
-            // when & then
-            assertThatThrownBy(() -> {
-                        member.grant();
-                    })
-                    .isInstanceOf(CustomException.class)
-                    .hasMessage(PAYMENT_NOT_VERIFIED.getMessage());
-        }
+    class 회원_가입시 {
 
         @Test
         void 디스코드_인증하지_않았으면_실패() {
@@ -97,14 +50,11 @@ class MemberTest {
             Member member = Member.createGuestMember(OAUTH_ID);
 
             member.completeUnivEmailVerification(UNIV_EMAIL);
-            member.updatePaymentStatus(VERIFIED);
             member.verifyBevy();
-
-            member.signup(STUDENT_ID, NAME, PHONE_NUMBER, D022, UNIV_EMAIL);
 
             // when & then
             assertThatThrownBy(() -> {
-                        member.grant();
+                        member.signUp();
                     })
                     .isInstanceOf(CustomException.class)
                     .hasMessage(DISCORD_NOT_VERIFIED.getMessage());
@@ -116,12 +66,11 @@ class MemberTest {
             Member member = Member.createGuestMember(OAUTH_ID);
 
             member.completeUnivEmailVerification(UNIV_EMAIL);
-            member.updatePaymentStatus(VERIFIED);
             member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
 
             // when & then
             assertThatThrownBy(() -> {
-                        member.grant();
+                        member.signUp();
                     })
                     .isInstanceOf(CustomException.class)
                     .hasMessage(BEVY_NOT_VERIFIED.getMessage());
@@ -133,11 +82,8 @@ class MemberTest {
             Member member = Member.createGuestMember(OAUTH_ID);
 
             member.completeUnivEmailVerification(UNIV_EMAIL);
-            member.updatePaymentStatus(VERIFIED);
             member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
             member.verifyBevy();
-
-            member.grant();
 
             // then
             assertThat(member.getRole()).isEqualTo(ASSOCIATE);
@@ -149,15 +95,12 @@ class MemberTest {
             Member member = Member.createGuestMember(OAUTH_ID);
 
             member.completeUnivEmailVerification(UNIV_EMAIL);
-            member.updatePaymentStatus(VERIFIED);
             member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
             member.verifyBevy();
 
-            member.grant();
-
             // when & then
             assertThatThrownBy(() -> {
-                        member.grant();
+                        member.signUp();
                     })
                     .isInstanceOf(CustomException.class)
                     .hasMessage(MEMBER_ALREADY_GRANTED.getMessage());

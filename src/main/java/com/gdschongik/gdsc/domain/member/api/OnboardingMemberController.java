@@ -25,10 +25,17 @@ public class OnboardingMemberController {
 
     private final OnboardingMemberService onboardingMemberService;
 
-    @Operation(summary = "회원 가입 신청", description = "회원 가입을 신청합니다.")
+    @Operation(summary = "회원 가입 신청", description = "회원 가입을 신청합니다.", deprecated = true)
     @PostMapping
     public ResponseEntity<Void> signupMember(@Valid @RequestBody MemberSignupRequest request) {
         onboardingMemberService.signupMember(request);
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "가입 신청", description = "회원 가입을 신청합니다.", deprecated = true)
+    @PostMapping
+    public ResponseEntity<Void> registerMember(@Valid @RequestBody MemberSignupRequest request) {
+        onboardingMemberService.registerAssociateMember(request);
         return ResponseEntity.ok().build();
     }
 

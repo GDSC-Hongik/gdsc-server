@@ -39,37 +39,6 @@ class OnboardingMemberServiceTest extends IntegrationTest {
     }
 
     @Nested
-    class 가입신청_수행시 {
-
-        @Test
-        void 재학생_인증을_완료했다면_성공한다() {
-            // given
-            setFixture();
-            logoutAndReloginAs(1L, MemberRole.GUEST);
-            verifyEmail();
-
-            // when
-            onboardingMemberService.signupMember(SIGNUP_REQUEST);
-
-            // then
-            Member signupMember = memberRepository.findById(1L).get();
-            assertThat(signupMember.isApplied()).isTrue();
-        }
-
-        @Test
-        void 재학생_인증을_미완료했다면_실패한다() {
-            // given
-            setFixture();
-            logoutAndReloginAs(1L, MemberRole.GUEST);
-
-            // when & then
-            assertThatThrownBy(() -> onboardingMemberService.signupMember(SIGNUP_REQUEST))
-                    .isInstanceOf(CustomException.class)
-                    .hasMessage(ErrorCode.UNIV_NOT_VERIFIED.getMessage());
-        }
-    }
-
-    @Nested
     class 회원정보_조회시 {
 
         @Test
@@ -78,7 +47,7 @@ class OnboardingMemberServiceTest extends IntegrationTest {
             setFixture();
             logoutAndReloginAs(1L, MemberRole.GUEST);
             verifyEmail();
-            onboardingMemberService.signupMember(SIGNUP_REQUEST);
+            onboardingMemberService.registerAssociateMember(SIGNUP_REQUEST);
 
             // when
             MemberInfoResponse response = onboardingMemberService.getMemberInfo();

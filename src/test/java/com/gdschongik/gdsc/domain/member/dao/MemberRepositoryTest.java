@@ -188,7 +188,6 @@ class MemberRepositoryTest extends RepositoryTest {
             member.updatePaymentStatus(VERIFIED);
             member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
             member.verifyBevy();
-            member.grant();
 
             flushAndClearBeforeExecute();
 
@@ -209,7 +208,6 @@ class MemberRepositoryTest extends RepositoryTest {
             member.updatePaymentStatus(VERIFIED);
             member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
             member.verifyBevy();
-            member.grant();
 
             flushAndClearBeforeExecute();
 

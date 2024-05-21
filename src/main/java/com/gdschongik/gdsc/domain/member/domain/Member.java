@@ -157,6 +157,7 @@ public class Member extends BaseTimeEntity {
 
     /**
      * 가입 신청 시 작성한 정보를 저장합니다. 재학생 인증을 완료한 회원만 신청할 수 있습니다.
+     * deprecated
      */
     public void signup(String studentId, String name, String phone, Department department, String email) {
         validateStatusUpdatable();
@@ -192,6 +193,7 @@ public class Member extends BaseTimeEntity {
      */
     public void signUp() {
         validateStatusUpdatable();
+        validateSignupAvailable();
 
         this.role = ASSOCIATE;
         registerEvent(new MemberGrantEvent(discordUsername, nickname));
@@ -200,6 +202,7 @@ public class Member extends BaseTimeEntity {
     /**
      * 가입 신청을 승인합니다.<br>
      * 어드민만 사용할 수 있어야 합니다.
+     * deprecated
      */
     public void grant() {
         validateStatusUpdatable();
@@ -241,15 +244,16 @@ public class Member extends BaseTimeEntity {
         this.nickname = nickname;
     }
 
+    // TODO deprecated방식
     public void completeUnivEmailVerification(String univEmail) {
         this.univEmail = univEmail;
         requirement.updateUnivStatus(RequirementStatus.VERIFIED);
-        if (validateSignupAvailable()) {
+        if (isSignupAvailable()) {
             signUp();
         }
     }
 
-    private boolean validateSignupAvailable() {
+    private boolean isSignupAvailable() {
         if (isSignedUp()) {
             return false;
         }
@@ -268,6 +272,24 @@ public class Member extends BaseTimeEntity {
         return true;
     }
 
+    private void validateSignupAvailable() {
+        if (isSignedUp()) {
+            throw new CustomException(MEMBER_ALREADY_GRANTED);
+        }
+
+        if (!this.requirement.isDiscordVerified() || this.discordUsername == null || this.nickname == null) {
+            throw new CustomException(DISCORD_NOT_VERIFIED);
+        }
+
+        if (!this.requirement.isBevyVerified()) {
+            throw new CustomException(BEVY_NOT_VERIFIED);
+        }
+
+        if (!this.requirement.isUnivVerified() || this.univEmail == null) {
+            throw new CustomException(UNIV_NOT_VERIFIED);
+        }
+    }
+
     private boolean isSignedUp() {
         return role.equals(ASSOCIATE) || role.equals(MemberRole.ADMIN);
     }
@@ -279,11 +301,14 @@ public class Member extends BaseTimeEntity {
         this.discordUsername = discordUsername;
         this.nickname = nickname;
 
-        if (validateSignupAvailable()) {
+        if (isSignupAvailable()) {
             signUp();
         }
     }
 
+    /**
+     * deprecated
+     */
     public void updatePaymentStatus(RequirementStatus status) {
         validateStatusUpdatable();
         this.requirement.updatePaymentStatus(status);
@@ -292,7 +317,7 @@ public class Member extends BaseTimeEntity {
     public void verifyBevy() {
         validateStatusUpdatable();
         this.requirement.verifyBevy();
-        if (validateSignupAvailable()) {
+        if (isSignupAvailable()) {
             signUp();
         }
     }
