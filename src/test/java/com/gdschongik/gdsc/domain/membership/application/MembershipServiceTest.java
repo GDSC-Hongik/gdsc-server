@@ -1,5 +1,6 @@
 package com.gdschongik.gdsc.domain.membership.application;
 
+import static com.gdschongik.gdsc.domain.member.domain.MemberRole.*;
 import static com.gdschongik.gdsc.domain.member.domain.RequirementStatus.*;
 import static com.gdschongik.gdsc.global.common.constant.MemberConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.RecruitmentConstant.*;
@@ -8,7 +9,6 @@ import static org.assertj.core.api.Assertions.*;
 
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
-import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRepository;
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.global.exception.CustomException;
@@ -51,7 +51,7 @@ public class MembershipServiceTest extends IntegrationTest {
         void Recruitment가_없다면_실패한다() {
             // given
             setMemberFixture();
-            logoutAndReloginAs(1L, MemberRole.ASSOCIATE);
+            logoutAndReloginAs(1L, ASSOCIATE);
             Long recruitmentId = 1L;
 
             // when & then
@@ -65,8 +65,7 @@ public class MembershipServiceTest extends IntegrationTest {
             // given
             setMemberFixture();
             Recruitment recruitment = createRecruitment();
-            // todo: Member.grant() 작업 후 ASSOCIATE로 로그인하는 것으로 변경
-            logoutAndReloginAs(1L, MemberRole.USER);
+            logoutAndReloginAs(1L, ASSOCIATE);
             membershipService.receiveMembership(recruitment.getId());
 
             // when & then
