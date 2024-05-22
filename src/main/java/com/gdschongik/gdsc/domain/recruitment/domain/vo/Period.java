@@ -35,6 +35,12 @@ public class Period {
         }
     }
 
+    public boolean isOpen() {
+        LocalDateTime now = LocalDateTime.now();
+        return (now.isAfter(this.startDate) || now.isEqual(startDate))
+                && (now.isBefore(this.endDate) || now.isEqual(startDate));
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
