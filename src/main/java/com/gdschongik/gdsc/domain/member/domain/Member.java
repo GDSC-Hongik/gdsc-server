@@ -244,7 +244,6 @@ public class Member extends BaseTimeEntity {
         this.nickname = nickname;
     }
 
-    // TODO deprecated방식
     public void completeUnivEmailVerification(String univEmail) {
         this.univEmail = univEmail;
         requirement.updateUnivStatus(RequirementStatus.VERIFIED);
@@ -291,7 +290,7 @@ public class Member extends BaseTimeEntity {
     }
 
     private boolean isSignedUp() {
-        return role.equals(ASSOCIATE) || role.equals(MemberRole.ADMIN);
+        return role.equals(ASSOCIATE) || role.equals(MemberRole.ADMIN) || role.equals(REGULAR);
     }
 
     // 가입조건 인증 로직
