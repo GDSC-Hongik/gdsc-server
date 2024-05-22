@@ -216,7 +216,7 @@ class MemberTest {
     @Nested
     class 재학생_인증시 {
         @Test
-        void 회원가입_조건이_모두_만족안됐으면_멤버상태가_GUEST이다() {
+        void 회원가입_조건이_모두_만족안됐으면_멤버ROLE이_GUEST이다() {
             // given
             Member member = Member.createGuestMember(OAUTH_ID);
 
@@ -228,7 +228,7 @@ class MemberTest {
         }
 
         @Test
-        void 회원가입_조건이_모두_만족됐으면_멤버상태가_ASOOCIATE이다() {
+        void 회원가입_조건이_모두_만족됐으면_멤버_ROLE이_ASOOCIATE이다() {
             // given
             Member member = Member.createGuestMember(OAUTH_ID);
             member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
