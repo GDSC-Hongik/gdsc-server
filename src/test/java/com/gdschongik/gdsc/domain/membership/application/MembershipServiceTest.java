@@ -41,7 +41,6 @@ public class MembershipServiceTest extends IntegrationTest {
         member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
         member.verifyBevy();
 
-        member.grant();
         return memberRepository.save(member);
     }
 
