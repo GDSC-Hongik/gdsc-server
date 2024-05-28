@@ -45,7 +45,7 @@ class MemberTest {
     class 회원_가입시 {
 
         @Test
-        void 디스코드_인증하지_않았으면_실패() {
+        void 디스코드_인증하지_않았으면_실패한다() {
             // given
             Member member = Member.createGuestMember(OAUTH_ID);
 
@@ -61,7 +61,7 @@ class MemberTest {
         }
 
         @Test
-        void Bevy_연동하지_않았으면_실패() {
+        void Bevy_연동하지_않았으면_실패한다() {
             // given
             Member member = Member.createGuestMember(OAUTH_ID);
 
@@ -77,7 +77,7 @@ class MemberTest {
         }
 
         @Test
-        void 회비납부_디스코드인증_Bevy인증_재학생인증하면_성공() {
+        void 회비납부_디스코드인증_Bevy인증_재학생인증하면_성공한다() {
             // given
             Member member = Member.createGuestMember(OAUTH_ID);
 
@@ -90,7 +90,7 @@ class MemberTest {
         }
 
         @Test
-        void 이미_승인되어있으면_실패() {
+        void 이미_승인되어있으면_실패한다() {
             // given
             Member member = Member.createGuestMember(OAUTH_ID);
 
@@ -110,7 +110,7 @@ class MemberTest {
     @Nested
     class 회원탈퇴시 {
         @Test
-        void 이미_탈퇴한_유저면_실패() {
+        void 이미_탈퇴한_유저면_실패한다() {
             // given
             Member member = Member.createGuestMember(OAUTH_ID);
 
@@ -125,7 +125,7 @@ class MemberTest {
         }
 
         @Test
-        void 회원탈퇴시_이전에_탈퇴하지_않은_유저면_성공() {
+        void 회원탈퇴시_이전에_탈퇴하지_않은_유저면_성공한다() {
             // given
             Member member = Member.createGuestMember(OAUTH_ID);
 
@@ -140,7 +140,7 @@ class MemberTest {
     @Nested
     class 회원수정시 {
         @Test
-        void 탈퇴하지_않은_유저면_성공() {
+        void 탈퇴하지_않은_유저면_성공한다() {
             // given
             Member member = Member.createGuestMember(OAUTH_ID);
 
@@ -152,7 +152,7 @@ class MemberTest {
         }
 
         @Test
-        void 탈퇴한_유저면_실패() {
+        void 탈퇴한_유저면_실패한다() {
             // given
             Member member = Member.createGuestMember(OAUTH_ID);
 
@@ -169,7 +169,7 @@ class MemberTest {
     }
 
     @Test
-    void 디스코드인증시_탈퇴한_유저면_실패() {
+    void 디스코드인증시_탈퇴한_유저면_실패한다() {
         // given
         Member member = Member.createGuestMember(OAUTH_ID);
 
@@ -184,7 +184,7 @@ class MemberTest {
     }
 
     @Test
-    void 회비납부시_탈퇴한_유저면_실패() {
+    void 회비납부시_탈퇴한_유저면_실패한다() {
         // given
         Member member = Member.createGuestMember(OAUTH_ID);
 
@@ -199,7 +199,7 @@ class MemberTest {
     }
 
     @Test
-    void Bevy인증시_탈퇴한_유저면_실패() {
+    void Bevy인증시_탈퇴한_유저면_실패한다() {
         // given
         Member member = Member.createGuestMember(OAUTH_ID);
 
@@ -216,7 +216,7 @@ class MemberTest {
     @Nested
     class 재학생_인증시 {
         @Test
-        void 회원가입_조건이_모두_만족안됐으면_MEMBER_ROLE은_GUEST이다() {
+        void 회원가입_조건이_모두_만족안됐으면_MemberRole은_GUEST이다() {
             // given
             Member member = Member.createGuestMember(OAUTH_ID);
 
@@ -228,7 +228,7 @@ class MemberTest {
         }
 
         @Test
-        void 회원가입_조건이_모두_만족됐으면_MEMBER_ROLE은_ASOOCIATE이다() {
+        void 회원가입_조건이_모두_만족됐으면_MemberRole은_ASOOCIATE이다() {
             // given
             Member member = Member.createGuestMember(OAUTH_ID);
             member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
@@ -245,7 +245,7 @@ class MemberTest {
     @Nested
     class 디스코드_인증시 {
         @Test
-        void 회원가입_조건이_모두_만족안됐으면_MEMBER_ROLE은_GUEST이다() {
+        void 회원가입_조건이_모두_만족안됐으면_MemberRole은_GUEST이다() {
             // given
             Member member = Member.createGuestMember(OAUTH_ID);
 
@@ -257,7 +257,7 @@ class MemberTest {
         }
 
         @Test
-        void 회원가입_조건이_모두_만족됐으면_MEMBER_ROLE은_ASOOCIATE이다() {
+        void 회원가입_조건이_모두_만족됐으면_MemberRole은_ASOOCIATE이다() {
             // given
             Member member = Member.createGuestMember(OAUTH_ID);
             member.completeUnivEmailVerification(UNIV_EMAIL);
@@ -274,7 +274,7 @@ class MemberTest {
     @Nested
     class Bevy_인증시 {
         @Test
-        void 회원가입_조건이_모두_만족안됐으면_MEMBER_ROLE은_GUEST이다() {
+        void 회원가입_조건이_모두_만족안됐으면_MemberRole은_GUEST이다() {
             // given
             Member member = Member.createGuestMember(OAUTH_ID);
 
@@ -286,7 +286,7 @@ class MemberTest {
         }
 
         @Test
-        void 회원가입_조건이_모두_만족됐으면_MEMBER_ROLE은_ASOOCIATE이다() {
+        void 회원가입_조건이_모두_만족됐으면_MemberRole은_ASOOCIATE이다() {
             // given
             Member member = Member.createGuestMember(OAUTH_ID);
             member.completeUnivEmailVerification(UNIV_EMAIL);
