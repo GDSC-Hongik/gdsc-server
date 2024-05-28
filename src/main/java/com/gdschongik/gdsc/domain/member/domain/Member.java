@@ -172,7 +172,6 @@ public class Member extends BaseTimeEntity {
 
     /**
      * 가입 신청 시 작성한 정보를 저장한다.
-     *
      */
     public void register(String studentId, String name, String phone, Department department, String email) {
         validateStatusUpdatable();
@@ -290,7 +289,7 @@ public class Member extends BaseTimeEntity {
     }
 
     private boolean isSignedUp() {
-        return role.equals(ASSOCIATE) || role.equals(MemberRole.ADMIN) || role.equals(REGULAR);
+        return role.equals(ASSOCIATE) || role.equals(ADMIN) || role.equals(REGULAR);
     }
 
     // 가입조건 인증 로직

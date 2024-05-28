@@ -146,11 +146,10 @@ class MemberRepositoryTest extends RepositoryTest {
     class 역할로_조회할때 {
 
         @Test
-        void 승인전이라면_GUEST로_조회된다() {
+        void 가입신청후_회원가입전_이라면_GUEST로_조회된다() {
             // given
             Member member = getMember();
-            member.completeUnivEmailVerification(UNIV_EMAIL);
-            member.signup(STUDENT_ID, NAME, PHONE_NUMBER, D022, UNIV_EMAIL);
+            member.register(STUDENT_ID, NAME, PHONE_NUMBER, D022, UNIV_EMAIL);
 
             flushAndClearBeforeExecute();
 
@@ -163,29 +162,11 @@ class MemberRepositoryTest extends RepositoryTest {
         }
 
         @Test
-        void 승인전이라면_USER로_조회되지_않는다() {
+        void 회원가입후라면_ASSOCIATE로_조회된다() {
             // given
             Member member = getMember();
+            member.register(STUDENT_ID, NAME, PHONE_NUMBER, D022, UNIV_EMAIL);
             member.completeUnivEmailVerification(UNIV_EMAIL);
-            member.signup(STUDENT_ID, NAME, PHONE_NUMBER, D022, UNIV_EMAIL);
-
-            flushAndClearBeforeExecute();
-
-            // when
-            Page<Member> members = memberRepository.findAllByRole(EMPTY_QUERY_OPTION, PageRequest.of(0, 10), USER);
-
-            // then
-            Member guest = memberRepository.findById(1L).get();
-            assertThat(members).doesNotContain(guest);
-        }
-
-        @Test
-        void 승인후라면_USER로_조회된다() {
-            // given
-            Member member = getMember();
-            member.completeUnivEmailVerification(UNIV_EMAIL);
-            member.signup(STUDENT_ID, NAME, PHONE_NUMBER, D022, UNIV_EMAIL);
-            member.updatePaymentStatus(VERIFIED);
             member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
             member.verifyBevy();
 
@@ -200,12 +181,11 @@ class MemberRepositoryTest extends RepositoryTest {
         }
 
         @Test
-        void 승인후라면_GUEST로_조회되지_않는다() {
+        void 회원가입후라면_GUEST로_조회되지_않는다() {
             // given
             Member member = getMember();
+            member.register(STUDENT_ID, NAME, PHONE_NUMBER, D022, UNIV_EMAIL);
             member.completeUnivEmailVerification(UNIV_EMAIL);
-            member.signup(STUDENT_ID, NAME, PHONE_NUMBER, D022, UNIV_EMAIL);
-            member.updatePaymentStatus(VERIFIED);
             member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
             member.verifyBevy();
 
