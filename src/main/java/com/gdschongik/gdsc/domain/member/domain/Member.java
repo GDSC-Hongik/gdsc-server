@@ -190,7 +190,7 @@ public class Member extends BaseTimeEntity {
      * 조건 2 : 디스코드 인증
      * 조건 3 : Bevy 인증
      */
-    public void signUp() {
+    public void signup() {
         validateStatusUpdatable();
         validateSignupAvailable();
 
@@ -247,7 +247,7 @@ public class Member extends BaseTimeEntity {
         this.univEmail = univEmail;
         requirement.updateUnivStatus(RequirementStatus.VERIFIED);
         if (isSignupAvailable()) {
-            signUp();
+            signup();
         }
     }
 
@@ -300,7 +300,7 @@ public class Member extends BaseTimeEntity {
         this.nickname = nickname;
 
         if (isSignupAvailable()) {
-            signUp();
+            signup();
         }
     }
 
@@ -316,7 +316,7 @@ public class Member extends BaseTimeEntity {
         validateStatusUpdatable();
         this.requirement.verifyBevy();
         if (isSignupAvailable()) {
-            signUp();
+            signup();
         }
     }
 

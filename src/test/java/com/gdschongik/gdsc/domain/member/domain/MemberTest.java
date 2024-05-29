@@ -54,7 +54,7 @@ class MemberTest {
 
             // when & then
             assertThatThrownBy(() -> {
-                        member.signUp();
+                        member.signup();
                     })
                     .isInstanceOf(CustomException.class)
                     .hasMessage(DISCORD_NOT_VERIFIED.getMessage());
@@ -70,14 +70,14 @@ class MemberTest {
 
             // when & then
             assertThatThrownBy(() -> {
-                        member.signUp();
+                        member.signup();
                     })
                     .isInstanceOf(CustomException.class)
                     .hasMessage(BEVY_NOT_VERIFIED.getMessage());
         }
 
         @Test
-        void 회비납부_디스코드인증_Bevy인증_재학생인증하면_성공한다() {
+        void 디스코드인증_Bevy인증_재학생인증하면_성공한다() {
             // given
             Member member = Member.createGuestMember(OAUTH_ID);
 
@@ -100,7 +100,7 @@ class MemberTest {
 
             // when & then
             assertThatThrownBy(() -> {
-                        member.signUp();
+                        member.signup();
                     })
                     .isInstanceOf(CustomException.class)
                     .hasMessage(MEMBER_ALREADY_GRANTED.getMessage());

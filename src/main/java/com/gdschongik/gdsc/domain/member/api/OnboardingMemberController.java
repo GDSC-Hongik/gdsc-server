@@ -1,6 +1,7 @@
 package com.gdschongik.gdsc.domain.member.api;
 
 import com.gdschongik.gdsc.domain.member.application.OnboardingMemberService;
+import com.gdschongik.gdsc.domain.member.dto.request.MemberRegisterRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberSignupRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.OnboardingMemberUpdateRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberInfoResponse;
@@ -63,7 +64,7 @@ public class OnboardingMemberController {
 
     @Operation(summary = "가입 신청", description = "가입을 신청합니다.")
     @PostMapping("/register")
-    public ResponseEntity<Void> registerAssociateMember(@Valid @RequestBody MemberSignupRequest request) {
+    public ResponseEntity<Void> registerAssociateMember(@Valid @RequestBody MemberRegisterRequest request) {
         onboardingMemberService.registerAssociateMember(request);
         return ResponseEntity.ok().build();
     }
