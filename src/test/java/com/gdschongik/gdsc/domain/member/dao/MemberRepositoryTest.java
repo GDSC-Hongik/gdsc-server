@@ -35,10 +35,10 @@ class MemberRepositoryTest extends RepositoryTest {
     }
 
     @Nested
-    class 승인_가능_멤버를_조회할때 {
+    class 준회원_승급가능_멤버를_조회할때 {
 
         @Test
-        void 가입조건_모두_충족했다면_조회_성공한다() {
+        void 준회원_승급조건_모두_충족했다면_조회_성공한다() {
             // given
             Member member = getMember();
             member.getRequirement().updateUnivStatus(VERIFIED);
@@ -146,7 +146,7 @@ class MemberRepositoryTest extends RepositoryTest {
     class 역할로_조회할때 {
 
         @Test
-        void 회원정보_작성후_회원가입전_이라면_GUEST로_조회된다() {
+        void 기본회원정보_작성후_준회원_승급전_이라면_GUEST로_조회된다() {
             // given
             Member member = getMember();
             member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, UNIV_EMAIL);
@@ -162,7 +162,7 @@ class MemberRepositoryTest extends RepositoryTest {
         }
 
         @Test
-        void 회원정보_작성후_회원가입후라면_ASSOCIATE로_조회된다() {
+        void 기본회원정보_작성후_준회원_승급후_이라면_ASSOCIATE로_조회된다() {
             // given
             Member member = getMember();
             member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, UNIV_EMAIL);
@@ -181,7 +181,7 @@ class MemberRepositoryTest extends RepositoryTest {
         }
 
         @Test
-        void 회원가입후라면_GUEST로_조회되지_않는다() {
+        void 기본회원정보_작성후_준회원_승급후라면_GUEST로_조회되지_않는다() {
             // given
             Member member = getMember();
             member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, UNIV_EMAIL);
