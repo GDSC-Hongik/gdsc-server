@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 class MemberTest {
 
     @Nested
-    class 기본회원정보_입력시 {
+    class 게스트_회원가입시 {
         @Test
         void MemberRole은_GUEST이다() {
             // given
