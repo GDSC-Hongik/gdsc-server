@@ -33,7 +33,8 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
         void 기간이_중복되는_Recruitment가_있다면_실패한다() {
             // given
             createRecruitment();
-            RecruitmentCreateRequest request = new RecruitmentCreateRequest(RECRUITMENT_NAME, START_DATE, END_DATE);
+            RecruitmentCreateRequest request =
+                    new RecruitmentCreateRequest(RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE);
 
             // when & then
             assertThatThrownBy(() -> adminRecruitmentService.createRecruitment(request))
