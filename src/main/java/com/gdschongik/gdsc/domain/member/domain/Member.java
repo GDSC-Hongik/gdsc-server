@@ -186,7 +186,7 @@ public class Member extends BaseTimeEntity {
 
     /**
      * GUEST -> 준회원으로 승급됩니다.
-     * 모든 조건을 충족하면 서버에서 각각의 인증과정에서 자동으로 signUp()호출된다
+     * 모든 조건을 충족하면 서버에서 각각의 인증과정에서 자동으로 advanceToAssociate()호출된다
      * 조건 1 : 재학생 인증
      * 조건 2 : 디스코드 인증
      * 조건 3 : Bevy 인증
