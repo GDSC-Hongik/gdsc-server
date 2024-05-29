@@ -57,7 +57,7 @@ class OnboardingMemberServiceTest extends IntegrationTest {
         }
 
         @Test
-        void 회워정보_작성을_완료하지_않았다면_실패한다() {
+        void 회원정보_작성을_완료하지_않았다면_실패한다() {
             // given
             setFixture();
             logoutAndReloginAs(1L, MemberRole.GUEST);

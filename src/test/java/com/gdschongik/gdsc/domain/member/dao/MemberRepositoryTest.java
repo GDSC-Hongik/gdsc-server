@@ -162,7 +162,7 @@ class MemberRepositoryTest extends RepositoryTest {
         }
 
         @Test
-        void 회원가입후라면_ASSOCIATE로_조회된다() {
+        void 회원정보_작성후_회원가입후라면_ASSOCIATE로_조회된다() {
             // given
             Member member = getMember();
             member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, UNIV_EMAIL);

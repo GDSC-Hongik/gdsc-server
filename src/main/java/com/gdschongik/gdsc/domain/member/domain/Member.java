@@ -171,7 +171,7 @@ public class Member extends BaseTimeEntity {
     }
 
     /**
-     * 가입 신청 시 작성한 정보를 저장한다.
+     * 기본 회원 정보 작성한다.
      */
     public void updateBasicMemberInfo(
             String studentId, String name, String phone, Department department, String email) {
@@ -191,9 +191,9 @@ public class Member extends BaseTimeEntity {
      * 조건 2 : 디스코드 인증
      * 조건 3 : Bevy 인증
      */
-    public void signup() {
+    public void advanceToAssociate() {
         validateStatusUpdatable();
-        validateSignupAvailable();
+        validateAssociateAvailable();
 
         this.role = ASSOCIATE;
         registerEvent(new MemberGrantEvent(discordUsername, nickname));
@@ -247,13 +247,13 @@ public class Member extends BaseTimeEntity {
     public void completeUnivEmailVerification(String univEmail) {
         this.univEmail = univEmail;
         requirement.updateUnivStatus(RequirementStatus.VERIFIED);
-        if (isSignupAvailable()) {
-            signup();
+        if (isAssociateAvailable()) {
+            advanceToAssociate();
         }
     }
 
-    private boolean isSignupAvailable() {
-        if (isSignedUp()) {
+    private boolean isAssociateAvailable() {
+        if (isAssociate()) {
             return false;
         }
 
@@ -271,8 +271,8 @@ public class Member extends BaseTimeEntity {
         return true;
     }
 
-    private void validateSignupAvailable() {
-        if (isSignedUp()) {
+    private void validateAssociateAvailable() {
+        if (isAssociate()) {
             throw new CustomException(MEMBER_ALREADY_GRANTED);
         }
 
@@ -289,7 +289,7 @@ public class Member extends BaseTimeEntity {
         }
     }
 
-    private boolean isSignedUp() {
+    private boolean isAssociate() {
         return role.equals(ASSOCIATE) || role.equals(ADMIN) || role.equals(REGULAR);
     }
 
@@ -300,8 +300,8 @@ public class Member extends BaseTimeEntity {
         this.discordUsername = discordUsername;
         this.nickname = nickname;
 
-        if (isSignupAvailable()) {
-            signup();
+        if (isAssociateAvailable()) {
+            advanceToAssociate();
         }
     }
 
@@ -316,8 +316,8 @@ public class Member extends BaseTimeEntity {
     public void verifyBevy() {
         validateStatusUpdatable();
         this.requirement.verifyBevy();
-        if (isSignupAvailable()) {
-            signup();
+        if (isAssociateAvailable()) {
+            advanceToAssociate();
         }
     }
 

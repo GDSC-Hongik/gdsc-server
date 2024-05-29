@@ -54,7 +54,7 @@ class MemberTest {
 
             // when & then
             assertThatThrownBy(() -> {
-                        member.signup();
+                        member.advanceToAssociate();
                     })
                     .isInstanceOf(CustomException.class)
                     .hasMessage(DISCORD_NOT_VERIFIED.getMessage());
@@ -70,7 +70,7 @@ class MemberTest {
 
             // when & then
             assertThatThrownBy(() -> {
-                        member.signup();
+                        member.advanceToAssociate();
                     })
                     .isInstanceOf(CustomException.class)
                     .hasMessage(BEVY_NOT_VERIFIED.getMessage());
@@ -100,7 +100,7 @@ class MemberTest {
 
             // when & then
             assertThatThrownBy(() -> {
-                        member.signup();
+                        member.advanceToAssociate();
                     })
                     .isInstanceOf(CustomException.class)
                     .hasMessage(MEMBER_ALREADY_GRANTED.getMessage());
