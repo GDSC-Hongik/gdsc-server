@@ -4,7 +4,7 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
-import com.gdschongik.gdsc.domain.member.dto.request.MemberRegisterRequest;
+import com.gdschongik.gdsc.domain.member.dto.request.BasicMemberInfoRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberSignupRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.OnboardingMemberUpdateRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberInfoResponse;
@@ -64,9 +64,9 @@ public class OnboardingMemberService {
     }
 
     @Transactional
-    public void registerAssociateMember(MemberRegisterRequest request) {
+    public void updateBasicMemberInfo(BasicMemberInfoRequest request) {
         Member currentMember = memberUtil.getCurrentMember();
-        currentMember.register(
+        currentMember.updateBasicMemberInfo(
                 request.studentId(), request.name(), request.phone(), request.department(), request.email());
     }
 }

@@ -1,7 +1,7 @@
 package com.gdschongik.gdsc.domain.member.api;
 
 import com.gdschongik.gdsc.domain.member.application.OnboardingMemberService;
-import com.gdschongik.gdsc.domain.member.dto.request.MemberRegisterRequest;
+import com.gdschongik.gdsc.domain.member.dto.request.BasicMemberInfoRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberSignupRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.OnboardingMemberUpdateRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberInfoResponse;
@@ -62,10 +62,10 @@ public class OnboardingMemberController {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "가입 신청", description = "가입을 신청합니다.")
-    @PostMapping("/register")
-    public ResponseEntity<Void> registerAssociateMember(@Valid @RequestBody MemberRegisterRequest request) {
-        onboardingMemberService.registerAssociateMember(request);
+    @Operation(summary = "기본 회원정보 작성", description = "회원정보를 작성합니다")
+    @PostMapping("/update-basic-info")
+    public ResponseEntity<Void> updateBasicMemberInfo(@Valid @RequestBody BasicMemberInfoRequest request) {
+        onboardingMemberService.updateBasicMemberInfo(request);
         return ResponseEntity.ok().build();
     }
 }

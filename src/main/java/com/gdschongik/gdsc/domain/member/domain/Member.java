@@ -173,7 +173,8 @@ public class Member extends BaseTimeEntity {
     /**
      * 가입 신청 시 작성한 정보를 저장한다.
      */
-    public void register(String studentId, String name, String phone, Department department, String email) {
+    public void updateBasicMemberInfo(
+            String studentId, String name, String phone, Department department, String email) {
         validateStatusUpdatable();
 
         this.studentId = studentId;

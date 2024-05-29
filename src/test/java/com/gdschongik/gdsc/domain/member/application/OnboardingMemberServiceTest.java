@@ -7,7 +7,7 @@ import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Department;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
-import com.gdschongik.gdsc.domain.member.dto.request.MemberRegisterRequest;
+import com.gdschongik.gdsc.domain.member.dto.request.BasicMemberInfoRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberInfoResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
@@ -18,8 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 class OnboardingMemberServiceTest extends IntegrationTest {
 
-    public static final MemberRegisterRequest REGISTER_REQUEST =
-            new MemberRegisterRequest(STUDENT_ID, NAME, PHONE_NUMBER, Department.D015, EMAIL);
+    public static final BasicMemberInfoRequest BASIC_MEMBER_INFO_REQUEST =
+            new BasicMemberInfoRequest(STUDENT_ID, NAME, PHONE_NUMBER, Department.D015, EMAIL);
 
     @Autowired
     private OnboardingMemberService onboardingMemberService;
@@ -42,12 +42,12 @@ class OnboardingMemberServiceTest extends IntegrationTest {
     class 회원정보_조회시 {
 
         @Test
-        void 가입신청을_완료헀다면_성공한다() {
+        void 회원정보_작성을_완료헀다면_성공한다() {
             // given
             setFixture();
             logoutAndReloginAs(1L, MemberRole.GUEST);
             verifyEmail();
-            onboardingMemberService.registerAssociateMember(REGISTER_REQUEST);
+            onboardingMemberService.updateBasicMemberInfo(BASIC_MEMBER_INFO_REQUEST);
 
             // when
             MemberInfoResponse response = onboardingMemberService.getMemberInfo();
@@ -57,7 +57,7 @@ class OnboardingMemberServiceTest extends IntegrationTest {
         }
 
         @Test
-        void 가입신청을_완료하지_않았다면_실패한다() {
+        void 회워정보_작성을_완료하지_않았다면_실패한다() {
             // given
             setFixture();
             logoutAndReloginAs(1L, MemberRole.GUEST);

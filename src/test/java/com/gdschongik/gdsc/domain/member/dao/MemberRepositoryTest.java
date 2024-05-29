@@ -146,10 +146,10 @@ class MemberRepositoryTest extends RepositoryTest {
     class 역할로_조회할때 {
 
         @Test
-        void 가입신청후_회원가입전_이라면_GUEST로_조회된다() {
+        void 회원정보_작성후_회원가입전_이라면_GUEST로_조회된다() {
             // given
             Member member = getMember();
-            member.register(STUDENT_ID, NAME, PHONE_NUMBER, D022, UNIV_EMAIL);
+            member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, UNIV_EMAIL);
 
             flushAndClearBeforeExecute();
 
@@ -165,7 +165,7 @@ class MemberRepositoryTest extends RepositoryTest {
         void 회원가입후라면_ASSOCIATE로_조회된다() {
             // given
             Member member = getMember();
-            member.register(STUDENT_ID, NAME, PHONE_NUMBER, D022, UNIV_EMAIL);
+            member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, UNIV_EMAIL);
             member.completeUnivEmailVerification(UNIV_EMAIL);
             member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
             member.verifyBevy();
@@ -184,7 +184,7 @@ class MemberRepositoryTest extends RepositoryTest {
         void 회원가입후라면_GUEST로_조회되지_않는다() {
             // given
             Member member = getMember();
-            member.register(STUDENT_ID, NAME, PHONE_NUMBER, D022, UNIV_EMAIL);
+            member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, UNIV_EMAIL);
             member.completeUnivEmailVerification(UNIV_EMAIL);
             member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
             member.verifyBevy();
