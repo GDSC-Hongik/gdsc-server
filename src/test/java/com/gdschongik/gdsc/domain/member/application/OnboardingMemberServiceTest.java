@@ -42,7 +42,7 @@ class OnboardingMemberServiceTest extends IntegrationTest {
     class 회원정보_조회시 {
 
         @Test
-        void 기본회원정보_작성을_완료헀다면_성공한다() {
+        void 기본_회원정보_작성을_완료헀다면_성공한다() {
             // given
             setFixture();
             logoutAndReloginAs(1L, MemberRole.GUEST);
@@ -57,7 +57,7 @@ class OnboardingMemberServiceTest extends IntegrationTest {
         }
 
         @Test
-        void 기본회원정보_작성을_완료하지_않았다면_실패한다() {
+        void 기본_회원정보_작성을_완료하지_않았다면_실패한다() {
             // given
             setFixture();
             logoutAndReloginAs(1L, MemberRole.GUEST);

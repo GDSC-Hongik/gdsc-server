@@ -228,7 +228,7 @@ class MemberTest {
         }
 
         @Test
-        void 준회원_승급조건이_모두_만족됐으면_MemberRole은_ASOOCIATE이다() {
+        void 준회원_승급조건이_모두_만족됐으면_MemberRole은_ASSOCIATE이다() {
             // given
             Member member = Member.createGuestMember(OAUTH_ID);
             member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
@@ -257,7 +257,7 @@ class MemberTest {
         }
 
         @Test
-        void 준회원_승급조건이_모두_만족됐으면_MemberRole은_ASOOCIATE이다() {
+        void 준회원_승급조건이_모두_만족됐으면_MemberRole은_ASSOCIATE이다() {
             // given
             Member member = Member.createGuestMember(OAUTH_ID);
             member.completeUnivEmailVerification(UNIV_EMAIL);
@@ -286,7 +286,7 @@ class MemberTest {
         }
 
         @Test
-        void 준회원_승급조건이_모두_만족됐으면_MemberRole은_ASOOCIATE이다() {
+        void 준회원_승급조건이_모두_만족됐으면_MemberRole은_ASSOCIATE이다() {
             // given
             Member member = Member.createGuestMember(OAUTH_ID);
             member.completeUnivEmailVerification(UNIV_EMAIL);
