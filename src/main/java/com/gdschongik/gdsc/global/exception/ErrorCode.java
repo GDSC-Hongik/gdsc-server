@@ -58,6 +58,9 @@ public enum ErrorCode {
     DISCORD_NICKNAME_NOTNULL(HttpStatus.INTERNAL_SERVER_ERROR, "닉네임은 빈 값이 될 수 없습니다."),
     DISCORD_MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "디스코드 멤버를 찾을 수 없습니다."),
 
+    // SemesterType
+    SEMESTER_TYPE_INVALID_FOR_DATE(HttpStatus.CONFLICT, "해당 날짜가 포함되는 학기가 없습니다."),
+
     // Membership
     PAYMENT_NOT_VERIFIED(HttpStatus.CONFLICT, "회비 납부가 완료되지 않았습니다."),
     MEMBERSHIP_NOT_APPLICABLE(HttpStatus.CONFLICT, "멤버십 가입을 신청할 수 없는 회원입니다."),
@@ -67,7 +70,10 @@ public enum ErrorCode {
     DATE_PRECEDENCE_INVALID(HttpStatus.BAD_REQUEST, "종료일이 시작일과 같거나 앞설 수 없습니다."),
     RECRUITMENT_NOT_OPEN(HttpStatus.CONFLICT, "리크루트먼트 모집기간이 아닙니다."),
     RECRUITMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "열려있는 리크루트먼트가 없습니다."),
-    RECRUITMENT_PERIOD_OVERLAP(HttpStatus.BAD_REQUEST, "모집 기간이 중복됩니다.");
+    RECRUITMENT_PERIOD_OVERLAP(HttpStatus.BAD_REQUEST, "모집 기간이 중복됩니다."),
+    RECRUITMENT_PERIOD_MISMATCH_ACADEMIC_YEAR(HttpStatus.BAD_REQUEST, "모집 시작일과 종료일의 연도가 학년도와 일치하지 않습니다."),
+    RECRUITMENT_PERIOD_MISMATCH_SEMESTER_TYPE(HttpStatus.BAD_REQUEST, "모집 시작일과 종료일의 입력된 학기가 일치하지 않습니다."),
+    RECRUITMENT_PERIOD_NOT_WITHIN_TWO_WEEKS(HttpStatus.BAD_REQUEST, "모집 시작일과 종료일이 학기 시작일로부터 2주 이내에 있지 않습니다.");
 
     private final HttpStatus status;
     private final String message;
