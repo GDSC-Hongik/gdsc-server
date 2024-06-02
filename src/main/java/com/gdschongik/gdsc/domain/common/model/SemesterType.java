@@ -1,9 +1,10 @@
 package com.gdschongik.gdsc.domain.common.model;
 
+import static com.gdschongik.gdsc.global.common.constant.TemporalConstant.*;
+
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
 import java.time.LocalDateTime;
-import java.time.Month;
 import java.time.MonthDay;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,12 +25,11 @@ public enum SemesterType {
         LocalDateTime secondSemesterStartDate =
                 LocalDateTime.of(year, SECOND.startDate.getMonth(), SECOND.startDate.getDayOfMonth(), 0, 0);
 
-        if (dateTime.isAfter(firstSemesterStartDate.minusWeeks(2))
-                && dateTime.getMonthValue() < Month.JULY.getValue()) {
+        if (dateTime.isAfter(firstSemesterStartDate.minusWeeks(TWO_WEEKS)) && dateTime.getMonthValue() < JULY) {
             return FIRST;
         }
 
-        if (dateTime.isAfter(secondSemesterStartDate.minusWeeks(2))) {
+        if (dateTime.isAfter(secondSemesterStartDate.minusWeeks(TWO_WEEKS))) {
             return SECOND;
         }
         throw new CustomException(ErrorCode.SEMESTER_TYPE_INVALID_FOR_DATE);

@@ -1,5 +1,6 @@
 package com.gdschongik.gdsc.domain.recruitment.application;
 
+import static com.gdschongik.gdsc.global.common.constant.TemporalConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.common.model.SemesterType;
@@ -62,13 +63,13 @@ public class AdminRecruitmentService {
                 0,
                 0);
 
-        if (semesterStartDate.minusWeeks(2).isAfter(startDate)
-                || semesterStartDate.plusWeeks(2).isBefore(startDate)) {
+        if (semesterStartDate.minusWeeks(TWO_WEEKS).isAfter(startDate)
+                || semesterStartDate.plusWeeks(TWO_WEEKS).isBefore(startDate)) {
             throw new CustomException(RECRUITMENT_PERIOD_NOT_WITHIN_TWO_WEEKS);
         }
 
-        if (semesterStartDate.minusWeeks(2).isAfter(endDate)
-                || semesterStartDate.plusWeeks(2).isBefore(endDate)) {
+        if (semesterStartDate.minusWeeks(TWO_WEEKS).isAfter(endDate)
+                || semesterStartDate.plusWeeks(TWO_WEEKS).isBefore(endDate)) {
             throw new CustomException(RECRUITMENT_PERIOD_NOT_WITHIN_TWO_WEEKS);
         }
     }
