@@ -23,7 +23,6 @@ public enum SemesterType {
 
     private static SemesterType getSemesterType(LocalDateTime dateTime) {
         int year = dateTime.getYear();
-
         LocalDateTime firstSemesterStartDate =
                 LocalDateTime.of(year, FIRST.startDate.getMonth(), FIRST.startDate.getDayOfMonth(), 0, 0);
         LocalDateTime secondSemesterStartDate =
