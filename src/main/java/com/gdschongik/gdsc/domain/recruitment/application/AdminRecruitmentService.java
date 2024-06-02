@@ -55,8 +55,12 @@ public class AdminRecruitmentService {
 
     private void validatePeriodWithinTwoWeeks(
             LocalDateTime startDate, LocalDateTime endDate, Integer academicYear, SemesterType semesterType) {
-        LocalDateTime semesterStartDate =
-                LocalDateTime.of(academicYear, SemesterType.getStartMonth(semesterType), 1, 0, 0);
+        LocalDateTime semesterStartDate = LocalDateTime.of(
+                academicYear,
+                semesterType.getStartDate().getMonth(),
+                semesterType.getStartDate().getDayOfMonth(),
+                0,
+                0);
 
         if (semesterStartDate.minusWeeks(2).isAfter(startDate)
                 || semesterStartDate.plusWeeks(2).isBefore(startDate)) {
