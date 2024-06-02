@@ -253,7 +253,7 @@ public class Member extends BaseTimeEntity {
     }
 
     private boolean isAssociateAvailable() {
-        if (isAssociate()) {
+        if (checkIfAssociateOrHigher()) {
             return false;
         }
 
@@ -272,7 +272,7 @@ public class Member extends BaseTimeEntity {
     }
 
     private void validateAssociateAvailable() {
-        if (isAssociate()) {
+        if (checkIfAssociateOrHigher()) {
             throw new CustomException(MEMBER_ALREADY_GRANTED);
         }
 
@@ -289,7 +289,7 @@ public class Member extends BaseTimeEntity {
         }
     }
 
-    private boolean isAssociate() {
+    private boolean checkIfAssociateOrHigher() {
         return role.equals(ASSOCIATE) || role.equals(ADMIN) || role.equals(REGULAR);
     }
 
