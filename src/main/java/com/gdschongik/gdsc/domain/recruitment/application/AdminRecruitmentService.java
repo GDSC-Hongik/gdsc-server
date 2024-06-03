@@ -1,5 +1,6 @@
 package com.gdschongik.gdsc.domain.recruitment.application;
 
+import static com.gdschongik.gdsc.domain.common.model.SemesterType.*;
 import static com.gdschongik.gdsc.global.common.constant.TemporalConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
@@ -46,12 +47,33 @@ public class AdminRecruitmentService {
 
     private void validatePeriodMatchesSemesterType(
             LocalDateTime startDate, LocalDateTime endDate, SemesterType semesterType) {
-        if (SemesterType.from(startDate).equals(semesterType)
-                && SemesterType.from(endDate).equals(semesterType)) {
+        if (getSemesterTypeByStartDateOrEndDate(startDate).equals(semesterType)
+                && getSemesterTypeByStartDateOrEndDate(endDate).equals(semesterType)) {
             return;
         }
 
         throw new CustomException(RECRUITMENT_PERIOD_MISMATCH_SEMESTER_TYPE);
+    }
+
+    private SemesterType getSemesterTypeByStartDateOrEndDate(LocalDateTime dateTime) {
+        int year = dateTime.getYear();
+        LocalDateTime firstSemesterStartDate = LocalDateTime.of(
+                year, FIRST.getStartDate().getMonth(), FIRST.getStartDate().getDayOfMonth(), 0, 0);
+        LocalDateTime secondSemesterStartDate = LocalDateTime.of(
+                year, SECOND.getStartDate().getMonth(), SECOND.getStartDate().getDayOfMonth(), 0, 0);
+
+        /*
+        개강일 기준으로 2주 전까지는 같은 학기로 간주한다.
+         */
+        if (dateTime.isAfter(firstSemesterStartDate.minusWeeks(TWO_WEEKS)) && dateTime.getMonthValue() < JULY) {
+            return FIRST;
+        }
+
+        if (dateTime.isAfter(secondSemesterStartDate.minusWeeks(TWO_WEEKS))) {
+            return SECOND;
+        }
+
+        throw new CustomException(SEMESTER_TYPE_INVALID_FOR_DATE);
     }
 
     private void validatePeriodWithinTwoWeeks(
