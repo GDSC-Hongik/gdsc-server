@@ -25,6 +25,9 @@ public enum ErrorCode {
     // Parameter
     INVALID_QUERY_PARAMETER(HttpStatus.BAD_REQUEST, "잘못된 쿼리 파라미터입니다."),
 
+    // Money
+    MONEY_AMOUNT_NOT_NULL(HttpStatus.INTERNAL_SERVER_ERROR, "금액은 null이 될 수 없습니다."),
+
     // Member
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 커뮤니티 멤버입니다."),
     MEMBER_DELETED(HttpStatus.CONFLICT, "탈퇴한 회원입니다."),
