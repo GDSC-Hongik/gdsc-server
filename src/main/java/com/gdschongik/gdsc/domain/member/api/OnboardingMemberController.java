@@ -1,6 +1,7 @@
 package com.gdschongik.gdsc.domain.member.api;
 
 import com.gdschongik.gdsc.domain.member.application.OnboardingMemberService;
+import com.gdschongik.gdsc.domain.member.dto.request.BasicMemberInfoRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberSignupRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.OnboardingMemberUpdateRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberInfoResponse;
@@ -25,7 +26,7 @@ public class OnboardingMemberController {
 
     private final OnboardingMemberService onboardingMemberService;
 
-    @Operation(summary = "회원 가입 신청", description = "회원 가입을 신청합니다.")
+    @Operation(summary = "회원 가입 신청", description = "회원 가입을 신청합니다.", deprecated = true)
     @PostMapping
     public ResponseEntity<Void> signupMember(@Valid @RequestBody MemberSignupRequest request) {
         onboardingMemberService.signupMember(request);
@@ -58,6 +59,13 @@ public class OnboardingMemberController {
     @PostMapping("/me/link-bevy")
     public ResponseEntity<Void> linkBevy() {
         onboardingMemberService.verifyBevyStatus();
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "기본 회원정보 작성", description = "기본 회원정보를 작성합니다")
+    @PostMapping("/me/basic-info")
+    public ResponseEntity<Void> updateBasicMemberInfo(@Valid @RequestBody BasicMemberInfoRequest request) {
+        onboardingMemberService.updateBasicMemberInfo(request);
         return ResponseEntity.ok().build();
     }
 }

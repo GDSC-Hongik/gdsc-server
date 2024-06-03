@@ -65,14 +65,14 @@ public class AdminMemberController {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "회원 승인", description = "회원의 가입을 승인합니다.")
+    @Operation(summary = "회원 승인", description = "회원의 가입을 승인합니다.", deprecated = true)
     @PutMapping("/grant")
     public ResponseEntity<MemberGrantResponse> grantMember(@Valid @RequestBody MemberGrantRequest request) {
         MemberGrantResponse response = adminMemberService.grantMember(request);
         return ResponseEntity.ok().body(response);
     }
 
-    @Operation(summary = "승인 가능 회원 전체 조회", description = "승인 가능한 회원 전체를 조회합니다.")
+    @Operation(summary = "승인 가능 회원 전체 조회", description = "승인 가능한 회원 전체를 조회합니다.", deprecated = true)
     @GetMapping("/grantable")
     public ResponseEntity<Page<AdminMemberResponse>> getGrantableMembers(
             MemberQueryOption queryOption, Pageable pageable) {
@@ -80,7 +80,7 @@ public class AdminMemberController {
         return ResponseEntity.ok().body(response);
     }
 
-    @Operation(summary = "회비 납부 상태에 따른 회원 전체 조회", description = "회비 납부 상태에 따라 회원 목록을 조회합니다.")
+    @Operation(summary = "회비 납부 상태에 따른 회원 전체 조회", description = "회비 납부 상태에 따라 회원 목록을 조회합니다.", deprecated = true)
     @GetMapping("/payment")
     public ResponseEntity<Page<AdminMemberResponse>> getMembersByPaymentStatus(
             MemberQueryOption queryOption,
@@ -91,7 +91,7 @@ public class AdminMemberController {
         return ResponseEntity.ok().body(response);
     }
 
-    @Operation(summary = "회비 납부 상태 변경", description = "회비 납부 상태를 변경합니다.")
+    @Operation(summary = "회비 납부 상태 변경", description = "회비 납부 상태를 변경합니다.", deprecated = true)
     @PutMapping("/payment/{memberId}")
     public ResponseEntity<Void> updatePayment(
             @PathVariable Long memberId, @Valid @RequestBody MemberPaymentRequest request) {
@@ -99,7 +99,7 @@ public class AdminMemberController {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "승인된 회원 전체 조회", description = "승인된 회원 전체를 조회합니다.")
+    @Operation(summary = "승인된 회원 전체 조회", description = "승인된 회원 전체를 조회합니다.", deprecated = true)
     @GetMapping("/granted")
     public ResponseEntity<Page<AdminMemberResponse>> getGrantedMembers(
             MemberQueryOption queryOption, Pageable pageable) {

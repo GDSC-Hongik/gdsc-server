@@ -4,6 +4,7 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
+import com.gdschongik.gdsc.domain.member.dto.request.BasicMemberInfoRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberSignupRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.OnboardingMemberUpdateRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberInfoResponse;
@@ -60,5 +61,12 @@ public class OnboardingMemberService {
     public void verifyBevyStatus() {
         Member currentMember = memberUtil.getCurrentMember();
         currentMember.verifyBevy();
+    }
+
+    @Transactional
+    public void updateBasicMemberInfo(BasicMemberInfoRequest request) {
+        Member currentMember = memberUtil.getCurrentMember();
+        currentMember.updateBasicMemberInfo(
+                request.studentId(), request.name(), request.phone(), request.department(), request.email());
     }
 }

@@ -157,6 +157,7 @@ public class Member extends BaseTimeEntity {
 
     /**
      * 가입 신청 시 작성한 정보를 저장합니다. 재학생 인증을 완료한 회원만 신청할 수 있습니다.
+     * deprecated
      */
     public void signup(String studentId, String name, String phone, Department department, String email) {
         validateStatusUpdatable();
@@ -170,14 +171,44 @@ public class Member extends BaseTimeEntity {
     }
 
     /**
+     * 기본 회원 정보를 작성한다.
+     */
+    public void updateBasicMemberInfo(
+            String studentId, String name, String phone, Department department, String email) {
+        validateStatusUpdatable();
+
+        this.studentId = studentId;
+        this.name = name;
+        this.phone = phone;
+        this.department = department;
+        this.email = email;
+    }
+
+    /**
+     * GUEST -> 준회원으로 승급됩니다.
+     * 모든 조건을 충족하면 서버에서 각각의 인증과정에서 자동으로 advanceToAssociate()호출된다
+     * 조건 1 : 재학생 인증
+     * 조건 2 : 디스코드 인증
+     * 조건 3 : Bevy 인증
+     */
+    public void advanceToAssociate() {
+        validateStatusUpdatable();
+        validateAssociateAvailable();
+
+        this.role = ASSOCIATE;
+        registerEvent(new MemberGrantEvent(discordUsername, nickname));
+    }
+
+    /**
      * 가입 신청을 승인합니다.<br>
      * 어드민만 사용할 수 있어야 합니다.
+     * deprecated
      */
     public void grant() {
         validateStatusUpdatable();
         validateGrantAvailable();
 
-        this.role = USER;
+        this.role = ASSOCIATE;
         registerEvent(new MemberGrantEvent(discordUsername, nickname));
     }
 
@@ -216,17 +247,67 @@ public class Member extends BaseTimeEntity {
     public void completeUnivEmailVerification(String univEmail) {
         this.univEmail = univEmail;
         requirement.updateUnivStatus(RequirementStatus.VERIFIED);
+        if (isAssociateAvailable()) {
+            advanceToAssociate();
+        }
+    }
+
+    private boolean isAssociateAvailable() {
+        if (isAtLeastAssociate()) {
+            return false;
+        }
+
+        if (!this.requirement.isDiscordVerified() || this.discordUsername == null || this.nickname == null) {
+            return false;
+        }
+
+        if (!this.requirement.isBevyVerified()) {
+            return false;
+        }
+
+        if (!this.requirement.isUnivVerified() || this.univEmail == null) {
+            return false;
+        }
+        return true;
+    }
+
+    private void validateAssociateAvailable() {
+        if (isAtLeastAssociate()) {
+            throw new CustomException(MEMBER_ALREADY_GRANTED);
+        }
+
+        if (!this.requirement.isDiscordVerified() || this.discordUsername == null || this.nickname == null) {
+            throw new CustomException(DISCORD_NOT_VERIFIED);
+        }
+
+        if (!this.requirement.isBevyVerified()) {
+            throw new CustomException(BEVY_NOT_VERIFIED);
+        }
+
+        if (!this.requirement.isUnivVerified() || this.univEmail == null) {
+            throw new CustomException(UNIV_NOT_VERIFIED);
+        }
+    }
+
+    private boolean isAtLeastAssociate() {
+        return role.equals(ASSOCIATE) || role.equals(ADMIN) || role.equals(REGULAR);
     }
 
     // 가입조건 인증 로직
     public void verifyDiscord(String discordUsername, String nickname) {
         validateStatusUpdatable();
-
         this.requirement.verifyDiscord();
         this.discordUsername = discordUsername;
         this.nickname = nickname;
+
+        if (isAssociateAvailable()) {
+            advanceToAssociate();
+        }
     }
 
+    /**
+     * deprecated
+     */
     public void updatePaymentStatus(RequirementStatus status) {
         validateStatusUpdatable();
         this.requirement.updatePaymentStatus(status);
@@ -235,12 +316,16 @@ public class Member extends BaseTimeEntity {
     public void verifyBevy() {
         validateStatusUpdatable();
         this.requirement.verifyBevy();
+        if (isAssociateAvailable()) {
+            advanceToAssociate();
+        }
     }
 
     // 데이터 전달 로직
 
+    // TODO 한꺼번에 USER관련 기능을 삭제 할때 함께 USER부분을 삭제하기
     public boolean isGranted() {
-        return role.equals(USER) || role.equals(MemberRole.ADMIN);
+        return role.equals(USER) || role.equals(ASSOCIATE) || role.equals(MemberRole.ADMIN);
     }
 
     /**
