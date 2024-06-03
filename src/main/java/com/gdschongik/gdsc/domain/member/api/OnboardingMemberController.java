@@ -63,7 +63,7 @@ public class OnboardingMemberController {
     }
 
     @Operation(summary = "기본 회원정보 작성", description = "기본 회원정보를 작성합니다")
-    @PostMapping("/basic-info")
+    @PostMapping("/me/basic-info")
     public ResponseEntity<Void> updateBasicMemberInfo(@Valid @RequestBody BasicMemberInfoRequest request) {
         onboardingMemberService.updateBasicMemberInfo(request);
         return ResponseEntity.ok().build();
