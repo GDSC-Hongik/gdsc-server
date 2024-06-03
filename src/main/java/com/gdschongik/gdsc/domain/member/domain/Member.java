@@ -176,6 +176,7 @@ public class Member extends BaseTimeEntity {
     public void updateBasicMemberInfo(
             String studentId, String name, String phone, Department department, String email) {
         validateStatusUpdatable();
+        verifyInfoStatus();
 
         this.studentId = studentId;
         this.name = name;
@@ -187,9 +188,10 @@ public class Member extends BaseTimeEntity {
     /**
      * GUEST -> 준회원으로 승급됩니다.
      * 모든 조건을 충족하면 서버에서 각각의 인증과정에서 자동으로 advanceToAssociate()호출된다
-     * 조건 1 : 재학생 인증
-     * 조건 2 : 디스코드 인증
-     * 조건 3 : Bevy 인증
+     * 조건 1 : 기본 회원정보 작성
+     * 조건 2 : 재학생 인증
+     * 조건 3 : 디스코드 인증
+     * 조건 4 : Bevy 인증
      */
     public void advanceToAssociate() {
         validateStatusUpdatable();
@@ -256,6 +258,9 @@ public class Member extends BaseTimeEntity {
         if (isAtLeastAssociate()) {
             return false;
         }
+        if (!this.requirement.isInfoVerified()) {
+            return false;
+        }
 
         if (!this.requirement.isDiscordVerified() || this.discordUsername == null || this.nickname == null) {
             return false;
@@ -274,6 +279,10 @@ public class Member extends BaseTimeEntity {
     private void validateAssociateAvailable() {
         if (isAtLeastAssociate()) {
             throw new CustomException(MEMBER_ALREADY_GRANTED);
+        }
+
+        if (!this.requirement.isInfoVerified()) {
+            throw new CustomException(BASIC_INFO_NOT_VERIFIED);
         }
 
         if (!this.requirement.isDiscordVerified() || this.discordUsername == null || this.nickname == null) {
@@ -316,6 +325,13 @@ public class Member extends BaseTimeEntity {
     public void verifyBevy() {
         validateStatusUpdatable();
         this.requirement.verifyBevy();
+        if (isAssociateAvailable()) {
+            advanceToAssociate();
+        }
+    }
+
+    public void verifyInfoStatus() {
+        this.requirement.verifyInfoStatus();
         if (isAssociateAvailable()) {
             advanceToAssociate();
         }

@@ -49,6 +49,7 @@ class MemberTest {
             // given
             Member member = Member.createGuestMember(OAUTH_ID);
 
+            member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
             member.completeUnivEmailVerification(UNIV_EMAIL);
             member.verifyBevy();
 
@@ -65,6 +66,7 @@ class MemberTest {
             // given
             Member member = Member.createGuestMember(OAUTH_ID);
 
+            member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
             member.completeUnivEmailVerification(UNIV_EMAIL);
             member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
 
@@ -77,10 +79,11 @@ class MemberTest {
         }
 
         @Test
-        void 디스코드인증_Bevy인증_재학생인증하면_성공한다() {
+        void 기본_회원정보_작성_디스코드인증_Bevy인증_재학생인증하면_성공한다() {
             // given
             Member member = Member.createGuestMember(OAUTH_ID);
 
+            member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
             member.completeUnivEmailVerification(UNIV_EMAIL);
             member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
             member.verifyBevy();
@@ -93,7 +96,7 @@ class MemberTest {
         void 이미_준회원으로_승급_돼있으면_실패한다() {
             // given
             Member member = Member.createGuestMember(OAUTH_ID);
-
+            member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
             member.completeUnivEmailVerification(UNIV_EMAIL);
             member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
             member.verifyBevy();
@@ -231,6 +234,7 @@ class MemberTest {
         void 준회원_승급조건이_모두_만족됐으면_MemberRole은_ASSOCIATE이다() {
             // given
             Member member = Member.createGuestMember(OAUTH_ID);
+            member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
             member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
             member.verifyBevy();
 
@@ -260,6 +264,7 @@ class MemberTest {
         void 준회원_승급조건이_모두_만족됐으면_MemberRole은_ASSOCIATE이다() {
             // given
             Member member = Member.createGuestMember(OAUTH_ID);
+            member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
             member.completeUnivEmailVerification(UNIV_EMAIL);
             member.verifyBevy();
 
@@ -289,6 +294,7 @@ class MemberTest {
         void 준회원_승급조건이_모두_만족됐으면_MemberRole은_ASSOCIATE이다() {
             // given
             Member member = Member.createGuestMember(OAUTH_ID);
+            member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
             member.completeUnivEmailVerification(UNIV_EMAIL);
             member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
 
