@@ -73,7 +73,7 @@ public class AdminRecruitmentService {
             return SECOND;
         }
 
-        throw new CustomException(SEMESTER_TYPE_INVALID_FOR_DATE);
+        throw new CustomException(RECRUITMENT_PERIOD_SEMESTER_TYPE_UNMAPPED);
     }
 
     private void validatePeriodWithinTwoWeeks(
