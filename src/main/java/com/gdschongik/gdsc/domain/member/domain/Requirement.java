@@ -1,7 +1,10 @@
 package com.gdschongik.gdsc.domain.member.domain;
 
 import static com.gdschongik.gdsc.domain.member.domain.RequirementStatus.*;
+import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
+import static com.gdschongik.gdsc.global.exception.ErrorCode.UNIV_NOT_VERIFIED;
 
+import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;

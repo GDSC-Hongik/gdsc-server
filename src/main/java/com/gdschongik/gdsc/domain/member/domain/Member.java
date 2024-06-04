@@ -183,6 +183,8 @@ public class Member extends BaseTimeEntity {
         this.phone = phone;
         this.department = department;
         this.email = email;
+
+        registerEvent(new MemberAssociateEvent());
     }
 
     /**
@@ -195,7 +197,6 @@ public class Member extends BaseTimeEntity {
      */
     public void advanceToAssociate() {
         validateStatusUpdatable();
-        validateAssociateAvailable();
 
         this.role = ASSOCIATE;
         registerEvent(new MemberGrantEvent(discordUsername, nickname));
@@ -249,15 +250,16 @@ public class Member extends BaseTimeEntity {
     public void completeUnivEmailVerification(String univEmail) {
         this.univEmail = univEmail;
         requirement.updateUnivStatus(RequirementStatus.VERIFIED);
-        if (isAssociateAvailable()) {
-            advanceToAssociate();
+        registerEvent(new MemberAssociateEvent());
+    }
+    public boolean isAllVerified() {
+        if (validateAssociateAvailable()) {
+            return true;
         }
+        return false;
     }
 
-    private boolean isAssociateAvailable() {
-        if (isAtLeastAssociate()) {
-            return false;
-        }
+    private boolean validateAssociateAvailable() {
         if (!this.requirement.isInfoVerified()) {
             return false;
         }
@@ -276,42 +278,13 @@ public class Member extends BaseTimeEntity {
         return true;
     }
 
-    private void validateAssociateAvailable() {
-        if (isAtLeastAssociate()) {
-            throw new CustomException(MEMBER_ALREADY_GRANTED);
-        }
-
-        if (!this.requirement.isInfoVerified()) {
-            throw new CustomException(BASIC_INFO_NOT_VERIFIED);
-        }
-
-        if (!this.requirement.isDiscordVerified() || this.discordUsername == null || this.nickname == null) {
-            throw new CustomException(DISCORD_NOT_VERIFIED);
-        }
-
-        if (!this.requirement.isBevyVerified()) {
-            throw new CustomException(BEVY_NOT_VERIFIED);
-        }
-
-        if (!this.requirement.isUnivVerified() || this.univEmail == null) {
-            throw new CustomException(UNIV_NOT_VERIFIED);
-        }
-    }
-
-    private boolean isAtLeastAssociate() {
-        return role.equals(ASSOCIATE) || role.equals(ADMIN) || role.equals(REGULAR);
-    }
-
-    // 가입조건 인증 로직
     public void verifyDiscord(String discordUsername, String nickname) {
         validateStatusUpdatable();
         this.requirement.verifyDiscord();
         this.discordUsername = discordUsername;
         this.nickname = nickname;
 
-        if (isAssociateAvailable()) {
-            advanceToAssociate();
-        }
+        registerEvent(new MemberAssociateEvent());
     }
 
     /**
@@ -324,17 +297,14 @@ public class Member extends BaseTimeEntity {
 
     public void verifyBevy() {
         validateStatusUpdatable();
+
         this.requirement.verifyBevy();
-        if (isAssociateAvailable()) {
-            advanceToAssociate();
-        }
+        registerEvent(new MemberAssociateEvent());
     }
 
     public void verifyInfoStatus() {
         this.requirement.verifyInfoStatus();
-        if (isAssociateAvailable()) {
-            advanceToAssociate();
-        }
+        registerEvent(new MemberAssociateEvent());
     }
 
     // 데이터 전달 로직
