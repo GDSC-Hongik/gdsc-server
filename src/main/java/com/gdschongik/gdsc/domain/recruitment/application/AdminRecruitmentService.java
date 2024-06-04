@@ -10,6 +10,7 @@ import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentCreateRequest;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -65,7 +66,8 @@ public class AdminRecruitmentService {
         /*
         개강일 기준으로 2주 전까지는 같은 학기로 간주한다.
          */
-        if (dateTime.isAfter(firstSemesterStartDate.minusWeeks(PRE_SEMESTER_TERM)) && dateTime.getMonthValue() < JULY) {
+        if (dateTime.isAfter(firstSemesterStartDate.minusWeeks(PRE_SEMESTER_TERM))
+                && dateTime.getMonthValue() < Month.JULY.getValue()) {
             return FIRST;
         }
 
