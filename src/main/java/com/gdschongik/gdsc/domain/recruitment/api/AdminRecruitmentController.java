@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "Admin Recruitment", description = "어드민 리쿠르팅 관리 API입니다.")
 @RestController
-@RequestMapping("/admin/recruitment")
+@RequestMapping("/admin/recruitments")
 @RequiredArgsConstructor
 public class AdminRecruitmentController {
 
