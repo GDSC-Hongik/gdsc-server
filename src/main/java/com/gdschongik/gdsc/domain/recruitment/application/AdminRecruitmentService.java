@@ -65,11 +65,11 @@ public class AdminRecruitmentService {
         /*
         개강일 기준으로 2주 전까지는 같은 학기로 간주한다.
          */
-        if (dateTime.isAfter(firstSemesterStartDate.minusWeeks(TWO_WEEKS)) && dateTime.getMonthValue() < JULY) {
+        if (dateTime.isAfter(firstSemesterStartDate.minusWeeks(PRE_SEMESTER_TERM)) && dateTime.getMonthValue() < JULY) {
             return FIRST;
         }
 
-        if (dateTime.isAfter(secondSemesterStartDate.minusWeeks(TWO_WEEKS))) {
+        if (dateTime.isAfter(secondSemesterStartDate.minusWeeks(PRE_SEMESTER_TERM))) {
             return SECOND;
         }
 
@@ -85,13 +85,13 @@ public class AdminRecruitmentService {
                 0,
                 0);
 
-        if (semesterStartDate.minusWeeks(TWO_WEEKS).isAfter(startDate)
-                || semesterStartDate.plusWeeks(TWO_WEEKS).isBefore(startDate)) {
+        if (semesterStartDate.minusWeeks(PRE_SEMESTER_TERM).isAfter(startDate)
+                || semesterStartDate.plusWeeks(PRE_SEMESTER_TERM).isBefore(startDate)) {
             throw new CustomException(RECRUITMENT_PERIOD_NOT_WITHIN_TWO_WEEKS);
         }
 
-        if (semesterStartDate.minusWeeks(TWO_WEEKS).isAfter(endDate)
-                || semesterStartDate.plusWeeks(TWO_WEEKS).isBefore(endDate)) {
+        if (semesterStartDate.minusWeeks(PRE_SEMESTER_TERM).isAfter(endDate)
+                || semesterStartDate.plusWeeks(PRE_SEMESTER_TERM).isBefore(endDate)) {
             throw new CustomException(RECRUITMENT_PERIOD_NOT_WITHIN_TWO_WEEKS);
         }
     }
