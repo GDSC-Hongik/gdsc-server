@@ -1,7 +1,7 @@
 package com.gdschongik.gdsc.domain.member.domain;
 
 import static com.gdschongik.gdsc.domain.member.domain.Department.*;
-import static com.gdschongik.gdsc.domain.member.domain.MemberRole.*;
+import static com.gdschongik.gdsc.domain.member.domain.MemberRole.ASSOCIATE;
 import static com.gdschongik.gdsc.domain.member.domain.MemberStatus.*;
 import static com.gdschongik.gdsc.domain.member.domain.RequirementStatus.*;
 import static com.gdschongik.gdsc.global.common.constant.MemberConstant.*;
@@ -42,7 +42,92 @@ class MemberTest {
     }
 
     @Nested
+    class 준회원_승급_만족여부 {
+        @Test
+        void 기본_회원정보_기입하지_않았으면_isAllVerified는_false이다() {
+            // given
+            Member member = Member.createGuestMember(OAUTH_ID);
+
+            member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
+            member.completeUnivEmailVerification(UNIV_EMAIL);
+            member.verifyBevy();
+
+            // when & then
+            assertThat(member.isAllVerified()).isFalse();
+        }
+
+        @Test
+        void 재학생_인증하지_않았으면_isAllVerified는_false이다() {
+            // given
+            Member member = Member.createGuestMember(OAUTH_ID);
+
+            member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
+            member.completeUnivEmailVerification(UNIV_EMAIL);
+            member.verifyBevy();
+
+            // when & then
+            assertThat(member.isAllVerified()).isFalse();
+        }
+
+        @Test
+        void 디스코드_인증하지_않았으면_isAllVerified는_false이다() {
+            // given
+            Member member = Member.createGuestMember(OAUTH_ID);
+
+            member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
+            member.completeUnivEmailVerification(UNIV_EMAIL);
+            member.verifyBevy();
+
+            // when & then
+            assertThat(member.isAllVerified()).isFalse();
+        }
+
+        @Test
+        void Bevy_연동하지_않았으면_isAllVerified는_false이다() {
+            // given
+            Member member = Member.createGuestMember(OAUTH_ID);
+
+            member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
+            member.completeUnivEmailVerification(UNIV_EMAIL);
+            member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
+
+            // when & then
+            assertThat(member.isAllVerified()).isFalse();
+        }
+
+        @Test
+        void 기본_회원정보_작성_디스코드인증_Bevy인증_재학생인증하면_isAllVerified는_true이다() {
+            // given
+            Member member = Member.createGuestMember(OAUTH_ID);
+
+            member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
+            member.completeUnivEmailVerification(UNIV_EMAIL);
+            member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
+            member.verifyBevy();
+
+            // then
+            assertThat(member.isAllVerified()).isTrue();
+        }
+    }
+
+    @Nested
     class 준회원으로_승급시 {
+        @Test
+        void 기본_회원정보_작성하지_않았으면_실패한다() {
+            // given
+            Member member = Member.createGuestMember(OAUTH_ID);
+
+            member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
+            member.completeUnivEmailVerification(UNIV_EMAIL);
+            member.verifyBevy();
+
+            // when & then
+            assertThatThrownBy(() -> {
+                        member.advanceToAssociate();
+                    })
+                    .isInstanceOf(CustomException.class)
+                    .hasMessage(BASIC_INFO_NOT_VERIFIED.getMessage());
+        }
 
         @Test
         void 디스코드_인증하지_않았으면_실패한다() {
@@ -70,6 +155,7 @@ class MemberTest {
             member.completeUnivEmailVerification(UNIV_EMAIL);
             member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
 
+            System.out.println(member.getRequirement().isInfoVerified());
             // when & then
             assertThatThrownBy(() -> {
                         member.advanceToAssociate();
@@ -79,7 +165,7 @@ class MemberTest {
         }
 
         @Test
-        void 기본_회원정보_작성_디스코드인증_Bevy인증_재학생인증하면_성공한다() {
+        void 디스코드인증_Bevy인증_재학생인증하면_성공한다() {
             // given
             Member member = Member.createGuestMember(OAUTH_ID);
 
@@ -87,6 +173,7 @@ class MemberTest {
             member.completeUnivEmailVerification(UNIV_EMAIL);
             member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
             member.verifyBevy();
+            member.advanceToAssociate();
 
             // then
             assertThat(member.getRole()).isEqualTo(ASSOCIATE);
@@ -96,10 +183,12 @@ class MemberTest {
         void 이미_준회원으로_승급_돼있으면_실패한다() {
             // given
             Member member = Member.createGuestMember(OAUTH_ID);
+
             member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
             member.completeUnivEmailVerification(UNIV_EMAIL);
             member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
             member.verifyBevy();
+            member.advanceToAssociate();
 
             // when & then
             assertThatThrownBy(() -> {
@@ -214,95 +303,5 @@ class MemberTest {
                 })
                 .isInstanceOf(CustomException.class)
                 .hasMessage(MEMBER_DELETED.getMessage());
-    }
-
-    @Nested
-    class 재학생_인증시 {
-        @Test
-        void 준회원_승급조건이_모두_만족안됐으면_MemberRole은_GUEST이다() {
-            // given
-            Member member = Member.createGuestMember(OAUTH_ID);
-
-            // when
-            member.completeUnivEmailVerification(UNIV_EMAIL);
-
-            // then
-            assertThat(member.getRole()).isEqualTo(GUEST);
-        }
-
-        @Test
-        void 준회원_승급조건이_모두_만족됐으면_MemberRole은_ASSOCIATE이다() {
-            // given
-            Member member = Member.createGuestMember(OAUTH_ID);
-            member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
-            member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
-            member.verifyBevy();
-
-            // when
-            member.completeUnivEmailVerification(UNIV_EMAIL);
-
-            // then
-            assertThat(member.getRole()).isEqualTo(ASSOCIATE);
-        }
-    }
-
-    @Nested
-    class 디스코드_인증시 {
-        @Test
-        void 준회원_승급조건이_모두_만족안됐으면_MemberRole은_GUEST이다() {
-            // given
-            Member member = Member.createGuestMember(OAUTH_ID);
-
-            // when
-            member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
-
-            // then
-            assertThat(member.getRole()).isEqualTo(GUEST);
-        }
-
-        @Test
-        void 준회원_승급조건이_모두_만족됐으면_MemberRole은_ASSOCIATE이다() {
-            // given
-            Member member = Member.createGuestMember(OAUTH_ID);
-            member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
-            member.completeUnivEmailVerification(UNIV_EMAIL);
-            member.verifyBevy();
-
-            // when
-            member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
-
-            // then
-            assertThat(member.getRole()).isEqualTo(ASSOCIATE);
-        }
-    }
-
-    @Nested
-    class Bevy_인증시 {
-        @Test
-        void 준회원_승급조건이_모두_만족안됐으면_MemberRole은_GUEST이다() {
-            // given
-            Member member = Member.createGuestMember(OAUTH_ID);
-
-            // when
-            member.verifyBevy();
-
-            // then
-            assertThat(member.getRole()).isEqualTo(GUEST);
-        }
-
-        @Test
-        void 준회원_승급조건이_모두_만족됐으면_MemberRole은_ASSOCIATE이다() {
-            // given
-            Member member = Member.createGuestMember(OAUTH_ID);
-            member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
-            member.completeUnivEmailVerification(UNIV_EMAIL);
-            member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
-
-            // when
-            member.verifyBevy();
-
-            // then
-            assertThat(member.getRole()).isEqualTo(ASSOCIATE);
-        }
     }
 }

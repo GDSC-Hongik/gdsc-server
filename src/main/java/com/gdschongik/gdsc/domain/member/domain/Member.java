@@ -132,14 +132,15 @@ public class Member extends BaseTimeEntity {
 
     /**
      * 회원 승인 가능 여부를 검증합니다.
+     * TODO validateAdvanceAvailable로 수정해야 함
      */
     private void validateGrantAvailable() {
         if (isGranted()) {
             throw new CustomException(MEMBER_ALREADY_GRANTED);
         }
 
-        if (!this.requirement.isPaymentVerified()) {
-            throw new CustomException(PAYMENT_NOT_VERIFIED);
+        if (!this.requirement.isInfoVerified()) {
+            throw new CustomException(BASIC_INFO_NOT_VERIFIED);
         }
 
         if (!this.requirement.isDiscordVerified() || this.discordUsername == null || this.nickname == null) {
@@ -184,7 +185,7 @@ public class Member extends BaseTimeEntity {
         this.department = department;
         this.email = email;
 
-        registerEvent(new MemberAssociateEvent());
+        registerEvent(new MemberAssociateEvent(this));
     }
 
     /**
@@ -197,6 +198,7 @@ public class Member extends BaseTimeEntity {
      */
     public void advanceToAssociate() {
         validateStatusUpdatable();
+        validateGrantAvailable();
 
         this.role = ASSOCIATE;
         registerEvent(new MemberGrantEvent(discordUsername, nickname));
@@ -250,8 +252,9 @@ public class Member extends BaseTimeEntity {
     public void completeUnivEmailVerification(String univEmail) {
         this.univEmail = univEmail;
         requirement.updateUnivStatus(RequirementStatus.VERIFIED);
-        registerEvent(new MemberAssociateEvent());
+        registerEvent(new MemberAssociateEvent(this));
     }
+
     public boolean isAllVerified() {
         if (validateAssociateAvailable()) {
             return true;
@@ -284,7 +287,7 @@ public class Member extends BaseTimeEntity {
         this.discordUsername = discordUsername;
         this.nickname = nickname;
 
-        registerEvent(new MemberAssociateEvent());
+        registerEvent(new MemberAssociateEvent(this));
     }
 
     /**
@@ -299,12 +302,12 @@ public class Member extends BaseTimeEntity {
         validateStatusUpdatable();
 
         this.requirement.verifyBevy();
-        registerEvent(new MemberAssociateEvent());
+        registerEvent(new MemberAssociateEvent(this));
     }
 
     public void verifyInfoStatus() {
         this.requirement.verifyInfoStatus();
-        registerEvent(new MemberAssociateEvent());
+        registerEvent(new MemberAssociateEvent(this));
     }
 
     // 데이터 전달 로직

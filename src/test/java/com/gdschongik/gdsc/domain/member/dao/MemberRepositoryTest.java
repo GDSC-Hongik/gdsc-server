@@ -41,9 +41,9 @@ class MemberRepositoryTest extends RepositoryTest {
         void 준회원_승급조건_모두_충족했다면_조회_성공한다() {
             // given
             Member member = getMember();
+            member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
             member.getRequirement().updateUnivStatus(VERIFIED);
             member.getRequirement().verifyDiscord();
-            member.getRequirement().updatePaymentStatus(VERIFIED);
             member.getRequirement().verifyBevy();
 
             // when
@@ -169,6 +169,7 @@ class MemberRepositoryTest extends RepositoryTest {
             member.completeUnivEmailVerification(UNIV_EMAIL);
             member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
             member.verifyBevy();
+            member.advanceToAssociate();
 
             flushAndClearBeforeExecute();
 
@@ -188,6 +189,7 @@ class MemberRepositoryTest extends RepositoryTest {
             member.completeUnivEmailVerification(UNIV_EMAIL);
             member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
             member.verifyBevy();
+            member.advanceToAssociate();
 
             flushAndClearBeforeExecute();
 

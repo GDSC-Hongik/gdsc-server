@@ -1,5 +1,6 @@
 package com.gdschongik.gdsc.domain.membership.application;
 
+import static com.gdschongik.gdsc.domain.member.domain.Department.D022;
 import static com.gdschongik.gdsc.domain.member.domain.MemberRole.*;
 import static com.gdschongik.gdsc.domain.member.domain.RequirementStatus.*;
 import static com.gdschongik.gdsc.global.common.constant.MemberConstant.*;
@@ -37,6 +38,7 @@ public class MembershipServiceTest extends IntegrationTest {
         Member member = Member.createGuestMember(OAUTH_ID);
 
         member.completeUnivEmailVerification(UNIV_EMAIL);
+        member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
         member.updatePaymentStatus(VERIFIED);
         member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
         member.verifyBevy();
