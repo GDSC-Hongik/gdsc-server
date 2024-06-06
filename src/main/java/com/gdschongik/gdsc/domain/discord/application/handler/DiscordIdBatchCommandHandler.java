@@ -28,8 +28,5 @@ public class DiscordIdBatchCommandHandler implements DiscordEventHandler {
                 .sendMessage(REPLY_MESSAGE_BATCH_DISCORD_ID)
                 .setEphemeral(true)
                 .queue();
-
-        // 뷰 로직.
-        // @Trasactional DB
     }
 }
