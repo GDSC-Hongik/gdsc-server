@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class MemberAssociateEventHandler {
-    public void handle(Object context) {
-        MemberAssociateEvent event = (MemberAssociateEvent) context;
+    public void handle(MemberAssociateEvent context) {
+        MemberAssociateEvent event = context;
         if (validateAdvanceAvailable(event.member())) {
             advanceToAssociate(event.member());
         }
