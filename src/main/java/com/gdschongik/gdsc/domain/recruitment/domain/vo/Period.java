@@ -1,7 +1,8 @@
 package com.gdschongik.gdsc.domain.recruitment.domain.vo;
 
+import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
+
 import com.gdschongik.gdsc.global.exception.CustomException;
-import com.gdschongik.gdsc.global.exception.ErrorCode;
 import jakarta.persistence.Embeddable;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -31,7 +32,7 @@ public class Period {
 
     private static void validatePeriod(LocalDateTime startDate, LocalDateTime endDate) {
         if (startDate.isAfter(endDate) || startDate.isEqual(endDate)) {
-            throw new CustomException(ErrorCode.DATE_PRECEDENCE_INVALID);
+            throw new CustomException(DATE_PRECEDENCE_INVALID);
         }
     }
 
@@ -39,6 +40,13 @@ public class Period {
         LocalDateTime now = LocalDateTime.now();
         return (now.isAfter(this.startDate) || now.isEqual(startDate))
                 && (now.isBefore(this.endDate) || now.isEqual(startDate));
+    }
+
+    public void validatePeriodOverlap(LocalDateTime startDate, LocalDateTime endDate) {
+        if (this.endDate.isBefore(startDate) || this.startDate.isAfter(endDate)) {
+            return;
+        }
+        throw new CustomException(RECRUITMENT_PERIOD_OVERLAP);
     }
 
     @Override
