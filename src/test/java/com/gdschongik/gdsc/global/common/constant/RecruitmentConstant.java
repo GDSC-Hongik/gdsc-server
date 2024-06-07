@@ -4,12 +4,29 @@ import com.gdschongik.gdsc.domain.common.model.SemesterType;
 import java.time.LocalDateTime;
 
 public class RecruitmentConstant {
-    public static final String RECRUITMENT_NAME = "20xx학년도 1학기";
-    public static final LocalDateTime START_DATE = LocalDateTime.of(2024, 3, 02, 00, 0);
-    public static final LocalDateTime WRONG_END_DATE = LocalDateTime.of(2024, 3, 02, 00, 0);
-    public static final LocalDateTime END_DATE = LocalDateTime.of(2024, 3, 11, 00, 00);
+    // 1차 모집 상수
+    public static final String RECRUITMENT_NAME = "2024학년도 1학기 1차 모집";
+    public static final LocalDateTime START_DATE = LocalDateTime.of(2024, 3, 2, 0, 0);
+    public static final LocalDateTime WRONG_END_DATE = LocalDateTime.of(2024, 3, 2, 0, 0);
+    public static final LocalDateTime END_DATE = LocalDateTime.of(2024, 3, 5, 0, 0);
     public static final Integer ACADEMIC_YEAR = 2024;
     public static final SemesterType SEMESTER_TYPE = SemesterType.FIRST;
+
+    // 2차 모집 상수
+    public static final String ROUND_TWO_RECRUITMENT_NAME = "2024학년도 1학기 2차 모집";
+    public static final LocalDateTime ROUND_TWO_START_DATE = LocalDateTime.of(2024, 3, 8, 0, 0);
+    public static final LocalDateTime ROUND_TWO_END_DATE = LocalDateTime.of(2024, 3, 10, 0, 0);
+
+    // 2학기 모집 상수
+    public static final String SECOND_SEMESTER_RECRUITMENT_NAME = "2024학년도 2학기 1차 모집";
+    public static final LocalDateTime SECOND_SEMESTER_START_DATE = LocalDateTime.of(2024, 9, 2, 0, 0);
+    public static final LocalDateTime SECOND_SEMESTER_END_DATE = LocalDateTime.of(2024, 9, 5, 0, 0);
+    public static final SemesterType SECOND_SEMESTER_SEMESTER_TYPE = SemesterType.SECOND;
+
+    // 모집 차수
+    public static final int FIRST_ROUND = 1;
+    public static final int SECOND_ROUND = 2;
+    public static final String FIRST_ROUND_NAME = "1차";
 
     private RecruitmentConstant() {}
 }
