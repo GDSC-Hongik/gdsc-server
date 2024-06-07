@@ -96,7 +96,7 @@ class MemberTest {
         }
 
         @Test
-        void 기본_회원정보_작성_디스코드인증_Bevy인증_재학생인증하면_isAllVerified는_true이다() {
+        void 준회원_가입조건을_모두_충족했다면_isAllVerified는_true이다() {
             // given
             Member member = Member.createGuestMember(OAUTH_ID);
 

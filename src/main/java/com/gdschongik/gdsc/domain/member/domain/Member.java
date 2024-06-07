@@ -256,13 +256,13 @@ public class Member extends BaseTimeEntity {
     }
 
     public boolean isAllVerified() {
-        if (validateAssociateAvailable()) {
+        if (isAssociateAvailable()) {
             return true;
         }
         return false;
     }
 
-    private boolean validateAssociateAvailable() {
+    private boolean isAssociateAvailable() {
         if (!this.requirement.isInfoVerified()) {
             return false;
         }
@@ -307,7 +307,6 @@ public class Member extends BaseTimeEntity {
 
     public void verifyInfoStatus() {
         this.requirement.verifyInfoStatus();
-        registerEvent(new MemberAssociateEvent(this));
     }
 
     // 데이터 전달 로직
