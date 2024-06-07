@@ -3,16 +3,26 @@ package com.gdschongik.gdsc.domain.recruitment.application;
 import static com.gdschongik.gdsc.domain.common.model.SemesterType.*;
 import static com.gdschongik.gdsc.global.common.constant.TemporalConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
+import static java.util.Comparator.*;
 
 import com.gdschongik.gdsc.domain.common.model.SemesterType;
 import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRepository;
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
+import com.gdschongik.gdsc.domain.recruitment.domain.vo.AcademicYearSemesterKey;
 import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentCreateRequest;
+import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentQueryOption;
+import com.gdschongik.gdsc.domain.recruitment.dto.response.AdminRecruitmentResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +45,35 @@ public class AdminRecruitmentService {
                 request.name(), request.startDate(), request.endDate(), request.academicYear(), request.semesterType());
         recruitmentRepository.save(recruitment);
         // todo: recruitment 모집 시작 직전에 멤버 역할 수정하는 로직 필요.
+    }
+
+    public Page<AdminRecruitmentResponse> getAllRecruitments(RecruitmentQueryOption queryOption, Pageable pageable) {
+        Page<Recruitment> recruitments = recruitmentRepository.findAllOrderByStartDate(queryOption, pageable);
+        List<AdminRecruitmentResponse> adminRecruitmentResponses = getAdminRecruitmentResponses(recruitments);
+        adminRecruitmentResponses.sort(comparing(AdminRecruitmentResponse::academicYear, reverseOrder())
+                .thenComparing(AdminRecruitmentResponse::semester, reverseOrder())
+                .thenComparing(AdminRecruitmentResponse::round));
+        return new PageImpl<>(adminRecruitmentResponses, pageable, recruitments.getTotalElements());
+    }
+
+    private List<AdminRecruitmentResponse> getAdminRecruitmentResponses(Page<Recruitment> recruitments) {
+        Map<AcademicYearSemesterKey, List<Recruitment>> groupedRecruitments =
+                recruitmentsGroupByAcademicYearAndSemesterType(recruitments);
+
+        ArrayList<AdminRecruitmentResponse> adminRecruitmentResponses = new ArrayList<>();
+        groupedRecruitments.forEach(
+                (academicYearSemesterKey, recruitmentList) -> recruitmentList.forEach(recruitment -> {
+                    int round = recruitmentList.indexOf(recruitment) + 1;
+                    adminRecruitmentResponses.add(AdminRecruitmentResponse.of(recruitment, round));
+                }));
+        return adminRecruitmentResponses;
+    }
+
+    private Map<AcademicYearSemesterKey, List<Recruitment>> recruitmentsGroupByAcademicYearAndSemesterType(
+            Page<Recruitment> recruitments) {
+        return recruitments.stream()
+                .collect(Collectors.groupingBy(recruitment ->
+                        new AcademicYearSemesterKey(recruitment.getAcademicYear(), recruitment.getSemesterType())));
     }
 
     private void validatePeriodMatchesAcademicYear(
