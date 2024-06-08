@@ -60,13 +60,13 @@ public class IssuedCoupon extends BaseTimeEntity {
         }
 
         if (isUsed()) {
-            throw new CustomException(COUPON_ALREADY_USED);
+            throw new CustomException(COUPON_NOT_USABLE_ALREADY_USED);
         }
     }
 
     private void validateRevokable() {
         if (isUsed()) {
-            throw new CustomException(COUPON_ALREADY_USED);
+            throw new CustomException(COUPON_NOT_REVOKABLE_ALREADY_USED);
         }
     }
 
