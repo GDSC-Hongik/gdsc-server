@@ -39,7 +39,7 @@ class IssuedCouponTest {
             IssuedCoupon issuedCoupon = IssuedCoupon.issue(coupon, member);
             issuedCoupon.use();
 
-            // when, then
+            // when & then
             assertThatThrownBy(issuedCoupon::use)
                     .isInstanceOf(CustomException.class)
                     .hasMessageContaining(COUPON_NOT_USABLE_ALREADY_USED.getMessage());
@@ -53,7 +53,7 @@ class IssuedCouponTest {
             IssuedCoupon issuedCoupon = IssuedCoupon.issue(coupon, member);
             issuedCoupon.revoke();
 
-            // when, then
+            // when & then
             assertThatThrownBy(issuedCoupon::use)
                     .isInstanceOf(CustomException.class)
                     .hasMessageContaining(COUPON_NOT_USABLE_REVOKED.getMessage());
@@ -85,7 +85,7 @@ class IssuedCouponTest {
             IssuedCoupon issuedCoupon = IssuedCoupon.issue(coupon, member);
             issuedCoupon.use();
 
-            // when, then
+            // when & then
             assertThatThrownBy(issuedCoupon::revoke)
                     .isInstanceOf(CustomException.class)
                     .hasMessageContaining(COUPON_NOT_USABLE_ALREADY_USED.getMessage());
