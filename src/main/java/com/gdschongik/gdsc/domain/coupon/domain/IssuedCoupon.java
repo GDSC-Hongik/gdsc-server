@@ -52,10 +52,7 @@ public class IssuedCoupon extends BaseTimeEntity {
                 .build();
     }
 
-    public void useCoupon() {
-        validateUsable();
-        this.usedAt = LocalDateTime.now();
-    }
+    // 검증 로직
 
     private void validateUsable() {
         if (this.isRevoked.equals(FALSE)) {
@@ -66,6 +63,15 @@ public class IssuedCoupon extends BaseTimeEntity {
             throw new CustomException(COUPON_ALREADY_USED);
         }
     }
+
+    // 상태 변경 로직
+
+    public void useCoupon() {
+        validateUsable();
+        this.usedAt = LocalDateTime.now();
+    }
+
+    // 데이터 전달 로직
 
     public boolean isUsed() {
         return this.usedAt != null;
