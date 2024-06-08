@@ -87,4 +87,8 @@ public class IssuedCoupon extends BaseTimeEntity {
     public boolean isUsed() {
         return this.usedAt != null;
     }
+
+    public boolean isRevoked() {
+        return this.isRevoked;
+    }
 }
