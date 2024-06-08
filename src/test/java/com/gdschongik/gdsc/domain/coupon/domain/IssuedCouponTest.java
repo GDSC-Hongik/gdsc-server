@@ -88,7 +88,7 @@ class IssuedCouponTest {
             // when & then
             assertThatThrownBy(issuedCoupon::revoke)
                     .isInstanceOf(CustomException.class)
-                    .hasMessageContaining(COUPON_NOT_USABLE_ALREADY_USED.getMessage());
+                    .hasMessageContaining(COUPON_NOT_REVOKABLE_ALREADY_USED.getMessage());
         }
     }
 }
