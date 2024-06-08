@@ -74,7 +74,12 @@ public enum ErrorCode {
     RECRUITMENT_PERIOD_MISMATCH_ACADEMIC_YEAR(HttpStatus.BAD_REQUEST, "모집 시작일과 종료일의 연도가 학년도와 일치하지 않습니다."),
     RECRUITMENT_PERIOD_MISMATCH_SEMESTER_TYPE(HttpStatus.BAD_REQUEST, "모집 시작일과 종료일의 입력된 학기가 일치하지 않습니다."),
     RECRUITMENT_PERIOD_SEMESTER_TYPE_UNMAPPED(HttpStatus.CONFLICT, "모집 시작일과 종료일이 매핑되는 학기가 없습니다."),
-    RECRUITMENT_PERIOD_NOT_WITHIN_TWO_WEEKS(HttpStatus.BAD_REQUEST, "모집 시작일과 종료일이 학기 시작일로부터 2주 이내에 있지 않습니다.");
+    RECRUITMENT_PERIOD_NOT_WITHIN_TWO_WEEKS(HttpStatus.BAD_REQUEST, "모집 시작일과 종료일이 학기 시작일로부터 2주 이내에 있지 않습니다."),
+
+    // Coupon
+    COUPON_ALREADY_USED(HttpStatus.CONFLICT, "이미 사용된 쿠폰입니다."),
+    COUPON_NOT_USABLE(HttpStatus.CONFLICT, "사용할 수 없는 쿠폰입니다."),
+    ;
 
     private final HttpStatus status;
     private final String message;
