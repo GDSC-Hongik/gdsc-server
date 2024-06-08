@@ -78,7 +78,7 @@ public enum ErrorCode {
 
     // Coupon
     COUPON_ALREADY_USED(HttpStatus.CONFLICT, "이미 사용된 쿠폰입니다."),
-    COUPON_NOT_USABLE(HttpStatus.CONFLICT, "사용할 수 없는 쿠폰입니다."),
+    COUPON_ALREADY_REVOKED(HttpStatus.CONFLICT, "이미 회수된 쿠폰입니다"),
     ;
 
     private final HttpStatus status;
