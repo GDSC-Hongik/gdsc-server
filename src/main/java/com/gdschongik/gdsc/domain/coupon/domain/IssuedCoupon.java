@@ -64,6 +64,12 @@ public class IssuedCoupon extends BaseTimeEntity {
         }
     }
 
+    private void validateRevokable() {
+        if (isUsed()) {
+            throw new CustomException(COUPON_ALREADY_USED);
+        }
+    }
+
     // 상태 변경 로직
 
     public void use() {
@@ -72,6 +78,7 @@ public class IssuedCoupon extends BaseTimeEntity {
     }
 
     public void revoke() {
+        validateRevokable();
         this.isRevoked = true;
     }
 
