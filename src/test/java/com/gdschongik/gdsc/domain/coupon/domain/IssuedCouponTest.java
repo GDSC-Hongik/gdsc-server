@@ -58,4 +58,36 @@ class IssuedCouponTest {
                     .hasMessageContaining(COUPON_ALREADY_REVOKED.getMessage());
         }
     }
+
+    @Nested
+    class 발급쿠폰_회수할때 {
+
+        @Test
+        void 성공하면_회수여부는_true이다() {
+            // given
+            Coupon coupon = Coupon.createCoupon("쿠폰이름", Money.from(ONE));
+            Member member = Member.createGuestMember(OAUTH_ID);
+            IssuedCoupon issuedCoupon = IssuedCoupon.issue(coupon, member);
+
+            // when
+            issuedCoupon.revoke();
+
+            // then
+            assertThat(issuedCoupon.isRevoked()).isTrue();
+        }
+
+        @Test
+        void 이미_사용한_쿠폰이면_실패한다() {
+            // given
+            Coupon coupon = Coupon.createCoupon("쿠폰이름", Money.from(ONE));
+            Member member = Member.createGuestMember(OAUTH_ID);
+            IssuedCoupon issuedCoupon = IssuedCoupon.issue(coupon, member);
+            issuedCoupon.use();
+
+            // when, then
+            assertThatThrownBy(issuedCoupon::revoke)
+                    .isInstanceOf(CustomException.class)
+                    .hasMessageContaining(COUPON_ALREADY_USED.getMessage());
+        }
+    }
 }
