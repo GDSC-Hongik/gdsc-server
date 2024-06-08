@@ -71,6 +71,10 @@ public class IssuedCoupon extends BaseTimeEntity {
         this.usedAt = LocalDateTime.now();
     }
 
+    public void revoke() {
+        this.isRevoked = true;
+    }
+
     // 데이터 전달 로직
 
     public boolean isUsed() {
