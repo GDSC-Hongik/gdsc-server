@@ -18,7 +18,7 @@ class IssuedCouponTest {
         IssuedCoupon issuedCoupon = IssuedCoupon.issue(coupon, member);
 
         // when
-        issuedCoupon.useCoupon();
+        issuedCoupon.use();
 
         // then
         assertThat(issuedCoupon.isUsed()).isTrue();

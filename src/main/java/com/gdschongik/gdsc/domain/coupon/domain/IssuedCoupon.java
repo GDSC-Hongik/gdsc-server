@@ -66,7 +66,7 @@ public class IssuedCoupon extends BaseTimeEntity {
 
     // 상태 변경 로직
 
-    public void useCoupon() {
+    public void use() {
         validateUsable();
         this.usedAt = LocalDateTime.now();
     }
