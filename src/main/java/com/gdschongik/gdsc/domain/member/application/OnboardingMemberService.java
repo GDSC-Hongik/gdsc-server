@@ -7,6 +7,7 @@ import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.dto.request.BasicMemberInfoRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberSignupRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.OnboardingMemberUpdateRequest;
+import com.gdschongik.gdsc.domain.member.dto.response.MemberBasicInfoResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberInfoResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberUnivStatusResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
@@ -68,5 +69,10 @@ public class OnboardingMemberService {
         Member currentMember = memberUtil.getCurrentMember();
         currentMember.updateBasicMemberInfo(
                 request.studentId(), request.name(), request.phone(), request.department(), request.email());
+    }
+
+    public MemberBasicInfoResponse getMemberBasicInfo() {
+        Member currentMember = memberUtil.getCurrentMember();
+        return MemberBasicInfoResponse.from(currentMember);
     }
 }
