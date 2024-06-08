@@ -1,5 +1,6 @@
 package com.gdschongik.gdsc.domain.coupon.domain;
 
+import static com.gdschongik.gdsc.global.common.constant.CouponConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.MemberConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import static java.math.BigDecimal.*;
@@ -19,7 +20,7 @@ class IssuedCouponTest {
         @Test
         void 성공하면_사용여부는_true이다() {
             // given
-            Coupon coupon = Coupon.createCoupon("쿠폰이름", Money.from(ONE));
+            Coupon coupon = Coupon.createCoupon(COUPON_NAME, Money.from(ONE));
             Member member = Member.createGuestMember(OAUTH_ID);
             IssuedCoupon issuedCoupon = IssuedCoupon.issue(coupon, member);
 
@@ -33,7 +34,7 @@ class IssuedCouponTest {
         @Test
         void 이미_사용한_쿠폰이면_실패한다() {
             // given
-            Coupon coupon = Coupon.createCoupon("쿠폰이름", Money.from(ONE));
+            Coupon coupon = Coupon.createCoupon(COUPON_NAME, Money.from(ONE));
             Member member = Member.createGuestMember(OAUTH_ID);
             IssuedCoupon issuedCoupon = IssuedCoupon.issue(coupon, member);
             issuedCoupon.use();
@@ -47,7 +48,7 @@ class IssuedCouponTest {
         @Test
         void 이미_회수한_쿠폰이면_실패한다() {
             // given
-            Coupon coupon = Coupon.createCoupon("쿠폰이름", Money.from(ONE));
+            Coupon coupon = Coupon.createCoupon(COUPON_NAME, Money.from(ONE));
             Member member = Member.createGuestMember(OAUTH_ID);
             IssuedCoupon issuedCoupon = IssuedCoupon.issue(coupon, member);
             issuedCoupon.revoke();
@@ -65,7 +66,7 @@ class IssuedCouponTest {
         @Test
         void 성공하면_회수여부는_true이다() {
             // given
-            Coupon coupon = Coupon.createCoupon("쿠폰이름", Money.from(ONE));
+            Coupon coupon = Coupon.createCoupon(COUPON_NAME, Money.from(ONE));
             Member member = Member.createGuestMember(OAUTH_ID);
             IssuedCoupon issuedCoupon = IssuedCoupon.issue(coupon, member);
 
@@ -79,7 +80,7 @@ class IssuedCouponTest {
         @Test
         void 이미_사용한_쿠폰이면_실패한다() {
             // given
-            Coupon coupon = Coupon.createCoupon("쿠폰이름", Money.from(ONE));
+            Coupon coupon = Coupon.createCoupon(COUPON_NAME, Money.from(ONE));
             Member member = Member.createGuestMember(OAUTH_ID);
             IssuedCoupon issuedCoupon = IssuedCoupon.issue(coupon, member);
             issuedCoupon.use();
