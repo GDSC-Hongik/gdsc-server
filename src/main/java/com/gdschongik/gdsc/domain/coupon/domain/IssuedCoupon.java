@@ -55,7 +55,7 @@ public class IssuedCoupon extends BaseTimeEntity {
     // 검증 로직
 
     private void validateUsable() {
-        if (this.isRevoked.equals(FALSE)) {
+        if (this.isRevoked.equals(TRUE)) {
             throw new CustomException(COUPON_ALREADY_REVOKED);
         }
 
