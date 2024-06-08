@@ -2,12 +2,10 @@ package com.gdschongik.gdsc.domain.member.dto.response;
 
 import com.gdschongik.gdsc.domain.member.domain.Department;
 import com.gdschongik.gdsc.domain.member.domain.Member;
-import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import java.util.Optional;
 
 public record MemberBasicInfoResponse(
         Long memberId,
-        MemberRole memberRole,
         String studentId,
         String name,
         String phone,
@@ -18,7 +16,6 @@ public record MemberBasicInfoResponse(
     public static MemberBasicInfoResponse from(Member member) {
         return new MemberBasicInfoResponse(
                 member.getId(),
-                member.getRole(),
                 member.getStudentId(),
                 member.getName(),
                 Optional.ofNullable(member.getPhone())
