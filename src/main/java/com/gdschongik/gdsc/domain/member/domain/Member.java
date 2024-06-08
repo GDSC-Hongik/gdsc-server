@@ -184,8 +184,6 @@ public class Member extends BaseTimeEntity {
         this.phone = phone;
         this.department = department;
         this.email = email;
-
-        registerEvent(new MemberAssociateEvent(this));
     }
 
     /**
@@ -307,6 +305,8 @@ public class Member extends BaseTimeEntity {
 
     public void verifyInfoStatus() {
         this.requirement.verifyInfoStatus();
+
+        registerEvent(new MemberAssociateEvent(this));
     }
 
     // 데이터 전달 로직
