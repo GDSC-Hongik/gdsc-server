@@ -258,29 +258,6 @@ public class Member extends BaseTimeEntity {
         registerEvent(new MemberAssociateEvent(this.id));
     }
 
-    public boolean isAllVerified() {
-        return isAssociateAvailable();
-    }
-
-    private boolean isAssociateAvailable() {
-        if (!this.requirement.isInfoVerified()) {
-            return false;
-        }
-
-        if (!this.requirement.isDiscordVerified() || this.discordUsername == null || this.nickname == null) {
-            return false;
-        }
-
-        if (!this.requirement.isBevyVerified()) {
-            return false;
-        }
-
-        if (!this.requirement.isUnivVerified() || this.univEmail == null) {
-            return false;
-        }
-        return true;
-    }
-
     public boolean isAtLeastAssociate(MemberRole role) {
         return role.equals(ASSOCIATE) || role.equals(ADMIN) || role.equals(REGULAR);
     }

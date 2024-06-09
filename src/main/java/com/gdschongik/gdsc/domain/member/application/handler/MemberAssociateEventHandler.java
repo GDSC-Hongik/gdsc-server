@@ -1,7 +1,5 @@
 package com.gdschongik.gdsc.domain.member.application.handler;
 
-import static com.gdschongik.gdsc.domain.member.domain.MemberRole.*;
-
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberAssociateEvent;
@@ -30,7 +28,7 @@ public class MemberAssociateEventHandler {
             return false;
         }
 
-        if (member.isAllVerified()) {
+        if (member.getRequirement().isAllVerified()) {
             return true;
         }
 

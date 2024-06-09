@@ -93,4 +93,27 @@ public class Requirement {
     public boolean isInfoVerified() {
         return this.infoStatus == VERIFIED;
     }
+
+    public boolean isAllVerified() {
+        return isAssociateAvailable();
+    }
+
+    private boolean isAssociateAvailable() {
+        if (!this.isInfoVerified()) {
+            return false;
+        }
+
+        if (!this.isDiscordVerified()) {
+            return false;
+        }
+
+        if (!this.isBevyVerified()) {
+            return false;
+        }
+
+        if (!this.isUnivVerified()) {
+            return false;
+        }
+        return true;
+    }
 }
