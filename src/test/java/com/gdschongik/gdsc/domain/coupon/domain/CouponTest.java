@@ -17,11 +17,8 @@ class CouponTest {
 
         @Test
         void 성공한다() {
-            // given
-            Money discountAmount = Money.from(ONE);
-
             // when
-            Coupon coupon = Coupon.createCoupon(COUPON_NAME, discountAmount);
+            Coupon coupon = Coupon.createCoupon(COUPON_NAME, Money.from(ONE));
 
             // then
             assertThat(coupon).isNotNull();
