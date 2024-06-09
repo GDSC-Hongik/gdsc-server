@@ -255,7 +255,7 @@ public class Member extends BaseTimeEntity {
     private void verifyUnivEmail() {
         validateStatusUpdatable();
         requirement.updateUnivStatus(RequirementStatus.VERIFIED);
-        registerEvent(new MemberAssociateEvent(this));
+        registerEvent(new MemberAssociateEvent(this.id));
     }
 
     public boolean isAllVerified() {
@@ -281,13 +281,17 @@ public class Member extends BaseTimeEntity {
         return true;
     }
 
+    public boolean isAtLeastAssociate(MemberRole role) {
+        return role.equals(ASSOCIATE) || role.equals(ADMIN) || role.equals(REGULAR);
+    }
+
     public void verifyDiscord(String discordUsername, String nickname) {
         validateStatusUpdatable();
         this.requirement.verifyDiscord();
         this.discordUsername = discordUsername;
         this.nickname = nickname;
 
-        registerEvent(new MemberAssociateEvent(this));
+        registerEvent(new MemberAssociateEvent(this.id));
     }
 
     /**
@@ -302,14 +306,14 @@ public class Member extends BaseTimeEntity {
         validateStatusUpdatable();
 
         this.requirement.verifyBevy();
-        registerEvent(new MemberAssociateEvent(this));
+        registerEvent(new MemberAssociateEvent(this.id));
     }
 
     public void verifyInfo() {
         validateStatusUpdatable();
         this.requirement.verifyInfoStatus();
 
-        registerEvent(new MemberAssociateEvent(this));
+        registerEvent(new MemberAssociateEvent(this.id));
     }
 
     // 데이터 전달 로직

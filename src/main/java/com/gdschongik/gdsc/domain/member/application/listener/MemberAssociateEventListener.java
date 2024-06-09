@@ -14,6 +14,6 @@ public class MemberAssociateEventListener {
 
     @TransactionalEventListener(MemberAssociateEvent.class)
     public void handleMemberAssociateEvent(MemberAssociateEvent event) {
-        memberAssociateEventHandler.handle(event);
+        memberAssociateEventHandler.advanceToAssociate(event);
     }
 }

@@ -2,28 +2,31 @@ package com.gdschongik.gdsc.domain.member.application.handler;
 
 import static com.gdschongik.gdsc.domain.member.domain.MemberRole.*;
 
+import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberAssociateEvent;
-import com.gdschongik.gdsc.domain.member.domain.MemberRole;
+import com.gdschongik.gdsc.global.exception.CustomException;
+import com.gdschongik.gdsc.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 public class MemberAssociateEventHandler {
-    public void handle(MemberAssociateEvent context) {
-        MemberAssociateEvent event = context;
-        if (validateAdvanceAvailable(event.member())) {
-            advanceToAssociate(event.member());
+    private final MemberRepository memberRepository;
+
+    public void advanceToAssociate(MemberAssociateEvent memberAssociateEvent) {
+        MemberAssociateEvent event = memberAssociateEvent;
+        Member member = memberRepository
+                .findById(event.memberId())
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        if (validateAdvanceAvailable(member)) {
+            member.advanceToAssociate();
         }
     }
 
-    private void advanceToAssociate(Member member) {
-        member.advanceToAssociate();
-    }
-
     private boolean validateAdvanceAvailable(Member member) {
-        if (isAtLeastAssociate(member.getRole())) {
+        if (member.isAtLeastAssociate(member.getRole())) {
             return false;
         }
 
@@ -32,9 +35,5 @@ public class MemberAssociateEventHandler {
         }
 
         return false;
-    }
-
-    private boolean isAtLeastAssociate(MemberRole role) {
-        return role.equals(ASSOCIATE) || role.equals(ADMIN) || role.equals(REGULAR);
     }
 }

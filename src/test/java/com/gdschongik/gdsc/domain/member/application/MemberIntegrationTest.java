@@ -7,6 +7,7 @@ import static com.gdschongik.gdsc.global.common.constant.MemberConstant.NICKNAME
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.gdschongik.gdsc.domain.member.application.handler.MemberAssociateEventHandler;
+import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberAssociateEvent;
 import com.gdschongik.gdsc.integration.IntegrationTest;
@@ -19,15 +20,22 @@ public class MemberIntegrationTest extends IntegrationTest {
     @Autowired
     private MemberAssociateEventHandler memberAssociateEventHandler;
 
+    @Autowired
+    private MemberRepository memberRepository;
+
     @Test
     void 준회원_승급조건_만족됐으면_MemberRole은_ASSOCIATE이다() {
-        // when
+        // given
         Member member = Member.createGuestMember(OAUTH_ID);
+        memberRepository.save(member);
         member.completeUnivEmailVerification(UNIV_EMAIL);
         member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
         member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
         member.verifyBevy();
-        memberAssociateEventHandler.handle(new MemberAssociateEvent(member));
+
+        // when
+        memberAssociateEventHandler.advanceToAssociate(new MemberAssociateEvent(member.getId()));
+        member = memberRepository.save(member);
 
         // then
         assertThat(member.getRole()).isEqualTo(ASSOCIATE);
