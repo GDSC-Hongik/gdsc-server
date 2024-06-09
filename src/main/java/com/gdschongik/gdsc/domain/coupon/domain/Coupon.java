@@ -43,9 +43,19 @@ public class Coupon extends BaseTimeEntity {
         return Coupon.builder().name(name).discountAmount(discountAmount).build();
     }
 
+    // 검증 로직
+
     private static void validateDiscountAmountPositive(Money discountAmount) {
         if (!discountAmount.isGreaterThan(Money.from(BigDecimal.ZERO))) {
             throw new CustomException(COUPON_DISCOUNT_AMOUNT_NOT_POSITIVE);
         }
+    }
+
+    // 상태 변경 로직
+
+    public void updateCoupon(String name, Money discountAmount) {
+        validateDiscountAmountPositive(discountAmount);
+        this.name = name;
+        this.discountAmount = discountAmount;
     }
 }
