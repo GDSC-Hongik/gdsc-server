@@ -177,7 +177,7 @@ public class Member extends BaseTimeEntity {
     public void updateBasicMemberInfo(
             String studentId, String name, String phone, Department department, String email) {
         validateStatusUpdatable();
-        verifyInfoStatus();
+        verifyInfo();
 
         this.studentId = studentId;
         this.name = name;
@@ -249,15 +249,17 @@ public class Member extends BaseTimeEntity {
 
     public void completeUnivEmailVerification(String univEmail) {
         this.univEmail = univEmail;
+        verifyUnivEmail();
+    }
+
+    private void verifyUnivEmail() {
+        validateStatusUpdatable();
         requirement.updateUnivStatus(RequirementStatus.VERIFIED);
         registerEvent(new MemberAssociateEvent(this));
     }
 
     public boolean isAllVerified() {
-        if (isAssociateAvailable()) {
-            return true;
-        }
-        return false;
+        return isAssociateAvailable();
     }
 
     private boolean isAssociateAvailable() {
@@ -303,7 +305,8 @@ public class Member extends BaseTimeEntity {
         registerEvent(new MemberAssociateEvent(this));
     }
 
-    public void verifyInfoStatus() {
+    public void verifyInfo() {
+        validateStatusUpdatable();
         this.requirement.verifyInfoStatus();
 
         registerEvent(new MemberAssociateEvent(this));

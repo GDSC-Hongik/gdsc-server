@@ -105,7 +105,7 @@ class MemberTest {
             member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
             member.verifyBevy();
 
-            // then
+            // when & then
             assertThat(member.isAllVerified()).isTrue();
         }
     }
@@ -155,7 +155,6 @@ class MemberTest {
             member.completeUnivEmailVerification(UNIV_EMAIL);
             member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
 
-            System.out.println(member.getRequirement().isInfoVerified());
             // when & then
             assertThatThrownBy(() -> {
                         member.advanceToAssociate();
@@ -165,7 +164,7 @@ class MemberTest {
         }
 
         @Test
-        void 디스코드인증_Bevy인증_재학생인증하면_성공한다() {
+        void 기본_회원정보_작성_디스코드인증_Bevy인증_재학생인증하면_성공한다() {
             // given
             Member member = Member.createGuestMember(OAUTH_ID);
 
@@ -173,6 +172,8 @@ class MemberTest {
             member.completeUnivEmailVerification(UNIV_EMAIL);
             member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
             member.verifyBevy();
+
+            // when
             member.advanceToAssociate();
 
             // then
