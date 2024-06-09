@@ -77,6 +77,7 @@ public enum ErrorCode {
     RECRUITMENT_PERIOD_NOT_WITHIN_TWO_WEEKS(HttpStatus.BAD_REQUEST, "모집 시작일과 종료일이 학기 시작일로부터 2주 이내에 있지 않습니다."),
 
     // Coupon
+    COUPON_DISCOUNT_AMOUNT_NOT_POSITIVE(HttpStatus.CONFLICT, "쿠폰의 할인 금액은 0보다 커야 합니다."),
     COUPON_NOT_USABLE_ALREADY_USED(HttpStatus.CONFLICT, "이미 사용한 쿠폰은 사용할 수 없습니다."),
     COUPON_NOT_USABLE_REVOKED(HttpStatus.CONFLICT, "회수된 쿠폰은 사용할 수 없습니다."),
     COUPON_NOT_REVOKABLE_ALREADY_USED(HttpStatus.CONFLICT, "이미 사용한 쿠폰은 회수할 수 없습니다."),
