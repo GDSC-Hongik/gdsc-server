@@ -22,7 +22,10 @@ public class RecruitmentCustomRepositoryImpl extends RecruitmentQueryMethod impl
         List<Recruitment> recruitments = queryFactory
                 .selectFrom(recruitment)
                 .where(matchesQueryOption(queryOption))
-                .orderBy(recruitment.academicYear.desc(), recruitment.semesterType.desc(), recruitment.period.startDate.asc())
+                .orderBy(
+                        recruitment.academicYear.desc(),
+                        recruitment.semesterType.desc(),
+                        recruitment.period.startDate.asc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
