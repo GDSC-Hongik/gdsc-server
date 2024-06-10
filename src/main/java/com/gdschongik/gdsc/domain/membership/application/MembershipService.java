@@ -28,7 +28,7 @@ public class MembershipService {
         Recruitment recruitment = recruitmentRepository
                 .findById(recruitmentId)
                 .orElseThrow(() -> new CustomException(RECRUITMENT_NOT_FOUND));
-        validateCurrentSemesterMembershipNotExists(currentMember, recruitment);
+        validateMembershipDuplicate(currentMember, recruitment);
         validateRecruitmentOpen(recruitment);
 
         Membership membership = Membership.createMembership(currentMember, recruitment);
@@ -41,9 +41,13 @@ public class MembershipService {
         }
     }
 
-    private void validateCurrentSemesterMembershipNotExists(Member currentMember, Recruitment recruitment) {
-        if (membershipRepository.existsByMemberAndAcademicYearAndSemesterType(
+    private void validateMembershipDuplicate(Member currentMember, Recruitment recruitment) {
+        if (membershipRepository.existsIssuedMembership(
                 currentMember, recruitment.getAcademicYear(), recruitment.getSemesterType())) {
+            throw new CustomException(MEMBERSHIP_ALREADY_ISSUED);
+        }
+
+        if (membershipRepository.existsByMemberAndRecruitment(currentMember, recruitment)) {
             throw new CustomException(MEMBERSHIP_ALREADY_APPLIED);
         }
     }
