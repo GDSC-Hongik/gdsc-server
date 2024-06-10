@@ -19,6 +19,6 @@ public class CustomOAuth2User extends DefaultOAuth2User {
         super(oAuth2User.getAuthorities(), oAuth2User.getAttributes(), GITHUB_NAME_ATTR_KEY);
         this.memberId = member.getId();
         this.memberRole = member.getRole();
-        this.landingStatus = LandingStatus.of(member);
+        this.landingStatus = LandingStatus.TO_DASHBOARD;
     }
 }
