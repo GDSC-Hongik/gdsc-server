@@ -135,7 +135,7 @@ public class Member extends BaseTimeEntity {
      * TODO validateAdvanceAvailable로 수정해야 함
      */
     private void validateGrantAvailable() {
-        if (isGranted()) {
+        if (isAtLeastAssociate()) {
             throw new CustomException(MEMBER_ALREADY_GRANTED);
         }
 
