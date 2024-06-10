@@ -21,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class OnboardingDiscordService {
 
     public static final long DISCORD_CODE_TTL_SECONDS = 300L;
@@ -93,6 +92,7 @@ public class OnboardingDiscordService {
         }
     }
 
+    @Transactional(readOnly = true)
     public DiscordNicknameResponse checkDiscordRoleAssignable(String discordUsername) {
         Member member = memberRepository
                 .findByDiscordUsername(discordUsername)
