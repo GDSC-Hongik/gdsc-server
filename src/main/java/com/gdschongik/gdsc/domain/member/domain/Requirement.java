@@ -99,19 +99,7 @@ public class Requirement {
     }
 
     private boolean isAssociateAvailable() {
-        if (!this.isInfoVerified()) {
-            return false;
-        }
-
-        if (!this.isDiscordVerified()) {
-            return false;
-        }
-
-        if (!this.isBevyVerified()) {
-            return false;
-        }
-
-        if (!this.isUnivVerified()) {
+        if (!this.isInfoVerified() || !this.isDiscordVerified() || !this.isBevyVerified() || !this.isUnivVerified()) {
             return false;
         }
         return true;

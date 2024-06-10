@@ -14,9 +14,8 @@ public class MemberAssociateEventHandler {
     private final MemberRepository memberRepository;
 
     public void advanceToAssociate(MemberAssociateEvent memberAssociateEvent) {
-        MemberAssociateEvent event = memberAssociateEvent;
         Member member = memberRepository
-                .findById(event.memberId())
+                .findById(memberAssociateEvent.memberId())
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
         if (validateAdvanceAvailable(member)) {
             member.advanceToAssociate();
@@ -24,7 +23,7 @@ public class MemberAssociateEventHandler {
     }
 
     private boolean validateAdvanceAvailable(Member member) {
-        if (member.isAtLeastAssociate(member.getRole())) {
+        if (member.isAtLeastAssociate()) {
             return false;
         }
 
