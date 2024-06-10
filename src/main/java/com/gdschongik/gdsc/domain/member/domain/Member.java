@@ -258,7 +258,7 @@ public class Member extends BaseTimeEntity {
         registerEvent(new MemberAssociateEvent(this.id));
     }
 
-    public boolean isAtLeastAssociate() {
+    private boolean isAtLeastAssociate() {
         return this.role.equals(ASSOCIATE) || this.role.equals(ADMIN) || this.role.equals(REGULAR);
     }
 
