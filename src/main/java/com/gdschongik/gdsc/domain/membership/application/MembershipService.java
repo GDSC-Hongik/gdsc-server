@@ -31,8 +31,7 @@ public class MembershipService {
         validateCurrentSemesterMembershipNotExists(currentMember, recruitment);
         validateRecruitmentOpen(recruitment);
 
-        Membership membership = Membership.createMembership(
-                currentMember, recruitment.getAcademicYear(), recruitment.getSemesterType());
+        Membership membership = Membership.createMembership(currentMember, recruitment);
         membershipRepository.save(membership);
     }
 

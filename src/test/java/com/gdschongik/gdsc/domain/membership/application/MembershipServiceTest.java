@@ -52,8 +52,7 @@ public class MembershipServiceTest extends IntegrationTest {
 
     private void createMembership(Member member) {
         Recruitment recruitment = createRecruitment();
-        Membership membership =
-                Membership.createMembership(member, recruitment.getAcademicYear(), recruitment.getSemesterType());
+        Membership membership = Membership.createMembership(member, recruitment);
         membershipRepository.save(membership);
     }
 
