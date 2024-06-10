@@ -69,6 +69,10 @@ public class Membership extends BaseSemesterEntity {
                 .build();
     }
 
+    public void verifyPaymentStatus() {
+        this.paymentStatus = RequirementStatus.VERIFIED;
+    }
+
     private static void validateMembershipApplicable(Member member) {
         if (member.getRole().equals(MemberRole.ASSOCIATE)) {
             return;
