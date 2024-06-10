@@ -4,6 +4,7 @@ import com.gdschongik.gdsc.domain.member.application.OnboardingMemberService;
 import com.gdschongik.gdsc.domain.member.dto.request.BasicMemberInfoRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberSignupRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.OnboardingMemberUpdateRequest;
+import com.gdschongik.gdsc.domain.member.dto.response.MemberBasicInfoResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberInfoResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberUnivStatusResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -62,10 +63,17 @@ public class OnboardingMemberController {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "기본 회원정보 작성", description = "기본 회원정보를 작성합니다")
+    @Operation(summary = "기본 회원정보 작성", description = "기본 회원정보를 작성합니다.")
     @PostMapping("/me/basic-info")
     public ResponseEntity<Void> updateBasicMemberInfo(@Valid @RequestBody BasicMemberInfoRequest request) {
         onboardingMemberService.updateBasicMemberInfo(request);
         return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "기본 회원정보 조회", description = "기본 회원정보를 조회합니다.")
+    @GetMapping("/me/basic-info")
+    public ResponseEntity<MemberBasicInfoResponse> getMemberBasicInfo() {
+        MemberBasicInfoResponse response = onboardingMemberService.getMemberBasicInfo();
+        return ResponseEntity.ok().body(response);
     }
 }
