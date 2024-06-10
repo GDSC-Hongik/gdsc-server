@@ -50,11 +50,9 @@ public class MembershipServiceTest extends IntegrationTest {
         return recruitmentRepository.save(recruitment);
     }
 
-    private void createMembership(Member member) {
-        Recruitment recruitment = createRecruitment();
-        Membership membership =
-                Membership.createMembership(member, recruitment.getAcademicYear(), recruitment.getSemesterType());
-        membershipRepository.save(membership);
+    private Membership createMembership(Member member, Recruitment recruitment) {
+        Membership membership = Membership.createMembership(member, recruitment);
+        return membershipRepository.save(membership);
     }
 
     @Nested
@@ -73,12 +71,30 @@ public class MembershipServiceTest extends IntegrationTest {
         }
 
         @Test
+        void 해당_학기에_이미_Membership을_발급받았다면_실패한다() {
+            // given
+            Member member = createMember();
+            logoutAndReloginAs(1L, ASSOCIATE);
+            Recruitment recruitment = createRecruitment();
+            Membership membership = createMembership(member, recruitment);
+
+            // when
+            membership.verifyPaymentStatus();
+            membershipRepository.save(membership);
+
+            // then
+            assertThatThrownBy(() -> membershipService.submitMembership(recruitment.getId()))
+                    .isInstanceOf(CustomException.class)
+                    .hasMessage(MEMBERSHIP_ALREADY_ISSUED.getMessage());
+        }
+
+        @Test
         void 해당_Recruitment에_대해_Membership을_생성한_적이_있다면_실패한다() {
             // given
             Member member = createMember();
             logoutAndReloginAs(1L, ASSOCIATE);
             Recruitment recruitment = createRecruitment();
-            createMembership(member);
+            createMembership(member, recruitment);
 
             // when & then
             assertThatThrownBy(() -> membershipService.submitMembership(recruitment.getId()))
