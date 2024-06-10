@@ -54,6 +54,7 @@ public class Membership extends BaseSemesterEntity {
             SemesterType semesterType) {
         super(academicYear, semesterType);
         this.member = member;
+        this.recruitment = recruitment;
         this.paymentStatus = paymentStatus;
     }
 
