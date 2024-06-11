@@ -61,18 +61,18 @@ public class MemberQueryMethod {
 
     protected BooleanBuilder isGrantAvailable() {
         return new BooleanBuilder()
-                .and(eqRequirementStatus(member.requirement.discordStatus, VERIFIED))
-                .and(eqRequirementStatus(member.requirement.univStatus, VERIFIED))
-                .and(eqRequirementStatus(member.requirement.paymentStatus, VERIFIED))
-                .and(eqRequirementStatus(member.requirement.bevyStatus, VERIFIED));
+                .and(eqRequirementStatus(member.associateRequirement.discordStatus, VERIFIED))
+                .and(eqRequirementStatus(member.associateRequirement.univStatus, VERIFIED))
+                .and(eqRequirementStatus(member.associateRequirement.paymentStatus, VERIFIED))
+                .and(eqRequirementStatus(member.associateRequirement.bevyStatus, VERIFIED));
     }
 
     protected BooleanBuilder isAssociateAvailable() {
         return new BooleanBuilder()
-                .and(eqRequirementStatus(member.requirement.discordStatus, VERIFIED))
-                .and(eqRequirementStatus(member.requirement.univStatus, VERIFIED))
-                .and(eqRequirementStatus(member.requirement.infoStatus, VERIFIED))
-                .and(eqRequirementStatus(member.requirement.bevyStatus, VERIFIED));
+                .and(eqRequirementStatus(member.associateRequirement.discordStatus, VERIFIED))
+                .and(eqRequirementStatus(member.associateRequirement.univStatus, VERIFIED))
+                .and(eqRequirementStatus(member.associateRequirement.infoStatus, VERIFIED))
+                .and(eqRequirementStatus(member.associateRequirement.bevyStatus, VERIFIED));
     }
 
     protected BooleanBuilder matchesQueryOption(MemberQueryOption queryOption) {

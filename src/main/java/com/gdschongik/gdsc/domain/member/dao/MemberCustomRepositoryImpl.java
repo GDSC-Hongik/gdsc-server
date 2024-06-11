@@ -67,7 +67,7 @@ public class MemberCustomRepositoryImpl extends MemberQueryMethod implements Mem
                 .selectFrom(member)
                 .where(
                         matchesQueryOption(queryOption),
-                        eqRequirementStatus(member.requirement.paymentStatus, paymentStatus),
+                        eqRequirementStatus(member.associateRequirement.paymentStatus, paymentStatus),
                         isStudentIdNotNull())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -79,7 +79,7 @@ public class MemberCustomRepositoryImpl extends MemberQueryMethod implements Mem
                 .from(member)
                 .where(
                         matchesQueryOption(queryOption),
-                        eqRequirementStatus(member.requirement.paymentStatus, paymentStatus),
+                        eqRequirementStatus(member.associateRequirement.paymentStatus, paymentStatus),
                         isStudentIdNotNull());
 
         return PageableExecutionUtils.getPage(fetch, pageable, countQuery::fetchOne);
@@ -116,7 +116,7 @@ public class MemberCustomRepositoryImpl extends MemberQueryMethod implements Mem
     public List<Member> findAllByDiscordStatus(RequirementStatus discordStatus) {
         return queryFactory
                 .selectFrom(member)
-                .where(eqRequirementStatus(member.requirement.discordStatus, discordStatus))
+                .where(eqRequirementStatus(member.associateRequirement.discordStatus, discordStatus))
                 .fetch();
     }
 }
