@@ -83,10 +83,6 @@ public class AssociateRequirement {
         return this.discordStatus == VERIFIED;
     }
 
-    public boolean isPaymentVerified() {
-        return this.paymentStatus == VERIFIED;
-    }
-
     public boolean isBevyVerified() {
         return this.bevyStatus == VERIFIED;
     }
