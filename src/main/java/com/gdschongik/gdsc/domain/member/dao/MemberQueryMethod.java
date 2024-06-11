@@ -67,6 +67,14 @@ public class MemberQueryMethod {
                 .and(eqRequirementStatus(member.requirement.bevyStatus, VERIFIED));
     }
 
+    protected BooleanBuilder isAssociateAvailable() {
+        return new BooleanBuilder()
+                .and(eqRequirementStatus(member.requirement.discordStatus, VERIFIED))
+                .and(eqRequirementStatus(member.requirement.univStatus, VERIFIED))
+                .and(eqRequirementStatus(member.requirement.infoStatus, VERIFIED))
+                .and(eqRequirementStatus(member.requirement.bevyStatus, VERIFIED));
+    }
+
     protected BooleanBuilder matchesQueryOption(MemberQueryOption queryOption) {
         return new BooleanBuilder()
                 .and(eqStudentId(queryOption.studentId()))
