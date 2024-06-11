@@ -63,7 +63,6 @@ public class MemberQueryMethod {
         return new BooleanBuilder()
                 .and(eqRequirementStatus(member.associateRequirement.discordStatus, VERIFIED))
                 .and(eqRequirementStatus(member.associateRequirement.univStatus, VERIFIED))
-                .and(eqRequirementStatus(member.associateRequirement.paymentStatus, VERIFIED))
                 .and(eqRequirementStatus(member.associateRequirement.bevyStatus, VERIFIED));
     }
 
