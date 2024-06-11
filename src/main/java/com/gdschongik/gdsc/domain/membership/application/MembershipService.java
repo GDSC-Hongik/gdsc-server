@@ -48,9 +48,8 @@ public class MembershipService {
                 .ifPresent(membership -> {
                     if (membership.isAdvanceToRegularAvailable()) {
                         throw new CustomException(MEMBERSHIP_ALREADY_VERIFIED);
-                    } else {
-                        throw new CustomException(MEMBERSHIP_ALREADY_APPLIED);
                     }
+                    throw new CustomException(MEMBERSHIP_ALREADY_APPLIED);
                 });
     }
 }
