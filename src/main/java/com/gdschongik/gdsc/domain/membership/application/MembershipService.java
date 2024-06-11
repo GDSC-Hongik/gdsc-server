@@ -48,7 +48,7 @@ public class MembershipService {
                 .findByMemberAndAcademicYearAndSemesterType(currentMember, academicYear, semesterType)
                 .ifPresent(membership -> {
                     if (membership.getPaymentStatus() == RequirementStatus.VERIFIED) {
-                        throw new CustomException(MEMBERSHIP_ALREADY_ISSUED);
+                        throw new CustomException(MEMBERSHIP_ALREADY_VERIFIED);
                     } else {
                         throw new CustomException(MEMBERSHIP_ALREADY_APPLIED);
                     }
