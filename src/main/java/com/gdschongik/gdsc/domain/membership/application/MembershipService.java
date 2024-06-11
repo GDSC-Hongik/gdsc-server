@@ -2,7 +2,9 @@ package com.gdschongik.gdsc.domain.membership.application;
 
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
+import com.gdschongik.gdsc.domain.common.model.SemesterType;
 import com.gdschongik.gdsc.domain.member.domain.Member;
+import com.gdschongik.gdsc.domain.member.domain.RequirementStatus;
 import com.gdschongik.gdsc.domain.membership.dao.MembershipRepository;
 import com.gdschongik.gdsc.domain.membership.domain.Membership;
 import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRepository;
@@ -28,11 +30,10 @@ public class MembershipService {
         Recruitment recruitment = recruitmentRepository
                 .findById(recruitmentId)
                 .orElseThrow(() -> new CustomException(RECRUITMENT_NOT_FOUND));
-        validateCurrentSemesterMembershipNotExists(currentMember, recruitment);
+        validateMembershipDuplicate(currentMember, recruitment.getAcademicYear(), recruitment.getSemesterType());
         validateRecruitmentOpen(recruitment);
 
-        Membership membership = Membership.createMembership(
-                currentMember, recruitment.getAcademicYear(), recruitment.getSemesterType());
+        Membership membership = Membership.createMembership(currentMember, recruitment);
         membershipRepository.save(membership);
     }
 
@@ -42,10 +43,15 @@ public class MembershipService {
         }
     }
 
-    private void validateCurrentSemesterMembershipNotExists(Member currentMember, Recruitment recruitment) {
-        if (membershipRepository.existsByMemberAndAcademicYearAndSemesterType(
-                currentMember, recruitment.getAcademicYear(), recruitment.getSemesterType())) {
-            throw new CustomException(MEMBERSHIP_ALREADY_APPLIED);
-        }
+    private void validateMembershipDuplicate(Member currentMember, Integer academicYear, SemesterType semesterType) {
+        membershipRepository
+                .findByMemberAndAcademicYearAndSemesterType(currentMember, academicYear, semesterType)
+                .ifPresent(membership -> {
+                    if (membership.getPaymentStatus() == RequirementStatus.VERIFIED) {
+                        throw new CustomException(MEMBERSHIP_ALREADY_ISSUED);
+                    } else {
+                        throw new CustomException(MEMBERSHIP_ALREADY_APPLIED);
+                    }
+                });
     }
 }
