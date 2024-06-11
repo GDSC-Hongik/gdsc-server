@@ -2,14 +2,12 @@ package com.gdschongik.gdsc.domain.recruitment.api;
 
 import com.gdschongik.gdsc.domain.recruitment.application.AdminRecruitmentService;
 import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentCreateRequest;
-import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentQueryOption;
 import com.gdschongik.gdsc.domain.recruitment.dto.response.AdminRecruitmentResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,9 +32,8 @@ public class AdminRecruitmentController {
 
     @Operation(summary = "리쿠르팅 목록 조회", description = "전체 리쿠르팅 목록을 조회합니다.")
     @GetMapping
-    public ResponseEntity<Page<AdminRecruitmentResponse>> getAllRecruitments(
-            RecruitmentQueryOption queryOption, Pageable pageable) {
-        Page<AdminRecruitmentResponse> response = adminRecruitmentService.getAllRecruitments(queryOption, pageable);
+    public ResponseEntity<List<AdminRecruitmentResponse>> getAllRecruitments() {
+        List<AdminRecruitmentResponse> response = adminRecruitmentService.getAllRecruitments();
         return ResponseEntity.ok().body(response);
     }
 }

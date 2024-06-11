@@ -17,8 +17,6 @@ import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 
 class AdminRecruitmentServiceTest extends IntegrationTest {
 
@@ -107,8 +105,7 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
                     SEMESTER_TYPE);
 
             // when
-            Page<AdminRecruitmentResponse> allRecruitments =
-                    adminRecruitmentService.getAllRecruitments(queryOption, PageRequest.of(0, 10));
+            List<AdminRecruitmentResponse> allRecruitments = adminRecruitmentService.getAllRecruitments();
 
             // then
             assertThat(allRecruitments)
@@ -130,8 +127,7 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
                     SECOND_SEMESTER_SEMESTER_TYPE);
 
             // when
-            Page<AdminRecruitmentResponse> allRecruitments =
-                    adminRecruitmentService.getAllRecruitments(queryOption, PageRequest.of(0, 10));
+            List<AdminRecruitmentResponse> allRecruitments = adminRecruitmentService.getAllRecruitments();
 
             // then
             assertThat(allRecruitments)
@@ -149,8 +145,7 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
                     ROUND_TWO_RECRUITMENT_NAME, ROUND_TWO_START_DATE, ROUND_TWO_END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE);
 
             // when
-            Page<AdminRecruitmentResponse> allRecruitments =
-                    adminRecruitmentService.getAllRecruitments(queryOption, PageRequest.of(0, 10));
+            List<AdminRecruitmentResponse> allRecruitments = adminRecruitmentService.getAllRecruitments();
 
             // then
             assertThat(allRecruitments)
@@ -168,10 +163,8 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
                     ROUND_TWO_RECRUITMENT_NAME, ROUND_TWO_START_DATE, ROUND_TWO_END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE);
 
             // when
-            Page<AdminRecruitmentResponse> allRecruitments =
-                    adminRecruitmentService.getAllRecruitments(queryOption, PageRequest.of(0, 10));
-            List<AdminRecruitmentResponse> recruitmentResponses = allRecruitments.getContent();
-            AdminRecruitmentResponse recruitmentResponse = recruitmentResponses.stream()
+            List<AdminRecruitmentResponse> allRecruitments = adminRecruitmentService.getAllRecruitments();
+            AdminRecruitmentResponse recruitmentResponse = allRecruitments.stream()
                     .filter(response -> response.recruitmentId().equals(roundOneRecruitment.getId()))
                     .findFirst()
                     .orElse(null);
