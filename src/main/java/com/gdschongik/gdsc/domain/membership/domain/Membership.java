@@ -1,6 +1,6 @@
 package com.gdschongik.gdsc.domain.membership.domain;
 
-import static com.gdschongik.gdsc.domain.member.domain.RequirementStatus.*;
+import static com.gdschongik.gdsc.domain.common.model.RequirementStatus.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.common.model.BaseSemesterEntity;

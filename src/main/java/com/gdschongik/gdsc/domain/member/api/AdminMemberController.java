@@ -1,7 +1,7 @@
 package com.gdschongik.gdsc.domain.member.api;
 
+import com.gdschongik.gdsc.domain.common.model.RequirementStatus;
 import com.gdschongik.gdsc.domain.member.application.AdminMemberService;
-import com.gdschongik.gdsc.domain.member.domain.RequirementStatus;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberGrantRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberPaymentRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryOption;

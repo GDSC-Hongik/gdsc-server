@@ -3,9 +3,9 @@ package com.gdschongik.gdsc.domain.member.dao;
 import static com.gdschongik.gdsc.domain.member.domain.QMember.*;
 import static com.querydsl.core.group.GroupBy.*;
 
+import com.gdschongik.gdsc.domain.common.model.RequirementStatus;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
-import com.gdschongik.gdsc.domain.member.domain.RequirementStatus;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryOption;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;

@@ -1,8 +1,8 @@
 package com.gdschongik.gdsc.domain.member.dto.response;
 
+import com.gdschongik.gdsc.domain.common.model.RequirementStatus;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
-import com.gdschongik.gdsc.domain.member.domain.RequirementStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 public record MemberInfoResponse(

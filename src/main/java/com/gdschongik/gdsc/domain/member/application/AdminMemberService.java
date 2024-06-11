@@ -3,9 +3,9 @@ package com.gdschongik.gdsc.domain.member.application;
 import static com.gdschongik.gdsc.domain.member.domain.MemberRole.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
+import com.gdschongik.gdsc.domain.common.model.RequirementStatus;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
-import com.gdschongik.gdsc.domain.member.domain.RequirementStatus;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberGrantRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberPaymentRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryOption;

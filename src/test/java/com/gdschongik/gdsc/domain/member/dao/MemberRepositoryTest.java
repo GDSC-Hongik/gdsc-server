@@ -1,8 +1,8 @@
 package com.gdschongik.gdsc.domain.member.dao;
 
+import static com.gdschongik.gdsc.domain.common.model.RequirementStatus.*;
 import static com.gdschongik.gdsc.domain.member.domain.Department.*;
 import static com.gdschongik.gdsc.domain.member.domain.MemberRole.*;
-import static com.gdschongik.gdsc.domain.member.domain.RequirementStatus.*;
 import static com.gdschongik.gdsc.global.common.constant.MemberConstant.*;
 import static org.assertj.core.api.Assertions.*;
 
