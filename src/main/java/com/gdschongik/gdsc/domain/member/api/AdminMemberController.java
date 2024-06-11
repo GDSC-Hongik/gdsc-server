@@ -1,6 +1,7 @@
 package com.gdschongik.gdsc.domain.member.api;
 
 import com.gdschongik.gdsc.domain.member.application.AdminMemberService;
+import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import com.gdschongik.gdsc.domain.member.domain.RequirementStatus;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberGrantRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberPaymentRequest;
@@ -39,6 +40,16 @@ public class AdminMemberController {
     @GetMapping
     public ResponseEntity<Page<AdminMemberResponse>> getMembers(MemberQueryOption queryOption, Pageable pageable) {
         Page<AdminMemberResponse> response = adminMemberService.findAll(queryOption, pageable);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @Operation(summary = "회원 상태별 목록 조회", description = "정회원, 준회원, 게스트별로 조회합니다.")
+    @GetMapping("/role")
+    public ResponseEntity<Page<AdminMemberResponse>> getMembersByRole(
+            @RequestParam(name = "role", required = true) MemberRole memberRole,
+            MemberQueryOption queryOption,
+            Pageable pageable) {
+        Page<AdminMemberResponse> response = adminMemberService.findAllByRole(queryOption, pageable, memberRole);
         return ResponseEntity.ok().body(response);
     }
 

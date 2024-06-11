@@ -277,6 +277,7 @@ public class Member extends BaseTimeEntity {
     public void updatePaymentStatus(RequirementStatus status) {
         validateStatusUpdatable();
         this.requirement.updatePaymentStatus(status);
+        this.role = REGULAR;
     }
 
     public void verifyBevy() {
