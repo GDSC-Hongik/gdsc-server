@@ -23,9 +23,6 @@ public class AssociateRequirement {
     private RequirementStatus discordStatus;
 
     @Enumerated(EnumType.STRING)
-    private RequirementStatus paymentStatus;
-
-    @Enumerated(EnumType.STRING)
     private RequirementStatus bevyStatus;
 
     @Enumerated(EnumType.STRING)
@@ -35,12 +32,10 @@ public class AssociateRequirement {
     private AssociateRequirement(
             RequirementStatus univStatus,
             RequirementStatus discordStatus,
-            RequirementStatus paymentStatus,
             RequirementStatus bevyStatus,
             RequirementStatus infoStatus) {
         this.univStatus = univStatus;
         this.discordStatus = discordStatus;
-        this.paymentStatus = paymentStatus;
         this.bevyStatus = bevyStatus;
         this.infoStatus = infoStatus;
     }
@@ -49,7 +44,6 @@ public class AssociateRequirement {
         return AssociateRequirement.builder()
                 .univStatus(PENDING)
                 .discordStatus(PENDING)
-                .paymentStatus(PENDING)
                 .bevyStatus(PENDING)
                 .infoStatus(PENDING)
                 .build();
@@ -58,7 +52,7 @@ public class AssociateRequirement {
     public void updateUnivStatus(RequirementStatus univStatus) {
         this.univStatus = univStatus;
     }
-    
+
     public void verifyDiscord() {
         this.discordStatus = VERIFIED;
     }
