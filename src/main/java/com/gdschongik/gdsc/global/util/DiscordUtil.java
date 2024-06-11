@@ -42,4 +42,10 @@ public class DiscordUtil {
                 .orElseThrow(() -> new CustomException(ErrorCode.DISCORD_MEMBER_NOT_FOUND))
                 .getId();
     }
+
+    public boolean existsByDiscordUsername(String username) {
+        return getCurrentGuild().getMembersByName(username, true).stream()
+                .findFirst()
+                .isPresent();
+    }
 }
