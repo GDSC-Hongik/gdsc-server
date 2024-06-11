@@ -62,7 +62,7 @@ public class Membership extends BaseSemesterEntity {
         return Membership.builder()
                 .member(member)
                 .recruitment(recruitment)
-                .regularRequirement(RegularRequirement.createRegularRequirement())
+                .regularRequirement(RegularRequirement.createUnverifiedRequirement())
                 .academicYear(recruitment.getAcademicYear())
                 .semesterType(recruitment.getSemesterType())
                 .build();

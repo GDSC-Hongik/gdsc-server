@@ -24,7 +24,7 @@ public class RegularRequirement {
         this.paymentStatus = paymentStatus;
     }
 
-    public static RegularRequirement createRegularRequirement() {
+    public static RegularRequirement createUnverifiedRequirement() {
         return RegularRequirement.builder()
                 .paymentStatus(RequirementStatus.PENDING)
                 .build();
