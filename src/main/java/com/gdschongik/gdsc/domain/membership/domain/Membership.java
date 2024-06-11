@@ -68,9 +68,7 @@ public class Membership extends BaseSemesterEntity {
                 .build();
     }
 
-    public void verifyPaymentStatus() {
-        this.regularRequirement.updatePaymentStatus(RequirementStatus.VERIFIED);
-    }
+    // 검증 로직
 
     private static void validateMembershipApplicable(Member member) {
         if (member.getRole().equals(MemberRole.ASSOCIATE)) {
@@ -83,5 +81,11 @@ public class Membership extends BaseSemesterEntity {
         }
 
         throw new CustomException(MEMBERSHIP_NOT_APPLICABLE);
+    }
+
+    // 상태 변경 로직
+
+    public void verifyPaymentStatus() {
+        this.regularRequirement.updatePaymentStatus(RequirementStatus.VERIFIED);
     }
 }
