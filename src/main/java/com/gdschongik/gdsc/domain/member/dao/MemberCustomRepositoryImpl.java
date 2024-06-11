@@ -28,7 +28,7 @@ public class MemberCustomRepositoryImpl extends MemberQueryMethod implements Mem
     public Page<Member> findAllGrantable(MemberQueryOption queryOption, Pageable pageable) {
         List<Member> fetch = queryFactory
                 .selectFrom(member)
-                .where(matchesQueryOption(queryOption), eqRole(MemberRole.GUEST), isGrantAvailable())
+                .where(matchesQueryOption(queryOption), eqRole(MemberRole.GUEST), isAssociateAvailable())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(member.createdAt.desc())
@@ -37,7 +37,7 @@ public class MemberCustomRepositoryImpl extends MemberQueryMethod implements Mem
         JPAQuery<Long> countQuery = queryFactory
                 .select(member.count())
                 .from(member)
-                .where(matchesQueryOption(queryOption), eqRole(MemberRole.GUEST), isGrantAvailable());
+                .where(matchesQueryOption(queryOption), eqRole(MemberRole.GUEST), isAssociateAvailable());
 
         return PageableExecutionUtils.getPage(fetch, pageable, countQuery::fetchOne);
     }
