@@ -59,6 +59,7 @@ public class Membership extends BaseSemesterEntity {
 
     public static Membership createMembership(Member member, Recruitment recruitment) {
         validateMembershipApplicable(member);
+
         return Membership.builder()
                 .member(member)
                 .recruitment(recruitment)
