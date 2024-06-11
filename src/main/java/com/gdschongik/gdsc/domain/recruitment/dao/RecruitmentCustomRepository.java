@@ -4,5 +4,5 @@ import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import java.util.List;
 
 public interface RecruitmentCustomRepository {
-    List<Recruitment> findAllOrderByStartDate();
+    List<Recruitment> findAllOrderByAcademicYearAndSemesterTypeAndStartDate();
 }

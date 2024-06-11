@@ -44,7 +44,7 @@ public class AdminRecruitmentService {
     }
 
     public List<AdminRecruitmentResponse> getAllRecruitments() {
-        List<Recruitment> recruitments = recruitmentRepository.findAllOrderByStartDate();
+        List<Recruitment> recruitments = recruitmentRepository.findAllOrderByAcademicYearAndSemesterTypeAndStartDate();
         List<AdminRecruitmentResponse> adminRecruitmentResponses = getAdminRecruitmentResponses(recruitments);
         adminRecruitmentResponses.sort(comparing(AdminRecruitmentResponse::academicYear, reverseOrder())
                 .thenComparing(AdminRecruitmentResponse::semester, reverseOrder())

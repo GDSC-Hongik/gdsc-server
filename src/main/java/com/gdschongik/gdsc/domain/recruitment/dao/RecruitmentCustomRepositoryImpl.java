@@ -13,7 +13,7 @@ public class RecruitmentCustomRepositoryImpl implements RecruitmentCustomReposit
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<Recruitment> findAllOrderByStartDate() {
+    public List<Recruitment> findAllOrderByAcademicYearAndSemesterTypeAndStartDate() {
         return queryFactory
                 .selectFrom(recruitment)
                 .orderBy(
