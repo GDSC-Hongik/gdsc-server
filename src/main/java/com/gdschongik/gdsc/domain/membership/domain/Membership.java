@@ -1,12 +1,12 @@
 package com.gdschongik.gdsc.domain.membership.domain;
 
+import static com.gdschongik.gdsc.domain.member.domain.RequirementStatus.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.common.model.BaseSemesterEntity;
 import com.gdschongik.gdsc.domain.common.model.SemesterType;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
-import com.gdschongik.gdsc.domain.member.domain.RequirementStatus;
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.persistence.Column;
@@ -87,7 +87,7 @@ public class Membership extends BaseSemesterEntity {
     // 상태 변경 로직
 
     public void verifyPaymentStatus() {
-        this.regularRequirement.updatePaymentStatus(RequirementStatus.VERIFIED);
+        this.regularRequirement.updatePaymentStatus(VERIFIED);
     }
 
     // 데이터 전달 로직
