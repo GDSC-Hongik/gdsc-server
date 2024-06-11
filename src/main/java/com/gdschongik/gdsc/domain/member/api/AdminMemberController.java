@@ -2,7 +2,6 @@ package com.gdschongik.gdsc.domain.member.api;
 
 import com.gdschongik.gdsc.domain.member.application.AdminMemberService;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberGrantRequest;
-import com.gdschongik.gdsc.domain.member.dto.request.MemberPaymentRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryOption;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberUpdateRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.AdminMemberResponse;
@@ -76,14 +75,6 @@ public class AdminMemberController {
             MemberQueryOption queryOption, Pageable pageable) {
         Page<AdminMemberResponse> response = adminMemberService.getGrantableMembers(queryOption, pageable);
         return ResponseEntity.ok().body(response);
-    }
-
-    @Operation(summary = "회비 납부 상태 변경", description = "회비 납부 상태를 변경합니다.", deprecated = true)
-    @PutMapping("/payment/{memberId}")
-    public ResponseEntity<Void> updatePayment(
-            @PathVariable Long memberId, @Valid @RequestBody MemberPaymentRequest request) {
-        adminMemberService.updatePaymentStatus(memberId, request);
-        return ResponseEntity.ok().build();
     }
 
     @Operation(summary = "승인된 회원 전체 조회", description = "승인된 회원 전체를 조회합니다.", deprecated = true)
