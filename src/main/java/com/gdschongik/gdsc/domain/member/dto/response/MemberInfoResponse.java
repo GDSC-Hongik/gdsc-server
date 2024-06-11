@@ -14,13 +14,13 @@ public record MemberInfoResponse(
         String email,
         String discordUsername,
         String nickname,
-        @Schema(description = "회비 입금 상태") RequirementStatus paymentStatus,
         @Schema(description = "디스코드 연동 상태") RequirementStatus discordStatus,
         @Schema(description = "GDSC Bevy 가입 상태") RequirementStatus bevyStatus,
         @Schema(description = "가입 상태") MemberRole role,
         @Schema(description = "입금자명") String depositorName,
         @Schema(description = "가입 상태") RegistrationStatus registrationStatus) {
 
+    // TODO: 2차 MVP 응답 스펙에 맞게 수정 필요
     public static MemberInfoResponse of(Member member) {
         return new MemberInfoResponse(
                 member.getId(),
@@ -37,7 +37,6 @@ public record MemberInfoResponse(
                 member.getNickname(),
                 member.getAssociateRequirement().getPaymentStatus(),
                 member.getAssociateRequirement().getDiscordStatus(),
-                member.getAssociateRequirement().getBevyStatus(),
                 member.getRole(),
                 String.format("%s%s", member.getName(), member.getPhone().substring(7)),
                 RegistrationStatus.from(member));
