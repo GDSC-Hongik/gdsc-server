@@ -59,7 +59,6 @@ class MemberRepositoryTest extends RepositoryTest {
             // given
             Member member = getMember();
             member.getAssociateRequirement().verifyDiscord();
-            member.getAssociateRequirement().updatePaymentStatus(VERIFIED);
             member.getAssociateRequirement().verifyBevy();
 
             // when
@@ -74,7 +73,6 @@ class MemberRepositoryTest extends RepositoryTest {
             // given
             Member member = getMember();
             member.getAssociateRequirement().updateUnivStatus(VERIFIED);
-            member.getAssociateRequirement().updatePaymentStatus(VERIFIED);
             member.getAssociateRequirement().verifyBevy();
 
             // when
@@ -105,7 +103,6 @@ class MemberRepositoryTest extends RepositoryTest {
             Member member = getMember();
             member.getAssociateRequirement().updateUnivStatus(VERIFIED);
             member.getAssociateRequirement().verifyDiscord();
-            member.getAssociateRequirement().updatePaymentStatus(VERIFIED);
 
             // when
             Page<Member> members = memberRepository.findAllGrantable(EMPTY_QUERY_OPTION, PageRequest.of(0, 10));

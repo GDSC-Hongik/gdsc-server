@@ -272,14 +272,6 @@ public class Member extends BaseTimeEntity {
         registerEvent(new MemberAssociateEvent(this.id));
     }
 
-    /**
-     * deprecated
-     */
-    public void updatePaymentStatus(RequirementStatus status) {
-        validateStatusUpdatable();
-        this.associateRequirement.updatePaymentStatus(status);
-    }
-
     public void verifyBevy() {
         validateStatusUpdatable();
 
