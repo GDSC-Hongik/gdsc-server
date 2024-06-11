@@ -53,7 +53,7 @@ class MemberTest {
             member.verifyBevy();
 
             // when & then
-            assertThat(member.getRequirement().isAllVerified()).isFalse();
+            assertThat(member.getAssociateRequirement().isAllVerified()).isFalse();
         }
 
         @Test
@@ -66,7 +66,7 @@ class MemberTest {
             member.verifyBevy();
 
             // when & then
-            assertThat(member.getRequirement().isAllVerified()).isFalse();
+            assertThat(member.getAssociateRequirement().isAllVerified()).isFalse();
         }
 
         @Test
@@ -79,7 +79,7 @@ class MemberTest {
             member.verifyBevy();
 
             // when & then
-            assertThat(member.getRequirement().isAllVerified()).isFalse();
+            assertThat(member.getAssociateRequirement().isAllVerified()).isFalse();
         }
 
         @Test
@@ -92,7 +92,7 @@ class MemberTest {
             member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
 
             // when & then
-            assertThat(member.getRequirement().isAllVerified()).isFalse();
+            assertThat(member.getAssociateRequirement().isAllVerified()).isFalse();
         }
 
         @Test
@@ -106,7 +106,7 @@ class MemberTest {
             member.verifyBevy();
 
             // when & then
-            assertThat(member.getRequirement().isAllVerified()).isTrue();
+            assertThat(member.getAssociateRequirement().isAllVerified()).isTrue();
         }
     }
 

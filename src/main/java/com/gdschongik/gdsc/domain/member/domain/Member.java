@@ -63,7 +63,7 @@ public class Member extends BaseTimeEntity {
     private String univEmail;
 
     @Embedded
-    private Requirement requirement;
+    private AssociateRequirement associateRequirement;
 
     @Builder(access = AccessLevel.PRIVATE)
     private Member(
@@ -79,7 +79,7 @@ public class Member extends BaseTimeEntity {
             String oauthId,
             LocalDateTime lastLoginAt,
             String univEmail,
-            Requirement requirement) {
+            AssociateRequirement associateRequirement) {
         this.role = role;
         this.status = status;
         this.name = name;
@@ -92,16 +92,16 @@ public class Member extends BaseTimeEntity {
         this.oauthId = oauthId;
         this.lastLoginAt = lastLoginAt;
         this.univEmail = univEmail;
-        this.requirement = requirement;
+        this.associateRequirement = associateRequirement;
     }
 
     public static Member createGuestMember(String oauthId) {
-        Requirement requirement = Requirement.createRequirement();
+        AssociateRequirement associateRequirement = AssociateRequirement.createRequirement();
         return Member.builder()
                 .oauthId(oauthId)
-                .role(MemberRole.GUEST)
+                .role(GUEST)
                 .status(MemberStatus.NORMAL)
-                .requirement(requirement)
+                .associateRequirement(associateRequirement)
                 .build();
     }
 
@@ -124,7 +124,7 @@ public class Member extends BaseTimeEntity {
      * 재학생 인증 여부를 검증합니다.
      */
     private void validateUnivStatus() {
-        if (this.requirement.isUnivVerified() && this.univEmail != null) {
+        if (this.associateRequirement.isUnivVerified() && this.univEmail != null) {
             return;
         }
 
@@ -140,15 +140,15 @@ public class Member extends BaseTimeEntity {
             throw new CustomException(MEMBER_ALREADY_GRANTED);
         }
 
-        if (!this.requirement.isInfoVerified()) {
+        if (!this.associateRequirement.isInfoVerified()) {
             throw new CustomException(BASIC_INFO_NOT_VERIFIED);
         }
 
-        if (!this.requirement.isDiscordVerified() || this.discordUsername == null || this.nickname == null) {
+        if (!this.associateRequirement.isDiscordVerified() || this.discordUsername == null || this.nickname == null) {
             throw new CustomException(DISCORD_NOT_VERIFIED);
         }
 
-        if (!this.requirement.isBevyVerified()) {
+        if (!this.associateRequirement.isBevyVerified()) {
             throw new CustomException(BEVY_NOT_VERIFIED);
         }
 
@@ -255,7 +255,7 @@ public class Member extends BaseTimeEntity {
 
     private void verifyUnivEmail() {
         validateStatusUpdatable();
-        requirement.updateUnivStatus(RequirementStatus.VERIFIED);
+        associateRequirement.updateUnivStatus(RequirementStatus.VERIFIED);
         registerEvent(new MemberAssociateEvent(this.id));
     }
 
@@ -265,7 +265,7 @@ public class Member extends BaseTimeEntity {
 
     public void verifyDiscord(String discordUsername, String nickname) {
         validateStatusUpdatable();
-        this.requirement.verifyDiscord();
+        this.associateRequirement.verifyDiscord();
         this.discordUsername = discordUsername;
         this.nickname = nickname;
 
@@ -277,19 +277,19 @@ public class Member extends BaseTimeEntity {
      */
     public void updatePaymentStatus(RequirementStatus status) {
         validateStatusUpdatable();
-        this.requirement.updatePaymentStatus(status);
+        this.associateRequirement.updatePaymentStatus(status);
     }
 
     public void verifyBevy() {
         validateStatusUpdatable();
 
-        this.requirement.verifyBevy();
+        this.associateRequirement.verifyBevy();
         registerEvent(new MemberAssociateEvent(this.id));
     }
 
     public void verifyInfo() {
         validateStatusUpdatable();
-        this.requirement.verifyInfoStatus();
+        this.associateRequirement.verifyInfoStatus();
 
         registerEvent(new MemberAssociateEvent(this.id));
     }

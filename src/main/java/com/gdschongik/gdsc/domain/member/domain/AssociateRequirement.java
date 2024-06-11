@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Embeddable
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Requirement {
+public class AssociateRequirement {
 
     @Enumerated(EnumType.STRING)
     private RequirementStatus univStatus;
@@ -32,7 +32,7 @@ public class Requirement {
     private RequirementStatus infoStatus;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private Requirement(
+    private AssociateRequirement(
             RequirementStatus univStatus,
             RequirementStatus discordStatus,
             RequirementStatus paymentStatus,
@@ -45,8 +45,8 @@ public class Requirement {
         this.infoStatus = infoStatus;
     }
 
-    public static Requirement createRequirement() {
-        return Requirement.builder()
+    public static AssociateRequirement createRequirement() {
+        return AssociateRequirement.builder()
                 .univStatus(PENDING)
                 .discordStatus(PENDING)
                 .paymentStatus(PENDING)

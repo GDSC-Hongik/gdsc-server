@@ -42,9 +42,9 @@ class MemberRepositoryTest extends RepositoryTest {
             // given
             Member member = getMember();
             member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
-            member.getRequirement().updateUnivStatus(VERIFIED);
-            member.getRequirement().verifyDiscord();
-            member.getRequirement().verifyBevy();
+            member.getAssociateRequirement().updateUnivStatus(VERIFIED);
+            member.getAssociateRequirement().verifyDiscord();
+            member.getAssociateRequirement().verifyBevy();
 
             // when
             Page<Member> members = memberRepository.findAllGrantable(EMPTY_QUERY_OPTION, PageRequest.of(0, 10));
@@ -57,9 +57,9 @@ class MemberRepositoryTest extends RepositoryTest {
         void 재학생_인증_미완료시_조회되지_않는다() {
             // given
             Member member = getMember();
-            member.getRequirement().verifyDiscord();
-            member.getRequirement().updatePaymentStatus(VERIFIED);
-            member.getRequirement().verifyBevy();
+            member.getAssociateRequirement().verifyDiscord();
+            member.getAssociateRequirement().updatePaymentStatus(VERIFIED);
+            member.getAssociateRequirement().verifyBevy();
 
             // when
             Page<Member> members = memberRepository.findAllGrantable(EMPTY_QUERY_OPTION, PageRequest.of(0, 10));
@@ -72,9 +72,9 @@ class MemberRepositoryTest extends RepositoryTest {
         void 디스코드_인증_미완료시_조회되지_않는다() {
             // given
             Member member = getMember();
-            member.getRequirement().updateUnivStatus(VERIFIED);
-            member.getRequirement().updatePaymentStatus(VERIFIED);
-            member.getRequirement().verifyBevy();
+            member.getAssociateRequirement().updateUnivStatus(VERIFIED);
+            member.getAssociateRequirement().updatePaymentStatus(VERIFIED);
+            member.getAssociateRequirement().verifyBevy();
 
             // when
             Page<Member> members = memberRepository.findAllGrantable(EMPTY_QUERY_OPTION, PageRequest.of(0, 10));
@@ -87,9 +87,9 @@ class MemberRepositoryTest extends RepositoryTest {
         void 회비납부_미완료시_조회되지_않는다() {
             // given
             Member member = getMember();
-            member.getRequirement().updateUnivStatus(VERIFIED);
-            member.getRequirement().verifyDiscord();
-            member.getRequirement().verifyBevy();
+            member.getAssociateRequirement().updateUnivStatus(VERIFIED);
+            member.getAssociateRequirement().verifyDiscord();
+            member.getAssociateRequirement().verifyBevy();
 
             // when
             Page<Member> members = memberRepository.findAllGrantable(EMPTY_QUERY_OPTION, PageRequest.of(0, 10));
@@ -102,9 +102,9 @@ class MemberRepositoryTest extends RepositoryTest {
         void Bevy_연동_미완료시_조회되지_않는다() {
             // given
             Member member = getMember();
-            member.getRequirement().updateUnivStatus(VERIFIED);
-            member.getRequirement().verifyDiscord();
-            member.getRequirement().updatePaymentStatus(VERIFIED);
+            member.getAssociateRequirement().updateUnivStatus(VERIFIED);
+            member.getAssociateRequirement().verifyDiscord();
+            member.getAssociateRequirement().updatePaymentStatus(VERIFIED);
 
             // when
             Page<Member> members = memberRepository.findAllGrantable(EMPTY_QUERY_OPTION, PageRequest.of(0, 10));

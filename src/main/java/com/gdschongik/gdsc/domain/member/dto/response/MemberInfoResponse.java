@@ -35,9 +35,9 @@ public record MemberInfoResponse(
                 member.getEmail(),
                 member.getDiscordUsername(),
                 member.getNickname(),
-                member.getRequirement().getPaymentStatus(),
-                member.getRequirement().getDiscordStatus(),
-                member.getRequirement().getBevyStatus(),
+                member.getAssociateRequirement().getPaymentStatus(),
+                member.getAssociateRequirement().getDiscordStatus(),
+                member.getAssociateRequirement().getBevyStatus(),
                 member.getRole(),
                 String.format("%s%s", member.getName(), member.getPhone().substring(7)),
                 RegistrationStatus.from(member));
