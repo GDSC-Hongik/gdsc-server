@@ -88,4 +88,10 @@ public class Membership extends BaseSemesterEntity {
     public void verifyPaymentStatus() {
         this.regularRequirement.updatePaymentStatus(RequirementStatus.VERIFIED);
     }
+
+    // 데이터 전달 로직
+
+    public boolean isAdvanceToRegularAvailable() {
+        return this.regularRequirement.isAllVerified();
+    }
 }
