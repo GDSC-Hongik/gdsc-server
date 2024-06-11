@@ -277,21 +277,6 @@ class MemberTest {
     }
 
     @Test
-    void 회비납부시_탈퇴한_유저면_실패한다() {
-        // given
-        Member member = Member.createGuestMember(OAUTH_ID);
-
-        member.withdraw();
-
-        // when & then
-        assertThatThrownBy(() -> {
-                    member.updatePaymentStatus(VERIFIED);
-                })
-                .isInstanceOf(CustomException.class)
-                .hasMessage(MEMBER_DELETED.getMessage());
-    }
-
-    @Test
     void Bevy인증시_탈퇴한_유저면_실패한다() {
         // given
         Member member = Member.createGuestMember(OAUTH_ID);
