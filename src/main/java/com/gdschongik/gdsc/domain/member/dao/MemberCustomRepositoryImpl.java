@@ -61,31 +61,6 @@ public class MemberCustomRepositoryImpl extends MemberQueryMethod implements Mem
     }
 
     @Override
-    public Page<Member> findAllByPaymentStatus(
-            MemberQueryOption queryOption, RequirementStatus paymentStatus, Pageable pageable) {
-        List<Member> fetch = queryFactory
-                .selectFrom(member)
-                .where(
-                        matchesQueryOption(queryOption),
-                        eqRequirementStatus(member.associateRequirement.paymentStatus, paymentStatus),
-                        isStudentIdNotNull())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .orderBy(member.createdAt.desc())
-                .fetch();
-
-        JPAQuery<Long> countQuery = queryFactory
-                .select(member.count())
-                .from(member)
-                .where(
-                        matchesQueryOption(queryOption),
-                        eqRequirementStatus(member.associateRequirement.paymentStatus, paymentStatus),
-                        isStudentIdNotNull());
-
-        return PageableExecutionUtils.getPage(fetch, pageable, countQuery::fetchOne);
-    }
-
-    @Override
     public Map<Boolean, List<Member>> groupByVerified(List<Long> memberIdList) {
         Map<Boolean, List<Member>> groupByVerified = queryFactory
                 .selectFrom(member)

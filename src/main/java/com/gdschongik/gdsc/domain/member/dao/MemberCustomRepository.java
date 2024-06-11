@@ -15,9 +15,6 @@ public interface MemberCustomRepository {
 
     Page<Member> findAllByRole(MemberQueryOption queryOption, Pageable pageable, @Nullable MemberRole role);
 
-    Page<Member> findAllByPaymentStatus(
-            MemberQueryOption queryOption, RequirementStatus paymentStatus, Pageable pageable);
-
     Map<Boolean, List<Member>> groupByVerified(List<Long> memberIdList);
 
     List<Member> findAllByRole(@Nullable MemberRole role);

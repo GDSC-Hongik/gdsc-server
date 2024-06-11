@@ -3,7 +3,6 @@ package com.gdschongik.gdsc.domain.member.application;
 import static com.gdschongik.gdsc.domain.member.domain.MemberRole.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
-import com.gdschongik.gdsc.domain.common.model.RequirementStatus;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberGrantRequest;
@@ -73,12 +72,6 @@ public class AdminMemberService {
 
     public Page<AdminMemberResponse> getGrantableMembers(MemberQueryOption queryOption, Pageable pageable) {
         Page<Member> members = memberRepository.findAllGrantable(queryOption, pageable);
-        return members.map(AdminMemberResponse::from);
-    }
-
-    public Page<AdminMemberResponse> getMembersByPaymentStatus(
-            MemberQueryOption queryOption, RequirementStatus paymentStatus, Pageable pageable) {
-        Page<Member> members = memberRepository.findAllByPaymentStatus(queryOption, paymentStatus, pageable);
         return members.map(AdminMemberResponse::from);
     }
 
