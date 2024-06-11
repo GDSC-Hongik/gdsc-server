@@ -10,9 +10,8 @@ import com.gdschongik.gdsc.domain.member.domain.RequirementStatus;
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -42,20 +41,20 @@ public class Membership extends BaseSemesterEntity {
     @JoinColumn(name = "recruitment_id")
     private Recruitment recruitment;
 
-    @Enumerated(EnumType.STRING)
-    private RequirementStatus paymentStatus;
+    @Embedded
+    private RegularRequirement regularRequirement;
 
     @Builder(access = AccessLevel.PRIVATE)
     private Membership(
             Member member,
             Recruitment recruitment,
-            RequirementStatus paymentStatus,
+            RegularRequirement regularRequirement,
             Integer academicYear,
             SemesterType semesterType) {
         super(academicYear, semesterType);
         this.member = member;
         this.recruitment = recruitment;
-        this.paymentStatus = paymentStatus;
+        this.regularRequirement = regularRequirement;
     }
 
     public static Membership createMembership(Member member, Recruitment recruitment) {
@@ -63,14 +62,14 @@ public class Membership extends BaseSemesterEntity {
         return Membership.builder()
                 .member(member)
                 .recruitment(recruitment)
-                .paymentStatus(RequirementStatus.PENDING)
+                .regularRequirement(RegularRequirement.createRegularRequirement())
                 .academicYear(recruitment.getAcademicYear())
                 .semesterType(recruitment.getSemesterType())
                 .build();
     }
 
     public void verifyPaymentStatus() {
-        this.paymentStatus = RequirementStatus.VERIFIED;
+        this.regularRequirement.updatePaymentStatus(RequirementStatus.VERIFIED);
     }
 
     private static void validateMembershipApplicable(Member member) {
