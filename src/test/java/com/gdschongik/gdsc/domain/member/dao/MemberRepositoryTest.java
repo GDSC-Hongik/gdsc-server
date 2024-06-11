@@ -34,6 +34,7 @@ class MemberRepositoryTest extends RepositoryTest {
         testEntityManager.clear();
     }
 
+    @Deprecated
     @Nested
     class 준회원_승급가능_멤버를_조회할때 {
 
