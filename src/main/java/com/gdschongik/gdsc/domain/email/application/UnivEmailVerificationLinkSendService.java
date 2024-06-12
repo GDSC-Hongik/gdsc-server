@@ -11,7 +11,7 @@ import com.gdschongik.gdsc.global.exception.ErrorCode;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import com.gdschongik.gdsc.global.util.email.HongikUnivEmailValidator;
 import com.gdschongik.gdsc.global.util.email.MailSender;
-import com.gdschongik.gdsc.global.util.email.VerificationCodeGenerator;
+import com.gdschongik.gdsc.global.util.email.VerificationTokenUtil;
 import com.gdschongik.gdsc.global.util.email.VerificationLinkUtil;
 import java.time.Duration;
 import java.util.Optional;
@@ -29,7 +29,7 @@ public class UnivEmailVerificationLinkSendService {
 
     private final MailSender mailSender;
     private final HongikUnivEmailValidator hongikUnivEmailValidator;
-    private final VerificationCodeGenerator verificationCodeGenerator;
+    private final VerificationTokenUtil verificationTokenUtil;
     private final VerificationLinkUtil verificationLinkUtil;
     private final MemberUtil memberUtil;
     public static final Duration VERIFICATION_CODE_TIME_TO_LIVE = Duration.ofMinutes(10);
@@ -50,7 +50,7 @@ public class UnivEmailVerificationLinkSendService {
         hongikUnivEmailValidator.validate(univEmail);
         validateUnivEmailNotVerified(univEmail);
 
-        String verificationCode = verificationCodeGenerator.generate();
+        String verificationCode = verificationTokenUtil.generate();
         String verificationLink = verificationLinkUtil.createLink(verificationCode);
         String mailContent = writeMailContentWithVerificationLink(verificationLink);
         mailSender.send(univEmail, VERIFICATION_EMAIL_SUBJECT, mailContent);
