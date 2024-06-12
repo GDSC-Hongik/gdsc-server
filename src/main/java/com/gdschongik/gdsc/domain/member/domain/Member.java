@@ -170,18 +170,6 @@ public class Member extends BaseTimeEntity {
     }
 
     /**
-     * 가입 신청을 승인합니다.<br>
-     * 어드민만 사용할 수 있어야 합니다.
-     * deprecated
-     */
-    public void grant() {
-        validateStatusUpdatable();
-
-        this.role = ASSOCIATE;
-        registerEvent(new MemberGrantEvent(discordUsername, nickname));
-    }
-
-    /**
      * 해당 회원을 탈퇴 처리합니다.
      */
     public void withdraw() {
