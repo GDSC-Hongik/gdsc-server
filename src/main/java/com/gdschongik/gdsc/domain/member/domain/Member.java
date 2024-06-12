@@ -133,7 +133,7 @@ public class Member extends BaseTimeEntity {
      */
     private void validateAssociateAvailable() {
         if (!isAssociateAvailable()) {
-            throw new CustomException(MEMBER_ADVANCE_ASSOCIATE_NOT_AVAILABLE);
+            throw new CustomException(MEMBER_ADVANCE_TO_ASSOCIATE_NOT_AVAILABLE);
         }
     }
     // 회원 가입상태 변경 로직

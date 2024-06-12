@@ -192,11 +192,9 @@ class MemberTest {
             member.advanceToAssociate();
 
             // when & then
-            assertThatThrownBy(() -> {
-                        member.advanceToAssociate();
-                    })
+            assertThatThrownBy(member::advanceToAssociate)
                     .isInstanceOf(CustomException.class)
-                    .hasMessage(MEMBER_ALREADY_GRANTED.getMessage());
+                    .hasMessage(MEMBER_ADVANCE_TO_ASSOCIATE_NOT_AVAILABLE.getMessage());
         }
     }
 
