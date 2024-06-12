@@ -309,20 +309,6 @@ public class Member extends BaseTimeEntity {
     }
 
     /**
-     * 회원 승인 가능 여부를 반환합니다.
-     *
-     * @see com.gdschongik.gdsc.domain.member.dao.MemberQueryMethod#isGrantAvailable()
-     */
-    public boolean isGrantAvailable() {
-        try {
-            validateGrantAvailable();
-            return true;
-        } catch (CustomException e) {
-            return false;
-        }
-    }
-
-    /**
      * 가입 신청서 제출 여부를 반환합니다.
      */
     public boolean isApplied() {
