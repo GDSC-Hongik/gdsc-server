@@ -129,30 +129,6 @@ public class Member extends BaseTimeEntity {
     }
 
     /**
-     * 회원 승인 가능 여부를 검증합니다.
-     * TODO validateAdvanceAvailable로 수정해야 함
-     */
-    private void validateGrantAvailable() {
-        if (isAtLeastAssociate()) {
-            throw new CustomException(MEMBER_ALREADY_GRANTED);
-        }
-
-        if (!this.associateRequirement.isInfoVerified()) {
-            throw new CustomException(BASIC_INFO_NOT_VERIFIED);
-        }
-
-        if (!this.associateRequirement.isDiscordVerified() || this.discordUsername == null || this.nickname == null) {
-            throw new CustomException(DISCORD_NOT_VERIFIED);
-        }
-
-        if (!this.associateRequirement.isBevyVerified()) {
-            throw new CustomException(BEVY_NOT_VERIFIED);
-        }
-
-        validateUnivStatus();
-    }
-
-    /**
      * 준회원 승급 가능 여부를 검증합니다.
      */
     private void validateAssociateAvailable() {
