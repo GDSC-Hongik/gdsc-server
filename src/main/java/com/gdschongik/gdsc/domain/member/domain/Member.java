@@ -167,7 +167,6 @@ public class Member extends BaseTimeEntity {
         validateAssociateAvailable();
 
         this.role = ASSOCIATE;
-        registerEvent(new MemberGrantEvent(discordUsername, nickname));
     }
 
     /**
