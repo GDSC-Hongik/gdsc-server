@@ -205,10 +205,6 @@ public class Member extends BaseTimeEntity {
         registerEvent(new MemberAssociateEvent(this.id));
     }
 
-    private boolean isAtLeastAssociate() {
-        return this.role.equals(ASSOCIATE) || this.role.equals(ADMIN) || this.role.equals(REGULAR);
-    }
-
     public void verifyDiscord(String discordUsername, String nickname) {
         validateStatusUpdatable();
         this.associateRequirement.verifyDiscord();
