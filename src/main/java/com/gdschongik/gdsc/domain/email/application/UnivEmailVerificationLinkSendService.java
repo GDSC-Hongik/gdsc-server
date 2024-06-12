@@ -2,15 +2,14 @@ package com.gdschongik.gdsc.domain.email.application;
 
 import static com.gdschongik.gdsc.global.common.constant.EmailConstant.VERIFICATION_EMAIL_SUBJECT;
 
-import com.gdschongik.gdsc.domain.email.dao.UnivEmailVerificationRepository;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
 import com.gdschongik.gdsc.global.util.MemberUtil;
+import com.gdschongik.gdsc.global.util.email.EmailVerificationTokenUtil;
 import com.gdschongik.gdsc.global.util.email.HongikUnivEmailValidator;
 import com.gdschongik.gdsc.global.util.email.MailSender;
-import com.gdschongik.gdsc.global.util.email.EmailVerificationTokenUtil;
 import com.gdschongik.gdsc.global.util.email.VerificationLinkUtil;
 import java.time.Duration;
 import java.util.Optional;
@@ -60,7 +59,8 @@ public class UnivEmailVerificationLinkSendService {
             throw new CustomException(ErrorCode.UNIV_EMAIL_ALREADY_VERIFIED);
         }
     }
-    private String generateVerificationToken(String univEmail){
+
+    private String generateVerificationToken(String univEmail) {
         Long currentMemberId = memberUtil.getCurrentMemberId();
         return emailVerificationTokenUtil.generateEmailVerificationToken(currentMemberId, univEmail);
     }

@@ -27,16 +27,18 @@ public class EmailVerificationTokenUtil {
 
     public String generateEmailVerificationToken(Long memberId, String email) {
         Date issuedAt = new Date();
-        JwtProperty.TokenProperty emailVerificationTokenProperty = jwtProperty.getToken().get(JwtConstant.EMAIL_VERIFICATION_TOKEN);
+        JwtProperty.TokenProperty emailVerificationTokenProperty =
+                jwtProperty.getToken().get(JwtConstant.EMAIL_VERIFICATION_TOKEN);
         Date expiredAt = new Date(issuedAt.getTime() + emailVerificationTokenProperty.expirationMilliTime());
         Key key = getKey();
 
         return buildToken(memberId, email, issuedAt, expiredAt, key);
     }
 
-    public EmailVerificationTokenDto parseEmailVerificationTokenDto(String emailVerificationTokenValue) throws ExpiredJwtException {
+    public EmailVerificationTokenDto parseEmailVerificationTokenDto(String emailVerificationTokenValue)
+            throws ExpiredJwtException {
         try {
-            Jws<Claims> claims =  Jwts.parserBuilder()
+            Jws<Claims> claims = Jwts.parserBuilder()
                     .requireIssuer(jwtProperty.getIssuer())
                     .setSigningKey(getKey())
                     .build()
@@ -65,6 +67,10 @@ public class EmailVerificationTokenUtil {
     }
 
     private Key getKey() {
-        return Keys.hmacShaKeyFor(jwtProperty.getToken().get(JwtConstant.EMAIL_VERIFICATION_TOKEN).secret().getBytes());
+        return Keys.hmacShaKeyFor(jwtProperty
+                .getToken()
+                .get(JwtConstant.EMAIL_VERIFICATION_TOKEN)
+                .secret()
+                .getBytes());
     }
 }

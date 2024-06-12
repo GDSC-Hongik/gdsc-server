@@ -6,6 +6,7 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import com.gdschongik.gdsc.domain.common.model.BaseTimeEntity;
 import com.gdschongik.gdsc.domain.common.model.RequirementStatus;
 import com.gdschongik.gdsc.global.exception.CustomException;
+import com.gdschongik.gdsc.global.exception.ErrorCode;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -249,6 +250,10 @@ public class Member extends BaseTimeEntity {
     }
 
     public void completeUnivEmailVerification(String univEmail) {
+        // 이미 인증되어있으면 에러
+        if (associateRequirement.isUnivVerified()) {
+            throw new CustomException(ErrorCode.EMAIL_ALREADY_VERIFIED);
+        }
         this.univEmail = univEmail;
         verifyUnivEmail();
     }

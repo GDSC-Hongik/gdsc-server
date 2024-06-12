@@ -43,6 +43,7 @@ public enum ErrorCode {
     UNIV_NOT_VERIFIED(HttpStatus.CONFLICT, "재학생 인증이 완료되지 않았습니다."),
     DISCORD_NOT_VERIFIED(HttpStatus.CONFLICT, "디스코드 인증이 완료되지 않았습니다."),
     BEVY_NOT_VERIFIED(HttpStatus.CONFLICT, "GDSC Bevy 가입이 완료되지 않았습니다."),
+    EMAIL_ALREADY_VERIFIED(HttpStatus.CONFLICT, "이미 이메일 인증된 회원입니다."),
     BASIC_INFO_NOT_VERIFIED(HttpStatus.CONFLICT, "기본 회원정보 작성이 완료되지 않았습니다."),
 
     // Univ Email Verification
