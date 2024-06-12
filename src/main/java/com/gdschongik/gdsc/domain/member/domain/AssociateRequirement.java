@@ -88,10 +88,6 @@ public class AssociateRequirement {
     }
 
     public boolean isAllVerified() {
-        return isAssociateAvailable();
-    }
-
-    private boolean isAssociateAvailable() {
-        return this.isInfoVerified() && this.isDiscordVerified() && this.isBevyVerified() && this.isUnivVerified();
+        return isUnivVerified() && isDiscordVerified() && isBevyVerified() && isInfoVerified();
     }
 }
