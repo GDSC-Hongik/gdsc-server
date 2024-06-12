@@ -123,11 +123,9 @@ public class Member extends BaseTimeEntity {
      * 재학생 인증 여부를 검증합니다.
      */
     private void validateUnivStatus() {
-        if (this.associateRequirement.isUnivVerified() && this.univEmail != null) {
-            return;
+        if (!this.associateRequirement.isUnivVerified()) {
+            throw new CustomException(UNIV_NOT_VERIFIED);
         }
-
-        throw new CustomException(UNIV_NOT_VERIFIED);
     }
 
     /**
