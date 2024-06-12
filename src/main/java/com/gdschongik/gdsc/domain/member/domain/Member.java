@@ -4,7 +4,6 @@ import static com.gdschongik.gdsc.domain.member.domain.MemberRole.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.common.model.BaseTimeEntity;
-import com.gdschongik.gdsc.domain.common.model.RequirementStatus;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -255,7 +254,7 @@ public class Member extends BaseTimeEntity {
 
     private void verifyUnivEmail() {
         validateStatusUpdatable();
-        associateRequirement.updateUnivStatus(RequirementStatus.VERIFIED);
+        associateRequirement.verifyUniv();
         registerEvent(new MemberAssociateEvent(this.id));
     }
 

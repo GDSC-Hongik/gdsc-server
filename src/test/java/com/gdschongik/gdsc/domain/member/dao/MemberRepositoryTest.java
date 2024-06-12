@@ -1,6 +1,5 @@
 package com.gdschongik.gdsc.domain.member.dao;
 
-import static com.gdschongik.gdsc.domain.common.model.RequirementStatus.*;
 import static com.gdschongik.gdsc.domain.member.domain.Department.*;
 import static com.gdschongik.gdsc.domain.member.domain.MemberRole.*;
 import static com.gdschongik.gdsc.global.common.constant.MemberConstant.*;
@@ -43,7 +42,7 @@ class MemberRepositoryTest extends RepositoryTest {
             // given
             Member member = getMember();
             member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
-            member.getAssociateRequirement().updateUnivStatus(VERIFIED);
+            member.getAssociateRequirement().verifyUniv();
             member.getAssociateRequirement().verifyDiscord();
             member.getAssociateRequirement().verifyBevy();
 
@@ -72,7 +71,7 @@ class MemberRepositoryTest extends RepositoryTest {
         void 디스코드_인증_미완료시_조회되지_않는다() {
             // given
             Member member = getMember();
-            member.getAssociateRequirement().updateUnivStatus(VERIFIED);
+            member.getAssociateRequirement().verifyUniv();
             member.getAssociateRequirement().verifyBevy();
 
             // when
@@ -86,7 +85,7 @@ class MemberRepositoryTest extends RepositoryTest {
         void 회비납부_미완료시_조회되지_않는다() {
             // given
             Member member = getMember();
-            member.getAssociateRequirement().updateUnivStatus(VERIFIED);
+            member.getAssociateRequirement().verifyUniv();
             member.getAssociateRequirement().verifyDiscord();
             member.getAssociateRequirement().verifyBevy();
 
@@ -101,7 +100,7 @@ class MemberRepositoryTest extends RepositoryTest {
         void Bevy_연동_미완료시_조회되지_않는다() {
             // given
             Member member = getMember();
-            member.getAssociateRequirement().updateUnivStatus(VERIFIED);
+            member.getAssociateRequirement().verifyUniv();
             member.getAssociateRequirement().verifyDiscord();
 
             // when

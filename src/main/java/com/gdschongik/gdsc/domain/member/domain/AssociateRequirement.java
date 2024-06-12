@@ -51,8 +51,8 @@ public class AssociateRequirement {
                 .build();
     }
 
-    public void updateUnivStatus(RequirementStatus univStatus) {
-        this.univStatus = univStatus;
+    public void verifyUniv() {
+        this.univStatus = VERIFIED;
     }
 
     public void verifyDiscord() {
