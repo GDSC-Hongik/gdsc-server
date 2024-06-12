@@ -243,11 +243,4 @@ public class Member extends BaseTimeEntity {
     public boolean isAssociate() {
         return role.equals(ASSOCIATE);
     }
-
-    /**
-     * 가입 신청서 제출 여부를 반환합니다.
-     */
-    public boolean isApplied() {
-        return studentId != null;
-    }
 }
