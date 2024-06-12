@@ -285,6 +285,16 @@ public class Member extends BaseTimeEntity {
         registerEvent(new MemberAssociateEvent(this.id));
     }
 
+    // 기타 상태 변경 로직
+
+    public void updateLastLoginAt() {
+        this.lastLoginAt = LocalDateTime.now();
+    }
+
+    public void updateDiscordId(String discordId) {
+        this.discordId = discordId;
+    }
+
     // 데이터 전달 로직
 
     // TODO 한꺼번에 USER관련 기능을 삭제 할때 함께 USER부분을 삭제하기
@@ -318,15 +328,5 @@ public class Member extends BaseTimeEntity {
      */
     private boolean isAssociateAvailable() {
         return associateRequirement.isAllVerified();
-    }
-
-    // 기타 로직
-
-    public void updateLastLoginAt() {
-        this.lastLoginAt = LocalDateTime.now();
-    }
-
-    public void updateDiscordId(String discordId) {
-        this.discordId = discordId;
     }
 }
