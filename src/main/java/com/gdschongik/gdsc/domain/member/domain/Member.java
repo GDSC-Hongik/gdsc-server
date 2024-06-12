@@ -172,7 +172,7 @@ public class Member extends BaseTimeEntity {
     }
 
     /**
-     * 기본 회원 정보를 작성한다.
+     * 기본 회원 정보를 작성합니다.
      */
     public void updateBasicMemberInfo(
             String studentId, String name, String phone, Department department, String email) {
