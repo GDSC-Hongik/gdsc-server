@@ -313,6 +313,13 @@ public class Member extends BaseTimeEntity {
         return studentId != null;
     }
 
+    /**
+     * 준회원 승급 가능 여부를 반환합니다.
+     */
+    private boolean isAssociateAvailable() {
+        return associateRequirement.isAllVerified();
+    }
+
     // 기타 로직
 
     public void updateLastLoginAt() {
