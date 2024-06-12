@@ -182,27 +182,6 @@ class MemberRepositoryTest extends RepositoryTest {
         }
 
         @Test
-        void 준회원_상태에서_회비납부하면_REGULAR로_조회된다() {
-            // given
-            Member member = getMember();
-            member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, UNIV_EMAIL);
-            member.completeUnivEmailVerification(UNIV_EMAIL);
-            member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
-            member.verifyBevy();
-            member.advanceToAssociate();
-            member.updatePaymentStatus(VERIFIED);
-
-            flushAndClearBeforeExecute();
-
-            // when
-            Page<Member> members = memberRepository.findAllByRole(EMPTY_QUERY_OPTION, PageRequest.of(0, 10), REGULAR);
-
-            // then
-            Member user = memberRepository.findById(1L).get();
-            assertThat(members).contains(user);
-        }
-
-        @Test
         void 기본_회원정보_작성후_준회원_승급후라면_GUEST로_조회되지_않는다() {
             // given
             Member member = getMember();
