@@ -8,7 +8,6 @@ import com.gdschongik.gdsc.domain.common.model.SemesterType;
 import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRepository;
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentCreateRequest;
-import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentQueryOption;
 import com.gdschongik.gdsc.domain.recruitment.dto.response.AdminRecruitmentResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.integration.IntegrationTest;
@@ -19,8 +18,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 class AdminRecruitmentServiceTest extends IntegrationTest {
-
-    private static final RecruitmentQueryOption queryOption = new RecruitmentQueryOption(null, null);
 
     @Autowired
     private AdminRecruitmentService adminRecruitmentService;
