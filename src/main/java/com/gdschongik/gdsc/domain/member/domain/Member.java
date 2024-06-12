@@ -133,6 +133,7 @@ public class Member extends BaseTimeEntity {
      */
     private void validateAssociateAvailable() {
         // TODO: 검증 실패 케이스 세분화
+        // TODO: Requirement의 validate 로직 호출하여, 검증 책임을 VO가 가지도록 변경
         if (!isAssociateAvailable()) {
             throw new CustomException(MEMBER_ADVANCE_TO_ASSOCIATE_NOT_AVAILABLE);
         }
