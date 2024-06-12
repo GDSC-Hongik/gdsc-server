@@ -34,6 +34,7 @@ public class OnboardingMemberController {
         return ResponseEntity.ok().build();
     }
 
+    @Deprecated
     @Operation(summary = "회원 정보 조회", description = "회원 정보를 조회합니다.")
     @GetMapping("/me")
     public ResponseEntity<MemberInfoResponse> getMemberInfo() {

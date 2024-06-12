@@ -38,10 +38,8 @@ public class OnboardingMemberService {
     }
 
     public MemberInfoResponse getMemberInfo() {
+        // TODO: 대시보드 API로 통합
         Member currentMember = memberUtil.getCurrentMember();
-        if (!currentMember.isApplied()) {
-            throw new CustomException(MEMBER_NOT_APPLIED);
-        }
         return MemberInfoResponse.of(currentMember);
     }
 
