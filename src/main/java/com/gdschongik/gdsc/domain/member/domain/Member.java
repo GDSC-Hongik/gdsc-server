@@ -240,7 +240,7 @@ public class Member extends BaseTimeEntity {
 
     // 데이터 전달 로직
 
-    public boolean isAssociate() {
-        return role.equals(ASSOCIATE);
+    public boolean isRegular() {
+        return role.equals(REGULAR);
     }
 }
