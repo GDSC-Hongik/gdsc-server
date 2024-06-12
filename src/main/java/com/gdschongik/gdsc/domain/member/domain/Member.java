@@ -132,6 +132,8 @@ public class Member extends BaseTimeEntity {
      * 준회원 승급 가능 여부를 검증합니다.
      */
     private void validateAssociateAvailable() {
+        if (this.role.equals(ASSOCIATE)) {
+            throw new CustomException(MEMBER_ALREADY_ASSOCIATE);
         }
 
         associateRequirement.validateAllVerified();
