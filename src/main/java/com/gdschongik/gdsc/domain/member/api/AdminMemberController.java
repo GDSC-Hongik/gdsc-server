@@ -36,17 +36,10 @@ public class AdminMemberController {
 
     private final AdminMemberService adminMemberService;
 
-    @Operation(summary = "전체 회원 목록 조회", description = "전체 회원 목록을 조회합니다.")
-    @GetMapping
-    public ResponseEntity<Page<AdminMemberResponse>> getMembers(MemberQueryOption queryOption, Pageable pageable) {
-        Page<AdminMemberResponse> response = adminMemberService.findAll(queryOption, pageable);
-        return ResponseEntity.ok().body(response);
-    }
-
     @Operation(summary = "회원 상태별 목록 조회", description = "정회원, 준회원, 게스트별로 조회합니다.")
-    @GetMapping("/role")
-    public ResponseEntity<Page<AdminMemberResponse>> getMembersByRole(
-            @RequestParam(name = "role", required = true) MemberRole memberRole,
+    @GetMapping
+    public ResponseEntity<Page<AdminMemberResponse>> getMembers(
+            @RequestParam(name = "role", required = false) MemberRole memberRole,
             MemberQueryOption queryOption,
             Pageable pageable) {
         Page<AdminMemberResponse> response = adminMemberService.findAllByRole(queryOption, pageable, memberRole);
