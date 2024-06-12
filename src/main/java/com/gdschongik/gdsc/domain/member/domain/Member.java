@@ -120,15 +120,6 @@ public class Member extends BaseTimeEntity {
     }
 
     /**
-     * 재학생 인증 여부를 검증합니다.
-     */
-    private void validateUnivStatus() {
-        if (!this.associateRequirement.isUnivVerified()) {
-            throw new CustomException(UNIV_NOT_VERIFIED);
-        }
-    }
-
-    /**
      * 준회원 승급 가능 여부를 검증합니다.
      */
     private void validateAssociateAvailable() {
