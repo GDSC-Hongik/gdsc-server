@@ -63,7 +63,7 @@ public class AssociateRequirement {
         this.bevyStatus = VERIFIED;
     }
 
-    public void verifyInfoStatus() {
+    public void verifyInfo() {
         this.infoStatus = VERIFIED;
     }
 
