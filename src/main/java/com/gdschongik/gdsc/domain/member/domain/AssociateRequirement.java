@@ -1,19 +1,22 @@
 package com.gdschongik.gdsc.domain.member.domain;
 
-import static com.gdschongik.gdsc.domain.member.domain.RequirementStatus.*;
+import static com.gdschongik.gdsc.domain.common.model.RequirementStatus.*;
 
+import com.gdschongik.gdsc.domain.common.model.RequirementStatus;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Embeddable
 @Getter
+@Embeddable
+@EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Requirement {
+public class AssociateRequirement {
 
     @Enumerated(EnumType.STRING)
     private RequirementStatus univStatus;
@@ -22,33 +25,27 @@ public class Requirement {
     private RequirementStatus discordStatus;
 
     @Enumerated(EnumType.STRING)
-    private RequirementStatus paymentStatus;
-
-    @Enumerated(EnumType.STRING)
     private RequirementStatus bevyStatus;
 
     @Enumerated(EnumType.STRING)
     private RequirementStatus infoStatus;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private Requirement(
+    private AssociateRequirement(
             RequirementStatus univStatus,
             RequirementStatus discordStatus,
-            RequirementStatus paymentStatus,
             RequirementStatus bevyStatus,
             RequirementStatus infoStatus) {
         this.univStatus = univStatus;
         this.discordStatus = discordStatus;
-        this.paymentStatus = paymentStatus;
         this.bevyStatus = bevyStatus;
         this.infoStatus = infoStatus;
     }
 
-    public static Requirement createRequirement() {
-        return Requirement.builder()
+    public static AssociateRequirement createRequirement() {
+        return AssociateRequirement.builder()
                 .univStatus(PENDING)
                 .discordStatus(PENDING)
-                .paymentStatus(PENDING)
                 .bevyStatus(PENDING)
                 .infoStatus(PENDING)
                 .build();
@@ -56,10 +53,6 @@ public class Requirement {
 
     public void updateUnivStatus(RequirementStatus univStatus) {
         this.univStatus = univStatus;
-    }
-
-    public void updatePaymentStatus(RequirementStatus status) {
-        this.paymentStatus = status;
     }
 
     public void verifyDiscord() {
@@ -80,10 +73,6 @@ public class Requirement {
 
     public boolean isDiscordVerified() {
         return this.discordStatus == VERIFIED;
-    }
-
-    public boolean isPaymentVerified() {
-        return this.paymentStatus == VERIFIED;
     }
 
     public boolean isBevyVerified() {

@@ -4,7 +4,6 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.common.model.SemesterType;
 import com.gdschongik.gdsc.domain.member.domain.Member;
-import com.gdschongik.gdsc.domain.member.domain.RequirementStatus;
 import com.gdschongik.gdsc.domain.membership.dao.MembershipRepository;
 import com.gdschongik.gdsc.domain.membership.domain.Membership;
 import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRepository;
@@ -47,11 +46,10 @@ public class MembershipService {
         membershipRepository
                 .findByMemberAndAcademicYearAndSemesterType(currentMember, academicYear, semesterType)
                 .ifPresent(membership -> {
-                    if (membership.getPaymentStatus() == RequirementStatus.VERIFIED) {
-                        throw new CustomException(MEMBERSHIP_ALREADY_ISSUED);
-                    } else {
-                        throw new CustomException(MEMBERSHIP_ALREADY_APPLIED);
+                    if (membership.isAdvanceToRegularAvailable()) {
+                        throw new CustomException(MEMBERSHIP_ALREADY_VERIFIED);
                     }
+                    throw new CustomException(MEMBERSHIP_ALREADY_APPLIED);
                 });
     }
 }

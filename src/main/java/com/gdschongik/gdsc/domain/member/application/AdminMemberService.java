@@ -5,9 +5,7 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
-import com.gdschongik.gdsc.domain.member.domain.RequirementStatus;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberGrantRequest;
-import com.gdschongik.gdsc.domain.member.dto.request.MemberPaymentRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryOption;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberUpdateRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.AdminMemberResponse;
@@ -74,18 +72,6 @@ public class AdminMemberService {
     public Page<AdminMemberResponse> getGrantableMembers(MemberQueryOption queryOption, Pageable pageable) {
         Page<Member> members = memberRepository.findAllGrantable(queryOption, pageable);
         return members.map(AdminMemberResponse::from);
-    }
-
-    public Page<AdminMemberResponse> getMembersByPaymentStatus(
-            MemberQueryOption queryOption, RequirementStatus paymentStatus, Pageable pageable) {
-        Page<Member> members = memberRepository.findAllByPaymentStatus(queryOption, paymentStatus, pageable);
-        return members.map(AdminMemberResponse::from);
-    }
-
-    @Transactional
-    public void updatePaymentStatus(Long memberId, MemberPaymentRequest request) {
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
-        member.updatePaymentStatus(request.status());
     }
 
     public Page<AdminMemberResponse> findAllGrantedMembers(MemberQueryOption queryOption, Pageable pageable) {
