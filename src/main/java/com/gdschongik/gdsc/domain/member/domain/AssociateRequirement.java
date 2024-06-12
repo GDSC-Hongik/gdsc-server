@@ -51,6 +51,8 @@ public class AssociateRequirement {
                 .build();
     }
 
+    // 상태 변경 로직
+
     public void verifyUniv() {
         this.univStatus = VERIFIED;
     }
@@ -66,6 +68,8 @@ public class AssociateRequirement {
     public void verifyInfo() {
         this.infoStatus = VERIFIED;
     }
+
+    // 데이터 전달 로직
 
     public boolean isUnivVerified() {
         return this.univStatus == VERIFIED;
