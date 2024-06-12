@@ -202,7 +202,7 @@ public class Member extends BaseTimeEntity {
      */
     public void advanceToAssociate() {
         validateStatusUpdatable();
-        validateGrantAvailable();
+        validateAssociateAvailable();
 
         this.role = ASSOCIATE;
         registerEvent(new MemberGrantEvent(discordUsername, nickname));
@@ -215,7 +215,6 @@ public class Member extends BaseTimeEntity {
      */
     public void grant() {
         validateStatusUpdatable();
-        validateGrantAvailable();
 
         this.role = ASSOCIATE;
         registerEvent(new MemberGrantEvent(discordUsername, nickname));
