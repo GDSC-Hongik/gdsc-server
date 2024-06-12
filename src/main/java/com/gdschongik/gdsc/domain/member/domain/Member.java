@@ -132,11 +132,9 @@ public class Member extends BaseTimeEntity {
      * 준회원 승급 가능 여부를 검증합니다.
      */
     private void validateAssociateAvailable() {
-        // TODO: 검증 실패 케이스 세분화
-        // TODO: Requirement의 validate 로직 호출하여, 검증 책임을 VO가 가지도록 변경
-        if (!isAssociateAvailable()) {
-            throw new CustomException(MEMBER_ADVANCE_TO_ASSOCIATE_NOT_AVAILABLE);
         }
+
+        associateRequirement.validateAllVerified();
     }
     // 회원 가입상태 변경 로직
 
@@ -262,12 +260,5 @@ public class Member extends BaseTimeEntity {
      */
     public boolean isApplied() {
         return studentId != null;
-    }
-
-    /**
-     * 준회원 승급 가능 여부를 반환합니다.
-     */
-    private boolean isAssociateAvailable() {
-        return associateRequirement.isAllVerified();
     }
 }

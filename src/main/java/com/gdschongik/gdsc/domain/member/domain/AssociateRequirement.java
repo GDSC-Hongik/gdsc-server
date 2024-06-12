@@ -1,8 +1,10 @@
 package com.gdschongik.gdsc.domain.member.domain;
 
 import static com.gdschongik.gdsc.domain.common.model.RequirementStatus.*;
+import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.common.model.RequirementStatus;
+import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -71,23 +73,39 @@ public class AssociateRequirement {
 
     // 데이터 전달 로직
 
-    public boolean isUnivVerified() {
+    private boolean isUnivVerified() {
         return this.univStatus == VERIFIED;
     }
 
-    public boolean isDiscordVerified() {
+    private boolean isDiscordVerified() {
         return this.discordStatus == VERIFIED;
     }
 
-    public boolean isBevyVerified() {
+    private boolean isBevyVerified() {
         return this.bevyStatus == VERIFIED;
     }
 
-    public boolean isInfoVerified() {
+    private boolean isInfoVerified() {
         return this.infoStatus == VERIFIED;
     }
 
-    public boolean isAllVerified() {
-        return isUnivVerified() && isDiscordVerified() && isBevyVerified() && isInfoVerified();
+    // 검증 로직
+
+    public void validateAllVerified() {
+        if (!isUnivVerified()) {
+            throw new CustomException(UNIV_NOT_VERIFIED);
+        }
+
+        if (!isDiscordVerified()) {
+            throw new CustomException(DISCORD_NOT_VERIFIED);
+        }
+
+        if (!isBevyVerified()) {
+            throw new CustomException(BEVY_NOT_VERIFIED);
+        }
+
+        if (!isInfoVerified()) {
+            throw new CustomException(BASIC_INFO_NOT_VERIFIED);
+        }
     }
 }
