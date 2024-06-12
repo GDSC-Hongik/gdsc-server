@@ -2,10 +2,12 @@ package com.gdschongik.gdsc.domain.email.application;
 
 import com.gdschongik.gdsc.domain.email.dao.UnivEmailVerificationRepository;
 import com.gdschongik.gdsc.domain.email.domain.UnivEmailVerification;
+import com.gdschongik.gdsc.domain.email.dto.request.EmailVerificationTokenDto;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
+import com.gdschongik.gdsc.global.util.email.EmailVerificationTokenUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,21 +16,20 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class UnivEmailVerificationService {
+    private final EmailVerificationTokenUtil emailVerificationTokenUtil;
 
     private final MemberRepository memberRepository;
     private final UnivEmailVerificationRepository univEmailVerificationRepository;
 
     @Transactional
-    public void verifyMemberUnivEmail(String verificationCode) {
-        UnivEmailVerification univEmailVerification = getUnivEmailVerification(verificationCode);
-        Member member = getMemberById(univEmailVerification.getMemberId());
-        member.completeUnivEmailVerification(univEmailVerification.getUnivEmail());
+    public void verifyMemberUnivEmail(String verificationToken) {
+        EmailVerificationTokenDto emailVerificationToken = getEmailVerificationToken(verificationToken);
+        Member member = getMemberById(emailVerificationToken.memberId());
+        member.completeUnivEmailVerification(emailVerificationToken.email());
     }
 
-    private UnivEmailVerification getUnivEmailVerification(String verificationCode) {
-        return univEmailVerificationRepository
-                .findById(verificationCode)
-                .orElseThrow(() -> new CustomException(ErrorCode.VERIFICATION_CODE_NOT_FOUND));
+    private EmailVerificationTokenDto getEmailVerificationToken(String verificationToken) {
+        return emailVerificationTokenUtil.parseEmailVerificationTokenDto(verificationToken);
     }
 
     private Member getMemberById(Long id) {

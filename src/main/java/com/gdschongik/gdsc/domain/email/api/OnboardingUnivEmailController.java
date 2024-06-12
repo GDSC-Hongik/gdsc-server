@@ -37,8 +37,8 @@ public class OnboardingUnivEmailController {
     @Operation(summary = "학교 인증 메일 인증하기", description = "학교 인증 메일을 인증합니다.")
     @GetMapping("/verify-email")
     public ResponseEntity<Void> sendUnivEmailVerificationLink(
-            @RequestParam(VERIFY_EMAIL_REQUEST_PARAMETER_KEY) String verificationCode) {
-        univEmailVerificationService.verifyMemberUnivEmail(verificationCode);
+            @RequestParam(VERIFY_EMAIL_REQUEST_PARAMETER_KEY) String verificationToken) {
+        univEmailVerificationService.verifyMemberUnivEmail(verificationToken);
         return ResponseEntity.ok().build();
     }
 }

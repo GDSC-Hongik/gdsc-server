@@ -3,8 +3,6 @@ package com.gdschongik.gdsc.domain.email.application;
 import static com.gdschongik.gdsc.global.common.constant.EmailConstant.VERIFICATION_EMAIL_SUBJECT;
 
 import com.gdschongik.gdsc.domain.email.dao.UnivEmailVerificationRepository;
-import com.gdschongik.gdsc.domain.email.domain.UnivEmailVerification;
-import com.gdschongik.gdsc.domain.email.dto.request.EmailVerificationTokenDto;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.global.exception.CustomException;
@@ -12,7 +10,7 @@ import com.gdschongik.gdsc.global.exception.ErrorCode;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import com.gdschongik.gdsc.global.util.email.HongikUnivEmailValidator;
 import com.gdschongik.gdsc.global.util.email.MailSender;
-import com.gdschongik.gdsc.global.util.email.VerificationTokenUtil;
+import com.gdschongik.gdsc.global.util.email.EmailVerificationTokenUtil;
 import com.gdschongik.gdsc.global.util.email.VerificationLinkUtil;
 import java.time.Duration;
 import java.util.Optional;
@@ -26,11 +24,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class UnivEmailVerificationLinkSendService {
 
     private final MemberRepository memberRepository;
-    private final UnivEmailVerificationRepository univEmailVerificationRepository;
 
     private final MailSender mailSender;
     private final HongikUnivEmailValidator hongikUnivEmailValidator;
-    private final VerificationTokenUtil verificationTokenUtil;
+    private final EmailVerificationTokenUtil emailVerificationTokenUtil;
     private final VerificationLinkUtil verificationLinkUtil;
     private final MemberUtil memberUtil;
     public static final Duration VERIFICATION_CODE_TIME_TO_LIVE = Duration.ofMinutes(10);
@@ -65,9 +62,7 @@ public class UnivEmailVerificationLinkSendService {
     }
     private String generateVerificationToken(String univEmail){
         Long currentMemberId = memberUtil.getCurrentMemberId();
-        EmailVerificationTokenDto emailVerificationTokenDto =
-                verificationTokenUtil.generateEmailVerificationToken(currentMemberId, univEmail);
-        return emailVerificationTokenDto.tokenValue();
+        return emailVerificationTokenUtil.generateEmailVerificationToken(currentMemberId, univEmail);
     }
 
     private String writeMailContentWithVerificationLink(String verificationLink) {

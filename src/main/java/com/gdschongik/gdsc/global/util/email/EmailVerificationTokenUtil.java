@@ -1,12 +1,8 @@
 package com.gdschongik.gdsc.global.util.email;
 
 import static com.gdschongik.gdsc.global.common.constant.EmailConstant.TOKEN_EMAIL_NAME;
-import static com.gdschongik.gdsc.global.common.constant.SecurityConstant.TOKEN_ROLE_NAME;
 
-import com.gdschongik.gdsc.domain.auth.dto.AccessTokenDto;
-import com.gdschongik.gdsc.domain.auth.dto.RefreshTokenDto;
 import com.gdschongik.gdsc.domain.email.dto.request.EmailVerificationTokenDto;
-import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import com.gdschongik.gdsc.global.common.constant.EmailConstant;
 import com.gdschongik.gdsc.global.common.constant.JwtConstant;
 import com.gdschongik.gdsc.global.exception.CustomException;
@@ -25,18 +21,17 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class VerificationTokenUtil {
+public class EmailVerificationTokenUtil {
 
     private final JwtProperty jwtProperty;
 
-    public EmailVerificationTokenDto generateEmailVerificationToken(Long memberId, String email) {
+    public String generateEmailVerificationToken(Long memberId, String email) {
         Date issuedAt = new Date();
         JwtProperty.TokenProperty emailVerificationTokenProperty = jwtProperty.getToken().get(JwtConstant.EMAIL_VERIFICATION_TOKEN);
         Date expiredAt = new Date(issuedAt.getTime() + emailVerificationTokenProperty.expirationMilliTime());
         Key key = getKey();
 
-        String tokenValue = buildToken(memberId, email, issuedAt, expiredAt, key);
-        return new EmailVerificationTokenDto(memberId, tokenValue, emailVerificationTokenProperty.expirationTime());
+        return buildToken(memberId, email, issuedAt, expiredAt, key);
     }
 
     public EmailVerificationTokenDto parseEmailVerificationTokenDto(String emailVerificationTokenValue) throws ExpiredJwtException {
@@ -49,8 +44,7 @@ public class VerificationTokenUtil {
 
             return new EmailVerificationTokenDto(
                     Long.parseLong(claims.getBody().getSubject()),
-                    claims.getBody().get(TOKEN_EMAIL_NAME, String.class),
-                    jwtProperty.getToken().get(JwtConstant.EMAIL_VERIFICATION_TOKEN).expirationTime());
+                    claims.getBody().get(TOKEN_EMAIL_NAME, String.class));
         } catch (ExpiredJwtException e) {
             throw new CustomException(ErrorCode.EXPIRED_EMAIL_VERIFICATION_TOKEN);
         } catch (Exception e) {
