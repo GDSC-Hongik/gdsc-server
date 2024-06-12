@@ -139,21 +139,6 @@ public class Member extends BaseTimeEntity {
     // 회원 가입상태 변경 로직
 
     /**
-     * 가입 신청 시 작성한 정보를 저장합니다. 재학생 인증을 완료한 회원만 신청할 수 있습니다.
-     * deprecated
-     */
-    public void signup(String studentId, String name, String phone, Department department, String email) {
-        validateStatusUpdatable();
-        validateUnivStatus();
-
-        this.studentId = studentId;
-        this.name = name;
-        this.phone = phone;
-        this.department = department;
-        this.email = email;
-    }
-
-    /**
      * 기본 회원 정보를 작성합니다.
      */
     public void updateBasicMemberInfo(
