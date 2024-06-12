@@ -4,6 +4,7 @@ import static com.gdschongik.gdsc.global.common.constant.EmailConstant.VERIFICAT
 
 import com.gdschongik.gdsc.domain.email.dao.UnivEmailVerificationRepository;
 import com.gdschongik.gdsc.domain.email.domain.UnivEmailVerification;
+import com.gdschongik.gdsc.domain.email.dto.request.EmailVerificationTokenDto;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.global.exception.CustomException;
@@ -50,12 +51,10 @@ public class UnivEmailVerificationLinkSendService {
         hongikUnivEmailValidator.validate(univEmail);
         validateUnivEmailNotVerified(univEmail);
 
-        String verificationCode = verificationTokenUtil.generate();
-        String verificationLink = verificationLinkUtil.createLink(verificationCode);
+        String verificationToken = generateVerificationToken(univEmail);
+        String verificationLink = verificationLinkUtil.createLink(verificationToken);
         String mailContent = writeMailContentWithVerificationLink(verificationLink);
         mailSender.send(univEmail, VERIFICATION_EMAIL_SUBJECT, mailContent);
-
-        saveUnivEmailVerification(univEmail, verificationCode);
     }
 
     private void validateUnivEmailNotVerified(String univEmail) {
@@ -64,16 +63,14 @@ public class UnivEmailVerificationLinkSendService {
             throw new CustomException(ErrorCode.UNIV_EMAIL_ALREADY_VERIFIED);
         }
     }
+    private String generateVerificationToken(String univEmail){
+        Long currentMemberId = memberUtil.getCurrentMemberId();
+        EmailVerificationTokenDto emailVerificationTokenDto =
+                verificationTokenUtil.generateEmailVerificationToken(currentMemberId, univEmail);
+        return emailVerificationTokenDto.tokenValue();
+    }
 
     private String writeMailContentWithVerificationLink(String verificationLink) {
         return NOTIFICATION_MESSAGE.formatted(VERIFICATION_CODE_TIME_TO_LIVE.toMinutes(), verificationLink);
-    }
-
-    private void saveUnivEmailVerification(String univEmail, String verificationCode) {
-        Long currentMemberId = memberUtil.getCurrentMemberId();
-        UnivEmailVerification univEmailVerification = new UnivEmailVerification(
-                verificationCode, univEmail, currentMemberId, VERIFICATION_CODE_TIME_TO_LIVE.toSeconds());
-
-        univEmailVerificationRepository.save(univEmailVerification);
     }
 }
