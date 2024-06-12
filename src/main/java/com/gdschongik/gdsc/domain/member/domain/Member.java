@@ -152,6 +152,14 @@ public class Member extends BaseTimeEntity {
         validateUnivStatus();
     }
 
+    /**
+     * 준회원 승급 가능 여부를 검증합니다.
+     */
+    private void validateAssociateAvailable() {
+        if (!isAssociateAvailable()) {
+            throw new CustomException(MEMBER_ADVANCE_ASSOCIATE_NOT_AVAILABLE);
+        }
+    }
     // 회원 가입상태 변경 로직
 
     /**
