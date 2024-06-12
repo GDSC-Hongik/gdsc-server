@@ -4,6 +4,7 @@ import com.gdschongik.gdsc.domain.member.application.handler.MemberAssociateEven
 import com.gdschongik.gdsc.domain.member.domain.MemberAssociateEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 @Component
@@ -12,7 +13,7 @@ public class MemberAssociateEventListener {
 
     private final MemberAssociateEventHandler memberAssociateEventHandler;
 
-    @TransactionalEventListener(MemberAssociateEvent.class)
+    @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT, classes = MemberAssociateEvent.class)
     public void handleMemberAssociateEvent(MemberAssociateEvent event) {
         memberAssociateEventHandler.advanceToAssociate(event);
     }

@@ -1,6 +1,6 @@
 package com.gdschongik.gdsc.domain.discord.application.handler;
 
-import static com.gdschongik.gdsc.domain.member.domain.RequirementStatus.*;
+import static com.gdschongik.gdsc.domain.common.model.RequirementStatus.*;
 import static com.gdschongik.gdsc.global.common.constant.DiscordConstant.*;
 
 import com.gdschongik.gdsc.domain.discord.application.CommonDiscordService;

@@ -1,9 +1,9 @@
 package com.gdschongik.gdsc.domain.member.domain;
 
+import static com.gdschongik.gdsc.domain.common.model.RequirementStatus.*;
 import static com.gdschongik.gdsc.domain.member.domain.Department.*;
 import static com.gdschongik.gdsc.domain.member.domain.MemberRole.ASSOCIATE;
 import static com.gdschongik.gdsc.domain.member.domain.MemberStatus.*;
-import static com.gdschongik.gdsc.domain.member.domain.RequirementStatus.*;
 import static com.gdschongik.gdsc.global.common.constant.MemberConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
@@ -53,7 +53,7 @@ class MemberTest {
             member.verifyBevy();
 
             // when & then
-            assertThat(member.getRequirement().isAllVerified()).isFalse();
+            assertThat(member.getAssociateRequirement().isAllVerified()).isFalse();
         }
 
         @Test
@@ -66,7 +66,7 @@ class MemberTest {
             member.verifyBevy();
 
             // when & then
-            assertThat(member.getRequirement().isAllVerified()).isFalse();
+            assertThat(member.getAssociateRequirement().isAllVerified()).isFalse();
         }
 
         @Test
@@ -79,7 +79,7 @@ class MemberTest {
             member.verifyBevy();
 
             // when & then
-            assertThat(member.getRequirement().isAllVerified()).isFalse();
+            assertThat(member.getAssociateRequirement().isAllVerified()).isFalse();
         }
 
         @Test
@@ -92,7 +92,7 @@ class MemberTest {
             member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
 
             // when & then
-            assertThat(member.getRequirement().isAllVerified()).isFalse();
+            assertThat(member.getAssociateRequirement().isAllVerified()).isFalse();
         }
 
         @Test
@@ -106,7 +106,7 @@ class MemberTest {
             member.verifyBevy();
 
             // when & then
-            assertThat(member.getRequirement().isAllVerified()).isTrue();
+            assertThat(member.getAssociateRequirement().isAllVerified()).isTrue();
         }
     }
 
@@ -271,21 +271,6 @@ class MemberTest {
         // when & then
         assertThatThrownBy(() -> {
                     member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
-                })
-                .isInstanceOf(CustomException.class)
-                .hasMessage(MEMBER_DELETED.getMessage());
-    }
-
-    @Test
-    void 회비납부시_탈퇴한_유저면_실패한다() {
-        // given
-        Member member = Member.createGuestMember(OAUTH_ID);
-
-        member.withdraw();
-
-        // when & then
-        assertThatThrownBy(() -> {
-                    member.updatePaymentStatus(VERIFIED);
                 })
                 .isInstanceOf(CustomException.class)
                 .hasMessage(MEMBER_DELETED.getMessage());

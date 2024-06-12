@@ -2,9 +2,7 @@ package com.gdschongik.gdsc.domain.member.api;
 
 import com.gdschongik.gdsc.domain.member.application.AdminMemberService;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
-import com.gdschongik.gdsc.domain.member.domain.RequirementStatus;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberGrantRequest;
-import com.gdschongik.gdsc.domain.member.dto.request.MemberPaymentRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryOption;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberUpdateRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.AdminMemberResponse;
@@ -19,14 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Admin Member", description = "어드민 회원 관리 API입니다.")
 @RestController
@@ -82,25 +73,6 @@ public class AdminMemberController {
             MemberQueryOption queryOption, Pageable pageable) {
         Page<AdminMemberResponse> response = adminMemberService.getGrantableMembers(queryOption, pageable);
         return ResponseEntity.ok().body(response);
-    }
-
-    @Operation(summary = "회비 납부 상태에 따른 회원 전체 조회", description = "회비 납부 상태에 따라 회원 목록을 조회합니다.", deprecated = true)
-    @GetMapping("/payment")
-    public ResponseEntity<Page<AdminMemberResponse>> getMembersByPaymentStatus(
-            MemberQueryOption queryOption,
-            @RequestParam(name = "status", required = false) RequirementStatus paymentStatus,
-            Pageable pageable) {
-        Page<AdminMemberResponse> response =
-                adminMemberService.getMembersByPaymentStatus(queryOption, paymentStatus, pageable);
-        return ResponseEntity.ok().body(response);
-    }
-
-    @Operation(summary = "회비 납부 상태 변경", description = "회비 납부 상태를 변경합니다.", deprecated = true)
-    @PutMapping("/payment/{memberId}")
-    public ResponseEntity<Void> updatePayment(
-            @PathVariable Long memberId, @Valid @RequestBody MemberPaymentRequest request) {
-        adminMemberService.updatePaymentStatus(memberId, request);
-        return ResponseEntity.ok().build();
     }
 
     @Operation(summary = "승인된 회원 전체 조회", description = "승인된 회원 전체를 조회합니다.", deprecated = true)

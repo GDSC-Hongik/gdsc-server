@@ -1,8 +1,8 @@
 package com.gdschongik.gdsc.domain.member.dto.response;
 
+import com.gdschongik.gdsc.domain.member.domain.AssociateRequirement;
 import com.gdschongik.gdsc.domain.member.domain.Department;
 import com.gdschongik.gdsc.domain.member.domain.Member;
-import com.gdschongik.gdsc.domain.member.domain.Requirement;
 import java.util.Optional;
 
 public record AdminMemberResponse(
@@ -29,7 +29,7 @@ public record AdminMemberResponse(
                 member.getEmail(),
                 member.getDiscordUsername(),
                 member.getNickname(),
-                RequirementDto.from(member.getRequirement()));
+                RequirementDto.from(member.getAssociateRequirement()));
     }
 
     record DepartmentDto(Department code, String name) {
@@ -40,13 +40,12 @@ public record AdminMemberResponse(
         }
     }
 
-    record RequirementDto(String univStatus, String discordStatus, String paymentStatus, String bevyStatus) {
-        public static RequirementDto from(Requirement requirement) {
+    record RequirementDto(String univStatus, String discordStatus, String bevyStatus) {
+        public static RequirementDto from(AssociateRequirement associateRequirement) {
             return new RequirementDto(
-                    requirement.getUnivStatus().name(),
-                    requirement.getDiscordStatus().name(),
-                    requirement.getPaymentStatus().name(),
-                    requirement.getBevyStatus().name());
+                    associateRequirement.getUnivStatus().name(),
+                    associateRequirement.getDiscordStatus().name(),
+                    associateRequirement.getBevyStatus().name());
         }
     }
 }

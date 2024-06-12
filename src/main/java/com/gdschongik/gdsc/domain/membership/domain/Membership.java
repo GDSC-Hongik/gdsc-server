@@ -1,18 +1,17 @@
 package com.gdschongik.gdsc.domain.membership.domain;
 
+import static com.gdschongik.gdsc.domain.common.model.RequirementStatus.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.common.model.BaseSemesterEntity;
 import com.gdschongik.gdsc.domain.common.model.SemesterType;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
-import com.gdschongik.gdsc.domain.member.domain.RequirementStatus;
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -42,36 +41,35 @@ public class Membership extends BaseSemesterEntity {
     @JoinColumn(name = "recruitment_id")
     private Recruitment recruitment;
 
-    @Enumerated(EnumType.STRING)
-    private RequirementStatus paymentStatus;
+    @Embedded
+    private RegularRequirement regularRequirement;
 
     @Builder(access = AccessLevel.PRIVATE)
     private Membership(
             Member member,
             Recruitment recruitment,
-            RequirementStatus paymentStatus,
+            RegularRequirement regularRequirement,
             Integer academicYear,
             SemesterType semesterType) {
         super(academicYear, semesterType);
         this.member = member;
         this.recruitment = recruitment;
-        this.paymentStatus = paymentStatus;
+        this.regularRequirement = regularRequirement;
     }
 
     public static Membership createMembership(Member member, Recruitment recruitment) {
         validateMembershipApplicable(member);
+
         return Membership.builder()
                 .member(member)
                 .recruitment(recruitment)
-                .paymentStatus(RequirementStatus.PENDING)
+                .regularRequirement(RegularRequirement.createUnverifiedRequirement())
                 .academicYear(recruitment.getAcademicYear())
                 .semesterType(recruitment.getSemesterType())
                 .build();
     }
 
-    public void verifyPaymentStatus() {
-        this.paymentStatus = RequirementStatus.VERIFIED;
-    }
+    // 검증 로직
 
     private static void validateMembershipApplicable(Member member) {
         if (member.getRole().equals(MemberRole.ASSOCIATE)) {
@@ -84,5 +82,17 @@ public class Membership extends BaseSemesterEntity {
         }
 
         throw new CustomException(MEMBERSHIP_NOT_APPLICABLE);
+    }
+
+    // 상태 변경 로직
+
+    public void verifyPaymentStatus() {
+        this.regularRequirement.updatePaymentStatus(VERIFIED);
+    }
+
+    // 데이터 전달 로직
+
+    public boolean isAdvanceToRegularAvailable() {
+        return this.regularRequirement.isAllVerified();
     }
 }
