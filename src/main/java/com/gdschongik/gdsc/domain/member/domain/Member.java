@@ -104,7 +104,7 @@ public class Member extends BaseTimeEntity {
                 .build();
     }
 
-    // 회원 검증 로직
+    // 상태 검증 로직
 
     /**
      * 회원 상태를 변경할 수 있는지 검증합니다. 삭제되거나 차단된 회원은 상태를 변경할 수 없습니다.<br>
