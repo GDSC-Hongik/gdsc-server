@@ -255,7 +255,7 @@ public class Member extends BaseTimeEntity {
     private void verifyUnivEmail() {
         validateStatusUpdatable();
         associateRequirement.verifyUniv();
-        
+
         registerEvent(new MemberAssociateEvent(this.id));
     }
 
