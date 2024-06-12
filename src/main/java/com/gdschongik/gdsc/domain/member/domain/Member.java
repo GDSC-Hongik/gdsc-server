@@ -252,9 +252,8 @@ public class Member extends BaseTimeEntity {
 
     // 데이터 전달 로직
 
-    // TODO 한꺼번에 USER관련 기능을 삭제 할때 함께 USER부분을 삭제하기
-    public boolean isGranted() {
-        return role.equals(USER) || role.equals(ASSOCIATE) || role.equals(MemberRole.ADMIN);
+    public boolean isAssociate() {
+        return role.equals(ASSOCIATE);
     }
 
     /**
