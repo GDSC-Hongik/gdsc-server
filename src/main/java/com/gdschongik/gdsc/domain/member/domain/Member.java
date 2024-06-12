@@ -132,6 +132,7 @@ public class Member extends BaseTimeEntity {
      * 준회원 승급 가능 여부를 검증합니다.
      */
     private void validateAssociateAvailable() {
+        // TODO: 검증 실패 케이스 세분화
         if (!isAssociateAvailable()) {
             throw new CustomException(MEMBER_ADVANCE_TO_ASSOCIATE_NOT_AVAILABLE);
         }
