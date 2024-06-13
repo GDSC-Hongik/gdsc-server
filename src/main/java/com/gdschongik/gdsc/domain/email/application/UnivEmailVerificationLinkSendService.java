@@ -29,7 +29,7 @@ public class UnivEmailVerificationLinkSendService {
     private final EmailVerificationTokenUtil emailVerificationTokenUtil;
     private final VerificationLinkUtil verificationLinkUtil;
     private final MemberUtil memberUtil;
-    public static final Duration VERIFICATION_CODE_TIME_TO_LIVE = Duration.ofMinutes(10);
+    public static final Duration VERIFICATION_TOKEN_TIME_TO_LIVE = Duration.ofMinutes(30);
 
     private static final String NOTIFICATION_MESSAGE =
             """
@@ -66,6 +66,6 @@ public class UnivEmailVerificationLinkSendService {
     }
 
     private String writeMailContentWithVerificationLink(String verificationLink) {
-        return NOTIFICATION_MESSAGE.formatted(VERIFICATION_CODE_TIME_TO_LIVE.toMinutes(), verificationLink);
+        return NOTIFICATION_MESSAGE.formatted(VERIFICATION_TOKEN_TIME_TO_LIVE.toMinutes(), verificationLink);
     }
 }
