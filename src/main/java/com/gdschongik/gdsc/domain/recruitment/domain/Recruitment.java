@@ -2,6 +2,7 @@ package com.gdschongik.gdsc.domain.recruitment.domain;
 
 import com.gdschongik.gdsc.domain.common.model.BaseSemesterEntity;
 import com.gdschongik.gdsc.domain.common.model.SemesterType;
+import com.gdschongik.gdsc.domain.common.vo.Money;
 import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -25,11 +26,19 @@ public class Recruitment extends BaseSemesterEntity {
     @Embedded
     private Period period;
 
+    private Money fee;
+
+    @Enumerated(EnumType.STRING)
+    private Round round;
+
     @Builder(access = AccessLevel.PRIVATE)
-    private Recruitment(String name, final Period period, Integer academicYear, SemesterType semesterType) {
+    private Recruitment(
+            String name, final Period period, Integer academicYear, SemesterType semesterType, Money fee, Round round) {
         super(academicYear, semesterType);
         this.name = name;
         this.period = period;
+        this.fee = fee;
+        this.round = round;
     }
 
     public static Recruitment createRecruitment(
@@ -37,13 +46,17 @@ public class Recruitment extends BaseSemesterEntity {
             LocalDateTime startDate,
             LocalDateTime endDate,
             Integer academicYear,
-            SemesterType semesterType) {
+            SemesterType semesterType,
+            Money fee,
+            Round round) {
         Period period = Period.createPeriod(startDate, endDate);
         return Recruitment.builder()
                 .name(name)
                 .period(period)
                 .academicYear(academicYear)
                 .semesterType(semesterType)
+                .fee(fee)
+                .round(round)
                 .build();
     }
 

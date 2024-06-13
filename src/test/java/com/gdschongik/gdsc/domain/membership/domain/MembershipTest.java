@@ -19,8 +19,8 @@ class MembershipTest {
         void 역할이_GUEST라면_멤버십_가입신청에_실패한다() {
             // given
             Member guestMember = Member.createGuestMember(OAUTH_ID);
-            Recruitment recruitment =
-                    Recruitment.createRecruitment(RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE);
+            Recruitment recruitment = Recruitment.createRecruitment(
+                    RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE, FEE, ROUND);
 
             // when & then
             assertThatThrownBy(() -> Membership.createMembership(guestMember, recruitment))

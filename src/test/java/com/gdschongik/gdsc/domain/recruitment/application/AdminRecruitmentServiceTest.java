@@ -24,8 +24,8 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
     private RecruitmentRepository recruitmentRepository;
 
     private void createRecruitment() {
-        Recruitment recruitment =
-                Recruitment.createRecruitment(RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE);
+        Recruitment recruitment = Recruitment.createRecruitment(
+                RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE, FEE, ROUND);
         recruitmentRepository.save(recruitment);
     }
 
@@ -35,8 +35,8 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
         void 기간이_중복되는_Recruitment가_있다면_실패한다() {
             // given
             createRecruitment();
-            RecruitmentCreateRequest request =
-                    new RecruitmentCreateRequest(RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE);
+            RecruitmentCreateRequest request = new RecruitmentCreateRequest(
+                    RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE, FEE, ROUND);
 
             // when & then
             assertThatThrownBy(() -> adminRecruitmentService.createRecruitment(request))
@@ -47,8 +47,8 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
         @Test
         void 모집_시작일과_종료일의_연도가_입력된_학년도와_다르다면_실패한다() {
             // given
-            RecruitmentCreateRequest request =
-                    new RecruitmentCreateRequest(RECRUITMENT_NAME, START_DATE, END_DATE, 2025, SEMESTER_TYPE);
+            RecruitmentCreateRequest request = new RecruitmentCreateRequest(
+                    RECRUITMENT_NAME, START_DATE, END_DATE, 2025, SEMESTER_TYPE, FEE, ROUND);
 
             // when & then
             assertThatThrownBy(() -> adminRecruitmentService.createRecruitment(request))
@@ -60,7 +60,7 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
         void 모집_시작일과_종료일의_학기가_입력된_학기와_다르다면_실패한다() {
             // given
             RecruitmentCreateRequest request = new RecruitmentCreateRequest(
-                    RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SemesterType.SECOND);
+                    RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SemesterType.SECOND, FEE, ROUND);
 
             // when & then
             assertThatThrownBy(() -> adminRecruitmentService.createRecruitment(request))
@@ -72,7 +72,13 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
         void 모집_시작일과_종료일이_학기_시작일로부터_2주_이내에_있지_않다면_실패한다() {
             // given
             RecruitmentCreateRequest request = new RecruitmentCreateRequest(
-                    RECRUITMENT_NAME, START_DATE, LocalDateTime.of(2024, 4, 10, 00, 00), ACADEMIC_YEAR, SEMESTER_TYPE);
+                    RECRUITMENT_NAME,
+                    START_DATE,
+                    LocalDateTime.of(2024, 4, 10, 0, 0),
+                    ACADEMIC_YEAR,
+                    SEMESTER_TYPE,
+                    FEE,
+                    ROUND);
 
             // when & then
             assertThatThrownBy(() -> adminRecruitmentService.createRecruitment(request))

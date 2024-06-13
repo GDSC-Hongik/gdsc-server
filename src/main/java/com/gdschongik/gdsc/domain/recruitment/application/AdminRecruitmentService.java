@@ -7,6 +7,7 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import com.gdschongik.gdsc.domain.common.model.SemesterType;
 import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRepository;
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
+import com.gdschongik.gdsc.domain.recruitment.domain.Round;
 import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentCreateRequest;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import java.time.LocalDateTime;
@@ -32,7 +33,13 @@ public class AdminRecruitmentService {
         validatePeriodOverlap(request.academicYear(), request.semesterType(), request.startDate(), request.endDate());
 
         Recruitment recruitment = Recruitment.createRecruitment(
-                request.name(), request.startDate(), request.endDate(), request.academicYear(), request.semesterType());
+                request.name(),
+                request.startDate(),
+                request.endDate(),
+                request.academicYear(),
+                request.semesterType(),
+                request.fee(),
+                request.round());
         recruitmentRepository.save(recruitment);
         // todo: recruitment 모집 시작 직전에 멤버 역할 수정하는 로직 필요.
     }

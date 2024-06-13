@@ -18,8 +18,8 @@ class RecruitmentTest {
             Period period = Period.createPeriod(START_DATE, END_DATE);
 
             // when
-            Recruitment recruitment =
-                    Recruitment.createRecruitment(RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE);
+            Recruitment recruitment = Recruitment.createRecruitment(
+                    RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE, FEE, ROUND);
 
             // then
             assertThat(recruitment.getPeriod().getStartDate()).isEqualTo(START_DATE);
