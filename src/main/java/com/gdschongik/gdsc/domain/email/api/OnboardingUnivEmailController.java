@@ -2,7 +2,7 @@ package com.gdschongik.gdsc.domain.email.api;
 
 import com.gdschongik.gdsc.domain.email.application.UnivEmailVerificationLinkSendService;
 import com.gdschongik.gdsc.domain.email.application.UnivEmailVerificationService;
-import com.gdschongik.gdsc.domain.email.dto.request.UnivEmailTokenVerificationRequest;
+import com.gdschongik.gdsc.domain.email.dto.request.UnivEmailVerificationRequest;
 import com.gdschongik.gdsc.domain.email.dto.request.UnivEmailVerificationLinkSendRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -35,8 +35,8 @@ public class OnboardingUnivEmailController {
     @Operation(summary = "학교 인증 메일 인증하기", description = "학교 인증 메일을 인증합니다.")
     @PatchMapping("/verify-email")
     public ResponseEntity<Void> sendUnivEmailVerificationLink(
-            @RequestBody @Valid UnivEmailTokenVerificationRequest verificationToken) {
-        univEmailVerificationService.verifyMemberUnivEmail(verificationToken);
+            @RequestBody @Valid UnivEmailVerificationRequest request) {
+        univEmailVerificationService.verifyMemberUnivEmail(request);
         return ResponseEntity.ok().build();
     }
 }

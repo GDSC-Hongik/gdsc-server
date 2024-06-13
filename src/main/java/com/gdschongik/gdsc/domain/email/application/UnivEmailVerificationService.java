@@ -1,8 +1,7 @@
 package com.gdschongik.gdsc.domain.email.application;
 
-import com.gdschongik.gdsc.domain.email.dao.UnivEmailVerificationRepository;
 import com.gdschongik.gdsc.domain.email.dto.request.EmailVerificationTokenDto;
-import com.gdschongik.gdsc.domain.email.dto.request.UnivEmailTokenVerificationRequest;
+import com.gdschongik.gdsc.domain.email.dto.request.UnivEmailVerificationRequest;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.global.exception.CustomException;
@@ -20,7 +19,7 @@ public class UnivEmailVerificationService {
     private final EmailVerificationTokenUtil emailVerificationTokenUtil;
     private final MemberRepository memberRepository;
     @Transactional
-    public void verifyMemberUnivEmail(UnivEmailTokenVerificationRequest request) {
+    public void verifyMemberUnivEmail(UnivEmailVerificationRequest request) {
         EmailVerificationTokenDto emailVerificationToken = getEmailVerificationToken(request.token());
         Member member = getMemberById(emailVerificationToken.memberId());
         member.completeUnivEmailVerification(emailVerificationToken.email());
