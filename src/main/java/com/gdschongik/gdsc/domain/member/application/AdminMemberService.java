@@ -5,17 +5,13 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
-import com.gdschongik.gdsc.domain.member.dto.request.MemberGrantRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryOption;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberUpdateRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.AdminMemberResponse;
-import com.gdschongik.gdsc.domain.member.dto.response.MemberGrantResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
 import com.gdschongik.gdsc.global.util.ExcelUtil;
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -57,25 +53,6 @@ public class AdminMemberService {
 
     public Page<AdminMemberResponse> findAllPendingMembers(MemberQueryOption queryOption, Pageable pageable) {
         Page<Member> members = memberRepository.findAllByRole(queryOption, pageable, GUEST);
-        return members.map(AdminMemberResponse::from);
-    }
-
-    @Transactional
-    public MemberGrantResponse grantMember(MemberGrantRequest request) {
-        Map<Boolean, List<Member>> classifiedMember = memberRepository.groupByVerified(request.memberIdList());
-        List<Member> verifiedMembers = classifiedMember.get(true);
-        verifiedMembers.forEach(Member::grant);
-        memberRepository.saveAll(verifiedMembers); // explicitly save to publish event
-        return MemberGrantResponse.from(classifiedMember);
-    }
-
-    public Page<AdminMemberResponse> getGrantableMembers(MemberQueryOption queryOption, Pageable pageable) {
-        Page<Member> members = memberRepository.findAllGrantable(queryOption, pageable);
-        return members.map(AdminMemberResponse::from);
-    }
-
-    public Page<AdminMemberResponse> findAllGrantedMembers(MemberQueryOption queryOption, Pageable pageable) {
-        Page<Member> members = memberRepository.findAllByRole(queryOption, pageable, USER);
         return members.map(AdminMemberResponse::from);
     }
 

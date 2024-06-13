@@ -47,14 +47,9 @@ public record MemberInfoResponse(
         PENDING,
         GRANTED;
 
+        // TODO: 2차 MVP 응답 스펙에 맞게 수정 필요
         static RegistrationStatus from(Member member) {
-            if (member.isGranted()) {
-                return GRANTED;
-            }
-            if (member.isGrantAvailable()) {
-                return PENDING;
-            }
-            return APPLIED;
+            return GRANTED;
         }
     }
 }
