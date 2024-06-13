@@ -85,5 +85,24 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
                     .isInstanceOf(CustomException.class)
                     .hasMessage(RECRUITMENT_PERIOD_NOT_WITHIN_TWO_WEEKS.getMessage());
         }
+
+        @Test
+        void 학년도_학기_차수가_모두_중복되는_리쿠르팅이라면_실패한다() {
+            // given
+            createRecruitment();
+            RecruitmentCreateRequest request = new RecruitmentCreateRequest(
+                    RECRUITMENT_NAME,
+                    LocalDateTime.of(2024, 3, 12, 0, 0),
+                    LocalDateTime.of(2024, 3, 13, 0, 0),
+                    ACADEMIC_YEAR,
+                    SEMESTER_TYPE,
+                    FEE,
+                    ROUND);
+
+            // when & then
+            assertThatThrownBy(() -> adminRecruitmentService.createRecruitment(request))
+                    .isInstanceOf(CustomException.class)
+                    .hasMessage(RECRUITMENT_ROUND_OVERLAP.getMessage());
+        }
     }
 }

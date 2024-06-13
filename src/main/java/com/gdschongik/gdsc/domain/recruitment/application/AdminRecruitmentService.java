@@ -31,6 +31,7 @@ public class AdminRecruitmentService {
         validatePeriodWithinTwoWeeks(
                 request.startDate(), request.endDate(), request.academicYear(), request.semesterType());
         validatePeriodOverlap(request.academicYear(), request.semesterType(), request.startDate(), request.endDate());
+        validateRoundOverlap(request.academicYear(), request.semesterType(), request.round());
 
         Recruitment recruitment = Recruitment.createRecruitment(
                 request.name(),
@@ -41,7 +42,6 @@ public class AdminRecruitmentService {
                 request.fee(),
                 request.round());
         recruitmentRepository.save(recruitment);
-        // todo: recruitment 모집 시작 직전에 멤버 역할 수정하는 로직 필요.
     }
 
     private void validatePeriodMatchesAcademicYear(
@@ -111,5 +111,11 @@ public class AdminRecruitmentService {
                 recruitmentRepository.findAllByAcademicYearAndSemesterType(academicYear, semesterType);
 
         recruitments.forEach(recruitment -> recruitment.validatePeriodOverlap(startDate, endDate));
+    }
+
+    private void validateRoundOverlap(Integer academicYear, SemesterType semesterType, Round round) {
+        if (recruitmentRepository.existsByAcademicYearAndSemesterTypeAndRound(academicYear, semesterType, round)) {
+            throw new CustomException(RECRUITMENT_ROUND_OVERLAP);
+        }
     }
 }
