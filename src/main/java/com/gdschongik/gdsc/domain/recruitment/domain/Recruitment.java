@@ -29,16 +29,21 @@ public class Recruitment extends BaseSemesterEntity {
     private Money fee;
 
     @Enumerated(EnumType.STRING)
-    private Round round;
+    private RoundType roundType;
 
     @Builder(access = AccessLevel.PRIVATE)
     private Recruitment(
-            String name, final Period period, Integer academicYear, SemesterType semesterType, Money fee, Round round) {
+            String name,
+            final Period period,
+            Integer academicYear,
+            SemesterType semesterType,
+            Money fee,
+            RoundType roundType) {
         super(academicYear, semesterType);
         this.name = name;
         this.period = period;
         this.fee = fee;
-        this.round = round;
+        this.roundType = roundType;
     }
 
     public static Recruitment createRecruitment(
@@ -48,7 +53,7 @@ public class Recruitment extends BaseSemesterEntity {
             Integer academicYear,
             SemesterType semesterType,
             Money fee,
-            Round round) {
+            RoundType roundType) {
         Period period = Period.createPeriod(startDate, endDate);
         return Recruitment.builder()
                 .name(name)
@@ -56,7 +61,7 @@ public class Recruitment extends BaseSemesterEntity {
                 .academicYear(academicYear)
                 .semesterType(semesterType)
                 .fee(fee)
-                .round(round)
+                .roundType(roundType)
                 .build();
     }
 

@@ -7,7 +7,7 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import com.gdschongik.gdsc.domain.common.model.SemesterType;
 import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRepository;
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
-import com.gdschongik.gdsc.domain.recruitment.domain.Round;
+import com.gdschongik.gdsc.domain.recruitment.domain.RoundType;
 import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentCreateRequest;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import java.time.LocalDateTime;
@@ -31,7 +31,7 @@ public class AdminRecruitmentService {
         validatePeriodWithinTwoWeeks(
                 request.startDate(), request.endDate(), request.academicYear(), request.semesterType());
         validatePeriodOverlap(request.academicYear(), request.semesterType(), request.startDate(), request.endDate());
-        validateRoundOverlap(request.academicYear(), request.semesterType(), request.round());
+        validateRoundOverlap(request.academicYear(), request.semesterType(), request.roundType());
 
         Recruitment recruitment = Recruitment.createRecruitment(
                 request.name(),
@@ -40,7 +40,7 @@ public class AdminRecruitmentService {
                 request.academicYear(),
                 request.semesterType(),
                 request.fee(),
-                request.round());
+                request.roundType());
         recruitmentRepository.save(recruitment);
     }
 
@@ -113,9 +113,10 @@ public class AdminRecruitmentService {
         recruitments.forEach(recruitment -> recruitment.validatePeriodOverlap(startDate, endDate));
     }
 
-    private void validateRoundOverlap(Integer academicYear, SemesterType semesterType, Round round) {
-        if (recruitmentRepository.existsByAcademicYearAndSemesterTypeAndRound(academicYear, semesterType, round)) {
-            throw new CustomException(RECRUITMENT_ROUND_OVERLAP);
+    private void validateRoundOverlap(Integer academicYear, SemesterType semesterType, RoundType roundType) {
+        if (recruitmentRepository.existsByAcademicYearAndSemesterTypeAndRoundType(
+                academicYear, semesterType, roundType)) {
+            throw new CustomException(RECRUITMENT_ROUND_TYPE_OVERLAP);
         }
     }
 }

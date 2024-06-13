@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum Round {
+public enum RoundType {
     FIRST("1차"),
     SECOND("2차");
 

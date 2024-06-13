@@ -20,7 +20,7 @@ class MembershipTest {
             // given
             Member guestMember = Member.createGuestMember(OAUTH_ID);
             Recruitment recruitment = Recruitment.createRecruitment(
-                    RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE, FEE, ROUND);
+                    RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE, FEE, ROUND_TYPE);
 
             // when & then
             assertThatThrownBy(() -> Membership.createMembership(guestMember, recruitment))
