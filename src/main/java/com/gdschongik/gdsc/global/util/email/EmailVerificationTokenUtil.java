@@ -3,7 +3,6 @@ package com.gdschongik.gdsc.global.util.email;
 import static com.gdschongik.gdsc.global.common.constant.EmailConstant.TOKEN_EMAIL_NAME;
 
 import com.gdschongik.gdsc.domain.email.dto.request.EmailVerificationTokenDto;
-import com.gdschongik.gdsc.global.common.constant.EmailConstant;
 import com.gdschongik.gdsc.global.common.constant.JwtConstant;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
