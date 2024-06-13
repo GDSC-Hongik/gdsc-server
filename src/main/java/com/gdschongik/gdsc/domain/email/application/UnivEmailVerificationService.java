@@ -18,6 +18,7 @@ public class UnivEmailVerificationService {
 
     private final EmailVerificationTokenUtil emailVerificationTokenUtil;
     private final MemberRepository memberRepository;
+
     @Transactional
     public void verifyMemberUnivEmail(UnivEmailVerificationRequest request) {
         EmailVerificationTokenDto emailVerificationToken = getEmailVerificationToken(request.token());

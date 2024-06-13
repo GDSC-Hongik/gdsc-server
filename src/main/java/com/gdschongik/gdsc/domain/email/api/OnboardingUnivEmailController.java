@@ -2,8 +2,8 @@ package com.gdschongik.gdsc.domain.email.api;
 
 import com.gdschongik.gdsc.domain.email.application.UnivEmailVerificationLinkSendService;
 import com.gdschongik.gdsc.domain.email.application.UnivEmailVerificationService;
-import com.gdschongik.gdsc.domain.email.dto.request.UnivEmailVerificationRequest;
 import com.gdschongik.gdsc.domain.email.dto.request.UnivEmailVerificationLinkSendRequest;
+import com.gdschongik.gdsc.domain.email.dto.request.UnivEmailVerificationRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
