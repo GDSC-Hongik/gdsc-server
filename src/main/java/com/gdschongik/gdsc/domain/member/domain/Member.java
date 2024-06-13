@@ -252,7 +252,7 @@ public class Member extends BaseTimeEntity {
     public void completeUnivEmailVerification(String univEmail) {
         // 이미 인증되어있으면 에러
         if (associateRequirement.isUnivVerified()) {
-            throw new CustomException(ErrorCode.EMAIL_ALREADY_VERIFIED);
+            throw new CustomException(EMAIL_ALREADY_VERIFIED);
         }
         this.univEmail = univEmail;
         verifyUnivEmail();

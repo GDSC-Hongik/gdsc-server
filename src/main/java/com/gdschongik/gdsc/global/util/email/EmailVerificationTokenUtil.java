@@ -56,7 +56,7 @@ public class EmailVerificationTokenUtil {
 
     private String buildToken(Long memberId, String email, Date issuedAt, Date expiredAt, Key key) {
         JwtBuilder jwtBuilder = Jwts.builder()
-                .claim(EmailConstant.TOKEN_EMAIL_NAME, email)
+                .claim(TOKEN_EMAIL_NAME, email)
                 .setIssuer(jwtProperty.getIssuer())
                 .setSubject(memberId.toString())
                 .setIssuedAt(issuedAt)

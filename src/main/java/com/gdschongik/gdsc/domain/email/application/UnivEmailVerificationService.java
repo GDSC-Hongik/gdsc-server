@@ -16,8 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class UnivEmailVerificationService {
-    private final EmailVerificationTokenUtil emailVerificationTokenUtil;
 
+    private final EmailVerificationTokenUtil emailVerificationTokenUtil;
     private final MemberRepository memberRepository;
     private final UnivEmailVerificationRepository univEmailVerificationRepository;
 
