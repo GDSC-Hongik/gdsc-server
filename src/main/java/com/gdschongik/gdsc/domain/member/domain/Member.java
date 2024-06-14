@@ -221,7 +221,7 @@ public class Member extends BaseTimeEntity {
         registerEvent(new MemberAssociateEvent(this.id));
     }
 
-    public void verifyInfo() {
+    private void verifyInfo() {
         validateStatusUpdatable();
         this.associateRequirement.verifyInfo();
 
