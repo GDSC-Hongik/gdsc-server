@@ -151,13 +151,15 @@ public class Member extends BaseTimeEntity {
         registerEvent(new MemberAssociateEvent(this.id));
     }
 
+    /**
+     * 재학생 이메일 인증을 진행합니다.
+     * 재학생 이메일 인증상태를 인증 처리합니다.
+     */
     public void completeUnivEmailVerification(String univEmail) {
-        this.univEmail = univEmail;
-        verifyUnivEmail();
-    }
-
-    private void verifyUnivEmail() {
         validateStatusUpdatable();
+
+        this.univEmail = univEmail;
+
         associateRequirement.verifyUniv();
 
         registerEvent(new MemberAssociateEvent(this.id));
