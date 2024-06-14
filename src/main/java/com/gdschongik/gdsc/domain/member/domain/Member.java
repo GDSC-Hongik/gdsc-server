@@ -129,6 +129,7 @@ public class Member extends BaseTimeEntity {
 
         associateRequirement.validateAllVerified();
     }
+
     // 회원 가입상태 변경 로직
 
     /**
@@ -150,6 +151,34 @@ public class Member extends BaseTimeEntity {
         registerEvent(new MemberAssociateEvent(this.id));
     }
 
+    public void completeUnivEmailVerification(String univEmail) {
+        this.univEmail = univEmail;
+        verifyUnivEmail();
+    }
+
+    private void verifyUnivEmail() {
+        validateStatusUpdatable();
+        associateRequirement.verifyUniv();
+
+        registerEvent(new MemberAssociateEvent(this.id));
+    }
+
+    public void verifyDiscord(String discordUsername, String nickname) {
+        validateStatusUpdatable();
+        this.associateRequirement.verifyDiscord();
+        this.discordUsername = discordUsername;
+        this.nickname = nickname;
+
+        registerEvent(new MemberAssociateEvent(this.id));
+    }
+
+    public void verifyBevy() {
+        validateStatusUpdatable();
+        this.associateRequirement.verifyBevy();
+
+        registerEvent(new MemberAssociateEvent(this.id));
+    }
+
     /**
      * GUEST -> 준회원으로 승급됩니다.
      * 모든 조건을 충족하면 서버에서 각각의 인증과정에서 자동으로 advanceToAssociate()호출된다
@@ -163,6 +192,16 @@ public class Member extends BaseTimeEntity {
         validateAssociateAvailable();
 
         this.role = ASSOCIATE;
+    }
+
+    // 기타 상태 변경 로직
+
+    public void updateLastLoginAt() {
+        this.lastLoginAt = LocalDateTime.now();
+    }
+
+    public void updateDiscordId(String discordId) {
+        this.discordId = discordId;
     }
 
     /**
@@ -195,44 +234,6 @@ public class Member extends BaseTimeEntity {
         this.email = email;
         this.discordUsername = discordUsername;
         this.nickname = nickname;
-    }
-
-    public void completeUnivEmailVerification(String univEmail) {
-        this.univEmail = univEmail;
-        verifyUnivEmail();
-    }
-
-    private void verifyUnivEmail() {
-        validateStatusUpdatable();
-        associateRequirement.verifyUniv();
-
-        registerEvent(new MemberAssociateEvent(this.id));
-    }
-
-    public void verifyDiscord(String discordUsername, String nickname) {
-        validateStatusUpdatable();
-        this.associateRequirement.verifyDiscord();
-        this.discordUsername = discordUsername;
-        this.nickname = nickname;
-
-        registerEvent(new MemberAssociateEvent(this.id));
-    }
-
-    public void verifyBevy() {
-        validateStatusUpdatable();
-        this.associateRequirement.verifyBevy();
-
-        registerEvent(new MemberAssociateEvent(this.id));
-    }
-
-    // 기타 상태 변경 로직
-
-    public void updateLastLoginAt() {
-        this.lastLoginAt = LocalDateTime.now();
-    }
-
-    public void updateDiscordId(String discordId) {
-        this.discordId = discordId;
     }
 
     // 데이터 전달 로직
