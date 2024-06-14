@@ -165,6 +165,10 @@ public class Member extends BaseTimeEntity {
         registerEvent(new MemberAssociateEvent(this.id));
     }
 
+    /**
+     * 디스코드 서버와의 연동을 진행합니다.
+     * 디스코드 인증상태를 인증 처리합니다.
+     */
     public void verifyDiscord(String discordUsername, String nickname) {
         validateStatusUpdatable();
         this.associateRequirement.verifyDiscord();
@@ -174,6 +178,10 @@ public class Member extends BaseTimeEntity {
         registerEvent(new MemberAssociateEvent(this.id));
     }
 
+    /**
+     * Bevy 서버와의 연동을 진행합니다.
+     * Bevy 인증상태를 인증 처리합니다.
+     */
     public void verifyBevy() {
         validateStatusUpdatable();
         this.associateRequirement.verifyBevy();
