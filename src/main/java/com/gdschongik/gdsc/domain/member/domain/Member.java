@@ -133,17 +133,21 @@ public class Member extends BaseTimeEntity {
 
     /**
      * 기본 회원 정보를 작성합니다.
+     * 기본정보 인증상태를 인증 처리합니다.
      */
     public void updateBasicMemberInfo(
             String studentId, String name, String phone, Department department, String email) {
         validateStatusUpdatable();
-        verifyInfo();
 
         this.studentId = studentId;
         this.name = name;
         this.phone = phone;
         this.department = department;
         this.email = email;
+
+        this.associateRequirement.verifyInfo();
+
+        registerEvent(new MemberAssociateEvent(this.id));
     }
 
     /**
@@ -217,13 +221,6 @@ public class Member extends BaseTimeEntity {
     public void verifyBevy() {
         validateStatusUpdatable();
         this.associateRequirement.verifyBevy();
-
-        registerEvent(new MemberAssociateEvent(this.id));
-    }
-
-    private void verifyInfo() {
-        validateStatusUpdatable();
-        this.associateRequirement.verifyInfo();
 
         registerEvent(new MemberAssociateEvent(this.id));
     }
