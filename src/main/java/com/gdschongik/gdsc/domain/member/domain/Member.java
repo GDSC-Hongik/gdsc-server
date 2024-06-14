@@ -186,6 +186,7 @@ public class Member extends BaseTimeEntity {
      */
     public void verifyBevy() {
         validateStatusUpdatable();
+
         this.associateRequirement.verifyBevy();
 
         registerEvent(new MemberAssociateEvent(this.id));
