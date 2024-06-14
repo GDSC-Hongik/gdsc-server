@@ -130,7 +130,7 @@ public class Member extends BaseTimeEntity {
         associateRequirement.validateAllVerified();
     }
 
-    // 회원 가입상태 변경 로직
+    // 준회원 승급 관련 로직
 
     /**
      * 기본 회원 정보를 작성합니다.
