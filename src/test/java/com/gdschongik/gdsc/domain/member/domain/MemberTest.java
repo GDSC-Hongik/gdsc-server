@@ -114,7 +114,7 @@ class MemberTest {
     }
 
     @Nested
-    class 준회원으로_승급시 {
+    class 준회원으로_승급시도시 {
 
         @Test
         void 기본_회원정보_작성하지_않았으면_실패한다() {
@@ -162,23 +162,6 @@ class MemberTest {
         }
 
         @Test
-        void 기본_회원정보_작성_디스코드인증_Bevy인증_재학생인증하면_성공한다() {
-            // given
-            Member member = Member.createGuestMember(OAUTH_ID);
-
-            member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
-            member.completeUnivEmailVerification(UNIV_EMAIL);
-            member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
-            member.verifyBevy();
-
-            // when
-            member.advanceToAssociate();
-
-            // then
-            assertThat(member.getRole()).isEqualTo(ASSOCIATE);
-        }
-
-        @Test
         void 이미_준회원으로_승급_돼있으면_실패한다() {
             // given
             Member member = Member.createGuestMember(OAUTH_ID);
@@ -193,6 +176,23 @@ class MemberTest {
             assertThatThrownBy(member::advanceToAssociate)
                     .isInstanceOf(CustomException.class)
                     .hasMessage(MEMBER_ALREADY_ASSOCIATE.getMessage());
+        }
+
+        @Test
+        void 모든_준회원_가입조건이_인증되었으면_성공한다() {
+            // given
+            Member member = Member.createGuestMember(OAUTH_ID);
+
+            member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
+            member.completeUnivEmailVerification(UNIV_EMAIL);
+            member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
+            member.verifyBevy();
+
+            // when
+            member.advanceToAssociate();
+
+            // then
+            assertThat(member.getRole()).isEqualTo(ASSOCIATE);
         }
     }
 
