@@ -1,5 +1,6 @@
 package com.gdschongik.gdsc.domain.member.domain;
 
+import static com.gdschongik.gdsc.domain.common.model.RequirementStatus.*;
 import static com.gdschongik.gdsc.domain.member.domain.Department.*;
 import static com.gdschongik.gdsc.domain.member.domain.MemberRole.ASSOCIATE;
 import static com.gdschongik.gdsc.domain.member.domain.MemberStatus.*;
@@ -55,6 +56,18 @@ class MemberTest {
             assertThat(requirement.getInfoStatus()).isEqualTo(PENDING);
         }
     }
+
+    @Test
+    void 기본회원정보_작성시_준회원_가입조건중_기본정보_인증상태가_인증된다() {
+        // given
+        Member member = Member.createGuestMember(OAUTH_ID);
+
+        // when
+        member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
+
+        // then
+        AssociateRequirement requirement = member.getAssociateRequirement();
+        assertThat(requirement.getInfoStatus()).isEqualTo(VERIFIED);
     }
 
     @Nested
