@@ -3,23 +3,18 @@ package com.gdschongik.gdsc.domain.recruitment.application;
 import static com.gdschongik.gdsc.domain.common.model.SemesterType.*;
 import static com.gdschongik.gdsc.global.common.constant.TemporalConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
-import static java.util.Comparator.*;
 
 import com.gdschongik.gdsc.domain.common.model.SemesterType;
 import com.gdschongik.gdsc.domain.common.vo.Money;
 import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRepository;
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.domain.recruitment.domain.RoundType;
-import com.gdschongik.gdsc.domain.recruitment.domain.vo.AcademicYearSemesterKey;
 import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentCreateRequest;
 import com.gdschongik.gdsc.domain.recruitment.dto.response.AdminRecruitmentResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,32 +47,8 @@ public class AdminRecruitmentService {
     }
 
     public List<AdminRecruitmentResponse> getAllRecruitments() {
-        List<Recruitment> recruitments = recruitmentRepository.findAllOrderByAcademicYearAndSemesterTypeAndStartDate();
-        List<AdminRecruitmentResponse> adminRecruitmentResponses = getAdminRecruitmentResponses(recruitments);
-        adminRecruitmentResponses.sort(comparing(AdminRecruitmentResponse::academicYear, reverseOrder())
-                .thenComparing(AdminRecruitmentResponse::semester, reverseOrder())
-                .thenComparing(AdminRecruitmentResponse::round));
-        return adminRecruitmentResponses;
-    }
-
-    private List<AdminRecruitmentResponse> getAdminRecruitmentResponses(List<Recruitment> recruitments) {
-        Map<AcademicYearSemesterKey, List<Recruitment>> groupedRecruitments =
-                recruitmentsGroupByAcademicYearAndSemesterType(recruitments);
-
-        ArrayList<AdminRecruitmentResponse> adminRecruitmentResponses = new ArrayList<>();
-        groupedRecruitments.forEach(
-                (academicYearSemesterKey, recruitmentList) -> recruitmentList.forEach(recruitment -> {
-                    int round = recruitmentList.indexOf(recruitment) + 1;
-                    adminRecruitmentResponses.add(AdminRecruitmentResponse.of(recruitment, round));
-                }));
-        return adminRecruitmentResponses;
-    }
-
-    private Map<AcademicYearSemesterKey, List<Recruitment>> recruitmentsGroupByAcademicYearAndSemesterType(
-            List<Recruitment> recruitments) {
-        return recruitments.stream()
-                .collect(Collectors.groupingBy(recruitment ->
-                        new AcademicYearSemesterKey(recruitment.getAcademicYear(), recruitment.getSemesterType())));
+        List<Recruitment> recruitments = recruitmentRepository.findAllOrderByStartDate();
+        return recruitments.stream().map(AdminRecruitmentResponse::from).toList();
     }
 
     private void validatePeriodMatchesAcademicYear(

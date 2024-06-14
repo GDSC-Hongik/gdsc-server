@@ -3,7 +3,6 @@ package com.gdschongik.gdsc.domain.recruitment.dto.response;
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 public record AdminRecruitmentResponse(
         Long recruitmentId,
@@ -14,12 +13,12 @@ public record AdminRecruitmentResponse(
         @Schema(description = "신청기간 시작일") LocalDateTime startDate,
         @Schema(description = "신청기간 종료일") LocalDateTime endDate) {
 
-    public static AdminRecruitmentResponse of(Recruitment recruitment, Integer round) {
+    public static AdminRecruitmentResponse from(Recruitment recruitment) {
         return new AdminRecruitmentResponse(
                 recruitment.getId(),
                 recruitment.getAcademicYear(),
                 recruitment.getSemesterType().getValue(),
-                Optional.ofNullable(round).map(r -> String.format("%d차", round)).orElse(null),
+                recruitment.getRoundType().getValue(),
                 recruitment.getName(),
                 recruitment.getPeriod().getStartDate(),
                 recruitment.getPeriod().getEndDate());
