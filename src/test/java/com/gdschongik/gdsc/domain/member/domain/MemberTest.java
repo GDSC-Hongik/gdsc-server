@@ -15,6 +15,7 @@ class MemberTest {
 
     @Nested
     class 게스트_회원가입시 {
+
         @Test
         void MemberRole은_GUEST이다() {
             // given
@@ -42,6 +43,7 @@ class MemberTest {
 
     @Nested
     class 준회원으로_승급시 {
+
         @Test
         void 기본_회원정보_작성하지_않았으면_실패한다() {
             // given
@@ -124,6 +126,7 @@ class MemberTest {
 
     @Nested
     class 회원탈퇴시 {
+
         @Test
         void 이미_탈퇴한_유저면_실패한다() {
             // given
