@@ -25,7 +25,7 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
 
     private void createRecruitment() {
         Recruitment recruitment = Recruitment.createRecruitment(
-                RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE, FEE, ROUND_TYPE);
+                RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE, ROUND_TYPE, FEE);
         recruitmentRepository.save(recruitment);
     }
 
@@ -36,7 +36,7 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
             // given
             createRecruitment();
             RecruitmentCreateRequest request = new RecruitmentCreateRequest(
-                    RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE, FEE, ROUND_TYPE);
+                    RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE, ROUND_TYPE, FEE);
 
             // when & then
             assertThatThrownBy(() -> adminRecruitmentService.createRecruitment(request))
@@ -48,7 +48,7 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
         void 모집_시작일과_종료일의_연도가_입력된_학년도와_다르다면_실패한다() {
             // given
             RecruitmentCreateRequest request = new RecruitmentCreateRequest(
-                    RECRUITMENT_NAME, START_DATE, END_DATE, 2025, SEMESTER_TYPE, FEE, ROUND_TYPE);
+                    RECRUITMENT_NAME, START_DATE, END_DATE, 2025, SEMESTER_TYPE, ROUND_TYPE, FEE);
 
             // when & then
             assertThatThrownBy(() -> adminRecruitmentService.createRecruitment(request))
@@ -60,7 +60,7 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
         void 모집_시작일과_종료일의_학기가_입력된_학기와_다르다면_실패한다() {
             // given
             RecruitmentCreateRequest request = new RecruitmentCreateRequest(
-                    RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SemesterType.SECOND, FEE, ROUND_TYPE);
+                    RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SemesterType.SECOND, ROUND_TYPE, FEE);
 
             // when & then
             assertThatThrownBy(() -> adminRecruitmentService.createRecruitment(request))
@@ -77,8 +77,8 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
                     LocalDateTime.of(2024, 4, 10, 0, 0),
                     ACADEMIC_YEAR,
                     SEMESTER_TYPE,
-                    FEE,
-                    ROUND_TYPE);
+                    ROUND_TYPE,
+                    FEE);
 
             // when & then
             assertThatThrownBy(() -> adminRecruitmentService.createRecruitment(request))
@@ -96,8 +96,8 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
                     LocalDateTime.of(2024, 3, 13, 0, 0),
                     ACADEMIC_YEAR,
                     SEMESTER_TYPE,
-                    FEE,
-                    ROUND_TYPE);
+                    ROUND_TYPE,
+                    FEE);
 
             // when & then
             assertThatThrownBy(() -> adminRecruitmentService.createRecruitment(request))

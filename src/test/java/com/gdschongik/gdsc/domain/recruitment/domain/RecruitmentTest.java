@@ -18,7 +18,7 @@ class RecruitmentTest {
 
             // when
             Recruitment recruitment = Recruitment.createRecruitment(
-                    RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE, FEE, ROUND_TYPE);
+                    RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE, ROUND_TYPE, FEE);
 
             // then
             assertThat(recruitment.getPeriod().getStartDate()).isEqualTo(START_DATE);

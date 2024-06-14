@@ -26,6 +26,7 @@ public class Recruitment extends BaseSemesterEntity {
     @Embedded
     private Period period;
 
+    @Embedded
     private Money fee;
 
     @Enumerated(EnumType.STRING)
@@ -52,16 +53,16 @@ public class Recruitment extends BaseSemesterEntity {
             LocalDateTime endDate,
             Integer academicYear,
             SemesterType semesterType,
-            Money fee,
-            RoundType roundType) {
+            RoundType roundType,
+            Money fee) {
         Period period = Period.createPeriod(startDate, endDate);
         return Recruitment.builder()
                 .name(name)
                 .period(period)
                 .academicYear(academicYear)
                 .semesterType(semesterType)
-                .fee(fee)
                 .roundType(roundType)
+                .fee(fee)
                 .build();
     }
 

@@ -18,5 +18,5 @@ public record RecruitmentCreateRequest(
         @NotNull(message = "학년도는 null이 될 수 없습니다.") @Schema(description = "학년도", pattern = ACADEMIC_YEAR)
                 Integer academicYear,
         @NotNull(message = "학기는 null이 될 수 없습니다.") @Schema(description = "학기") SemesterType semesterType,
-        @NotNull(message = "회비는 null이 될 수 없습니다.") @Schema(description = "회비") Money fee,
-        @NotNull(message = "모집 차수는 null이 될 수 없습니다.") @Schema(description = "모집 차수") RoundType roundType) {}
+        @NotNull(message = "모집 차수는 null이 될 수 없습니다.") @Schema(description = "모집 차수") RoundType roundType,
+        @NotNull(message = "회비는 null이 될 수 없습니다.") @Schema(description = "회비") Money fee) {}

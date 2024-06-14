@@ -39,8 +39,8 @@ public class AdminRecruitmentService {
                 request.endDate(),
                 request.academicYear(),
                 request.semesterType(),
-                request.fee(),
-                request.roundType());
+                request.roundType(),
+                request.fee());
         recruitmentRepository.save(recruitment);
     }
 
