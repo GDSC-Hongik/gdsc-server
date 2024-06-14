@@ -57,17 +57,60 @@ class MemberTest {
         }
     }
 
-    @Test
-    void 기본회원정보_작성시_준회원_가입조건중_기본정보_인증상태가_인증된다() {
-        // given
-        Member member = Member.createGuestMember(OAUTH_ID);
+    @Nested
+    class 준회원_가입조건_인증시도시 {
 
-        // when
-        member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
+        @Test
+        void 기본회원정보_작성시_준회원_가입조건중_기본정보_인증상태가_인증된다() {
+            // given
+            Member member = Member.createGuestMember(OAUTH_ID);
 
-        // then
-        AssociateRequirement requirement = member.getAssociateRequirement();
-        assertThat(requirement.getInfoStatus()).isEqualTo(VERIFIED);
+            // when
+            member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
+
+            // then
+            AssociateRequirement requirement = member.getAssociateRequirement();
+            assertThat(requirement.getInfoStatus()).isEqualTo(VERIFIED);
+        }
+
+        @Test
+        void 재학생이메일_인증시_준회원_가입조건중_재학생이메일_인증상태가_인증된다() {
+            // given
+            Member member = Member.createGuestMember(OAUTH_ID);
+
+            // when
+            member.completeUnivEmailVerification(UNIV_EMAIL);
+
+            // then
+            AssociateRequirement requirement = member.getAssociateRequirement();
+            assertThat(requirement.getUnivStatus()).isEqualTo(VERIFIED);
+        }
+
+        @Test
+        void 디스코드_인증시_준회원_가입조건중_디스코드_인증상태가_인증된다() {
+            // given
+            Member member = Member.createGuestMember(OAUTH_ID);
+
+            // when
+            member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
+
+            // then
+            AssociateRequirement requirement = member.getAssociateRequirement();
+            assertThat(requirement.getDiscordStatus()).isEqualTo(VERIFIED);
+        }
+
+        @Test
+        void Bevy_인증시_준회원_가입조건중_Bevy_인증상태가_인증된다() {
+            // given
+            Member member = Member.createGuestMember(OAUTH_ID);
+
+            // when
+            member.verifyBevy();
+
+            // then
+            AssociateRequirement requirement = member.getAssociateRequirement();
+            assertThat(requirement.getBevyStatus()).isEqualTo(VERIFIED);
+        }
     }
 
     @Nested
