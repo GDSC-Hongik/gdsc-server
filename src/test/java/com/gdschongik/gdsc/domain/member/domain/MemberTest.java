@@ -39,6 +39,22 @@ class MemberTest {
             // then
             assertThat(status).isEqualTo(MemberStatus.NORMAL);
         }
+
+        @Test
+        void 모든_준회원_가입조건은_인증되지_않은_상태이다() {
+            // given
+            Member member = Member.createGuestMember(OAUTH_ID);
+
+            // when
+            AssociateRequirement requirement = member.getAssociateRequirement();
+
+            // then
+            assertThat(requirement.getUnivStatus()).isEqualTo(PENDING);
+            assertThat(requirement.getDiscordStatus()).isEqualTo(PENDING);
+            assertThat(requirement.getBevyStatus()).isEqualTo(PENDING);
+            assertThat(requirement.getInfoStatus()).isEqualTo(PENDING);
+        }
+    }
     }
 
     @Nested
