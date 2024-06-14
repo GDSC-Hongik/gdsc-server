@@ -3,7 +3,6 @@ package com.gdschongik.gdsc.domain.member.domain;
 import static com.gdschongik.gdsc.domain.member.domain.Department.*;
 import static com.gdschongik.gdsc.domain.member.domain.MemberRole.ASSOCIATE;
 import static com.gdschongik.gdsc.domain.member.domain.MemberStatus.*;
-import static com.gdschongik.gdsc.domain.member.domain.RequirementStatus.*;
 import static com.gdschongik.gdsc.global.common.constant.MemberConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
@@ -38,75 +37,6 @@ class MemberTest {
 
             // then
             assertThat(status).isEqualTo(MemberStatus.NORMAL);
-        }
-    }
-
-    @Nested
-    class 준회원_승급_만족여부 {
-        @Test
-        void 기본_회원정보_기입하지_않았으면_isAllVerified는_false이다() {
-            // given
-            Member member = Member.createGuestMember(OAUTH_ID);
-
-            member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
-            member.completeUnivEmailVerification(UNIV_EMAIL);
-            member.verifyBevy();
-
-            // when & then
-            assertThat(member.getRequirement().isAllVerified()).isFalse();
-        }
-
-        @Test
-        void 재학생_인증하지_않았으면_isAllVerified는_false이다() {
-            // given
-            Member member = Member.createGuestMember(OAUTH_ID);
-
-            member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
-            member.completeUnivEmailVerification(UNIV_EMAIL);
-            member.verifyBevy();
-
-            // when & then
-            assertThat(member.getRequirement().isAllVerified()).isFalse();
-        }
-
-        @Test
-        void 디스코드_인증하지_않았으면_isAllVerified는_false이다() {
-            // given
-            Member member = Member.createGuestMember(OAUTH_ID);
-
-            member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
-            member.completeUnivEmailVerification(UNIV_EMAIL);
-            member.verifyBevy();
-
-            // when & then
-            assertThat(member.getRequirement().isAllVerified()).isFalse();
-        }
-
-        @Test
-        void Bevy_연동하지_않았으면_isAllVerified는_false이다() {
-            // given
-            Member member = Member.createGuestMember(OAUTH_ID);
-
-            member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
-            member.completeUnivEmailVerification(UNIV_EMAIL);
-            member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
-
-            // when & then
-            assertThat(member.getRequirement().isAllVerified()).isFalse();
-        }
-
-        @Test
-        void 준회원_가입조건을_모두_충족했다면_isAllVerified는_true이다() {
-            // given
-            Member member = Member.createGuestMember(OAUTH_ID);
-
-            member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
-            member.completeUnivEmailVerification(UNIV_EMAIL);
-            member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
-            member.verifyBevy();
-
-            // when & then
-            assertThat(member.getRequirement().isAllVerified()).isTrue();
         }
     }
 
@@ -192,11 +122,9 @@ class MemberTest {
             member.advanceToAssociate();
 
             // when & then
-            assertThatThrownBy(() -> {
-                        member.advanceToAssociate();
-                    })
+            assertThatThrownBy(member::advanceToAssociate)
                     .isInstanceOf(CustomException.class)
-                    .hasMessage(MEMBER_ALREADY_GRANTED.getMessage());
+                    .hasMessage(MEMBER_ALREADY_ASSOCIATE.getMessage());
         }
     }
 
@@ -271,21 +199,6 @@ class MemberTest {
         // when & then
         assertThatThrownBy(() -> {
                     member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
-                })
-                .isInstanceOf(CustomException.class)
-                .hasMessage(MEMBER_DELETED.getMessage());
-    }
-
-    @Test
-    void 회비납부시_탈퇴한_유저면_실패한다() {
-        // given
-        Member member = Member.createGuestMember(OAUTH_ID);
-
-        member.withdraw();
-
-        // when & then
-        assertThatThrownBy(() -> {
-                    member.updatePaymentStatus(VERIFIED);
                 })
                 .isInstanceOf(CustomException.class)
                 .hasMessage(MEMBER_DELETED.getMessage());

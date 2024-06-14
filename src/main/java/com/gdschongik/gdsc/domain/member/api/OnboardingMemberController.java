@@ -2,7 +2,6 @@ package com.gdschongik.gdsc.domain.member.api;
 
 import com.gdschongik.gdsc.domain.member.application.OnboardingMemberService;
 import com.gdschongik.gdsc.domain.member.dto.request.BasicMemberInfoRequest;
-import com.gdschongik.gdsc.domain.member.dto.request.MemberSignupRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.OnboardingMemberUpdateRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberBasicInfoResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberInfoResponse;
@@ -27,13 +26,6 @@ public class OnboardingMemberController {
 
     private final OnboardingMemberService onboardingMemberService;
 
-    @Operation(summary = "회원 가입 신청", description = "회원 가입을 신청합니다.", deprecated = true)
-    @PostMapping
-    public ResponseEntity<Void> signupMember(@Valid @RequestBody MemberSignupRequest request) {
-        onboardingMemberService.signupMember(request);
-        return ResponseEntity.ok().build();
-    }
-
     @Deprecated
     @Operation(summary = "디스코드 회원 정보 수정", description = "디스코드 회원 정보를 수정합니다.")
     @PutMapping("/me/discord")
@@ -42,6 +34,7 @@ public class OnboardingMemberController {
         return ResponseEntity.ok().build();
     }
 
+    @Deprecated
     @Operation(summary = "회원 정보 조회", description = "회원 정보를 조회합니다.")
     @GetMapping("/me")
     public ResponseEntity<MemberInfoResponse> getMemberInfo() {

@@ -32,7 +32,7 @@ public enum ErrorCode {
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 커뮤니티 멤버입니다."),
     MEMBER_DELETED(HttpStatus.CONFLICT, "탈퇴한 회원입니다."),
     MEMBER_FORBIDDEN(HttpStatus.CONFLICT, "차단된 회원입니다."),
-    MEMBER_ALREADY_GRANTED(HttpStatus.CONFLICT, "이미 승인된 회원입니다."),
+    MEMBER_ALREADY_ASSOCIATE(HttpStatus.CONFLICT, "이미 준회원 역할에 해당하는 회원입니다."),
     MEMBER_ALREADY_VERIFIED(HttpStatus.CONFLICT, "이미 인증된 상태입니다."),
     MEMBER_DISCORD_USERNAME_DUPLICATE(HttpStatus.CONFLICT, "이미 등록된 디스코드 유저네임입니다."),
     MEMBER_NICKNAME_DUPLICATE(HttpStatus.CONFLICT, "이미 사용중인 닉네임입니다."),
@@ -66,7 +66,7 @@ public enum ErrorCode {
     PAYMENT_NOT_VERIFIED(HttpStatus.CONFLICT, "회비 납부가 완료되지 않았습니다."),
     MEMBERSHIP_NOT_APPLICABLE(HttpStatus.CONFLICT, "멤버십 가입을 신청할 수 없는 회원입니다."),
     MEMBERSHIP_ALREADY_APPLIED(HttpStatus.CONFLICT, "이미 이번 학기에 멤버십 가입을 신청한 회원입니다."),
-    MEMBERSHIP_ALREADY_ISSUED(HttpStatus.CONFLICT, "이미 이번 학기에 멤버십을 발급받은 회원입니다."),
+    MEMBERSHIP_ALREADY_VERIFIED(HttpStatus.CONFLICT, "이미 이번 학기에 정회원 승급을 완료한 회원입니다."),
 
     // Recruitment
     DATE_PRECEDENCE_INVALID(HttpStatus.BAD_REQUEST, "종료일이 시작일과 같거나 앞설 수 없습니다."),
