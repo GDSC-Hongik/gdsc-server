@@ -2,11 +2,9 @@ package com.gdschongik.gdsc.domain.member.api;
 
 import com.gdschongik.gdsc.domain.member.application.AdminMemberService;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
-import com.gdschongik.gdsc.domain.member.dto.request.MemberGrantRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryOption;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberUpdateRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.AdminMemberResponse;
-import com.gdschongik.gdsc.domain.member.dto.response.MemberGrantResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -27,7 +25,7 @@ public class AdminMemberController {
 
     private final AdminMemberService adminMemberService;
 
-    @Operation(summary = "회원 상태별 목록 조회", description = "정회원, 준회원, 게스트별로 조회합니다.")
+    @Operation(summary = "회원 역할별 목록 조회", description = "정회원, 준회원, 게스트별로 조회합니다.")
     @GetMapping
     public ResponseEntity<Page<AdminMemberResponse>> getMembers(
             @RequestParam(name = "role", required = false) MemberRole memberRole,
@@ -58,29 +56,6 @@ public class AdminMemberController {
             @PathVariable Long memberId, @Valid @RequestBody MemberUpdateRequest request) {
         adminMemberService.updateMember(memberId, request);
         return ResponseEntity.ok().build();
-    }
-
-    @Operation(summary = "회원 승인", description = "회원의 가입을 승인합니다.", deprecated = true)
-    @PutMapping("/grant")
-    public ResponseEntity<MemberGrantResponse> grantMember(@Valid @RequestBody MemberGrantRequest request) {
-        MemberGrantResponse response = adminMemberService.grantMember(request);
-        return ResponseEntity.ok().body(response);
-    }
-
-    @Operation(summary = "승인 가능 회원 전체 조회", description = "승인 가능한 회원 전체를 조회합니다.", deprecated = true)
-    @GetMapping("/grantable")
-    public ResponseEntity<Page<AdminMemberResponse>> getGrantableMembers(
-            MemberQueryOption queryOption, Pageable pageable) {
-        Page<AdminMemberResponse> response = adminMemberService.getGrantableMembers(queryOption, pageable);
-        return ResponseEntity.ok().body(response);
-    }
-
-    @Operation(summary = "승인된 회원 전체 조회", description = "승인된 회원 전체를 조회합니다.", deprecated = true)
-    @GetMapping("/granted")
-    public ResponseEntity<Page<AdminMemberResponse>> getGrantedMembers(
-            MemberQueryOption queryOption, Pageable pageable) {
-        Page<AdminMemberResponse> response = adminMemberService.findAllGrantedMembers(queryOption, pageable);
-        return ResponseEntity.ok().body(response);
     }
 
     @Operation(summary = "회원 정보 엑셀 다운로드", description = "회원 정보를 엑셀로 다운로드합니다.")
