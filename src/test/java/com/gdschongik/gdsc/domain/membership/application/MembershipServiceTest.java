@@ -46,8 +46,8 @@ public class MembershipServiceTest extends IntegrationTest {
     }
 
     private Recruitment createRecruitment() {
-        Recruitment recruitment =
-                Recruitment.createRecruitment(RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE);
+        Recruitment recruitment = Recruitment.createRecruitment(
+                RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE, ROUND_TYPE, FEE);
         return recruitmentRepository.save(recruitment);
     }
 
@@ -86,7 +86,7 @@ public class MembershipServiceTest extends IntegrationTest {
             // then
             assertThatThrownBy(() -> membershipService.submitMembership(recruitment.getId()))
                     .isInstanceOf(CustomException.class)
-                    .hasMessage(MEMBERSHIP_ALREADY_ISSUED.getMessage());
+                    .hasMessage(MEMBERSHIP_ALREADY_VERIFIED.getMessage());
         }
 
         @Test

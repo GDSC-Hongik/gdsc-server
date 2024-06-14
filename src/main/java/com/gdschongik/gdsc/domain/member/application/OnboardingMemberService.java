@@ -5,7 +5,6 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.dto.request.BasicMemberInfoRequest;
-import com.gdschongik.gdsc.domain.member.dto.request.MemberSignupRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.OnboardingMemberUpdateRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberBasicInfoResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberInfoResponse;
@@ -24,13 +23,6 @@ public class OnboardingMemberService {
     private final MemberUtil memberUtil;
     private final MemberRepository memberRepository;
 
-    @Transactional
-    public void signupMember(MemberSignupRequest request) {
-        Member currentMember = memberUtil.getCurrentMember();
-        currentMember.signup(
-                request.studentId(), request.name(), request.phone(), request.department(), request.email());
-    }
-
     @Deprecated
     @Transactional
     public void updateMember(OnboardingMemberUpdateRequest request) {
@@ -46,10 +38,8 @@ public class OnboardingMemberService {
     }
 
     public MemberInfoResponse getMemberInfo() {
+        // TODO: 대시보드 API로 통합
         Member currentMember = memberUtil.getCurrentMember();
-        if (!currentMember.isApplied()) {
-            throw new CustomException(MEMBER_NOT_APPLIED);
-        }
         return MemberInfoResponse.of(currentMember);
     }
 

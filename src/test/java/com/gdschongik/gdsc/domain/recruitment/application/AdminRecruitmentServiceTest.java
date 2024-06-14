@@ -5,8 +5,10 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 
 import com.gdschongik.gdsc.domain.common.model.SemesterType;
+import com.gdschongik.gdsc.domain.common.vo.Money;
 import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRepository;
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
+import com.gdschongik.gdsc.domain.recruitment.domain.RoundType;
 import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentCreateRequest;
 import com.gdschongik.gdsc.domain.recruitment.dto.response.AdminRecruitmentResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
@@ -30,8 +32,11 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
             LocalDateTime startDate,
             LocalDateTime endDate,
             Integer academicYear,
-            SemesterType semesterType) {
-        Recruitment recruitment = Recruitment.createRecruitment(name, startDate, endDate, academicYear, semesterType);
+            SemesterType semesterType,
+            RoundType roundType,
+            Money fee) {
+        Recruitment recruitment =
+                Recruitment.createRecruitment(name, startDate, endDate, academicYear, semesterType, roundType, fee);
         return recruitmentRepository.save(recruitment);
     }
 
@@ -40,9 +45,9 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
         @Test
         void 기간이_중복되는_Recruitment가_있다면_실패한다() {
             // given
-            createRecruitment(RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE);
-            RecruitmentCreateRequest request =
-                    new RecruitmentCreateRequest(RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE);
+            createRecruitment(RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE, ROUND_TYPE, FEE);
+            RecruitmentCreateRequest request = new RecruitmentCreateRequest(
+                    RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE, ROUND_TYPE, FEE_AMOUNT);
 
             // when & then
             assertThatThrownBy(() -> adminRecruitmentService.createRecruitment(request))
@@ -53,8 +58,8 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
         @Test
         void 모집_시작일과_종료일의_연도가_입력된_학년도와_다르다면_실패한다() {
             // given
-            RecruitmentCreateRequest request =
-                    new RecruitmentCreateRequest(RECRUITMENT_NAME, START_DATE, END_DATE, 2025, SEMESTER_TYPE);
+            RecruitmentCreateRequest request = new RecruitmentCreateRequest(
+                    RECRUITMENT_NAME, START_DATE, END_DATE, 2025, SEMESTER_TYPE, ROUND_TYPE, FEE_AMOUNT);
 
             // when & then
             assertThatThrownBy(() -> adminRecruitmentService.createRecruitment(request))
@@ -66,7 +71,7 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
         void 모집_시작일과_종료일의_학기가_입력된_학기와_다르다면_실패한다() {
             // given
             RecruitmentCreateRequest request = new RecruitmentCreateRequest(
-                    RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SemesterType.SECOND);
+                    RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SemesterType.SECOND, ROUND_TYPE, FEE_AMOUNT);
 
             // when & then
             assertThatThrownBy(() -> adminRecruitmentService.createRecruitment(request))
@@ -78,97 +83,37 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
         void 모집_시작일과_종료일이_학기_시작일로부터_2주_이내에_있지_않다면_실패한다() {
             // given
             RecruitmentCreateRequest request = new RecruitmentCreateRequest(
-                    RECRUITMENT_NAME, START_DATE, LocalDateTime.of(2024, 4, 10, 00, 00), ACADEMIC_YEAR, SEMESTER_TYPE);
+                    RECRUITMENT_NAME,
+                    START_DATE,
+                    LocalDateTime.of(2024, 4, 10, 0, 0),
+                    ACADEMIC_YEAR,
+                    SEMESTER_TYPE,
+                    ROUND_TYPE,
+                    FEE_AMOUNT);
 
             // when & then
             assertThatThrownBy(() -> adminRecruitmentService.createRecruitment(request))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(RECRUITMENT_PERIOD_NOT_WITHIN_TWO_WEEKS.getMessage());
         }
-    }
-
-    @Nested
-    class 모집기간_조회시 {
-        @Test
-        void 학년도_내림차순으로_정렬된다() {
-            // given
-            Recruitment recruitment2024 =
-                    createRecruitment(RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE);
-            Recruitment recruitment2025 = createRecruitment(
-                    "2025학년도 1학기 1차 모집",
-                    LocalDateTime.of(2025, 3, 2, 0, 0),
-                    LocalDateTime.of(2025, 3, 5, 0, 0),
-                    2025,
-                    SEMESTER_TYPE);
-
-            // when
-            List<AdminRecruitmentResponse> allRecruitments = adminRecruitmentService.getAllRecruitments();
-
-            // then
-            assertThat(allRecruitments)
-                    .containsSequence(
-                            AdminRecruitmentResponse.of(recruitment2025, FIRST_ROUND),
-                            AdminRecruitmentResponse.of(recruitment2024, FIRST_ROUND));
-        }
 
         @Test
-        void 학년도가_같다면_학기_내림차순으로_정렬된다() {
+        void 학년도_학기_차수가_모두_중복되는_리쿠르팅이라면_실패한다() {
             // given
-            Recruitment firstSemesterRecruitment =
-                    createRecruitment(RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE);
-            Recruitment secondSemesterRecruitment = createRecruitment(
-                    SECOND_SEMESTER_RECRUITMENT_NAME,
-                    SECOND_SEMESTER_START_DATE,
-                    SECOND_SEMESTER_END_DATE,
+            createRecruitment(RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE, ROUND_TYPE, FEE);
+            RecruitmentCreateRequest request = new RecruitmentCreateRequest(
+                    RECRUITMENT_NAME,
+                    LocalDateTime.of(2024, 3, 12, 0, 0),
+                    LocalDateTime.of(2024, 3, 13, 0, 0),
                     ACADEMIC_YEAR,
-                    SECOND_SEMESTER_SEMESTER_TYPE);
+                    SEMESTER_TYPE,
+                    ROUND_TYPE,
+                    FEE_AMOUNT);
 
-            // when
-            List<AdminRecruitmentResponse> allRecruitments = adminRecruitmentService.getAllRecruitments();
-
-            // then
-            assertThat(allRecruitments)
-                    .containsSequence(
-                            AdminRecruitmentResponse.of(secondSemesterRecruitment, FIRST_ROUND),
-                            AdminRecruitmentResponse.of(firstSemesterRecruitment, FIRST_ROUND));
-        }
-
-        @Test
-        void 학년도와_학기가_같다면_모집_시작일_오름차순으로_정렬된다() {
-            // given
-            Recruitment roundOneRecruitment =
-                    createRecruitment(RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE);
-            Recruitment roundTwoRecruitment = createRecruitment(
-                    ROUND_TWO_RECRUITMENT_NAME, ROUND_TWO_START_DATE, ROUND_TWO_END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE);
-
-            // when
-            List<AdminRecruitmentResponse> allRecruitments = adminRecruitmentService.getAllRecruitments();
-
-            // then
-            assertThat(allRecruitments)
-                    .containsSequence(
-                            AdminRecruitmentResponse.of(roundOneRecruitment, FIRST_ROUND),
-                            AdminRecruitmentResponse.of(roundTwoRecruitment, SECOND_ROUND));
-        }
-
-        @Test
-        void 학년도와_학기가_같은_두_리쿠르팅이_있다면_모집_시작일이_빠른_리쿠르팅이_1차이다() {
-            // given
-            Recruitment roundOneRecruitment =
-                    createRecruitment(RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE);
-            createRecruitment(
-                    ROUND_TWO_RECRUITMENT_NAME, ROUND_TWO_START_DATE, ROUND_TWO_END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE);
-
-            // when
-            List<AdminRecruitmentResponse> allRecruitments = adminRecruitmentService.getAllRecruitments();
-            AdminRecruitmentResponse recruitmentResponse = allRecruitments.stream()
-                    .filter(response -> response.recruitmentId().equals(roundOneRecruitment.getId()))
-                    .findFirst()
-                    .orElse(null);
-
-            // then
-            assertThat(recruitmentResponse).isNotNull();
-            assertThat(recruitmentResponse.round()).isEqualTo(FIRST_ROUND_NAME);
+            // when & then
+            assertThatThrownBy(() -> adminRecruitmentService.createRecruitment(request))
+                    .isInstanceOf(CustomException.class)
+                    .hasMessage(RECRUITMENT_ROUND_TYPE_OVERLAP.getMessage());
         }
     }
 }

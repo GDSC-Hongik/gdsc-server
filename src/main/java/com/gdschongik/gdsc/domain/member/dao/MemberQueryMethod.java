@@ -1,11 +1,11 @@
 package com.gdschongik.gdsc.domain.member.dao;
 
+import static com.gdschongik.gdsc.domain.common.model.RequirementStatus.*;
 import static com.gdschongik.gdsc.domain.member.domain.QMember.*;
-import static com.gdschongik.gdsc.domain.member.domain.RequirementStatus.*;
 
+import com.gdschongik.gdsc.domain.common.model.RequirementStatus;
 import com.gdschongik.gdsc.domain.member.domain.Department;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
-import com.gdschongik.gdsc.domain.member.domain.RequirementStatus;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryOption;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -61,18 +61,17 @@ public class MemberQueryMethod {
 
     protected BooleanBuilder isGrantAvailable() {
         return new BooleanBuilder()
-                .and(eqRequirementStatus(member.requirement.discordStatus, VERIFIED))
-                .and(eqRequirementStatus(member.requirement.univStatus, VERIFIED))
-                .and(eqRequirementStatus(member.requirement.paymentStatus, VERIFIED))
-                .and(eqRequirementStatus(member.requirement.bevyStatus, VERIFIED));
+                .and(eqRequirementStatus(member.associateRequirement.discordStatus, VERIFIED))
+                .and(eqRequirementStatus(member.associateRequirement.univStatus, VERIFIED))
+                .and(eqRequirementStatus(member.associateRequirement.bevyStatus, VERIFIED));
     }
 
     protected BooleanBuilder isAssociateAvailable() {
         return new BooleanBuilder()
-                .and(eqRequirementStatus(member.requirement.discordStatus, VERIFIED))
-                .and(eqRequirementStatus(member.requirement.univStatus, VERIFIED))
-                .and(eqRequirementStatus(member.requirement.infoStatus, VERIFIED))
-                .and(eqRequirementStatus(member.requirement.bevyStatus, VERIFIED));
+                .and(eqRequirementStatus(member.associateRequirement.discordStatus, VERIFIED))
+                .and(eqRequirementStatus(member.associateRequirement.univStatus, VERIFIED))
+                .and(eqRequirementStatus(member.associateRequirement.infoStatus, VERIFIED))
+                .and(eqRequirementStatus(member.associateRequirement.bevyStatus, VERIFIED));
     }
 
     protected BooleanBuilder matchesQueryOption(MemberQueryOption queryOption) {

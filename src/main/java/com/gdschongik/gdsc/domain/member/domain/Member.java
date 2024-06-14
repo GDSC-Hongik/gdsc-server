@@ -62,7 +62,7 @@ public class Member extends BaseTimeEntity {
     private String univEmail;
 
     @Embedded
-    private Requirement requirement;
+    private AssociateRequirement associateRequirement;
 
     @Builder(access = AccessLevel.PRIVATE)
     private Member(
@@ -78,7 +78,7 @@ public class Member extends BaseTimeEntity {
             String oauthId,
             LocalDateTime lastLoginAt,
             String univEmail,
-            Requirement requirement) {
+            AssociateRequirement associateRequirement) {
         this.role = role;
         this.status = status;
         this.name = name;
@@ -91,20 +91,20 @@ public class Member extends BaseTimeEntity {
         this.oauthId = oauthId;
         this.lastLoginAt = lastLoginAt;
         this.univEmail = univEmail;
-        this.requirement = requirement;
+        this.associateRequirement = associateRequirement;
     }
 
     public static Member createGuestMember(String oauthId) {
-        Requirement requirement = Requirement.createRequirement();
+        AssociateRequirement associateRequirement = AssociateRequirement.createRequirement();
         return Member.builder()
                 .oauthId(oauthId)
-                .role(MemberRole.GUEST)
+                .role(GUEST)
                 .status(MemberStatus.NORMAL)
-                .requirement(requirement)
+                .associateRequirement(associateRequirement)
                 .build();
     }
 
-    // 회원 검증 로직
+    // 상태 검증 로직
 
     /**
      * 회원 상태를 변경할 수 있는지 검증합니다. 삭제되거나 차단된 회원은 상태를 변경할 수 없습니다.<br>
@@ -120,59 +120,19 @@ public class Member extends BaseTimeEntity {
     }
 
     /**
-     * 재학생 인증 여부를 검증합니다.
+     * 준회원 승급 가능 여부를 검증합니다.
      */
-    private void validateUnivStatus() {
-        if (this.requirement.isUnivVerified() && this.univEmail != null) {
-            return;
+    private void validateAssociateAvailable() {
+        if (this.role.equals(ASSOCIATE)) {
+            throw new CustomException(MEMBER_ALREADY_ASSOCIATE);
         }
 
-        throw new CustomException(UNIV_NOT_VERIFIED);
+        associateRequirement.validateAllVerified();
     }
-
-    /**
-     * 회원 승인 가능 여부를 검증합니다.
-     * TODO validateAdvanceAvailable로 수정해야 함
-     */
-    private void validateGrantAvailable() {
-        if (isAtLeastAssociate()) {
-            throw new CustomException(MEMBER_ALREADY_GRANTED);
-        }
-
-        if (!this.requirement.isInfoVerified()) {
-            throw new CustomException(BASIC_INFO_NOT_VERIFIED);
-        }
-
-        if (!this.requirement.isDiscordVerified() || this.discordUsername == null || this.nickname == null) {
-            throw new CustomException(DISCORD_NOT_VERIFIED);
-        }
-
-        if (!this.requirement.isBevyVerified()) {
-            throw new CustomException(BEVY_NOT_VERIFIED);
-        }
-
-        validateUnivStatus();
-    }
-
     // 회원 가입상태 변경 로직
 
     /**
-     * 가입 신청 시 작성한 정보를 저장합니다. 재학생 인증을 완료한 회원만 신청할 수 있습니다.
-     * deprecated
-     */
-    public void signup(String studentId, String name, String phone, Department department, String email) {
-        validateStatusUpdatable();
-        validateUnivStatus();
-
-        this.studentId = studentId;
-        this.name = name;
-        this.phone = phone;
-        this.department = department;
-        this.email = email;
-    }
-
-    /**
-     * 기본 회원 정보를 작성한다.
+     * 기본 회원 정보를 작성합니다.
      */
     public void updateBasicMemberInfo(
             String studentId, String name, String phone, Department department, String email) {
@@ -196,23 +156,9 @@ public class Member extends BaseTimeEntity {
      */
     public void advanceToAssociate() {
         validateStatusUpdatable();
-        validateGrantAvailable();
+        validateAssociateAvailable();
 
         this.role = ASSOCIATE;
-        registerEvent(new MemberGrantEvent(discordUsername, nickname));
-    }
-
-    /**
-     * 가입 신청을 승인합니다.<br>
-     * 어드민만 사용할 수 있어야 합니다.
-     * deprecated
-     */
-    public void grant() {
-        validateStatusUpdatable();
-        validateGrantAvailable();
-
-        this.role = ASSOCIATE;
-        registerEvent(new MemberGrantEvent(discordUsername, nickname));
     }
 
     /**
@@ -254,74 +200,35 @@ public class Member extends BaseTimeEntity {
 
     private void verifyUnivEmail() {
         validateStatusUpdatable();
-        requirement.updateUnivStatus(RequirementStatus.VERIFIED);
-        registerEvent(new MemberAssociateEvent(this.id));
-    }
+        associateRequirement.verifyUniv();
 
-    private boolean isAtLeastAssociate() {
-        return this.role.equals(ASSOCIATE) || this.role.equals(ADMIN) || this.role.equals(REGULAR);
+        registerEvent(new MemberAssociateEvent(this.id));
     }
 
     public void verifyDiscord(String discordUsername, String nickname) {
         validateStatusUpdatable();
-        this.requirement.verifyDiscord();
+        this.associateRequirement.verifyDiscord();
         this.discordUsername = discordUsername;
         this.nickname = nickname;
 
         registerEvent(new MemberAssociateEvent(this.id));
     }
 
-    /**
-     * deprecated
-     */
-    public void updatePaymentStatus(RequirementStatus status) {
-        validateStatusUpdatable();
-        this.requirement.updatePaymentStatus(status);
-    }
-
     public void verifyBevy() {
         validateStatusUpdatable();
+        this.associateRequirement.verifyBevy();
 
-        this.requirement.verifyBevy();
         registerEvent(new MemberAssociateEvent(this.id));
     }
 
     public void verifyInfo() {
         validateStatusUpdatable();
-        this.requirement.verifyInfoStatus();
+        this.associateRequirement.verifyInfo();
 
         registerEvent(new MemberAssociateEvent(this.id));
     }
 
-    // 데이터 전달 로직
-
-    // TODO 한꺼번에 USER관련 기능을 삭제 할때 함께 USER부분을 삭제하기
-    public boolean isGranted() {
-        return role.equals(USER) || role.equals(ASSOCIATE) || role.equals(MemberRole.ADMIN);
-    }
-
-    /**
-     * 회원 승인 가능 여부를 반환합니다.
-     *
-     * @see com.gdschongik.gdsc.domain.member.dao.MemberQueryMethod#isGrantAvailable()
-     */
-    public boolean isGrantAvailable() {
-        try {
-            validateGrantAvailable();
-            return true;
-        } catch (CustomException e) {
-            return false;
-        }
-    }
-
-    /**
-     * 가입 신청서 제출 여부를 반환합니다.
-     */
-    public boolean isApplied() {
-        return studentId != null;
-    }
-
-    // 기타 로직
+    // 기타 상태 변경 로직
 
     public void updateLastLoginAt() {
         this.lastLoginAt = LocalDateTime.now();
@@ -329,5 +236,11 @@ public class Member extends BaseTimeEntity {
 
     public void updateDiscordId(String discordId) {
         this.discordId = discordId;
+    }
+
+    // 데이터 전달 로직
+
+    public boolean isRegular() {
+        return role.equals(REGULAR);
     }
 }

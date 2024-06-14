@@ -98,7 +98,7 @@ public class OnboardingDiscordService {
                 .findByDiscordUsername(discordUsername)
                 .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
 
-        if (!member.isGranted()) {
+        if (!member.isRegular()) {
             throw new CustomException(DISCORD_ROLE_UNASSIGNABLE);
         }
 
