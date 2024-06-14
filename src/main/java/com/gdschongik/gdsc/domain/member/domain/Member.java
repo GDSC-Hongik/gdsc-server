@@ -171,9 +171,11 @@ public class Member extends BaseTimeEntity {
      */
     public void verifyDiscord(String discordUsername, String nickname) {
         validateStatusUpdatable();
-        this.associateRequirement.verifyDiscord();
+
         this.discordUsername = discordUsername;
         this.nickname = nickname;
+
+        this.associateRequirement.verifyDiscord();
 
         registerEvent(new MemberAssociateEvent(this.id));
     }
