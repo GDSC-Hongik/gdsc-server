@@ -52,9 +52,7 @@ class MemberTest {
             member.verifyBevy();
 
             // when & then
-            assertThatThrownBy(() -> {
-                        member.advanceToAssociate();
-                    })
+            assertThatThrownBy(member::advanceToAssociate)
                     .isInstanceOf(CustomException.class)
                     .hasMessage(BASIC_INFO_NOT_VERIFIED.getMessage());
         }
@@ -69,9 +67,7 @@ class MemberTest {
             member.verifyBevy();
 
             // when & then
-            assertThatThrownBy(() -> {
-                        member.advanceToAssociate();
-                    })
+            assertThatThrownBy(member::advanceToAssociate)
                     .isInstanceOf(CustomException.class)
                     .hasMessage(DISCORD_NOT_VERIFIED.getMessage());
         }
@@ -86,9 +82,7 @@ class MemberTest {
             member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
 
             // when & then
-            assertThatThrownBy(() -> {
-                        member.advanceToAssociate();
-                    })
+            assertThatThrownBy(member::advanceToAssociate)
                     .isInstanceOf(CustomException.class)
                     .hasMessage(BEVY_NOT_VERIFIED.getMessage());
         }
@@ -138,9 +132,7 @@ class MemberTest {
             member.withdraw();
 
             // when & then
-            assertThatThrownBy(() -> {
-                        member.withdraw();
-                    })
+            assertThatThrownBy(member::withdraw)
                     .isInstanceOf(CustomException.class)
                     .hasMessage(MEMBER_DELETED.getMessage());
         }
@@ -212,9 +204,7 @@ class MemberTest {
         member.withdraw();
 
         // when & then
-        assertThatThrownBy(() -> {
-                    member.verifyBevy();
-                })
+        assertThatThrownBy(member::verifyBevy)
                 .isInstanceOf(CustomException.class)
                 .hasMessage(MEMBER_DELETED.getMessage());
     }
