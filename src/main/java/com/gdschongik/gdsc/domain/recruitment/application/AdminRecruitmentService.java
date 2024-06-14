@@ -5,6 +5,7 @@ import static com.gdschongik.gdsc.global.common.constant.TemporalConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.common.model.SemesterType;
+import com.gdschongik.gdsc.domain.common.vo.Money;
 import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRepository;
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.domain.recruitment.domain.RoundType;
@@ -40,7 +41,7 @@ public class AdminRecruitmentService {
                 request.academicYear(),
                 request.semesterType(),
                 request.roundType(),
-                request.fee());
+                Money.from(request.fee()));
         recruitmentRepository.save(recruitment);
     }
 
