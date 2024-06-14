@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "Onboarding Discord", description = "온보딩 서비스의 디스코드 관련 API입니다.")
@@ -38,7 +39,7 @@ public class OnboardingDiscordController {
     @Operation(summary = "디스코드 사용자명 중복 확인하기", description = "디스코드 사용자명이 중복되는지 확인합니다.")
     @GetMapping("/check-discord-username")
     public ResponseEntity<DiscordCheckDuplicateResponse> checkDiscordUsername(
-            @NotBlank @Schema(description = "디스코드 유저네임") String discordUsername) {
+            @RequestParam("username") @NotBlank @Schema(description = "디스코드 유저네임") String discordUsername) {
         DiscordCheckDuplicateResponse response = onboardingDiscordService.checkUsernameDuplicate(discordUsername);
         return ResponseEntity.ok(response);
     }
@@ -46,7 +47,8 @@ public class OnboardingDiscordController {
     @Operation(summary = "디스코드 닉네임 중복 확인하기", description = "디스코드 닉네임이 중복되는지 확인합니다.")
     @GetMapping("/check-discord-nickname")
     public ResponseEntity<DiscordCheckDuplicateResponse> checkDiscordNickname(
-            @NotBlank
+            @RequestParam("nickname")
+                    @NotBlank
                     @Pattern(regexp = NICKNAME, message = "닉네임은 " + NICKNAME + " 형식이어야 합니다.")
                     @Schema(description = "커뮤니티 닉네임", pattern = NICKNAME)
                     String nickname) {
@@ -57,7 +59,7 @@ public class OnboardingDiscordController {
     @Operation(summary = "디스코드 합류 확인하기", description = "해당 사용자명을 가진 유저가 디스코드 서버에 합류했는지 확인합니다.")
     @GetMapping("/check-discord-join")
     public ResponseEntity<DiscordCheckJoinResponse> checkDiscordJoin(
-            @NotBlank @Schema(description = "디스코드 유저네임") String discordUsername) {
+            @RequestParam("username") @NotBlank @Schema(description = "디스코드 유저네임") String discordUsername) {
         DiscordCheckJoinResponse response = onboardingDiscordService.checkServerJoined(discordUsername);
         return ResponseEntity.ok(response);
     }
