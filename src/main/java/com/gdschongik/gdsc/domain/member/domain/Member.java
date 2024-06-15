@@ -129,26 +129,72 @@ public class Member extends BaseTimeEntity {
 
         associateRequirement.validateAllVerified();
     }
-    // 회원 가입상태 변경 로직
+
+    // 준회원 승급 관련 로직
 
     /**
      * 기본 회원 정보를 작성합니다.
+     * 기본정보 인증상태를 인증 처리합니다.
      */
     public void updateBasicMemberInfo(
             String studentId, String name, String phone, Department department, String email) {
         validateStatusUpdatable();
-        verifyInfo();
 
         this.studentId = studentId;
         this.name = name;
         this.phone = phone;
         this.department = department;
         this.email = email;
+
+        this.associateRequirement.verifyInfo();
+
+        registerEvent(new MemberAssociateEvent(this.id));
     }
 
     /**
-     * GUEST -> 준회원으로 승급됩니다.
-     * 모든 조건을 충족하면 서버에서 각각의 인증과정에서 자동으로 advanceToAssociate()호출된다
+     * 재학생 이메일 인증을 진행합니다.
+     * 재학생 이메일 인증상태를 인증 처리합니다.
+     */
+    public void completeUnivEmailVerification(String univEmail) {
+        validateStatusUpdatable();
+
+        this.univEmail = univEmail;
+
+        associateRequirement.verifyUniv();
+
+        registerEvent(new MemberAssociateEvent(this.id));
+    }
+
+    /**
+     * 디스코드 서버와의 연동을 진행합니다.
+     * 디스코드 인증상태를 인증 처리합니다.
+     */
+    public void verifyDiscord(String discordUsername, String nickname) {
+        validateStatusUpdatable();
+
+        this.discordUsername = discordUsername;
+        this.nickname = nickname;
+
+        this.associateRequirement.verifyDiscord();
+
+        registerEvent(new MemberAssociateEvent(this.id));
+    }
+
+    /**
+     * Bevy 서버와의 연동을 진행합니다.
+     * Bevy 인증상태를 인증 처리합니다.
+     */
+    public void verifyBevy() {
+        validateStatusUpdatable();
+
+        this.associateRequirement.verifyBevy();
+
+        registerEvent(new MemberAssociateEvent(this.id));
+    }
+
+    /**
+     * 게스트에서 준회원으로 승급합니다.
+     * 본 로직은 승급조건 충족 이벤트로 트리거됩니다. 다음 조건을 모두 충족하면 승급됩니다.
      * 조건 1 : 기본 회원정보 작성
      * 조건 2 : 재학생 인증
      * 조건 3 : 디스코드 인증
@@ -159,6 +205,16 @@ public class Member extends BaseTimeEntity {
         validateAssociateAvailable();
 
         this.role = ASSOCIATE;
+    }
+
+    // 기타 상태 변경 로직
+
+    public void updateLastLoginAt() {
+        this.lastLoginAt = LocalDateTime.now();
+    }
+
+    public void updateDiscordId(String discordId) {
+        this.discordId = discordId;
     }
 
     /**
@@ -191,51 +247,6 @@ public class Member extends BaseTimeEntity {
         this.email = email;
         this.discordUsername = discordUsername;
         this.nickname = nickname;
-    }
-
-    public void completeUnivEmailVerification(String univEmail) {
-        this.univEmail = univEmail;
-        verifyUnivEmail();
-    }
-
-    private void verifyUnivEmail() {
-        validateStatusUpdatable();
-        associateRequirement.verifyUniv();
-
-        registerEvent(new MemberAssociateEvent(this.id));
-    }
-
-    public void verifyDiscord(String discordUsername, String nickname) {
-        validateStatusUpdatable();
-        this.associateRequirement.verifyDiscord();
-        this.discordUsername = discordUsername;
-        this.nickname = nickname;
-
-        registerEvent(new MemberAssociateEvent(this.id));
-    }
-
-    public void verifyBevy() {
-        validateStatusUpdatable();
-        this.associateRequirement.verifyBevy();
-
-        registerEvent(new MemberAssociateEvent(this.id));
-    }
-
-    public void verifyInfo() {
-        validateStatusUpdatable();
-        this.associateRequirement.verifyInfo();
-
-        registerEvent(new MemberAssociateEvent(this.id));
-    }
-
-    // 기타 상태 변경 로직
-
-    public void updateLastLoginAt() {
-        this.lastLoginAt = LocalDateTime.now();
-    }
-
-    public void updateDiscordId(String discordId) {
-        this.discordId = discordId;
     }
 
     // 데이터 전달 로직
