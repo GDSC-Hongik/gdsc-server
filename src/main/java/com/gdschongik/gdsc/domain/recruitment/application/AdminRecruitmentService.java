@@ -9,7 +9,7 @@ import com.gdschongik.gdsc.domain.common.vo.Money;
 import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRepository;
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.domain.recruitment.domain.RoundType;
-import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentCreateOrUpdateRequest;
+import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentCreateUpdateRequest;
 import com.gdschongik.gdsc.domain.recruitment.dto.response.AdminRecruitmentResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import java.time.LocalDateTime;
@@ -27,7 +27,7 @@ public class AdminRecruitmentService {
     private final RecruitmentRepository recruitmentRepository;
 
     @Transactional
-    public void createRecruitment(RecruitmentCreateOrUpdateRequest request) {
+    public void createRecruitment(RecruitmentCreateUpdateRequest request) {
         validatePeriodMatchesAcademicYear(request.startDate(), request.endDate(), request.academicYear());
         validatePeriodMatchesSemesterType(request.startDate(), request.endDate(), request.semesterType());
         validatePeriodWithinTwoWeeks(
@@ -52,7 +52,7 @@ public class AdminRecruitmentService {
     }
 
     @Transactional
-    public void updateRecruitment(Long recruitmentId, RecruitmentCreateOrUpdateRequest request) {
+    public void updateRecruitment(Long recruitmentId, RecruitmentCreateUpdateRequest request) {
         Recruitment recruitment = recruitmentRepository
                 .findById(recruitmentId)
                 .orElseThrow(() -> new CustomException(RECRUITMENT_NOT_FOUND));
