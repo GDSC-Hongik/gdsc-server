@@ -24,10 +24,18 @@ public class DatabaseCleaner implements InitializingBean {
         em.unwrap(Session.class).doWork(this::extractTableNames);
     }
 
-    private void extractTableNames(Connection conn) throws SQLException {
+    private void extractTableNames(Connection conn) {
         tableNames = em.getMetamodel().getEntities().stream()
                 .map(EntityType::getName)
+                .map(this::convertCamelCaseToSnakeCase)
                 .toList();
+    }
+
+    /**
+     * 카멜 케이스로 되어있는 엔티티 이름을 스네이크 케이스로 되어있는 테이블 이름으로 변환한다.
+     */
+    private String convertCamelCaseToSnakeCase(String name) {
+        return name.replaceAll("([a-z])([A-Z])", "$1_$2").toLowerCase();
     }
 
     public void execute() {
