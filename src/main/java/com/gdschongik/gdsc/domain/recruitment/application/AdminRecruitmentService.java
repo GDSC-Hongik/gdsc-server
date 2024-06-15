@@ -10,6 +10,7 @@ import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRepository;
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.domain.recruitment.domain.RoundType;
 import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentCreateRequest;
+import com.gdschongik.gdsc.domain.recruitment.dto.response.AdminRecruitmentResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -43,6 +44,11 @@ public class AdminRecruitmentService {
                 request.roundType(),
                 Money.from(request.fee()));
         recruitmentRepository.save(recruitment);
+    }
+
+    public List<AdminRecruitmentResponse> getAllRecruitments() {
+        List<Recruitment> recruitments = recruitmentRepository.findByOrderByPeriodStartDateDesc();
+        return recruitments.stream().map(AdminRecruitmentResponse::from).toList();
     }
 
     private void validatePeriodMatchesAcademicYear(

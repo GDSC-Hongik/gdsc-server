@@ -5,8 +5,10 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 
 import com.gdschongik.gdsc.domain.common.model.SemesterType;
+import com.gdschongik.gdsc.domain.common.vo.Money;
 import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRepository;
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
+import com.gdschongik.gdsc.domain.recruitment.domain.RoundType;
 import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentCreateRequest;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.integration.IntegrationTest;
@@ -23,10 +25,17 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
     @Autowired
     private RecruitmentRepository recruitmentRepository;
 
-    private void createRecruitment() {
-        Recruitment recruitment = Recruitment.createRecruitment(
-                RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE, ROUND_TYPE, FEE);
-        recruitmentRepository.save(recruitment);
+    private Recruitment createRecruitment(
+            String name,
+            LocalDateTime startDate,
+            LocalDateTime endDate,
+            Integer academicYear,
+            SemesterType semesterType,
+            RoundType roundType,
+            Money fee) {
+        Recruitment recruitment =
+                Recruitment.createRecruitment(name, startDate, endDate, academicYear, semesterType, roundType, fee);
+        return recruitmentRepository.save(recruitment);
     }
 
     @Nested
@@ -34,7 +43,7 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
         @Test
         void 기간이_중복되는_Recruitment가_있다면_실패한다() {
             // given
-            createRecruitment();
+            createRecruitment(RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE, ROUND_TYPE, FEE);
             RecruitmentCreateRequest request = new RecruitmentCreateRequest(
                     RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE, ROUND_TYPE, FEE_AMOUNT);
 
@@ -89,7 +98,7 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
         @Test
         void 학년도_학기_차수가_모두_중복되는_리쿠르팅이라면_실패한다() {
             // given
-            createRecruitment();
+            createRecruitment(RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE, ROUND_TYPE, FEE);
             RecruitmentCreateRequest request = new RecruitmentCreateRequest(
                     RECRUITMENT_NAME,
                     LocalDateTime.of(2024, 3, 12, 0, 0),
