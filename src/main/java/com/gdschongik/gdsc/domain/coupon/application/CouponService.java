@@ -21,5 +21,6 @@ public class CouponService {
     public void createCoupon(CouponCreateRequest request) {
         Coupon coupon = Coupon.createCoupon(request.name(), Money.from(request.discountAmount()));
         couponRepository.save(coupon);
+        log.info("[CouponService] 쿠폰 생성: name={}, discountAmount={}", request.name(), request.discountAmount());
     }
 }
