@@ -73,4 +73,22 @@ public class Recruitment extends BaseSemesterEntity {
     public void validatePeriodOverlap(LocalDateTime startDate, LocalDateTime endDate) {
         this.period.validatePeriodOverlap(startDate, endDate);
     }
+
+    public void updateRecruitment(
+            String name,
+            LocalDateTime startDate,
+            LocalDateTime endDate,
+            Integer academicYear,
+            SemesterType semesterType,
+            RoundType roundType,
+            Money fee) {
+        period.validatePeriodUpdatable();
+
+        this.name = name;
+        this.period = Period.createPeriod(startDate, endDate);
+        super.updateAcademicYear(academicYear);
+        super.updateSemesterType(semesterType);
+        this.roundType = roundType;
+        this.fee = fee;
+    }
 }
