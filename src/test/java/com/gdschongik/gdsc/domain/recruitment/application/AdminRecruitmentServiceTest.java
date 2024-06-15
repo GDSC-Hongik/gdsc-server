@@ -114,4 +114,77 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
                     .hasMessage(RECRUITMENT_ROUND_TYPE_OVERLAP.getMessage());
         }
     }
+
+    @Nested
+    class 모집기간_수정시 {
+        @Test
+        void 모집_시작일이_지났다면_수정_실패한다() {
+            // given
+            Recruitment recruitment = createRecruitment(
+                    RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE, ROUND_TYPE, FEE);
+            RecruitmentRequest request = new RecruitmentRequest(
+                    RECRUITMENT_NAME,
+                    LocalDateTime.of(2024, 3, 12, 0, 0),
+                    LocalDateTime.of(2024, 3, 13, 0, 0),
+                    ACADEMIC_YEAR,
+                    SEMESTER_TYPE,
+                    ROUND_TYPE,
+                    FEE_AMOUNT);
+
+            // when & then
+            assertThatThrownBy(() -> adminRecruitmentService.updateRecruitment(recruitment.getId(), request))
+                    .isInstanceOf(CustomException.class)
+                    .hasMessage(RECRUITMENT_STARTDATE_ALREADY_PASSED.getMessage());
+        }
+
+        @Test
+        void 기간이_중복되는_Recruitment가_있다면_실패한다() {
+            // given
+            Recruitment recruitmentRoundOne = createRecruitment(
+                    RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE, ROUND_TYPE, FEE);
+            Recruitment recruitmentRoundTwo = createRecruitment(
+                    ROUND_TWO_RECRUITMENT_NAME,
+                    ROUND_TWO_START_DATE,
+                    ROUND_TWO_END_DATE,
+                    ACADEMIC_YEAR,
+                    SEMESTER_TYPE,
+                    RoundType.SECOND,
+                    FEE);
+            RecruitmentRequest request = new RecruitmentRequest(
+                    RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE, ROUND_TYPE, FEE_AMOUNT);
+
+            // when & then
+            assertThatThrownBy(() -> adminRecruitmentService.updateRecruitment(recruitmentRoundTwo.getId(), request))
+                    .isInstanceOf(CustomException.class)
+                    .hasMessage(RECRUITMENT_PERIOD_OVERLAP.getMessage());
+        }
+
+        @Test
+        void 차수가_중복되는_Recruitment가_있다면_실패한다() {
+            // given
+            Recruitment recruitmentRoundOne = createRecruitment(
+                    RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE, ROUND_TYPE, FEE);
+            Recruitment recruitmentRoundTwo = createRecruitment(
+                    ROUND_TWO_RECRUITMENT_NAME,
+                    ROUND_TWO_START_DATE,
+                    ROUND_TWO_END_DATE,
+                    ACADEMIC_YEAR,
+                    SEMESTER_TYPE,
+                    RoundType.SECOND,
+                    FEE);
+            RecruitmentRequest request = new RecruitmentRequest(
+                    RECRUITMENT_NAME,
+                    ROUND_TWO_START_DATE,
+                    ROUND_TWO_END_DATE,
+                    ACADEMIC_YEAR,
+                    SEMESTER_TYPE,
+                    ROUND_TYPE,
+                    FEE_AMOUNT);
+
+            // when & then
+            assertThatThrownBy(() -> adminRecruitmentService.updateRecruitment(recruitmentRoundTwo.getId(), request))
+                    .isInstanceOf(CustomException.class)
+                    .hasMessage(RECRUITMENT_ROUND_TYPE_OVERLAP.getMessage());
+        }
+    }
 }
