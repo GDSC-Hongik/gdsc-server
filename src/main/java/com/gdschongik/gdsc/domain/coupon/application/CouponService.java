@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class CouponService {
 
-    private CouponRepository couponRepository;
+    private final CouponRepository couponRepository;
 
     @Transactional
     public void createCoupon(CouponCreateRequest request) {
