@@ -45,7 +45,7 @@ class CouponTest {
             Coupon coupon = Coupon.createCoupon(COUPON_NAME, Money.from(ONE));
 
             // when
-            coupon.updateCoupon(COUPON_NAME, Money.from(TEN));
+            coupon.updateDiscountAmount(Money.from(TEN));
 
             // then
             assertThat(coupon.getDiscountAmount()).isEqualTo(Money.from(TEN));
@@ -58,7 +58,7 @@ class CouponTest {
             Money changedDiscountAmount = Money.from(ZERO);
 
             // when & then
-            assertThatThrownBy(() -> coupon.updateCoupon(COUPON_NAME, changedDiscountAmount))
+            assertThatThrownBy(() -> coupon.updateDiscountAmount(changedDiscountAmount))
                     .isInstanceOf(CustomException.class)
                     .hasMessageContaining(COUPON_DISCOUNT_AMOUNT_NOT_POSITIVE.getMessage());
         }

@@ -53,9 +53,8 @@ public class Coupon extends BaseTimeEntity {
 
     // 상태 변경 로직
 
-    public void updateCoupon(String name, Money discountAmount) {
+    public void updateDiscountAmount(Money discountAmount) {
         validateDiscountAmountPositive(discountAmount);
-        this.name = name;
         this.discountAmount = discountAmount;
     }
 }
