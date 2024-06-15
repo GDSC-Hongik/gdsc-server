@@ -49,13 +49,6 @@ public class Period {
         throw new CustomException(RECRUITMENT_PERIOD_OVERLAP);
     }
 
-    public void validatePeriodUpdatable() {
-        LocalDateTime now = LocalDateTime.now();
-        if (now.isAfter(this.startDate)) {
-            throw new CustomException(RECRUITMENT_STARTDATE_ALREADY_PASSED);
-        }
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
