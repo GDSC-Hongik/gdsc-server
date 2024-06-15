@@ -3,6 +3,7 @@ package com.gdschongik.gdsc.global.util;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
 import com.gdschongik.gdsc.global.property.DiscordProperty;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
@@ -30,15 +31,17 @@ public class DiscordUtil {
         return jda.getTextChannelById(discordProperty.getAdminChannelId());
     }
 
+    public Optional<Member> getOptionalMemberByUsername(String username) {
+        return getCurrentGuild().getMembersByName(username, true).stream().findFirst();
+    }
+
     public Member getMemberByUsername(String username) {
-        return getCurrentGuild().getMembersByName(username, true).stream()
-                .findFirst()
+        return getOptionalMemberByUsername(username)
                 .orElseThrow(() -> new CustomException(ErrorCode.DISCORD_MEMBER_NOT_FOUND));
     }
 
     public String getMemberIdByUsername(String username) {
-        return getCurrentGuild().getMembersByName(username, true).stream()
-                .findFirst()
+        return getOptionalMemberByUsername(username)
                 .orElseThrow(() -> new CustomException(ErrorCode.DISCORD_MEMBER_NOT_FOUND))
                 .getId();
     }
