@@ -164,22 +164,22 @@ public class AdminRecruitmentService {
             SemesterType semesterType,
             LocalDateTime startDate,
             LocalDateTime endDate,
-            Long recruitmentId) {
+            Long currentRecruitmentId) {
         List<Recruitment> recruitments =
                 recruitmentRepository.findAllByAcademicYearAndSemesterType(academicYear, semesterType);
 
         recruitments.stream()
-                .filter(recruitment -> !recruitment.getId().equals(recruitmentId))
+                .filter(recruitment -> !recruitment.getId().equals(currentRecruitmentId))
                 .forEach(r -> r.validatePeriodOverlap(startDate, endDate));
     }
 
     private void validateRoundOverlap(
-            Integer academicYear, SemesterType semesterType, RoundType roundType, Long recruitmentId) {
+            Integer academicYear, SemesterType semesterType, RoundType roundType, Long currentRecruitmentId) {
         List<Recruitment> recruitments =
                 recruitmentRepository.findAllByAcademicYearAndSemesterType(academicYear, semesterType);
 
         recruitments.stream()
-                .filter(recruitment -> !recruitment.getId().equals(recruitmentId)
+                .filter(recruitment -> !recruitment.getId().equals(currentRecruitmentId)
                         && recruitment.getRoundType().equals(roundType))
                 .findAny()
                 .ifPresent(recruitment -> {
