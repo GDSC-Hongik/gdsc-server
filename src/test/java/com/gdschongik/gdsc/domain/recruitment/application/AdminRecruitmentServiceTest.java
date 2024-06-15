@@ -9,7 +9,7 @@ import com.gdschongik.gdsc.domain.common.vo.Money;
 import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRepository;
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.domain.recruitment.domain.RoundType;
-import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentCreateRequest;
+import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentCreateOrUpdateRequest;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.integration.IntegrationTest;
 import java.time.LocalDateTime;
@@ -44,7 +44,7 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
         void 기간이_중복되는_Recruitment가_있다면_실패한다() {
             // given
             createRecruitment(RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE, ROUND_TYPE, FEE);
-            RecruitmentCreateRequest request = new RecruitmentCreateRequest(
+            RecruitmentCreateOrUpdateRequest request = new RecruitmentCreateOrUpdateRequest(
                     RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE, ROUND_TYPE, FEE_AMOUNT);
 
             // when & then
@@ -56,7 +56,7 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
         @Test
         void 모집_시작일과_종료일의_연도가_입력된_학년도와_다르다면_실패한다() {
             // given
-            RecruitmentCreateRequest request = new RecruitmentCreateRequest(
+            RecruitmentCreateOrUpdateRequest request = new RecruitmentCreateOrUpdateRequest(
                     RECRUITMENT_NAME, START_DATE, END_DATE, 2025, SEMESTER_TYPE, ROUND_TYPE, FEE_AMOUNT);
 
             // when & then
@@ -68,7 +68,7 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
         @Test
         void 모집_시작일과_종료일의_학기가_입력된_학기와_다르다면_실패한다() {
             // given
-            RecruitmentCreateRequest request = new RecruitmentCreateRequest(
+            RecruitmentCreateOrUpdateRequest request = new RecruitmentCreateOrUpdateRequest(
                     RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SemesterType.SECOND, ROUND_TYPE, FEE_AMOUNT);
 
             // when & then
@@ -80,7 +80,7 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
         @Test
         void 모집_시작일과_종료일이_학기_시작일로부터_2주_이내에_있지_않다면_실패한다() {
             // given
-            RecruitmentCreateRequest request = new RecruitmentCreateRequest(
+            RecruitmentCreateOrUpdateRequest request = new RecruitmentCreateOrUpdateRequest(
                     RECRUITMENT_NAME,
                     START_DATE,
                     LocalDateTime.of(2024, 4, 10, 0, 0),
@@ -99,7 +99,7 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
         void 학년도_학기_차수가_모두_중복되는_리쿠르팅이라면_실패한다() {
             // given
             createRecruitment(RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE, ROUND_TYPE, FEE);
-            RecruitmentCreateRequest request = new RecruitmentCreateRequest(
+            RecruitmentCreateOrUpdateRequest request = new RecruitmentCreateOrUpdateRequest(
                     RECRUITMENT_NAME,
                     LocalDateTime.of(2024, 3, 12, 0, 0),
                     LocalDateTime.of(2024, 3, 13, 0, 0),
@@ -122,7 +122,7 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
             // given
             Recruitment recruitment = createRecruitment(
                     RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE, ROUND_TYPE, FEE);
-            RecruitmentRequest request = new RecruitmentRequest(
+            RecruitmentCreateOrUpdateRequest request = new RecruitmentCreateOrUpdateRequest(
                     RECRUITMENT_NAME,
                     LocalDateTime.of(2024, 3, 12, 0, 0),
                     LocalDateTime.of(2024, 3, 13, 0, 0),
@@ -150,7 +150,7 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
                     SEMESTER_TYPE,
                     RoundType.SECOND,
                     FEE);
-            RecruitmentRequest request = new RecruitmentRequest(
+            RecruitmentCreateOrUpdateRequest request = new RecruitmentCreateOrUpdateRequest(
                     RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE, ROUND_TYPE, FEE_AMOUNT);
 
             // when & then
@@ -172,7 +172,7 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
                     SEMESTER_TYPE,
                     RoundType.SECOND,
                     FEE);
-            RecruitmentRequest request = new RecruitmentRequest(
+            RecruitmentCreateOrUpdateRequest request = new RecruitmentCreateOrUpdateRequest(
                     RECRUITMENT_NAME,
                     ROUND_TWO_START_DATE,
                     ROUND_TWO_END_DATE,
