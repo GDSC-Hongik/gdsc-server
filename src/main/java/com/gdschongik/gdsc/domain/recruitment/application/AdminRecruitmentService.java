@@ -179,8 +179,8 @@ public class AdminRecruitmentService {
                 recruitmentRepository.findAllByAcademicYearAndSemesterType(academicYear, semesterType);
 
         recruitments.stream()
-                .filter(recruitment -> !recruitment.getId().equals(recruitmentId))
-                .filter(recruitment -> recruitment.getRoundType().equals(roundType))
+                .filter(recruitment -> !recruitment.getId().equals(recruitmentId)
+                        && recruitment.getRoundType().equals(roundType))
                 .findAny()
                 .ifPresent(recruitment -> {
                     throw new CustomException(RECRUITMENT_ROUND_TYPE_OVERLAP);
