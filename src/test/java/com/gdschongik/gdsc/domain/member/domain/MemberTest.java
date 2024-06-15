@@ -218,4 +218,25 @@ class MemberTest {
                 .isInstanceOf(CustomException.class)
                 .hasMessage(MEMBER_DELETED.getMessage());
     }
+
+    @Nested
+    class 정회원_승급시 {
+        @Test
+        void 이미_정회원으로_승급된_멤버이면_실패한다() {
+            // given
+            Member member = Member.createGuestMember(OAUTH_ID);
+
+            member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
+            member.completeUnivEmailVerification(UNIV_EMAIL);
+            member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
+            member.verifyBevy();
+            member.advanceToAssociate();
+            member.advanceToRegular();
+
+            // when & then
+            assertThatThrownBy(member::advanceToRegular)
+                    .isInstanceOf(CustomException.class)
+                    .hasMessage(MEMBER_ALREADY_REGULAR.getMessage());
+        }
+    }
 }

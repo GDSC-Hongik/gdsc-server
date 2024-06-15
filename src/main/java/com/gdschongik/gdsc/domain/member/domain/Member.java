@@ -161,6 +161,20 @@ public class Member extends BaseTimeEntity {
         this.role = ASSOCIATE;
     }
 
+    public void advanceToRegular() {
+        validateStatusUpdatable();
+        validateRegularAvailable();
+
+        this.role = REGULAR;
+        registerEvent(new MemberAdvanceToRegularEvent(discordUsername, nickname));
+    }
+
+    private void validateRegularAvailable() {
+        if (isRegular()) {
+            throw new CustomException(MEMBER_ALREADY_REGULAR);
+        }
+    }
+
     /**
      * 해당 회원을 탈퇴 처리합니다.
      */

@@ -1,5 +1,6 @@
 package com.gdschongik.gdsc.domain.membership.application;
 
+import static com.gdschongik.gdsc.domain.common.model.RequirementStatus.VERIFIED;
 import static com.gdschongik.gdsc.domain.member.domain.Department.D022;
 import static com.gdschongik.gdsc.domain.member.domain.MemberRole.*;
 import static com.gdschongik.gdsc.global.common.constant.MemberConstant.*;
@@ -114,6 +115,46 @@ public class MembershipServiceTest extends IntegrationTest {
             assertThatThrownBy(() -> membershipService.submitMembership(recruitment.getId()))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(RECRUITMENT_NOT_OPEN.getMessage());
+        }
+    }
+
+    @Nested
+    class 정회원_승급시 {
+        @Test
+        void 멤버십_상태와_멤버_역할_승급_성공한다() {
+            // given
+            Member member = createMember();
+            logoutAndReloginAs(1L, ASSOCIATE);
+            Recruitment recruitment = createRecruitment();
+            Membership membership = createMembership(member, recruitment);
+
+            // when
+            membershipService.advanceToRegular(membership.getId());
+            Member regularMember = memberRepository.findById(member.getId()).get();
+            Membership verifiedMemberShip =
+                    membershipRepository.findById(membership.getId()).get();
+
+            // then
+            assertThat(verifiedMemberShip.getRegularRequirement().getPaymentStatus())
+                    .isEqualTo(VERIFIED);
+            assertThat(regularMember.getRole()).isEqualTo(REGULAR);
+        }
+
+        @Test
+        void 이미_정회원으로_승급됐다면_멤버십_상태와_멤버_역할_승급_실패한다() {
+            // given
+            Member member = createMember();
+            logoutAndReloginAs(1L, ASSOCIATE);
+            Recruitment recruitment = createRecruitment();
+            Membership membership = createMembership(member, recruitment);
+
+            // when
+            membershipService.advanceToRegular(membership.getId());
+
+            // then
+            assertThatThrownBy(() -> membershipService.advanceToRegular(membership.getId()))
+                    .isInstanceOf(CustomException.class)
+                    .hasMessage(MEMBERSHIP_ALREADY_VERIFIED.getMessage());
         }
     }
 }
