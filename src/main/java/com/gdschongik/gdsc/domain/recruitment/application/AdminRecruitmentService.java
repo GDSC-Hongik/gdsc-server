@@ -60,13 +60,14 @@ public class AdminRecruitmentService {
         validatePeriodMatchesSemesterType(request.startDate(), request.endDate(), request.semesterType());
         validatePeriodWithinTwoWeeks(
                 request.startDate(), request.endDate(), request.academicYear(), request.semesterType());
-        validatePeriodOverlap(
+        validatePeriodOverlapExcludingCurrentRecruitment(
                 recruitment.getAcademicYear(),
                 recruitment.getSemesterType(),
                 request.startDate(),
                 request.endDate(),
                 recruitment.getId());
-        validateRoundOverlap(request.academicYear(), request.semesterType(), request.roundType(), recruitment.getId());
+        validateRoundOverlapExcludingCurrentRecruitment(
+                request.academicYear(), request.semesterType(), request.roundType(), recruitment.getId());
 
         recruitment.updateRecruitment(
                 request.name(),
@@ -157,9 +158,10 @@ public class AdminRecruitmentService {
 
     /*
     기존 리쿠르팅 수정하는 경우,
-    자기 자신은 제외하고 검증.
+    자기 자신의 모집기간과 차수는 수정에 성공하면 소멸되므로 무의미함.
+    따라서, 자기 자신은 제외하고 검증.
     */
-    private void validatePeriodOverlap(
+    private void validatePeriodOverlapExcludingCurrentRecruitment(
             Integer academicYear,
             SemesterType semesterType,
             LocalDateTime startDate,
@@ -173,7 +175,7 @@ public class AdminRecruitmentService {
                 .forEach(r -> r.validatePeriodOverlap(startDate, endDate));
     }
 
-    private void validateRoundOverlap(
+    private void validateRoundOverlapExcludingCurrentRecruitment(
             Integer academicYear, SemesterType semesterType, RoundType roundType, Long currentRecruitmentId) {
         List<Recruitment> recruitments =
                 recruitmentRepository.findAllByAcademicYearAndSemesterType(academicYear, semesterType);
