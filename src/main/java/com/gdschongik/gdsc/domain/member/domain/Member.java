@@ -222,7 +222,7 @@ public class Member extends BaseTimeEntity {
 
     private void validateRegularAvailable() {
         if (this.role != ASSOCIATE) {
-            throw new CustomException(MEMBER_NOT_APPLIED);
+            throw new CustomException(MEMBER_NOT_GRANTED);
         }
 
         if (isRegular()) {

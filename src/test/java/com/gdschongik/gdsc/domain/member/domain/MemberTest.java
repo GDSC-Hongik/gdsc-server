@@ -306,7 +306,7 @@ class MemberTest {
         }
 
         @Test
-        void 이미_정회원으로_승급된_멤버이면_실패한다() {
+        void 이미_정회원_승급됐으면_실패한다() {
             // given
             Member member = Member.createGuestMember(OAUTH_ID);
 
@@ -320,7 +320,7 @@ class MemberTest {
             // when & then
             assertThatThrownBy(member::advanceToRegular)
                     .isInstanceOf(CustomException.class)
-                    .hasMessage(MEMBER_ALREADY_REGULAR.getMessage());
+                    .hasMessage(MEMBER_NOT_GRANTED.getMessage());
         }
     }
 }

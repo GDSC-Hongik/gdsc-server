@@ -4,7 +4,6 @@ import com.gdschongik.gdsc.domain.discord.application.handler.MemberAdvanceToReg
 import com.gdschongik.gdsc.domain.member.domain.MemberAdvanceToRegularEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 @Component
@@ -13,7 +12,7 @@ public class MemberAdvanceToRegularEventListener {
 
     private final MemberAdvanceToRegularEventHandler memberAdvanceToRegularEvenHandler;
 
-    @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT, classes = MemberAdvanceToRegularEvent.class)
+    @TransactionalEventListener(MemberAdvanceToRegularEvent.class)
     public void handleMemberAdvanceToRegularEvent(MemberAdvanceToRegularEvent event) {
         memberAdvanceToRegularEvenHandler.delegate(event);
     }
