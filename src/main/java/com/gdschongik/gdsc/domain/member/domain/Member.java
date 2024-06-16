@@ -130,6 +130,19 @@ public class Member extends BaseTimeEntity {
         associateRequirement.validateAllVerified();
     }
 
+    /**
+     * 정회원 승급 가능 여부를 검증합니다.
+     */
+    private void validateRegularAvailable() {
+        if (!role.equals(ASSOCIATE)) {
+            throw new CustomException(MEMBER_NOT_GRANTED);
+        }
+
+        if (isRegular()) {
+            throw new CustomException(MEMBER_ALREADY_REGULAR);
+        }
+    }
+
     // 준회원 승급 관련 로직
 
     /**
@@ -218,16 +231,6 @@ public class Member extends BaseTimeEntity {
         validateRegularAvailable();
 
         this.role = REGULAR;
-    }
-
-    private void validateRegularAvailable() {
-        if (this.role != ASSOCIATE) {
-            throw new CustomException(MEMBER_NOT_GRANTED);
-        }
-
-        if (isRegular()) {
-            throw new CustomException(MEMBER_ALREADY_REGULAR);
-        }
     }
 
     // 기타 상태 변경 로직
