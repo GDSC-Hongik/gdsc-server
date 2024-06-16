@@ -156,11 +156,11 @@ public class AdminRecruitmentService {
         }
     }
 
-    /*
-    기존 리쿠르팅 수정하는 경우,
-    자기 자신의 모집기간과 차수는 수정에 성공하면 소멸되므로 무의미함.
-    따라서, 자기 자신은 제외하고 검증.
-    */
+    /**
+     * 기존 리쿠르팅 수정하는 경우,
+     * 자기 자신의 모집기간과 차수는 수정에 성공하면 소멸되므로 무의미함.
+     * 따라서, 자기 자신은 제외하고 검증.
+     */
     private void validatePeriodOverlapExcludingCurrentRecruitment(
             Integer academicYear,
             SemesterType semesterType,
