@@ -11,7 +11,7 @@ import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public record RecruitmentCreateRequest(
+public record RecruitmentCreateUpdateRequest(
         @NotBlank @Schema(description = "이름") String name,
         @Future @Schema(description = "모집기간 시작일", pattern = DATETIME) LocalDateTime startDate,
         @Future @Schema(description = "모집기간 종료일", pattern = DATETIME) LocalDateTime endDate,
