@@ -10,7 +10,6 @@ import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRepository;
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,20 +23,13 @@ public class MembershipService {
     private final MemberUtil memberUtil;
 
     @Transactional
-    public void advanceToRegular(Long membershipId) {
-        Member currentMember = memberUtil.getCurrentMember();
+    public void advanceToVerified(Long membershipId) {
         Membership currentMembership = membershipRepository
                 .findById(membershipId)
                 .orElseThrow(() -> new CustomException(MEMBERSHIP_NOT_FOUND));
 
-        Optional.of(currentMembership)
-                .filter(Membership::isAdvanceToRegularAvailable)
-                .ifPresentOrElse(
-                        m -> {
-                            throw new CustomException(MEMBERSHIP_ALREADY_VERIFIED);
-                        },
-                        currentMembership::verifyPaymentStatus);
-        currentMember.advanceToRegular();
+        currentMembership.validateAdvanceRequirement();
+        currentMembership.verifyPaymentStatus();
     }
 
     @Transactional
@@ -63,7 +55,7 @@ public class MembershipService {
         membershipRepository
                 .findByMemberAndAcademicYearAndSemesterType(currentMember, academicYear, semesterType)
                 .ifPresent(membership -> {
-                    if (membership.isAdvanceToRegularAvailable()) {
+                    if (membership.isAdvanceRequirementAllSatisfied()) {
                         throw new CustomException(MEMBERSHIP_ALREADY_VERIFIED);
                     }
                     throw new CustomException(MEMBERSHIP_ALREADY_APPLIED);

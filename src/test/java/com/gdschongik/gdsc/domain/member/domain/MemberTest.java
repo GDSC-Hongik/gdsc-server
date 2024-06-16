@@ -3,6 +3,7 @@ package com.gdschongik.gdsc.domain.member.domain;
 import static com.gdschongik.gdsc.domain.common.model.RequirementStatus.*;
 import static com.gdschongik.gdsc.domain.member.domain.Department.*;
 import static com.gdschongik.gdsc.domain.member.domain.MemberRole.ASSOCIATE;
+import static com.gdschongik.gdsc.domain.member.domain.MemberRole.REGULAR;
 import static com.gdschongik.gdsc.domain.member.domain.MemberStatus.*;
 import static com.gdschongik.gdsc.global.common.constant.MemberConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
@@ -286,6 +287,24 @@ class MemberTest {
 
     @Nested
     class 정회원_승급시 {
+        @Test
+        void 준회원_상태면_성공한다() {
+            // given
+            Member member = Member.createGuestMember(OAUTH_ID);
+
+            member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
+            member.completeUnivEmailVerification(UNIV_EMAIL);
+            member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
+            member.verifyBevy();
+            member.advanceToAssociate();
+
+            // when
+            member.advanceToRegular();
+
+            // then
+            assertThat(member.getRole()).isEqualTo(REGULAR);
+        }
+
         @Test
         void 이미_정회원으로_승급된_멤버이면_실패한다() {
             // given

@@ -202,20 +202,29 @@ public class Member extends BaseTimeEntity {
      */
     public void advanceToAssociate() {
         validateStatusUpdatable();
+
         validateAssociateAvailable();
 
         this.role = ASSOCIATE;
     }
 
+    /**
+     * 준회원에서 정회원으로 승급합니다.
+     * 조건 1 : 멤버가 준회원이어야 함
+     */
     public void advanceToRegular() {
         validateStatusUpdatable();
+
         validateRegularAvailable();
 
         this.role = REGULAR;
-        registerEvent(new MemberAdvanceToRegularEvent(discordUsername, nickname));
     }
 
     private void validateRegularAvailable() {
+        if (this.role != ASSOCIATE) {
+            throw new CustomException(MEMBER_NOT_APPLIED);
+        }
+
         if (isRegular()) {
             throw new CustomException(MEMBER_ALREADY_REGULAR);
         }

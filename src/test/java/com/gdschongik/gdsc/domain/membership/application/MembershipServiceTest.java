@@ -8,6 +8,7 @@ import static com.gdschongik.gdsc.global.common.constant.RecruitmentConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 
+import com.gdschongik.gdsc.domain.discord.application.handler.MemberAdvanceToRegularEventHandler;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.membership.dao.MembershipRepository;
@@ -33,6 +34,9 @@ public class MembershipServiceTest extends IntegrationTest {
 
     @Autowired
     private RecruitmentRepository recruitmentRepository;
+
+    @Autowired
+    private MemberAdvanceToRegularEventHandler memberAdvanceToRegularEventHandler;
 
     public Member createMember() {
         Member member = Member.createGuestMember(OAUTH_ID);
@@ -119,9 +123,9 @@ public class MembershipServiceTest extends IntegrationTest {
     }
 
     @Nested
-    class 정회원_승급시 {
+    class 정회원_조건_만족시 {
         @Test
-        void 멤버십_상태와_멤버_역할_승급_성공한다() {
+        void 멤버십_상태_승급_성공한다() {
             // given
             Member member = createMember();
             logoutAndReloginAs(1L, ASSOCIATE);
@@ -129,19 +133,15 @@ public class MembershipServiceTest extends IntegrationTest {
             Membership membership = createMembership(member, recruitment);
 
             // when
-            membershipService.advanceToRegular(membership.getId());
-            Member regularMember = memberRepository.findById(member.getId()).get();
-            Membership verifiedMemberShip =
-                    membershipRepository.findById(membership.getId()).get();
+            membershipService.advanceToVerified(membership.getId());
+            membership = membershipRepository.findById(membership.getId()).get();
 
             // then
-            assertThat(verifiedMemberShip.getRegularRequirement().getPaymentStatus())
-                    .isEqualTo(VERIFIED);
-            assertThat(regularMember.getRole()).isEqualTo(REGULAR);
+            assertThat(membership.getRegularRequirement().getPaymentStatus()).isEqualTo(VERIFIED);
         }
 
         @Test
-        void 이미_정회원으로_승급됐다면_멤버십_상태와_멤버_역할_승급_실패한다() {
+        void 이미_정회원으로_승급됐다면_멤버십_상태_승급과_멤버_역할_승급_실패한다() {
             // given
             Member member = createMember();
             logoutAndReloginAs(1L, ASSOCIATE);
@@ -149,10 +149,10 @@ public class MembershipServiceTest extends IntegrationTest {
             Membership membership = createMembership(member, recruitment);
 
             // when
-            membershipService.advanceToRegular(membership.getId());
+            membershipService.advanceToVerified(membership.getId());
 
             // then
-            assertThatThrownBy(() -> membershipService.advanceToRegular(membership.getId()))
+            assertThatThrownBy(() -> membershipService.advanceToVerified(membership.getId()))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(MEMBERSHIP_ALREADY_VERIFIED.getMessage());
         }
