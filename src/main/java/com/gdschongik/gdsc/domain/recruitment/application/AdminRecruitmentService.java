@@ -182,7 +182,7 @@ public class AdminRecruitmentService {
                 .filter(recruitment -> !recruitment.getId().equals(currentRecruitmentId)
                         && recruitment.getRoundType().equals(roundType))
                 .findAny()
-                .ifPresent(recruitment -> {
+                .ifPresent(ignored -> {
                     throw new CustomException(RECRUITMENT_ROUND_TYPE_OVERLAP);
                 });
     }
