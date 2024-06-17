@@ -7,11 +7,9 @@ import static com.gdschongik.gdsc.global.common.constant.MemberConstant.NICKNAME
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.gdschongik.gdsc.domain.member.application.handler.MemberAssociateEventHandler;
-import com.gdschongik.gdsc.domain.member.application.handler.MemberRegularEventHandler;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberAssociateEvent;
-import com.gdschongik.gdsc.domain.membership.dao.MembershipRepository;
 import com.gdschongik.gdsc.integration.IntegrationTest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -23,13 +21,7 @@ public class MemberIntegrationTest extends IntegrationTest {
     private MemberAssociateEventHandler memberAssociateEventHandler;
 
     @Autowired
-    private MemberRegularEventHandler memberRegularEventHandler;
-
-    @Autowired
     private MemberRepository memberRepository;
-
-    @Autowired
-    private MembershipRepository membershipRepository;
 
     @Test
     void 준회원_승급조건_만족됐으면_MemberRole은_ASSOCIATE이다() {
