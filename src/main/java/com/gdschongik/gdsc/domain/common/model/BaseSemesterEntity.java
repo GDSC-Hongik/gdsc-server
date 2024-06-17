@@ -18,4 +18,12 @@ public abstract class BaseSemesterEntity extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     private SemesterType semesterType;
+
+    protected void updateAcademicYear(Integer academicYear) {
+        this.academicYear = academicYear;
+    }
+
+    protected void updateSemesterType(SemesterType semesterType) {
+        this.semesterType = semesterType;
+    }
 }

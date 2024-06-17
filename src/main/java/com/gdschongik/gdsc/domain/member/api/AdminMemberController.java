@@ -1,11 +1,10 @@
 package com.gdschongik.gdsc.domain.member.api;
 
 import com.gdschongik.gdsc.domain.member.application.AdminMemberService;
-import com.gdschongik.gdsc.domain.member.dto.request.MemberGrantRequest;
+import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryOption;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberUpdateRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.AdminMemberResponse;
-import com.gdschongik.gdsc.domain.member.dto.response.MemberGrantResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -16,13 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Admin Member", description = "어드민 회원 관리 API입니다.")
 @RestController
@@ -32,10 +25,13 @@ public class AdminMemberController {
 
     private final AdminMemberService adminMemberService;
 
-    @Operation(summary = "전체 회원 목록 조회", description = "전체 회원 목록을 조회합니다.")
+    @Operation(summary = "회원 역할별 목록 조회", description = "정회원, 준회원, 게스트별로 조회합니다.")
     @GetMapping
-    public ResponseEntity<Page<AdminMemberResponse>> getMembers(MemberQueryOption queryOption, Pageable pageable) {
-        Page<AdminMemberResponse> response = adminMemberService.findAll(queryOption, pageable);
+    public ResponseEntity<Page<AdminMemberResponse>> getMembers(
+            @RequestParam(name = "role", required = false) MemberRole memberRole,
+            MemberQueryOption queryOption,
+            Pageable pageable) {
+        Page<AdminMemberResponse> response = adminMemberService.findAllByRole(queryOption, pageable, memberRole);
         return ResponseEntity.ok().body(response);
     }
 
@@ -60,29 +56,6 @@ public class AdminMemberController {
             @PathVariable Long memberId, @Valid @RequestBody MemberUpdateRequest request) {
         adminMemberService.updateMember(memberId, request);
         return ResponseEntity.ok().build();
-    }
-
-    @Operation(summary = "회원 승인", description = "회원의 가입을 승인합니다.", deprecated = true)
-    @PutMapping("/grant")
-    public ResponseEntity<MemberGrantResponse> grantMember(@Valid @RequestBody MemberGrantRequest request) {
-        MemberGrantResponse response = adminMemberService.grantMember(request);
-        return ResponseEntity.ok().body(response);
-    }
-
-    @Operation(summary = "승인 가능 회원 전체 조회", description = "승인 가능한 회원 전체를 조회합니다.", deprecated = true)
-    @GetMapping("/grantable")
-    public ResponseEntity<Page<AdminMemberResponse>> getGrantableMembers(
-            MemberQueryOption queryOption, Pageable pageable) {
-        Page<AdminMemberResponse> response = adminMemberService.getGrantableMembers(queryOption, pageable);
-        return ResponseEntity.ok().body(response);
-    }
-
-    @Operation(summary = "승인된 회원 전체 조회", description = "승인된 회원 전체를 조회합니다.", deprecated = true)
-    @GetMapping("/granted")
-    public ResponseEntity<Page<AdminMemberResponse>> getGrantedMembers(
-            MemberQueryOption queryOption, Pageable pageable) {
-        Page<AdminMemberResponse> response = adminMemberService.findAllGrantedMembers(queryOption, pageable);
-        return ResponseEntity.ok().body(response);
     }
 
     @Operation(summary = "회원 정보 엑셀 다운로드", description = "회원 정보를 엑셀로 다운로드합니다.")

@@ -6,6 +6,8 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import com.gdschongik.gdsc.domain.discord.dao.DiscordVerificationCodeRepository;
 import com.gdschongik.gdsc.domain.discord.domain.DiscordVerificationCode;
 import com.gdschongik.gdsc.domain.discord.dto.request.DiscordLinkRequest;
+import com.gdschongik.gdsc.domain.discord.dto.response.DiscordCheckDuplicateResponse;
+import com.gdschongik.gdsc.domain.discord.dto.response.DiscordCheckJoinResponse;
 import com.gdschongik.gdsc.domain.discord.dto.response.DiscordNicknameResponse;
 import com.gdschongik.gdsc.domain.discord.dto.response.DiscordVerificationCodeResponse;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
@@ -21,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class OnboardingDiscordService {
 
     public static final long DISCORD_CODE_TTL_SECONDS = 300L;
@@ -93,15 +94,34 @@ public class OnboardingDiscordService {
         }
     }
 
+    @Transactional(readOnly = true)
     public DiscordNicknameResponse checkDiscordRoleAssignable(String discordUsername) {
         Member member = memberRepository
                 .findByDiscordUsername(discordUsername)
                 .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
 
-        if (!member.isGranted()) {
+        if (!member.isRegular()) {
             throw new CustomException(DISCORD_ROLE_UNASSIGNABLE);
         }
 
         return DiscordNicknameResponse.of(member.getNickname());
+    }
+
+    @Transactional(readOnly = true)
+    public DiscordCheckDuplicateResponse checkUsernameDuplicate(String discordUsername) {
+        boolean isExist = memberRepository.existsByDiscordUsername(discordUsername);
+        return DiscordCheckDuplicateResponse.from(isExist);
+    }
+
+    @Transactional(readOnly = true)
+    public DiscordCheckDuplicateResponse checkNicknameDuplicate(String nickname) {
+        boolean isExist = memberRepository.existsByNickname(nickname);
+        return DiscordCheckDuplicateResponse.from(isExist);
+    }
+
+    public DiscordCheckJoinResponse checkServerJoined(String discordUsername) {
+        boolean isJoined =
+                discordUtil.getOptionalMemberByUsername(discordUsername).isPresent();
+        return DiscordCheckJoinResponse.from(isJoined);
     }
 }
