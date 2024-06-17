@@ -5,8 +5,8 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.common.model.BaseSemesterEntity;
 import com.gdschongik.gdsc.domain.common.model.SemesterType;
-import com.gdschongik.gdsc.domain.member.domain.DiscordEvent;
 import com.gdschongik.gdsc.domain.member.domain.Member;
+import com.gdschongik.gdsc.domain.member.domain.MemberRegularEvent;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.global.exception.CustomException;
@@ -85,7 +85,7 @@ public class Membership extends BaseSemesterEntity {
     public void verifyPaymentStatus() {
         this.regularRequirement.updatePaymentStatus(VERIFIED);
 
-        registerEvent(new DiscordEvent(member.getDiscordUsername()));
+        registerEvent(new MemberRegularEvent(member.getId(), member.getDiscordUsername()));
     }
 
     // 데이터 전달 로직

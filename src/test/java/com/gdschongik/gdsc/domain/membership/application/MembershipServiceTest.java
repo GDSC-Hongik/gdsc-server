@@ -8,7 +8,6 @@ import static com.gdschongik.gdsc.global.common.constant.RecruitmentConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 
-import com.gdschongik.gdsc.domain.discord.application.handler.DelegateMemberDiscordEventHandler;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.membership.dao.MembershipRepository;
@@ -34,9 +33,6 @@ public class MembershipServiceTest extends IntegrationTest {
 
     @Autowired
     private RecruitmentRepository recruitmentRepository;
-
-    @Autowired
-    private DelegateMemberDiscordEventHandler memberAdvanceToRegularEventHandler;
 
     public Member createMember() {
         Member member = Member.createGuestMember(OAUTH_ID);
