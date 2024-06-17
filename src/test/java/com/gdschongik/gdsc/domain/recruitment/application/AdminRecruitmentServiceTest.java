@@ -198,7 +198,7 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
             MemberDemoteRequest request = new MemberDemoteRequest(ACADEMIC_YEAR, SEMESTER_TYPE);
 
             // when & then
-            assertThatThrownBy(() -> adminRecruitmentService.demoteAllMembersToAssociate(request))
+            assertThatThrownBy(() -> adminRecruitmentService.demoteAllRegularMembersToAssociate(request))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(RECRUITMENT_STARTDATE_ALREADY_PASSED.getMessage());
         }
@@ -209,7 +209,7 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
             MemberDemoteRequest request = new MemberDemoteRequest(ACADEMIC_YEAR, SEMESTER_TYPE);
 
             // when & then
-            assertThatThrownBy(() -> adminRecruitmentService.demoteAllMembersToAssociate(request))
+            assertThatThrownBy(() -> adminRecruitmentService.demoteAllRegularMembersToAssociate(request))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(RECRUITMENT_NOT_FOUND.getMessage());
         }
