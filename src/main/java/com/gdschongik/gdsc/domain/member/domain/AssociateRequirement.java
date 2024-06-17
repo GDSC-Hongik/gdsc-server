@@ -55,7 +55,9 @@ public class AssociateRequirement {
 
     // 상태 변경 로직
 
-    public void verifyUniv() { this.univStatus = VERIFIED; }
+    public void verifyUniv() {
+        this.univStatus = VERIFIED;
+    }
 
     public void verifyDiscord() {
         this.discordStatus = VERIFIED;
@@ -107,7 +109,7 @@ public class AssociateRequirement {
         }
     }
 
-    public void checkVerifiableUniv(){
+    public void checkVerifiableUniv() {
         if (isUnivVerified()) {
             throw new CustomException(EMAIL_ALREADY_VERIFIED);
         }
