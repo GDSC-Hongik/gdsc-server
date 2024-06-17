@@ -72,6 +72,7 @@ public class Membership extends BaseSemesterEntity {
 
     // 검증 로직
 
+    // TODO validateAdvanceRequirement처럼 로직 변경
     private static void validateMembershipApplicable(Member member) {
         if (member.getRole().equals(MemberRole.ASSOCIATE)) {
             return;
@@ -90,14 +91,13 @@ public class Membership extends BaseSemesterEntity {
 
     // 데이터 전달 로직
 
-    public boolean isAdvanceRequirementAllSatisfied() {
+    public boolean isRegularRequirementAllSatisfied() {
         return this.regularRequirement.isAllVerified();
     }
 
     public void validateAdvanceRequirement() {
-        if (!isAdvanceRequirementAllSatisfied()) {
-            return;
+        if (isRegularRequirementAllSatisfied()) {
+            throw new CustomException(MEMBERSHIP_ALREADY_VERIFIED);
         }
-        throw new CustomException(MEMBERSHIP_ALREADY_VERIFIED);
     }
 }

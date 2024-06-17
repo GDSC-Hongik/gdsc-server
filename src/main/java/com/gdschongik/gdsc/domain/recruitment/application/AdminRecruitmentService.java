@@ -51,6 +51,7 @@ public class AdminRecruitmentService {
         return recruitments.stream().map(AdminRecruitmentResponse::from).toList();
     }
 
+    // TODO validateAdvanceRequirement처럼 로직 변경
     private void validatePeriodMatchesAcademicYear(
             LocalDateTime startDate, LocalDateTime endDate, Integer academicYear) {
         if (academicYear.equals(startDate.getYear()) && academicYear.equals(endDate.getYear())) {
@@ -60,6 +61,7 @@ public class AdminRecruitmentService {
         throw new CustomException(RECRUITMENT_PERIOD_MISMATCH_ACADEMIC_YEAR);
     }
 
+    // TODO validateAdvanceRequirement처럼 로직 변경
     private void validatePeriodMatchesSemesterType(
             LocalDateTime startDate, LocalDateTime endDate, SemesterType semesterType) {
         if (getSemesterTypeByStartDateOrEndDate(startDate).equals(semesterType)

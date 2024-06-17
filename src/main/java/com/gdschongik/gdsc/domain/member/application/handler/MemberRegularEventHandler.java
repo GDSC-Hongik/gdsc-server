@@ -21,6 +21,7 @@ public class MemberRegularEventHandler {
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
         try {
             currentMember.advanceToRegular();
+            log.info("success");
         } catch (CustomException e) {
             log.info("{}", e.getErrorCode());
         }

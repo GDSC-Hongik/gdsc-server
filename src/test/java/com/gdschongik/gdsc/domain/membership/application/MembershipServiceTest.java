@@ -119,7 +119,7 @@ public class MembershipServiceTest extends IntegrationTest {
     }
 
     @Nested
-    class 정회원_조건_만족시 {
+    class 회비_납부시 {
         @Test
         void 멤버십_상태_승급_성공한다() {
             // given
