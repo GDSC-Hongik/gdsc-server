@@ -121,7 +121,7 @@ public class MembershipServiceTest extends IntegrationTest {
     @Nested
     class 회비_납부시 {
         @Test
-        void 멤버십_상태_승급_성공한다() {
+        void 정회원_승급_성공한다() {
             // given
             Member member = createMember();
             logoutAndReloginAs(1L, ASSOCIATE);
@@ -137,7 +137,7 @@ public class MembershipServiceTest extends IntegrationTest {
         }
 
         @Test
-        void 이미_정회원으로_승급됐다면_멤버십_상태_승급과_멤버_역할_승급_실패한다() {
+        void 이미_정회원으로_승급됐다면_실패한다() {
             // given
             Member member = createMember();
             logoutAndReloginAs(1L, ASSOCIATE);
