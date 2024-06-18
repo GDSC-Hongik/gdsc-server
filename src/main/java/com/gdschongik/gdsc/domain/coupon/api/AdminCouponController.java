@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +22,8 @@ public class AdminCouponController {
 
     @Operation(summary = "쿠폰 생성", description = "쿠폰을 생성합니다.")
     @PostMapping
-    public void createCoupon(@Valid @RequestBody CouponCreateRequest request) {
+    public ResponseEntity<Void> createCoupon(@Valid @RequestBody CouponCreateRequest request) {
         couponService.createCoupon(request);
+        return ResponseEntity.ok().build();
     }
 }

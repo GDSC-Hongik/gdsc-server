@@ -50,11 +50,4 @@ public class Coupon extends BaseTimeEntity {
             throw new CustomException(COUPON_DISCOUNT_AMOUNT_NOT_POSITIVE);
         }
     }
-
-    // 상태 변경 로직
-
-    public void updateDiscountAmount(Money discountAmount) {
-        validateDiscountAmountPositive(discountAmount);
-        this.discountAmount = discountAmount;
-    }
 }
