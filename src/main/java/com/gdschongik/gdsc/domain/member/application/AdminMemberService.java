@@ -5,6 +5,7 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
+import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryOption;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberUpdateRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.AdminMemberResponse;
@@ -28,6 +29,12 @@ public class AdminMemberService {
 
     public Page<AdminMemberResponse> findAll(MemberQueryOption queryOption, Pageable pageable) {
         Page<Member> members = memberRepository.findAllByRole(queryOption, pageable, null);
+        return members.map(AdminMemberResponse::from);
+    }
+
+    public Page<AdminMemberResponse> findAllByRole(
+            MemberQueryOption queryOption, Pageable pageable, MemberRole memberRole) {
+        Page<Member> members = memberRepository.findAllByRole(queryOption, pageable, memberRole);
         return members.map(AdminMemberResponse::from);
     }
 

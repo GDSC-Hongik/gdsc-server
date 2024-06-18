@@ -1,6 +1,6 @@
 package com.gdschongik.gdsc.global.util;
 
-import static com.gdschongik.gdsc.global.common.constant.SecurityConstant.*;
+import static com.gdschongik.gdsc.global.common.constant.SecurityConstant.TOKEN_ROLE_NAME;
 
 import com.gdschongik.gdsc.domain.auth.dto.AccessTokenDto;
 import com.gdschongik.gdsc.domain.auth.dto.RefreshTokenDto;

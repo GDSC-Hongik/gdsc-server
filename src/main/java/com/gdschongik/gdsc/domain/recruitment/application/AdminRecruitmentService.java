@@ -9,7 +9,7 @@ import com.gdschongik.gdsc.domain.common.vo.Money;
 import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRepository;
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.domain.recruitment.domain.RoundType;
-import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentCreateRequest;
+import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentCreateUpdateRequest;
 import com.gdschongik.gdsc.domain.recruitment.dto.response.AdminRecruitmentResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import java.time.LocalDateTime;
@@ -27,7 +27,7 @@ public class AdminRecruitmentService {
     private final RecruitmentRepository recruitmentRepository;
 
     @Transactional
-    public void createRecruitment(RecruitmentCreateRequest request) {
+    public void createRecruitment(RecruitmentCreateUpdateRequest request) {
         validatePeriodMatchesAcademicYear(request.startDate(), request.endDate(), request.academicYear());
         validatePeriodMatchesSemesterType(request.startDate(), request.endDate(), request.semesterType());
         validatePeriodWithinTwoWeeks(
@@ -49,6 +49,34 @@ public class AdminRecruitmentService {
     public List<AdminRecruitmentResponse> getAllRecruitments() {
         List<Recruitment> recruitments = recruitmentRepository.findByOrderByPeriodStartDateDesc();
         return recruitments.stream().map(AdminRecruitmentResponse::from).toList();
+    }
+
+    @Transactional
+    public void updateRecruitment(Long recruitmentId, RecruitmentCreateUpdateRequest request) {
+        Recruitment recruitment = recruitmentRepository
+                .findById(recruitmentId)
+                .orElseThrow(() -> new CustomException(RECRUITMENT_NOT_FOUND));
+        validatePeriodMatchesAcademicYear(request.startDate(), request.endDate(), request.academicYear());
+        validatePeriodMatchesSemesterType(request.startDate(), request.endDate(), request.semesterType());
+        validatePeriodWithinTwoWeeks(
+                request.startDate(), request.endDate(), request.academicYear(), request.semesterType());
+        validatePeriodOverlapExcludingCurrentRecruitment(
+                recruitment.getAcademicYear(),
+                recruitment.getSemesterType(),
+                request.startDate(),
+                request.endDate(),
+                recruitment.getId());
+        validateRoundOverlapExcludingCurrentRecruitment(
+                request.academicYear(), request.semesterType(), request.roundType(), recruitment.getId());
+
+        recruitment.updateRecruitment(
+                request.name(),
+                request.startDate(),
+                request.endDate(),
+                request.academicYear(),
+                request.semesterType(),
+                request.roundType(),
+                Money.from(request.fee()));
     }
 
     private void validatePeriodMatchesAcademicYear(
@@ -112,6 +140,7 @@ public class AdminRecruitmentService {
         }
     }
 
+    // 새로 생성하는 경우
     private void validatePeriodOverlap(
             Integer academicYear, SemesterType semesterType, LocalDateTime startDate, LocalDateTime endDate) {
         List<Recruitment> recruitments =
@@ -125,5 +154,38 @@ public class AdminRecruitmentService {
                 academicYear, semesterType, roundType)) {
             throw new CustomException(RECRUITMENT_ROUND_TYPE_OVERLAP);
         }
+    }
+
+    /**
+     * 기존 리쿠르팅 수정하는 경우,
+     * 자기 자신의 모집기간과 차수는 수정에 성공하면 소멸되므로 무의미함.
+     * 따라서, 자기 자신은 제외하고 검증.
+     */
+    private void validatePeriodOverlapExcludingCurrentRecruitment(
+            Integer academicYear,
+            SemesterType semesterType,
+            LocalDateTime startDate,
+            LocalDateTime endDate,
+            Long currentRecruitmentId) {
+        List<Recruitment> recruitments =
+                recruitmentRepository.findAllByAcademicYearAndSemesterType(academicYear, semesterType);
+
+        recruitments.stream()
+                .filter(recruitment -> !recruitment.getId().equals(currentRecruitmentId))
+                .forEach(r -> r.validatePeriodOverlap(startDate, endDate));
+    }
+
+    private void validateRoundOverlapExcludingCurrentRecruitment(
+            Integer academicYear, SemesterType semesterType, RoundType roundType, Long currentRecruitmentId) {
+        List<Recruitment> recruitments =
+                recruitmentRepository.findAllByAcademicYearAndSemesterType(academicYear, semesterType);
+
+        recruitments.stream()
+                .filter(recruitment -> !recruitment.getId().equals(currentRecruitmentId)
+                        && recruitment.getRoundType().equals(roundType))
+                .findAny()
+                .ifPresent(ignored -> {
+                    throw new CustomException(RECRUITMENT_ROUND_TYPE_OVERLAP);
+                });
     }
 }

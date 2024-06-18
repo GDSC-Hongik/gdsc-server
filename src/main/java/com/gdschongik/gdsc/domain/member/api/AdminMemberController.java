@@ -1,6 +1,7 @@
 package com.gdschongik.gdsc.domain.member.api;
 
 import com.gdschongik.gdsc.domain.member.application.AdminMemberService;
+import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryOption;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberUpdateRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.AdminMemberResponse;
@@ -14,13 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Admin Member", description = "어드민 회원 관리 API입니다.")
 @RestController
@@ -30,10 +25,13 @@ public class AdminMemberController {
 
     private final AdminMemberService adminMemberService;
 
-    @Operation(summary = "전체 회원 목록 조회", description = "전체 회원 목록을 조회합니다.")
+    @Operation(summary = "회원 역할별 목록 조회", description = "정회원, 준회원, 게스트별로 조회합니다.")
     @GetMapping
-    public ResponseEntity<Page<AdminMemberResponse>> getMembers(MemberQueryOption queryOption, Pageable pageable) {
-        Page<AdminMemberResponse> response = adminMemberService.findAll(queryOption, pageable);
+    public ResponseEntity<Page<AdminMemberResponse>> getMembers(
+            @RequestParam(name = "role", required = false) MemberRole memberRole,
+            MemberQueryOption queryOption,
+            Pageable pageable) {
+        Page<AdminMemberResponse> response = adminMemberService.findAllByRole(queryOption, pageable, memberRole);
         return ResponseEntity.ok().body(response);
     }
 
