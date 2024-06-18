@@ -108,4 +108,10 @@ public class AssociateRequirement {
             throw new CustomException(BASIC_INFO_NOT_VERIFIED);
         }
     }
+
+    public void checkVerifiableUniv() {
+        if (isUnivVerified()) {
+            throw new CustomException(EMAIL_ALREADY_VERIFIED);
+        }
+    }
 }

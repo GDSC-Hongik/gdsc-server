@@ -158,6 +158,9 @@ public class Member extends BaseTimeEntity {
     public void completeUnivEmailVerification(String univEmail) {
         validateStatusUpdatable();
 
+        // 이미 인증되어있으면 에러
+        associateRequirement.checkVerifiableUniv();
+
         this.univEmail = univEmail;
 
         associateRequirement.verifyUniv();

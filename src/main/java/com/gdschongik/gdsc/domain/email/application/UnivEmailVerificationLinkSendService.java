@@ -2,16 +2,14 @@ package com.gdschongik.gdsc.domain.email.application;
 
 import static com.gdschongik.gdsc.global.common.constant.EmailConstant.VERIFICATION_EMAIL_SUBJECT;
 
-import com.gdschongik.gdsc.domain.email.dao.UnivEmailVerificationRepository;
-import com.gdschongik.gdsc.domain.email.domain.UnivEmailVerification;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
 import com.gdschongik.gdsc.global.util.MemberUtil;
+import com.gdschongik.gdsc.global.util.email.EmailVerificationTokenUtil;
 import com.gdschongik.gdsc.global.util.email.HongikUnivEmailValidator;
 import com.gdschongik.gdsc.global.util.email.MailSender;
-import com.gdschongik.gdsc.global.util.email.VerificationCodeGenerator;
 import com.gdschongik.gdsc.global.util.email.VerificationLinkUtil;
 import java.time.Duration;
 import java.util.Optional;
@@ -25,14 +23,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class UnivEmailVerificationLinkSendService {
 
     private final MemberRepository memberRepository;
-    private final UnivEmailVerificationRepository univEmailVerificationRepository;
 
     private final MailSender mailSender;
     private final HongikUnivEmailValidator hongikUnivEmailValidator;
-    private final VerificationCodeGenerator verificationCodeGenerator;
+    private final EmailVerificationTokenUtil emailVerificationTokenUtil;
     private final VerificationLinkUtil verificationLinkUtil;
     private final MemberUtil memberUtil;
-    public static final Duration VERIFICATION_CODE_TIME_TO_LIVE = Duration.ofMinutes(10);
+    public static final Duration VERIFICATION_TOKEN_TIME_TO_LIVE = Duration.ofMinutes(30);
 
     private static final String NOTIFICATION_MESSAGE =
             """
@@ -50,12 +47,10 @@ public class UnivEmailVerificationLinkSendService {
         hongikUnivEmailValidator.validate(univEmail);
         validateUnivEmailNotVerified(univEmail);
 
-        String verificationCode = verificationCodeGenerator.generate();
-        String verificationLink = verificationLinkUtil.createLink(verificationCode);
+        String verificationToken = generateVerificationToken(univEmail);
+        String verificationLink = verificationLinkUtil.createLink(verificationToken);
         String mailContent = writeMailContentWithVerificationLink(verificationLink);
         mailSender.send(univEmail, VERIFICATION_EMAIL_SUBJECT, mailContent);
-
-        saveUnivEmailVerification(univEmail, verificationCode);
     }
 
     private void validateUnivEmailNotVerified(String univEmail) {
@@ -65,15 +60,12 @@ public class UnivEmailVerificationLinkSendService {
         }
     }
 
-    private String writeMailContentWithVerificationLink(String verificationLink) {
-        return NOTIFICATION_MESSAGE.formatted(VERIFICATION_CODE_TIME_TO_LIVE.toMinutes(), verificationLink);
+    private String generateVerificationToken(String univEmail) {
+        Long currentMemberId = memberUtil.getCurrentMemberId();
+        return emailVerificationTokenUtil.generateEmailVerificationToken(currentMemberId, univEmail);
     }
 
-    private void saveUnivEmailVerification(String univEmail, String verificationCode) {
-        Long currentMemberId = memberUtil.getCurrentMemberId();
-        UnivEmailVerification univEmailVerification = new UnivEmailVerification(
-                verificationCode, univEmail, currentMemberId, VERIFICATION_CODE_TIME_TO_LIVE.toSeconds());
-
-        univEmailVerificationRepository.save(univEmailVerification);
+    private String writeMailContentWithVerificationLink(String verificationLink) {
+        return NOTIFICATION_MESSAGE.formatted(VERIFICATION_TOKEN_TIME_TO_LIVE.toMinutes(), verificationLink);
     }
 }
