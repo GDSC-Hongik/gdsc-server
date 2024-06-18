@@ -74,7 +74,7 @@ public class AdminMemberController {
                 .body(response);
     }
 
-    @Operation(summary = "정회원 일괄 강등", description = "모든 정회원을 준회원으로 일괄 강등합니다.")
+    @Operation(summary = "정회원 일괄 강등", description = "모든 정회원을 준회원으로 일괄 강등합니다. 리쿠르팅 시작 전에 사용합니다.")
     @PatchMapping("/demotion")
     public ResponseEntity<Void> demoteAllMembersToAssociate(MemberDemoteRequest request) {
         adminMemberService.demoteAllRegularMembersToAssociate(request);
