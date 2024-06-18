@@ -5,7 +5,9 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
+import com.gdschongik.gdsc.domain.member.domain.MemberDemoteValidationEvent;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
+import com.gdschongik.gdsc.domain.member.dto.request.MemberDemoteRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryOption;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberUpdateRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.AdminMemberResponse;
@@ -13,7 +15,9 @@ import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
 import com.gdschongik.gdsc.global.util.ExcelUtil;
 import java.io.IOException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -26,6 +30,7 @@ public class AdminMemberService {
 
     private final MemberRepository memberRepository;
     private final ExcelUtil excelUtil;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     public Page<AdminMemberResponse> findAll(MemberQueryOption queryOption, Pageable pageable) {
         Page<Member> members = memberRepository.findAllByRole(queryOption, pageable, null);
@@ -65,5 +70,15 @@ public class AdminMemberService {
 
     public byte[] createExcel() throws IOException {
         return excelUtil.createMemberExcel();
+    }
+
+    @Transactional
+    public void demoteAllRegularMembersToAssociate(MemberDemoteRequest request) {
+        applicationEventPublisher.publishEvent(
+                new MemberDemoteValidationEvent(request.academicYear(), request.semesterType()));
+
+        List<Member> regularMembers = memberRepository.findAllByRole(MemberRole.REGULAR);
+
+        regularMembers.forEach(Member::demoteToAssociate);
     }
 }
