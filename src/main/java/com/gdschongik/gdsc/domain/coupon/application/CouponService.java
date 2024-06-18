@@ -50,4 +50,14 @@ public class CouponService {
         issuedCouponRepository.save(issuedCoupon);
         log.info("[CouponService] 쿠폰 발급: couponId={}, memberId={}", request.couponId(), currentMember.getId());
     }
+
+    @Transactional
+    public void revokeIssuedCoupon(Long issuedCouponId) {
+        IssuedCoupon issuedCoupon = issuedCouponRepository
+                .findById(issuedCouponId)
+                .orElseThrow(() -> new CustomException(ISSUED_COUPON_NOT_FOUND));
+
+        issuedCoupon.revoke();
+        log.info("[CouponService] 쿠폰 회수: issuedCouponId={}", issuedCouponId);
+    }
 }

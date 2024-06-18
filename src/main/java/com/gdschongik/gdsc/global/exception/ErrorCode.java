@@ -89,6 +89,7 @@ public enum ErrorCode {
     COUPON_NOT_USABLE_REVOKED(HttpStatus.CONFLICT, "회수된 쿠폰은 사용할 수 없습니다."),
     COUPON_NOT_REVOKABLE_ALREADY_USED(HttpStatus.CONFLICT, "이미 사용한 쿠폰은 회수할 수 없습니다."),
     COUPON_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 쿠폰입니다."),
+    ISSUED_COUPON_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 발급쿠폰입니다."),
     ;
 
     private final HttpStatus status;

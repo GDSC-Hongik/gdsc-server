@@ -46,4 +46,11 @@ public class AdminCouponController {
         couponService.createIssuedCoupon(request);
         return ResponseEntity.ok().build();
     }
+
+    @Operation(summary = "쿠폰 회수", description = "쿠폰을 회수합니다.")
+    @DeleteMapping("/issued/{issuedCouponId}")
+    public ResponseEntity<Void> deleteIssuedCoupon(@PathVariable Long issuedCouponId) {
+        couponService.revokeIssuedCoupon(issuedCouponId);
+        return ResponseEntity.ok().build();
+    }
 }
