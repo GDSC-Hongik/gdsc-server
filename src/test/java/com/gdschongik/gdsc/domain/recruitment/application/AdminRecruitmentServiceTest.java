@@ -9,7 +9,6 @@ import com.gdschongik.gdsc.domain.common.vo.Money;
 import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRepository;
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.domain.recruitment.domain.RoundType;
-import com.gdschongik.gdsc.domain.recruitment.dto.request.MemberDemoteRequest;
 import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentCreateUpdateRequest;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.integration.IntegrationTest;
@@ -186,32 +185,6 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
             assertThatThrownBy(() -> adminRecruitmentService.updateRecruitment(recruitmentRoundTwo.getId(), request))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(RECRUITMENT_ROUND_TYPE_OVERLAP.getMessage());
-        }
-    }
-
-    @Nested
-    class 준회원으로_일괄_강등시 {
-        @Test
-        void 해당_학기에_이미_시작된_모집기간이_있다면_실패한다() {
-            // given
-            createRecruitment(RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE, ROUND_TYPE, FEE);
-            MemberDemoteRequest request = new MemberDemoteRequest(ACADEMIC_YEAR, SEMESTER_TYPE);
-
-            // when & then
-            assertThatThrownBy(() -> adminRecruitmentService.demoteAllRegularMembersToAssociate(request))
-                    .isInstanceOf(CustomException.class)
-                    .hasMessage(RECRUITMENT_STARTDATE_ALREADY_PASSED.getMessage());
-        }
-
-        @Test
-        void 해당_학기에_리쿠르팅이_존재하지_않는다면_실패한다() {
-            // given
-            MemberDemoteRequest request = new MemberDemoteRequest(ACADEMIC_YEAR, SEMESTER_TYPE);
-
-            // when & then
-            assertThatThrownBy(() -> adminRecruitmentService.demoteAllRegularMembersToAssociate(request))
-                    .isInstanceOf(CustomException.class)
-                    .hasMessage(RECRUITMENT_NOT_FOUND.getMessage());
         }
     }
 }
