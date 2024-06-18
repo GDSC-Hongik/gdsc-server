@@ -6,9 +6,13 @@ import static java.math.BigDecimal.*;
 import static org.assertj.core.api.Assertions.*;
 
 import com.gdschongik.gdsc.domain.coupon.dao.CouponRepository;
+import com.gdschongik.gdsc.domain.coupon.dao.IssuedCouponRepository;
 import com.gdschongik.gdsc.domain.coupon.dto.request.CouponCreateRequest;
+import com.gdschongik.gdsc.domain.coupon.dto.request.CouponIssueRequest;
+import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.integration.IntegrationTest;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +24,9 @@ class CouponServiceTest extends IntegrationTest {
 
     @Autowired
     CouponRepository couponRepository;
+
+    @Autowired
+    IssuedCouponRepository issuedCouponRepository;
 
     @Nested
     class 쿠폰_생성할때 {
@@ -45,6 +52,103 @@ class CouponServiceTest extends IntegrationTest {
             assertThatThrownBy(() -> couponService.createCoupon(request))
                     .isInstanceOf(CustomException.class)
                     .hasMessageContaining(COUPON_DISCOUNT_AMOUNT_NOT_POSITIVE.getMessage());
+        }
+    }
+
+    @Nested
+    class 쿠폰_발급할때 {
+
+        @BeforeEach
+        void setUp() {
+            createMember();
+            logoutAndReloginAs(1L, MemberRole.REGULAR);
+        }
+
+        @Test
+        void 성공한다() {
+            // given
+            CouponCreateRequest request = new CouponCreateRequest(COUPON_NAME, ONE);
+            couponService.createCoupon(request);
+            CouponIssueRequest issueRequest = new CouponIssueRequest(1L);
+
+            // when
+            couponService.createIssuedCoupon(issueRequest);
+
+            // then
+            assertThat(issuedCouponRepository.findById(1L)).isPresent();
+        }
+
+        @Test
+        void 존재하지_않는_쿠폰이면_실패한다() {
+            // given
+            CouponCreateRequest request = new CouponCreateRequest(COUPON_NAME, ONE);
+            couponService.createCoupon(request);
+            CouponIssueRequest issueRequest = new CouponIssueRequest(2L);
+
+            // when & then
+            assertThatThrownBy(() -> couponService.createIssuedCoupon(issueRequest))
+                    .isInstanceOf(CustomException.class)
+                    .hasMessageContaining(COUPON_NOT_FOUND.getMessage());
+        }
+    }
+
+    @Nested
+    class 쿠폰_회수할때 {
+
+        @BeforeEach
+        void setUp() {
+            createMember();
+            logoutAndReloginAs(1L, MemberRole.REGULAR);
+        }
+
+        @Test
+        void 성공한다() {
+            // given
+            CouponCreateRequest request = new CouponCreateRequest(COUPON_NAME, ONE);
+            couponService.createCoupon(request);
+            CouponIssueRequest issueRequest = new CouponIssueRequest(1L);
+            couponService.createIssuedCoupon(issueRequest);
+
+            // when
+            couponService.revokeIssuedCoupon(1L);
+
+            // then
+            assertThat(issuedCouponRepository.findById(1L)).isPresent().get().satisfies(issuedCoupon -> assertThat(
+                            issuedCoupon.isRevoked())
+                    .isTrue());
+        }
+
+        @Test
+        void 존재하지_않는_발급쿠폰이면_실패한다() {
+            // given
+            CouponCreateRequest request = new CouponCreateRequest(COUPON_NAME, ONE);
+            couponService.createCoupon(request);
+            CouponIssueRequest issueRequest = new CouponIssueRequest(1L);
+            couponService.createIssuedCoupon(issueRequest);
+
+            // when & then
+            assertThatThrownBy(() -> couponService.revokeIssuedCoupon(2L))
+                    .isInstanceOf(CustomException.class)
+                    .hasMessageContaining(ISSUED_COUPON_NOT_FOUND.getMessage());
+        }
+
+        @Test
+        void 이미_사용한_발급쿠폰이면_실패한다() {
+            // given
+            CouponCreateRequest request = new CouponCreateRequest(COUPON_NAME, ONE);
+            couponService.createCoupon(request);
+            CouponIssueRequest issueRequest = new CouponIssueRequest(1L);
+            couponService.createIssuedCoupon(issueRequest);
+
+            issuedCouponRepository.findById(1L).ifPresent(coupon -> {
+                coupon.use();
+                issuedCouponRepository.save(coupon);
+            });
+
+            // when & then
+            assertThatThrownBy(() -> couponService.revokeIssuedCoupon(1L))
+                    .isInstanceOf(CustomException.class)
+                    .hasMessageContaining(COUPON_NOT_REVOKABLE_ALREADY_USED.getMessage());
         }
     }
 }
