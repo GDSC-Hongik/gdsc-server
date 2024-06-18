@@ -39,4 +39,11 @@ public class AdminCouponController {
         List<CouponResponse> response = couponService.findAllCoupons();
         return ResponseEntity.ok().body(response);
     }
+
+    @Operation(summary = "쿠폰 발급", description = "쿠폰을 발급합니다.")
+    @PostMapping("/issued")
+    public ResponseEntity<Void> createIssuedCoupon(@Valid @RequestBody CouponIssueRequest request) {
+        couponService.createIssuedCoupon(request);
+        return ResponseEntity.ok().build();
+    }
 }

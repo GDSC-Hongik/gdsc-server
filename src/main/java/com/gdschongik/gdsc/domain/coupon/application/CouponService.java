@@ -39,4 +39,15 @@ public class CouponService {
     public List<CouponResponse> findAllCoupons() {
         return couponRepository.findAll().stream().map(CouponResponse::from).toList();
     }
+
+    @Transactional
+    public void createIssuedCoupon(CouponIssueRequest request) {
+        Member currentMember = memberUtil.getCurrentMember();
+        Coupon coupon =
+                couponRepository.findById(request.couponId()).orElseThrow(() -> new CustomException(COUPON_NOT_FOUND));
+
+        IssuedCoupon issuedCoupon = IssuedCoupon.issue(coupon, currentMember);
+        issuedCouponRepository.save(issuedCoupon);
+        log.info("[CouponService] 쿠폰 발급: couponId={}, memberId={}", request.couponId(), currentMember.getId());
+    }
 }
