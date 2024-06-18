@@ -1,9 +1,12 @@
 package com.gdschongik.gdsc.domain.recruitment.domain;
 
+import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
+
 import com.gdschongik.gdsc.domain.common.model.BaseSemesterEntity;
 import com.gdschongik.gdsc.domain.common.model.SemesterType;
 import com.gdschongik.gdsc.domain.common.vo.Money;
 import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
+import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
@@ -72,5 +75,30 @@ public class Recruitment extends BaseSemesterEntity {
 
     public void validatePeriodOverlap(LocalDateTime startDate, LocalDateTime endDate) {
         this.period.validatePeriodOverlap(startDate, endDate);
+    }
+
+    public void updateRecruitment(
+            String name,
+            LocalDateTime startDate,
+            LocalDateTime endDate,
+            Integer academicYear,
+            SemesterType semesterType,
+            RoundType roundType,
+            Money fee) {
+        validatePeriodUpdatable();
+
+        this.name = name;
+        this.period = Period.createPeriod(startDate, endDate);
+        super.updateAcademicYear(academicYear);
+        super.updateSemesterType(semesterType);
+        this.roundType = roundType;
+        this.fee = fee;
+    }
+
+    private void validatePeriodUpdatable() {
+        LocalDateTime now = LocalDateTime.now();
+        if (now.isAfter(period.getStartDate())) {
+            throw new CustomException(RECRUITMENT_STARTDATE_ALREADY_PASSED);
+        }
     }
 }
