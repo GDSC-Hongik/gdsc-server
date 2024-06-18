@@ -81,6 +81,12 @@ public class Membership extends BaseSemesterEntity {
         throw new CustomException(MEMBERSHIP_NOT_APPLICABLE);
     }
 
+    public void validateAdvanceRequirement() {
+        if (isRegularRequirementAllSatisfied()) {
+            throw new CustomException(MEMBERSHIP_ALREADY_VERIFIED);
+        }
+    }
+
     // 상태 변경 로직
 
     public void verifyPaymentStatus() {
@@ -93,11 +99,5 @@ public class Membership extends BaseSemesterEntity {
 
     public boolean isRegularRequirementAllSatisfied() {
         return this.regularRequirement.isAllVerified();
-    }
-
-    public void validateAdvanceRequirement() {
-        if (isRegularRequirementAllSatisfied()) {
-            throw new CustomException(MEMBERSHIP_ALREADY_VERIFIED);
-        }
     }
 }

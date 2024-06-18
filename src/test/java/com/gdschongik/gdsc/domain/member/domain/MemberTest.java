@@ -288,7 +288,7 @@ class MemberTest {
     @Nested
     class 정회원_승급시 {
         @Test
-        void 준회원_상태면_성공한다() {
+        void 준회원이라면_성공한다() {
             // given
             Member member = Member.createGuestMember(OAUTH_ID);
 
@@ -306,7 +306,7 @@ class MemberTest {
         }
 
         @Test
-        void 이미_정회원_승급됐으면_실패한다() {
+        void 이미_정회원이라면_실패한다() {
             // given
             Member member = Member.createGuestMember(OAUTH_ID);
 
