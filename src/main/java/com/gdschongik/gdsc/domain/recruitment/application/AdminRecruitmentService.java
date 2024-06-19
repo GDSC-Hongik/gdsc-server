@@ -79,6 +79,21 @@ public class AdminRecruitmentService {
                 Money.from(request.fee()));
     }
 
+    /*
+     1. 해당 학기에 리쿠르팅이 존재해야 함.
+     2. 해당 학기의 모든 리쿠르팅이 아직 시작되지 않았어야 함.
+    */
+    public void validateRecruitmentNotStarted(Integer academicYear, SemesterType semesterType) {
+        List<Recruitment> recruitments =
+                recruitmentRepository.findAllByAcademicYearAndSemesterType(academicYear, semesterType);
+
+        if (recruitments.isEmpty()) {
+            throw new CustomException(RECRUITMENT_NOT_FOUND);
+        }
+
+        recruitments.forEach(Recruitment::validatePeriodNotStarted);
+    }
+
     private void validatePeriodMatchesAcademicYear(
             LocalDateTime startDate, LocalDateTime endDate, Integer academicYear) {
         if (academicYear.equals(startDate.getYear()) && academicYear.equals(endDate.getYear())) {

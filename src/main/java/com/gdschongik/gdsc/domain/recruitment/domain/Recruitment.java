@@ -85,7 +85,7 @@ public class Recruitment extends BaseSemesterEntity {
             SemesterType semesterType,
             RoundType roundType,
             Money fee) {
-        validatePeriodUpdatable();
+        validatePeriodNotStarted();
 
         this.name = name;
         this.period = Period.createPeriod(startDate, endDate);
@@ -95,7 +95,7 @@ public class Recruitment extends BaseSemesterEntity {
         this.fee = fee;
     }
 
-    private void validatePeriodUpdatable() {
+    public void validatePeriodNotStarted() {
         LocalDateTime now = LocalDateTime.now();
         if (now.isAfter(period.getStartDate())) {
             throw new CustomException(RECRUITMENT_STARTDATE_ALREADY_PASSED);
