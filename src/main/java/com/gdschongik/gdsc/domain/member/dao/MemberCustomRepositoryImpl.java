@@ -25,22 +25,14 @@ public class MemberCustomRepositoryImpl extends MemberQueryMethod implements Mem
     public Page<Member> findAllByRole(MemberQueryOption queryOption, Pageable pageable, @Nullable MemberRole role) {
         List<Member> fetch = queryFactory
                 .selectFrom(member)
-                .where(
-                        matchesQueryOption(queryOption),
-                        eqRole(role),
-                        eqRequirementStatus(member.associateRequirement.infoStatus, VERIFIED))
+                .where(matchesQueryOption(queryOption), eqRole(role))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(member.createdAt.desc())
                 .fetch();
 
-        JPAQuery<Long> countQuery = queryFactory
-                .select(member.count())
-                .from(member)
-                .where(
-                        matchesQueryOption(queryOption),
-                        eqRole(role),
-                        eqRequirementStatus(member.associateRequirement.infoStatus, VERIFIED));
+        JPAQuery<Long> countQuery =
+                queryFactory.select(member.count()).from(member).where(matchesQueryOption(queryOption), eqRole(role));
 
         return PageableExecutionUtils.getPage(fetch, pageable, countQuery::fetchOne);
     }
@@ -49,7 +41,7 @@ public class MemberCustomRepositoryImpl extends MemberQueryMethod implements Mem
     public List<Member> findAllByRole(MemberRole role) {
         return queryFactory
                 .selectFrom(member)
-                .where(eqRole(role), eqRequirementStatus(member.associateRequirement.infoStatus, VERIFIED))
+                .where(eqRole(role))
                 .orderBy(member.studentId.asc(), member.name.asc())
                 .fetch();
     }
