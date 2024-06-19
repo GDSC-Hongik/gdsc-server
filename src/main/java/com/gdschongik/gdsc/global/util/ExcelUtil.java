@@ -28,6 +28,7 @@ public class ExcelUtil {
     public byte[] createMemberExcel() throws IOException {
         HSSFWorkbook workbook = new HSSFWorkbook();
         createSheet(workbook, ALL_MEMBER_SHEET_NAME, null);
+        createSheet(workbook, REGULAR_MEMBER_SHEET_NAME, REGULAR);
         return createByteArray(workbook);
     }
 
