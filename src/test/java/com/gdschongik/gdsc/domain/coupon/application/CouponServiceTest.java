@@ -9,10 +9,9 @@ import com.gdschongik.gdsc.domain.coupon.dao.CouponRepository;
 import com.gdschongik.gdsc.domain.coupon.dao.IssuedCouponRepository;
 import com.gdschongik.gdsc.domain.coupon.dto.request.CouponCreateRequest;
 import com.gdschongik.gdsc.domain.coupon.dto.request.CouponIssueRequest;
-import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.integration.IntegrationTest;
-import org.junit.jupiter.api.BeforeEach;
+import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,24 +57,40 @@ class CouponServiceTest extends IntegrationTest {
     @Nested
     class 쿠폰_발급할때 {
 
-        @BeforeEach
-        void setUp() {
-            createMember();
-            logoutAndReloginAs(1L, MemberRole.REGULAR);
-        }
-
         @Test
         void 성공한다() {
             // given
             CouponCreateRequest request = new CouponCreateRequest(COUPON_NAME, ONE);
             couponService.createCoupon(request);
-            CouponIssueRequest issueRequest = new CouponIssueRequest(1L);
+
+            createMember();
+            createMember();
+
+            CouponIssueRequest issueRequest = new CouponIssueRequest(1L, List.of(1L, 2L));
 
             // when
             couponService.createIssuedCoupon(issueRequest);
 
             // then
-            assertThat(issuedCouponRepository.findById(1L)).isPresent();
+            assertThat(issuedCouponRepository.findAll()).hasSize(2);
+        }
+
+        @Test
+        void 존재하지_않는_유저이면_제외하고_성공한다() {
+            // given
+            CouponCreateRequest request = new CouponCreateRequest(COUPON_NAME, ONE);
+            couponService.createCoupon(request);
+
+            createMember();
+            createMember();
+
+            CouponIssueRequest issueRequest = new CouponIssueRequest(1L, List.of(1L, 2L, 3L));
+
+            // when
+            couponService.createIssuedCoupon(issueRequest);
+
+            // then
+            assertThat(issuedCouponRepository.findAll()).hasSize(2);
         }
 
         @Test
@@ -83,7 +98,11 @@ class CouponServiceTest extends IntegrationTest {
             // given
             CouponCreateRequest request = new CouponCreateRequest(COUPON_NAME, ONE);
             couponService.createCoupon(request);
-            CouponIssueRequest issueRequest = new CouponIssueRequest(2L);
+
+            createMember();
+            createMember();
+
+            CouponIssueRequest issueRequest = new CouponIssueRequest(2L, List.of(1L, 2L));
 
             // when & then
             assertThatThrownBy(() -> couponService.createIssuedCoupon(issueRequest))
@@ -95,25 +114,21 @@ class CouponServiceTest extends IntegrationTest {
     @Nested
     class 쿠폰_회수할때 {
 
-        @BeforeEach
-        void setUp() {
-            createMember();
-            logoutAndReloginAs(1L, MemberRole.REGULAR);
-        }
-
         @Test
         void 성공한다() {
             // given
             CouponCreateRequest request = new CouponCreateRequest(COUPON_NAME, ONE);
             couponService.createCoupon(request);
-            CouponIssueRequest issueRequest = new CouponIssueRequest(1L);
+
+            createMember();
+            CouponIssueRequest issueRequest = new CouponIssueRequest(1L, List.of(1L));
             couponService.createIssuedCoupon(issueRequest);
 
             // when
             couponService.revokeIssuedCoupon(1L);
 
             // then
-            assertThat(issuedCouponRepository.findById(1L)).isPresent().get().satisfies(issuedCoupon -> assertThat(
+            assertThat(issuedCouponRepository.findAll()).hasSize(1).first().satisfies(issuedCoupon -> assertThat(
                             issuedCoupon.isRevoked())
                     .isTrue());
         }
@@ -123,7 +138,9 @@ class CouponServiceTest extends IntegrationTest {
             // given
             CouponCreateRequest request = new CouponCreateRequest(COUPON_NAME, ONE);
             couponService.createCoupon(request);
-            CouponIssueRequest issueRequest = new CouponIssueRequest(1L);
+
+            createMember();
+            CouponIssueRequest issueRequest = new CouponIssueRequest(1L, List.of(1L));
             couponService.createIssuedCoupon(issueRequest);
 
             // when & then
@@ -137,7 +154,9 @@ class CouponServiceTest extends IntegrationTest {
             // given
             CouponCreateRequest request = new CouponCreateRequest(COUPON_NAME, ONE);
             couponService.createCoupon(request);
-            CouponIssueRequest issueRequest = new CouponIssueRequest(1L);
+
+            createMember();
+            CouponIssueRequest issueRequest = new CouponIssueRequest(1L, List.of(1L));
             couponService.createIssuedCoupon(issueRequest);
 
             issuedCouponRepository.findById(1L).ifPresent(coupon -> {
