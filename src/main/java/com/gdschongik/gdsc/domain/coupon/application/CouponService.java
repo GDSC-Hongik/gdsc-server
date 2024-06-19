@@ -10,9 +10,9 @@ import com.gdschongik.gdsc.domain.coupon.domain.IssuedCoupon;
 import com.gdschongik.gdsc.domain.coupon.dto.request.CouponCreateRequest;
 import com.gdschongik.gdsc.domain.coupon.dto.request.CouponIssueRequest;
 import com.gdschongik.gdsc.domain.coupon.dto.response.CouponResponse;
+import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.global.exception.CustomException;
-import com.gdschongik.gdsc.global.util.MemberUtil;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,9 +25,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class CouponService {
 
-    private final MemberUtil memberUtil;
     private final CouponRepository couponRepository;
     private final IssuedCouponRepository issuedCouponRepository;
+    private final MemberRepository memberRepository;
 
     @Transactional
     public void createCoupon(CouponCreateRequest request) {
@@ -42,13 +42,20 @@ public class CouponService {
 
     @Transactional
     public void createIssuedCoupon(CouponIssueRequest request) {
-        Member currentMember = memberUtil.getCurrentMember();
         Coupon coupon =
                 couponRepository.findById(request.couponId()).orElseThrow(() -> new CustomException(COUPON_NOT_FOUND));
 
-        IssuedCoupon issuedCoupon = IssuedCoupon.issue(coupon, currentMember);
-        issuedCouponRepository.save(issuedCoupon);
-        log.info("[CouponService] 쿠폰 발급: couponId={}, memberId={}", request.couponId(), currentMember.getId());
+        List<Member> members = memberRepository.findAllById(request.memberIds());
+
+        List<IssuedCoupon> issuedCoupons = members.stream()
+                .map(member -> IssuedCoupon.issue(coupon, member))
+                .toList();
+
+        issuedCouponRepository.saveAll(issuedCoupons);
+
+        log.info(
+                "[CouponService] 쿠폰 발급: issuedCouponIds={}",
+                issuedCoupons.stream().map(IssuedCoupon::getId).toList());
     }
 
     @Transactional

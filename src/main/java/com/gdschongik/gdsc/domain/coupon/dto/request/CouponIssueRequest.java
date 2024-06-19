@@ -1,5 +1,5 @@
 package com.gdschongik.gdsc.domain.coupon.dto.request;
 
-import jakarta.validation.constraints.Positive;
+import java.util.List;
 
-public record CouponIssueRequest(@Positive Long couponId) {}
+public record CouponIssueRequest(Long couponId, List<Long> memberIds) {}

@@ -40,7 +40,7 @@ public class AdminCouponController {
         return ResponseEntity.ok().body(response);
     }
 
-    @Operation(summary = "발급쿠폰 생성", description = "지정된 멤버들에게 쿠폰을 발급합니다.")
+    @Operation(summary = "발급쿠폰 생성", description = "지정된 멤버들에게 쿠폰을 발급합니다. 존재하지 않는 멤버인 경우 무시됩니다.")
     @PostMapping("/issued")
     public ResponseEntity<Void> createIssuedCoupon(@Valid @RequestBody CouponIssueRequest request) {
         couponService.createIssuedCoupon(request);
