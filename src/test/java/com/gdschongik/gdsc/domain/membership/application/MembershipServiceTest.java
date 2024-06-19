@@ -118,6 +118,21 @@ public class MembershipServiceTest extends IntegrationTest {
         }
     }
 
+    @Test
+    void 멤버십_회비납부시_이미_회비납부_했다면_회비납부_실패한다() {
+        // given
+        Member member = createMember();
+        logoutAndReloginAs(1L, ASSOCIATE);
+        Recruitment recruitment = createRecruitment();
+        Membership membership = createMembership(member, recruitment);
+        membershipService.verifyPaymentStatus(membership.getId());
+
+        // when & then
+        assertThatThrownBy(() -> membershipService.verifyPaymentStatus(membership.getId()))
+                .isInstanceOf(CustomException.class)
+                .hasMessage(MEMBERSHIP_ALREADY_VERIFIED.getMessage());
+    }
+
     @Nested
     class 정회원_가입조건_인증시도시 {
         @Test
@@ -134,21 +149,6 @@ public class MembershipServiceTest extends IntegrationTest {
 
             // then
             assertThat(membership.getRegularRequirement().getPaymentStatus()).isEqualTo(VERIFIED);
-        }
-
-        @Test
-        void 멤버십_회비납부시_이미_회비납부_했다면_회비납부_인증상태가_인증_실패한다() {
-            // given
-            Member member = createMember();
-            logoutAndReloginAs(1L, ASSOCIATE);
-            Recruitment recruitment = createRecruitment();
-            Membership membership = createMembership(member, recruitment);
-            membershipService.verifyPaymentStatus(membership.getId());
-
-            // when & then
-            assertThatThrownBy(() -> membershipService.verifyPaymentStatus(membership.getId()))
-                    .isInstanceOf(CustomException.class)
-                    .hasMessage(MEMBERSHIP_ALREADY_VERIFIED.getMessage());
         }
     }
 }
