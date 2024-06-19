@@ -10,6 +10,7 @@ import com.gdschongik.gdsc.domain.coupon.domain.IssuedCoupon;
 import com.gdschongik.gdsc.domain.coupon.dto.request.CouponCreateRequest;
 import com.gdschongik.gdsc.domain.coupon.dto.request.CouponIssueRequest;
 import com.gdschongik.gdsc.domain.coupon.dto.response.CouponResponse;
+import com.gdschongik.gdsc.domain.coupon.dto.response.IssuedCouponResponse;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.global.exception.CustomException;
@@ -38,6 +39,12 @@ public class CouponService {
 
     public List<CouponResponse> findAllCoupons() {
         return couponRepository.findAll().stream().map(CouponResponse::from).toList();
+    }
+
+    public List<IssuedCouponResponse> findAllIssuedCoupons() {
+        return issuedCouponRepository.findAll().stream()
+                .map(IssuedCouponResponse::from)
+                .toList();
     }
 
     @Transactional

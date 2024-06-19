@@ -4,6 +4,7 @@ import com.gdschongik.gdsc.domain.coupon.application.CouponService;
 import com.gdschongik.gdsc.domain.coupon.dto.request.CouponCreateRequest;
 import com.gdschongik.gdsc.domain.coupon.dto.request.CouponIssueRequest;
 import com.gdschongik.gdsc.domain.coupon.dto.response.CouponResponse;
+import com.gdschongik.gdsc.domain.coupon.dto.response.IssuedCouponResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -37,6 +38,13 @@ public class AdminCouponController {
     @GetMapping
     public ResponseEntity<List<CouponResponse>> getCoupons() {
         List<CouponResponse> response = couponService.findAllCoupons();
+        return ResponseEntity.ok().body(response);
+    }
+
+    @Operation(summary = "발급쿠폰 조회", description = "발급된 쿠폰을 조회합니다.")
+    @GetMapping("/issued")
+    public ResponseEntity<List<IssuedCouponResponse>> getIssuedCoupons() {
+        List<IssuedCouponResponse> response = couponService.findAllIssuedCoupons();
         return ResponseEntity.ok().body(response);
     }
 
