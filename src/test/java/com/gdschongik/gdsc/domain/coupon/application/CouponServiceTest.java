@@ -150,6 +150,27 @@ class CouponServiceTest extends IntegrationTest {
         }
 
         @Test
+        void 이미_회수한_발급쿠폰이면_실패한다() {
+            // given
+            CouponCreateRequest request = new CouponCreateRequest(COUPON_NAME, ONE);
+            couponService.createCoupon(request);
+
+            createMember();
+            CouponIssueRequest issueRequest = new CouponIssueRequest(1L, List.of(1L));
+            couponService.createIssuedCoupon(issueRequest);
+
+            issuedCouponRepository.findById(1L).ifPresent(coupon -> {
+                coupon.revoke();
+                issuedCouponRepository.save(coupon);
+            });
+
+            // when & then
+            assertThatThrownBy(() -> couponService.revokeIssuedCoupon(1L))
+                    .isInstanceOf(CustomException.class)
+                    .hasMessageContaining(COUPON_NOT_REVOKABLE_ALREADY_REVOKED.getMessage());
+        }
+
+        @Test
         void 이미_사용한_발급쿠폰이면_실패한다() {
             // given
             CouponCreateRequest request = new CouponCreateRequest(COUPON_NAME, ONE);

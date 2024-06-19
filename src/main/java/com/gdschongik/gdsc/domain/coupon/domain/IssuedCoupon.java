@@ -72,6 +72,10 @@ public class IssuedCoupon extends BaseTimeEntity {
     }
 
     private void validateRevokable() {
+        if (isRevoked.equals(TRUE)) {
+            throw new CustomException(COUPON_NOT_REVOKABLE_ALREADY_REVOKED);
+        }
+
         if (isUsed()) {
             throw new CustomException(COUPON_NOT_REVOKABLE_ALREADY_USED);
         }
