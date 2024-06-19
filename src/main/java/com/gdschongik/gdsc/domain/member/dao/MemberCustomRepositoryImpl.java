@@ -1,7 +1,7 @@
 package com.gdschongik.gdsc.domain.member.dao;
 
+import static com.gdschongik.gdsc.domain.common.model.RequirementStatus.*;
 import static com.gdschongik.gdsc.domain.member.domain.QMember.*;
-import static com.querydsl.core.group.GroupBy.*;
 
 import com.gdschongik.gdsc.domain.common.model.RequirementStatus;
 import com.gdschongik.gdsc.domain.member.domain.Member;
@@ -25,16 +25,14 @@ public class MemberCustomRepositoryImpl extends MemberQueryMethod implements Mem
     public Page<Member> findAllByRole(MemberQueryOption queryOption, Pageable pageable, @Nullable MemberRole role) {
         List<Member> fetch = queryFactory
                 .selectFrom(member)
-                .where(matchesQueryOption(queryOption), eqRole(role), isStudentIdNotNull())
+                .where(matchesQueryOption(queryOption), eqRole(role))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(member.createdAt.desc())
                 .fetch();
 
-        JPAQuery<Long> countQuery = queryFactory
-                .select(member.count())
-                .from(member)
-                .where(matchesQueryOption(queryOption), eqRole(role), isStudentIdNotNull());
+        JPAQuery<Long> countQuery =
+                queryFactory.select(member.count()).from(member).where(matchesQueryOption(queryOption), eqRole(role));
 
         return PageableExecutionUtils.getPage(fetch, pageable, countQuery::fetchOne);
     }
@@ -43,7 +41,7 @@ public class MemberCustomRepositoryImpl extends MemberQueryMethod implements Mem
     public List<Member> findAllByRole(MemberRole role) {
         return queryFactory
                 .selectFrom(member)
-                .where(eqRole(role), isStudentIdNotNull())
+                .where(eqRole(role))
                 .orderBy(member.studentId.asc(), member.name.asc())
                 .fetch();
     }

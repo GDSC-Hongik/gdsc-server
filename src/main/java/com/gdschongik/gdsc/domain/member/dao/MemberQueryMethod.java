@@ -1,6 +1,5 @@
 package com.gdschongik.gdsc.domain.member.dao;
 
-import static com.gdschongik.gdsc.domain.common.model.RequirementStatus.*;
 import static com.gdschongik.gdsc.domain.member.domain.QMember.*;
 
 import com.gdschongik.gdsc.domain.common.model.RequirementStatus;
@@ -42,10 +41,6 @@ public class MemberQueryMethod {
         return nickname != null ? member.nickname.containsIgnoreCase(nickname) : null;
     }
 
-    protected BooleanExpression eqOauthId(String oauthId) {
-        return member.oauthId.eq(oauthId);
-    }
-
     protected BooleanExpression eqRequirementStatus(
             EnumPath<RequirementStatus> requirement, RequirementStatus requirementStatus) {
         return requirementStatus != null ? requirement.eq(requirementStatus) : null;
@@ -53,25 +48,6 @@ public class MemberQueryMethod {
 
     protected BooleanExpression inDepartmentList(List<Department> departmentCodes) {
         return departmentCodes.isEmpty() ? null : member.department.in(departmentCodes);
-    }
-
-    protected BooleanExpression isStudentIdNotNull() {
-        return member.studentId.isNotNull();
-    }
-
-    protected BooleanBuilder isGrantAvailable() {
-        return new BooleanBuilder()
-                .and(eqRequirementStatus(member.associateRequirement.discordStatus, VERIFIED))
-                .and(eqRequirementStatus(member.associateRequirement.univStatus, VERIFIED))
-                .and(eqRequirementStatus(member.associateRequirement.bevyStatus, VERIFIED));
-    }
-
-    protected BooleanBuilder isAssociateAvailable() {
-        return new BooleanBuilder()
-                .and(eqRequirementStatus(member.associateRequirement.discordStatus, VERIFIED))
-                .and(eqRequirementStatus(member.associateRequirement.univStatus, VERIFIED))
-                .and(eqRequirementStatus(member.associateRequirement.infoStatus, VERIFIED))
-                .and(eqRequirementStatus(member.associateRequirement.bevyStatus, VERIFIED));
     }
 
     protected BooleanBuilder matchesQueryOption(MemberQueryOption queryOption) {
