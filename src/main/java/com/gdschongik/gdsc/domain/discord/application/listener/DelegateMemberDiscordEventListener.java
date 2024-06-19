@@ -8,7 +8,7 @@ import org.springframework.transaction.event.TransactionalEventListener;
 
 @Component
 @RequiredArgsConstructor
-public class DelegateMemberEventListener {
+public class DelegateMemberDiscordEventListener {
 
     private final DelegateMemberDiscordEventHandler delegateMemberDiscordEventHandler;
 

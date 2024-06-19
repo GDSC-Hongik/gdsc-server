@@ -87,7 +87,7 @@ public class MembershipServiceTest extends IntegrationTest {
             // then
             assertThatThrownBy(() -> membershipService.submitMembership(recruitment.getId()))
                     .isInstanceOf(CustomException.class)
-                    .hasMessage(MEMBERSHIP_ALREADY_VERIFIED.getMessage());
+                    .hasMessage(MEMBERSHIP_ALREADY_APPLIED.getMessage());
         }
 
         @Test
@@ -121,7 +121,7 @@ public class MembershipServiceTest extends IntegrationTest {
     @Nested
     class 정회원_가입조건_인증시도시 {
         @Test
-        void 멤버십_회비납부시_정회원_가입조건중_회비납부_인증상태가_인증된다() {
+        void 멤버십_회비납부시_정회원_가입조건중_회비납부_인증상태가_인증_성공한다() {
             // given
             Member member = createMember();
             logoutAndReloginAs(1L, ASSOCIATE);
@@ -137,7 +137,7 @@ public class MembershipServiceTest extends IntegrationTest {
         }
 
         @Test
-        void 멤버십_회비납부시_이미_회비납부_했다면_회비납부_실패한다() {
+        void 멤버십_회비납부시_이미_회비납부_했다면_회비납부_인증상태가_인증_실패한다() {
             // given
             Member member = createMember();
             logoutAndReloginAs(1L, ASSOCIATE);
