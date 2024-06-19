@@ -38,7 +38,7 @@ public enum ErrorCode {
     MEMBER_DISCORD_USERNAME_DUPLICATE(HttpStatus.CONFLICT, "이미 등록된 디스코드 유저네임입니다."),
     MEMBER_NICKNAME_DUPLICATE(HttpStatus.CONFLICT, "이미 사용중인 닉네임입니다."),
     MEMBER_NOT_APPLIED(HttpStatus.CONFLICT, "가입신청서를 제출하지 않은 회원입니다."),
-    MEMBER_NOT_GRANTED(HttpStatus.CONFLICT, "승인되지 않은 회원입니다."),
+    MEMBER_NOT_ASSOCIATE(HttpStatus.CONFLICT, "정회원이 아닌 회원입니다."),
 
     // Requirement
     UNIV_NOT_VERIFIED(HttpStatus.CONFLICT, "재학생 인증이 완료되지 않았습니다."),

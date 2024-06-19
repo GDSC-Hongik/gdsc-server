@@ -23,12 +23,11 @@ public class MembershipService {
     private final MemberUtil memberUtil;
 
     @Transactional
-    public void advanceToVerified(Long membershipId) {
+    public void verifyPaymentStatus(Long membershipId) {
         Membership currentMembership = membershipRepository
                 .findById(membershipId)
                 .orElseThrow(() -> new CustomException(MEMBERSHIP_NOT_FOUND));
 
-        currentMembership.validateAdvanceRequirement();
         currentMembership.verifyPaymentStatus();
     }
 

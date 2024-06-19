@@ -119,9 +119,9 @@ public class MembershipServiceTest extends IntegrationTest {
     }
 
     @Nested
-    class 회비_납부시 {
+    class 정회원_가입조건_인증시도시 {
         @Test
-        void 정회원_승급조건_충족_됐다면_성공한다() {
+        void 멤버십_회비납부시_정회원_가입조건중_회비납부_인증상태가_인증된다() {
             // given
             Member member = createMember();
             logoutAndReloginAs(1L, ASSOCIATE);
@@ -129,7 +129,7 @@ public class MembershipServiceTest extends IntegrationTest {
             Membership membership = createMembership(member, recruitment);
 
             // when
-            membershipService.advanceToVerified(membership.getId());
+            membershipService.verifyPaymentStatus(membership.getId());
             membership = membershipRepository.findById(membership.getId()).get();
 
             // then
@@ -137,18 +137,16 @@ public class MembershipServiceTest extends IntegrationTest {
         }
 
         @Test
-        void 이미_정회원_승급조건_충족_돼있었다면_실패한다() {
+        void 멤버십_회비납부시_이미_회비납부_했다면_회비납부_실패한다() {
             // given
             Member member = createMember();
             logoutAndReloginAs(1L, ASSOCIATE);
             Recruitment recruitment = createRecruitment();
             Membership membership = createMembership(member, recruitment);
+            membershipService.verifyPaymentStatus(membership.getId());
 
-            // when
-            membershipService.advanceToVerified(membership.getId());
-
-            // then
-            assertThatThrownBy(() -> membershipService.advanceToVerified(membership.getId()))
+            // when & then
+            assertThatThrownBy(() -> membershipService.verifyPaymentStatus(membership.getId()))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(MEMBERSHIP_ALREADY_VERIFIED.getMessage());
         }

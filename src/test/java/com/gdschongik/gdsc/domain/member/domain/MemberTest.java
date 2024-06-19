@@ -286,7 +286,36 @@ class MemberTest {
     }
 
     @Nested
-    class 정회원_승급시 {
+    class 정회원으로_승급_시도시 {
+        @Test
+        void 이미_정회원이라면_실패한다() {
+            // given
+            Member member = Member.createGuestMember(OAUTH_ID);
+
+            member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
+            member.completeUnivEmailVerification(UNIV_EMAIL);
+            member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
+            member.verifyBevy();
+            member.advanceToAssociate();
+            member.advanceToRegular();
+
+            // when & then
+            assertThatThrownBy(member::advanceToRegular)
+                    .isInstanceOf(CustomException.class)
+                    .hasMessage(MEMBER_ALREADY_REGULAR.getMessage());
+        }
+
+        @Test
+        void MemberRole이_GUEST_이라면_실패한다() {
+            // given
+            Member member = Member.createGuestMember(OAUTH_ID);
+
+            // when & then
+            assertThatThrownBy(member::advanceToRegular)
+                    .isInstanceOf(CustomException.class)
+                    .hasMessage(MEMBER_NOT_ASSOCIATE.getMessage());
+        }
+
         @Test
         void 준회원이라면_성공한다() {
             // given
@@ -303,24 +332,6 @@ class MemberTest {
 
             // then
             assertThat(member.getRole()).isEqualTo(REGULAR);
-        }
-
-        @Test
-        void 이미_정회원이라면_실패한다() {
-            // given
-            Member member = Member.createGuestMember(OAUTH_ID);
-
-            member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
-            member.completeUnivEmailVerification(UNIV_EMAIL);
-            member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
-            member.verifyBevy();
-            member.advanceToAssociate();
-            member.advanceToRegular();
-
-            // when & then
-            assertThatThrownBy(member::advanceToRegular)
-                    .isInstanceOf(CustomException.class)
-                    .hasMessage(MEMBER_NOT_GRANTED.getMessage());
         }
     }
 }

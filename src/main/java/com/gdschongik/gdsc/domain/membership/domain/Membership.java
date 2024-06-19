@@ -72,7 +72,7 @@ public class Membership extends BaseSemesterEntity {
 
     // 검증 로직
 
-    // TODO validateAdvanceRequirement처럼 로직 변경
+    // TODO validateRegularRequirement처럼 로직 변경
     private static void validateMembershipApplicable(Member member) {
         if (member.getRole().equals(MemberRole.ASSOCIATE)) {
             return;
@@ -81,7 +81,7 @@ public class Membership extends BaseSemesterEntity {
         throw new CustomException(MEMBERSHIP_NOT_APPLICABLE);
     }
 
-    public void validateAdvanceRequirement() {
+    public void validateRegularRequirement() {
         if (isRegularRequirementAllSatisfied()) {
             throw new CustomException(MEMBERSHIP_ALREADY_VERIFIED);
         }
@@ -90,7 +90,10 @@ public class Membership extends BaseSemesterEntity {
     // 상태 변경 로직
 
     public void verifyPaymentStatus() {
+        validateRegularRequirement();
+
         this.regularRequirement.updatePaymentStatus(VERIFIED);
+        regularRequirement.validateAllVerified();
 
         registerEvent(new MemberRegularEvent(member.getId(), member.getDiscordUsername()));
     }

@@ -70,7 +70,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         return baseUri;
     }
 
-    // TODO validateAdvanceRequirement처럼 로직 변경
+    // TODO validateRegularRequirement처럼 로직 변경
     private void validateBaseUri(String baseUri) {
         if (baseUri.endsWith(ROOT_DOMAIN) || LOCAL_CLIENT_URLS.contains(baseUri)) {
             return;

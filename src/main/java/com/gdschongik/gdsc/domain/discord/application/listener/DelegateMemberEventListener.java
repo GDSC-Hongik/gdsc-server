@@ -13,7 +13,7 @@ public class DelegateMemberEventListener {
     private final DelegateMemberDiscordEventHandler delegateMemberDiscordEventHandler;
 
     @TransactionalEventListener(classes = MemberRegularEvent.class)
-    public void handleMemberAdvanceToRegularEvent(MemberRegularEvent event) {
+    public void delegateMemberDiscordEvent(MemberRegularEvent event) {
         delegateMemberDiscordEventHandler.delegate(event);
     }
 }
