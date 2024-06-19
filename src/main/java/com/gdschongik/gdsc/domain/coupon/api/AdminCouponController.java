@@ -26,28 +26,28 @@ public class AdminCouponController {
 
     private final CouponService couponService;
 
-    @Operation(summary = "쿠폰 생성", description = "쿠폰을 생성합니다.")
+    @Operation(summary = "쿠폰 생성", description = "쿠폰을 생성합니다. 이름 및 할인금액을 가집니다.")
     @PostMapping
     public ResponseEntity<Void> createCoupon(@Valid @RequestBody CouponCreateRequest request) {
         couponService.createCoupon(request);
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "쿠폰 조회", description = "쿠폰을 조회합니다.")
+    @Operation(summary = "쿠폰 조회", description = "발급 가능한 모든 쿠폰을 조회합니다.")
     @GetMapping
     public ResponseEntity<List<CouponResponse>> getCoupons() {
         List<CouponResponse> response = couponService.findAllCoupons();
         return ResponseEntity.ok().body(response);
     }
 
-    @Operation(summary = "쿠폰 발급", description = "쿠폰을 발급합니다.")
+    @Operation(summary = "발급쿠폰 생성", description = "지정된 멤버들에게 쿠폰을 발급합니다.")
     @PostMapping("/issued")
     public ResponseEntity<Void> createIssuedCoupon(@Valid @RequestBody CouponIssueRequest request) {
         couponService.createIssuedCoupon(request);
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "쿠폰 회수", description = "쿠폰을 회수합니다.")
+    @Operation(summary = "발급쿠폰 회수", description = "발급된 쿠폰을 회수합니다.")
     @DeleteMapping("/issued/{issuedCouponId}")
     public ResponseEntity<Void> deleteIssuedCoupon(@PathVariable Long issuedCouponId) {
         couponService.revokeIssuedCoupon(issuedCouponId);
