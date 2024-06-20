@@ -8,18 +8,26 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import lombok.AccessLevel;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 @Getter
 @Embeddable
-@EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Money {
+public final class Money {
 
     private BigDecimal amount;
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Money other && this.amount.compareTo(other.amount) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.amount.stripTrailingZeros().hashCode();
+    }
 
     @Builder(access = AccessLevel.PRIVATE)
     private Money(BigDecimal amount) {

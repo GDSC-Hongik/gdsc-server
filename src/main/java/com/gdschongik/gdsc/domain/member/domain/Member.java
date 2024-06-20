@@ -235,6 +235,14 @@ public class Member extends BaseTimeEntity {
 
         role = REGULAR;
     }
+    /**
+     * 정회원에서 준회원으로 강등합니다.
+     */
+    public void demoteToAssociate() {
+        validateStatusUpdatable();
+
+        this.role = ASSOCIATE;
+    }
 
     // 기타 상태 변경 로직
 
