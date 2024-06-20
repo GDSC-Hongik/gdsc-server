@@ -87,7 +87,7 @@ public class MembershipServiceTest extends IntegrationTest {
             // then
             assertThatThrownBy(() -> membershipService.submitMembership(recruitment.getId()))
                     .isInstanceOf(CustomException.class)
-                    .hasMessage(MEMBERSHIP_ALREADY_APPLIED.getMessage());
+                    .hasMessage(MEMBERSHIP_ALREADY_VERIFIED.getMessage());
         }
 
         @Test
