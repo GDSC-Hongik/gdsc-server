@@ -6,6 +6,7 @@ import static org.mockito.Mockito.*;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
+import com.gdschongik.gdsc.domain.member.dto.response.MemberDashboardResponse;
 import com.gdschongik.gdsc.domain.recruitment.application.OnboardingRecruitmentService;
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
@@ -40,10 +41,10 @@ class OnboardingMemberServiceTest extends IntegrationTest {
             logoutAndReloginAs(1L, MemberRole.ASSOCIATE);
 
             // when
-            var memberDashboardResponse = onboardingMemberService.getDashboard();
+            MemberDashboardResponse response = onboardingMemberService.getDashboard();
 
             // then
-            assertThat(memberDashboardResponse.currentMembership()).isNull();
+            assertThat(response.currentMembership()).isNull();
         }
 
         @Test
@@ -53,10 +54,10 @@ class OnboardingMemberServiceTest extends IntegrationTest {
             logoutAndReloginAs(1L, MemberRole.ASSOCIATE);
 
             // when
-            var memberDashboardResponse = onboardingMemberService.getDashboard();
+            MemberDashboardResponse response = onboardingMemberService.getDashboard();
 
             // then - 전체 필드가 null인지 확인
-            assertThat(memberDashboardResponse.member().basicInfo()).hasAllNullFieldsOrProperties();
+            assertThat(response.member().basicInfo()).hasAllNullFieldsOrProperties();
         }
     }
 }
