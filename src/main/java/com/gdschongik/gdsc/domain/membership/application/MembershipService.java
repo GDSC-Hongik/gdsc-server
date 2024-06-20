@@ -37,7 +37,6 @@ public class MembershipService {
         Recruitment recruitment = recruitmentRepository
                 .findById(recruitmentId)
                 .orElseThrow(() -> new CustomException(RECRUITMENT_NOT_FOUND));
-        System.out.println(recruitment.getSemesterType());
         validateMembershipDuplicate(currentMember, recruitment.getAcademicYear(), recruitment.getSemesterType());
         validateRecruitmentOpen(recruitment);
 
