@@ -4,6 +4,7 @@ import com.gdschongik.gdsc.domain.member.domain.AssociateRequirement;
 import com.gdschongik.gdsc.domain.member.domain.Department;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
+import com.gdschongik.gdsc.global.util.formatter.PhoneFormatter;
 import java.util.Optional;
 
 public record MemberFullDto(
@@ -29,7 +30,9 @@ public record MemberFullDto(
                     Optional.ofNullable(member.getDepartment())
                             .map(Department::getDepartmentName)
                             .orElse(null),
-                    member.getPhone(),
+                    Optional.ofNullable(member.getPhone())
+                            .map(PhoneFormatter::format)
+                            .orElse(null),
                     member.getDiscordUsername(),
                     member.getNickname());
         }
