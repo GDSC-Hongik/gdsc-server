@@ -1,14 +1,11 @@
 package com.gdschongik.gdsc.domain.membership.application;
 
 import static com.gdschongik.gdsc.domain.common.model.RequirementStatus.VERIFIED;
-import static com.gdschongik.gdsc.domain.member.domain.Department.D022;
-import static com.gdschongik.gdsc.domain.member.domain.MemberRole.*;
-import static com.gdschongik.gdsc.global.common.constant.MemberConstant.*;
+import static com.gdschongik.gdsc.domain.member.domain.MemberRole.ASSOCIATE;
 import static com.gdschongik.gdsc.global.common.constant.RecruitmentConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 
-import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.membership.dao.MembershipRepository;
 import com.gdschongik.gdsc.domain.membership.domain.Membership;
@@ -26,25 +23,10 @@ public class MembershipServiceTest extends IntegrationTest {
     private MembershipService membershipService;
 
     @Autowired
-    private MemberRepository memberRepository;
-
-    @Autowired
     private MembershipRepository membershipRepository;
 
     @Autowired
     private RecruitmentRepository recruitmentRepository;
-
-    public Member createMember() {
-        Member member = Member.createGuestMember(OAUTH_ID);
-        memberRepository.save(member);
-
-        member.completeUnivEmailVerification(UNIV_EMAIL);
-        member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
-        member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
-        member.verifyBevy();
-
-        return memberRepository.save(member);
-    }
 
     private Recruitment createRecruitment() {
         Recruitment recruitment = Recruitment.createRecruitment(

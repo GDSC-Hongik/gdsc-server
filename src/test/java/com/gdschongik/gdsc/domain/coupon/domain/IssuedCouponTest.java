@@ -78,7 +78,21 @@ class IssuedCouponTest {
         }
 
         @Test
-        void 이미_사용한_쿠폰이면_실패한다() {
+        void 이미_회수한_발급쿠폰이면_실패한다() {
+            // given
+            Coupon coupon = Coupon.createCoupon(COUPON_NAME, Money.from(ONE));
+            Member member = Member.createGuestMember(OAUTH_ID);
+            IssuedCoupon issuedCoupon = IssuedCoupon.issue(coupon, member);
+            issuedCoupon.revoke();
+
+            // when & then
+            assertThatThrownBy(issuedCoupon::revoke)
+                    .isInstanceOf(CustomException.class)
+                    .hasMessageContaining(COUPON_NOT_REVOKABLE_ALREADY_REVOKED.getMessage());
+        }
+
+        @Test
+        void 이미_사용한_발급쿠폰이면_실패한다() {
             // given
             Coupon coupon = Coupon.createCoupon(COUPON_NAME, Money.from(ONE));
             Member member = Member.createGuestMember(OAUTH_ID);
