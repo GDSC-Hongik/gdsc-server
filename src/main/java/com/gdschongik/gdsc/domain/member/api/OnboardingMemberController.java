@@ -43,7 +43,7 @@ public class OnboardingMemberController {
         return ResponseEntity.ok().body(response);
     }
 
-    @Operation(summary = "내 대시보드 조회", description = "내 대시보드를 조회합니다.")
+    @Operation(summary = "내 대시보드 조회", description = "내 대시보드를 조회합니다. 2차 MVP 기능입니다.")
     @GetMapping("/me/dashboard")
     public ResponseEntity<MemberDashboardResponse> getDashboard() {
         MemberDashboardResponse response = onboardingMemberService.getDashboard();
