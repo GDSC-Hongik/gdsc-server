@@ -16,7 +16,7 @@ public class OnboardingRecruitmentService {
     // TODO: 모집기간과 별도로 표시기간 사용하여 필터링하도록 변경
     public Recruitment findCurrentRecruitment() {
         return recruitmentRepository.findAll().stream()
-                .filter(Recruitment::isOpen)
+                .filter(Recruitment::isOpen) // isOpen -> isDisplayable
                 .findFirst()
                 .orElseThrow();
     }
