@@ -52,4 +52,10 @@ public class MembershipService {
                     throw new CustomException(MEMBERSHIP_ALREADY_APPLIED);
                 });
     }
+
+    public Membership findMyMembership(Member member, Recruitment recruitment) {
+        return membershipRepository
+                .findByMemberAndRecruitment(member, recruitment)
+                .orElseThrow(() -> new CustomException(MEMBERSHIP_NOT_FOUND));
+    }
 }
