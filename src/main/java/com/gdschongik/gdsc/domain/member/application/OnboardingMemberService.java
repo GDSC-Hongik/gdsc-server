@@ -16,6 +16,7 @@ import com.gdschongik.gdsc.domain.recruitment.application.OnboardingRecruitmentS
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -76,8 +77,8 @@ public class OnboardingMemberService {
     public MemberDashboardResponse getDashboard() {
         Member currentMember = memberUtil.getCurrentMember();
         Recruitment currentRecruitment = onboardingRecruitmentService.findCurrentRecruitment();
-        Membership myMembership = membershipService.findMyMembership(currentMember, currentRecruitment);
+        Optional<Membership> myMembership = membershipService.findMyMembership(currentMember, currentRecruitment);
 
-        return MemberDashboardResponse.from(currentMember, currentRecruitment, myMembership);
+        return MemberDashboardResponse.from(currentMember, currentRecruitment, myMembership.orElse(null));
     }
 }

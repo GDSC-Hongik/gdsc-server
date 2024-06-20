@@ -6,14 +6,15 @@ import com.gdschongik.gdsc.domain.membership.domain.Membership;
 import com.gdschongik.gdsc.domain.membership.dto.MembershipFullDto;
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.domain.recruitment.dto.RecruitmentFullDto;
+import jakarta.annotation.Nullable;
 
 public record MemberDashboardResponse(
-        MemberFullDto member, RecruitmentFullDto currentRecruitment, MembershipFullDto currentMembership) {
+        MemberFullDto member, RecruitmentFullDto currentRecruitment, @Nullable MembershipFullDto currentMembership) {
     public static MemberDashboardResponse from(
             Member member, Recruitment currentRecruitment, Membership currentMembership) {
         return new MemberDashboardResponse(
                 MemberFullDto.from(member),
                 RecruitmentFullDto.from(currentRecruitment),
-                MembershipFullDto.from(currentMembership));
+                currentMembership == null ? null : MembershipFullDto.from(currentMembership));
     }
 }
