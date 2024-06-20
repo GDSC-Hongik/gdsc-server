@@ -7,8 +7,13 @@ import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.dto.request.BasicMemberInfoRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.OnboardingMemberUpdateRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberBasicInfoResponse;
+import com.gdschongik.gdsc.domain.member.dto.response.MemberDashboardResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberInfoResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberUnivStatusResponse;
+import com.gdschongik.gdsc.domain.membership.application.MembershipService;
+import com.gdschongik.gdsc.domain.membership.domain.Membership;
+import com.gdschongik.gdsc.domain.recruitment.application.OnboardingRecruitmentService;
+import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +26,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class OnboardingMemberService {
 
     private final MemberUtil memberUtil;
+    private final OnboardingRecruitmentService onboardingRecruitmentService;
+    private final MembershipService membershipService;
     private final MemberRepository memberRepository;
 
     @Deprecated
@@ -64,5 +71,13 @@ public class OnboardingMemberService {
     public MemberBasicInfoResponse getMemberBasicInfo() {
         Member currentMember = memberUtil.getCurrentMember();
         return MemberBasicInfoResponse.from(currentMember);
+    }
+
+    public MemberDashboardResponse getDashboard() {
+        Member currentMember = memberUtil.getCurrentMember();
+        Recruitment currentRecruitment = onboardingRecruitmentService.findCurrentRecruitment();
+        Membership myMembership = membershipService.findMyMembership(currentMember, currentRecruitment);
+
+        return MemberDashboardResponse.from(currentMember, currentRecruitment, myMembership);
     }
 }
