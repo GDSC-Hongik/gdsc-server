@@ -4,6 +4,7 @@ import com.gdschongik.gdsc.domain.member.application.OnboardingMemberService;
 import com.gdschongik.gdsc.domain.member.dto.request.BasicMemberInfoRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.OnboardingMemberUpdateRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberBasicInfoResponse;
+import com.gdschongik.gdsc.domain.member.dto.response.MemberDashboardResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberInfoResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberUnivStatusResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,6 +40,13 @@ public class OnboardingMemberController {
     @GetMapping("/me")
     public ResponseEntity<MemberInfoResponse> getMemberInfo() {
         MemberInfoResponse response = onboardingMemberService.getMemberInfo();
+        return ResponseEntity.ok().body(response);
+    }
+
+    @Operation(summary = "내 대시보드 조회", description = "내 대시보드를 조회합니다. 2차 MVP 기능입니다.")
+    @GetMapping("/me/dashboard")
+    public ResponseEntity<MemberDashboardResponse> getDashboard() {
+        MemberDashboardResponse response = onboardingMemberService.getDashboard();
         return ResponseEntity.ok().body(response);
     }
 
