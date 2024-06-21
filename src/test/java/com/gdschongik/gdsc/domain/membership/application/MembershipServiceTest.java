@@ -1,6 +1,5 @@
 package com.gdschongik.gdsc.domain.membership.application;
 
-
 import static com.gdschongik.gdsc.domain.common.model.RequirementStatus.VERIFIED;
 import static com.gdschongik.gdsc.domain.member.domain.MemberRole.ASSOCIATE;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
