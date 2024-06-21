@@ -1,15 +1,14 @@
 package com.gdschongik.gdsc.domain.membership.application;
 
+
 import static com.gdschongik.gdsc.domain.common.model.RequirementStatus.VERIFIED;
 import static com.gdschongik.gdsc.domain.member.domain.MemberRole.ASSOCIATE;
-import static com.gdschongik.gdsc.global.common.constant.RecruitmentConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.membership.dao.MembershipRepository;
 import com.gdschongik.gdsc.domain.membership.domain.Membership;
-import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRepository;
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.integration.IntegrationTest;
@@ -24,15 +23,6 @@ public class MembershipServiceTest extends IntegrationTest {
 
     @Autowired
     private MembershipRepository membershipRepository;
-
-    @Autowired
-    private RecruitmentRepository recruitmentRepository;
-
-    private Recruitment createRecruitment() {
-        Recruitment recruitment = Recruitment.createRecruitment(
-                RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE, ROUND_TYPE, FEE);
-        return recruitmentRepository.save(recruitment);
-    }
 
     private Membership createMembership(Member member, Recruitment recruitment) {
         Membership membership = Membership.createMembership(member, recruitment);

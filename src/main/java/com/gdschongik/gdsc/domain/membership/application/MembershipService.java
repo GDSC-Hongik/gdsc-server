@@ -10,6 +10,7 @@ import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRepository;
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,5 +60,9 @@ public class MembershipService {
                     }
                     throw new CustomException(MEMBERSHIP_ALREADY_APPLIED);
                 });
+    }
+
+    public Optional<Membership> findMyMembership(Member member, Recruitment recruitment) {
+        return membershipRepository.findByMemberAndRecruitment(member, recruitment);
     }
 }

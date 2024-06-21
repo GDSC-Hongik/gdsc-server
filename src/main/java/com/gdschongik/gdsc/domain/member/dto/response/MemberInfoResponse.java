@@ -3,6 +3,7 @@ package com.gdschongik.gdsc.domain.member.dto.response;
 import com.gdschongik.gdsc.domain.common.model.RequirementStatus;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
+import com.gdschongik.gdsc.global.util.formatter.PhoneFormatter;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 public record MemberInfoResponse(
@@ -26,11 +27,7 @@ public record MemberInfoResponse(
                 member.getId(),
                 member.getStudentId(),
                 member.getName(),
-                String.format(
-                        "%s-%s-%s",
-                        member.getPhone().substring(0, 3),
-                        member.getPhone().substring(3, 7),
-                        member.getPhone().substring(7)),
+                PhoneFormatter.format(member.getPhone()),
                 member.getDepartment().getDepartmentName(),
                 member.getEmail(),
                 member.getDiscordUsername(),

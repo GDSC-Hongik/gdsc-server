@@ -2,14 +2,19 @@ package com.gdschongik.gdsc.integration;
 
 import static com.gdschongik.gdsc.domain.member.domain.Department.*;
 import static com.gdschongik.gdsc.global.common.constant.MemberConstant.*;
+import static com.gdschongik.gdsc.global.common.constant.RecruitmentConstant.*;
 
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
+import com.gdschongik.gdsc.domain.recruitment.application.OnboardingRecruitmentService;
+import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRepository;
+import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.global.security.PrincipalDetails;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,6 +29,12 @@ public abstract class IntegrationTest {
 
     @Autowired
     protected MemberRepository memberRepository;
+
+    @Autowired
+    protected RecruitmentRepository recruitmentRepository;
+
+    @MockBean
+    protected OnboardingRecruitmentService onboardingRecruitmentService;
 
     @BeforeEach
     void setUp() {
@@ -47,5 +58,11 @@ public abstract class IntegrationTest {
         member.verifyBevy();
 
         return memberRepository.save(member);
+    }
+
+    protected Recruitment createRecruitment() {
+        Recruitment recruitment = Recruitment.createRecruitment(
+                NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE, ROUND_TYPE, FEE);
+        return recruitmentRepository.save(recruitment);
     }
 }
