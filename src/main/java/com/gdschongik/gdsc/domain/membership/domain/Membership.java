@@ -6,6 +6,7 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import com.gdschongik.gdsc.domain.common.model.BaseSemesterEntity;
 import com.gdschongik.gdsc.domain.common.model.SemesterType;
 import com.gdschongik.gdsc.domain.member.domain.Member;
+import com.gdschongik.gdsc.domain.member.domain.MemberRegularEvent;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.global.exception.CustomException;
@@ -71,6 +72,7 @@ public class Membership extends BaseSemesterEntity {
 
     // 검증 로직
 
+    // TODO validateRegularRequirement처럼 로직 변경
     private static void validateMembershipApplicable(Member member) {
         if (member.getRole().equals(MemberRole.ASSOCIATE)) {
             return;
@@ -79,15 +81,26 @@ public class Membership extends BaseSemesterEntity {
         throw new CustomException(MEMBERSHIP_NOT_APPLICABLE);
     }
 
+    public void validateRegularRequirement() {
+        if (isRegularRequirementAllSatisfied()) {
+            throw new CustomException(MEMBERSHIP_ALREADY_VERIFIED);
+        }
+    }
+
     // 상태 변경 로직
 
     public void verifyPaymentStatus() {
+        validateRegularRequirement();
+
         this.regularRequirement.updatePaymentStatus(VERIFIED);
+        regularRequirement.validateAllVerified();
+
+        registerEvent(new MemberRegularEvent(member.getId(), member.getDiscordUsername()));
     }
 
     // 데이터 전달 로직
 
-    public boolean isAdvanceToRegularAvailable() {
+    public boolean isRegularRequirementAllSatisfied() {
         return this.regularRequirement.isAllVerified();
     }
 }

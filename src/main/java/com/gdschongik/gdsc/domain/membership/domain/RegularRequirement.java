@@ -1,6 +1,9 @@
 package com.gdschongik.gdsc.domain.membership.domain;
 
+import static com.gdschongik.gdsc.global.exception.ErrorCode.PAYMENT_NOT_VERIFIED;
+
 import com.gdschongik.gdsc.domain.common.model.RequirementStatus;
+import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -38,7 +41,16 @@ public class RegularRequirement {
         return this.paymentStatus == RequirementStatus.VERIFIED;
     }
 
+    /**
+     * 정회원 승급 조건은 추가될 가능성이 존재
+     */
     public boolean isAllVerified() {
         return isPaymentVerified();
+    }
+
+    public void validateAllVerified() {
+        if (!isPaymentVerified()) {
+            throw new CustomException(PAYMENT_NOT_VERIFIED);
+        }
     }
 }

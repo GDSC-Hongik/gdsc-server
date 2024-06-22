@@ -19,10 +19,18 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class MembershipService {
-
     private final MembershipRepository membershipRepository;
     private final RecruitmentRepository recruitmentRepository;
     private final MemberUtil memberUtil;
+
+    @Transactional
+    public void verifyPaymentStatus(Long membershipId) {
+        Membership currentMembership = membershipRepository
+                .findById(membershipId)
+                .orElseThrow(() -> new CustomException(MEMBERSHIP_NOT_FOUND));
+
+        currentMembership.verifyPaymentStatus();
+    }
 
     @Transactional
     public void submitMembership(Long recruitmentId) {
@@ -47,7 +55,7 @@ public class MembershipService {
         membershipRepository
                 .findByMemberAndAcademicYearAndSemesterType(currentMember, academicYear, semesterType)
                 .ifPresent(membership -> {
-                    if (membership.isAdvanceToRegularAvailable()) {
+                    if (membership.isRegularRequirementAllSatisfied()) {
                         throw new CustomException(MEMBERSHIP_ALREADY_VERIFIED);
                     }
                     throw new CustomException(MEMBERSHIP_ALREADY_APPLIED);

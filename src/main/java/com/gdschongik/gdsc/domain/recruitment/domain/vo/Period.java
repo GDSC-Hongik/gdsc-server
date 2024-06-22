@@ -42,6 +42,7 @@ public class Period {
                 && (now.isBefore(this.endDate) || now.isEqual(startDate));
     }
 
+    // TODO validateRegularRequirement처럼 로직 변경
     public void validatePeriodOverlap(LocalDateTime startDate, LocalDateTime endDate) {
         if (this.endDate.isBefore(startDate) || this.startDate.isAfter(endDate)) {
             return;

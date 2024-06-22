@@ -130,6 +130,19 @@ public class Member extends BaseTimeEntity {
         associateRequirement.validateAllVerified();
     }
 
+    /**
+     * 정회원 승급 가능 여부를 검증합니다.
+     */
+    private void validateRegularAvailable() {
+        if (isRegular()) {
+            throw new CustomException(MEMBER_ALREADY_REGULAR);
+        }
+
+        if (!role.equals(ASSOCIATE)) {
+            throw new CustomException(MEMBER_NOT_ASSOCIATE);
+        }
+    }
+
     // 준회원 승급 관련 로직
 
     /**
@@ -205,11 +218,23 @@ public class Member extends BaseTimeEntity {
      */
     public void advanceToAssociate() {
         validateStatusUpdatable();
+
         validateAssociateAvailable();
 
         this.role = ASSOCIATE;
     }
 
+    /**
+     * 준회원에서 정회원으로 승급합니다.
+     * 조건 1 : 멤버가 준회원이어야 함
+     */
+    public void advanceToRegular() {
+        validateStatusUpdatable();
+
+        validateRegularAvailable();
+
+        role = REGULAR;
+    }
     /**
      * 정회원에서 준회원으로 강등합니다.
      */
