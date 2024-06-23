@@ -34,7 +34,6 @@ public enum ErrorCode {
     MEMBER_FORBIDDEN(HttpStatus.CONFLICT, "차단된 회원입니다."),
     MEMBER_ALREADY_ASSOCIATE(HttpStatus.CONFLICT, "이미 준회원 역할에 해당하는 회원입니다."),
     MEMBER_ALREADY_REGULAR(HttpStatus.CONFLICT, "이미 정회원 역할에 해당하는 회원입니다."),
-    MEMBER_ALREADY_VERIFIED(HttpStatus.CONFLICT, "이미 인증된 상태입니다."),
     MEMBER_DISCORD_USERNAME_DUPLICATE(HttpStatus.CONFLICT, "이미 등록된 디스코드 유저네임입니다."),
     MEMBER_NICKNAME_DUPLICATE(HttpStatus.CONFLICT, "이미 사용중인 닉네임입니다."),
     MEMBER_NOT_APPLIED(HttpStatus.CONFLICT, "가입신청서를 제출하지 않은 회원입니다."),
