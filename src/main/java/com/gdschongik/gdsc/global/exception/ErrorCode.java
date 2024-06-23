@@ -41,14 +41,14 @@ public enum ErrorCode {
     MEMBER_NOT_ASSOCIATE(HttpStatus.CONFLICT, "준회원이 아닌 회원입니다."),
 
     // Requirement
-    UNIV_NOT_VERIFIED(HttpStatus.CONFLICT, "재학생 인증이 완료되지 않았습니다."),
-    DISCORD_NOT_VERIFIED(HttpStatus.CONFLICT, "디스코드 인증이 완료되지 않았습니다."),
-    BEVY_NOT_VERIFIED(HttpStatus.CONFLICT, "GDSC Bevy 가입이 완료되지 않았습니다."),
-    EMAIL_ALREADY_VERIFIED(HttpStatus.CONFLICT, "이미 이메일 인증된 회원입니다."),
-    BASIC_INFO_NOT_VERIFIED(HttpStatus.CONFLICT, "기본 회원정보 작성이 완료되지 않았습니다."),
+    UNIV_NOT_SATISFIED(HttpStatus.CONFLICT, "재학생 인증이 완료되지 않았습니다."),
+    DISCORD_NOT_SATISFIED(HttpStatus.CONFLICT, "디스코드 인증이 완료되지 않았습니다."),
+    BEVY_NOT_SATISFIED(HttpStatus.CONFLICT, "GDSC Bevy 가입이 완료되지 않았습니다."),
+    EMAIL_ALREADY_SATISFIED(HttpStatus.CONFLICT, "이미 이메일 인증된 회원입니다."),
+    BASIC_INFO_NOT_SATISFIED(HttpStatus.CONFLICT, "기본 회원정보 작성이 완료되지 않았습니다."),
 
     // Univ Email Verification
-    UNIV_EMAIL_ALREADY_VERIFIED(HttpStatus.CONFLICT, "이미 가입된 재학생 메일입니다."),
+    UNIV_EMAIL_ALREADY_SATISFIED(HttpStatus.CONFLICT, "이미 가입된 재학생 메일입니다."),
     UNIV_EMAIL_FORMAT_MISMATCH(HttpStatus.BAD_REQUEST, "형식에 맞지 않는 재학생 메일입니다."),
     UNIV_EMAIL_DOMAIN_MISMATCH(HttpStatus.BAD_REQUEST, "재학생 메일의 도메인이 맞지 않습니다."),
     MESSAGING_EXCEPTION(HttpStatus.BAD_REQUEST, "수신자 이메일이 올바르지 않습니다."),
@@ -67,10 +67,10 @@ public enum ErrorCode {
     DISCORD_MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "디스코드 멤버를 찾을 수 없습니다."),
 
     // Membership
-    PAYMENT_NOT_VERIFIED(HttpStatus.CONFLICT, "회비 납부가 완료되지 않았습니다."),
+    PAYMENT_NOT_SATISFIED(HttpStatus.CONFLICT, "회비 납부가 완료되지 않았습니다."),
     MEMBERSHIP_NOT_APPLICABLE(HttpStatus.CONFLICT, "멤버십 가입을 신청할 수 없는 회원입니다."),
     MEMBERSHIP_ALREADY_APPLIED(HttpStatus.CONFLICT, "이미 이번 학기에 멤버십 가입을 신청한 회원입니다."),
-    MEMBERSHIP_ALREADY_VERIFIED(HttpStatus.CONFLICT, "이미 이번 학기에 정회원 승급을 완료한 회원입니다."),
+    MEMBERSHIP_ALREADY_SATISFIED(HttpStatus.CONFLICT, "이미 이번 학기에 정회원 승급을 완료한 회원입니다."),
     MEMBERSHIP_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 멤버십이 존재하지 않습니다."),
 
     // Recruitment

@@ -1,6 +1,6 @@
 package com.gdschongik.gdsc.domain.membership.application;
 
-import static com.gdschongik.gdsc.domain.common.model.RequirementStatus.VERIFIED;
+import static com.gdschongik.gdsc.domain.common.model.RequirementStatus.SATISFIED;
 import static com.gdschongik.gdsc.domain.member.domain.MemberRole.ASSOCIATE;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
@@ -58,7 +58,7 @@ public class MembershipServiceTest extends IntegrationTest {
             // then
             assertThatThrownBy(() -> membershipService.submitMembership(recruitment.getId()))
                     .isInstanceOf(CustomException.class)
-                    .hasMessage(MEMBERSHIP_ALREADY_VERIFIED.getMessage());
+                    .hasMessage(MEMBERSHIP_ALREADY_SATISFIED.getMessage());
         }
 
         @Test
@@ -101,7 +101,7 @@ public class MembershipServiceTest extends IntegrationTest {
         // when & then
         assertThatThrownBy(() -> membershipService.verifyPaymentStatus(membership.getId()))
                 .isInstanceOf(CustomException.class)
-                .hasMessage(MEMBERSHIP_ALREADY_VERIFIED.getMessage());
+                .hasMessage(MEMBERSHIP_ALREADY_SATISFIED.getMessage());
     }
 
     @Nested
@@ -119,7 +119,7 @@ public class MembershipServiceTest extends IntegrationTest {
             membership = membershipRepository.findById(membership.getId()).get();
 
             // then
-            assertThat(membership.getRegularRequirement().getPaymentStatus()).isEqualTo(VERIFIED);
+            assertThat(membership.getRegularRequirement().getPaymentStatus()).isEqualTo(SATISFIED);
         }
     }
 }

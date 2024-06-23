@@ -127,7 +127,7 @@ public class Member extends BaseTimeEntity {
             throw new CustomException(MEMBER_ALREADY_ASSOCIATE);
         }
 
-        associateRequirement.validateAllVerified();
+        associateRequirement.validateAllSatisfied();
     }
 
     /**

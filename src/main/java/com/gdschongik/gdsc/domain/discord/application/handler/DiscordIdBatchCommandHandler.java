@@ -22,7 +22,7 @@ public class DiscordIdBatchCommandHandler implements DiscordEventHandler {
 
         String discordUsername = event.getUser().getName();
         commonDiscordService.checkPermissionForCommand(discordUsername);
-        commonDiscordService.batchDiscordId(VERIFIED);
+        commonDiscordService.batchDiscordId(SATISFIED);
 
         event.getHook()
                 .sendMessage(REPLY_MESSAGE_BATCH_DISCORD_ID)

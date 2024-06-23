@@ -56,62 +56,62 @@ public class AssociateRequirement {
     // 상태 변경 로직
 
     public void verifyUniv() {
-        this.univStatus = VERIFIED;
+        this.univStatus = SATISFIED;
     }
 
     public void verifyDiscord() {
-        this.discordStatus = VERIFIED;
+        this.discordStatus = SATISFIED;
     }
 
     public void verifyBevy() {
-        this.bevyStatus = VERIFIED;
+        this.bevyStatus = SATISFIED;
     }
 
     public void verifyInfo() {
-        this.infoStatus = VERIFIED;
+        this.infoStatus = SATISFIED;
     }
 
     // 데이터 전달 로직
 
-    private boolean isUnivVerified() {
-        return this.univStatus == VERIFIED;
+    private boolean isUnivSatisfied() {
+        return this.univStatus == SATISFIED;
     }
 
-    private boolean isDiscordVerified() {
-        return this.discordStatus == VERIFIED;
+    private boolean isDiscordSatisfied() {
+        return this.discordStatus == SATISFIED;
     }
 
-    private boolean isBevyVerified() {
-        return this.bevyStatus == VERIFIED;
+    private boolean isBevySatisfied() {
+        return this.bevyStatus == SATISFIED;
     }
 
-    private boolean isInfoVerified() {
-        return this.infoStatus == VERIFIED;
+    private boolean isInfoSatisfied() {
+        return this.infoStatus == SATISFIED;
     }
 
     // 검증 로직
 
-    public void validateAllVerified() {
-        if (!isUnivVerified()) {
-            throw new CustomException(UNIV_NOT_VERIFIED);
+    public void validateAllSatisfied() {
+        if (!isUnivSatisfied()) {
+            throw new CustomException(UNIV_NOT_SATISFIED);
         }
 
-        if (!isDiscordVerified()) {
-            throw new CustomException(DISCORD_NOT_VERIFIED);
+        if (!isDiscordSatisfied()) {
+            throw new CustomException(DISCORD_NOT_SATISFIED);
         }
 
-        if (!isBevyVerified()) {
-            throw new CustomException(BEVY_NOT_VERIFIED);
+        if (!isBevySatisfied()) {
+            throw new CustomException(BEVY_NOT_SATISFIED);
         }
 
-        if (!isInfoVerified()) {
-            throw new CustomException(BASIC_INFO_NOT_VERIFIED);
+        if (!isInfoSatisfied()) {
+            throw new CustomException(BASIC_INFO_NOT_SATISFIED);
         }
     }
 
     public void checkVerifiableUniv() {
-        if (isUnivVerified()) {
-            throw new CustomException(EMAIL_ALREADY_VERIFIED);
+        if (isUnivSatisfied()) {
+            throw new CustomException(EMAIL_ALREADY_SATISFIED);
         }
     }
 }
