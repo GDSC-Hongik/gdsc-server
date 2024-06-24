@@ -62,7 +62,7 @@ public class IssuedCoupon extends BaseTimeEntity {
     // 검증 로직
 
     private void validateUsable() {
-        if (this.isRevoked.equals(TRUE)) {
+        if (isRevoked.equals(TRUE)) {
             throw new CustomException(COUPON_NOT_USABLE_REVOKED);
         }
 
@@ -85,21 +85,21 @@ public class IssuedCoupon extends BaseTimeEntity {
 
     public void use() {
         validateUsable();
-        this.usedAt = LocalDateTime.now();
+        usedAt = LocalDateTime.now();
     }
 
     public void revoke() {
         validateRevokable();
-        this.isRevoked = true;
+        isRevoked = true;
     }
 
     // 데이터 전달 로직
 
     public boolean isUsed() {
-        return this.usedAt != null;
+        return usedAt != null;
     }
 
     public boolean isRevoked() {
-        return this.isRevoked;
+        return isRevoked;
     }
 }

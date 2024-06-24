@@ -92,7 +92,7 @@ public class Membership extends BaseSemesterEntity {
     public void verifyPaymentStatus() {
         validateRegularRequirement();
 
-        this.regularRequirement.updatePaymentStatus(SATISFIED);
+        regularRequirement.updatePaymentStatus(SATISFIED);
         regularRequirement.validateAllSatisfied();
 
         registerEvent(new MemberRegularEvent(member.getId(), member.getDiscordUsername()));
@@ -101,6 +101,6 @@ public class Membership extends BaseSemesterEntity {
     // 데이터 전달 로직
 
     public boolean isRegularRequirementAllSatisfied() {
-        return this.regularRequirement.isAllSatisfied();
+        return regularRequirement.isAllSatisfied();
     }
 }

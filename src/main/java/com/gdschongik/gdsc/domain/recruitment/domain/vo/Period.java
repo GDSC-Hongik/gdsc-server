@@ -38,8 +38,7 @@ public class Period {
 
     public boolean isOpen() {
         LocalDateTime now = LocalDateTime.now();
-        return (now.isAfter(this.startDate) || now.isEqual(startDate))
-                && (now.isBefore(this.endDate) || now.isEqual(startDate));
+        return (now.isAfter(startDate) || now.isEqual(startDate)) && (now.isBefore(endDate) || now.isEqual(startDate));
     }
 
     // TODO validateRegularRequirement처럼 로직 변경

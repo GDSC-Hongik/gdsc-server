@@ -70,11 +70,11 @@ public class Recruitment extends BaseSemesterEntity {
     }
 
     public boolean isOpen() {
-        return this.period.isOpen();
+        return period.isOpen();
     }
 
     public void validatePeriodOverlap(LocalDateTime startDate, LocalDateTime endDate) {
-        this.period.validatePeriodOverlap(startDate, endDate);
+        period.validatePeriodOverlap(startDate, endDate);
     }
 
     public void updateRecruitment(
