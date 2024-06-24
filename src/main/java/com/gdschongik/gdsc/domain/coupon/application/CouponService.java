@@ -77,11 +77,12 @@ public class CouponService {
         log.info("[CouponService] 쿠폰 회수: issuedCouponId={}", issuedCouponId);
     }
 
-    public List<CouponResponse> findMyIssuedCoupons() {
+    public List<IssuedCouponResponse> findMyUsableIssuedCoupons() {
         Member currentMember = memberUtil.getCurrentMember();
 
         return issuedCouponRepository.findByMember(currentMember).stream()
-                .map(issuedCoupon -> CouponResponse.from(issuedCoupon.getCoupon()))
+                .filter(IssuedCoupon::isUsable)
+                .map(IssuedCouponResponse::from)
                 .toList();
     }
 }

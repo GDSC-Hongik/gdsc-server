@@ -102,4 +102,13 @@ public class IssuedCoupon extends BaseTimeEntity {
     public boolean isRevoked() {
         return this.isRevoked;
     }
+
+    public boolean isUsable() {
+        try {
+            validateUsable();
+            return true;
+        } catch (CustomException e) {
+            return false;
+        }
+    }
 }
