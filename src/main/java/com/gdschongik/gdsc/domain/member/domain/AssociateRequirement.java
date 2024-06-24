@@ -56,37 +56,37 @@ public class AssociateRequirement {
     // 상태 변경 로직
 
     public void verifyUniv() {
-        this.univStatus = SATISFIED;
+        univStatus = SATISFIED;
     }
 
     public void verifyDiscord() {
-        this.discordStatus = SATISFIED;
+        discordStatus = SATISFIED;
     }
 
     public void verifyBevy() {
-        this.bevyStatus = SATISFIED;
+        bevyStatus = SATISFIED;
     }
 
     public void verifyInfo() {
-        this.infoStatus = SATISFIED;
+        infoStatus = SATISFIED;
     }
 
     // 데이터 전달 로직
 
     private boolean isUnivSatisfied() {
-        return this.univStatus == SATISFIED;
+        return univStatus == SATISFIED;
     }
 
     private boolean isDiscordSatisfied() {
-        return this.discordStatus == SATISFIED;
+        return discordStatus == SATISFIED;
     }
 
     private boolean isBevySatisfied() {
-        return this.bevyStatus == SATISFIED;
+        return bevyStatus == SATISFIED;
     }
 
     private boolean isInfoSatisfied() {
-        return this.infoStatus == SATISFIED;
+        return infoStatus == SATISFIED;
     }
 
     // 검증 로직

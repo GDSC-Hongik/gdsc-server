@@ -111,10 +111,10 @@ public class Member extends BaseTimeEntity {
      * 대부분의 상태 변경 로직에서 사용됩니다.
      */
     private void validateStatusUpdatable() {
-        if (this.status.isDeleted()) {
+        if (status.isDeleted()) {
             throw new CustomException(MEMBER_DELETED);
         }
-        if (this.status.isForbidden()) {
+        if (status.isForbidden()) {
             throw new CustomException(MEMBER_FORBIDDEN);
         }
     }
@@ -123,7 +123,7 @@ public class Member extends BaseTimeEntity {
      * 준회원 승급 가능 여부를 검증합니다.
      */
     private void validateAssociateAvailable() {
-        if (this.role.equals(ASSOCIATE)) {
+        if (role.equals(ASSOCIATE)) {
             throw new CustomException(MEMBER_ALREADY_ASSOCIATE);
         }
 
@@ -159,7 +159,7 @@ public class Member extends BaseTimeEntity {
         this.department = department;
         this.email = email;
 
-        this.associateRequirement.verifyInfo();
+        associateRequirement.verifyInfo();
 
         registerEvent(new MemberAssociateEvent(this.id));
     }
@@ -191,7 +191,7 @@ public class Member extends BaseTimeEntity {
         this.discordUsername = discordUsername;
         this.nickname = nickname;
 
-        this.associateRequirement.verifyDiscord();
+        associateRequirement.verifyDiscord();
 
         registerEvent(new MemberAssociateEvent(this.id));
     }
@@ -203,9 +203,9 @@ public class Member extends BaseTimeEntity {
     public void verifyBevy() {
         validateStatusUpdatable();
 
-        this.associateRequirement.verifyBevy();
+        associateRequirement.verifyBevy();
 
-        registerEvent(new MemberAssociateEvent(this.id));
+        registerEvent(new MemberAssociateEvent(id));
     }
 
     /**
@@ -221,7 +221,7 @@ public class Member extends BaseTimeEntity {
 
         validateAssociateAvailable();
 
-        this.role = ASSOCIATE;
+        role = ASSOCIATE;
     }
 
     /**
@@ -241,7 +241,7 @@ public class Member extends BaseTimeEntity {
     public void demoteToAssociate() {
         validateStatusUpdatable();
 
-        this.role = ASSOCIATE;
+        role = ASSOCIATE;
     }
 
     // 기타 상태 변경 로직
@@ -258,10 +258,10 @@ public class Member extends BaseTimeEntity {
      * 해당 회원을 탈퇴 처리합니다.
      */
     public void withdraw() {
-        if (this.status.isDeleted()) {
+        if (status.isDeleted()) {
             throw new CustomException(MEMBER_DELETED);
         }
-        this.status = MemberStatus.DELETED;
+        status = MemberStatus.DELETED;
     }
 
     /**

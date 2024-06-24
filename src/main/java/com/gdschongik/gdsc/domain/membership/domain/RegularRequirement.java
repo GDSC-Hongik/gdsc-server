@@ -38,7 +38,7 @@ public class RegularRequirement {
     }
 
     public boolean isPaymentSatisfied() {
-        return this.paymentStatus == RequirementStatus.SATISFIED;
+        return paymentStatus == RequirementStatus.SATISFIED;
     }
 
     /**

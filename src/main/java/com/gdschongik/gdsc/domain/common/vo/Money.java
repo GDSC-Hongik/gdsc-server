@@ -21,12 +21,12 @@ public final class Money {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof Money other && this.amount.compareTo(other.amount) == 0;
+        return obj instanceof Money other && amount.compareTo(other.amount) == 0;
     }
 
     @Override
     public int hashCode() {
-        return this.amount.stripTrailingZeros().hashCode();
+        return amount.stripTrailingZeros().hashCode();
     }
 
     @Builder(access = AccessLevel.PRIVATE)
@@ -51,38 +51,38 @@ public final class Money {
     // 금액 사칙연산 로직
 
     public Money add(@NonNull Money target) {
-        return Money.from(this.amount.add(target.amount));
+        return Money.from(amount.add(target.amount));
     }
 
     public Money subtract(@NonNull Money target) {
-        return Money.from(this.amount.subtract(target.amount));
+        return Money.from(amount.subtract(target.amount));
     }
 
     public Money multiply(@NonNull BigDecimal target) {
-        return Money.builder().amount(this.amount.multiply(target)).build();
+        return Money.builder().amount(amount.multiply(target)).build();
     }
 
     public Money divide(@NonNull BigDecimal target) {
         return Money.builder()
-                .amount(this.amount.divide(target, RoundingMode.HALF_UP))
+                .amount(amount.divide(target, RoundingMode.HALF_UP))
                 .build();
     }
 
     // 금액 비교 로직
 
     public boolean isGreaterThan(@NonNull Money target) {
-        return this.amount.compareTo(target.amount) > 0;
+        return amount.compareTo(target.amount) > 0;
     }
 
     public boolean isGreaterThanOrEqual(@NonNull Money target) {
-        return this.amount.compareTo(target.amount) >= 0;
+        return amount.compareTo(target.amount) >= 0;
     }
 
     public boolean isLessThan(@NonNull Money target) {
-        return this.amount.compareTo(target.amount) < 0;
+        return amount.compareTo(target.amount) < 0;
     }
 
     public boolean isLessThanOrEqual(@NonNull Money target) {
-        return this.amount.compareTo(target.amount) <= 0;
+        return amount.compareTo(target.amount) <= 0;
     }
 }
