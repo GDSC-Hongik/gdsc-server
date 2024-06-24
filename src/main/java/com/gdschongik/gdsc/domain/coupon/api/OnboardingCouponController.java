@@ -19,7 +19,7 @@ public class OnboardingCouponController {
 
     private final CouponService couponService;
 
-    @Operation(summary = "내 사용 가능 발급쿠폰 조회", description = "나에게 발급된 쿠폰을 조회합니다.")
+    @Operation(summary = "사용 가능한 내 발급쿠폰 조회", description = "나에게 발급된 쿠폰 중 사용 가능한 것만 조회합니다.")
     @GetMapping("/issued/me")
     public ResponseEntity<List<IssuedCouponResponse>> getMyUsableIssuedCoupons() {
         var response = couponService.findMyUsableIssuedCoupons();
