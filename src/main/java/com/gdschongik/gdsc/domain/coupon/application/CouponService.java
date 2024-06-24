@@ -14,6 +14,7 @@ import com.gdschongik.gdsc.domain.coupon.dto.response.IssuedCouponResponse;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.global.exception.CustomException;
+import com.gdschongik.gdsc.global.util.MemberUtil;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class CouponService {
 
+    private final MemberUtil memberUtil;
     private final CouponRepository couponRepository;
     private final IssuedCouponRepository issuedCouponRepository;
     private final MemberRepository memberRepository;
@@ -73,5 +75,14 @@ public class CouponService {
 
         issuedCoupon.revoke();
         log.info("[CouponService] 쿠폰 회수: issuedCouponId={}", issuedCouponId);
+    }
+
+    public List<IssuedCouponResponse> findMyUsableIssuedCoupons() {
+        Member currentMember = memberUtil.getCurrentMember();
+
+        return issuedCouponRepository.findByMember(currentMember).stream()
+                .filter(IssuedCoupon::isUsable)
+                .map(IssuedCouponResponse::from)
+                .toList();
     }
 }
