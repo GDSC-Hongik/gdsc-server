@@ -45,7 +45,7 @@ public class UnivEmailVerificationLinkSendService {
 
     public void send(String univEmail) {
         hongikUnivEmailValidator.validate(univEmail);
-        validateUnivEmailNotVerified(univEmail);
+        validateUnivEmailNotSatisfied(univEmail);
 
         String verificationToken = generateVerificationToken(univEmail);
         String verificationLink = verificationLinkUtil.createLink(verificationToken);
@@ -53,10 +53,10 @@ public class UnivEmailVerificationLinkSendService {
         mailSender.send(univEmail, VERIFICATION_EMAIL_SUBJECT, mailContent);
     }
 
-    private void validateUnivEmailNotVerified(String univEmail) {
+    private void validateUnivEmailNotSatisfied(String univEmail) {
         Optional<Member> member = memberRepository.findByUnivEmail(univEmail);
         if (member.isPresent()) {
-            throw new CustomException(ErrorCode.UNIV_EMAIL_ALREADY_VERIFIED);
+            throw new CustomException(ErrorCode.UNIV_EMAIL_ALREADY_SATISFIED);
         }
     }
 

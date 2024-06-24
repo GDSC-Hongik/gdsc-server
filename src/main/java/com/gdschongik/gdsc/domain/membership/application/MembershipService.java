@@ -56,7 +56,7 @@ public class MembershipService {
                 .findByMemberAndAcademicYearAndSemesterType(currentMember, academicYear, semesterType)
                 .ifPresent(membership -> {
                     if (membership.isRegularRequirementAllSatisfied()) {
-                        throw new CustomException(MEMBERSHIP_ALREADY_VERIFIED);
+                        throw new CustomException(MEMBERSHIP_ALREADY_SATISFIED);
                     }
                     throw new CustomException(MEMBERSHIP_ALREADY_APPLIED);
                 });

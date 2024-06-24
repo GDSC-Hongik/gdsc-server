@@ -64,7 +64,7 @@ public class Membership extends BaseSemesterEntity {
         return Membership.builder()
                 .member(member)
                 .recruitment(recruitment)
-                .regularRequirement(RegularRequirement.createUnverifiedRequirement())
+                .regularRequirement(RegularRequirement.createUnsatisfiedRequirement())
                 .academicYear(recruitment.getAcademicYear())
                 .semesterType(recruitment.getSemesterType())
                 .build();
@@ -83,7 +83,7 @@ public class Membership extends BaseSemesterEntity {
 
     public void validateRegularRequirement() {
         if (isRegularRequirementAllSatisfied()) {
-            throw new CustomException(MEMBERSHIP_ALREADY_VERIFIED);
+            throw new CustomException(MEMBERSHIP_ALREADY_SATISFIED);
         }
     }
 
@@ -92,8 +92,8 @@ public class Membership extends BaseSemesterEntity {
     public void verifyPaymentStatus() {
         validateRegularRequirement();
 
-        this.regularRequirement.updatePaymentStatus(VERIFIED);
-        regularRequirement.validateAllVerified();
+        this.regularRequirement.updatePaymentStatus(SATISFIED);
+        regularRequirement.validateAllSatisfied();
 
         registerEvent(new MemberRegularEvent(member.getId(), member.getDiscordUsername()));
     }
@@ -101,6 +101,6 @@ public class Membership extends BaseSemesterEntity {
     // 데이터 전달 로직
 
     public boolean isRegularRequirementAllSatisfied() {
-        return this.regularRequirement.isAllVerified();
+        return this.regularRequirement.isAllSatisfied();
     }
 }

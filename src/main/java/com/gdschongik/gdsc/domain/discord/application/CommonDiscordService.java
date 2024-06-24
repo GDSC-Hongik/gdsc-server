@@ -29,9 +29,9 @@ public class CommonDiscordService {
 
     @Transactional
     public void batchDiscordId(RequirementStatus discordStatus) {
-        List<Member> discordVerifiedMembers = memberRepository.findAllByDiscordStatus(discordStatus);
+        List<Member> discordSatisfiedMembers = memberRepository.findAllByDiscordStatus(discordStatus);
 
-        discordVerifiedMembers.forEach(member -> {
+        discordSatisfiedMembers.forEach(member -> {
             String discordUsername = member.getDiscordUsername();
             String discordId = discordUtil.getMemberIdByUsername(discordUsername);
             member.updateDiscordId(discordId);

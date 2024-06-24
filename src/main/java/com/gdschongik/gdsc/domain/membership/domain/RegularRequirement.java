@@ -1,6 +1,6 @@
 package com.gdschongik.gdsc.domain.membership.domain;
 
-import static com.gdschongik.gdsc.global.exception.ErrorCode.PAYMENT_NOT_VERIFIED;
+import static com.gdschongik.gdsc.global.exception.ErrorCode.PAYMENT_NOT_SATISFIED;
 
 import com.gdschongik.gdsc.domain.common.model.RequirementStatus;
 import com.gdschongik.gdsc.global.exception.CustomException;
@@ -27,7 +27,7 @@ public class RegularRequirement {
         this.paymentStatus = paymentStatus;
     }
 
-    public static RegularRequirement createUnverifiedRequirement() {
+    public static RegularRequirement createUnsatisfiedRequirement() {
         return RegularRequirement.builder()
                 .paymentStatus(RequirementStatus.PENDING)
                 .build();
@@ -37,20 +37,20 @@ public class RegularRequirement {
         this.paymentStatus = paymentStatus;
     }
 
-    public boolean isPaymentVerified() {
-        return this.paymentStatus == RequirementStatus.VERIFIED;
+    public boolean isPaymentSatisfied() {
+        return this.paymentStatus == RequirementStatus.SATISFIED;
     }
 
     /**
      * 정회원 승급 조건은 추가될 가능성이 존재
      */
-    public boolean isAllVerified() {
-        return isPaymentVerified();
+    public boolean isAllSatisfied() {
+        return isPaymentSatisfied();
     }
 
-    public void validateAllVerified() {
-        if (!isPaymentVerified()) {
-            throw new CustomException(PAYMENT_NOT_VERIFIED);
+    public void validateAllSatisfied() {
+        if (!isPaymentSatisfied()) {
+            throw new CustomException(PAYMENT_NOT_SATISFIED);
         }
     }
 }

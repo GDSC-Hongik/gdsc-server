@@ -71,7 +71,7 @@ class MemberTest {
 
             // then
             AssociateRequirement requirement = member.getAssociateRequirement();
-            assertThat(requirement.getInfoStatus()).isEqualTo(VERIFIED);
+            assertThat(requirement.getInfoStatus()).isEqualTo(SATISFIED);
         }
 
         @Test
@@ -84,7 +84,7 @@ class MemberTest {
 
             // then
             AssociateRequirement requirement = member.getAssociateRequirement();
-            assertThat(requirement.getUnivStatus()).isEqualTo(VERIFIED);
+            assertThat(requirement.getUnivStatus()).isEqualTo(SATISFIED);
         }
 
         @Test
@@ -97,7 +97,7 @@ class MemberTest {
 
             // then
             AssociateRequirement requirement = member.getAssociateRequirement();
-            assertThat(requirement.getDiscordStatus()).isEqualTo(VERIFIED);
+            assertThat(requirement.getDiscordStatus()).isEqualTo(SATISFIED);
         }
 
         @Test
@@ -110,7 +110,7 @@ class MemberTest {
 
             // then
             AssociateRequirement requirement = member.getAssociateRequirement();
-            assertThat(requirement.getBevyStatus()).isEqualTo(VERIFIED);
+            assertThat(requirement.getBevyStatus()).isEqualTo(SATISFIED);
         }
     }
 
@@ -129,7 +129,7 @@ class MemberTest {
             // when & then
             assertThatThrownBy(member::advanceToAssociate)
                     .isInstanceOf(CustomException.class)
-                    .hasMessage(BASIC_INFO_NOT_VERIFIED.getMessage());
+                    .hasMessage(BASIC_INFO_NOT_SATISFIED.getMessage());
         }
 
         @Test
@@ -144,7 +144,7 @@ class MemberTest {
             // when & then
             assertThatThrownBy(member::advanceToAssociate)
                     .isInstanceOf(CustomException.class)
-                    .hasMessage(DISCORD_NOT_VERIFIED.getMessage());
+                    .hasMessage(DISCORD_NOT_SATISFIED.getMessage());
         }
 
         @Test
@@ -159,7 +159,7 @@ class MemberTest {
             // when & then
             assertThatThrownBy(member::advanceToAssociate)
                     .isInstanceOf(CustomException.class)
-                    .hasMessage(BEVY_NOT_VERIFIED.getMessage());
+                    .hasMessage(BEVY_NOT_SATISFIED.getMessage());
         }
 
         @Test
