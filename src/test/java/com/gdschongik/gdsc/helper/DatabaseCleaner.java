@@ -1,4 +1,4 @@
-package com.gdschongik.gdsc.integration;
+package com.gdschongik.gdsc.helper;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;

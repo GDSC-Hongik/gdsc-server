@@ -10,7 +10,7 @@ import com.gdschongik.gdsc.domain.coupon.dao.IssuedCouponRepository;
 import com.gdschongik.gdsc.domain.coupon.dto.request.CouponCreateRequest;
 import com.gdschongik.gdsc.domain.coupon.dto.request.CouponIssueRequest;
 import com.gdschongik.gdsc.global.exception.CustomException;
-import com.gdschongik.gdsc.integration.IntegrationTest;
+import com.gdschongik.gdsc.helper.IntegrationTest;
 import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
