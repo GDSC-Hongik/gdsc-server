@@ -43,14 +43,6 @@ public class AdminMemberController {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "대기중인 회원 목록 조회", description = "대기중인 회원 목록을 조회합니다.")
-    @GetMapping("/pending")
-    public ResponseEntity<Page<AdminMemberResponse>> getPendingMembers(
-            MemberQueryOption queryOption, Pageable pageable) {
-        Page<AdminMemberResponse> response = adminMemberService.findAllPendingMembers(queryOption, pageable);
-        return ResponseEntity.ok().body(response);
-    }
-
     @Operation(summary = "회원 정보 수정", description = "회원 정보를 수정합니다.")
     @PutMapping("/{memberId}")
     public ResponseEntity<Void> updateMember(

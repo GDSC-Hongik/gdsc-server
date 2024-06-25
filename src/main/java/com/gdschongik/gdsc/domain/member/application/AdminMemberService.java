@@ -1,6 +1,5 @@
 package com.gdschongik.gdsc.domain.member.application;
 
-import static com.gdschongik.gdsc.domain.member.domain.MemberRole.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
@@ -33,11 +32,6 @@ public class AdminMemberService {
     private final ExcelUtil excelUtil;
     private final AdminRecruitmentService adminRecruitmentService;
 
-    public Page<AdminMemberResponse> findAll(MemberQueryOption queryOption, Pageable pageable) {
-        Page<Member> members = memberRepository.findAllByRole(queryOption, pageable, null);
-        return members.map(AdminMemberResponse::from);
-    }
-
     public Page<AdminMemberResponse> findAllByRole(
             MemberQueryOption queryOption, Pageable pageable, MemberRole memberRole) {
         Page<Member> members = memberRepository.findAllByRole(queryOption, pageable, memberRole);
@@ -62,11 +56,6 @@ public class AdminMemberService {
                 request.email(),
                 request.discordUsername(),
                 request.nickname());
-    }
-
-    public Page<AdminMemberResponse> findAllPendingMembers(MemberQueryOption queryOption, Pageable pageable) {
-        Page<Member> members = memberRepository.findAllByRole(queryOption, pageable, GUEST);
-        return members.map(AdminMemberResponse::from);
     }
 
     public byte[] createExcel() throws IOException {
