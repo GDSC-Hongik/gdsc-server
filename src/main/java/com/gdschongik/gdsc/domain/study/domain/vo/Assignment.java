@@ -17,17 +17,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Assignment {
 
-    // 과제 마감 시각
-    private LocalDateTime assignmentDueAt;
+    private String title;
 
-    private String assignmentTitle;
+    // 과제 마감 시각
+    private LocalDateTime deadline;
 
     @Column(columnDefinition = "TEXT")
-    private String assignmentNotionLink;
-
-    // 과제 휴강 여부
-    private boolean isAssignmentCanceled;
+    private String descriptionLink;
 
     @Enumerated(EnumType.STRING)
-    private Difficulty assignmentDifficulty;
+    private Difficulty difficulty;
+
+    // 과제 휴강 여부
+    private boolean isCancelled;
 }
