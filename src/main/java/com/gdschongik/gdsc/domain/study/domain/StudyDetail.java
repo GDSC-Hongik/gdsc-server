@@ -24,7 +24,7 @@ public class StudyDetail extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "session_id")
+    @Column(name = "t ")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
