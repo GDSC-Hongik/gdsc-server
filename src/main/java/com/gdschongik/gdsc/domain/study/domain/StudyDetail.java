@@ -34,6 +34,8 @@ public class StudyDetail extends BaseTimeEntity {
     // 현 회차 값
     private Long currentCount;
 
+    private String attendanceNumber;
+
     @Embedded
     private Period period;
 
