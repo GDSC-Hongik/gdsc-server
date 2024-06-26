@@ -33,7 +33,7 @@ public class Coupon extends BaseTimeEntity {
     private Money discountAmount;
 
     @Builder(access = AccessLevel.PRIVATE)
-    public Coupon(String name, Money discountAmount) {
+    private Coupon(String name, Money discountAmount) {
         this.name = name;
         this.discountAmount = discountAmount;
     }
