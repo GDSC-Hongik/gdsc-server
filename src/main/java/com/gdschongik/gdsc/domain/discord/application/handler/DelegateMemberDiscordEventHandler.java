@@ -20,8 +20,7 @@ public class DelegateMemberDiscordEventHandler implements SpringEventHandler {
     public void delegate(Object context) {
         MemberRegularEvent event = (MemberRegularEvent) context;
         Guild guild = discordUtil.getCurrentGuild();
-        // TODO: 이름이 아닌 ID로 찾기 위해 전체 멤버의 디스코드 사용자 ID를 저장해야 함
-        Member member = discordUtil.getMemberByUsername(event.discordUsername());
+        Member member = discordUtil.getMemberById(event.discordId());
         Role role = discordUtil.findRoleByName(MEMBER_ROLE_NAME);
 
         guild.addRoleToMember(member, role).queue();
