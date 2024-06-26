@@ -21,15 +21,13 @@ public abstract class BaseEntity extends AbstractAggregateRoot<BaseEntity> {
     @CreatedDate
     private LocalDateTime createdAt;
 
-    @Column
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    @Column
+    @Column(updatable = false)
     @CreatedBy
     private Long createdBy;
 
-    @Column
     @LastModifiedBy
     private Long updatedBy;
 }
