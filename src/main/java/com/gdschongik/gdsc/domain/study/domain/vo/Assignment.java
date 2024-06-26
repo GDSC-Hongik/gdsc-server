@@ -10,6 +10,7 @@ import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Comment;
 
 @Getter
 @Embeddable
@@ -19,7 +20,7 @@ public class Assignment {
 
     private String title;
 
-    // 과제 마감 시각
+    @Comment("과제 마감 시각")
     private LocalDateTime deadline;
 
     @Column(columnDefinition = "TEXT")
@@ -28,6 +29,6 @@ public class Assignment {
     @Enumerated(EnumType.STRING)
     private Difficulty difficulty;
 
-    // 과제 휴강 여부
+    @Comment("과제 휴강 여부")
     private boolean isCancelled;
 }
