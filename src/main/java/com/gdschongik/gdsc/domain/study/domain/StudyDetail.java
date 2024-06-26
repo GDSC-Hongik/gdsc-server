@@ -4,15 +4,7 @@ import com.gdschongik.gdsc.domain.common.model.BaseTimeEntity;
 import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import com.gdschongik.gdsc.domain.study.domain.vo.Assignment;
 import com.gdschongik.gdsc.domain.study.domain.vo.Session;
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -43,5 +35,8 @@ public class StudyDetail extends BaseTimeEntity {
     private Session session;
 
     @Embedded
+    @AttributeOverride(name = "title", column = @Column(name = "assignment_title"))
+    @AttributeOverride(name = "isCancelled", column = @Column(name = "assignment_is_cancelled"))
+    @AttributeOverride(name = "difficulty", column = @Column(name = "assignment_difficulty"))
     private Assignment assignment;
 }
