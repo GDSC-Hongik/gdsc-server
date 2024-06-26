@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Comment;
 
 @Getter
 @Entity
@@ -23,7 +24,7 @@ public class StudyDetail extends BaseTimeEntity {
     @JoinColumn(name = "study_id")
     private Study study;
 
-    // 현 회차 값
+    @Comment("현 회차 값")
     private Long currentCount;
 
     private String attendanceNumber;
@@ -32,6 +33,11 @@ public class StudyDetail extends BaseTimeEntity {
     private Period period;
 
     @Embedded
+    @AttributeOverride(name = "title", column = @Column(name = "session_title"))
+    @AttributeOverride(name = "isCancelled", column = @Column(name = "session_is_cancelled"))
+    @AttributeOverride(name = "difficulty", column = @Column(name = "session_difficulty"))
+    @AttributeOverride(name = "startAt", column = @Column(name = "session_start_at"))
+    @AttributeOverride(name = "description", column = @Column(name = "session_description"))
     private Session session;
 
     @Embedded
