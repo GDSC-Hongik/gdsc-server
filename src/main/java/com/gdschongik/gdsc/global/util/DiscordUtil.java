@@ -1,7 +1,8 @@
 package com.gdschongik.gdsc.global.util;
 
+import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
+
 import com.gdschongik.gdsc.global.exception.CustomException;
-import com.gdschongik.gdsc.global.exception.ErrorCode;
 import com.gdschongik.gdsc.global.property.DiscordProperty;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,7 @@ public class DiscordUtil {
     public Role findRoleByName(String roleName) {
         return jda.getRolesByName(roleName, true).stream()
                 .findFirst()
-                .orElseThrow(() -> new CustomException(ErrorCode.DISCORD_ROLE_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(DISCORD_ROLE_NOT_FOUND));
     }
 
     public Guild getCurrentGuild() {
@@ -35,14 +36,14 @@ public class DiscordUtil {
         return getCurrentGuild().getMembersByName(username, true).stream().findFirst();
     }
 
-    public Member getMemberByUsername(String username) {
-        return getOptionalMemberByUsername(username)
-                .orElseThrow(() -> new CustomException(ErrorCode.DISCORD_MEMBER_NOT_FOUND));
+    public Member getMemberById(String discordId) {
+        return Optional.ofNullable(getCurrentGuild().getMemberById(discordId))
+                .orElseThrow(() -> new CustomException(DISCORD_MEMBER_NOT_FOUND));
     }
 
     public String getMemberIdByUsername(String username) {
         return getOptionalMemberByUsername(username)
-                .orElseThrow(() -> new CustomException(ErrorCode.DISCORD_MEMBER_NOT_FOUND))
+                .orElseThrow(() -> new CustomException(DISCORD_MEMBER_NOT_FOUND))
                 .getId();
     }
 }

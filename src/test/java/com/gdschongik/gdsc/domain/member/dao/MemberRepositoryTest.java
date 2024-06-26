@@ -7,7 +7,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryOption;
-import com.gdschongik.gdsc.repository.RepositoryTest;
+import com.gdschongik.gdsc.helper.RepositoryTest;
 import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

@@ -95,7 +95,7 @@ public class Membership extends BaseSemesterEntity {
         regularRequirement.updatePaymentStatus(SATISFIED);
         regularRequirement.validateAllSatisfied();
 
-        registerEvent(new MemberRegularEvent(member.getId(), member.getDiscordUsername()));
+        registerEvent(new MemberRegularEvent(member.getId(), member.getDiscordId()));
     }
 
     // 데이터 전달 로직

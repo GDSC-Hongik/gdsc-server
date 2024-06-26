@@ -1,4 +1,4 @@
-package com.gdschongik.gdsc.integration;
+package com.gdschongik.gdsc.helper;
 
 import static com.gdschongik.gdsc.domain.member.domain.Department.*;
 import static com.gdschongik.gdsc.global.common.constant.MemberConstant.*;
