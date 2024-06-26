@@ -1,8 +1,7 @@
-package com.gdschongik.gdsc.repository;
+package com.gdschongik.gdsc.helper;
 
 import com.gdschongik.gdsc.config.TestQuerydslConfig;
 import com.gdschongik.gdsc.config.TestRedisConfig;
-import com.gdschongik.gdsc.integration.DatabaseCleaner;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;

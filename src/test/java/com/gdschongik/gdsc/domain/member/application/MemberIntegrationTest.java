@@ -10,7 +10,7 @@ import com.gdschongik.gdsc.domain.member.application.handler.MemberAssociateEven
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberAssociateEvent;
-import com.gdschongik.gdsc.integration.IntegrationTest;
+import com.gdschongik.gdsc.helper.IntegrationTest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
