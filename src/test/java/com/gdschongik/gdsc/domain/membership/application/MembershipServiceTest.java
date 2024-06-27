@@ -25,6 +25,7 @@ public class MembershipServiceTest extends IntegrationTest {
 
     private Membership createMembership(Member member, Recruitment recruitment) {
         Membership membership = Membership.createMembership(member, recruitment);
+        logoutAndReloginAs(1L, ASSOCIATE);
         return membershipRepository.save(membership);
     }
 
@@ -47,7 +48,6 @@ public class MembershipServiceTest extends IntegrationTest {
         void 해당_학기에_이미_Membership을_발급받았다면_실패한다() {
             // given
             Member member = createMember();
-            logoutAndReloginAs(1L, ASSOCIATE);
             Recruitment recruitment = createRecruitment();
             Membership membership = createMembership(member, recruitment);
 
@@ -65,7 +65,6 @@ public class MembershipServiceTest extends IntegrationTest {
         void 해당_Recruitment에_대해_Membership을_생성한_적이_있다면_실패한다() {
             // given
             Member member = createMember();
-            logoutAndReloginAs(1L, ASSOCIATE);
             Recruitment recruitment = createRecruitment();
             createMembership(member, recruitment);
 
@@ -79,8 +78,8 @@ public class MembershipServiceTest extends IntegrationTest {
         void 해당_Recruitment의_모집기간이_아니라면_실패한다() {
             // given
             createMember();
-            logoutAndReloginAs(1L, ASSOCIATE);
             Recruitment recruitment = createRecruitment();
+            logoutAndReloginAs(1L, ASSOCIATE);
 
             // when & then
             assertThatThrownBy(() -> membershipService.submitMembership(recruitment.getId()))

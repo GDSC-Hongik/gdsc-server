@@ -25,6 +25,7 @@ class MemberRepositoryTest extends RepositoryTest {
 
     private Member getMember() {
         Member member = Member.createGuestMember(OAUTH_ID);
+        logoutAndReloginAs(1L, GUEST);
         return memberRepository.save(member);
     }
 

@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import com.gdschongik.gdsc.domain.common.model.SemesterType;
 import com.gdschongik.gdsc.domain.common.vo.Money;
+import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRepository;
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.domain.recruitment.domain.RoundType;
@@ -35,6 +36,7 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
             Money fee) {
         Recruitment recruitment =
                 Recruitment.createRecruitment(name, startDate, endDate, academicYear, semesterType, roundType, fee);
+        logoutAndReloginAs(0L, MemberRole.ADMIN);
         return recruitmentRepository.save(recruitment);
     }
 
