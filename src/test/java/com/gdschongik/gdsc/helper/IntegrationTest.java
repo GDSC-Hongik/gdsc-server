@@ -50,7 +50,6 @@ public abstract class IntegrationTest {
 
     protected Member createMember() {
         Member member = Member.createGuestMember(OAUTH_ID);
-        logoutAndReloginAs(1L, MemberRole.GUEST);
         memberRepository.save(member);
 
         member.completeUnivEmailVerification(UNIV_EMAIL);
@@ -64,7 +63,6 @@ public abstract class IntegrationTest {
     protected Recruitment createRecruitment() {
         Recruitment recruitment = Recruitment.createRecruitment(
                 NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE, ROUND_TYPE, FEE);
-        logoutAndReloginAs(0L, MemberRole.ADMIN);
         return recruitmentRepository.save(recruitment);
     }
 }

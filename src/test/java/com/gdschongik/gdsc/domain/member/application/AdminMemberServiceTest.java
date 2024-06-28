@@ -10,7 +10,6 @@ import com.gdschongik.gdsc.domain.common.vo.Money;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Department;
 import com.gdschongik.gdsc.domain.member.domain.Member;
-import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberDemoteRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberUpdateRequest;
 import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRepository;
@@ -45,7 +44,6 @@ class AdminMemberServiceTest extends IntegrationTest {
             Money fee) {
         Recruitment recruitment =
                 Recruitment.createRecruitment(name, startDate, endDate, academicYear, semesterType, roundType, fee);
-        logoutAndReloginAs(0L, MemberRole.ADMIN);
         return recruitmentRepository.save(recruitment);
     }
 
@@ -54,7 +52,6 @@ class AdminMemberServiceTest extends IntegrationTest {
         // given
         Member member = Member.createGuestMember(OAUTH_ID);
         member.withdraw();
-        logoutAndReloginAs(0L, MemberRole.ADMIN);
         memberRepository.save(member);
 
         // when & then

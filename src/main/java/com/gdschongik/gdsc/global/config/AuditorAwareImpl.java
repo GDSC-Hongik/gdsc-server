@@ -1,5 +1,6 @@
 package com.gdschongik.gdsc.global.config;
 
+import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,10 @@ public class AuditorAwareImpl implements AuditorAware<Long> {
 
     @Override
     public Optional<Long> getCurrentAuditor() {
-        return Optional.of(memberUtil.getCurrentMemberId());
+        try {
+            return Optional.of(memberUtil.getCurrentMemberId());
+        } catch (CustomException e) {
+            return Optional.empty();
+        }
     }
 }
