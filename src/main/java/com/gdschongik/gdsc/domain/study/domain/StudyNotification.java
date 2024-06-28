@@ -1,6 +1,6 @@
 package com.gdschongik.gdsc.domain.study.domain;
 
-import com.gdschongik.gdsc.domain.common.model.BaseTimeEntity;
+import com.gdschongik.gdsc.domain.common.model.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class StudyNotification extends BaseTimeEntity {
+public class StudyNotification extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
