@@ -4,7 +4,6 @@ import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import java.util.Collection;
 import java.util.Collections;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,9 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @AllArgsConstructor
 public class PrincipalDetails implements UserDetails {
 
-    @Getter
     private final Long memberId;
-
     private final MemberRole memberRole;
 
     @Override
