@@ -1,10 +1,9 @@
 package com.gdschongik.gdsc.domain.order.domain;
 
 import com.gdschongik.gdsc.domain.common.model.BaseTimeEntity;
-import com.gdschongik.gdsc.domain.common.vo.Money;
 import com.gdschongik.gdsc.domain.coupon.domain.IssuedCoupon;
-import com.gdschongik.gdsc.domain.member.domain.Member;
-import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
+import com.gdschongik.gdsc.domain.membership.domain.Membership;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -40,64 +39,50 @@ public class Order extends BaseTimeEntity {
     @Comment("주문자 ID")
     private Long memberId;
 
+    @Comment("주문 대상 멤버십 ID")
+    private Long membershipId;
+
     @Comment("신청하려는 리쿠르팅 ID")
     private Long recruitmentId;
 
-    @Comment("사용한 발급쿠폰 ID")
+    @Comment("사용하려는 발급쿠폰 ID")
     private Long issuedCouponId;
 
-    @Comment("주문총액")
     @Embedded
-    private Money totalAmount;
-
-    @Comment("쿠폰할인금액")
-    @Embedded
-    private Money discountAmount;
-
-    @Comment("최종결제금액")
-    @Embedded
-    private Money finalPaymentAmount;
+    private MoneyInfo moneyInfo;
 
     @Builder(access = AccessLevel.PRIVATE)
     private Order(
             OrderStatus status,
             String nanoId,
             Long memberId,
+            Long membershipId,
             Long recruitmentId,
             Long issuedCouponId,
-            Money totalAmount,
-            Money discountAmount,
-            Money finalPaymentAmount) {
+            MoneyInfo moneyInfo) {
         this.status = status;
         this.nanoId = nanoId;
         this.memberId = memberId;
+        this.membershipId = membershipId;
         this.recruitmentId = recruitmentId;
         this.issuedCouponId = issuedCouponId;
-        this.totalAmount = totalAmount;
-        this.discountAmount = discountAmount;
-        this.finalPaymentAmount = finalPaymentAmount;
+        this.moneyInfo = moneyInfo;
     }
 
     /**
      * 결제 요청 전 임시 주문을 생성합니다.
+     * 쿠폰의 경우 사용 여부를 선택할 수 있습니다.
      */
     public static Order createPending(
-            String nanoId,
-            Member member,
-            Recruitment recruitment,
-            IssuedCoupon issuedCoupon,
-            Money totalAmount,
-            Money discountAmount,
-            Money finalPaymentAmount) {
+            String nanoId, Membership membership, @Nullable IssuedCoupon issuedCoupon, MoneyInfo moneyInfo) {
         return Order.builder()
                 .status(OrderStatus.PENDING)
                 .nanoId(nanoId)
-                .memberId(member.getId())
-                .recruitmentId(recruitment.getId())
-                .issuedCouponId(issuedCoupon.getId())
-                .totalAmount(totalAmount)
-                .discountAmount(discountAmount)
-                .finalPaymentAmount(finalPaymentAmount)
+                .memberId(membership.getMember().getId())
+                .membershipId(membership.getId())
+                .recruitmentId(membership.getRecruitment().getId())
+                .issuedCouponId(issuedCoupon != null ? issuedCoupon.getId() : null)
+                .moneyInfo(moneyInfo)
                 .build();
     }
 }
