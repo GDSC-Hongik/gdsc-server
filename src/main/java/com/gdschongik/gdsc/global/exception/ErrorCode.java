@@ -92,6 +92,19 @@ public enum ErrorCode {
     COUPON_NOT_REVOKABLE_ALREADY_USED(HttpStatus.CONFLICT, "이미 사용한 쿠폰은 회수할 수 없습니다."),
     COUPON_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 쿠폰입니다."),
     ISSUED_COUPON_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 발급쿠폰입니다."),
+
+    // Order
+    ORDER_MEMBER_NOT_ASSOCIATE(HttpStatus.CONFLICT, "준회원만 주문할 수 있습니다."),
+    ORDER_MEMBERSHIP_MEMBER_MISMATCH(HttpStatus.CONFLICT, "주문 대상 멤버십의 멤버와 현재 로그인한 멤버가 일치하지 않습니다."),
+    ORDER_MEMBERSHIP_ALREADY_PAID(HttpStatus.CONFLICT, "주문 대상 멤버십의 회비가 이미 납부되었습니다."),
+    ORDER_RECRUITMENT_CLOSED(HttpStatus.CONFLICT, "주문 대상 멤버십의 리크루팅이 종료되었습니다."),
+    ORDER_ISSUED_COUPON_MEMBER_MISMATCH(HttpStatus.CONFLICT, "주문 시 사용할 발급쿠폰의 멤버와 현재 로그인한 멤버가 일치하지 않습니다."),
+    ORDER_TOTAL_AMOUNT_MISMATCH(HttpStatus.CONFLICT, "주문 금액은 리쿠르팅 회비와 일치해야 합니다."),
+    ORDER_DISCOUNT_AMOUNT_NOT_ZERO(HttpStatus.CONFLICT, "쿠폰 미사용시 할인 금액은 0이어야 합니다."),
+    ORDER_DISCOUNT_AMOUNT_MISMATCH(HttpStatus.CONFLICT, "쿠폰 사용시 할인 금액은 쿠폰의 할인 금액과 일치해야 합니다."),
+
+    // Order - MoneyInfo
+    ORDER_FINAL_PAYMENT_AMOUNT_MISMATCH(HttpStatus.CONFLICT, "주문 최종결제금액은 주문총액에서 할인금액을 뺀 값이어야 합니다."),
     ;
 
     private final HttpStatus status;
