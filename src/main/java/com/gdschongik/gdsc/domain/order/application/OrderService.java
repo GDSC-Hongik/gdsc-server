@@ -10,6 +10,8 @@ import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.order.dao.OrderRepository;
 import com.gdschongik.gdsc.domain.order.domain.Order;
 import com.gdschongik.gdsc.domain.order.dto.request.OrderCreateRequest;
+import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRepository;
+import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class OrderService {
 
     private final OrderRepository orderRepository;
+    private final RecruitmentRepository recruitmentRepository;
     private final IssuedCouponRepository issuedCouponRepository;
     private final MemberRepository memberRepository;
 
@@ -31,13 +34,18 @@ public class OrderService {
         Member member =
                 memberRepository.findById(request.memberId()).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
 
+        Recruitment recruitment = recruitmentRepository
+                .findById(request.recruitmentId())
+                .orElseThrow(() -> new CustomException(RECRUITMENT_NOT_FOUND));
+
         IssuedCoupon issuedCoupon = issuedCouponRepository
                 .findById(request.issuedCouponId())
                 .orElseThrow(() -> new CustomException(ISSUED_COUPON_NOT_FOUND));
 
         Order order = Order.createPending(
-                request.nanoId(),
+                request.orderNanoId(),
                 member,
+                recruitment,
                 issuedCoupon,
                 Money.from(request.totalAmount()),
                 Money.from(request.discountAmount()),

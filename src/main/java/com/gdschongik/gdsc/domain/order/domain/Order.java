@@ -4,6 +4,7 @@ import com.gdschongik.gdsc.domain.common.model.BaseTimeEntity;
 import com.gdschongik.gdsc.domain.common.vo.Money;
 import com.gdschongik.gdsc.domain.coupon.domain.IssuedCoupon;
 import com.gdschongik.gdsc.domain.member.domain.Member;
+import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -39,6 +40,9 @@ public class Order extends BaseTimeEntity {
     @Comment("주문자 ID")
     private Long memberId;
 
+    @Comment("신청하려는 리쿠르팅 ID")
+    private Long recruitmentId;
+
     @Comment("사용한 발급쿠폰 ID")
     private Long issuedCouponId;
 
@@ -59,6 +63,7 @@ public class Order extends BaseTimeEntity {
             OrderStatus status,
             String nanoId,
             Long memberId,
+            Long recruitmentId,
             Long issuedCouponId,
             Money totalAmount,
             Money discountAmount,
@@ -66,6 +71,7 @@ public class Order extends BaseTimeEntity {
         this.status = status;
         this.nanoId = nanoId;
         this.memberId = memberId;
+        this.recruitmentId = recruitmentId;
         this.issuedCouponId = issuedCouponId;
         this.totalAmount = totalAmount;
         this.discountAmount = discountAmount;
@@ -78,6 +84,7 @@ public class Order extends BaseTimeEntity {
     public static Order createPending(
             String nanoId,
             Member member,
+            Recruitment recruitment,
             IssuedCoupon issuedCoupon,
             Money totalAmount,
             Money discountAmount,
@@ -86,6 +93,7 @@ public class Order extends BaseTimeEntity {
                 .status(OrderStatus.PENDING)
                 .nanoId(nanoId)
                 .memberId(member.getId())
+                .recruitmentId(recruitment.getId())
                 .issuedCouponId(issuedCoupon.getId())
                 .totalAmount(totalAmount)
                 .discountAmount(discountAmount)
