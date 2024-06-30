@@ -7,6 +7,7 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 
 public class IssuedCouponQueryMethod {
+
     protected BooleanExpression eqName(String name) {
         return name != null ? issuedCoupon.coupon.name.containsIgnoreCase(name) : null;
     }
