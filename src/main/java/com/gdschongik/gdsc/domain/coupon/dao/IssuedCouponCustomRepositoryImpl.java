@@ -3,7 +3,7 @@ package com.gdschongik.gdsc.domain.coupon.dao;
 import static com.gdschongik.gdsc.domain.coupon.domain.QIssuedCoupon.issuedCoupon;
 
 import com.gdschongik.gdsc.domain.coupon.domain.IssuedCoupon;
-import com.gdschongik.gdsc.domain.coupon.dto.request.CouponQueryOption;
+import com.gdschongik.gdsc.domain.coupon.dto.request.IssuedCouponQueryOption;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
@@ -18,7 +18,7 @@ public class IssuedCouponCustomRepositoryImpl extends IssuedCouponQueryMethod im
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<IssuedCoupon> findAllIssuedCoupons(CouponQueryOption queryOption, Pageable pageable) {
+    public Page<IssuedCoupon> findAllIssuedCoupons(IssuedCouponQueryOption queryOption, Pageable pageable) {
         List<IssuedCoupon> fetch = queryFactory
                 .selectFrom(issuedCoupon)
                 .where(matchesQueryOption(queryOption))

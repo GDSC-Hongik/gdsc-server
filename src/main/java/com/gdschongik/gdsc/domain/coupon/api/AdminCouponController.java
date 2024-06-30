@@ -4,6 +4,7 @@ import com.gdschongik.gdsc.domain.coupon.application.CouponService;
 import com.gdschongik.gdsc.domain.coupon.dto.request.CouponCreateRequest;
 import com.gdschongik.gdsc.domain.coupon.dto.request.CouponIssueRequest;
 import com.gdschongik.gdsc.domain.coupon.dto.request.CouponQueryOption;
+import com.gdschongik.gdsc.domain.coupon.dto.request.IssuedCouponQueryOption;
 import com.gdschongik.gdsc.domain.coupon.dto.response.CouponResponse;
 import com.gdschongik.gdsc.domain.coupon.dto.response.IssuedCouponResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -46,7 +47,7 @@ public class AdminCouponController {
     @Operation(summary = "발급쿠폰 조회", description = "발급된 쿠폰을 조회합니다.")
     @GetMapping("/issued")
     public ResponseEntity<Page<IssuedCouponResponse>> getIssuedCoupons(
-            CouponQueryOption queryOption, Pageable pageable) {
+            IssuedCouponQueryOption queryOption, Pageable pageable) {
         Page<IssuedCouponResponse> response = couponService.findAllIssuedCoupons(queryOption, pageable);
         return ResponseEntity.ok().body(response);
     }
