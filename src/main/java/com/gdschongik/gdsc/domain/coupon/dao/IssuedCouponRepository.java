@@ -5,6 +5,6 @@ import com.gdschongik.gdsc.domain.member.domain.Member;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface IssuedCouponRepository extends JpaRepository<IssuedCoupon, Long> {
+public interface IssuedCouponRepository extends JpaRepository<IssuedCoupon, Long>, IssuedCouponCustomRepository {
     List<IssuedCoupon> findByMember(Member member);
 }
