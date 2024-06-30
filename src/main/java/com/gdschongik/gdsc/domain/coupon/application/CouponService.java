@@ -9,7 +9,6 @@ import com.gdschongik.gdsc.domain.coupon.domain.Coupon;
 import com.gdschongik.gdsc.domain.coupon.domain.IssuedCoupon;
 import com.gdschongik.gdsc.domain.coupon.dto.request.CouponCreateRequest;
 import com.gdschongik.gdsc.domain.coupon.dto.request.CouponIssueRequest;
-import com.gdschongik.gdsc.domain.coupon.dto.request.CouponQueryOption;
 import com.gdschongik.gdsc.domain.coupon.dto.request.IssuedCouponQueryOption;
 import com.gdschongik.gdsc.domain.coupon.dto.response.CouponResponse;
 import com.gdschongik.gdsc.domain.coupon.dto.response.IssuedCouponResponse;
@@ -43,9 +42,8 @@ public class CouponService {
         log.info("[CouponService] 쿠폰 생성: name={}, discountAmount={}", request.name(), request.discountAmount());
     }
 
-    public Page<CouponResponse> findAllCoupons(CouponQueryOption queryOption, Pageable pageable) {
-        Page<Coupon> coupons = couponRepository.findAllCoupons(queryOption, pageable);
-        return coupons.map(CouponResponse::from);
+    public List<CouponResponse> findAllCoupons() {
+        return couponRepository.findAll().stream().map(CouponResponse::from).toList();
     }
 
     public Page<IssuedCouponResponse> findAllIssuedCoupons(IssuedCouponQueryOption queryOption, Pageable pageable) {
