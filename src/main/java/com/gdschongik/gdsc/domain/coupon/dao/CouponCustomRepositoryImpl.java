@@ -13,7 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 
 @RequiredArgsConstructor
-public class CouponCustomRepositoryIml extends CouponQueryMethod implements CouponCustomRepository {
+public class CouponCustomRepositoryImpl extends CouponQueryMethod implements CouponCustomRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
