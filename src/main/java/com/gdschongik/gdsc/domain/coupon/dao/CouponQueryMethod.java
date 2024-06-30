@@ -12,6 +12,6 @@ public class CouponQueryMethod {
     }
 
     protected BooleanBuilder matchesQueryOption(CouponQueryOption queryOption) {
-        return new BooleanBuilder().and(eqName(queryOption.name()));
+        return new BooleanBuilder().and(eqName(queryOption.couponName()));
     }
 }

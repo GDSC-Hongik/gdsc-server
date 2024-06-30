@@ -12,7 +12,8 @@ public record IssuedCouponResponse(
         BigDecimal discountAmount,
         LocalDateTime usedAt,
         LocalDateTime issuedAt,
-        boolean isUsed) {
+        boolean isUsed,
+        boolean isRevoked) {
     public static IssuedCouponResponse from(IssuedCoupon issuedCoupon) {
         return new IssuedCouponResponse(
                 issuedCoupon.getId(),
@@ -21,6 +22,7 @@ public record IssuedCouponResponse(
                 issuedCoupon.getCoupon().getDiscountAmount().getAmount(),
                 issuedCoupon.getUsedAt(),
                 issuedCoupon.getCreatedAt(),
-                issuedCoupon.isUsed());
+                issuedCoupon.isUsed(),
+                issuedCoupon.isRevoked());
     }
 }
