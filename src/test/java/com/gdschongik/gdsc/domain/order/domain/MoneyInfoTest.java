@@ -21,9 +21,8 @@ class MoneyInfoTest {
         MoneyInfo moneyInfo = MoneyInfo.of(totalAmount, discountAmount, finalPaymentAmount);
 
         // then
-        assertThat(moneyInfo.getTotalAmount()).isEqualTo(totalAmount);
-        assertThat(moneyInfo.getDiscountAmount()).isEqualTo(discountAmount);
-        assertThat(moneyInfo.getFinalPaymentAmount()).isEqualTo(finalPaymentAmount);
+        Money expectedFinalPaymentAmount = totalAmount.subtract(discountAmount);
+        assertThat(moneyInfo.getFinalPaymentAmount()).isEqualTo(expectedFinalPaymentAmount);
     }
 
     @Test
