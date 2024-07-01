@@ -47,7 +47,7 @@ public class OrderValidator {
         Money totalAmount = moneyInfo.getTotalAmount();
         Money discountAmount = moneyInfo.getDiscountAmount();
 
-        if (totalAmount.equals(recruitment.getFee())) {
+        if (!totalAmount.equals(recruitment.getFee())) {
             throw new CustomException(ORDER_TOTAL_AMOUNT_MISMATCH);
         }
 
