@@ -1,6 +1,7 @@
 package com.gdschongik.gdsc.domain.study.domain.vo;
 
 import com.gdschongik.gdsc.domain.study.domain.Difficulty;
+import com.gdschongik.gdsc.domain.study.domain.StudyStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
@@ -29,6 +30,6 @@ public class Assignment {
     @Enumerated(EnumType.STRING)
     private Difficulty difficulty;
 
-    @Comment("과제 휴강 여부")
-    private boolean isCancelled;
+    @Comment("과제 상태")
+    private StudyStatus status;
 }

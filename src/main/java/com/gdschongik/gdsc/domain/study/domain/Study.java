@@ -38,7 +38,7 @@ public class Study extends BaseSemesterEntity {
     private Period period;
 
     // 총 주차수
-    private Long sessionCount;
+    private Long totalWeek;
 
     // 스터디 상세 노션 링크(Text)
     @Column(columnDefinition = "TEXT")
