@@ -59,7 +59,7 @@ public class OrderValidator {
     }
 
     private void validateIssuedCouponOwnership(IssuedCoupon issuedCoupon, Member currentMember) {
-        if (issuedCoupon.getMember().getId().equals(currentMember.getId())) {
+        if (!issuedCoupon.getMember().getId().equals(currentMember.getId())) {
             throw new CustomException(ORDER_ISSUED_COUPON_MEMBER_MISMATCH);
         }
 
