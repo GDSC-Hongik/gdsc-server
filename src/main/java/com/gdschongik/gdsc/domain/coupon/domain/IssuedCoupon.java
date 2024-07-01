@@ -3,7 +3,7 @@ package com.gdschongik.gdsc.domain.coupon.domain;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import static java.lang.Boolean.*;
 
-import com.gdschongik.gdsc.domain.common.model.BaseTimeEntity;
+import com.gdschongik.gdsc.domain.common.model.BaseEntity;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.persistence.Column;
@@ -24,7 +24,7 @@ import org.hibernate.annotations.Comment;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class IssuedCoupon extends BaseTimeEntity {
+public class IssuedCoupon extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
