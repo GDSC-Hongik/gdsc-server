@@ -33,7 +33,6 @@ public class OrderService {
 
     @Transactional
     public void createPendingOrder(OrderCreateRequest request) {
-
         Membership membership = membershipRepository
                 .findById(request.membershipId())
                 .orElseThrow(() -> new CustomException(MEMBERSHIP_NOT_FOUND));
