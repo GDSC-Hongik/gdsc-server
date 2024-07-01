@@ -33,7 +33,7 @@ public class OrderValidator {
         Recruitment recruitment = membership.getRecruitment();
 
         if (!recruitment.isOpen()) {
-            throw new CustomException(ORDER_RECRUITMENT_CLOSED);
+            throw new CustomException(ORDER_RECRUITMENT_PERIOD_INVALID);
         }
 
         // 발급쿠폰 관련 검증

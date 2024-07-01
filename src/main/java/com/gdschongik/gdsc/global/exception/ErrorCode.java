@@ -96,7 +96,7 @@ public enum ErrorCode {
     // Order
     ORDER_MEMBERSHIP_MEMBER_MISMATCH(HttpStatus.CONFLICT, "주문 대상 멤버십의 멤버와 현재 로그인한 멤버가 일치하지 않습니다."),
     ORDER_MEMBERSHIP_ALREADY_PAID(HttpStatus.CONFLICT, "주문 대상 멤버십의 회비가 이미 납부되었습니다."),
-    ORDER_RECRUITMENT_CLOSED(HttpStatus.CONFLICT, "주문 대상 멤버십의 리크루팅이 종료되었습니다."),
+    ORDER_RECRUITMENT_PERIOD_INVALID(HttpStatus.CONFLICT, "주문 대상 멤버십의 리크루팅의 지원기간이 아닙니다."),
     ORDER_ISSUED_COUPON_MEMBER_MISMATCH(HttpStatus.CONFLICT, "주문 시 사용할 발급쿠폰의 멤버와 현재 로그인한 멤버가 일치하지 않습니다."),
     ORDER_TOTAL_AMOUNT_MISMATCH(HttpStatus.CONFLICT, "주문 금액은 리쿠르팅 회비와 일치해야 합니다."),
     ORDER_DISCOUNT_AMOUNT_NOT_ZERO(HttpStatus.CONFLICT, "쿠폰 미사용시 할인 금액은 0이어야 합니다."),
