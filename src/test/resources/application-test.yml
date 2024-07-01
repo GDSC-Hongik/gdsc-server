@@ -4,7 +4,7 @@ spring:
       on-profile: "test"
 
   datasource:
-    url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false;MODE=MYSQL;NON_KEYWORDS=YEAR
+    url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false;MODE=MYSQL;NON_KEYWORDS=YEAR,ORDER
 
 discord:
   enabled: false
