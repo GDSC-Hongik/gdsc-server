@@ -116,9 +116,9 @@ class OrderValidatorTest {
         Member currentMember = createAssociateMember(1L);
 
         LocalDateTime invalidStartDate = LocalDateTime.now().minusDays(2);
-        LocalDateTime invalidaEndDate = LocalDateTime.now().minusDays(1);
+        LocalDateTime invalidEndDate = LocalDateTime.now().minusDays(1);
         Recruitment recruitment =
-                createRecruitment(invalidStartDate, invalidaEndDate, 2024, SemesterType.FIRST, MONEY_20000_WON);
+                createRecruitment(invalidStartDate, invalidEndDate, 2024, SemesterType.FIRST, MONEY_20000_WON);
 
         Membership membership = createMembership(currentMember, recruitment);
 
