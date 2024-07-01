@@ -42,9 +42,6 @@ public class MembershipService {
                 .findById(recruitmentRoundId)
                 .orElseThrow(() -> new CustomException(RECRUITMENT_NOT_FOUND));
 
-        // Recruitment recruitment = recruitmentRepository
-        //         .findById(recruitmentId)
-        //         .orElseThrow(() -> new CustomException(RECRUITMENT_NOT_FOUND));
         validateMembershipDuplicate(
                 currentMember, recruitmentRound.getAcademicYear(), recruitmentRound.getSemesterType());
         validateRecruitmentOpen(recruitmentRound);
