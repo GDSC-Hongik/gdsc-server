@@ -94,7 +94,6 @@ public enum ErrorCode {
     ISSUED_COUPON_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 발급쿠폰입니다."),
 
     // Order
-    ORDER_MEMBER_NOT_ASSOCIATE(HttpStatus.CONFLICT, "준회원만 주문할 수 있습니다."),
     ORDER_MEMBERSHIP_MEMBER_MISMATCH(HttpStatus.CONFLICT, "주문 대상 멤버십의 멤버와 현재 로그인한 멤버가 일치하지 않습니다."),
     ORDER_MEMBERSHIP_ALREADY_PAID(HttpStatus.CONFLICT, "주문 대상 멤버십의 회비가 이미 납부되었습니다."),
     ORDER_RECRUITMENT_CLOSED(HttpStatus.CONFLICT, "주문 대상 멤버십의 리크루팅이 종료되었습니다."),
