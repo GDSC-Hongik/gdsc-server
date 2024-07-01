@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @MappedSuperclass
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public abstract class BaseSemesterEntity extends BaseTimeEntity {
+public abstract class BaseSemesterEntity extends BaseEntity {
 
     private Integer academicYear;
 

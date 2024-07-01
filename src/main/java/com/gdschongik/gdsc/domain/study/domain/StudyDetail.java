@@ -1,6 +1,6 @@
 package com.gdschongik.gdsc.domain.study.domain;
 
-import com.gdschongik.gdsc.domain.common.model.BaseTimeEntity;
+import com.gdschongik.gdsc.domain.common.model.BaseEntity;
 import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import com.gdschongik.gdsc.domain.study.domain.vo.Assignment;
 import com.gdschongik.gdsc.domain.study.domain.vo.Session;
@@ -8,11 +8,12 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Comment;
 
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class StudyDetail extends BaseTimeEntity {
+public class StudyDetail extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,8 +24,8 @@ public class StudyDetail extends BaseTimeEntity {
     @JoinColumn(name = "study_id")
     private Study study;
 
-    // 현 회차 값
-    private Long currentCount;
+    @Comment("현 주차수")
+    private Long week;
 
     private String attendanceNumber;
 
@@ -32,11 +33,16 @@ public class StudyDetail extends BaseTimeEntity {
     private Period period;
 
     @Embedded
+    @AttributeOverride(name = "title", column = @Column(name = "session_title"))
+    @AttributeOverride(name = "difficulty", column = @Column(name = "session_difficulty"))
+    @AttributeOverride(name = "startAt", column = @Column(name = "session_start_at"))
+    @AttributeOverride(name = "description", column = @Column(name = "session_description"))
+    @AttributeOverride(name = "status", column = @Column(name = "session_status"))
     private Session session;
 
     @Embedded
     @AttributeOverride(name = "title", column = @Column(name = "assignment_title"))
-    @AttributeOverride(name = "isCancelled", column = @Column(name = "assignment_is_cancelled"))
     @AttributeOverride(name = "difficulty", column = @Column(name = "assignment_difficulty"))
+    @AttributeOverride(name = "status", column = @Column(name = "assignment_status"))
     private Assignment assignment;
 }
