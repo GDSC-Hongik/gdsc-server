@@ -44,7 +44,7 @@ public class RecruitmentRound extends BaseSemesterEntity {
     @Enumerated(EnumType.STRING)
     private RoundType roundType;
 
-    @Builder
+    @Builder(access = AccessLevel.PRIVATE)
     private RecruitmentRound(
             String name,
             Period period,
