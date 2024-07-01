@@ -1,6 +1,6 @@
 package com.gdschongik.gdsc.domain.order.domain;
 
-import com.gdschongik.gdsc.domain.common.model.BaseTimeEntity;
+import com.gdschongik.gdsc.domain.common.model.BaseEntity;
 import com.gdschongik.gdsc.domain.coupon.domain.IssuedCoupon;
 import com.gdschongik.gdsc.domain.membership.domain.Membership;
 import jakarta.annotation.Nullable;
@@ -21,7 +21,7 @@ import org.hibernate.annotations.Comment;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Order extends BaseTimeEntity {
+public class Order extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
