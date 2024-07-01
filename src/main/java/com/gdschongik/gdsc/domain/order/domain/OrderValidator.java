@@ -40,6 +40,7 @@ public class OrderValidator {
 
         if (issuedCoupon != null) {
             validateIssuedCouponOwnership(issuedCoupon, currentMember);
+            issuedCoupon.validateUsable();
         }
 
         // 금액 관련 검증
@@ -62,8 +63,6 @@ public class OrderValidator {
         if (!issuedCoupon.getMember().getId().equals(currentMember.getId())) {
             throw new CustomException(ORDER_ISSUED_COUPON_MEMBER_MISMATCH);
         }
-
-        issuedCoupon.validateUsable();
     }
 
     private void validateDiscountAmountZero(Money discountAmount) {
