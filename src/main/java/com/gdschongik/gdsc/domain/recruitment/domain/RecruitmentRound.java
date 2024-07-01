@@ -14,6 +14,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
@@ -37,6 +38,7 @@ public class RecruitmentRound extends BaseSemesterEntity {
     private Period period;
 
     @ManyToOne
+    @JoinColumn(name = "recruitment_id")
     private Recruitment recruitment;
 
     @Enumerated(EnumType.STRING)
