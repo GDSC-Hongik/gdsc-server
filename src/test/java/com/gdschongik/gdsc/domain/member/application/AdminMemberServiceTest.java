@@ -5,20 +5,14 @@ import static com.gdschongik.gdsc.global.common.constant.RecruitmentConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 
-import com.gdschongik.gdsc.domain.common.model.SemesterType;
-import com.gdschongik.gdsc.domain.common.vo.Money;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Department;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberDemoteRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberUpdateRequest;
-import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRepository;
-import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
-import com.gdschongik.gdsc.domain.recruitment.domain.RoundType;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
 import com.gdschongik.gdsc.helper.IntegrationTest;
-import java.time.LocalDateTime;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,22 +24,6 @@ class AdminMemberServiceTest extends IntegrationTest {
 
     @Autowired
     private AdminMemberService adminMemberService;
-
-    @Autowired
-    private RecruitmentRepository recruitmentRepository;
-
-    private Recruitment createRecruitment(
-            String name,
-            LocalDateTime startDate,
-            LocalDateTime endDate,
-            Integer academicYear,
-            SemesterType semesterType,
-            RoundType roundType,
-            Money fee) {
-        Recruitment recruitment =
-                Recruitment.createRecruitment(name, startDate, endDate, academicYear, semesterType, roundType, fee);
-        return recruitmentRepository.save(recruitment);
-    }
 
     @Test
     void status가_DELETED라면_예외_발생() {
