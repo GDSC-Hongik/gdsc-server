@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.*;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.membership.dao.MembershipRepository;
 import com.gdschongik.gdsc.domain.membership.domain.Membership;
-import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
+import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.helper.IntegrationTest;
 import org.junit.jupiter.api.Nested;
@@ -23,8 +23,8 @@ public class MembershipServiceTest extends IntegrationTest {
     @Autowired
     private MembershipRepository membershipRepository;
 
-    private Membership createMembership(Member member, Recruitment recruitment) {
-        Membership membership = Membership.createMembership(member, recruitment);
+    private Membership createMembership(Member member, RecruitmentRound recruitmentRound) {
+        Membership membership = Membership.createMembership(member, recruitmentRound);
         return membershipRepository.save(membership);
     }
 
@@ -48,15 +48,15 @@ public class MembershipServiceTest extends IntegrationTest {
             // given
             Member member = createMember();
             logoutAndReloginAs(1L, ASSOCIATE);
-            Recruitment recruitment = createRecruitment();
-            Membership membership = createMembership(member, recruitment);
+            RecruitmentRound recruitmentRound = createRecruitmentRound();
+            Membership membership = createMembership(member, recruitmentRound);
 
             // when
             membership.verifyPaymentStatus();
             membershipRepository.save(membership);
 
             // then
-            assertThatThrownBy(() -> membershipService.submitMembership(recruitment.getId()))
+            assertThatThrownBy(() -> membershipService.submitMembership(recruitmentRound.getId()))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(MEMBERSHIP_ALREADY_SATISFIED.getMessage());
         }
@@ -66,11 +66,11 @@ public class MembershipServiceTest extends IntegrationTest {
             // given
             Member member = createMember();
             logoutAndReloginAs(1L, ASSOCIATE);
-            Recruitment recruitment = createRecruitment();
-            createMembership(member, recruitment);
+            RecruitmentRound recruitmentRound = createRecruitmentRound();
+            createMembership(member, recruitmentRound);
 
             // when & then
-            assertThatThrownBy(() -> membershipService.submitMembership(recruitment.getId()))
+            assertThatThrownBy(() -> membershipService.submitMembership(recruitmentRound.getId()))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(MEMBERSHIP_ALREADY_APPLIED.getMessage());
         }
@@ -80,10 +80,10 @@ public class MembershipServiceTest extends IntegrationTest {
             // given
             createMember();
             logoutAndReloginAs(1L, ASSOCIATE);
-            Recruitment recruitment = createRecruitment();
+            RecruitmentRound recruitmentRound = createRecruitmentRound();
 
             // when & then
-            assertThatThrownBy(() -> membershipService.submitMembership(recruitment.getId()))
+            assertThatThrownBy(() -> membershipService.submitMembership(recruitmentRound.getId()))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(RECRUITMENT_NOT_OPEN.getMessage());
         }
@@ -94,8 +94,8 @@ public class MembershipServiceTest extends IntegrationTest {
         // given
         Member member = createMember();
         logoutAndReloginAs(1L, ASSOCIATE);
-        Recruitment recruitment = createRecruitment();
-        Membership membership = createMembership(member, recruitment);
+        RecruitmentRound recruitmentRound = createRecruitmentRound();
+        Membership membership = createMembership(member, recruitmentRound);
         membershipService.verifyPaymentStatus(membership.getId());
 
         // when & then
@@ -111,8 +111,8 @@ public class MembershipServiceTest extends IntegrationTest {
             // given
             Member member = createMember();
             logoutAndReloginAs(1L, ASSOCIATE);
-            Recruitment recruitment = createRecruitment();
-            Membership membership = createMembership(member, recruitment);
+            RecruitmentRound recruitmentRound = createRecruitmentRound();
+            Membership membership = createMembership(member, recruitmentRound);
 
             // when
             membershipService.verifyPaymentStatus(membership.getId());

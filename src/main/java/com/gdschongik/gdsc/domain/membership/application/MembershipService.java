@@ -7,7 +7,8 @@ import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.membership.dao.MembershipRepository;
 import com.gdschongik.gdsc.domain.membership.domain.Membership;
 import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRepository;
-import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
+import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRoundRepository;
+import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import java.util.Optional;
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class MembershipService {
     private final MembershipRepository membershipRepository;
     private final RecruitmentRepository recruitmentRepository;
+    private final RecruitmentRoundRepository recruitmentRoundRepository;
     private final MemberUtil memberUtil;
 
     @Transactional
@@ -33,20 +35,26 @@ public class MembershipService {
     }
 
     @Transactional
-    public void submitMembership(Long recruitmentId) {
+    public void submitMembership(Long recruitmentRoundId) {
         Member currentMember = memberUtil.getCurrentMember();
-        Recruitment recruitment = recruitmentRepository
-                .findById(recruitmentId)
-                .orElseThrow(() -> new CustomException(RECRUITMENT_NOT_FOUND));
-        validateMembershipDuplicate(currentMember, recruitment.getAcademicYear(), recruitment.getSemesterType());
-        validateRecruitmentOpen(recruitment);
 
-        Membership membership = Membership.createMembership(currentMember, recruitment);
+        RecruitmentRound recruitmentRound = recruitmentRoundRepository
+                .findById(recruitmentRoundId)
+                .orElseThrow(() -> new CustomException(RECRUITMENT_NOT_FOUND));
+
+        // Recruitment recruitment = recruitmentRepository
+        //         .findById(recruitmentId)
+        //         .orElseThrow(() -> new CustomException(RECRUITMENT_NOT_FOUND));
+        validateMembershipDuplicate(
+                currentMember, recruitmentRound.getAcademicYear(), recruitmentRound.getSemesterType());
+        validateRecruitmentOpen(recruitmentRound);
+
+        Membership membership = Membership.createMembership(currentMember, recruitmentRound);
         membershipRepository.save(membership);
     }
 
-    private void validateRecruitmentOpen(Recruitment recruitment) {
-        if (!recruitment.isOpen()) {
+    private void validateRecruitmentOpen(RecruitmentRound recruitmentRound) {
+        if (!recruitmentRound.isOpen()) {
             throw new CustomException(RECRUITMENT_NOT_OPEN);
         }
     }
@@ -62,7 +70,7 @@ public class MembershipService {
                 });
     }
 
-    public Optional<Membership> findMyMembership(Member member, Recruitment recruitment) {
-        return membershipRepository.findByMemberAndRecruitment(member, recruitment);
+    public Optional<Membership> findMyMembership(Member member, RecruitmentRound recruitmentRound) {
+        return membershipRepository.findByMemberAndRecruitmentRound(member, recruitmentRound);
     }
 }

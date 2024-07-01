@@ -4,13 +4,19 @@ import static com.gdschongik.gdsc.domain.member.domain.Department.*;
 import static com.gdschongik.gdsc.global.common.constant.MemberConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.RecruitmentConstant.*;
 
+import com.gdschongik.gdsc.domain.common.model.SemesterType;
+import com.gdschongik.gdsc.domain.common.vo.Money;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import com.gdschongik.gdsc.domain.recruitment.application.OnboardingRecruitmentService;
 import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRepository;
+import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRoundRepository;
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
+import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
+import com.gdschongik.gdsc.domain.recruitment.domain.RoundType;
 import com.gdschongik.gdsc.global.security.PrincipalDetails;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -32,6 +38,9 @@ public abstract class IntegrationTest {
 
     @Autowired
     protected RecruitmentRepository recruitmentRepository;
+
+    @Autowired
+    protected RecruitmentRoundRepository recruitmentRoundRepository;
 
     @MockBean
     protected OnboardingRecruitmentService onboardingRecruitmentService;
@@ -60,9 +69,29 @@ public abstract class IntegrationTest {
         return memberRepository.save(member);
     }
 
-    protected Recruitment createRecruitment() {
-        Recruitment recruitment = Recruitment.createRecruitment(
-                NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE, ROUND_TYPE, FEE);
-        return recruitmentRepository.save(recruitment);
+    protected RecruitmentRound createRecruitmentRound() {
+        Recruitment recruitment = Recruitment.createRecruitment(ACADEMIC_YEAR, SEMESTER_TYPE, FEE);
+
+        recruitmentRepository.save(recruitment);
+
+        RecruitmentRound recruitmentRound =
+                RecruitmentRound.create(NAME, START_DATE, END_DATE, recruitment, ROUND_TYPE);
+
+        return recruitmentRoundRepository.save(recruitmentRound);
+    }
+
+    protected RecruitmentRound createRecruitment(
+            String name,
+            LocalDateTime startDate,
+            LocalDateTime endDate,
+            Integer academicYear,
+            SemesterType semesterType,
+            RoundType roundType,
+            Money fee) {
+        Recruitment recruitment = Recruitment.createRecruitment(academicYear, semesterType, fee);
+        recruitmentRepository.save(recruitment);
+
+        RecruitmentRound recruitmentRound = RecruitmentRound.create(name, startDate, endDate, recruitment, roundType);
+        return recruitmentRoundRepository.save(recruitmentRound);
     }
 }

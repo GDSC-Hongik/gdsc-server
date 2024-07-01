@@ -8,7 +8,7 @@ import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberDashboardResponse;
 import com.gdschongik.gdsc.domain.recruitment.application.OnboardingRecruitmentService;
-import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
+import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import com.gdschongik.gdsc.helper.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,8 +30,8 @@ class OnboardingMemberServiceTest extends IntegrationTest {
          */
         @BeforeEach
         void setUp() {
-            Recruitment recruitment = createRecruitment();
-            when(onboardingRecruitmentService.findCurrentRecruitment()).thenReturn(recruitment);
+            RecruitmentRound recruitmentRound = createRecruitmentRound();
+            when(onboardingRecruitmentService.findCurrentRecruitment()).thenReturn(recruitmentRound);
         }
 
         @Test

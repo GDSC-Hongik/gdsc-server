@@ -17,13 +17,15 @@ class RecruitmentTest {
             Period period = Period.createPeriod(START_DATE, END_DATE);
 
             // when
-            Recruitment recruitment = Recruitment.createRecruitment(
-                    RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE, ROUND_TYPE, FEE);
+            Recruitment recruitment = Recruitment.createRecruitment(ACADEMIC_YEAR, SEMESTER_TYPE, FEE);
+
+            RecruitmentRound recruitmentRound =
+                    RecruitmentRound.create(RECRUITMENT_NAME, START_DATE, END_DATE, recruitment, ROUND_TYPE);
 
             // then
-            assertThat(recruitment.getPeriod().getStartDate()).isEqualTo(START_DATE);
-            assertThat(recruitment.getPeriod().getEndDate()).isEqualTo(END_DATE);
-            assertThat(recruitment.getPeriod().equals(period)).isTrue();
+            assertThat(recruitmentRound.getPeriod().getStartDate()).isEqualTo(START_DATE);
+            assertThat(recruitmentRound.getPeriod().getEndDate()).isEqualTo(END_DATE);
+            assertThat(recruitmentRound.getPeriod().equals(period)).isTrue();
         }
     }
 }

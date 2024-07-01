@@ -13,7 +13,7 @@ import com.gdschongik.gdsc.domain.member.dto.response.MemberUnivStatusResponse;
 import com.gdschongik.gdsc.domain.membership.application.MembershipService;
 import com.gdschongik.gdsc.domain.membership.domain.Membership;
 import com.gdschongik.gdsc.domain.recruitment.application.OnboardingRecruitmentService;
-import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
+import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import java.util.Optional;
@@ -76,9 +76,9 @@ public class OnboardingMemberService {
 
     public MemberDashboardResponse getDashboard() {
         Member currentMember = memberUtil.getCurrentMember();
-        Recruitment currentRecruitment = onboardingRecruitmentService.findCurrentRecruitment();
-        Optional<Membership> myMembership = membershipService.findMyMembership(currentMember, currentRecruitment);
+        RecruitmentRound currentRecruitmentRound = onboardingRecruitmentService.findCurrentRecruitment();
+        Optional<Membership> myMembership = membershipService.findMyMembership(currentMember, currentRecruitmentRound);
 
-        return MemberDashboardResponse.from(currentMember, currentRecruitment, myMembership.orElse(null));
+        return MemberDashboardResponse.from(currentMember, currentRecruitmentRound, myMembership.orElse(null));
     }
 }

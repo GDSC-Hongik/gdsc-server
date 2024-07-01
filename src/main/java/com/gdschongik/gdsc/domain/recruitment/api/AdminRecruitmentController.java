@@ -40,10 +40,10 @@ public class AdminRecruitmentController {
     }
 
     @Operation(summary = "리쿠르팅 수정", description = "기존 리쿠르팅(모집 기간)를 수정합니다.")
-    @PutMapping("/{recruitmentId}")
+    @PutMapping("/{recruitmentRoundId}")
     public ResponseEntity<Void> updateRecruitment(
-            @PathVariable Long recruitmentId, @Valid @RequestBody RecruitmentCreateUpdateRequest request) {
-        adminRecruitmentService.updateRecruitment(recruitmentId, request);
+            @PathVariable Long recruitmentRoundId, @Valid @RequestBody RecruitmentCreateUpdateRequest request) {
+        adminRecruitmentService.updateRecruitment(recruitmentRoundId, request);
         return ResponseEntity.ok().build();
     }
 }

@@ -5,9 +5,8 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 
 import com.gdschongik.gdsc.domain.common.model.SemesterType;
-import com.gdschongik.gdsc.domain.common.vo.Money;
 import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRepository;
-import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
+import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.domain.recruitment.domain.RoundType;
 import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentCreateUpdateRequest;
 import com.gdschongik.gdsc.global.exception.CustomException;
@@ -24,19 +23,6 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
 
     @Autowired
     private RecruitmentRepository recruitmentRepository;
-
-    private Recruitment createRecruitment(
-            String name,
-            LocalDateTime startDate,
-            LocalDateTime endDate,
-            Integer academicYear,
-            SemesterType semesterType,
-            RoundType roundType,
-            Money fee) {
-        Recruitment recruitment =
-                Recruitment.createRecruitment(name, startDate, endDate, academicYear, semesterType, roundType, fee);
-        return recruitmentRepository.save(recruitment);
-    }
 
     @Nested
     class 모집기간_생성시 {
@@ -120,7 +106,7 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
         @Test
         void 모집_시작일이_지났다면_수정_실패한다() {
             // given
-            Recruitment recruitment = createRecruitment(
+            RecruitmentRound recruitmentRound = createRecruitment(
                     RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE, ROUND_TYPE, FEE);
             RecruitmentCreateUpdateRequest request = new RecruitmentCreateUpdateRequest(
                     RECRUITMENT_NAME,
@@ -132,7 +118,7 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
                     FEE_AMOUNT);
 
             // when & then
-            assertThatThrownBy(() -> adminRecruitmentService.updateRecruitment(recruitment.getId(), request))
+            assertThatThrownBy(() -> adminRecruitmentService.updateRecruitment(recruitmentRound.getId(), request))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(RECRUITMENT_STARTDATE_ALREADY_PASSED.getMessage());
         }
@@ -140,9 +126,9 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
         @Test
         void 기간이_중복되는_Recruitment가_있다면_실패한다() {
             // given
-            Recruitment recruitmentRoundOne = createRecruitment(
+            RecruitmentRound recruitmentRoundOne = createRecruitment(
                     RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE, ROUND_TYPE, FEE);
-            Recruitment recruitmentRoundTwo = createRecruitment(
+            RecruitmentRound recruitmentRoundTwo = createRecruitment(
                     ROUND_TWO_RECRUITMENT_NAME,
                     ROUND_TWO_START_DATE,
                     ROUND_TWO_END_DATE,
@@ -162,9 +148,9 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
         @Test
         void 차수가_중복되는_Recruitment가_있다면_실패한다() {
             // given
-            Recruitment recruitmentRoundOne = createRecruitment(
+            RecruitmentRound recruitmentRoundOne = createRecruitment(
                     RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE, ROUND_TYPE, FEE);
-            Recruitment recruitmentRoundTwo = createRecruitment(
+            RecruitmentRound recruitmentRoundTwo = createRecruitment(
                     ROUND_TWO_RECRUITMENT_NAME,
                     ROUND_TWO_START_DATE,
                     ROUND_TWO_END_DATE,

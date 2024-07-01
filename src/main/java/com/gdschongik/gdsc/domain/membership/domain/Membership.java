@@ -8,7 +8,7 @@ import com.gdschongik.gdsc.domain.common.model.SemesterType;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberRegularEvent;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
-import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
+import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -39,8 +39,8 @@ public class Membership extends BaseSemesterEntity {
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "recruitment_id")
-    private Recruitment recruitment;
+    @JoinColumn(name = "recruitment_round_id")
+    private RecruitmentRound recruitmentRound;
 
     @Embedded
     private RegularRequirement regularRequirement;
@@ -48,25 +48,25 @@ public class Membership extends BaseSemesterEntity {
     @Builder(access = AccessLevel.PRIVATE)
     private Membership(
             Member member,
-            Recruitment recruitment,
+            RecruitmentRound recruitmentRound,
             RegularRequirement regularRequirement,
             Integer academicYear,
             SemesterType semesterType) {
         super(academicYear, semesterType);
         this.member = member;
-        this.recruitment = recruitment;
+        this.recruitmentRound = recruitmentRound;
         this.regularRequirement = regularRequirement;
     }
 
-    public static Membership createMembership(Member member, Recruitment recruitment) {
+    public static Membership createMembership(Member member, RecruitmentRound recruitmentRound) {
         validateMembershipApplicable(member);
 
         return Membership.builder()
                 .member(member)
-                .recruitment(recruitment)
+                .recruitmentRound(recruitmentRound)
                 .regularRequirement(RegularRequirement.createUnsatisfiedRequirement())
-                .academicYear(recruitment.getAcademicYear())
-                .semesterType(recruitment.getSemesterType())
+                .academicYear(recruitmentRound.getAcademicYear())
+                .semesterType(recruitmentRound.getSemesterType())
                 .build();
     }
 
