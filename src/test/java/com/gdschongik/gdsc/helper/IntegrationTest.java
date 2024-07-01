@@ -5,6 +5,10 @@ import static com.gdschongik.gdsc.global.common.constant.MemberConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.RecruitmentConstant.*;
 
 import com.gdschongik.gdsc.domain.common.vo.Money;
+import com.gdschongik.gdsc.domain.coupon.dao.CouponRepository;
+import com.gdschongik.gdsc.domain.coupon.dao.IssuedCouponRepository;
+import com.gdschongik.gdsc.domain.coupon.domain.Coupon;
+import com.gdschongik.gdsc.domain.coupon.domain.IssuedCoupon;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
@@ -39,6 +43,12 @@ public abstract class IntegrationTest {
 
     @Autowired
     protected MembershipRepository membershipRepository;
+
+    @Autowired
+    protected CouponRepository couponRepository;
+
+    @Autowired
+    protected IssuedCouponRepository issuedCouponRepository;
 
     @MockBean
     protected OnboardingRecruitmentService onboardingRecruitmentService;
@@ -82,5 +92,12 @@ public abstract class IntegrationTest {
     protected Membership createMembership(Member member, Recruitment recruitment) {
         Membership membership = Membership.createMembership(member, recruitment);
         return membershipRepository.save(membership);
+    }
+
+    protected IssuedCoupon createAndIssue(Money money, Member member) {
+        Coupon coupon = Coupon.createCoupon("테스트쿠폰", money);
+        couponRepository.save(coupon);
+        IssuedCoupon issuedCoupon = IssuedCoupon.issue(coupon, member);
+        return issuedCouponRepository.save(issuedCoupon);
     }
 }
