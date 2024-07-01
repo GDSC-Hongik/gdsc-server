@@ -18,13 +18,6 @@ public class OrderValidator {
     public void validatePendingOrderCreate(
             Membership membership, @Nullable IssuedCoupon issuedCoupon, MoneyInfo moneyInfo, Member currentMember) {
 
-        // 멤버 관련 검증
-
-        // TODO: 어드민인 경우 리쿠르팅 지원 및 결제에 대한 정책 검토 필요. 현재는 불가능하도록 처리
-        if (!currentMember.isAssociate()) {
-            throw new CustomException(ORDER_MEMBER_NOT_ASSOCIATE);
-        }
-
         // 멤버십 관련 검증
 
         if (!membership.getMember().getId().equals(currentMember.getId())) {
