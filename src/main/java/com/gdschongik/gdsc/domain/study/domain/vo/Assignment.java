@@ -31,5 +31,10 @@ public class Assignment {
     private Difficulty difficulty;
 
     @Comment("과제 상태")
+    @Enumerated(EnumType.STRING)
     private StudyStatus status;
+
+    public static Assignment createEmptyAssignment() {
+        return new Assignment();
+    }
 }

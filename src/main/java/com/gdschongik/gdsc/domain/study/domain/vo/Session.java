@@ -28,5 +28,10 @@ public class Session {
     private Difficulty difficulty;
 
     @Comment("세션 상태")
+    @Enumerated(EnumType.STRING)
     private StudyStatus status;
+
+    public static Session createEmptySession() {
+        return new Session();
+    }
 }
