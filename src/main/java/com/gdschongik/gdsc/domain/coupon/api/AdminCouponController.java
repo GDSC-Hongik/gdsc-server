@@ -3,6 +3,7 @@ package com.gdschongik.gdsc.domain.coupon.api;
 import com.gdschongik.gdsc.domain.coupon.application.CouponService;
 import com.gdschongik.gdsc.domain.coupon.dto.request.CouponCreateRequest;
 import com.gdschongik.gdsc.domain.coupon.dto.request.CouponIssueRequest;
+import com.gdschongik.gdsc.domain.coupon.dto.request.IssuedCouponQueryOption;
 import com.gdschongik.gdsc.domain.coupon.dto.response.CouponResponse;
 import com.gdschongik.gdsc.domain.coupon.dto.response.IssuedCouponResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,6 +11,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,8 +46,9 @@ public class AdminCouponController {
 
     @Operation(summary = "발급쿠폰 조회", description = "발급된 쿠폰을 조회합니다.")
     @GetMapping("/issued")
-    public ResponseEntity<List<IssuedCouponResponse>> getIssuedCoupons() {
-        List<IssuedCouponResponse> response = couponService.findAllIssuedCoupons();
+    public ResponseEntity<Page<IssuedCouponResponse>> getIssuedCoupons(
+            IssuedCouponQueryOption queryOption, Pageable pageable) {
+        Page<IssuedCouponResponse> response = couponService.findAllIssuedCoupons(queryOption, pageable);
         return ResponseEntity.ok().body(response);
     }
 
