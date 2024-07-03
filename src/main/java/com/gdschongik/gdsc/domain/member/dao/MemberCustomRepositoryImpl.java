@@ -57,7 +57,8 @@ public class MemberCustomRepositoryImpl extends MemberQueryMethod implements Mem
 
     @Override
     public Page<Member> findAssociateOrRegularMembers(MemberQueryOption queryOption, Pageable pageable) {
-        List<Long> ids = getCoveringIndex(matchesQueryOption(queryOption).and(eqRole(MemberRole.ASSOCIATE).or(eqRole(MemberRole.ASSOCIATE))));
+        List<Long> ids = getCoveringIndex(
+                matchesQueryOption(queryOption).and(eqRole(MemberRole.ASSOCIATE).or(eqRole(MemberRole.ASSOCIATE))));
 
         List<Member> fetch = queryFactory
                 .selectFrom(member)

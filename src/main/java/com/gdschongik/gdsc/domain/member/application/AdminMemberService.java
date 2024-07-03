@@ -38,8 +38,7 @@ public class AdminMemberService {
         return members.map(AdminMemberResponse::from);
     }
 
-    public Page<AdminMemberResponse> findAssociateOrRegularMembers(
-            MemberQueryOption queryOption, Pageable pageable) {
+    public Page<AdminMemberResponse> findAssociateOrRegularMembers(MemberQueryOption queryOption, Pageable pageable) {
         Page<Member> members = memberRepository.findAssociateOrRegularMembers(queryOption, pageable);
         return members.map(AdminMemberResponse::from);
     }
