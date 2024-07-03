@@ -7,12 +7,12 @@ import com.gdschongik.gdsc.domain.coupon.domain.IssuedCoupon;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.membership.domain.Membership;
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
+import com.gdschongik.gdsc.global.annotation.DomainService;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.annotation.Nullable;
 import java.math.BigDecimal;
-import org.springframework.stereotype.Component;
 
-@Component // 추후 도메인 서비스로 교체
+@DomainService
 public class OrderValidator {
 
     public void validatePendingOrderCreate(
