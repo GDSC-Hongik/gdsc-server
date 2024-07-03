@@ -36,6 +36,15 @@ public class AdminMemberController {
         return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "쿠폰지급용 회원 목록 조회", description = "정회원, 준회원 회원을 조회합니다.")
+    @GetMapping
+    public ResponseEntity<Page<AdminMemberResponse>> getAssociateOrRegularMembers(
+            MemberQueryOption queryOption,
+            Pageable pageable) {
+        Page<AdminMemberResponse> response = adminMemberService.findAssociateOrRegularMembers(queryOption, pageable);
+        return ResponseEntity.ok().body(response);
+    }
+
     @Operation(summary = "회원 탈퇴", description = "회원을 탈퇴시킵니다.")
     @DeleteMapping("/{memberId}")
     public ResponseEntity<Void> withdrawMember(@PathVariable Long memberId) {

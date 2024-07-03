@@ -16,4 +16,6 @@ public interface MemberCustomRepository {
     List<Member> findAllByRole(@Nullable MemberRole role);
 
     List<Member> findAllByDiscordStatus(RequirementStatus discordStatus);
+
+    Page<Member> findAssociateOrRegularMembers(MemberQueryOption queryOption, Pageable pageable);
 }

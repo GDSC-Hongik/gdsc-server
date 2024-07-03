@@ -38,6 +38,12 @@ public class AdminMemberService {
         return members.map(AdminMemberResponse::from);
     }
 
+    public Page<AdminMemberResponse> findAssociateOrRegularMembers(
+            MemberQueryOption queryOption, Pageable pageable) {
+        Page<Member> members = memberRepository.findAssociateOrRegularMembers(queryOption, pageable);
+        return members.map(AdminMemberResponse::from);
+    }
+
     @Transactional
     public void withdrawMember(Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));

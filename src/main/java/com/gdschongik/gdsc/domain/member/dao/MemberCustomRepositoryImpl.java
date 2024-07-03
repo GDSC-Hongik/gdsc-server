@@ -7,6 +7,7 @@ import com.gdschongik.gdsc.domain.common.model.RequirementStatus;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryOption;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.annotation.Nullable;
@@ -52,5 +53,24 @@ public class MemberCustomRepositoryImpl extends MemberQueryMethod implements Mem
                 .selectFrom(member)
                 .where(eqRequirementStatus(member.associateRequirement.discordStatus, discordStatus))
                 .fetch();
+    }
+
+    @Override
+    public Page<Member> findAssociateOrRegularMembers(MemberQueryOption queryOption, Pageable pageable) {
+        List<Long> ids = getCoveringIndex(matchesQueryOption(queryOption).and(eqRole(MemberRole.ASSOCIATE).or(eqRole(MemberRole.ASSOCIATE))));
+
+        List<Member> fetch = queryFactory
+                .selectFrom(member)
+                .where(member.id.in(ids))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .orderBy(member.createdAt.desc())
+                .fetch();
+
+        return PageableExecutionUtils.getPage(fetch, pageable, ids::size);
+    }
+
+    private List<Long> getCoveringIndex(Predicate predicate) {
+        return queryFactory.select(member.id).from(member).where(predicate).fetch();
     }
 }
