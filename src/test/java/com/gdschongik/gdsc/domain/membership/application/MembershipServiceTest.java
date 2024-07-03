@@ -23,11 +23,6 @@ public class MembershipServiceTest extends IntegrationTest {
     @Autowired
     private MembershipRepository membershipRepository;
 
-    private Membership createMembership(Member member, Recruitment recruitment) {
-        Membership membership = Membership.createMembership(member, recruitment);
-        return membershipRepository.save(membership);
-    }
-
     @Nested
     class 멤버십_가입신청시 {
         @Test

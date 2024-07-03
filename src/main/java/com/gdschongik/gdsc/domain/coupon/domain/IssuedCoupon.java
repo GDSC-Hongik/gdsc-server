@@ -61,7 +61,7 @@ public class IssuedCoupon extends BaseEntity {
 
     // 검증 로직
 
-    private void validateUsable() {
+    public void validateUsable() {
         if (isRevoked.equals(TRUE)) {
             throw new CustomException(COUPON_NOT_USABLE_REVOKED);
         }

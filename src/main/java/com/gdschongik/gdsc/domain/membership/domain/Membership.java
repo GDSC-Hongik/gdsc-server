@@ -73,6 +73,7 @@ public class Membership extends BaseSemesterEntity {
     // 검증 로직
 
     // TODO validateRegularRequirement처럼 로직 변경
+    // TODO: 어드민인 경우 리쿠르팅 지원 및 결제에 대한 정책 검토 필요. 현재는 불가능하도록 설정
     private static void validateMembershipApplicable(Member member) {
         if (member.getRole().equals(MemberRole.ASSOCIATE)) {
             return;
