@@ -9,6 +9,7 @@ import com.gdschongik.gdsc.domain.coupon.domain.Coupon;
 import com.gdschongik.gdsc.domain.coupon.domain.IssuedCoupon;
 import com.gdschongik.gdsc.domain.coupon.dto.request.CouponCreateRequest;
 import com.gdschongik.gdsc.domain.coupon.dto.request.CouponIssueRequest;
+import com.gdschongik.gdsc.domain.coupon.dto.request.IssuedCouponQueryOption;
 import com.gdschongik.gdsc.domain.coupon.dto.response.CouponResponse;
 import com.gdschongik.gdsc.domain.coupon.dto.response.IssuedCouponResponse;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
@@ -18,6 +19,8 @@ import com.gdschongik.gdsc.global.util.MemberUtil;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,10 +46,9 @@ public class CouponService {
         return couponRepository.findAll().stream().map(CouponResponse::from).toList();
     }
 
-    public List<IssuedCouponResponse> findAllIssuedCoupons() {
-        return issuedCouponRepository.findAll().stream()
-                .map(IssuedCouponResponse::from)
-                .toList();
+    public Page<IssuedCouponResponse> findAllIssuedCoupons(IssuedCouponQueryOption queryOption, Pageable pageable) {
+        Page<IssuedCoupon> issuedCoupons = issuedCouponRepository.findAllIssuedCoupons(queryOption, pageable);
+        return issuedCoupons.map(IssuedCouponResponse::from);
     }
 
     @Transactional

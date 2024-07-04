@@ -6,9 +6,15 @@ import static com.gdschongik.gdsc.global.common.constant.RecruitmentConstant.*;
 
 import com.gdschongik.gdsc.domain.common.model.SemesterType;
 import com.gdschongik.gdsc.domain.common.vo.Money;
+import com.gdschongik.gdsc.domain.coupon.dao.CouponRepository;
+import com.gdschongik.gdsc.domain.coupon.dao.IssuedCouponRepository;
+import com.gdschongik.gdsc.domain.coupon.domain.Coupon;
+import com.gdschongik.gdsc.domain.coupon.domain.IssuedCoupon;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
+import com.gdschongik.gdsc.domain.membership.dao.MembershipRepository;
+import com.gdschongik.gdsc.domain.membership.domain.Membership;
 import com.gdschongik.gdsc.domain.recruitment.application.OnboardingRecruitmentService;
 import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRepository;
 import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRoundRepository;
@@ -38,6 +44,15 @@ public abstract class IntegrationTest {
 
     @Autowired
     protected RecruitmentRepository recruitmentRepository;
+
+    @Autowired
+    protected MembershipRepository membershipRepository;
+
+    @Autowired
+    protected CouponRepository couponRepository;
+
+    @Autowired
+    protected IssuedCouponRepository issuedCouponRepository;
 
     @Autowired
     protected RecruitmentRoundRepository recruitmentRoundRepository;
@@ -93,5 +108,17 @@ public abstract class IntegrationTest {
 
         RecruitmentRound recruitmentRound = RecruitmentRound.create(name, startDate, endDate, recruitment, roundType);
         return recruitmentRoundRepository.save(recruitmentRound);
+    }
+
+    protected Membership createMembership(Member member, RecruitmentRound recruitmentRound) {
+        Membership membership = Membership.createMembership(member, recruitmentRound);
+        return membershipRepository.save(membership);
+    }
+
+    protected IssuedCoupon createAndIssue(Money money, Member member) {
+        Coupon coupon = Coupon.createCoupon("테스트쿠폰", money);
+        couponRepository.save(coupon);
+        IssuedCoupon issuedCoupon = IssuedCoupon.issue(coupon, member);
+        return issuedCouponRepository.save(issuedCoupon);
     }
 }

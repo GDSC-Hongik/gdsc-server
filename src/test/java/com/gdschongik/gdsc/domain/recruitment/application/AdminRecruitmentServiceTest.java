@@ -5,7 +5,6 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 
 import com.gdschongik.gdsc.domain.common.model.SemesterType;
-import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRepository;
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.domain.recruitment.domain.RoundType;
 import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentCreateUpdateRequest;
@@ -20,9 +19,6 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
 
     @Autowired
     private AdminRecruitmentService adminRecruitmentService;
-
-    @Autowired
-    private RecruitmentRepository recruitmentRepository;
 
     @Nested
     class 모집기간_생성시 {
