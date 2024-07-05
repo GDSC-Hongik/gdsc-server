@@ -104,7 +104,7 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
             assertThatThrownBy(
                             () -> adminRecruitmentService.updateRecruitmentRound(recruitmentRoundTwo.getId(), request))
                     .isInstanceOf(CustomException.class)
-                    .hasMessage(RECRUITMENT_PERIOD_OVERLAP.getMessage());
+                    .hasMessage(PERIOD_OVERLAP.getMessage());
         }
 
         @Test
