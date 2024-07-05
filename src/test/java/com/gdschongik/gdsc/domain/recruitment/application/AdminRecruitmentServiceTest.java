@@ -81,7 +81,7 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
             // when & then
             assertThatThrownBy(() -> adminRecruitmentService.updateRecruitmentRound(recruitmentRound.getId(), request))
                     .isInstanceOf(CustomException.class)
-                    .hasMessage(RECRUITMENT_STARTDATE_ALREADY_PASSED.getMessage());
+                    .hasMessage(RECRUITMENT_ROUND_STARTDATE_ALREADY_PASSED.getMessage());
         }
 
         @Test

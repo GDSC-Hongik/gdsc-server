@@ -92,7 +92,7 @@ public class RecruitmentRound extends BaseSemesterEntity {
     public void validatePeriodNotStarted() {
         LocalDateTime now = LocalDateTime.now();
         if (now.isAfter(period.getStartDate())) {
-            throw new CustomException(RECRUITMENT_STARTDATE_ALREADY_PASSED);
+            throw new CustomException(RECRUITMENT_ROUND_STARTDATE_ALREADY_PASSED);
         }
     }
 }

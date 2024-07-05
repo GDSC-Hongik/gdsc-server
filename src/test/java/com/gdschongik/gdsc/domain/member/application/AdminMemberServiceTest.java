@@ -52,7 +52,7 @@ class AdminMemberServiceTest extends IntegrationTest {
             // when & then
             assertThatThrownBy(() -> adminMemberService.demoteAllRegularMembersToAssociate(request))
                     .isInstanceOf(CustomException.class)
-                    .hasMessage(RECRUITMENT_STARTDATE_ALREADY_PASSED.getMessage());
+                    .hasMessage(RECRUITMENT_ROUND_STARTDATE_ALREADY_PASSED.getMessage());
         }
 
         @Test
