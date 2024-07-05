@@ -3,8 +3,7 @@ package com.gdschongik.gdsc.domain.membership.domain;
 import static com.gdschongik.gdsc.domain.common.model.RequirementStatus.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
-import com.gdschongik.gdsc.domain.common.model.BaseSemesterEntity;
-import com.gdschongik.gdsc.domain.common.model.SemesterType;
+import com.gdschongik.gdsc.domain.common.model.BaseEntity;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberRegularEvent;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
@@ -27,7 +26,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Membership extends BaseSemesterEntity {
+public class Membership extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,13 +45,7 @@ public class Membership extends BaseSemesterEntity {
     private RegularRequirement regularRequirement;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private Membership(
-            Member member,
-            RecruitmentRound recruitmentRound,
-            RegularRequirement regularRequirement,
-            Integer academicYear,
-            SemesterType semesterType) {
-        super(academicYear, semesterType);
+    private Membership(Member member, RecruitmentRound recruitmentRound, RegularRequirement regularRequirement) {
         this.member = member;
         this.recruitmentRound = recruitmentRound;
         this.regularRequirement = regularRequirement;
@@ -65,8 +58,6 @@ public class Membership extends BaseSemesterEntity {
                 .member(member)
                 .recruitmentRound(recruitmentRound)
                 .regularRequirement(RegularRequirement.createUnsatisfiedRequirement())
-                .academicYear(recruitmentRound.getAcademicYear())
-                .semesterType(recruitmentRound.getSemesterType())
                 .build();
     }
 
