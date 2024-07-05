@@ -87,14 +87,10 @@ public abstract class IntegrationTest {
     }
 
     protected RecruitmentRound createRecruitmentRound() {
-        // todo: template의 메서드 활용하도록 수정
-        Recruitment recruitment = Recruitment.createRecruitment(
-                ACADEMIC_YEAR, SEMESTER_TYPE, FEE, Period.createPeriod(SEMESTER_START_DATE, SEMESTER_END_DATE));
-
-        recruitmentRepository.save(recruitment);
+        Recruitment recruitment = createRecruitment(ACADEMIC_YEAR, SEMESTER_TYPE, FEE);
 
         RecruitmentRound recruitmentRound =
-                RecruitmentRound.create(NAME, START_DATE, END_DATE, recruitment, ROUND_TYPE);
+                RecruitmentRound.create(RECRUITMENT_NAME, START_DATE, END_DATE, recruitment, ROUND_TYPE);
 
         return recruitmentRoundRepository.save(recruitmentRound);
     }
@@ -107,9 +103,7 @@ public abstract class IntegrationTest {
             SemesterType semesterType,
             RoundType roundType,
             Money fee) {
-        Recruitment recruitment = Recruitment.createRecruitment(
-                academicYear, semesterType, fee, Period.createPeriod(SEMESTER_START_DATE, SEMESTER_END_DATE));
-        recruitmentRepository.save(recruitment);
+        Recruitment recruitment = createRecruitment(academicYear, semesterType, fee);
 
         RecruitmentRound recruitmentRound = RecruitmentRound.create(name, startDate, endDate, recruitment, roundType);
         return recruitmentRoundRepository.save(recruitmentRound);
