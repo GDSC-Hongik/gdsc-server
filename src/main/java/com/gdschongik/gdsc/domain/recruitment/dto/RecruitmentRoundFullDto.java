@@ -5,10 +5,10 @@ import com.gdschongik.gdsc.domain.recruitment.domain.RoundType;
 import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import java.math.BigDecimal;
 
-public record RecruitmentFullDto(
+public record RecruitmentRoundFullDto(
         Long recruitmentId, String name, Period period, BigDecimal fee, RoundType roundType, String roundTypeValue) {
-    public static RecruitmentFullDto from(RecruitmentRound recruitmentRound) {
-        return new RecruitmentFullDto(
+    public static RecruitmentRoundFullDto from(RecruitmentRound recruitmentRound) {
+        return new RecruitmentRoundFullDto(
                 recruitmentRound.getId(),
                 recruitmentRound.getName(),
                 recruitmentRound.getPeriod(),
