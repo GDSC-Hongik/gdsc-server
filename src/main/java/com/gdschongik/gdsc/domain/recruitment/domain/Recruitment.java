@@ -42,8 +42,4 @@ public class Recruitment extends BaseSemesterEntity {
                 .semesterPeriod(semesterPeriod)
                 .build();
     }
-
-    public void updateFee(Money fee) {
-        this.fee = fee;
-    }
 }
