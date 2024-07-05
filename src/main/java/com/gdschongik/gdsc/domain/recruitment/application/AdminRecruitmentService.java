@@ -72,6 +72,8 @@ public class AdminRecruitmentService {
 
         recruitmentRound.updateRecruitmentRound(
                 request.name(), request.startDate(), request.endDate(), request.roundType());
+
+        log.info("[AdminRecruitmentService] 모집회차 수정: recruitmentRoundId={}", recruitmentRoundId);
     }
 
     private void validateRecruitmentOverlap(Integer academicYear, SemesterType semesterType) {
