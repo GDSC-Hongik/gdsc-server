@@ -1,6 +1,7 @@
 package com.gdschongik.gdsc.domain.recruitment.api;
 
 import com.gdschongik.gdsc.domain.recruitment.application.AdminRecruitmentService;
+import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentCreateRequest;
 import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentCreateUpdateRequest;
 import com.gdschongik.gdsc.domain.recruitment.dto.response.AdminRecruitmentResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,7 +28,7 @@ public class AdminRecruitmentController {
 
     @Operation(summary = "리쿠르팅 생성", description = "새로운 리쿠르팅(모집 기간)를 생성합니다.")
     @PostMapping
-    public ResponseEntity<Void> createRecruitment(@Valid @RequestBody RecruitmentCreateUpdateRequest request) {
+    public ResponseEntity<Void> createRecruitment(@Valid @RequestBody RecruitmentCreateRequest request) {
         adminRecruitmentService.createRecruitment(request);
         return ResponseEntity.ok().build();
     }

@@ -3,6 +3,7 @@ package com.gdschongik.gdsc.helper;
 import static com.gdschongik.gdsc.domain.member.domain.Department.*;
 import static com.gdschongik.gdsc.global.common.constant.MemberConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.RecruitmentConstant.*;
+import static com.gdschongik.gdsc.global.common.constant.SemesterConstant.*;
 
 import com.gdschongik.gdsc.domain.common.model.SemesterType;
 import com.gdschongik.gdsc.domain.common.vo.Money;
@@ -21,6 +22,7 @@ import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRoundRepository;
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.domain.recruitment.domain.RoundType;
+import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import com.gdschongik.gdsc.global.security.PrincipalDetails;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
@@ -85,7 +87,9 @@ public abstract class IntegrationTest {
     }
 
     protected RecruitmentRound createRecruitmentRound() {
-        Recruitment recruitment = Recruitment.createRecruitment(ACADEMIC_YEAR, SEMESTER_TYPE, FEE);
+        // todo: template의 메서드 활용하도록 수정
+        Recruitment recruitment = Recruitment.createRecruitment(
+                ACADEMIC_YEAR, SEMESTER_TYPE, FEE, Period.createPeriod(SEMESTER_START_DATE, SEMESTER_END_DATE));
 
         recruitmentRepository.save(recruitment);
 
@@ -103,11 +107,18 @@ public abstract class IntegrationTest {
             SemesterType semesterType,
             RoundType roundType,
             Money fee) {
-        Recruitment recruitment = Recruitment.createRecruitment(academicYear, semesterType, fee);
+        Recruitment recruitment = Recruitment.createRecruitment(
+                academicYear, semesterType, fee, Period.createPeriod(SEMESTER_START_DATE, SEMESTER_END_DATE));
         recruitmentRepository.save(recruitment);
 
         RecruitmentRound recruitmentRound = RecruitmentRound.create(name, startDate, endDate, recruitment, roundType);
         return recruitmentRoundRepository.save(recruitmentRound);
+    }
+
+    protected Recruitment createRecruitment(Integer academicYear, SemesterType semesterType, Money fee) {
+        Recruitment recruitment = Recruitment.createRecruitment(
+                academicYear, semesterType, fee, Period.createPeriod(SEMESTER_START_DATE, SEMESTER_END_DATE));
+        return recruitmentRepository.save(recruitment);
     }
 
     protected Membership createMembership(Member member, RecruitmentRound recruitmentRound) {

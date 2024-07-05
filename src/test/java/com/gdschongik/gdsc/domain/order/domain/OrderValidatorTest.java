@@ -4,6 +4,7 @@ import static com.gdschongik.gdsc.domain.member.domain.Department.*;
 import static com.gdschongik.gdsc.domain.member.domain.Member.*;
 import static com.gdschongik.gdsc.global.common.constant.MemberConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.RecruitmentConstant.*;
+import static com.gdschongik.gdsc.global.common.constant.SemesterConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 
@@ -16,6 +17,7 @@ import com.gdschongik.gdsc.domain.membership.domain.Membership;
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.domain.recruitment.domain.RoundType;
+import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -48,7 +50,8 @@ class OrderValidatorTest {
             Integer academicYear,
             SemesterType semesterType,
             Money fee) {
-        Recruitment recruitment = Recruitment.createRecruitment(academicYear, semesterType, fee);
+        Recruitment recruitment = Recruitment.createRecruitment(
+                academicYear, semesterType, fee, Period.createPeriod(SEMESTER_START_DATE, SEMESTER_END_DATE));
 
         return RecruitmentRound.create(RECRUITMENT_NAME, startDate, endDate, recruitment, RoundType.FIRST);
     }
