@@ -12,6 +12,4 @@ public interface RecruitmentRoundRepository extends JpaRepository<RecruitmentRou
 
     boolean existsByAcademicYearAndSemesterTypeAndRoundType(
             Integer academicYear, SemesterType semesterType, RoundType roundType);
-
-    List<RecruitmentRound> findByOrderByPeriodStartDateDesc();
 }
