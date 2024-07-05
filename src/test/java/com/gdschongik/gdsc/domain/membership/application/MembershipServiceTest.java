@@ -26,7 +26,7 @@ public class MembershipServiceTest extends IntegrationTest {
     @Nested
     class 멤버십_가입신청시 {
         @Test
-        void Recruitment가_없다면_실패한다() {
+        void RecruitmentRound가_없다면_실패한다() {
             // given
             createMember();
             logoutAndReloginAs(1L, ASSOCIATE);
@@ -35,7 +35,7 @@ public class MembershipServiceTest extends IntegrationTest {
             // when & then
             assertThatThrownBy(() -> membershipService.submitMembership(recruitmentId))
                     .isInstanceOf(CustomException.class)
-                    .hasMessage(RECRUITMENT_NOT_FOUND.getMessage());
+                    .hasMessage(RECRUITMENT_ROUND_NOT_FOUND.getMessage());
         }
 
         @Test

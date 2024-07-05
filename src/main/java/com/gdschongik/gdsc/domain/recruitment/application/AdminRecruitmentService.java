@@ -101,7 +101,7 @@ public class AdminRecruitmentService {
                 recruitmentRoundRepository.findAllByAcademicYearAndSemesterType(academicYear, semesterType);
 
         if (recruitmentRounds.isEmpty()) {
-            throw new CustomException(RECRUITMENT_NOT_FOUND);
+            throw new CustomException(RECRUITMENT_ROUND_NOT_FOUND);
         }
 
         recruitmentRounds.forEach(RecruitmentRound::validatePeriodNotStarted);
