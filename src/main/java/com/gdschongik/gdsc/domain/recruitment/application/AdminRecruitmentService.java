@@ -71,7 +71,7 @@ public class AdminRecruitmentService {
                 academicYear, semesterType, request.roundType(), recruitmentRound.getId());
 
         recruitmentRound.updateRecruitmentRound(
-                request.name(), request.startDate(), request.endDate(), request.roundType());
+                request.name(), Period.createPeriod(request.startDate(), request.endDate()), request.roundType());
 
         log.info("[AdminRecruitmentService] 모집회차 수정: recruitmentRoundId={}", recruitmentRoundId);
     }

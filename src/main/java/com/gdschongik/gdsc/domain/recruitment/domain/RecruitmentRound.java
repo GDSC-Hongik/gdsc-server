@@ -47,7 +47,7 @@ public class RecruitmentRound extends BaseSemesterEntity {
     @Builder(access = AccessLevel.PRIVATE)
     private RecruitmentRound(
             String name,
-            Period period,
+            final Period period,
             Integer academicYear,
             SemesterType semesterType,
             Recruitment recruitment,
@@ -80,12 +80,11 @@ public class RecruitmentRound extends BaseSemesterEntity {
         period.validatePeriodOverlap(startDate, endDate);
     }
 
-    public void updateRecruitmentRound(
-            String name, LocalDateTime startDate, LocalDateTime endDate, RoundType roundType) {
+    public void updateRecruitmentRound(String name, Period period, RoundType roundType) {
         validatePeriodNotStarted();
 
         this.name = name;
-        this.period = Period.createPeriod(startDate, endDate);
+        this.period = period;
         this.roundType = roundType;
     }
 
