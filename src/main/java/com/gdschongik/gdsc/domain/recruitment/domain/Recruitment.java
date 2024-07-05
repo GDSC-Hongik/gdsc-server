@@ -27,7 +27,7 @@ public class Recruitment extends BaseSemesterEntity {
     private Period semesterPeriod;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private Recruitment(Integer academicYear, SemesterType semesterType, Money fee, Period semesterPeriod) {
+    private Recruitment(Integer academicYear, SemesterType semesterType, Money fee, final Period semesterPeriod) {
         super(academicYear, semesterType);
         this.fee = fee;
         this.semesterPeriod = semesterPeriod;
