@@ -23,7 +23,7 @@ public class AdminRecruitmentController {
 
     private final AdminRecruitmentService adminRecruitmentService;
 
-    @Operation(summary = "리쿠르팅 생성", description = "새로운 리쿠르팅(모집 기간)를 생성합니다.")
+    @Operation(summary = "리쿠르팅 생성", description = "새로운 리쿠르팅을 생성합니다.")
     @PostMapping
     public ResponseEntity<Void> createRecruitment(@Valid @RequestBody RecruitmentCreateRequest request) {
         adminRecruitmentService.createRecruitment(request);
