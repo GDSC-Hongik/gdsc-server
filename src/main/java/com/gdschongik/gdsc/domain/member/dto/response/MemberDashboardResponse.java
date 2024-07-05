@@ -10,7 +10,7 @@ import jakarta.annotation.Nullable;
 
 public record MemberDashboardResponse(
         MemberFullDto member,
-        RecruitmentRoundFullDto currentRecruitment,
+        RecruitmentRoundFullDto currentRecruitmentRound,
         @Nullable MembershipFullDto currentMembership) {
     public static MemberDashboardResponse from(
             Member member, RecruitmentRound currentRecruitmentRound, Membership currentMembership) {
