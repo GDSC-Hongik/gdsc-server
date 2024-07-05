@@ -99,7 +99,7 @@ public abstract class IntegrationTest {
         return recruitmentRoundRepository.save(recruitmentRound);
     }
 
-    protected RecruitmentRound createRecruitment(
+    protected RecruitmentRound createRecruitmentRound(
             String name,
             LocalDateTime startDate,
             LocalDateTime endDate,

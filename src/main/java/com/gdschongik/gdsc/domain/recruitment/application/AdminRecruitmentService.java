@@ -13,6 +13,7 @@ import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.domain.recruitment.domain.RoundType;
 import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentCreateRequest;
+import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentRoundUpdateRequest;
 import com.gdschongik.gdsc.domain.recruitment.dto.response.AdminRecruitmentResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import java.time.LocalDateTime;
@@ -53,38 +54,25 @@ public class AdminRecruitmentService {
         return recruitments.stream().map(AdminRecruitmentResponse::from).toList();
     }
 
-    // @Transactional
-    // public void updateRecruitment(Long recruitmentRoundId, RecruitmentCreateRequest request) {
-    //     RecruitmentRound recruitmentRound = recruitmentRoundRepository
-    //             .findById(recruitmentRoundId)
-    //             .orElseThrow(() -> new CustomException(RECRUITMENT_NOT_FOUND));
-    //
-    //     validatePeriodMatchesAcademicYear(request.periodStartDate(), request.periodEndDate(),
-    // request.academicYear());
-    //     validatePeriodMatchesSemesterType(request.periodStartDate(), request.periodEndDate(),
-    // request.semesterType());
-    //     validatePeriodWithinTwoWeeks(
-    //             request.periodStartDate(), request.periodEndDate(), request.academicYear(), request.semesterType());
-    //     validatePeriodOverlapExcludingCurrentRecruitment(
-    //             recruitmentRound.getAcademicYear(),
-    //             recruitmentRound.getSemesterType(),
-    //             request.periodStartDate(),
-    //             request.periodEndDate(),
-    //             recruitmentRound.getId());
-    //     validateRoundOverlapExcludingCurrentRecruitment(
-    //             request.academicYear(), request.semesterType(), request.roundType(), recruitmentRound.getId());
-    //
-    //     recruitmentRound.updateRecruitment(
-    //             request.name(),
-    //             request.periodStartDate(),
-    //             request.periodEndDate(),
-    //             request.academicYear(),
-    //             request.semesterType(),
-    //             request.roundType());
-    //
-    //     Recruitment recruitment = recruitmentRound.getRecruitment();
-    //     recruitment.updateFee(Money.from(request.fee()));
-    // }
+    @Transactional
+    public void updateRecruitmentRound(Long recruitmentRoundId, RecruitmentRoundUpdateRequest request) {
+        RecruitmentRound recruitmentRound = recruitmentRoundRepository
+                .findById(recruitmentRoundId)
+                .orElseThrow(() -> new CustomException(RECRUITMENT_ROUND_NOT_FOUND));
+
+        Integer academicYear = recruitmentRound.getRecruitment().getAcademicYear();
+        SemesterType semesterType = recruitmentRound.getRecruitment().getSemesterType();
+        validatePeriodMatchesAcademicYear(request.startDate(), request.endDate(), academicYear);
+        validatePeriodMatchesSemesterType(request.startDate(), request.endDate(), semesterType);
+        validatePeriodWithinTwoWeeks(request.startDate(), request.endDate(), academicYear, semesterType);
+        validatePeriodOverlapExcludingCurrentRecruitment(
+                academicYear, semesterType, request.startDate(), request.endDate(), recruitmentRound.getId());
+        validateRoundOverlapExcludingCurrentRecruitment(
+                academicYear, semesterType, request.roundType(), recruitmentRound.getId());
+
+        recruitmentRound.updateRecruitmentRound(
+                request.name(), request.startDate(), request.endDate(), request.roundType());
+    }
 
     private void validateRecruitmentOverlap(Integer academicYear, SemesterType semesterType) {
         if (recruitmentRepository.existsByAcademicYearAndSemesterType(academicYear, semesterType)) {

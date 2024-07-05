@@ -80,19 +80,12 @@ public class RecruitmentRound extends BaseSemesterEntity {
         period.validatePeriodOverlap(startDate, endDate);
     }
 
-    public void updateRecruitment(
-            String name,
-            LocalDateTime startDate,
-            LocalDateTime endDate,
-            Integer academicYear,
-            SemesterType semesterType,
-            RoundType roundType) {
+    public void updateRecruitmentRound(
+            String name, LocalDateTime startDate, LocalDateTime endDate, RoundType roundType) {
         validatePeriodNotStarted();
 
         this.name = name;
         this.period = Period.createPeriod(startDate, endDate);
-        super.updateAcademicYear(academicYear);
-        super.updateSemesterType(semesterType);
         this.roundType = roundType;
     }
 
