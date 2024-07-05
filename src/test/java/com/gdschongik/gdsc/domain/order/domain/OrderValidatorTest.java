@@ -44,7 +44,7 @@ class OrderValidatorTest {
         return member;
     }
 
-    private RecruitmentRound createRecruitment(
+    private RecruitmentRound createRecruitmentRound(
             LocalDateTime startDate,
             LocalDateTime endDate,
             Integer academicYear,
@@ -70,7 +70,7 @@ class OrderValidatorTest {
         // given
         Member currentMember = createAssociateMember(1L);
 
-        RecruitmentRound recruitmentRound = createRecruitment(
+        RecruitmentRound recruitmentRound = createRecruitmentRound(
                 LocalDateTime.now().minusDays(1),
                 LocalDateTime.now().plusDays(1),
                 2024,
@@ -95,7 +95,7 @@ class OrderValidatorTest {
         // given
         Member currentMember = createAssociateMember(1L);
 
-        RecruitmentRound recruitmentRound = createRecruitment(
+        RecruitmentRound recruitmentRound = createRecruitmentRound(
                 LocalDateTime.now().minusDays(1),
                 LocalDateTime.now().plusDays(1),
                 2024,
@@ -123,7 +123,7 @@ class OrderValidatorTest {
         LocalDateTime invalidStartDate = LocalDateTime.now().minusDays(2);
         LocalDateTime invalidEndDate = LocalDateTime.now().minusDays(1);
         RecruitmentRound recruitmentRound =
-                createRecruitment(invalidStartDate, invalidEndDate, 2024, SemesterType.FIRST, MONEY_20000_WON);
+                createRecruitmentRound(invalidStartDate, invalidEndDate, 2024, SemesterType.FIRST, MONEY_20000_WON);
 
         Membership membership = createMembership(currentMember, recruitmentRound);
 
@@ -142,7 +142,7 @@ class OrderValidatorTest {
         // given
         Member currentMember = createAssociateMember(1L);
 
-        RecruitmentRound recruitmentRound = createRecruitment(
+        RecruitmentRound recruitmentRound = createRecruitmentRound(
                 LocalDateTime.now().minusDays(1),
                 LocalDateTime.now().plusDays(1),
                 2024,
@@ -167,7 +167,7 @@ class OrderValidatorTest {
         // given
         Member currentMember = createAssociateMember(1L);
 
-        RecruitmentRound recruitmentRound = createRecruitment(
+        RecruitmentRound recruitmentRound = createRecruitmentRound(
                 LocalDateTime.now().minusDays(1),
                 LocalDateTime.now().plusDays(1),
                 2024,
@@ -192,7 +192,7 @@ class OrderValidatorTest {
         // given
         Member currentMember = createAssociateMember(1L);
 
-        RecruitmentRound recruitmentRound = createRecruitment(
+        RecruitmentRound recruitmentRound = createRecruitmentRound(
                 LocalDateTime.now().minusDays(1),
                 LocalDateTime.now().plusDays(1),
                 2024,
@@ -217,7 +217,7 @@ class OrderValidatorTest {
         // given
         Member currentMember = createAssociateMember(1L);
 
-        RecruitmentRound recruitmentRound = createRecruitment(
+        RecruitmentRound recruitmentRound = createRecruitmentRound(
                 LocalDateTime.now().minusDays(1),
                 LocalDateTime.now().plusDays(1),
                 2024,
@@ -241,7 +241,7 @@ class OrderValidatorTest {
         // given
         Member currentMember = createAssociateMember(1L);
 
-        RecruitmentRound recruitmentRound = createRecruitment(
+        RecruitmentRound recruitmentRound = createRecruitmentRound(
                 LocalDateTime.now().minusDays(1),
                 LocalDateTime.now().plusDays(1),
                 2024,
@@ -262,7 +262,7 @@ class OrderValidatorTest {
         // given
         Member currentMember = createAssociateMember(1L);
 
-        RecruitmentRound recruitmentRound = createRecruitment(
+        RecruitmentRound recruitmentRound = createRecruitmentRound(
                 LocalDateTime.now().minusDays(1),
                 LocalDateTime.now().plusDays(1),
                 2024,
