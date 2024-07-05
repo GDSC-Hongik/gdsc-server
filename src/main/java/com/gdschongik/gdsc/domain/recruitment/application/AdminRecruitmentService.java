@@ -49,7 +49,7 @@ public class AdminRecruitmentService {
     }
 
     public List<AdminRecruitmentResponse> getAllRecruitments() {
-        List<RecruitmentRound> recruitments = recruitmentRoundRepository.findByOrderByPeriodStartDateDesc();
+        List<Recruitment> recruitments = recruitmentRepository.findByOrderBySemesterPeriodDesc();
         return recruitments.stream().map(AdminRecruitmentResponse::from).toList();
     }
 
