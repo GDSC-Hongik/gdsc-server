@@ -71,7 +71,7 @@ public class MembershipServiceTest extends IntegrationTest {
         }
 
         @Test
-        void 해당_Recruitment의_모집기간이_아니라면_실패한다() {
+        void 해당_RecruitmentRound의_모집기간이_아니라면_실패한다() {
             // given
             createMember();
             logoutAndReloginAs(1L, ASSOCIATE);
@@ -80,7 +80,7 @@ public class MembershipServiceTest extends IntegrationTest {
             // when & then
             assertThatThrownBy(() -> membershipService.submitMembership(recruitmentRound.getId()))
                     .isInstanceOf(CustomException.class)
-                    .hasMessage(RECRUITMENT_NOT_OPEN.getMessage());
+                    .hasMessage(RECRUITMENT_ROUND_NOT_OPEN.getMessage());
         }
     }
 

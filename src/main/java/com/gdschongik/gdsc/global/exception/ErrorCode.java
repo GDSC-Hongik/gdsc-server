@@ -75,7 +75,7 @@ public enum ErrorCode {
     // Recruitment
     DATE_PRECEDENCE_INVALID(HttpStatus.BAD_REQUEST, "종료일이 시작일과 같거나 앞설 수 없습니다."),
     RECRUITMENT_OVERLAP(HttpStatus.BAD_REQUEST, "해당 학기에 이미 리크루팅이 존재합니다."),
-    RECRUITMENT_NOT_OPEN(HttpStatus.CONFLICT, "리크루팅 모집기간이 아닙니다."),
+    RECRUITMENT_ROUND_NOT_OPEN(HttpStatus.CONFLICT, "리크루팅 모집기간이 아닙니다."),
     RECRUITMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "리크루팅이 존재하지 않습니다."),
     RECRUITMENT_PERIOD_OVERLAP(HttpStatus.BAD_REQUEST, "모집 기간이 중복됩니다."),
     RECRUITMENT_PERIOD_MISMATCH_ACADEMIC_YEAR(HttpStatus.BAD_REQUEST, "모집 시작일과 종료일의 연도가 학년도와 일치하지 않습니다."),

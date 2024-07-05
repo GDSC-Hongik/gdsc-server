@@ -44,15 +44,15 @@ public class MembershipService {
 
         validateMembershipDuplicate(
                 currentMember, recruitmentRound.getAcademicYear(), recruitmentRound.getSemesterType());
-        validateRecruitmentOpen(recruitmentRound);
+        validateRecruitmentRoundOpen(recruitmentRound);
 
         Membership membership = Membership.createMembership(currentMember, recruitmentRound);
         membershipRepository.save(membership);
     }
 
-    private void validateRecruitmentOpen(RecruitmentRound recruitmentRound) {
+    private void validateRecruitmentRoundOpen(RecruitmentRound recruitmentRound) {
         if (!recruitmentRound.isOpen()) {
-            throw new CustomException(RECRUITMENT_NOT_OPEN);
+            throw new CustomException(RECRUITMENT_ROUND_NOT_OPEN);
         }
     }
 
