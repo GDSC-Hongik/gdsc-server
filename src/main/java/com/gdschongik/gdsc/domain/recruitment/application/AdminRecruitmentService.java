@@ -166,7 +166,7 @@ public class AdminRecruitmentService {
         List<RecruitmentRound> recruitmentRounds =
                 recruitmentRoundRepository.findAllByAcademicYearAndSemesterType(academicYear, semesterType);
 
-        recruitmentRounds.forEach(recruitment -> recruitment.validatePeriodOverlap(startDate, endDate));
+        recruitmentRounds.forEach(recruitmentRound -> recruitmentRound.validatePeriodOverlap(startDate, endDate));
     }
 
     private void validateRoundOverlap(Integer academicYear, SemesterType semesterType, RoundType roundType) {
