@@ -56,7 +56,7 @@ public class StudyService {
         return studyDetails;
     }
 
-    private Member getMemberById(Long id) {
-        return memberRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+    private Member getMemberById(Long memberId) {
+        return memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
     }
 }
