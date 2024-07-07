@@ -4,11 +4,9 @@ import static com.gdschongik.gdsc.domain.common.model.RequirementStatus.*;
 import static com.gdschongik.gdsc.domain.member.domain.QMember.*;
 
 import com.gdschongik.gdsc.domain.common.model.RequirementStatus;
-import com.gdschongik.gdsc.domain.member.domain.Department;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryOption;
-import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -60,7 +58,8 @@ public class MemberCustomRepositoryImpl extends MemberQueryMethod implements Mem
 
     @Override
     public Page<Member> findAssociateOrRegularMembers(MemberQueryOption queryOption, Pageable pageable) {
-        List<Long> ids = getIdsByQueryOption(queryOption, eqRole(MemberRole.ASSOCIATE).or(eqRole(MemberRole.REGULAR)), member.createdAt.desc());
+        List<Long> ids = getIdsByQueryOption(
+                queryOption, eqRole(MemberRole.ASSOCIATE).or(eqRole(MemberRole.REGULAR)), member.createdAt.desc());
 
         List<Member> fetch = queryFactory
                 .selectFrom(member)
@@ -72,8 +71,18 @@ public class MemberCustomRepositoryImpl extends MemberQueryMethod implements Mem
         return PageableExecutionUtils.getPage(fetch, pageable, ids::size);
     }
 
-    private List<Long> getIdsByQueryOption(MemberQueryOption queryOption, Predicate predicate, OrderSpecifier<?>... orderSpecifiers) {
-        return queryFactory.select(member.id)
+    /**
+     * queryOption으로 정렬된 상태로id값들을 가져옵니다.
+     * 이 id값들로 페이지네이션 content를 조인하는 쿼리 생성시 추가적인 정렬은 없어야하며, 정렬이 필요한경우 해당 함수에 넣어주세요.
+     * @param queryOption -> 필수
+     * @param predicate -> 옵션(추가적인 조건 있을 시)
+     * @param orderSpecifiers -> 필수
+     * @return
+     */
+    private List<Long> getIdsByQueryOption(
+            MemberQueryOption queryOption, Predicate predicate, OrderSpecifier<?>... orderSpecifiers) {
+        return queryFactory
+                .select(member.id)
                 .from(member)
                 .where(matchesQueryOption(queryOption), predicate)
                 .orderBy(orderSpecifiers)
