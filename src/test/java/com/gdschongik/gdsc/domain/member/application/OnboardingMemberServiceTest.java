@@ -26,12 +26,12 @@ class OnboardingMemberServiceTest extends IntegrationTest {
 
         /**
          * {@link Period#isOpen()}에서 LocalDateTime.now()를 사용하기 때문에 고정된 리쿠르팅을 반환하도록 설정
-         * @see OnboardingRecruitmentService#findCurrentRecruitment()
+         * @see OnboardingRecruitmentService#findCurrentRecruitmentRound()
          */
         @BeforeEach
         void setUp() {
             RecruitmentRound recruitmentRound = createRecruitmentRound();
-            when(onboardingRecruitmentService.findCurrentRecruitment()).thenReturn(recruitmentRound);
+            when(onboardingRecruitmentService.findCurrentRecruitmentRound()).thenReturn(recruitmentRound);
         }
 
         @Test

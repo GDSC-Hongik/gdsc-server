@@ -76,7 +76,7 @@ public class OnboardingMemberService {
 
     public MemberDashboardResponse getDashboard() {
         Member currentMember = memberUtil.getCurrentMember();
-        RecruitmentRound currentRecruitmentRound = onboardingRecruitmentService.findCurrentRecruitment();
+        RecruitmentRound currentRecruitmentRound = onboardingRecruitmentService.findCurrentRecruitmentRound();
         Optional<Membership> myMembership = membershipService.findMyMembership(currentMember, currentRecruitmentRound);
 
         return MemberDashboardResponse.from(currentMember, currentRecruitmentRound, myMembership.orElse(null));
