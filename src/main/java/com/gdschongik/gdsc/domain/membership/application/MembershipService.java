@@ -6,7 +6,6 @@ import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.membership.dao.MembershipRepository;
 import com.gdschongik.gdsc.domain.membership.domain.Membership;
 import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRoundRepository;
-import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
@@ -33,38 +32,26 @@ public class MembershipService {
     }
 
     @Transactional
-    public void submitMembership(Long recruitmentRoundId) {
-        Member currentMember = memberUtil.getCurrentMember();
+    public void submitMembership(Long recruitmentRoundId) {}
 
-        RecruitmentRound recruitmentRound = recruitmentRoundRepository
-                .findById(recruitmentRoundId)
-                .orElseThrow(() -> new CustomException(RECRUITMENT_ROUND_NOT_FOUND));
-
-        validateMembershipDuplicate(currentMember, recruitmentRound.getRecruitment());
-        validateRecruitmentRoundOpen(recruitmentRound);
-
-        Membership membership = Membership.createMembership(currentMember, recruitmentRound);
-        membershipRepository.save(membership);
-    }
-
-    private void validateRecruitmentRoundOpen(RecruitmentRound recruitmentRound) {
-        if (!recruitmentRound.isOpen()) {
-            throw new CustomException(RECRUITMENT_ROUND_NOT_OPEN);
-        }
-    }
-
-    private void validateMembershipDuplicate(Member currentMember, Recruitment recruitment) {
-        membershipRepository
-                .findByMember(currentMember)
-                .filter(membership ->
-                        membership.getRecruitmentRound().getRecruitment().equals(recruitment))
-                .ifPresent(membership -> {
-                    if (membership.isRegularRequirementAllSatisfied()) {
-                        throw new CustomException(MEMBERSHIP_ALREADY_SATISFIED);
-                    }
-                    throw new CustomException(MEMBERSHIP_ALREADY_APPLIED);
-                });
-    }
+    // private void validateRecruitmentRoundOpen(RecruitmentRound recruitmentRound) {
+    //     if (!recruitmentRound.isOpen()) {
+    //         throw new CustomException(RECRUITMENT_ROUND_NOT_OPEN);
+    //     }
+    // }
+    //
+    // private void validateMembershipDuplicate(Member currentMember, Recruitment recruitment) {
+    //     membershipRepository
+    //             .findByMember(currentMember)
+    //             .filter(membership ->
+    //                     membership.getRecruitmentRound().getRecruitment().equals(recruitment))
+    //             .ifPresent(membership -> {
+    //                 if (membership.isRegularRequirementAllSatisfied()) {
+    //                     throw new CustomException(MEMBERSHIP_ALREADY_SATISFIED);
+    //                 }
+    //                 throw new CustomException(MEMBERSHIP_ALREADY_APPLIED);
+    //             });
+    // }
 
     public Optional<Membership> findMyMembership(Member member, RecruitmentRound recruitmentRound) {
         return membershipRepository.findByMemberAndRecruitmentRound(member, recruitmentRound);

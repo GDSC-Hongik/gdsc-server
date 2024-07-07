@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MembershipRepository extends JpaRepository<Membership, Long> {
 
-    Optional<Membership> findByMember(Member member);
+    // Optional<Membership> findByMember(Member member);
 
     Optional<Membership> findByMemberAndRecruitmentRound(Member member, RecruitmentRound recruitmentRound);
 }

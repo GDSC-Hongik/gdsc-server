@@ -2,7 +2,6 @@ package com.gdschongik.gdsc.domain.recruitment.dao;
 
 import com.gdschongik.gdsc.domain.common.model.SemesterType;
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
-import com.gdschongik.gdsc.domain.recruitment.domain.RoundType;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -10,6 +9,6 @@ public interface RecruitmentRoundRepository extends JpaRepository<RecruitmentRou
 
     List<RecruitmentRound> findAllByAcademicYearAndSemesterType(Integer academicYear, SemesterType semesterType);
 
-    boolean existsByAcademicYearAndSemesterTypeAndRoundType(
-            Integer academicYear, SemesterType semesterType, RoundType roundType);
+    // boolean existsByAcademicYearAndSemesterTypeAndRoundType(
+    //         Integer academicYear, SemesterType semesterType, RoundType roundType);
 }
