@@ -38,7 +38,7 @@ public class AdminMemberController {
 
     @Operation(summary = "쿠폰지급용 회원 목록 조회", description = "정회원, 준회원 회원을 조회합니다.")
     @GetMapping("/coupons")
-    public ResponseEntity<Page<AdminMemberResponse>> getAssociateOrRegularMembers(
+    public ResponseEntity<Page<AdminMemberResponse>> findAssociateOrRegularMembers(
             MemberQueryOption queryOption, Pageable pageable) {
         Page<AdminMemberResponse> response = adminMemberService.findAssociateOrRegularMembers(queryOption, pageable);
         return ResponseEntity.ok().body(response);
