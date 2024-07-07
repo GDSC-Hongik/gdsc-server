@@ -5,7 +5,6 @@ import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import com.gdschongik.gdsc.domain.study.domain.vo.Assignment;
 import com.gdschongik.gdsc.domain.study.domain.vo.Session;
 import jakarta.persistence.*;
-import java.util.Random;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -59,13 +58,12 @@ public class StudyDetail extends BaseEntity {
         this.assignment = assignment;
     }
 
-    public static StudyDetail createStudyDetail(Study study, Long week, Period period) {
+    public static StudyDetail createStudyDetail(Study study, Long week, String attendanceNumber, Period period) {
         return StudyDetail.builder()
                 .study(study)
                 .week(week)
                 .period(period)
-                .attendanceNumber(
-                        new Random().ints(4, 0, 10).mapToObj(String::valueOf).reduce("", String::concat))
+                .attendanceNumber(attendanceNumber)
                 .period(period)
                 .session(Session.createEmptySession())
                 .assignment(Assignment.createEmptyAssignment())

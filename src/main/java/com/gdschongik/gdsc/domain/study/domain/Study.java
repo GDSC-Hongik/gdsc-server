@@ -64,6 +64,7 @@ public class Study extends BaseSemesterEntity {
     @Enumerated(EnumType.STRING)
     private StudyType studyType;
 
+    @Comment("스터디 요일")
     @Enumerated(EnumType.STRING)
     private DayOfWeek dayOfWeek;
 

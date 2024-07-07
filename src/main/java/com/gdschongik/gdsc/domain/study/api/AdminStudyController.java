@@ -20,10 +20,10 @@ public class AdminStudyController {
 
     private final StudyService studyService;
 
-    @Operation(summary = "스터디 개설", description = "수강신청을 위한 스터디를 개설합니다. 멘토 권한이 있는 멤버에게만 강사로 지정할 수 있습니다.")
+    @Operation(summary = "스터디 개설", description = "수강신청을 위한 스터디를 개설합니다. 코어멤버만 스터디를 개설할 수 있습니다.")
     @PostMapping
-    public ResponseEntity<Void> openStudy(@Valid @RequestBody StudyCreateRequest request) {
-        studyService.openStudy(request);
+    public ResponseEntity<Void> createStudy(@Valid @RequestBody StudyCreateRequest request) {
+        studyService.createStudyAndStudyDetail(request);
         return ResponseEntity.ok().build();
     }
 }
