@@ -38,8 +38,9 @@ public class StudyService {
         studyDetailRepository.saveAll(studyDetails);
 
         log.info(
-                "[StudyService] 스터디 생성: mentorId={}, "
+                "[StudyService] 스터디 생성: studyId = {}, mentorId={}, "
                         + "academicYear={}, semesterType={}, applicationStartDate={}, applicationEndDate={}",
+                study.getId(),
                 request.mentorId(),
                 request.academicYear(),
                 request.semesterType(),
