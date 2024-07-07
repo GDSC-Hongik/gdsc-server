@@ -95,6 +95,18 @@ public enum ErrorCode {
 
     // Study
     STUDY_APPLICATION_START_DATE_INVALID(HttpStatus.CONFLICT, "스터디 신청기간 시작일이 스터디 시작일보다 빠릅니다."),
+
+    // Order
+    ORDER_MEMBERSHIP_MEMBER_MISMATCH(HttpStatus.CONFLICT, "주문 대상 멤버십의 멤버와 현재 로그인한 멤버가 일치하지 않습니다."),
+    ORDER_MEMBERSHIP_ALREADY_PAID(HttpStatus.CONFLICT, "주문 대상 멤버십의 회비가 이미 납부되었습니다."),
+    ORDER_RECRUITMENT_PERIOD_INVALID(HttpStatus.CONFLICT, "주문 대상 멤버십의 리크루팅의 지원기간이 아닙니다."),
+    ORDER_ISSUED_COUPON_MEMBER_MISMATCH(HttpStatus.CONFLICT, "주문 시 사용할 발급쿠폰의 멤버와 현재 로그인한 멤버가 일치하지 않습니다."),
+    ORDER_TOTAL_AMOUNT_MISMATCH(HttpStatus.CONFLICT, "주문 금액은 리쿠르팅 회비와 일치해야 합니다."),
+    ORDER_DISCOUNT_AMOUNT_NOT_ZERO(HttpStatus.CONFLICT, "쿠폰 미사용시 할인 금액은 0이어야 합니다."),
+    ORDER_DISCOUNT_AMOUNT_MISMATCH(HttpStatus.CONFLICT, "쿠폰 사용시 할인 금액은 쿠폰의 할인 금액과 일치해야 합니다."),
+
+    // Order - MoneyInfo
+    ORDER_FINAL_PAYMENT_AMOUNT_MISMATCH(HttpStatus.CONFLICT, "주문 최종결제금액은 주문총액에서 할인금액을 뺀 값이어야 합니다."),
     ;
 
     private final HttpStatus status;
