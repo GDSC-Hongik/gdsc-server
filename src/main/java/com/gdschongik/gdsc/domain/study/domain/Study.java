@@ -1,6 +1,7 @@
 package com.gdschongik.gdsc.domain.study.domain;
 
 import static com.gdschongik.gdsc.global.exception.ErrorCode.STUDY_APPLICATION_START_DATE_INVALID;
+import static com.gdschongik.gdsc.global.exception.ErrorCode.STUDY_MENTOR_IS_UNAUTHORIZED;
 
 import com.gdschongik.gdsc.domain.common.model.BaseSemesterEntity;
 import com.gdschongik.gdsc.domain.common.model.SemesterType;
@@ -97,6 +98,7 @@ public class Study extends BaseSemesterEntity {
             StudyType studyType,
             DayOfWeek dayOfWeek) {
         validateApplicationStartDateBeforeSessionStartDate(applicationPeriod.getStartDate(), period.getStartDate());
+        validateMentorRole(mentor);
         return Study.builder()
                 .academicYear(academicYear)
                 .semesterType(semesterType)
@@ -113,6 +115,12 @@ public class Study extends BaseSemesterEntity {
             LocalDateTime applicationStartDate, LocalDateTime startDate) {
         if (!applicationStartDate.isBefore(startDate)) {
             throw new CustomException(STUDY_APPLICATION_START_DATE_INVALID);
+        }
+    }
+
+    private static void validateMentorRole(Member mentor) {
+        if (mentor.isGuest()) {
+            throw new CustomException(STUDY_MENTOR_IS_UNAUTHORIZED);
         }
     }
 }

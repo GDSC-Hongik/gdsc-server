@@ -287,6 +287,9 @@ public class Member extends BaseEntity {
     }
 
     // 데이터 전달 로직
+    public boolean isGuest() {
+        return role.equals(GUEST);
+    }
 
     public boolean isAssociate() {
         return role.equals(ASSOCIATE);

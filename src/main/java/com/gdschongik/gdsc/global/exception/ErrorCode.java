@@ -95,6 +95,7 @@ public enum ErrorCode {
 
     // Study
     STUDY_APPLICATION_START_DATE_INVALID(HttpStatus.CONFLICT, "스터디 신청기간 시작일이 스터디 시작일보다 빠릅니다."),
+    STUDY_MENTOR_IS_UNAUTHORIZED(HttpStatus.CONFLICT, "게스트인 회원은 멘토로 지정할 수 없습니다."),
 
     // Order
     ORDER_MEMBERSHIP_MEMBER_MISMATCH(HttpStatus.CONFLICT, "주문 대상 멤버십의 멤버와 현재 로그인한 멤버가 일치하지 않습니다."),
