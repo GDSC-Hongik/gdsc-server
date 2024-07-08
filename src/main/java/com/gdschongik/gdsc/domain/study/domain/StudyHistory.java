@@ -26,7 +26,7 @@ public class StudyHistory extends BaseSemesterEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    private Member mentor;
+    private Member mentee;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "study_id")
