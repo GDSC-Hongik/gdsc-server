@@ -28,6 +28,7 @@ public class StudyTest {
             Member guestMember = Member.createGuestMember(OAUTH_ID);
             Period period = Period.createPeriod(START_DATE, END_DATE);
             Period applicationPeriod = Period.createPeriod(START_DATE.minusDays(10), START_DATE.minusDays(5));
+            
             // when & then
             assertThatThrownBy(() -> Study.createStudy(
                             ACADEMIC_YEAR,
