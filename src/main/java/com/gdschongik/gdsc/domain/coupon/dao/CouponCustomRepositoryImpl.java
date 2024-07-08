@@ -33,7 +33,7 @@ public class CouponCustomRepositoryImpl implements CouponCustomRepository {
         return PageableExecutionUtils.getPage(fetch, pageable, countQuery::fetchOne);
     }
 
-    protected BooleanExpression eqCouponName(String couponName) {
+    private BooleanExpression eqCouponName(String couponName) {
         return couponName != null ? coupon.name.containsIgnoreCase(couponName) : null;
     }
 }
