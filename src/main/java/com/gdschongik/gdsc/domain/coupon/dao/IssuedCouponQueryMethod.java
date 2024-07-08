@@ -24,11 +24,11 @@ public class IssuedCouponQueryMethod {
         return couponName != null ? issuedCoupon.coupon.name.containsIgnoreCase(couponName) : null;
     }
 
-    protected BooleanExpression isUsed(boolean isUsed) {
+    protected BooleanExpression isUsed(Boolean isUsed) {
         return isUsed ? issuedCoupon.usedAt.isNotNull() : issuedCoupon.usedAt.isNull();
     }
 
-    protected BooleanExpression isRevoked(boolean isRevoked) {
+    protected BooleanExpression isRevoked(Boolean isRevoked) {
         return isRevoked ? issuedCoupon.isRevoked.isTrue() : issuedCoupon.isRevoked.isFalse();
     }
 
