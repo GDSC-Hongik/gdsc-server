@@ -80,7 +80,7 @@ public class Order extends BaseEntity {
                 .nanoId(nanoId)
                 .memberId(membership.getMember().getId())
                 .membershipId(membership.getId())
-                .recruitmentId(membership.getRecruitment().getId())
+                .recruitmentId(membership.getRecruitmentRound().getRecruitment().getId())
                 .issuedCouponId(issuedCoupon != null ? issuedCoupon.getId() : null)
                 .moneyInfo(moneyInfo)
                 .build();
