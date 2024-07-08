@@ -43,7 +43,7 @@ public class StudyServiceTest extends IntegrationTest {
                     startDate,
                     DAY_OF_WEEK,
                     STUDY_TYPE);
-                    
+
             // when & then
             assertThatThrownBy(() -> studyService.createStudyAndStudyDetail(request))
                     .isInstanceOf(CustomException.class)

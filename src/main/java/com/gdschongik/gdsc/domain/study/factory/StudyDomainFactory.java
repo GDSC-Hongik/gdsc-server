@@ -16,7 +16,7 @@ public class StudyDomainFactory {
 
     // 새로운 스터디를 생성합니다.
     public static Study createNewStudy(StudyCreateRequest request, Member mentor) {
-        LocalDate endDate = request.startDate().plusDays(request.totalWeek() * 7 - 1);
+        LocalDate endDate = request.startDate().plusWeeks(request.totalWeek()).minusDays(1);
         return Study.createStudy(
                 request.academicYear(),
                 request.semesterType(),
@@ -32,7 +32,7 @@ public class StudyDomainFactory {
 
     // 해당 주의 비어있는 스터디상세를 생성합니다.
     public static StudyDetail createNoneStudyDetail(Study study, Long week) {
-        LocalDateTime startDate = study.getPeriod().getStartDate().plusDays((week - 1) * 7);
+        LocalDateTime startDate = study.getPeriod().getStartDate().plusWeeks((week - 1));
         LocalDateTime endDate = startDate.plusDays(6).toLocalDate().atTime(LocalTime.MAX);
         String attendanceNumber =
                 new Random().ints(4, 0, 10).mapToObj(String::valueOf).reduce("", String::concat);
