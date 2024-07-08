@@ -8,7 +8,7 @@ import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberDashboardResponse;
 import com.gdschongik.gdsc.domain.recruitment.application.OnboardingRecruitmentService;
-import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
+import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import com.gdschongik.gdsc.helper.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,12 +26,12 @@ class OnboardingMemberServiceTest extends IntegrationTest {
 
         /**
          * {@link Period#isOpen()}에서 LocalDateTime.now()를 사용하기 때문에 고정된 리쿠르팅을 반환하도록 설정
-         * @see OnboardingRecruitmentService#findCurrentRecruitment()
+         * @see OnboardingRecruitmentService#findCurrentRecruitmentRound()
          */
         @BeforeEach
         void setUp() {
-            Recruitment recruitment = createRecruitment();
-            when(onboardingRecruitmentService.findCurrentRecruitment()).thenReturn(recruitment);
+            RecruitmentRound recruitmentRound = createRecruitmentRound();
+            when(onboardingRecruitmentService.findCurrentRecruitmentRound()).thenReturn(recruitmentRound);
         }
 
         @Test

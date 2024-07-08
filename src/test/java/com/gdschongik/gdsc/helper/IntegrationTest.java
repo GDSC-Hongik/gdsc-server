@@ -3,7 +3,9 @@ package com.gdschongik.gdsc.helper;
 import static com.gdschongik.gdsc.domain.member.domain.Department.*;
 import static com.gdschongik.gdsc.global.common.constant.MemberConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.RecruitmentConstant.*;
+import static com.gdschongik.gdsc.global.common.constant.SemesterConstant.*;
 
+import com.gdschongik.gdsc.domain.common.model.SemesterType;
 import com.gdschongik.gdsc.domain.common.vo.Money;
 import com.gdschongik.gdsc.domain.coupon.dao.CouponRepository;
 import com.gdschongik.gdsc.domain.coupon.dao.IssuedCouponRepository;
@@ -16,7 +18,11 @@ import com.gdschongik.gdsc.domain.membership.dao.MembershipRepository;
 import com.gdschongik.gdsc.domain.membership.domain.Membership;
 import com.gdschongik.gdsc.domain.recruitment.application.OnboardingRecruitmentService;
 import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRepository;
+import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRoundRepository;
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
+import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
+import com.gdschongik.gdsc.domain.recruitment.domain.RoundType;
+import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import com.gdschongik.gdsc.global.security.PrincipalDetails;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
@@ -50,6 +56,9 @@ public abstract class IntegrationTest {
     @Autowired
     protected IssuedCouponRepository issuedCouponRepository;
 
+    @Autowired
+    protected RecruitmentRoundRepository recruitmentRoundRepository;
+
     @MockBean
     protected OnboardingRecruitmentService onboardingRecruitmentService;
 
@@ -77,20 +86,37 @@ public abstract class IntegrationTest {
         return memberRepository.save(member);
     }
 
-    protected Recruitment createRecruitment() {
+    protected RecruitmentRound createRecruitmentRound() {
+        Recruitment recruitment = createRecruitment(ACADEMIC_YEAR, SEMESTER_TYPE, FEE);
+
+        RecruitmentRound recruitmentRound =
+                RecruitmentRound.create(RECRUITMENT_NAME, START_DATE, END_DATE, recruitment, ROUND_TYPE);
+
+        return recruitmentRoundRepository.save(recruitmentRound);
+    }
+
+    protected RecruitmentRound createRecruitmentRound(
+            String name,
+            LocalDateTime startDate,
+            LocalDateTime endDate,
+            Integer academicYear,
+            SemesterType semesterType,
+            RoundType roundType,
+            Money fee) {
+        Recruitment recruitment = createRecruitment(academicYear, semesterType, fee);
+
+        RecruitmentRound recruitmentRound = RecruitmentRound.create(name, startDate, endDate, recruitment, roundType);
+        return recruitmentRoundRepository.save(recruitmentRound);
+    }
+
+    protected Recruitment createRecruitment(Integer academicYear, SemesterType semesterType, Money fee) {
         Recruitment recruitment = Recruitment.createRecruitment(
-                NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE, ROUND_TYPE, FEE);
+                academicYear, semesterType, fee, Period.createPeriod(SEMESTER_START_DATE, SEMESTER_END_DATE));
         return recruitmentRepository.save(recruitment);
     }
 
-    protected Recruitment createRecruitment(LocalDateTime startDate, LocalDateTime endDate, Money fee) {
-        Recruitment recruitment =
-                Recruitment.createRecruitment(NAME, startDate, endDate, ACADEMIC_YEAR, SEMESTER_TYPE, ROUND_TYPE, fee);
-        return recruitmentRepository.save(recruitment);
-    }
-
-    protected Membership createMembership(Member member, Recruitment recruitment) {
-        Membership membership = Membership.createMembership(member, recruitment);
+    protected Membership createMembership(Member member, RecruitmentRound recruitmentRound) {
+        Membership membership = Membership.createMembership(member, recruitmentRound);
         return membershipRepository.save(membership);
     }
 

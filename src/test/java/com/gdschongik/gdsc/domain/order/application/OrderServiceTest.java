@@ -1,5 +1,6 @@
 package com.gdschongik.gdsc.domain.order.application;
 
+import static com.gdschongik.gdsc.global.common.constant.RecruitmentConstant.*;
 import static org.assertj.core.api.Assertions.*;
 
 import com.gdschongik.gdsc.domain.common.vo.Money;
@@ -9,7 +10,7 @@ import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import com.gdschongik.gdsc.domain.membership.domain.Membership;
 import com.gdschongik.gdsc.domain.order.dao.OrderRepository;
 import com.gdschongik.gdsc.domain.order.dto.request.OrderCreateRequest;
-import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
+import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.helper.IntegrationTest;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -38,9 +39,16 @@ class OrderServiceTest extends IntegrationTest {
             // given
             Member member = createMember();
             logoutAndReloginAs(1L, MemberRole.ASSOCIATE);
-            Recruitment recruitment = createRecruitment(
-                    LocalDateTime.now().minusDays(1), LocalDateTime.now().plusDays(1), MONEY_20000_WON);
-            Membership membership = createMembership(member, recruitment);
+            RecruitmentRound recruitmentRound = createRecruitmentRound(
+                    RECRUITMENT_NAME,
+                    LocalDateTime.now().minusDays(1),
+                    LocalDateTime.now().plusDays(1),
+                    ACADEMIC_YEAR,
+                    SEMESTER_TYPE,
+                    ROUND_TYPE,
+                    MONEY_20000_WON);
+
+            Membership membership = createMembership(member, recruitmentRound);
 
             IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, member);
 
