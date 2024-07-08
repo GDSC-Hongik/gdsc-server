@@ -43,7 +43,7 @@ public class AdminRecruitmentController {
 
     // todo: 서비스 복구 필요
     @Operation(summary = "모집회차 수정", description = "기존 모집회차를 수정합니다.")
-    @PutMapping("rounds/{recruitmentRoundId}")
+    @PutMapping("/rounds/{recruitmentRoundId}")
     public ResponseEntity<Void> updateRecruitmentRound(
             @PathVariable Long recruitmentRoundId, @Valid @RequestBody RecruitmentRoundUpdateRequest request) {
         adminRecruitmentService.updateRecruitmentRound(recruitmentRoundId, request);
