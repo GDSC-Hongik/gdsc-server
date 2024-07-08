@@ -10,5 +10,5 @@ public record IssuedCouponQueryOption(
         @Schema(description = "이름") String memberName,
         @Schema(description = "전화번호", pattern = PHONE_WITHOUT_HYPHEN) String phone,
         @Schema(description = "쿠폰 이름") String couponName,
-        @Schema(description = "쿠폰 사용 여부") boolean isUsed,
-        @Schema(description = "쿠폰 회수 여부") boolean isRevoked) {}
+        @Schema(description = "쿠폰 사용 여부") Boolean isUsed,
+        @Schema(description = "쿠폰 회수 여부") Boolean isRevoked) {}
