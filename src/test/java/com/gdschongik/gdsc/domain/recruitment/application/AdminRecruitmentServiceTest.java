@@ -4,7 +4,14 @@ import static com.gdschongik.gdsc.global.common.constant.RecruitmentConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 
+import com.gdschongik.gdsc.domain.common.model.SemesterType;
+import com.gdschongik.gdsc.domain.recruitment.domain.RoundType;
+import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentRoundCreateRequest;
+import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.helper.IntegrationTest;
+import java.time.LocalDateTime;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 class AdminRecruitmentServiceTest extends IntegrationTest {
@@ -127,4 +134,94 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
     //                 .hasMessage(RECRUITMENT_ROUND_TYPE_OVERLAP.getMessage());
     //     }
     // }
+
+    @Nested
+    class 모집회차_생성시 {
+
+        @Test
+        void 모집_시작일과_종료일의_연도가_입력된_학년도와_다르다면_실패한다() {
+            // given
+            RecruitmentRoundCreateRequest request = new RecruitmentRoundCreateRequest(
+                    2025, SEMESTER_TYPE, RECRUITMENT_NAME, START_DATE, END_DATE, ROUND_TYPE);
+
+            // when & then
+            assertThatThrownBy(() -> adminRecruitmentService.createRecruitmentRound(request))
+                    .isInstanceOf(CustomException.class)
+                    .hasMessage(RECRUITMENT_PERIOD_MISMATCH_ACADEMIC_YEAR.getMessage());
+        }
+
+        @Test
+        void 학기_시작일과_종료일의_학기가_입력된_학기와_다르다면_실패한다() {
+            // given
+            RecruitmentRoundCreateRequest request = new RecruitmentRoundCreateRequest(
+                    ACADEMIC_YEAR, SemesterType.SECOND, RECRUITMENT_NAME, START_DATE, END_DATE, ROUND_TYPE);
+
+            // when & then
+            assertThatThrownBy(() -> adminRecruitmentService.createRecruitmentRound(request))
+                    .isInstanceOf(CustomException.class)
+                    .hasMessage(RECRUITMENT_PERIOD_MISMATCH_SEMESTER_TYPE.getMessage());
+        }
+
+        @Test
+        void 학년도_학기_차수가_모두_중복되면_실패한다() {
+            // given
+            createRecruitmentRound(
+                    RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE, ROUND_TYPE, FEE);
+            RecruitmentRoundCreateRequest request = new RecruitmentRoundCreateRequest(
+                    ACADEMIC_YEAR,
+                    SEMESTER_TYPE,
+                    RECRUITMENT_NAME,
+                    LocalDateTime.of(2024, 3, 6, 0, 0),
+                    LocalDateTime.of(2024, 3, 7, 0, 0),
+                    ROUND_TYPE);
+
+            // when & then
+            assertThatThrownBy(() -> adminRecruitmentService.createRecruitmentRound(request))
+                    .isInstanceOf(CustomException.class)
+                    .hasMessage(RECRUITMENT_ROUND_TYPE_OVERLAP.getMessage());
+        }
+
+        @Test
+        void RoundType_1차가_없을때_2차를_생성하려_하면_실패한다() {
+            // given
+            RecruitmentRoundCreateRequest request = new RecruitmentRoundCreateRequest(
+                    ACADEMIC_YEAR, SEMESTER_TYPE, RECRUITMENT_NAME, START_DATE, END_DATE, RoundType.SECOND);
+
+            // when & then
+            assertThatThrownBy(() -> adminRecruitmentService.createRecruitmentRound(request))
+                    .isInstanceOf(CustomException.class)
+                    .hasMessage(ROUND_ONE_DOES_NOT_EXIST.getMessage());
+        }
+
+        @Test
+        void 기간이_중복되는_모집회차가_있다면_실패한다() {
+            // given
+            createRecruitmentRound(
+                    RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE, ROUND_TYPE, FEE);
+            RecruitmentRoundCreateRequest request = new RecruitmentRoundCreateRequest(
+                    ACADEMIC_YEAR, SEMESTER_TYPE, RECRUITMENT_NAME, START_DATE, END_DATE, RoundType.SECOND);
+
+            // when & then
+            assertThatThrownBy(() -> adminRecruitmentService.createRecruitmentRound(request))
+                    .isInstanceOf(CustomException.class)
+                    .hasMessage(PERIOD_OVERLAP.getMessage());
+        }
+    }
+
+    @Test
+    void 모집_시작일과_종료일이_학기_시작일로부터_2주_이내에_있지_않다면_실패한다() {
+        // given
+        RecruitmentRoundCreateRequest request = new RecruitmentRoundCreateRequest(
+                ACADEMIC_YEAR,
+                SEMESTER_TYPE,
+                RECRUITMENT_NAME,
+                START_DATE,
+                LocalDateTime.of(2024, 4, 10, 0, 0),
+                RoundType.SECOND);
+
+        // when & then
+        assertThatThrownBy(() -> adminRecruitmentService.createRecruitmentRound(request))
+                .isInstanceOf(CustomException.class)
+                .hasMessage(RECRUITMENT_PERIOD_NOT_WITHIN_TWO_WEEKS.getMessage());
+    }
 }

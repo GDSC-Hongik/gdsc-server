@@ -9,10 +9,14 @@ import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRepository;
 import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRoundRepository;
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
+import com.gdschongik.gdsc.domain.recruitment.domain.RoundType;
 import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentCreateRequest;
+import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentRoundCreateRequest;
 import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentRoundUpdateRequest;
 import com.gdschongik.gdsc.domain.recruitment.dto.response.AdminRecruitmentResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +38,26 @@ public class AdminRecruitmentService {
     public List<AdminRecruitmentResponse> getAllRecruitments() {
         List<Recruitment> recruitments = recruitmentRepository.findByOrderBySemesterPeriodDesc();
         return recruitments.stream().map(AdminRecruitmentResponse::from).toList();
+    }
+
+    @Transactional
+    public void createRecruitmentRound(RecruitmentRoundCreateRequest request) {
+        validatePeriodMatchesAcademicYear(request.startDate(), request.endDate(), request.academicYear());
+        validatePeriodMatchesSemesterType(request.startDate(), request.endDate(), request.semesterType());
+        validatePeriodOverlap(request.academicYear(), request.semesterType(), request.startDate(), request.endDate());
+        validatePeriodWithinTwoWeeks(
+                request.startDate(), request.endDate(), request.academicYear(), request.semesterType());
+        validateRound(request.academicYear(), request.semesterType(), request.roundType());
+
+        Recruitment recruitment = recruitmentRepository
+                .findByAcademicYearAndSemesterType(request.academicYear(), request.semesterType())
+                .orElseThrow(() -> new CustomException(RECRUITMENT_NOT_FOUND));
+
+        RecruitmentRound recruitmentRound = RecruitmentRound.create(
+                request.name(), request.startDate(), request.endDate(), recruitment, request.roundType());
+        recruitmentRoundRepository.save(recruitmentRound);
+
+        log.info("[AdminRecruitmentService] 모집회차 생성: recruitmentRoundId={}", recruitmentRound.getId());
     }
 
     @Transactional
@@ -60,85 +84,94 @@ public class AdminRecruitmentService {
         recruitmentRounds.forEach(RecruitmentRound::validatePeriodNotStarted);
     }
 
-    // // TODO validateRegularRequirement처럼 로직 변경
-    // private void validatePeriodMatchesAcademicYear(
-    //         LocalDateTime startDate, LocalDateTime endDate, Integer academicYear) {
-    //     if (academicYear.equals(startDate.getYear()) && academicYear.equals(endDate.getYear())) {
-    //         return;
-    //     }
-    //
-    //     throw new CustomException(RECRUITMENT_PERIOD_MISMATCH_ACADEMIC_YEAR);
-    // }
-    //
-    // // TODO validateRegularRequirement처럼 로직 변경
-    // private void validatePeriodMatchesSemesterType(
-    //         LocalDateTime startDate, LocalDateTime endDate, SemesterType semesterType) {
-    //     if (getSemesterTypeByStartDateOrEndDate(startDate).equals(semesterType)
-    //             && getSemesterTypeByStartDateOrEndDate(endDate).equals(semesterType)) {
-    //         return;
-    //     }
-    //
-    //     throw new CustomException(RECRUITMENT_PERIOD_MISMATCH_SEMESTER_TYPE);
-    // }
-    //
-    // private SemesterType getSemesterTypeByStartDateOrEndDate(LocalDateTime dateTime) {
-    //     int year = dateTime.getYear();
-    //     LocalDateTime firstSemesterStartDate = LocalDateTime.of(
-    //             year, FIRST.getStartDate().getMonth(), FIRST.getStartDate().getDayOfMonth(), 0, 0);
-    //     LocalDateTime secondSemesterStartDate = LocalDateTime.of(
-    //             year, SECOND.getStartDate().getMonth(), SECOND.getStartDate().getDayOfMonth(), 0, 0);
-    //
-    //     /*
-    //     개강일 기준으로 2주 전까지는 같은 학기로 간주한다.
-    //      */
-    //     if (dateTime.isAfter(firstSemesterStartDate.minusWeeks(PRE_SEMESTER_TERM))
-    //             && dateTime.getMonthValue() < Month.JULY.getValue()) {
-    //         return FIRST;
-    //     }
-    //
-    //     if (dateTime.isAfter(secondSemesterStartDate.minusWeeks(PRE_SEMESTER_TERM))) {
-    //         return SECOND;
-    //     }
-    //
-    //     throw new CustomException(RECRUITMENT_PERIOD_SEMESTER_TYPE_UNMAPPED);
-    // }
-    //
-    // private void validatePeriodWithinTwoWeeks(
-    //         LocalDateTime startDate, LocalDateTime endDate, Integer academicYear, SemesterType semesterType) {
-    //     LocalDateTime semesterStartDate = LocalDateTime.of(
-    //             academicYear,
-    //             semesterType.getStartDate().getMonth(),
-    //             semesterType.getStartDate().getDayOfMonth(),
-    //             0,
-    //             0);
-    //
-    //     if (semesterStartDate.minusWeeks(PRE_SEMESTER_TERM).isAfter(startDate)
-    //             || semesterStartDate.plusWeeks(PRE_SEMESTER_TERM).isBefore(startDate)) {
-    //         throw new CustomException(RECRUITMENT_PERIOD_NOT_WITHIN_TWO_WEEKS);
-    //     }
-    //
-    //     if (semesterStartDate.minusWeeks(PRE_SEMESTER_TERM).isAfter(endDate)
-    //             || semesterStartDate.plusWeeks(PRE_SEMESTER_TERM).isBefore(endDate)) {
-    //         throw new CustomException(RECRUITMENT_PERIOD_NOT_WITHIN_TWO_WEEKS);
-    //     }
-    // }
-    //
-    // // 새로 생성하는 경우
-    // private void validatePeriodOverlap(
-    //         Integer academicYear, SemesterType semesterType, LocalDateTime startDate, LocalDateTime endDate) {
-    //     List<RecruitmentRound> recruitmentRounds =
-    //             recruitmentRoundRepository.findAllByAcademicYearAndSemesterType(academicYear, semesterType);
-    //
-    //     recruitmentRounds.forEach(recruitmentRound -> recruitmentRound.validatePeriodOverlap(startDate, endDate));
-    // }
-    //
-    // private void validateRoundOverlap(Integer academicYear, SemesterType semesterType, RoundType roundType) {
-    //     if (recruitmentRoundRepository.existsByAcademicYearAndSemesterTypeAndRoundType(
-    //             academicYear, semesterType, roundType)) {
-    //         throw new CustomException(RECRUITMENT_ROUND_TYPE_OVERLAP);
-    //     }
-    // }
-    //
+    // TODO validateRegularRequirement처럼 로직 변경
+    private void validatePeriodMatchesAcademicYear(
+            LocalDateTime startDate, LocalDateTime endDate, Integer academicYear) {
+        if (academicYear.equals(startDate.getYear()) && academicYear.equals(endDate.getYear())) {
+            return;
+        }
+
+        throw new CustomException(RECRUITMENT_PERIOD_MISMATCH_ACADEMIC_YEAR);
+    }
+
+    // TODO validateRegularRequirement처럼 로직 변경
+    private void validatePeriodMatchesSemesterType(
+            LocalDateTime startDate, LocalDateTime endDate, SemesterType semesterType) {
+        if (getSemesterTypeByStartDateOrEndDate(startDate).equals(semesterType)
+                && getSemesterTypeByStartDateOrEndDate(endDate).equals(semesterType)) {
+            return;
+        }
+
+        throw new CustomException(RECRUITMENT_PERIOD_MISMATCH_SEMESTER_TYPE);
+    }
+
+    private SemesterType getSemesterTypeByStartDateOrEndDate(LocalDateTime dateTime) {
+        int year = dateTime.getYear();
+        LocalDateTime firstSemesterStartDate = LocalDateTime.of(
+                year, FIRST.getStartDate().getMonth(), FIRST.getStartDate().getDayOfMonth(), 0, 0);
+        LocalDateTime secondSemesterStartDate = LocalDateTime.of(
+                year, SECOND.getStartDate().getMonth(), SECOND.getStartDate().getDayOfMonth(), 0, 0);
+
+        /*
+        개강일 기준으로 2주 전까지는 같은 학기로 간주한다.
+         */
+        if (dateTime.isAfter(firstSemesterStartDate.minusWeeks(PRE_SEMESTER_TERM))
+                && dateTime.getMonthValue() < Month.JULY.getValue()) {
+            return FIRST;
+        }
+
+        if (dateTime.isAfter(secondSemesterStartDate.minusWeeks(PRE_SEMESTER_TERM))) {
+            return SECOND;
+        }
+
+        throw new CustomException(RECRUITMENT_PERIOD_SEMESTER_TYPE_UNMAPPED);
+    }
+
+    private void validatePeriodWithinTwoWeeks(
+            LocalDateTime startDate, LocalDateTime endDate, Integer academicYear, SemesterType semesterType) {
+        LocalDateTime semesterStartDate = LocalDateTime.of(
+                academicYear,
+                semesterType.getStartDate().getMonth(),
+                semesterType.getStartDate().getDayOfMonth(),
+                0,
+                0);
+
+        if (semesterStartDate.minusWeeks(PRE_SEMESTER_TERM).isAfter(startDate)
+                || semesterStartDate.plusWeeks(PRE_SEMESTER_TERM).isBefore(startDate)) {
+            throw new CustomException(RECRUITMENT_PERIOD_NOT_WITHIN_TWO_WEEKS);
+        }
+
+        if (semesterStartDate.minusWeeks(PRE_SEMESTER_TERM).isAfter(endDate)
+                || semesterStartDate.plusWeeks(PRE_SEMESTER_TERM).isBefore(endDate)) {
+            throw new CustomException(RECRUITMENT_PERIOD_NOT_WITHIN_TWO_WEEKS);
+        }
+    }
+
+    // 새로 생성하는 경우
+    private void validatePeriodOverlap(
+            Integer academicYear, SemesterType semesterType, LocalDateTime startDate, LocalDateTime endDate) {
+        List<RecruitmentRound> recruitmentRounds =
+                recruitmentRoundRepository.findAllByAcademicYearAndSemesterType(academicYear, semesterType);
+
+        recruitmentRounds.forEach(recruitmentRound -> recruitmentRound.validatePeriodOverlap(startDate, endDate));
+    }
+
+    /**
+     * 예외를 발생하는 경우
+     * 1. 학년도, 학기, 차수가 모두 같은 모집회차가 존재하는 경우
+     * 2. 1차 모집이 없는데 2차 모집을 생성하려고 하는 경우
+     */
+    private void validateRound(Integer academicYear, SemesterType semesterType, RoundType roundType) {
+        if (recruitmentRoundRepository.existsByAcademicYearAndSemesterTypeAndRoundType(
+                academicYear, semesterType, roundType)) {
+            throw new CustomException(RECRUITMENT_ROUND_TYPE_OVERLAP);
+        }
+
+        if (roundType.equals(RoundType.SECOND)) {
+            throw new CustomException(ROUND_ONE_DOES_NOT_EXIST);
+        }
+    }
+
     // /**
     //  * 기존 리쿠르팅 수정하는 경우,
     //  * 자기 자신의 모집기간과 차수는 수정에 성공하면 소멸되므로 무의미함.

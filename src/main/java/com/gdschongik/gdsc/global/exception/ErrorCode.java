@@ -78,14 +78,16 @@ public enum ErrorCode {
     // Recruitment
     DATE_PRECEDENCE_INVALID(HttpStatus.BAD_REQUEST, "종료일이 시작일과 같거나 앞설 수 없습니다."),
     RECRUITMENT_OVERLAP(HttpStatus.BAD_REQUEST, "해당 학기에 이미 리크루팅이 존재합니다."),
-    RECRUITMENT_ROUND_NOT_OPEN(HttpStatus.CONFLICT, "리크루팅 회차 모집기간이 아닙니다."),
-    RECRUITMENT_ROUND_NOT_FOUND(HttpStatus.NOT_FOUND, "리크루팅 회차가 존재하지 않습니다."),
+    RECRUITMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "리크루팅이 존재하지 않습니다."),
+    RECRUITMENT_ROUND_NOT_OPEN(HttpStatus.CONFLICT, "모집회차 모집기간이 아닙니다."),
+    RECRUITMENT_ROUND_NOT_FOUND(HttpStatus.NOT_FOUND, "모집회차가 존재하지 않습니다."),
     RECRUITMENT_PERIOD_MISMATCH_ACADEMIC_YEAR(HttpStatus.BAD_REQUEST, "모집 시작일과 종료일의 연도가 학년도와 일치하지 않습니다."),
     RECRUITMENT_PERIOD_MISMATCH_SEMESTER_TYPE(HttpStatus.BAD_REQUEST, "모집 시작일과 종료일의 입력된 학기가 일치하지 않습니다."),
     RECRUITMENT_PERIOD_SEMESTER_TYPE_UNMAPPED(HttpStatus.CONFLICT, "모집 시작일과 종료일이 매핑되는 학기가 없습니다."),
     RECRUITMENT_PERIOD_NOT_WITHIN_TWO_WEEKS(HttpStatus.BAD_REQUEST, "모집 시작일과 종료일이 학기 시작일로부터 2주 이내에 있지 않습니다."),
     RECRUITMENT_ROUND_TYPE_OVERLAP(HttpStatus.BAD_REQUEST, "모집 차수가 중복됩니다."),
-    RECRUITMENT_ROUND_STARTDATE_ALREADY_PASSED(HttpStatus.BAD_REQUEST, "이미 모집 시작일이 지난 리크루팅 회차입니다."),
+    RECRUITMENT_ROUND_STARTDATE_ALREADY_PASSED(HttpStatus.BAD_REQUEST, "이미 모집 시작일이 지난 모집회차입니다."),
+    ROUND_ONE_DOES_NOT_EXIST(HttpStatus.CONFLICT, "1차 모집이 존재하지 않습니다."),
 
     // Coupon
     COUPON_DISCOUNT_AMOUNT_NOT_POSITIVE(HttpStatus.CONFLICT, "쿠폰의 할인 금액은 0보다 커야 합니다."),
