@@ -40,43 +40,43 @@ public class IssuedCoupon extends BaseEntity {
     private Member member;
 
     @Comment("회수 여부")
-    private Boolean isRevoked;
+    private Boolean hasRevoked;
 
     private LocalDateTime usedAt;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private IssuedCoupon(Coupon coupon, Member member, Boolean isRevoked) {
+    private IssuedCoupon(Coupon coupon, Member member, Boolean hasRevoked) {
         this.coupon = coupon;
         this.member = member;
-        this.isRevoked = isRevoked;
+        this.hasRevoked = hasRevoked;
     }
 
     public static IssuedCoupon issue(Coupon coupon, Member member) {
         return IssuedCoupon.builder()
                 .coupon(coupon)
                 .member(member)
-                .isRevoked(false)
+                .hasRevoked(false)
                 .build();
     }
 
     // 검증 로직
 
     public void validateUsable() {
-        if (isRevoked.equals(TRUE)) {
+        if (hasRevoked.equals(TRUE)) {
             throw new CustomException(COUPON_NOT_USABLE_REVOKED);
         }
 
-        if (isUsed()) {
+        if (hasUsed()) {
             throw new CustomException(COUPON_NOT_USABLE_ALREADY_USED);
         }
     }
 
     private void validateRevokable() {
-        if (isRevoked.equals(TRUE)) {
+        if (hasRevoked.equals(TRUE)) {
             throw new CustomException(COUPON_NOT_REVOKABLE_ALREADY_REVOKED);
         }
 
-        if (isUsed()) {
+        if (hasUsed()) {
             throw new CustomException(COUPON_NOT_REVOKABLE_ALREADY_USED);
         }
     }
@@ -90,17 +90,17 @@ public class IssuedCoupon extends BaseEntity {
 
     public void revoke() {
         validateRevokable();
-        isRevoked = true;
+        hasRevoked = true;
     }
 
     // 데이터 전달 로직
 
-    public Boolean isUsed() {
+    public Boolean hasUsed() {
         return usedAt != null;
     }
 
-    public Boolean isRevoked() {
-        return isRevoked;
+    public Boolean hasRevoked() {
+        return hasRevoked;
     }
 
     public boolean isUsable() {

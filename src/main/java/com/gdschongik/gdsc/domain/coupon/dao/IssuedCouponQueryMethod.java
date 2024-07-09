@@ -24,12 +24,12 @@ public class IssuedCouponQueryMethod {
         return couponName != null ? issuedCoupon.coupon.name.containsIgnoreCase(couponName) : null;
     }
 
-    protected BooleanExpression isUsed(Boolean isUsed) {
-        return isUsed ? issuedCoupon.usedAt.isNotNull() : issuedCoupon.usedAt.isNull();
+    protected BooleanExpression hasUsed(Boolean hasUsed) {
+        return hasUsed != null ? issuedCoupon.usedAt.isNotNull() : issuedCoupon.usedAt.isNull();
     }
 
-    protected BooleanExpression isRevoked(Boolean isRevoked) {
-        return isRevoked ? issuedCoupon.isRevoked.isTrue() : issuedCoupon.isRevoked.isFalse();
+    protected BooleanExpression hasRevoked(Boolean hasRevoked) {
+        return hasRevoked != null ? issuedCoupon.hasRevoked.isTrue() : issuedCoupon.hasRevoked.isFalse();
     }
 
     protected BooleanBuilder matchesQueryOption(IssuedCouponQueryOption queryOption) {
@@ -38,7 +38,7 @@ public class IssuedCouponQueryMethod {
                 .and(eqMemberName(queryOption.memberName()))
                 .and(eqPhone(queryOption.phone()))
                 .and(eqCouponName(queryOption.couponName()))
-                .and(isUsed(queryOption.isUsed()))
-                .and(isRevoked(queryOption.isRevoked()));
+                .and(hasUsed(queryOption.hasUsed()))
+                .and(hasRevoked(queryOption.hasRevoked()));
     }
 }

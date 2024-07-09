@@ -28,7 +28,7 @@ class IssuedCouponTest {
             issuedCoupon.use();
 
             // then
-            assertThat(issuedCoupon.isUsed()).isTrue();
+            assertThat(issuedCoupon.hasUsed()).isTrue();
         }
 
         @Test
@@ -74,7 +74,7 @@ class IssuedCouponTest {
             issuedCoupon.revoke();
 
             // then
-            assertThat(issuedCoupon.isRevoked()).isTrue();
+            assertThat(issuedCoupon.hasRevoked()).isTrue();
         }
 
         @Test
