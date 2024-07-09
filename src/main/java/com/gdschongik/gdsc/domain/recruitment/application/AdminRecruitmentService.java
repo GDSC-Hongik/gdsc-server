@@ -12,6 +12,7 @@ import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentCreateRequest;
 import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentRoundUpdateRequest;
 import com.gdschongik.gdsc.domain.recruitment.dto.response.AdminRecruitmentResponse;
+import com.gdschongik.gdsc.domain.recruitment.dto.response.AdminRecruitmentRoundResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,13 @@ public class AdminRecruitmentService {
     public List<AdminRecruitmentResponse> getAllRecruitments() {
         List<Recruitment> recruitments = recruitmentRepository.findByOrderBySemesterPeriodDesc();
         return recruitments.stream().map(AdminRecruitmentResponse::from).toList();
+    }
+
+    public List<AdminRecruitmentRoundResponse> getAllRecruitmentRounds() {
+        List<RecruitmentRound> recruitmentRounds = recruitmentRoundRepository.findAll();
+        return recruitmentRounds.stream()
+                .map(AdminRecruitmentRoundResponse::from)
+                .toList();
     }
 
     @Transactional
