@@ -96,6 +96,8 @@ public class AdminRecruitmentService {
                             59)
                     .minusDays(1);
         }
+
+        // 2학기라면 학년도를 1 증가시켜야 함
         return LocalDateTime.of(
                         academicYear + 1,
                         FIRST.getStartDate().getMonth(),
