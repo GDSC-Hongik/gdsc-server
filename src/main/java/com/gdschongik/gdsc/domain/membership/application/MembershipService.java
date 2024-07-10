@@ -12,9 +12,12 @@ import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -44,6 +47,8 @@ public class MembershipService {
 
         Membership membership = Membership.createMembership(currentMember, recruitmentRound);
         membershipRepository.save(membership);
+
+        log.info("[MembershipService] 멤버십 가입 신청 접수: membershipId = {}", membership.getId());
     }
 
     public Optional<Membership> findMyMembership(Member member, RecruitmentRound recruitmentRound) {
