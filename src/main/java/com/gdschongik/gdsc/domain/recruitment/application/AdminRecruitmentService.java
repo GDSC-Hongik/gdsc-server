@@ -10,13 +10,13 @@ import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRepository;
 import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRoundRepository;
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
+import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentValidator;
 import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentCreateRequest;
 import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentRoundUpdateRequest;
 import com.gdschongik.gdsc.domain.recruitment.dto.response.AdminRecruitmentResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
-import java.time.LocalDateTime;
-import java.time.Month;
+import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,20 +31,24 @@ public class AdminRecruitmentService {
 
     private final RecruitmentRepository recruitmentRepository;
     private final RecruitmentRoundRepository recruitmentRoundRepository;
+    private final RecruitmentValidator recruitmentValidator;
 
     @Transactional
     public void createRecruitment(RecruitmentCreateRequest request) {
-        validatePeriodMatchesAcademicYear(
-                request.semesterStartDate(), request.semesterEndDate(), request.academicYear());
-        validatePeriodMatchesSemesterType(
-                request.semesterStartDate(), request.semesterEndDate(), request.semesterType());
-        validateRecruitmentOverlap(request.academicYear(), request.semesterType());
+        recruitmentValidator.validateRecruitmentCreate(
+                request.semesterStartDate(), request.semesterEndDate(), request.academicYear(), request.semesterType());
 
         Recruitment recruitment = Recruitment.createRecruitment(
                 request.academicYear(),
                 request.semesterType(),
                 Money.from(request.fee()),
-                Period.createPeriod(request.semesterStartDate(), request.semesterEndDate()));
+                Period.createPeriod(
+                        LocalDate.of(
+                                        request.academicYear(),
+                                        request.semesterType().getStartDate().getMonth(),
+                                        request.semesterType().getStartDate().getDayOfMonth())
+                                .atStartOfDay(),
+                        request.semesterEndDate()));
         recruitmentRepository.save(recruitment);
 
         log.info("[AdminRecruitmentService] 리쿠르팅 생성: recruitmentId={}", recruitment.getId());
@@ -77,49 +81,6 @@ public class AdminRecruitmentService {
         }
 
         recruitmentRounds.forEach(RecruitmentRound::validatePeriodNotStarted);
-    }
-
-    // TODO validateRegularRequirement처럼 로직 변경
-    private void validatePeriodMatchesAcademicYear(
-            LocalDateTime startDate, LocalDateTime endDate, Integer academicYear) {
-        if (academicYear.equals(startDate.getYear()) && academicYear.equals(endDate.getYear())) {
-            return;
-        }
-
-        throw new CustomException(RECRUITMENT_PERIOD_MISMATCH_ACADEMIC_YEAR);
-    }
-
-    // TODO validateRegularRequirement처럼 로직 변경
-    private void validatePeriodMatchesSemesterType(
-            LocalDateTime startDate, LocalDateTime endDate, SemesterType semesterType) {
-        if (getSemesterTypeByStartDateOrEndDate(startDate).equals(semesterType)
-                && getSemesterTypeByStartDateOrEndDate(endDate).equals(semesterType)) {
-            return;
-        }
-
-        throw new CustomException(RECRUITMENT_PERIOD_MISMATCH_SEMESTER_TYPE);
-    }
-
-    private SemesterType getSemesterTypeByStartDateOrEndDate(LocalDateTime dateTime) {
-        int year = dateTime.getYear();
-        LocalDateTime firstSemesterStartDate = LocalDateTime.of(
-                year, FIRST.getStartDate().getMonth(), FIRST.getStartDate().getDayOfMonth(), 0, 0);
-        LocalDateTime secondSemesterStartDate = LocalDateTime.of(
-                year, SECOND.getStartDate().getMonth(), SECOND.getStartDate().getDayOfMonth(), 0, 0);
-
-        /*
-        개강일 기준으로 2주 전까지는 같은 학기로 간주한다.
-         */
-        if (dateTime.isAfter(firstSemesterStartDate.minusWeeks(PRE_SEMESTER_TERM))
-                && dateTime.getMonthValue() < Month.JULY.getValue()) {
-            return FIRST;
-        }
-
-        if (dateTime.isAfter(secondSemesterStartDate.minusWeeks(PRE_SEMESTER_TERM))) {
-            return SECOND;
-        }
-
-        throw new CustomException(RECRUITMENT_PERIOD_SEMESTER_TYPE_UNMAPPED);
     }
 
     // private void validatePeriodWithinTwoWeeks(
