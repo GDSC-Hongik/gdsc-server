@@ -1,6 +1,7 @@
 package com.gdschongik.gdsc.domain.recruitment.dto.response;
 
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
+import com.gdschongik.gdsc.global.util.formatter.SemesterFormatter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 
@@ -15,8 +16,7 @@ public record AdminRecruitmentRoundResponse(
 
         return new AdminRecruitmentRoundResponse(
                 recruitmentRound.getId(),
-                String.format(
-                        "%d-%s",
+                SemesterFormatter.format(
                         recruitmentRound.getAcademicYear(),
                         recruitmentRound.getSemesterType().getValue()),
                 recruitmentRound.getPeriod().getStartDate(),
