@@ -4,13 +4,32 @@ import static com.gdschongik.gdsc.global.common.constant.RecruitmentConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 
+import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentCreateRequest;
+import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.helper.IntegrationTest;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 class AdminRecruitmentServiceTest extends IntegrationTest {
 
     @Autowired
     private AdminRecruitmentService adminRecruitmentService;
+
+    @Nested
+    class 리쿠르팅_생성시 {
+        @Test
+        void 학년도_학기가_모두_중복되는_리쿠르팅이라면_실패한다() {
+            // given
+            createRecruitment(ACADEMIC_YEAR, SEMESTER_TYPE, FEE);
+            RecruitmentCreateRequest request = new RecruitmentCreateRequest(ACADEMIC_YEAR, SEMESTER_TYPE, FEE_AMOUNT);
+
+            // when & then
+            assertThatThrownBy(() -> adminRecruitmentService.createRecruitment(request))
+                    .isInstanceOf(CustomException.class)
+                    .hasMessage(RECRUITMENT_OVERLAP.getMessage());
+        }
+    }
 
     // todo: test 원복
     // @Nested
