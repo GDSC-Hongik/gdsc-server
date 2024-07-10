@@ -71,7 +71,7 @@ public enum ErrorCode {
     // Membership
     PAYMENT_NOT_SATISFIED(HttpStatus.CONFLICT, "회비 납부가 완료되지 않았습니다."),
     MEMBERSHIP_NOT_APPLICABLE(HttpStatus.CONFLICT, "멤버십 가입을 신청할 수 없는 회원입니다."),
-    MEMBERSHIP_ALREADY_APPLIED(HttpStatus.CONFLICT, "이미 이번 학기에 멤버십 가입을 신청한 회원입니다."),
+    MEMBERSHIP_ALREADY_SUBMITTED(HttpStatus.CONFLICT, "이미 이번 학기에 멤버십 가입을 신청한 회원입니다."),
     MEMBERSHIP_ALREADY_SATISFIED(HttpStatus.CONFLICT, "이미 이번 학기에 정회원 승급을 완료한 회원입니다."),
     MEMBERSHIP_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 멤버십이 존재하지 않습니다."),
 

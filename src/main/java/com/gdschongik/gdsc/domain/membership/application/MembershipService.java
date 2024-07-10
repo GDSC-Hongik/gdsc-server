@@ -5,6 +5,7 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.membership.dao.MembershipRepository;
 import com.gdschongik.gdsc.domain.membership.domain.Membership;
+import com.gdschongik.gdsc.domain.membership.domain.MembershipValidator;
 import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRoundRepository;
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.global.exception.CustomException;
@@ -21,6 +22,7 @@ public class MembershipService {
     private final MembershipRepository membershipRepository;
     private final RecruitmentRoundRepository recruitmentRoundRepository;
     private final MemberUtil memberUtil;
+    private final MembershipValidator membershipValidator;
 
     @Transactional
     public void verifyPaymentStatus(Long membershipId) {
@@ -32,26 +34,17 @@ public class MembershipService {
     }
 
     @Transactional
-    public void submitMembership(Long recruitmentRoundId) {}
+    public void submitMembership(Long recruitmentRoundId) {
+        Member currentMember = memberUtil.getCurrentMember();
+        RecruitmentRound recruitmentRound = recruitmentRoundRepository
+                .findById(recruitmentRoundId)
+                .orElseThrow(() -> new CustomException(RECRUITMENT_ROUND_NOT_FOUND));
 
-    // private void validateRecruitmentRoundOpen(RecruitmentRound recruitmentRound) {
-    //     if (!recruitmentRound.isOpen()) {
-    //         throw new CustomException(RECRUITMENT_ROUND_NOT_OPEN);
-    //     }
-    // }
-    //
-    // private void validateMembershipDuplicate(Member currentMember, Recruitment recruitment) {
-    //     membershipRepository
-    //             .findByMember(currentMember)
-    //             .filter(membership ->
-    //                     membership.getRecruitmentRound().getRecruitment().equals(recruitment))
-    //             .ifPresent(membership -> {
-    //                 if (membership.isRegularRequirementAllSatisfied()) {
-    //                     throw new CustomException(MEMBERSHIP_ALREADY_SATISFIED);
-    //                 }
-    //                 throw new CustomException(MEMBERSHIP_ALREADY_APPLIED);
-    //             });
-    // }
+        // membershipValidator.validateMembershipSubmit(currentMember, recruitmentRound);
+
+        Membership membership = Membership.createMembership(currentMember, recruitmentRound);
+        membershipRepository.save(membership);
+    }
 
     public Optional<Membership> findMyMembership(Member member, RecruitmentRound recruitmentRound) {
         return membershipRepository.findByMemberAndRecruitmentRound(member, recruitmentRound);
