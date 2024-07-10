@@ -7,5 +7,5 @@ import java.time.LocalDateTime;
 
 public record AssignmentCreateRequest(
         @NotBlank @Schema(description = "과제 제목") String title,
-        @NotBlank @Schema(description = "과제 면세 노션 링크") String descriptionNotionLink,
+        @NotBlank @Schema(description = "과제 명세 노션 링크") String descriptionNotionLink,
         @Future @Schema(description = "마감일") LocalDateTime deadLine) {}
