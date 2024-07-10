@@ -1,5 +1,11 @@
 package com.gdschongik.gdsc.domain.study.domain.request;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
-public record AssignmentCreateRequest(String title, String descriptionNotionLink, LocalDateTime deadLine) {}
+public record AssignmentCreateRequest(
+        @NotBlank @Schema(description = "과제 제목") String title,
+        @NotBlank @Schema(description = "과제 면세 노션 링크") String descriptionNotionLink,
+        @Future @Schema(description = "마감일") LocalDateTime deadLine) {}
