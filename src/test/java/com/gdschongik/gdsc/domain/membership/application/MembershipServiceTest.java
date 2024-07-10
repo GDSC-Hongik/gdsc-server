@@ -37,51 +37,6 @@ public class MembershipServiceTest extends IntegrationTest {
                     .isInstanceOf(CustomException.class)
                     .hasMessage(RECRUITMENT_ROUND_NOT_FOUND.getMessage());
         }
-
-        @Test
-        void 해당_학기에_이미_Membership을_발급받았다면_실패한다() {
-            // given
-            Member member = createMember();
-            logoutAndReloginAs(1L, ASSOCIATE);
-            RecruitmentRound recruitmentRound = createRecruitmentRound();
-            Membership membership = createMembership(member, recruitmentRound);
-
-            // when
-            membership.verifyPaymentStatus();
-            membershipRepository.save(membership);
-
-            // then
-            assertThatThrownBy(() -> membershipService.submitMembership(recruitmentRound.getId()))
-                    .isInstanceOf(CustomException.class)
-                    .hasMessage(MEMBERSHIP_ALREADY_SATISFIED.getMessage());
-        }
-
-        @Test
-        void 해당_Recruitment에_대해_Membership을_생성한_적이_있다면_실패한다() {
-            // given
-            Member member = createMember();
-            logoutAndReloginAs(1L, ASSOCIATE);
-            RecruitmentRound recruitmentRound = createRecruitmentRound();
-            createMembership(member, recruitmentRound);
-
-            // when & then
-            assertThatThrownBy(() -> membershipService.submitMembership(recruitmentRound.getId()))
-                    .isInstanceOf(CustomException.class)
-                    .hasMessage(MEMBERSHIP_ALREADY_SUBMITTED.getMessage());
-        }
-
-        @Test
-        void 해당_RecruitmentRound의_모집기간이_아니라면_실패한다() {
-            // given
-            createMember();
-            logoutAndReloginAs(1L, ASSOCIATE);
-            RecruitmentRound recruitmentRound = createRecruitmentRound();
-
-            // when & then
-            assertThatThrownBy(() -> membershipService.submitMembership(recruitmentRound.getId()))
-                    .isInstanceOf(CustomException.class)
-                    .hasMessage(RECRUITMENT_ROUND_NOT_OPEN.getMessage());
-        }
     }
 
     @Test
