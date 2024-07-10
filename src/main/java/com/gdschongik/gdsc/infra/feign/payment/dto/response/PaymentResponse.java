@@ -1,4 +1,4 @@
-package com.gdschongik.gdsc.infra.payment.dto.response;
+package com.gdschongik.gdsc.infra.feign.payment.dto.response;
 
 import jakarta.annotation.Nullable;
 import java.util.List;

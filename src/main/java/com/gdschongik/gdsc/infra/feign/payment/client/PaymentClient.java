@@ -1,8 +1,9 @@
-package com.gdschongik.gdsc.infra.payment.client;
+package com.gdschongik.gdsc.infra.feign.payment.client;
 
-import com.gdschongik.gdsc.infra.payment.config.BasicAuthConfig;
-import com.gdschongik.gdsc.infra.payment.dto.request.PaymentConfirmRequest;
-import com.gdschongik.gdsc.infra.payment.dto.response.PaymentResponse;
+import com.gdschongik.gdsc.infra.feign.payment.config.BasicAuthConfig;
+import com.gdschongik.gdsc.infra.feign.payment.dto.request.PaymentConfirmRequest;
+import com.gdschongik.gdsc.infra.feign.payment.dto.response.PaymentResponse;
+
 import jakarta.validation.Valid;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;

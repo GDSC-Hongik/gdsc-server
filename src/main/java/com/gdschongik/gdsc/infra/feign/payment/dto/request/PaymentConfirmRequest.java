@@ -1,4 +1,4 @@
-package com.gdschongik.gdsc.infra.payment.dto.request;
+package com.gdschongik.gdsc.infra.feign.payment.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;

@@ -1,4 +1,4 @@
-package com.gdschongik.gdsc.infra.payment.config;
+package com.gdschongik.gdsc.infra.feign.payment.config;
 
 import com.gdschongik.gdsc.global.property.PaymentProperty;
 import feign.auth.BasicAuthRequestInterceptor;
