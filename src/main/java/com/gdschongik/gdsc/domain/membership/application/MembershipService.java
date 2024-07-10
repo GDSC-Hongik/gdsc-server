@@ -7,13 +7,13 @@ import com.gdschongik.gdsc.domain.membership.dao.MembershipRepository;
 import com.gdschongik.gdsc.domain.membership.domain.Membership;
 import com.gdschongik.gdsc.domain.membership.domain.MembershipValidator;
 import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRoundRepository;
+import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,7 +43,8 @@ public class MembershipService {
                 .findById(recruitmentRoundId)
                 .orElseThrow(() -> new CustomException(RECRUITMENT_ROUND_NOT_FOUND));
 
-        membershipValidator.validateMembershipSubmit(currentMember, recruitmentRound);
+        validateMembershipDuplicate(currentMember, recruitmentRound.getRecruitment());
+        membershipValidator.validateMembershipSubmit(recruitmentRound);
 
         Membership membership = Membership.createMembership(currentMember, recruitmentRound);
         membershipRepository.save(membership);
@@ -53,5 +54,18 @@ public class MembershipService {
 
     public Optional<Membership> findMyMembership(Member member, RecruitmentRound recruitmentRound) {
         return membershipRepository.findByMemberAndRecruitmentRound(member, recruitmentRound);
+    }
+
+    private void validateMembershipDuplicate(Member currentMember, Recruitment recruitment) {
+        Optional<Membership> membership = membershipRepository.findAllByMember(currentMember).stream()
+                .filter(m -> m.getRecruitmentRound().getRecruitment().equals(recruitment))
+                .findFirst();
+
+        if (membership.isPresent()) {
+            if (membership.get().isRegularRequirementAllSatisfied()) {
+                throw new CustomException(MEMBERSHIP_ALREADY_SATISFIED);
+            }
+            throw new CustomException(MEMBERSHIP_ALREADY_SUBMITTED);
+        }
     }
 }
