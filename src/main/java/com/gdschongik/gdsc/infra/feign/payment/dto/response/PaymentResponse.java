@@ -1,6 +1,7 @@
 package com.gdschongik.gdsc.infra.feign.payment.dto.response;
 
 import jakarta.annotation.Nullable;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 public record PaymentResponse(
@@ -15,8 +16,8 @@ public record PaymentResponse(
         Long totalAmount,
         Long balanceAmount,
         String status,
-        String requestedAt,
-        String approvedAt,
+        ZonedDateTime requestedAt,
+        ZonedDateTime approvedAt,
         Boolean useEscrow,
         @Nullable String lastTransactionKey,
         Long suppliedAmount,
@@ -35,14 +36,14 @@ public record PaymentResponse(
         @Nullable FailureDto failure,
         @Nullable CashReceiptDto cashReceipt,
         @Nullable List<CashReceiptsDto> cashReceipts) {
-    // TODO: 시간, enum 관련 매핑 여부 검토
+    // TODO: enum 관련 매핑 여부 검토
     public record PaymentCancelDto(
             Long cancelAmount,
             String cancelReason,
             Long taxFreeAmount,
             Long refundableAmount,
             Long easyPayDiscountAmount,
-            String canceledAt,
+            ZonedDateTime canceledAt,
             String transactionKey,
             @Nullable String receiptKey,
             String cancelStatus,
@@ -95,5 +96,5 @@ public record PaymentResponse(
             String issueStatus,
             Object failure,
             String customerIdentityNumber,
-            String requestedAt) {}
+            ZonedDateTime requestedAt) {}
 }
