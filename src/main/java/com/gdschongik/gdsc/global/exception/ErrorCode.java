@@ -86,6 +86,7 @@ public enum ErrorCode {
     RECRUITMENT_PERIOD_NOT_WITHIN_TWO_WEEKS(HttpStatus.BAD_REQUEST, "모집 시작일과 종료일이 학기 시작일로부터 2주 이내에 있지 않습니다."),
     RECRUITMENT_ROUND_TYPE_OVERLAP(HttpStatus.BAD_REQUEST, "모집 차수가 중복됩니다."),
     RECRUITMENT_ROUND_STARTDATE_ALREADY_PASSED(HttpStatus.BAD_REQUEST, "이미 모집 시작일이 지난 리크루팅 회차입니다."),
+    OPEN_RECRUITMENT_ROUND_NOT_FOUND(HttpStatus.NOT_FOUND, "진행중인 모집회차가 존재하지 않습니다."),
 
     // Coupon
     COUPON_DISCOUNT_AMOUNT_NOT_POSITIVE(HttpStatus.CONFLICT, "쿠폰의 할인 금액은 0보다 커야 합니다."),

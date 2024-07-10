@@ -2,6 +2,8 @@ package com.gdschongik.gdsc.domain.recruitment.application;
 
 import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRoundRepository;
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
+import com.gdschongik.gdsc.global.exception.CustomException;
+import com.gdschongik.gdsc.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +20,6 @@ public class OnboardingRecruitmentService {
         return recruitmentRoundRepository.findAll().stream()
                 .filter(RecruitmentRound::isOpen) // isOpen -> isDisplayable
                 .findFirst()
-                .orElseThrow();
+                .orElseThrow(() -> new CustomException(ErrorCode.OPEN_RECRUITMENT_ROUND_NOT_FOUND));
     }
 }
