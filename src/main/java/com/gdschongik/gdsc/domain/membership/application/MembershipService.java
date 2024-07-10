@@ -40,7 +40,7 @@ public class MembershipService {
                 .findById(recruitmentRoundId)
                 .orElseThrow(() -> new CustomException(RECRUITMENT_ROUND_NOT_FOUND));
 
-        // membershipValidator.validateMembershipSubmit(currentMember, recruitmentRound);
+        membershipValidator.validateMembershipSubmit(currentMember, recruitmentRound);
 
         Membership membership = Membership.createMembership(currentMember, recruitmentRound);
         membershipRepository.save(membership);
