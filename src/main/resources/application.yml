@@ -16,3 +16,4 @@ spring:
 logging:
   level:
     com.gdschongik.gdsc.domain.*.api.*: debug
+    com.gdschongik.gdsc.infra.feign: debug
