@@ -16,7 +16,7 @@ import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentCreateReque
 import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentRoundUpdateRequest;
 import com.gdschongik.gdsc.domain.recruitment.dto.response.AdminRecruitmentResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,20 +35,15 @@ public class AdminRecruitmentService {
 
     @Transactional
     public void createRecruitment(RecruitmentCreateRequest request) {
-        recruitmentValidator.validateRecruitmentCreate(
-                request.semesterStartDate(), request.semesterEndDate(), request.academicYear(), request.semesterType());
+        recruitmentValidator.validateRecruitmentCreate(request.academicYear(), request.semesterType());
 
         Recruitment recruitment = Recruitment.createRecruitment(
                 request.academicYear(),
                 request.semesterType(),
                 Money.from(request.fee()),
                 Period.createPeriod(
-                        LocalDate.of(
-                                        request.academicYear(),
-                                        request.semesterType().getStartDate().getMonth(),
-                                        request.semesterType().getStartDate().getDayOfMonth())
-                                .atStartOfDay(),
-                        request.semesterEndDate()));
+                        getSemesterStartDate(request.academicYear(), request.semesterType()),
+                        getSemesterEndDate(request.academicYear(), request.semesterType())));
         recruitmentRepository.save(recruitment);
 
         log.info("[AdminRecruitmentService] 리쿠르팅 생성: recruitmentId={}", recruitment.getId());
@@ -61,12 +56,6 @@ public class AdminRecruitmentService {
 
     @Transactional
     public void updateRecruitmentRound(Long recruitmentRoundId, RecruitmentRoundUpdateRequest request) {}
-
-    private void validateRecruitmentOverlap(Integer academicYear, SemesterType semesterType) {
-        if (recruitmentRepository.existsByAcademicYearAndSemesterType(academicYear, semesterType)) {
-            throw new CustomException(RECRUITMENT_OVERLAP);
-        }
-    }
 
     /*
      1. 해당 학기에 리쿠르팅이 존재해야 함.
@@ -81,6 +70,37 @@ public class AdminRecruitmentService {
         }
 
         recruitmentRounds.forEach(RecruitmentRound::validatePeriodNotStarted);
+    }
+
+    private LocalDateTime getSemesterStartDate(Integer academicYear, SemesterType semesterType) {
+        return LocalDateTime.of(
+                academicYear,
+                semesterType.getStartDate().getMonth(),
+                semesterType.getStartDate().getDayOfMonth(),
+                0,
+                0,
+                0);
+    }
+
+    private LocalDateTime getSemesterEndDate(Integer academicYear, SemesterType semesterType) {
+        if (semesterType.equals(FIRST)) {
+            return LocalDateTime.of(
+                            academicYear,
+                            SECOND.getStartDate().getMonth(),
+                            SECOND.getStartDate().getDayOfMonth(),
+                            23,
+                            59,
+                            59)
+                    .minusDays(1);
+        }
+        return LocalDateTime.of(
+                        academicYear + 1,
+                        FIRST.getStartDate().getMonth(),
+                        FIRST.getStartDate().getDayOfMonth(),
+                        23,
+                        59,
+                        59)
+                .minusDays(1);
     }
 
     // private void validatePeriodWithinTwoWeeks(
