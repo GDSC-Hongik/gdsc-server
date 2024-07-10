@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "Study Mentor Management", description = "스터디 멘토 관리 API입니다.")
+@Tag(name = "Mentor Study", description = "멘토 스터디 관리 API입니다.")
 @RestController
 @RequestMapping("/admin/mentor/studies")
 @RequiredArgsConstructor
