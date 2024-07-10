@@ -99,10 +99,6 @@ public class IssuedCoupon extends BaseEntity {
         return usedAt != null;
     }
 
-    public Boolean hasRevoked() {
-        return hasRevoked;
-    }
-
     public boolean isUsable() {
         try {
             validateUsable();

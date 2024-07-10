@@ -23,6 +23,6 @@ public record IssuedCouponResponse(
                 issuedCoupon.getUsedAt(),
                 issuedCoupon.getCreatedAt(),
                 issuedCoupon.hasUsed(),
-                issuedCoupon.hasRevoked());
+                issuedCoupon.getHasRevoked());
     }
 }
