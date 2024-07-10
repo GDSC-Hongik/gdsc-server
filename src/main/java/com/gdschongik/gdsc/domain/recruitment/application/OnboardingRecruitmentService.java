@@ -20,6 +20,6 @@ public class OnboardingRecruitmentService {
         return recruitmentRoundRepository.findAll().stream()
                 .filter(RecruitmentRound::isOpen) // isOpen -> isDisplayable
                 .findFirst()
-                .orElseThrow(() -> new CustomException(ErrorCode.OPEN_RECRUITMENT_ROUND_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.RECRUITMENT_ROUND_OPEN_NOT_FOUND));
     }
 }
