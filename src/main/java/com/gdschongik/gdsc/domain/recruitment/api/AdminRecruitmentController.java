@@ -5,6 +5,7 @@ import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentCreateReque
 import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentRoundCreateRequest;
 import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentRoundUpdateRequest;
 import com.gdschongik.gdsc.domain.recruitment.dto.response.AdminRecruitmentResponse;
+import com.gdschongik.gdsc.domain.recruitment.dto.response.AdminRecruitmentRoundResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -49,6 +50,13 @@ public class AdminRecruitmentController {
             @PathVariable Long recruitmentRoundId, @Valid @RequestBody RecruitmentRoundUpdateRequest request) {
         adminRecruitmentService.updateRecruitmentRound(recruitmentRoundId, request);
         return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "모집회차 목록 조회", description = "전체 모집회차 목록을 조회합니다.")
+    @GetMapping("/rounds")
+    public ResponseEntity<List<AdminRecruitmentRoundResponse>> getAllRecruitmentRounds() {
+        List<AdminRecruitmentRoundResponse> response = adminRecruitmentService.getAllRecruitmentRounds();
+        return ResponseEntity.ok().body(response);
     }
 
     @Operation(summary = "모집회차 생성", description = "새로운 모집회차를 생성합니다.")

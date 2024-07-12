@@ -88,6 +88,7 @@ public enum ErrorCode {
     RECRUITMENT_ROUND_TYPE_OVERLAP(HttpStatus.BAD_REQUEST, "모집 차수가 중복됩니다."),
     RECRUITMENT_ROUND_STARTDATE_ALREADY_PASSED(HttpStatus.BAD_REQUEST, "이미 모집 시작일이 지난 모집회차입니다."),
     ROUND_ONE_DOES_NOT_EXIST(HttpStatus.CONFLICT, "1차 모집이 존재하지 않습니다."),
+    RECRUITMENT_ROUND_OPEN_NOT_FOUND(HttpStatus.NOT_FOUND, "진행중인 모집회차가 존재하지 않습니다."),
 
     // Coupon
     COUPON_DISCOUNT_AMOUNT_NOT_POSITIVE(HttpStatus.CONFLICT, "쿠폰의 할인 금액은 0보다 커야 합니다."),
