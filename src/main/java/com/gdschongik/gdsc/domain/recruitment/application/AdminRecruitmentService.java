@@ -15,7 +15,6 @@ import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentCreateReque
 import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentRoundUpdateRequest;
 import com.gdschongik.gdsc.domain.recruitment.dto.response.AdminRecruitmentResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
-import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,9 +42,7 @@ public class AdminRecruitmentService {
                 request.academicYear(),
                 request.semesterType(),
                 Money.from(request.fee()),
-                Period.createPeriod(
-                        getSemesterStartDate(request.academicYear(), request.semesterType()),
-                        getSemesterEndDate(request.academicYear(), request.semesterType())));
+                Period.createPeriod(request.semesterStartDate(), request.semesterEndDate()));
         recruitmentRepository.save(recruitment);
 
         log.info("[AdminRecruitmentService] 리쿠르팅 생성: recruitmentId={}", recruitment.getId());
@@ -72,39 +69,6 @@ public class AdminRecruitmentService {
         }
 
         recruitmentRounds.forEach(RecruitmentRound::validatePeriodNotStarted);
-    }
-
-    private LocalDateTime getSemesterStartDate(Integer academicYear, SemesterType semesterType) {
-        return LocalDateTime.of(
-                academicYear,
-                semesterType.getStartDate().getMonth(),
-                semesterType.getStartDate().getDayOfMonth(),
-                0,
-                0,
-                0);
-    }
-
-    private LocalDateTime getSemesterEndDate(Integer academicYear, SemesterType semesterType) {
-        if (semesterType.equals(FIRST)) {
-            return LocalDateTime.of(
-                            academicYear,
-                            SECOND.getStartDate().getMonth(),
-                            SECOND.getStartDate().getDayOfMonth(),
-                            23,
-                            59,
-                            59)
-                    .minusDays(1);
-        }
-
-        // 2학기라면 학년도를 1 증가시켜야 함
-        return LocalDateTime.of(
-                        academicYear + 1,
-                        FIRST.getStartDate().getMonth(),
-                        FIRST.getStartDate().getDayOfMonth(),
-                        23,
-                        59,
-                        59)
-                .minusDays(1);
     }
 
     // private void validatePeriodWithinTwoWeeks(
