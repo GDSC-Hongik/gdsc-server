@@ -10,14 +10,12 @@ import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRoundRepository;
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRoundValidator;
-import com.gdschongik.gdsc.domain.recruitment.domain.RoundType;
 import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentCreateRequest;
 import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentRoundCreateRequest;
 import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentRoundUpdateRequest;
 import com.gdschongik.gdsc.domain.recruitment.dto.response.AdminRecruitmentResponse;
 import com.gdschongik.gdsc.domain.recruitment.dto.response.AdminRecruitmentRoundResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
-import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -51,10 +49,21 @@ public class AdminRecruitmentService {
 
     @Transactional
     public void createRecruitmentRound(RecruitmentRoundCreateRequest request) {
+        List<RecruitmentRound> recruitmentRounds = recruitmentRoundRepository.findAllByAcademicYearAndSemesterType(
+                request.academicYear(), request.semesterType());
+
+        boolean existsByAcademicYearAndSemesterTypeAndRoundType =
+                recruitmentRoundRepository.existsByAcademicYearAndSemesterTypeAndRoundType(
+                        request.academicYear(), request.semesterType(), request.roundType());
+
         recruitmentRoundValidator.validateRecruitmentRoundCreate(
-                request.startDate(), request.endDate(), request.academicYear(), request.semesterType());
-        validatePeriodOverlap(request.academicYear(), request.semesterType(), request.startDate(), request.endDate());
-        validateRound(request.academicYear(), request.semesterType(), request.roundType());
+                request.startDate(),
+                request.endDate(),
+                request.academicYear(),
+                request.semesterType(),
+                request.roundType(),
+                recruitmentRounds,
+                existsByAcademicYearAndSemesterTypeAndRoundType);
 
         Recruitment recruitment = recruitmentRepository
                 .findByAcademicYearAndSemesterType(request.academicYear(), request.semesterType())
@@ -89,31 +98,6 @@ public class AdminRecruitmentService {
         }
 
         recruitmentRounds.forEach(RecruitmentRound::validatePeriodNotStarted);
-    }
-
-    // 새로 생성하는 경우
-    private void validatePeriodOverlap(
-            Integer academicYear, SemesterType semesterType, LocalDateTime startDate, LocalDateTime endDate) {
-        List<RecruitmentRound> recruitmentRounds =
-                recruitmentRoundRepository.findAllByAcademicYearAndSemesterType(academicYear, semesterType);
-
-        recruitmentRounds.forEach(recruitmentRound -> recruitmentRound.validatePeriodOverlap(startDate, endDate));
-    }
-
-    /**
-     * 예외가 발생하는 경우
-     * 1. 학년도, 학기, 차수가 모두 같은 모집회차가 존재하는 경우
-     * 2. 1차 모집이 없는데 2차 모집을 생성하려고 하는 경우
-     */
-    private void validateRound(Integer academicYear, SemesterType semesterType, RoundType roundType) {
-        if (recruitmentRoundRepository.existsByAcademicYearAndSemesterTypeAndRoundType(
-                academicYear, semesterType, roundType)) {
-            throw new CustomException(RECRUITMENT_ROUND_TYPE_OVERLAP);
-        }
-
-        if (roundType.equals(RoundType.SECOND)) {
-            throw new CustomException(ROUND_ONE_DOES_NOT_EXIST);
-        }
     }
 
     // /**

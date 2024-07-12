@@ -9,15 +9,24 @@ import com.gdschongik.gdsc.global.annotation.DomainService;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.List;
 
 @DomainService
 public class RecruitmentRoundValidator {
 
     public void validateRecruitmentRoundCreate(
-            LocalDateTime startDate, LocalDateTime endDate, Integer academicYear, SemesterType semesterType) {
+            LocalDateTime startDate,
+            LocalDateTime endDate,
+            Integer academicYear,
+            SemesterType semesterType,
+            RoundType roundType,
+            List<RecruitmentRound> recruitmentRounds,
+            boolean existsByAcademicYearAndSemesterTypeAndRoundType) {
         validatePeriodMatchesAcademicYear(startDate, endDate, academicYear);
         validatePeriodMatchesSemesterType(startDate, endDate, semesterType);
         validatePeriodWithinTwoWeeks(startDate, endDate, academicYear, semesterType);
+        validatePeriodOverlap(recruitmentRounds, startDate, endDate);
+        validateRound(existsByAcademicYearAndSemesterTypeAndRoundType, roundType);
     }
 
     // TODO validateRegularRequirement처럼 로직 변경
@@ -80,6 +89,26 @@ public class RecruitmentRoundValidator {
         if (semesterStartDate.minusWeeks(PRE_SEMESTER_TERM).isAfter(endDate)
                 || semesterStartDate.plusWeeks(PRE_SEMESTER_TERM).isBefore(endDate)) {
             throw new CustomException(RECRUITMENT_PERIOD_NOT_WITHIN_TWO_WEEKS);
+        }
+    }
+
+    private void validatePeriodOverlap(
+            List<RecruitmentRound> recruitmentRounds, LocalDateTime startDate, LocalDateTime endDate) {
+        recruitmentRounds.forEach(recruitmentRound -> recruitmentRound.validatePeriodOverlap(startDate, endDate));
+    }
+
+    /**
+     * 예외가 발생하는 경우
+     * 1. 학년도, 학기, 차수가 모두 같은 모집회차가 존재하는 경우
+     * 2. 1차 모집이 없는데 2차 모집을 생성하려고 하는 경우
+     */
+    private void validateRound(boolean existsByAcademicYearAndSemesterTypeAndRoundType, RoundType roundType) {
+        if (existsByAcademicYearAndSemesterTypeAndRoundType) {
+            throw new CustomException(RECRUITMENT_ROUND_TYPE_OVERLAP);
+        }
+
+        if (roundType.equals(RoundType.SECOND)) {
+            throw new CustomException(ROUND_ONE_DOES_NOT_EXIST);
         }
     }
 }
