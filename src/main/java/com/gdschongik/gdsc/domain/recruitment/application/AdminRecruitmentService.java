@@ -49,10 +49,11 @@ public class AdminRecruitmentService {
 
     @Transactional
     public void createRecruitmentRound(RecruitmentRoundCreateRequest request) {
-        List<RecruitmentRound> recruitmentRounds = recruitmentRoundRepository.findAllByAcademicYearAndSemesterType(
-                request.academicYear(), request.semesterType());
+        List<RecruitmentRound> recruitmentRoundsInThisSemester =
+                recruitmentRoundRepository.findAllByAcademicYearAndSemesterType(
+                        request.academicYear(), request.semesterType());
 
-        boolean existsByAcademicYearAndSemesterTypeAndRoundType =
+        boolean isRecruitmentRoundDuplicate =
                 recruitmentRoundRepository.existsByAcademicYearAndSemesterTypeAndRoundType(
                         request.academicYear(), request.semesterType(), request.roundType());
 
@@ -62,8 +63,8 @@ public class AdminRecruitmentService {
                 request.academicYear(),
                 request.semesterType(),
                 request.roundType(),
-                recruitmentRounds,
-                existsByAcademicYearAndSemesterTypeAndRoundType);
+                recruitmentRoundsInThisSemester,
+                isRecruitmentRoundDuplicate);
 
         Recruitment recruitment = recruitmentRepository
                 .findByAcademicYearAndSemesterType(request.academicYear(), request.semesterType())

@@ -20,13 +20,13 @@ public class RecruitmentRoundValidator {
             Integer academicYear,
             SemesterType semesterType,
             RoundType roundType,
-            List<RecruitmentRound> recruitmentRounds,
-            boolean existsByAcademicYearAndSemesterTypeAndRoundType) {
+            List<RecruitmentRound> recruitmentRoundsInThisSemester,
+            boolean isRecruitmentRoundDuplicate) {
         validatePeriodMatchesAcademicYear(startDate, endDate, academicYear);
         validatePeriodMatchesSemesterType(startDate, endDate, semesterType);
         validatePeriodWithinTwoWeeks(startDate, endDate, academicYear, semesterType);
-        validatePeriodOverlap(recruitmentRounds, startDate, endDate);
-        validateRound(existsByAcademicYearAndSemesterTypeAndRoundType, roundType);
+        validatePeriodOverlap(recruitmentRoundsInThisSemester, startDate, endDate);
+        validateRound(isRecruitmentRoundDuplicate, roundType);
     }
 
     // TODO validateRegularRequirement처럼 로직 변경
@@ -102,8 +102,8 @@ public class RecruitmentRoundValidator {
      * 1. 학년도, 학기, 차수가 모두 같은 모집회차가 존재하는 경우
      * 2. 1차 모집이 없는데 2차 모집을 생성하려고 하는 경우
      */
-    private void validateRound(boolean existsByAcademicYearAndSemesterTypeAndRoundType, RoundType roundType) {
-        if (existsByAcademicYearAndSemesterTypeAndRoundType) {
+    private void validateRound(boolean isRecruitmentRoundDuplicate, RoundType roundType) {
+        if (isRecruitmentRoundDuplicate) {
             throw new CustomException(RECRUITMENT_ROUND_TYPE_OVERLAP);
         }
 
