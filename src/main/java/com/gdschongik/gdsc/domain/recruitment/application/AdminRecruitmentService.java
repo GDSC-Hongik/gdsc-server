@@ -9,6 +9,7 @@ import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRepository;
 import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRoundRepository;
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
+import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentValidator;
 import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentCreateRequest;
 import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentRoundUpdateRequest;
@@ -29,10 +30,14 @@ public class AdminRecruitmentService {
 
     private final RecruitmentRepository recruitmentRepository;
     private final RecruitmentRoundRepository recruitmentRoundRepository;
+    private final RecruitmentValidator recruitmentValidator;
 
     @Transactional
     public void createRecruitment(RecruitmentCreateRequest request) {
-        validateRecruitmentOverlap(request.academicYear(), request.semesterType());
+        boolean isRecruitmentOverlap = recruitmentRepository.existsByAcademicYearAndSemesterType(
+                request.academicYear(), request.semesterType());
+
+        recruitmentValidator.validateRecruitmentCreate(isRecruitmentOverlap);
 
         Recruitment recruitment = Recruitment.createRecruitment(
                 request.academicYear(),
@@ -67,12 +72,6 @@ public class AdminRecruitmentService {
         }
 
         recruitmentRounds.forEach(RecruitmentRound::validatePeriodNotStarted);
-    }
-
-    private void validateRecruitmentOverlap(Integer academicYear, SemesterType semesterType) {
-        if (recruitmentRepository.existsByAcademicYearAndSemesterType(academicYear, semesterType)) {
-            throw new CustomException(RECRUITMENT_OVERLAP);
-        }
     }
 
     private LocalDateTime getSemesterStartDate(Integer academicYear, SemesterType semesterType) {
