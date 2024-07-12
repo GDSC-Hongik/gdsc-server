@@ -31,6 +31,7 @@ public class DatabaseCleaner implements InitializingBean {
     }
 
     private static String getTableName(EntityType<?> entity) {
+        // TODO: 임시로 Order 테이블만 orders로 변환하도록 처리함. 추후 다른 테이블도 처리해야 함.
         if (entity.getName().equals("Order")) {
             return "orders";
         }
