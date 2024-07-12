@@ -11,7 +11,9 @@ spring:
       - actuator
       - discord
       - email
+      - payment
 
 logging:
   level:
     com.gdschongik.gdsc.domain.*.api.*: debug
+    com.gdschongik.gdsc.infra.feign: debug
