@@ -9,7 +9,7 @@ public record MembershipFullDto(
         return new MembershipFullDto(
                 membership.getId(),
                 membership.getMember().getId(),
-                membership.getRecruitment().getId(),
+                membership.getRecruitmentRound().getId(),
                 membership.getRegularRequirement());
     }
 }
