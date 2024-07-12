@@ -33,7 +33,6 @@ public class OnboardingOrderController {
     @PostMapping("/{orderId}/complete")
     public ResponseEntity<Void> completeOrder(
             @PathVariable Long orderId, @Valid @RequestBody OrderCompleteRequest request) {
-        orderService.completeOrder(orderId, request);
         return ResponseEntity.ok().build();
     }
 }
