@@ -95,7 +95,7 @@ public class IssuedCoupon extends BaseEntity {
 
     // 데이터 전달 로직
 
-    public Boolean hasUsed() {
+    public boolean hasUsed() {
         return usedAt != null;
     }
 
