@@ -53,18 +53,13 @@ public class AdminRecruitmentService {
                 recruitmentRoundRepository.findAllByAcademicYearAndSemesterType(
                         request.academicYear(), request.semesterType());
 
-        boolean isRecruitmentRoundDuplicate =
-                recruitmentRoundRepository.existsByAcademicYearAndSemesterTypeAndRoundType(
-                        request.academicYear(), request.semesterType(), request.roundType());
-
         recruitmentRoundValidator.validateRecruitmentRoundCreate(
                 request.startDate(),
                 request.endDate(),
                 request.academicYear(),
                 request.semesterType(),
                 request.roundType(),
-                recruitmentRoundsInThisSemester,
-                isRecruitmentRoundDuplicate);
+                recruitmentRoundsInThisSemester);
 
         Recruitment recruitment = recruitmentRepository
                 .findByAcademicYearAndSemesterType(request.academicYear(), request.semesterType())

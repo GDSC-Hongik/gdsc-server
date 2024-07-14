@@ -20,13 +20,13 @@ public class RecruitmentRoundValidator {
             Integer academicYear,
             SemesterType semesterType,
             RoundType roundType,
-            List<RecruitmentRound> recruitmentRoundsInThisSemester,
-            boolean isRecruitmentRoundDuplicate) {
+            List<RecruitmentRound> recruitmentRoundsInThisSemester) {
         validatePeriodMatchesAcademicYear(startDate, endDate, academicYear);
         validatePeriodMatchesSemesterType(startDate, endDate, semesterType);
         validatePeriodWithinTwoWeeks(startDate, endDate, academicYear, semesterType);
         validatePeriodOverlap(recruitmentRoundsInThisSemester, startDate, endDate);
-        validateRound(isRecruitmentRoundDuplicate, roundType);
+        validateRoundOverlap(recruitmentRoundsInThisSemester, roundType);
+        validateRoundOneExist(recruitmentRoundsInThisSemester, roundType);
     }
 
     // TODO validateRegularRequirement처럼 로직 변경
@@ -97,17 +97,22 @@ public class RecruitmentRoundValidator {
         recruitmentRounds.forEach(recruitmentRound -> recruitmentRound.validatePeriodOverlap(startDate, endDate));
     }
 
-    /**
-     * 예외가 발생하는 경우
-     * 1. 학년도, 학기, 차수가 모두 같은 모집회차가 존재하는 경우
-     * 2. 1차 모집이 없는데 2차 모집을 생성하려고 하는 경우
-     */
-    private void validateRound(boolean isRecruitmentRoundDuplicate, RoundType roundType) {
-        if (isRecruitmentRoundDuplicate) {
-            throw new CustomException(RECRUITMENT_ROUND_TYPE_OVERLAP);
-        }
+    // 학년도, 학기, 모집회차가 모두 같은 경우
+    private void validateRoundOverlap(List<RecruitmentRound> recruitmentRounds, RoundType roundType) {
+        recruitmentRounds.stream()
+                .filter(recruitmentRound -> recruitmentRound.getRoundType().equals(roundType))
+                .findAny()
+                .ifPresent(ignored -> {
+                    throw new CustomException(RECRUITMENT_ROUND_TYPE_OVERLAP);
+                });
+    }
 
-        if (roundType.equals(RoundType.SECOND)) {
+    // 1차 모집이 없는데 2차 모집을 생성하려고 하는 경우
+    private void validateRoundOneExist(List<RecruitmentRound> recruitmentRounds, RoundType roundType) {
+        if (roundType.equals(RoundType.SECOND)
+                && recruitmentRounds.stream()
+                        .noneMatch(recruitmentRound ->
+                                recruitmentRound.getRoundType().equals(RoundType.FIRST))) {
             throw new CustomException(ROUND_ONE_DOES_NOT_EXIST);
         }
     }
