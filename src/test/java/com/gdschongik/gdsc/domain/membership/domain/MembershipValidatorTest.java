@@ -57,7 +57,7 @@ class MembershipValidatorTest {
             // when & then
             assertThatThrownBy(() -> membershipValidator.validateMembershipSubmit(recruitmentRound, false))
                     .isInstanceOf(CustomException.class)
-                    .hasMessage(RECRUITMENT_ROUND_NOT_OPEN.getMessage());
+                    .hasMessage(MEMBERSHIP_RECRUITMENT_ROUND_NOT_OPEN.getMessage());
         }
 
         @Test
