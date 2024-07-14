@@ -62,6 +62,7 @@ public class MemberQueryMethod {
                 .and(inDepartmentList(Department.searchDepartments(queryOption.department())))
                 .and(eqEmail(queryOption.email()))
                 .and(eqDiscordUsername(queryOption.discordUsername()))
-                .and(eqNickname(queryOption.nickname()));
+                .and(eqNickname(queryOption.nickname()))
+                .and(eqRoles(queryOption.roles()));
     }
 }

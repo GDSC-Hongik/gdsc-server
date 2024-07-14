@@ -18,7 +18,7 @@ import org.springframework.data.domain.PageRequest;
 class MemberRepositoryTest extends RepositoryTest {
 
     private static final MemberQueryOption EMPTY_QUERY_OPTION =
-            new MemberQueryOption(null, null, null, null, null, null, null);
+            new MemberQueryOption(null, null, null, null, null, null, null, null);
 
     @Autowired
     private MemberRepository memberRepository;
@@ -73,8 +73,7 @@ class MemberRepositoryTest extends RepositoryTest {
             flushAndClearBeforeExecute();
 
             // when
-            Page<Member> members =
-                    memberRepository.findAllByRole(EMPTY_QUERY_OPTION, PageRequest.of(0, 10), List.of(GUEST));
+            Page<Member> members = memberRepository.findAllByRole(EMPTY_QUERY_OPTION, PageRequest.of(0, 10));
 
             // then
             Member guest = memberRepository.findById(1L).get();
@@ -94,8 +93,7 @@ class MemberRepositoryTest extends RepositoryTest {
             flushAndClearBeforeExecute();
 
             // when
-            Page<Member> members =
-                    memberRepository.findAllByRole(EMPTY_QUERY_OPTION, PageRequest.of(0, 10), List.of(ASSOCIATE));
+            Page<Member> members = memberRepository.findAllByRole(EMPTY_QUERY_OPTION, PageRequest.of(0, 10));
 
             // then
             Member user = memberRepository.findById(1L).get();
@@ -115,8 +113,7 @@ class MemberRepositoryTest extends RepositoryTest {
             flushAndClearBeforeExecute();
 
             // when
-            Page<Member> members =
-                    memberRepository.findAllByRole(EMPTY_QUERY_OPTION, PageRequest.of(0, 10), List.of(GUEST));
+            Page<Member> members = memberRepository.findAllByRole(EMPTY_QUERY_OPTION, PageRequest.of(0, 10));
 
             // then
             Member user = memberRepository.findById(1L).get();
