@@ -12,6 +12,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,13 +20,14 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 
 @Getter
+@Table(name = "orders")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Order extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "order_id")
+    @Column(name = "orders_id")
     private Long id;
 
     @Comment("주문상태")
@@ -80,7 +82,7 @@ public class Order extends BaseEntity {
                 .nanoId(nanoId)
                 .memberId(membership.getMember().getId())
                 .membershipId(membership.getId())
-                .recruitmentId(membership.getRecruitment().getId())
+                .recruitmentId(membership.getRecruitmentRound().getRecruitment().getId())
                 .issuedCouponId(issuedCoupon != null ? issuedCoupon.getId() : null)
                 .moneyInfo(moneyInfo)
                 .build();

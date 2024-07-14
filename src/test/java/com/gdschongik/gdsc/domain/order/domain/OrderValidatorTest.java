@@ -4,6 +4,7 @@ import static com.gdschongik.gdsc.domain.member.domain.Department.*;
 import static com.gdschongik.gdsc.domain.member.domain.Member.*;
 import static com.gdschongik.gdsc.global.common.constant.MemberConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.RecruitmentConstant.*;
+import static com.gdschongik.gdsc.global.common.constant.SemesterConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 
@@ -14,7 +15,9 @@ import com.gdschongik.gdsc.domain.coupon.domain.IssuedCoupon;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.membership.domain.Membership;
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
+import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.domain.recruitment.domain.RoundType;
+import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -41,18 +44,20 @@ class OrderValidatorTest {
         return member;
     }
 
-    private Recruitment createRecruitment(
+    private RecruitmentRound createRecruitmentRound(
             LocalDateTime startDate,
             LocalDateTime endDate,
             Integer academicYear,
             SemesterType semesterType,
             Money fee) {
-        return Recruitment.createRecruitment(
-                RECRUITMENT_NAME, startDate, endDate, academicYear, semesterType, RoundType.FIRST, fee);
+        Recruitment recruitment = Recruitment.createRecruitment(
+                academicYear, semesterType, fee, Period.createPeriod(SEMESTER_START_DATE, SEMESTER_END_DATE));
+
+        return RecruitmentRound.create(RECRUITMENT_NAME, startDate, endDate, recruitment, RoundType.FIRST);
     }
 
-    private Membership createMembership(Member member, Recruitment recruitment) {
-        return Membership.createMembership(member, recruitment);
+    private Membership createMembership(Member member, RecruitmentRound recruitmentRound) {
+        return Membership.createMembership(member, recruitmentRound);
     }
 
     private IssuedCoupon createAndIssue(Money money, Member member) {
@@ -65,7 +70,7 @@ class OrderValidatorTest {
         // given
         Member currentMember = createAssociateMember(1L);
 
-        Recruitment recruitment = createRecruitment(
+        RecruitmentRound recruitmentRound = createRecruitmentRound(
                 LocalDateTime.now().minusDays(1),
                 LocalDateTime.now().plusDays(1),
                 2024,
@@ -73,7 +78,7 @@ class OrderValidatorTest {
                 MONEY_20000_WON);
 
         Member anotherMember = createAssociateMember(2L);
-        Membership membership = createMembership(anotherMember, recruitment);
+        Membership membership = createMembership(anotherMember, recruitmentRound);
 
         IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, currentMember);
 
@@ -90,14 +95,14 @@ class OrderValidatorTest {
         // given
         Member currentMember = createAssociateMember(1L);
 
-        Recruitment recruitment = createRecruitment(
+        RecruitmentRound recruitmentRound = createRecruitmentRound(
                 LocalDateTime.now().minusDays(1),
                 LocalDateTime.now().plusDays(1),
                 2024,
                 SemesterType.FIRST,
                 MONEY_20000_WON);
 
-        Membership membership = createMembership(currentMember, recruitment);
+        Membership membership = createMembership(currentMember, recruitmentRound);
         membership.verifyPaymentStatus();
 
         IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, currentMember);
@@ -117,10 +122,10 @@ class OrderValidatorTest {
 
         LocalDateTime invalidStartDate = LocalDateTime.now().minusDays(2);
         LocalDateTime invalidEndDate = LocalDateTime.now().minusDays(1);
-        Recruitment recruitment =
-                createRecruitment(invalidStartDate, invalidEndDate, 2024, SemesterType.FIRST, MONEY_20000_WON);
+        RecruitmentRound recruitmentRound =
+                createRecruitmentRound(invalidStartDate, invalidEndDate, 2024, SemesterType.FIRST, MONEY_20000_WON);
 
-        Membership membership = createMembership(currentMember, recruitment);
+        Membership membership = createMembership(currentMember, recruitmentRound);
 
         IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, currentMember);
 
@@ -137,14 +142,14 @@ class OrderValidatorTest {
         // given
         Member currentMember = createAssociateMember(1L);
 
-        Recruitment recruitment = createRecruitment(
+        RecruitmentRound recruitmentRound = createRecruitmentRound(
                 LocalDateTime.now().minusDays(1),
                 LocalDateTime.now().plusDays(1),
                 2024,
                 SemesterType.FIRST,
                 MONEY_20000_WON);
 
-        Membership membership = createMembership(currentMember, recruitment);
+        Membership membership = createMembership(currentMember, recruitmentRound);
 
         Member anotherMember = createAssociateMember(2L);
         IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, anotherMember);
@@ -162,14 +167,14 @@ class OrderValidatorTest {
         // given
         Member currentMember = createAssociateMember(1L);
 
-        Recruitment recruitment = createRecruitment(
+        RecruitmentRound recruitmentRound = createRecruitmentRound(
                 LocalDateTime.now().minusDays(1),
                 LocalDateTime.now().plusDays(1),
                 2024,
                 SemesterType.FIRST,
                 MONEY_20000_WON);
 
-        Membership membership = createMembership(currentMember, recruitment);
+        Membership membership = createMembership(currentMember, recruitmentRound);
 
         IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, currentMember);
         issuedCoupon.revoke();
@@ -187,14 +192,14 @@ class OrderValidatorTest {
         // given
         Member currentMember = createAssociateMember(1L);
 
-        Recruitment recruitment = createRecruitment(
+        RecruitmentRound recruitmentRound = createRecruitmentRound(
                 LocalDateTime.now().minusDays(1),
                 LocalDateTime.now().plusDays(1),
                 2024,
                 SemesterType.FIRST,
                 MONEY_20000_WON);
 
-        Membership membership = createMembership(currentMember, recruitment);
+        Membership membership = createMembership(currentMember, recruitmentRound);
 
         IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, currentMember);
         issuedCoupon.use();
@@ -212,14 +217,14 @@ class OrderValidatorTest {
         // given
         Member currentMember = createAssociateMember(1L);
 
-        Recruitment recruitment = createRecruitment(
+        RecruitmentRound recruitmentRound = createRecruitmentRound(
                 LocalDateTime.now().minusDays(1),
                 LocalDateTime.now().plusDays(1),
                 2024,
                 SemesterType.FIRST,
                 MONEY_15000_WON);
 
-        Membership membership = createMembership(currentMember, recruitment);
+        Membership membership = createMembership(currentMember, recruitmentRound);
 
         IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, currentMember);
 
@@ -236,14 +241,14 @@ class OrderValidatorTest {
         // given
         Member currentMember = createAssociateMember(1L);
 
-        Recruitment recruitment = createRecruitment(
+        RecruitmentRound recruitmentRound = createRecruitmentRound(
                 LocalDateTime.now().minusDays(1),
                 LocalDateTime.now().plusDays(1),
                 2024,
                 SemesterType.FIRST,
                 MONEY_20000_WON);
 
-        Membership membership = createMembership(currentMember, recruitment);
+        Membership membership = createMembership(currentMember, recruitmentRound);
 
         // when & then
         MoneyInfo moneyInfo = MoneyInfo.of(MONEY_20000_WON, MONEY_5000_WON, MONEY_15000_WON);
@@ -257,14 +262,14 @@ class OrderValidatorTest {
         // given
         Member currentMember = createAssociateMember(1L);
 
-        Recruitment recruitment = createRecruitment(
+        RecruitmentRound recruitmentRound = createRecruitmentRound(
                 LocalDateTime.now().minusDays(1),
                 LocalDateTime.now().plusDays(1),
                 2024,
                 SemesterType.FIRST,
                 MONEY_20000_WON);
 
-        Membership membership = createMembership(currentMember, recruitment);
+        Membership membership = createMembership(currentMember, recruitmentRound);
 
         IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, currentMember);
 

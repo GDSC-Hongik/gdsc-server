@@ -6,7 +6,7 @@ import com.gdschongik.gdsc.domain.common.vo.Money;
 import com.gdschongik.gdsc.domain.coupon.domain.IssuedCoupon;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.membership.domain.Membership;
-import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
+import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.global.annotation.DomainService;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.annotation.Nullable;
@@ -30,9 +30,9 @@ public class OrderValidator {
 
         // 리쿠르팅 관련 검증
 
-        Recruitment recruitment = membership.getRecruitment();
+        RecruitmentRound recruitmentRound = membership.getRecruitmentRound();
 
-        if (!recruitment.isOpen()) {
+        if (!recruitmentRound.isOpen()) {
             throw new CustomException(ORDER_RECRUITMENT_PERIOD_INVALID);
         }
 
@@ -48,7 +48,7 @@ public class OrderValidator {
         Money totalAmount = moneyInfo.getTotalAmount();
         Money discountAmount = moneyInfo.getDiscountAmount();
 
-        if (!totalAmount.equals(recruitment.getFee())) {
+        if (!totalAmount.equals(recruitmentRound.getRecruitment().getFee())) {
             throw new CustomException(ORDER_TOTAL_AMOUNT_MISMATCH);
         }
 

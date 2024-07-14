@@ -46,7 +46,7 @@ public class Period {
         if (this.endDate.isBefore(startDate) || this.startDate.isAfter(endDate)) {
             return;
         }
-        throw new CustomException(RECRUITMENT_PERIOD_OVERLAP);
+        throw new CustomException(PERIOD_OVERLAP);
     }
 
     @Override

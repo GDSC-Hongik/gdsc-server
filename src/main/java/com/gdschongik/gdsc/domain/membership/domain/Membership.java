@@ -3,12 +3,11 @@ package com.gdschongik.gdsc.domain.membership.domain;
 import static com.gdschongik.gdsc.domain.common.model.RequirementStatus.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
-import com.gdschongik.gdsc.domain.common.model.BaseSemesterEntity;
-import com.gdschongik.gdsc.domain.common.model.SemesterType;
+import com.gdschongik.gdsc.domain.common.model.BaseEntity;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberRegularEvent;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
-import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
+import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -27,7 +26,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Membership extends BaseSemesterEntity {
+public class Membership extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,34 +38,26 @@ public class Membership extends BaseSemesterEntity {
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "recruitment_id")
-    private Recruitment recruitment;
+    @JoinColumn(name = "recruitment_round_id")
+    private RecruitmentRound recruitmentRound;
 
     @Embedded
     private RegularRequirement regularRequirement;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private Membership(
-            Member member,
-            Recruitment recruitment,
-            RegularRequirement regularRequirement,
-            Integer academicYear,
-            SemesterType semesterType) {
-        super(academicYear, semesterType);
+    private Membership(Member member, RecruitmentRound recruitmentRound, RegularRequirement regularRequirement) {
         this.member = member;
-        this.recruitment = recruitment;
+        this.recruitmentRound = recruitmentRound;
         this.regularRequirement = regularRequirement;
     }
 
-    public static Membership createMembership(Member member, Recruitment recruitment) {
+    public static Membership createMembership(Member member, RecruitmentRound recruitmentRound) {
         validateMembershipApplicable(member);
 
         return Membership.builder()
                 .member(member)
-                .recruitment(recruitment)
+                .recruitmentRound(recruitmentRound)
                 .regularRequirement(RegularRequirement.createUnsatisfiedRequirement())
-                .academicYear(recruitment.getAcademicYear())
-                .semesterType(recruitment.getSemesterType())
                 .build();
     }
 
