@@ -30,10 +30,10 @@ public class MembershipServiceTest extends IntegrationTest {
             // given
             createMember();
             logoutAndReloginAs(1L, ASSOCIATE);
-            Long recruitmentId = 1L;
+            Long recruitmentRoundId = 1L;
 
             // when & then
-            assertThatThrownBy(() -> membershipService.submitMembership(recruitmentId))
+            assertThatThrownBy(() -> membershipService.submitMembership(recruitmentRoundId))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(RECRUITMENT_ROUND_NOT_FOUND.getMessage());
         }
