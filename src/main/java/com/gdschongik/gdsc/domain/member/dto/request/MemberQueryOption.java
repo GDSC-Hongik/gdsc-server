@@ -14,4 +14,4 @@ public record MemberQueryOption(
         @Schema(description = "이메일") String email,
         @Schema(description = "디스코드 유저네임") String discordUsername,
         @Schema(description = "커뮤니티 닉네임", pattern = NICKNAME) String nickname,
-        @Schema(description = "멤버 권한", implementation = MemberRole.class) List<MemberRole> roles) {}
+        @Schema(description = "멤버 권한") List<MemberRole> roles) {}
