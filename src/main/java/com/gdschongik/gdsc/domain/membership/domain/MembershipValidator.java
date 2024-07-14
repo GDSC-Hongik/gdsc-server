@@ -19,7 +19,7 @@ public class MembershipValidator {
 
         // 모집 회차가 열려있는지 검증
         if (!recruitmentRound.isOpen()) {
-            throw new CustomException(RECRUITMENT_ROUND_NOT_OPEN);
+            throw new CustomException(MEMBERSHIP_RECRUITMENT_ROUND_NOT_OPEN);
         }
     }
 }

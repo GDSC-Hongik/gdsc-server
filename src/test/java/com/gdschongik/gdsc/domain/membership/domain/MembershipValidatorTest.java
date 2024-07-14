@@ -49,7 +49,7 @@ class MembershipValidatorTest {
     @Nested
     class 멤버십_가입신청시 {
         @Test
-        void 해당_RecruitmentRound의_모집기간이_아니라면_실패한다() {
+        void 해당_리쿠르팅회차의_모집기간이_아니라면_실패한다() {
             // given
             RecruitmentRound recruitmentRound =
                     createRecruitmentRound(ACADEMIC_YEAR, SEMESTER_TYPE, FEE, START_DATE, END_DATE);
