@@ -11,7 +11,7 @@ public record AdminRecruitmentRoundResponse(
         @Schema(description = "신청 시작일") LocalDateTime startDate,
         @Schema(description = "신청 종료일") LocalDateTime endDate,
         @Schema(description = "모집회차 이름") String name,
-        @Schema(description = "모집 차수") String round) {
+        @Schema(description = "차수") String round) {
 
     public static AdminRecruitmentRoundResponse from(RecruitmentRound recruitmentRound) {
 
