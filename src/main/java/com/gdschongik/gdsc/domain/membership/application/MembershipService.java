@@ -46,7 +46,7 @@ public class MembershipService {
         boolean isMembershipAlreadySubmitted =
                 membershipRepository.existsByMemberAndRecruitment(currentMember, recruitmentRound.getRecruitment());
 
-        membershipValidator.validateMembershipSubmit(recruitmentRound, isMembershipAlreadySubmitted);
+        membershipValidator.validateMembershipSubmit(currentMember, recruitmentRound, isMembershipAlreadySubmitted);
 
         Membership membership = Membership.createMembership(currentMember, recruitmentRound);
         membershipRepository.save(membership);

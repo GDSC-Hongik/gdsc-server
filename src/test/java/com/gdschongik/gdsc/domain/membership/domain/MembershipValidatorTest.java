@@ -48,14 +48,31 @@ class MembershipValidatorTest {
 
     @Nested
     class 멤버십_가입신청시 {
+
         @Test
-        void 해당_리쿠르팅회차의_모집기간이_아니라면_실패한다() {
+        void 역할이_GUEST라면_멤버십_가입신청에_실패한다() {
             // given
+            Member member = createGuestMember(OAUTH_ID);
+
             RecruitmentRound recruitmentRound =
                     createRecruitmentRound(ACADEMIC_YEAR, SEMESTER_TYPE, FEE, START_DATE, END_DATE);
 
             // when & then
-            assertThatThrownBy(() -> membershipValidator.validateMembershipSubmit(recruitmentRound, false))
+            assertThatThrownBy(() -> membershipValidator.validateMembershipSubmit(member, recruitmentRound, false))
+                    .isInstanceOf(CustomException.class)
+                    .hasMessage(MEMBERSHIP_NOT_APPLICABLE.getMessage());
+        }
+
+        @Test
+        void 해당_리쿠르팅회차의_모집기간이_아니라면_실패한다() {
+            // given
+            Member member = createAssociateMember(1L);
+
+            RecruitmentRound recruitmentRound =
+                    createRecruitmentRound(ACADEMIC_YEAR, SEMESTER_TYPE, FEE, START_DATE, END_DATE);
+
+            // when & then
+            assertThatThrownBy(() -> membershipValidator.validateMembershipSubmit(member, recruitmentRound, false))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(MEMBERSHIP_RECRUITMENT_ROUND_NOT_OPEN.getMessage());
         }
@@ -71,7 +88,7 @@ class MembershipValidatorTest {
             Membership membership = Membership.createMembership(member, recruitmentRound);
 
             // when & then
-            assertThatThrownBy(() -> membershipValidator.validateMembershipSubmit(recruitmentRound, true))
+            assertThatThrownBy(() -> membershipValidator.validateMembershipSubmit(member, recruitmentRound, true))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(MEMBERSHIP_ALREADY_SUBMITTED.getMessage());
         }
