@@ -33,13 +33,8 @@ public class AdminMemberService {
     private final AdminRecruitmentService adminRecruitmentService;
 
     public Page<AdminMemberResponse> findAllByRole(
-            MemberQueryOption queryOption, Pageable pageable, MemberRole memberRole) {
-        Page<Member> members = memberRepository.findAllByRole(queryOption, pageable, memberRole);
-        return members.map(AdminMemberResponse::from);
-    }
-
-    public Page<AdminMemberResponse> findAssociateOrRegularMembers(MemberQueryOption queryOption, Pageable pageable) {
-        Page<Member> members = memberRepository.findAssociateOrRegularMembers(queryOption, pageable);
+            MemberQueryOption queryOption, Pageable pageable, List<MemberRole> memberRoles) {
+        Page<Member> members = memberRepository.findAllByRole(queryOption, pageable, memberRoles);
         return members.map(AdminMemberResponse::from);
     }
 

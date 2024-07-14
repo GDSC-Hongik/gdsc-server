@@ -17,6 +17,10 @@ public class MemberQueryMethod {
         return role != null ? member.role.eq(role) : null;
     }
 
+    protected BooleanExpression eqRoles(List<MemberRole> roles) {
+        return roles != null && !roles.isEmpty() ? member.role.in(roles) : null;
+    }
+
     protected BooleanExpression eqStudentId(String studentId) {
         return studentId != null ? member.studentId.containsIgnoreCase(studentId) : null;
     }

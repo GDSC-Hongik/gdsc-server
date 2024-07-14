@@ -10,7 +10,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.io.IOException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ContentDisposition;
@@ -29,18 +31,10 @@ public class AdminMemberController {
     @Operation(summary = "회원 역할별 목록 조회", description = "정회원, 준회원, 게스트별로 조회합니다.")
     @GetMapping
     public ResponseEntity<Page<AdminMemberResponse>> getMembers(
-            @RequestParam(name = "role", required = false) MemberRole memberRole,
-            MemberQueryOption queryOption,
-            Pageable pageable) {
-        Page<AdminMemberResponse> response = adminMemberService.findAllByRole(queryOption, pageable, memberRole);
-        return ResponseEntity.ok().body(response);
-    }
-
-    @Operation(summary = "쿠폰지급용 회원 목록 조회", description = "정회원, 준회원 회원을 조회합니다.")
-    @GetMapping("/coupons")
-    public ResponseEntity<Page<AdminMemberResponse>> findAssociateOrRegularMembers(
-            MemberQueryOption queryOption, Pageable pageable) {
-        Page<AdminMemberResponse> response = adminMemberService.findAssociateOrRegularMembers(queryOption, pageable);
+            @RequestParam(name = "roles", required = false) List<MemberRole> memberRoles,
+            @ParameterObject MemberQueryOption queryOption,
+            @ParameterObject Pageable pageable) {
+        Page<AdminMemberResponse> response = adminMemberService.findAllByRole(queryOption, pageable, memberRoles);
         return ResponseEntity.ok().body(response);
     }
 

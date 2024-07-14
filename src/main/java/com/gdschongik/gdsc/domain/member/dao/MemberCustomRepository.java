@@ -11,11 +11,10 @@ import org.springframework.data.domain.Pageable;
 
 public interface MemberCustomRepository {
 
-    Page<Member> findAllByRole(MemberQueryOption queryOption, Pageable pageable, @Nullable MemberRole role);
+    Page<Member> findAllByRole(
+            MemberQueryOption queryOption, Pageable pageable, @Nullable List<MemberRole> memberRoles);
 
     List<Member> findAllByRole(@Nullable MemberRole role);
 
     List<Member> findAllByDiscordStatus(RequirementStatus discordStatus);
-
-    Page<Member> findAssociateOrRegularMembers(MemberQueryOption queryOption, Pageable pageable);
 }

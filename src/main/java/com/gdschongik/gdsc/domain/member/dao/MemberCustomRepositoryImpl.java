@@ -9,7 +9,6 @@ import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryOption;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.annotation.Nullable;
 import java.util.List;
@@ -25,19 +24,19 @@ public class MemberCustomRepositoryImpl extends MemberQueryMethod implements Mem
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<Member> findAllByRole(MemberQueryOption queryOption, Pageable pageable, @Nullable MemberRole role) {
+    public Page<Member> findAllByRole(
+            MemberQueryOption queryOption, Pageable pageable, @Nullable List<MemberRole> roles) {
+
+        List<Long> ids = getIdsByQueryOption(queryOption, eqRoles(roles), member.createdAt.desc());
+
         List<Member> fetch = queryFactory
                 .selectFrom(member)
-                .where(matchesQueryOption(queryOption), eqRole(role))
+                .where(member.id.in(ids))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .orderBy(member.createdAt.desc())
                 .fetch();
 
-        JPAQuery<Long> countQuery =
-                queryFactory.select(member.count()).from(member).where(matchesQueryOption(queryOption), eqRole(role));
-
-        return PageableExecutionUtils.getPage(fetch, pageable, countQuery::fetchOne);
+        return PageableExecutionUtils.getPage(fetch, pageable, ids::size);
     }
 
     @Override
@@ -55,21 +54,6 @@ public class MemberCustomRepositoryImpl extends MemberQueryMethod implements Mem
                 .selectFrom(member)
                 .where(eqRequirementStatus(member.associateRequirement.discordStatus, discordStatus))
                 .fetch();
-    }
-
-    @Override
-    public Page<Member> findAssociateOrRegularMembers(MemberQueryOption queryOption, Pageable pageable) {
-        List<Long> ids = getIdsByQueryOption(
-                queryOption, eqRole(MemberRole.ASSOCIATE).or(eqRole(MemberRole.REGULAR)), member.createdAt.desc());
-
-        List<Member> fetch = queryFactory
-                .selectFrom(member)
-                .where(member.id.in(ids))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
-
-        return PageableExecutionUtils.getPage(fetch, pageable, ids::size);
     }
 
     /**
