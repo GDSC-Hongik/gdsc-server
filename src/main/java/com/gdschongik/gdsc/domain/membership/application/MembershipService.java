@@ -43,10 +43,6 @@ public class MembershipService {
                 .findById(recruitmentRoundId)
                 .orElseThrow(() -> new CustomException(RECRUITMENT_ROUND_NOT_FOUND));
 
-        Optional<Membership> existingMembership = membershipRepository.findAllByMember(currentMember).stream()
-                .filter(m -> m.getRecruitmentRound().getRecruitment().equals(recruitmentRound.getRecruitment()))
-                .findFirst();
-
         boolean isMembershipAlreadySubmitted =
                 membershipRepository.existsByMemberAndRecruitment(currentMember, recruitmentRound.getRecruitment());
 
