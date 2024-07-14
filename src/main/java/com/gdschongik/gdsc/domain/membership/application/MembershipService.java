@@ -47,7 +47,10 @@ public class MembershipService {
                 .filter(m -> m.getRecruitmentRound().getRecruitment().equals(recruitmentRound.getRecruitment()))
                 .findFirst();
 
-        membershipValidator.validateMembershipSubmit(recruitmentRound, existingMembership);
+        boolean isMembershipAlreadySubmitted =
+                membershipRepository.existsByMemberAndRecruitment(currentMember, recruitmentRound.getRecruitment());
+
+        membershipValidator.validateMembershipSubmit(recruitmentRound, isMembershipAlreadySubmitted);
 
         Membership membership = Membership.createMembership(currentMember, recruitmentRound);
         membershipRepository.save(membership);

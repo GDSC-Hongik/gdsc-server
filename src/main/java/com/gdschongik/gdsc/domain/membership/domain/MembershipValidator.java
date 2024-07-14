@@ -5,19 +5,15 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.global.annotation.DomainService;
 import com.gdschongik.gdsc.global.exception.CustomException;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 
 @DomainService
 @RequiredArgsConstructor
 public class MembershipValidator {
 
-    public void validateMembershipSubmit(RecruitmentRound recruitmentRound, Optional<Membership> membership) {
+    public void validateMembershipSubmit(RecruitmentRound recruitmentRound, boolean isMembershipAlreadySubmitted) {
         // 이미 접수한 멤버십이 있는지 검증
-        if (membership.isPresent()) {
-            if (membership.get().isRegularRequirementAllSatisfied()) {
-                throw new CustomException(MEMBERSHIP_ALREADY_SATISFIED);
-            }
+        if (isMembershipAlreadySubmitted) {
             throw new CustomException(MEMBERSHIP_ALREADY_SUBMITTED);
         }
 

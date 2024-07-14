@@ -16,7 +16,6 @@ import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import java.time.LocalDateTime;
-import java.util.Optional;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -56,29 +55,9 @@ class MembershipValidatorTest {
                     createRecruitmentRound(ACADEMIC_YEAR, SEMESTER_TYPE, FEE, START_DATE, END_DATE);
 
             // when & then
-            assertThatThrownBy(() -> membershipValidator.validateMembershipSubmit(recruitmentRound, Optional.empty()))
+            assertThatThrownBy(() -> membershipValidator.validateMembershipSubmit(recruitmentRound, false))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(RECRUITMENT_ROUND_NOT_OPEN.getMessage());
-        }
-
-        @Test
-        void 해당_학기에_이미_Membership을_발급받았다면_실패한다() {
-            // given
-            Member member = createAssociateMember(1L);
-
-            RecruitmentRound recruitmentRound =
-                    createRecruitmentRound(ACADEMIC_YEAR, SEMESTER_TYPE, FEE, START_DATE, END_DATE);
-
-            Membership membership = Membership.createMembership(member, recruitmentRound);
-
-            // when
-            membership.verifyPaymentStatus();
-
-            // then
-            assertThatThrownBy(() ->
-                            membershipValidator.validateMembershipSubmit(recruitmentRound, Optional.of(membership)))
-                    .isInstanceOf(CustomException.class)
-                    .hasMessage(MEMBERSHIP_ALREADY_SATISFIED.getMessage());
         }
 
         @Test
@@ -92,8 +71,7 @@ class MembershipValidatorTest {
             Membership membership = Membership.createMembership(member, recruitmentRound);
 
             // when & then
-            assertThatThrownBy(() ->
-                            membershipValidator.validateMembershipSubmit(recruitmentRound, Optional.of(membership)))
+            assertThatThrownBy(() -> membershipValidator.validateMembershipSubmit(recruitmentRound, true))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(MEMBERSHIP_ALREADY_SUBMITTED.getMessage());
         }
