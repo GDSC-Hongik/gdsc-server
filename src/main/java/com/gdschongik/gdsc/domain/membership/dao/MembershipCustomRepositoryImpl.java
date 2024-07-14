@@ -4,6 +4,7 @@ import static com.gdschongik.gdsc.domain.membership.domain.QMembership.*;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
@@ -17,9 +18,17 @@ public class MembershipCustomRepositoryImpl implements MembershipCustomRepositor
         Integer fetchOne = queryFactory
                 .selectOne()
                 .from(membership)
-                .where(membership.member.eq(member), membership.recruitmentRound.recruitment.eq(recruitment))
+                .where(eqMember(member), eqRecruitment(recruitment))
                 .fetchFirst();
 
         return fetchOne != null;
+    }
+
+    private BooleanExpression eqMember(Member member) {
+        return member != null ? membership.member.eq(member) : null;
+    }
+
+    private BooleanExpression eqRecruitment(Recruitment recruitment) {
+        return recruitment != null ? membership.recruitmentRound.recruitment.eq(recruitment) : null;
     }
 }
