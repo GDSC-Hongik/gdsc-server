@@ -10,7 +10,8 @@ public record AdminRecruitmentRoundResponse(
         @Schema(description = "활동 학기") String semester,
         @Schema(description = "신청 시작일") LocalDateTime startDate,
         @Schema(description = "신청 종료일") LocalDateTime endDate,
-        @Schema(description = "모집회차 이름") String name) {
+        @Schema(description = "모집회차 이름") String name,
+        @Schema(description = "모집 차수") String round) {
 
     public static AdminRecruitmentRoundResponse from(RecruitmentRound recruitmentRound) {
 
@@ -21,6 +22,7 @@ public record AdminRecruitmentRoundResponse(
                         recruitmentRound.getSemesterType().getValue()),
                 recruitmentRound.getPeriod().getStartDate(),
                 recruitmentRound.getPeriod().getEndDate(),
-                recruitmentRound.getName());
+                recruitmentRound.getName(),
+                recruitmentRound.getRoundType().getValue());
     }
 }
