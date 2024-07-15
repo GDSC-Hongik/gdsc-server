@@ -78,7 +78,7 @@ class MembershipValidatorTest {
         }
 
         @Test
-        void 해당_학기에_이미_Membership을_생성한_적이_있다면_실패한다() {
+        void 해당_학기에_이미_멤버십을_생성한_적이_있다면_실패한다() {
             // given
             Member member = createAssociateMember(1L);
 
