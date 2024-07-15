@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RecruitmentRepository extends JpaRepository<Recruitment, Long> {
 
-    // boolean existsByAcademicYearAndSemesterType(Integer academicYear, SemesterType semesterType);
+    boolean existsByAcademicYearAndSemesterType(Integer academicYear, SemesterType semesterType);
 
     List<Recruitment> findByOrderBySemesterPeriodDesc();
 

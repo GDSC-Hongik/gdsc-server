@@ -26,15 +26,22 @@ public class DatabaseCleaner implements InitializingBean {
 
     private void extractTableNames(Connection conn) {
         tableNames = em.getMetamodel().getEntities().stream()
-                .map(EntityType::getName)
-                .map(this::convertCamelCaseToSnakeCase)
+                .map(DatabaseCleaner::getTableName)
                 .toList();
+    }
+
+    private static String getTableName(EntityType<?> entity) {
+        // TODO: 임시로 Order 테이블만 orders로 변환하도록 처리함. 추후 다른 테이블도 처리해야 함.
+        if (entity.getName().equals("Order")) {
+            return "orders";
+        }
+        return convertCamelCaseToSnakeCase(entity.getName());
     }
 
     /**
      * 카멜 케이스로 되어있는 엔티티 이름을 스네이크 케이스로 되어있는 테이블 이름으로 변환한다.
      */
-    private String convertCamelCaseToSnakeCase(String name) {
+    private static String convertCamelCaseToSnakeCase(String name) {
         return name.replaceAll("([a-z])([A-Z])", "$1_$2").toLowerCase();
     }
 

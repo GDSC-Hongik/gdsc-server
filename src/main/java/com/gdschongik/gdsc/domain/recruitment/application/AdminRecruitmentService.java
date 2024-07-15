@@ -1,15 +1,16 @@
 package com.gdschongik.gdsc.domain.recruitment.application;
 
-import static com.gdschongik.gdsc.domain.common.model.SemesterType.*;
-import static com.gdschongik.gdsc.global.common.constant.TemporalConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.common.model.SemesterType;
+import com.gdschongik.gdsc.domain.common.vo.Money;
 import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRepository;
 import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRoundRepository;
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRoundValidator;
+import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentValidator;
+import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentCreateRequest;
 import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentRoundCreateRequest;
 import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentRoundUpdateRequest;
@@ -30,10 +31,25 @@ public class AdminRecruitmentService {
 
     private final RecruitmentRepository recruitmentRepository;
     private final RecruitmentRoundRepository recruitmentRoundRepository;
+    private final RecruitmentValidator recruitmentValidator;
     private final RecruitmentRoundValidator recruitmentRoundValidator;
 
     @Transactional
-    public void createRecruitment(RecruitmentCreateRequest request) {}
+    public void createRecruitment(RecruitmentCreateRequest request) {
+        boolean isRecruitmentOverlap = recruitmentRepository.existsByAcademicYearAndSemesterType(
+                request.academicYear(), request.semesterType());
+
+        recruitmentValidator.validateRecruitmentCreate(isRecruitmentOverlap);
+
+        Recruitment recruitment = Recruitment.createRecruitment(
+                request.academicYear(),
+                request.semesterType(),
+                Money.from(request.fee()),
+                Period.createPeriod(request.semesterStartDate(), request.semesterEndDate()));
+        recruitmentRepository.save(recruitment);
+
+        log.info("[AdminRecruitmentService] 리쿠르팅 생성: recruitmentId={}", recruitment.getId());
+    }
 
     public List<AdminRecruitmentResponse> getAllRecruitments() {
         List<Recruitment> recruitments = recruitmentRepository.findByOrderBySemesterPeriodDesc();
@@ -74,12 +90,6 @@ public class AdminRecruitmentService {
 
     @Transactional
     public void updateRecruitmentRound(Long recruitmentRoundId, RecruitmentRoundUpdateRequest request) {}
-
-    // private void validateRecruitmentOverlap(Integer academicYear, SemesterType semesterType) {
-    //     if (recruitmentRepository.existsByAcademicYearAndSemesterType(academicYear, semesterType)) {
-    //         throw new CustomException(RECRUITMENT_OVERLAP);
-    //     }
-    // }
 
     /*
      1. 해당 학기에 리쿠르팅이 존재해야 함.
