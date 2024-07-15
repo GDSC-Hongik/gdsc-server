@@ -10,8 +10,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public record RecruitmentCreateRequest(
-        @Future @Schema(description = "학기 시작일", pattern = DATETIME) LocalDateTime periodStartDate,
-        @Future @Schema(description = "학기 종료일", pattern = DATETIME) LocalDateTime periodEndDate,
+        @Future @Schema(description = "학기 시작일", pattern = DATETIME) LocalDateTime semesterStartDate,
+        @Future @Schema(description = "학기 종료일", pattern = DATETIME) LocalDateTime semesterEndDate,
         @NotNull(message = "학년도는 null이 될 수 없습니다.") @Schema(description = "학년도", pattern = ACADEMIC_YEAR)
                 Integer academicYear,
         @NotNull(message = "학기는 null이 될 수 없습니다.") @Schema(description = "학기") SemesterType semesterType,
