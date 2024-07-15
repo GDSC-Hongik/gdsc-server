@@ -22,7 +22,7 @@ public class RecruitmentRoundValidator {
             List<RecruitmentRound> recruitmentRoundsInThisSemester) {
         validatePeriodMatchesAcademicYear(startDate, endDate, recruitment.getAcademicYear());
         validatePeriodMatchesSemesterType(startDate, endDate, recruitment.getSemesterType());
-        validatePeriodWithinTwoWeeks(startDate, endDate, recruitment.getAcademicYear(), recruitment.getSemesterType());
+        validatePeriodWithinTwoWeeks(startDate, endDate, recruitment);
         validatePeriodOverlap(recruitmentRoundsInThisSemester, startDate, endDate);
         validateRoundOverlap(recruitmentRoundsInThisSemester, roundType);
         validateRoundOneExist(recruitmentRoundsInThisSemester, roundType);
@@ -71,14 +71,8 @@ public class RecruitmentRoundValidator {
         throw new CustomException(RECRUITMENT_PERIOD_SEMESTER_TYPE_UNMAPPED);
     }
 
-    private void validatePeriodWithinTwoWeeks(
-            LocalDateTime startDate, LocalDateTime endDate, Integer academicYear, SemesterType semesterType) {
-        LocalDateTime semesterStartDate = LocalDateTime.of(
-                academicYear,
-                semesterType.getStartDate().getMonth(),
-                semesterType.getStartDate().getDayOfMonth(),
-                0,
-                0);
+    private void validatePeriodWithinTwoWeeks(LocalDateTime startDate, LocalDateTime endDate, Recruitment recruitment) {
+        LocalDateTime semesterStartDate = recruitment.getSemesterPeriod().getStartDate();
 
         if (semesterStartDate.minusWeeks(PRE_SEMESTER_TERM).isAfter(startDate)
                 || semesterStartDate.plusWeeks(PRE_SEMESTER_TERM).isBefore(startDate)) {
