@@ -12,8 +12,11 @@ public class RecruitmentValidatorTest {
 
     @Test
     void 학년도_학기가_모두_중복되는_리쿠르팅이라면_실패한다() {
+        // given
+        boolean isRecruitmentOverlap = true;
+
         // when & then
-        assertThatThrownBy(() -> recruitmentValidator.validateRecruitmentCreate(true))
+        assertThatThrownBy(() -> recruitmentValidator.validateRecruitmentCreate(isRecruitmentOverlap))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(RECRUITMENT_OVERLAP.getMessage());
     }
