@@ -22,6 +22,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -69,8 +70,11 @@ public class Study extends BaseSemesterEntity {
     @Enumerated(EnumType.STRING)
     private DayOfWeek dayOfWeek;
 
+    @Comment("스터디 시간")
+    private LocalTime time;
+
     @Builder(access = AccessLevel.PRIVATE)
-    public Study(
+    private Study(
             Integer academicYear,
             SemesterType semesterType,
             Member mentor,
@@ -78,7 +82,8 @@ public class Study extends BaseSemesterEntity {
             Period applicationPeriod,
             Long totalWeek,
             StudyType studyType,
-            DayOfWeek dayOfWeek) {
+            DayOfWeek dayOfWeek,
+            LocalTime time) {
         super(academicYear, semesterType);
         this.mentor = mentor;
         this.period = period;
@@ -86,6 +91,7 @@ public class Study extends BaseSemesterEntity {
         this.totalWeek = totalWeek;
         this.studyType = studyType;
         this.dayOfWeek = dayOfWeek;
+        this.time = time;
     }
 
     public static Study createStudy(
@@ -96,7 +102,8 @@ public class Study extends BaseSemesterEntity {
             Period applicationPeriod,
             Long totalWeek,
             StudyType studyType,
-            DayOfWeek dayOfWeek) {
+            DayOfWeek dayOfWeek,
+            LocalTime time) {
         validateApplicationStartDateBeforeSessionStartDate(applicationPeriod.getStartDate(), period.getStartDate());
         validateMentorRole(mentor);
         return Study.builder()
@@ -108,6 +115,7 @@ public class Study extends BaseSemesterEntity {
                 .totalWeek(totalWeek)
                 .studyType(studyType)
                 .dayOfWeek(dayOfWeek)
+                .time(time)
                 .build();
     }
 

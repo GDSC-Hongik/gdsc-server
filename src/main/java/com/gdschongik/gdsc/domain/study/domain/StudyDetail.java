@@ -48,7 +48,7 @@ public class StudyDetail extends BaseEntity {
     private Assignment assignment;
 
     @Builder(access = AccessLevel.PRIVATE)
-    public StudyDetail(
+    private StudyDetail(
             Study study, Long week, String attendanceNumber, Period period, Session session, Assignment assignment) {
         this.study = study;
         this.week = week;

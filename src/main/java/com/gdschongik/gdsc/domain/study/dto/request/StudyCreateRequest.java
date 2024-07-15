@@ -11,6 +11,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 public record StudyCreateRequest(
         @NotNull(message = "스터디 멘토 ID는 null이 될 수 없습니다.") @Schema(description = "스터디 멘토 ID") Long mentorId,
@@ -26,5 +27,6 @@ public record StudyCreateRequest(
                 LocalDate startDate,
         @NotNull(message = "스터디 요일은 null이 될 수 없습니다.") @Schema(description = "스터디 요일", implementation = DayOfWeek.class)
                 DayOfWeek dayOfWeek,
+        @Schema(description = "스터디 시간", implementation = LocalTime.class) LocalTime studyTime,
         @NotNull(message = "스터디 타입은 null이 될 수 없습니다.") @Schema(description = "스터디 타입", implementation = StudyType.class)
                 StudyType studyType) {}
