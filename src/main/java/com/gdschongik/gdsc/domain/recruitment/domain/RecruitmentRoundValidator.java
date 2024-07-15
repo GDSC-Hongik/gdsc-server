@@ -17,13 +17,12 @@ public class RecruitmentRoundValidator {
     public void validateRecruitmentRoundCreate(
             LocalDateTime startDate,
             LocalDateTime endDate,
-            Integer academicYear,
-            SemesterType semesterType,
             RoundType roundType,
+            Recruitment recruitment,
             List<RecruitmentRound> recruitmentRoundsInThisSemester) {
-        validatePeriodMatchesAcademicYear(startDate, endDate, academicYear);
-        validatePeriodMatchesSemesterType(startDate, endDate, semesterType);
-        validatePeriodWithinTwoWeeks(startDate, endDate, academicYear, semesterType);
+        validatePeriodMatchesAcademicYear(startDate, endDate, recruitment.getAcademicYear());
+        validatePeriodMatchesSemesterType(startDate, endDate, recruitment.getSemesterType());
+        validatePeriodWithinTwoWeeks(startDate, endDate, recruitment.getAcademicYear(), recruitment.getSemesterType());
         validatePeriodOverlap(recruitmentRoundsInThisSemester, startDate, endDate);
         validateRoundOverlap(recruitmentRoundsInThisSemester, roundType);
         validateRoundOneExist(recruitmentRoundsInThisSemester, roundType);
