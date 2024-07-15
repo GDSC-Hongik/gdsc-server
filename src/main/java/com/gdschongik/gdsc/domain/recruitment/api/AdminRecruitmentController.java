@@ -59,7 +59,7 @@ public class AdminRecruitmentController {
         return ResponseEntity.ok().body(response);
     }
 
-    @Operation(summary = "모집회차 생성", description = "새로운 모집회차를 생성합니다.")
+    @Operation(summary = "모집회차 생성", description = "새로운 모집회차를 생성합니다. 모집기간은 학기 시작일로부터 2주 이내입니다.")
     @PostMapping("/rounds")
     public ResponseEntity<Void> createRecruitmentRound(@Valid @RequestBody RecruitmentRoundCreateRequest request) {
         adminRecruitmentService.createRecruitmentRound(request);
