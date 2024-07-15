@@ -1,7 +1,6 @@
 package com.gdschongik.gdsc.domain.recruitment.domain;
 
 import static com.gdschongik.gdsc.global.common.constant.RecruitmentConstant.*;
-import static com.gdschongik.gdsc.global.common.constant.SemesterConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 
@@ -24,13 +23,16 @@ public class RecruitmentRoundValidatorTest {
         void 모집_시작일과_종료일의_연도가_입력된_학년도와_다르다면_실패한다() {
             // given
             Recruitment recruitment = Recruitment.createRecruitment(
-                    2025, SEMESTER_TYPE, FEE, Period.createPeriod(SEMESTER_START_DATE, SEMESTER_END_DATE));
+                    2025,
+                    SEMESTER_TYPE,
+                    FEE,
+                    Period.createPeriod(LocalDateTime.of(2025, 3, 2, 0, 0), LocalDateTime.of(2025, 8, 31, 0, 0)));
 
             // when & then
             assertThatThrownBy(() -> recruitmentRoundValidator.validateRecruitmentRoundCreate(
                             START_DATE, END_DATE, ROUND_TYPE, recruitment, List.of()))
                     .isInstanceOf(CustomException.class)
-                    .hasMessage(RECRUITMENT_PERIOD_MISMATCH_ACADEMIC_YEAR.getMessage());
+                    .hasMessage(RECRUITMENT_PERIOD_NOT_WITHIN_TWO_WEEKS.getMessage());
         }
 
         @Test
@@ -40,13 +42,13 @@ public class RecruitmentRoundValidatorTest {
                     ACADEMIC_YEAR,
                     SemesterType.SECOND,
                     FEE,
-                    Period.createPeriod(SEMESTER_START_DATE, SEMESTER_END_DATE));
+                    Period.createPeriod(LocalDateTime.of(2024, 9, 1, 0, 0), LocalDateTime.of(2025, 2, 28, 0, 0)));
 
             // when & then
             assertThatThrownBy(() -> recruitmentRoundValidator.validateRecruitmentRoundCreate(
                             START_DATE, END_DATE, ROUND_TYPE, recruitment, List.of()))
                     .isInstanceOf(CustomException.class)
-                    .hasMessage(RECRUITMENT_PERIOD_MISMATCH_SEMESTER_TYPE.getMessage());
+                    .hasMessage(RECRUITMENT_PERIOD_NOT_WITHIN_TWO_WEEKS.getMessage());
         }
 
         @Test
