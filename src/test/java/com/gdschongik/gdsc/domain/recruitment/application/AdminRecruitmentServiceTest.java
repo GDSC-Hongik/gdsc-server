@@ -7,6 +7,8 @@ import static org.assertj.core.api.Assertions.*;
 
 import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRepository;
 import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentCreateRequest;
+import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentRoundCreateRequest;
+import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.helper.IntegrationTest;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -106,4 +108,20 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
     //                 .hasMessage(RECRUITMENT_ROUND_TYPE_OVERLAP.getMessage());
     //     }
     // }
+
+    @Nested
+    class 모집회차_생성시 {
+
+        @Test
+        void 학년도와_학기가_일치하는_리쿠르팅이_존재하지_않는다면_실패한다() {
+            // given
+            RecruitmentRoundCreateRequest request = new RecruitmentRoundCreateRequest(
+                    ACADEMIC_YEAR, SEMESTER_TYPE, RECRUITMENT_NAME, START_DATE, END_DATE, ROUND_TYPE);
+
+            // when & then
+            assertThatThrownBy(() -> adminRecruitmentService.createRecruitmentRound(request))
+                    .isInstanceOf(CustomException.class)
+                    .hasMessage(RECRUITMENT_NOT_FOUND.getMessage());
+        }
+    }
 }

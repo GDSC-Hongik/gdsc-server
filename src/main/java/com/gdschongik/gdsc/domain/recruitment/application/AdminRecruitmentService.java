@@ -1,6 +1,5 @@
 package com.gdschongik.gdsc.domain.recruitment.application;
 
-import static com.gdschongik.gdsc.domain.common.model.SemesterType.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.common.model.SemesterType;
@@ -9,9 +8,11 @@ import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRepository;
 import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRoundRepository;
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
+import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRoundValidator;
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentValidator;
 import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentCreateRequest;
+import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentRoundCreateRequest;
 import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentRoundUpdateRequest;
 import com.gdschongik.gdsc.domain.recruitment.dto.response.AdminRecruitmentResponse;
 import com.gdschongik.gdsc.domain.recruitment.dto.response.AdminRecruitmentRoundResponse;
@@ -31,6 +32,7 @@ public class AdminRecruitmentService {
     private final RecruitmentRepository recruitmentRepository;
     private final RecruitmentRoundRepository recruitmentRoundRepository;
     private final RecruitmentValidator recruitmentValidator;
+    private final RecruitmentRoundValidator recruitmentRoundValidator;
 
     @Transactional
     public void createRecruitment(RecruitmentCreateRequest request) {
@@ -62,6 +64,30 @@ public class AdminRecruitmentService {
     }
 
     @Transactional
+    public void createRecruitmentRound(RecruitmentRoundCreateRequest request) {
+        Recruitment recruitment = recruitmentRepository
+                .findByAcademicYearAndSemesterType(request.academicYear(), request.semesterType())
+                .orElseThrow(() -> new CustomException(RECRUITMENT_NOT_FOUND));
+
+        List<RecruitmentRound> recruitmentRoundsInThisSemester =
+                recruitmentRoundRepository.findAllByAcademicYearAndSemesterType(
+                        request.academicYear(), request.semesterType());
+
+        recruitmentRoundValidator.validateRecruitmentRoundCreate(
+                request.startDate(),
+                request.endDate(),
+                request.roundType(),
+                recruitment,
+                recruitmentRoundsInThisSemester);
+
+        RecruitmentRound recruitmentRound = RecruitmentRound.create(
+                request.name(), request.startDate(), request.endDate(), recruitment, request.roundType());
+        recruitmentRoundRepository.save(recruitmentRound);
+
+        log.info("[AdminRecruitmentService] 모집회차 생성: recruitmentRoundId={}", recruitmentRound.getId());
+    }
+
+    @Transactional
     public void updateRecruitmentRound(Long recruitmentRoundId, RecruitmentRoundUpdateRequest request) {}
 
     /*
@@ -79,42 +105,6 @@ public class AdminRecruitmentService {
         recruitmentRounds.forEach(RecruitmentRound::validatePeriodNotStarted);
     }
 
-    // private void validatePeriodWithinTwoWeeks(
-    //         LocalDateTime startDate, LocalDateTime endDate, Integer academicYear, SemesterType semesterType) {
-    //     LocalDateTime semesterStartDate = LocalDateTime.of(
-    //             academicYear,
-    //             semesterType.getStartDate().getMonth(),
-    //             semesterType.getStartDate().getDayOfMonth(),
-    //             0,
-    //             0);
-    //
-    //     if (semesterStartDate.minusWeeks(PRE_SEMESTER_TERM).isAfter(startDate)
-    //             || semesterStartDate.plusWeeks(PRE_SEMESTER_TERM).isBefore(startDate)) {
-    //         throw new CustomException(RECRUITMENT_PERIOD_NOT_WITHIN_TWO_WEEKS);
-    //     }
-    //
-    //     if (semesterStartDate.minusWeeks(PRE_SEMESTER_TERM).isAfter(endDate)
-    //             || semesterStartDate.plusWeeks(PRE_SEMESTER_TERM).isBefore(endDate)) {
-    //         throw new CustomException(RECRUITMENT_PERIOD_NOT_WITHIN_TWO_WEEKS);
-    //     }
-    // }
-    //
-    // // 새로 생성하는 경우
-    // private void validatePeriodOverlap(
-    //         Integer academicYear, SemesterType semesterType, LocalDateTime startDate, LocalDateTime endDate) {
-    //     List<RecruitmentRound> recruitmentRounds =
-    //             recruitmentRoundRepository.findAllByAcademicYearAndSemesterType(academicYear, semesterType);
-    //
-    //     recruitmentRounds.forEach(recruitmentRound -> recruitmentRound.validatePeriodOverlap(startDate, endDate));
-    // }
-    //
-    // private void validateRoundOverlap(Integer academicYear, SemesterType semesterType, RoundType roundType) {
-    //     if (recruitmentRoundRepository.existsByAcademicYearAndSemesterTypeAndRoundType(
-    //             academicYear, semesterType, roundType)) {
-    //         throw new CustomException(RECRUITMENT_ROUND_TYPE_OVERLAP);
-    //     }
-    // }
-    //
     // /**
     //  * 기존 리쿠르팅 수정하는 경우,
     //  * 자기 자신의 모집기간과 차수는 수정에 성공하면 소멸되므로 무의미함.
