@@ -32,9 +32,8 @@ public class AdminMemberService {
     private final ExcelUtil excelUtil;
     private final AdminRecruitmentService adminRecruitmentService;
 
-    public Page<AdminMemberResponse> findAllByRole(
-            MemberQueryOption queryOption, Pageable pageable, MemberRole memberRole) {
-        Page<Member> members = memberRepository.findAllByRole(queryOption, pageable, memberRole);
+    public Page<AdminMemberResponse> searchMembers(MemberQueryOption queryOption, Pageable pageable) {
+        Page<Member> members = memberRepository.searchMembers(queryOption, pageable);
         return members.map(AdminMemberResponse::from);
     }
 

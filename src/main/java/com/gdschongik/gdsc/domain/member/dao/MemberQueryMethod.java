@@ -17,6 +17,10 @@ public class MemberQueryMethod {
         return role != null ? member.role.eq(role) : null;
     }
 
+    protected BooleanExpression eqRoles(List<MemberRole> roles) {
+        return roles != null && !roles.isEmpty() ? member.role.in(roles) : null;
+    }
+
     protected BooleanExpression eqStudentId(String studentId) {
         return studentId != null ? member.studentId.containsIgnoreCase(studentId) : null;
     }
@@ -58,6 +62,7 @@ public class MemberQueryMethod {
                 .and(inDepartmentList(Department.searchDepartments(queryOption.department())))
                 .and(eqEmail(queryOption.email()))
                 .and(eqDiscordUsername(queryOption.discordUsername()))
-                .and(eqNickname(queryOption.nickname()));
+                .and(eqNickname(queryOption.nickname()))
+                .and(eqRoles(queryOption.roles()));
     }
 }
