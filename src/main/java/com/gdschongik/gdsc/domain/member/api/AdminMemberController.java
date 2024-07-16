@@ -1,7 +1,6 @@
 package com.gdschongik.gdsc.domain.member.api;
 
 import com.gdschongik.gdsc.domain.member.application.AdminMemberService;
-import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberDemoteRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryOption;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberUpdateRequest;
@@ -11,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ContentDisposition;
@@ -29,10 +29,8 @@ public class AdminMemberController {
     @Operation(summary = "회원 역할별 목록 조회", description = "정회원, 준회원, 게스트별로 조회합니다.")
     @GetMapping
     public ResponseEntity<Page<AdminMemberResponse>> getMembers(
-            @RequestParam(name = "role", required = false) MemberRole memberRole,
-            MemberQueryOption queryOption,
-            Pageable pageable) {
-        Page<AdminMemberResponse> response = adminMemberService.findAllByRole(queryOption, pageable, memberRole);
+            @ParameterObject MemberQueryOption queryOption, @ParameterObject Pageable pageable) {
+        Page<AdminMemberResponse> response = adminMemberService.searchMembers(queryOption, pageable);
         return ResponseEntity.ok().body(response);
     }
 
