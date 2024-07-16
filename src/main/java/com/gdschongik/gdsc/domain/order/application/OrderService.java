@@ -88,5 +88,7 @@ public class OrderService {
         issuedCoupon.ifPresent(IssuedCoupon::use);
 
         orderRepository.save(order);
+
+        log.info("[OrderService] 주문 완료: orderId={}", order.getId());
     }
 }
