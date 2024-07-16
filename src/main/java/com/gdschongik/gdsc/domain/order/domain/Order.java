@@ -101,7 +101,7 @@ public class Order extends BaseEntity {
     public void complete(String paymentKey) {
         this.status = OrderStatus.COMPLETED;
         this.paymentKey = paymentKey;
-        
+
         registerEvent(new OrderCompletedEvent(id));
     }
 
