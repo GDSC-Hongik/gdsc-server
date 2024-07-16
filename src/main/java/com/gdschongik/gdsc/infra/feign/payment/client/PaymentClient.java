@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 @FeignClient(name = "paymentClient", url = "https://api.tosspayments.com", configuration = BasicAuthConfig.class)
 public interface PaymentClient {
 
+    // TODO: Feign 예외 처리 구현
+
     @PostMapping("/v1/payments/confirm")
     PaymentResponse confirm(@Valid @RequestBody PaymentConfirmRequest request);
 }
