@@ -35,6 +35,7 @@ public class StudyDomainFactory {
     public StudyDetail createNoneStudyDetail(Study study, Long week) {
         LocalDateTime startDate = study.getPeriod().getStartDate().plusWeeks((week - 1));
         LocalDateTime endDate = startDate.plusDays(6).toLocalDate().atTime(LocalTime.MAX);
+
         String attendanceNumber =
                 new Random().ints(4, 0, 10).mapToObj(String::valueOf).reduce("", String::concat);
         return StudyDetail.createStudyDetail(study, week, attendanceNumber, Period.createPeriod(startDate, endDate));

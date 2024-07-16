@@ -6,6 +6,7 @@ import java.time.LocalTime;
 
 public class StudyConstant {
     private StudyConstant() {}
+
     public static final Long TOTAL_WEEK = 8L;
     public static final StudyType STUDY_TYPE = StudyType.ONLINE;
     public static final DayOfWeek DAY_OF_WEEK = DayOfWeek.FRIDAY;

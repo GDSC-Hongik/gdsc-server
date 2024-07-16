@@ -2,24 +2,10 @@ package com.gdschongik.gdsc.domain.study.domain;
 
 import static com.gdschongik.gdsc.domain.member.domain.Department.D022;
 import static com.gdschongik.gdsc.domain.member.domain.Member.createGuestMember;
-import static com.gdschongik.gdsc.global.common.constant.MemberConstant.DISCORD_USERNAME;
-import static com.gdschongik.gdsc.global.common.constant.MemberConstant.EMAIL;
-import static com.gdschongik.gdsc.global.common.constant.MemberConstant.NAME;
-import static com.gdschongik.gdsc.global.common.constant.MemberConstant.NICKNAME;
-import static com.gdschongik.gdsc.global.common.constant.MemberConstant.OAUTH_ID;
-import static com.gdschongik.gdsc.global.common.constant.MemberConstant.PHONE_NUMBER;
-import static com.gdschongik.gdsc.global.common.constant.MemberConstant.STUDENT_ID;
-import static com.gdschongik.gdsc.global.common.constant.MemberConstant.UNIV_EMAIL;
-import static com.gdschongik.gdsc.global.common.constant.RecruitmentConstant.ACADEMIC_YEAR;
-import static com.gdschongik.gdsc.global.common.constant.RecruitmentConstant.END_DATE;
-import static com.gdschongik.gdsc.global.common.constant.RecruitmentConstant.SEMESTER_TYPE;
-import static com.gdschongik.gdsc.global.common.constant.RecruitmentConstant.START_DATE;
-import static com.gdschongik.gdsc.global.common.constant.StudyConstant.DAY_OF_WEEK;
-import static com.gdschongik.gdsc.global.common.constant.StudyConstant.STUDY_TYPE;
-import static com.gdschongik.gdsc.global.common.constant.StudyConstant.TIME;
-import static com.gdschongik.gdsc.global.common.constant.StudyConstant.TOTAL_WEEK;
-import static com.gdschongik.gdsc.global.exception.ErrorCode.STUDY_APPLICATION_START_DATE_INVALID;
-import static com.gdschongik.gdsc.global.exception.ErrorCode.STUDY_MENTOR_IS_UNAUTHORIZED;
+import static com.gdschongik.gdsc.global.common.constant.MemberConstant.*;
+import static com.gdschongik.gdsc.global.common.constant.RecruitmentConstant.*;
+import static com.gdschongik.gdsc.global.common.constant.StudyConstant.*;
+import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;

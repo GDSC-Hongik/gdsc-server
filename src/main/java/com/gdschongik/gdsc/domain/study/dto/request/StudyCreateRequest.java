@@ -1,7 +1,6 @@
 package com.gdschongik.gdsc.domain.study.dto.request;
 
-import static com.gdschongik.gdsc.global.common.constant.RegexConstant.ACADEMIC_YEAR;
-import static com.gdschongik.gdsc.global.common.constant.RegexConstant.DATE;
+import static com.gdschongik.gdsc.global.common.constant.RegexConstant.*;
 
 import com.gdschongik.gdsc.domain.common.model.SemesterType;
 import com.gdschongik.gdsc.domain.study.domain.StudyType;

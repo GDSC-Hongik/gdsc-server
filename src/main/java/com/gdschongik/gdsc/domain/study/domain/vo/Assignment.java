@@ -36,7 +36,7 @@ public class Assignment {
     private StudyStatus status;
 
     @Builder(access = AccessLevel.PRIVATE)
-    public Assignment(
+    private Assignment(
             String title, LocalDateTime deadline, String descriptionLink, Difficulty difficulty, StudyStatus status) {
         this.title = title;
         this.deadline = deadline;

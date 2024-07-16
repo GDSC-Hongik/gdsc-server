@@ -33,7 +33,8 @@ public class Session {
     private StudyStatus status;
 
     @Builder(access = AccessLevel.PRIVATE)
-    public Session(LocalDateTime startAt, String title, String description, Difficulty difficulty, StudyStatus status) {
+    private Session(
+            LocalDateTime startAt, String title, String description, Difficulty difficulty, StudyStatus status) {
         this.startAt = startAt;
         this.title = title;
         this.description = description;
