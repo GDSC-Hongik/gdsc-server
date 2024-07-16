@@ -1,5 +1,6 @@
 package com.gdschongik.gdsc.domain.study.domain;
 
+import static com.gdschongik.gdsc.domain.study.domain.StudyType.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.common.model.BaseSemesterEntity;
@@ -111,6 +112,7 @@ public class Study extends BaseSemesterEntity {
             LocalTime endTime) {
         validateApplicationStartDateBeforeSessionStartDate(applicationPeriod.getStartDate(), period.getStartDate());
         validateMentorRole(mentor);
+        validateStudyTime(studyType, startTime, endTime);
         return Study.builder()
                 .academicYear(academicYear)
                 .semesterType(semesterType)
@@ -135,6 +137,29 @@ public class Study extends BaseSemesterEntity {
     private static void validateMentorRole(Member mentor) {
         if (mentor.isGuest()) {
             throw new CustomException(STUDY_MENTOR_IS_UNAUTHORIZED);
+        }
+    }
+
+    private static void validateStudyTime(StudyType studyType, LocalTime studyStartTime, LocalTime studyEndTime) {
+        if (studyType == OFFLINE || studyType == ONLINE) {
+            validateOnOffLineStudyTime(studyStartTime, studyEndTime);
+        }
+        if (studyType == ASSIGNMENT) {
+            validateAssignmentLineStudyTime(studyStartTime, studyEndTime);
+        }
+    }
+
+    private static void validateOnOffLineStudyTime(LocalTime studyStartTime, LocalTime studyEndTime) {
+        if (!(studyStartTime != null && studyEndTime != null)) {
+            throw new CustomException(ON_OFF_LINE_STUDY_TIME_IS_ESSENTIAL);
+        } else if (!studyStartTime.isBefore(studyEndTime)) {
+            throw new CustomException(STUDY_TIME_INVALID);
+        }
+    }
+
+    private static void validateAssignmentLineStudyTime(LocalTime studyStartTime, LocalTime studyEndTime) {
+        if (!(studyStartTime == null && studyEndTime == null)) {
+            throw new CustomException(ASSIGNMENT_STUDY_CAN_NOT_INPUT_STUDY_TIME);
         }
     }
 }
