@@ -104,4 +104,10 @@ public class Order extends BaseEntity {
         
         registerEvent(new OrderCompletedEvent(id));
     }
+
+    // 데이터 조회 로직
+
+    public boolean isCompleted() {
+        return status == OrderStatus.COMPLETED;
+    }
 }
