@@ -8,7 +8,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,9 +29,9 @@ public class OnboardingOrderController {
     }
 
     @Operation(summary = "주문 완료하기", description = "주문을 완료합니다. 요청된 결제는 승인됩니다.")
-    @PostMapping("/{orderId}/complete")
-    public ResponseEntity<Void> completeOrder(
-            @PathVariable Long orderId, @Valid @RequestBody OrderCompleteRequest request) {
+    @PostMapping("/complete")
+    public ResponseEntity<Void> completeOrder(@Valid @RequestBody OrderCompleteRequest request) {
+        orderService.completeOrder(request);
         return ResponseEntity.ok().build();
     }
 }
