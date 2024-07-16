@@ -48,7 +48,8 @@ public class StudyTest {
                             TOTAL_WEEK,
                             STUDY_TYPE,
                             DAY_OF_WEEK,
-                            TIME))
+                            STUDY_START_TIME,
+                            STUDY_END_TIME))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(STUDY_MENTOR_IS_UNAUTHORIZED.getMessage());
         }
@@ -70,7 +71,8 @@ public class StudyTest {
                             TOTAL_WEEK,
                             STUDY_TYPE,
                             DAY_OF_WEEK,
-                            TIME))
+                            STUDY_START_TIME,
+                            STUDY_END_TIME))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(STUDY_APPLICATION_START_DATE_INVALID.getMessage());
         }

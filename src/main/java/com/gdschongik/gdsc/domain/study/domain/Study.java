@@ -69,8 +69,11 @@ public class Study extends BaseSemesterEntity {
     @Enumerated(EnumType.STRING)
     private DayOfWeek dayOfWeek;
 
-    @Comment("스터디 시간")
-    private LocalTime time;
+    @Comment("스터디 시작 시간")
+    private LocalTime startTime;
+
+    @Comment("스터디 종료 시간")
+    private LocalTime endTime;
 
     @Builder(access = AccessLevel.PRIVATE)
     private Study(
@@ -82,7 +85,8 @@ public class Study extends BaseSemesterEntity {
             Long totalWeek,
             StudyType studyType,
             DayOfWeek dayOfWeek,
-            LocalTime time) {
+            LocalTime startTime,
+            LocalTime endTime) {
         super(academicYear, semesterType);
         this.mentor = mentor;
         this.period = period;
@@ -90,7 +94,8 @@ public class Study extends BaseSemesterEntity {
         this.totalWeek = totalWeek;
         this.studyType = studyType;
         this.dayOfWeek = dayOfWeek;
-        this.time = time;
+        this.startTime = startTime;
+        this.endTime = endTime;
     }
 
     public static Study createStudy(
@@ -102,7 +107,8 @@ public class Study extends BaseSemesterEntity {
             Long totalWeek,
             StudyType studyType,
             DayOfWeek dayOfWeek,
-            LocalTime time) {
+            LocalTime startTime,
+            LocalTime endTime) {
         validateApplicationStartDateBeforeSessionStartDate(applicationPeriod.getStartDate(), period.getStartDate());
         validateMentorRole(mentor);
         return Study.builder()
@@ -114,7 +120,8 @@ public class Study extends BaseSemesterEntity {
                 .totalWeek(totalWeek)
                 .studyType(studyType)
                 .dayOfWeek(dayOfWeek)
-                .time(time)
+                .startTime(startTime)
+                .endTime(endTime)
                 .build();
     }
 
