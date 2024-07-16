@@ -11,6 +11,7 @@ import com.gdschongik.gdsc.global.annotation.DomainService;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.annotation.Nullable;
 import java.math.BigDecimal;
+import java.util.Optional;
 
 @DomainService
 public class OrderValidator {
@@ -38,6 +39,7 @@ public class OrderValidator {
 
         // 발급쿠폰 관련 검증
 
+        // TODO: 주문 완료 검증 로직처럼 Optional로 변경
         if (issuedCoupon != null) {
             validateIssuedCouponOwnership(issuedCoupon, currentMember);
             issuedCoupon.validateUsable();
@@ -74,6 +76,27 @@ public class OrderValidator {
     private void validateDiscountAmountMatches(Money discountAmount, IssuedCoupon issuedCoupon) {
         if (!discountAmount.equals(issuedCoupon.getCoupon().getDiscountAmount())) {
             throw new CustomException(ORDER_DISCOUNT_AMOUNT_MISMATCH);
+        }
+    }
+
+    public void validateCompleteOrder(
+            Order order, Optional<IssuedCoupon> optionalIssuedCoupon, Member currentMember, Money requestedAmount) {
+        if (order.isCompleted()) {
+            throw new CustomException(ORDER_ALREADY_COMPLETED);
+        }
+
+        if (optionalIssuedCoupon.isPresent()) {
+            var issuedCoupon = optionalIssuedCoupon.get();
+            issuedCoupon.validateUsable();
+            validateIssuedCouponOwnership(issuedCoupon, currentMember);
+        }
+
+        if (!order.getMemberId().equals(currentMember.getId())) {
+            throw new CustomException(ORDER_MEMBERSHIP_MEMBER_MISMATCH);
+        }
+
+        if (!order.getMoneyInfo().getFinalPaymentAmount().equals(requestedAmount)) {
+            throw new CustomException(ORDER_COMPLETE_AMOUNT_MISMATCH);
         }
     }
 }
