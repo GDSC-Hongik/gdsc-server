@@ -19,17 +19,16 @@ import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.domain.recruitment.domain.RoundType;
 import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import com.gdschongik.gdsc.global.exception.CustomException;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 
 class OrderValidatorTest {
 
-    public static final Money MONEY_5000_WON = Money.from(BigDecimal.valueOf(5000));
-    public static final Money MONEY_10000_WON = Money.from(BigDecimal.valueOf(10000));
-    public static final Money MONEY_15000_WON = Money.from(BigDecimal.valueOf(15000));
-    public static final Money MONEY_20000_WON = Money.from(BigDecimal.valueOf(20000));
+    public static final Money MONEY_5000_WON = Money.from(5000L);
+    public static final Money MONEY_10000_WON = Money.from(10000L);
+    public static final Money MONEY_15000_WON = Money.from(15000L);
+    public static final Money MONEY_20000_WON = Money.from(20000L);
 
     OrderValidator orderValidator = new OrderValidator();
 

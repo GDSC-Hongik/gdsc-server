@@ -40,6 +40,12 @@ public final class Money {
         return Money.builder().amount(amount).build();
     }
 
+    public static Money from(Long amount) {
+        validateAmountNotNull(BigDecimal.valueOf(amount));
+
+        return Money.builder().amount(BigDecimal.valueOf(amount)).build();
+    }
+
     private static void validateAmountNotNull(BigDecimal amount) {
         if (amount == null) {
             throw new CustomException(MONEY_AMOUNT_NOT_NULL);

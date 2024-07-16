@@ -20,10 +20,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 class OrderServiceTest extends IntegrationTest {
 
-    public static final Money MONEY_20000_WON = Money.from(BigDecimal.valueOf(20000));
-    public static final Money MONEY_15000_WON = Money.from(BigDecimal.valueOf(15000));
-    public static final Money MONEY_10000_WON = Money.from(BigDecimal.valueOf(10000));
-    public static final Money MONEY_5000_WON = Money.from(BigDecimal.valueOf(5000));
+    public static final Money MONEY_20000_WON = Money.from(20000L);
+    public static final Money MONEY_15000_WON = Money.from(15000L);
+    public static final Money MONEY_10000_WON = Money.from(10000L);
+    public static final Money MONEY_5000_WON = Money.from(5000L);
 
     @Autowired
     private OrderService orderService;
