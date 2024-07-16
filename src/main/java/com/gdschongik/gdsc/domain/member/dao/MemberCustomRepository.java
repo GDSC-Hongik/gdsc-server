@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface MemberCustomRepository {
 
-    Page<Member> findAllByRole(MemberQueryOption queryOption, Pageable pageable);
+    Page<Member> searchMembers(MemberQueryOption queryOption, Pageable pageable);
 
     List<Member> findAllByRole(@Nullable MemberRole role);
 

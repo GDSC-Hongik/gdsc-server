@@ -76,7 +76,7 @@ class MemberRepositoryTest extends RepositoryTest {
             flushAndClearBeforeExecute();
 
             // when
-            Page<Member> members = memberRepository.findAllByRole(GUEST_QUERY_OPTION, PageRequest.of(0, 10));
+            Page<Member> members = memberRepository.searchMembers(GUEST_QUERY_OPTION, PageRequest.of(0, 10));
 
             // then
             Member guest = memberRepository.findById(1L).get();
@@ -96,7 +96,7 @@ class MemberRepositoryTest extends RepositoryTest {
             flushAndClearBeforeExecute();
 
             // when
-            Page<Member> members = memberRepository.findAllByRole(ASSOCIATE_QUERY_OPTION, PageRequest.of(0, 10));
+            Page<Member> members = memberRepository.searchMembers(ASSOCIATE_QUERY_OPTION, PageRequest.of(0, 10));
 
             // then
             Member user = memberRepository.findById(1L).get();
@@ -116,7 +116,7 @@ class MemberRepositoryTest extends RepositoryTest {
             flushAndClearBeforeExecute();
 
             // when
-            Page<Member> members = memberRepository.findAllByRole(GUEST_QUERY_OPTION, PageRequest.of(0, 10));
+            Page<Member> members = memberRepository.searchMembers(GUEST_QUERY_OPTION, PageRequest.of(0, 10));
 
             // then
             Member user = memberRepository.findById(1L).get();

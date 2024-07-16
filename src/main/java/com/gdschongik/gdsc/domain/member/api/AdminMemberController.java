@@ -30,7 +30,7 @@ public class AdminMemberController {
     @GetMapping
     public ResponseEntity<Page<AdminMemberResponse>> getMembers(
             @ParameterObject MemberQueryOption queryOption, @ParameterObject Pageable pageable) {
-        Page<AdminMemberResponse> response = adminMemberService.findAllByRole(queryOption, pageable);
+        Page<AdminMemberResponse> response = adminMemberService.searchMembers(queryOption, pageable);
         return ResponseEntity.ok().body(response);
     }
 

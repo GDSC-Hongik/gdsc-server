@@ -24,7 +24,7 @@ public class MemberCustomRepositoryImpl extends MemberQueryMethod implements Mem
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<Member> findAllByRole(MemberQueryOption queryOption, Pageable pageable) {
+    public Page<Member> searchMembers(MemberQueryOption queryOption, Pageable pageable) {
 
         List<Long> ids = getIdsByQueryOption(queryOption, null, member.createdAt.desc());
 
