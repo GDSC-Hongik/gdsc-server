@@ -1,6 +1,5 @@
 package com.gdschongik.gdsc.domain.recruitment.domain;
 
-import static com.gdschongik.gdsc.domain.common.model.SemesterType.*;
 import static com.gdschongik.gdsc.global.common.constant.TemporalConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
@@ -27,13 +26,13 @@ public class RecruitmentRoundValidator {
     private void validatePeriodWithinTwoWeeks(LocalDateTime startDate, LocalDateTime endDate, Recruitment recruitment) {
         LocalDateTime semesterStartDate = recruitment.getSemesterPeriod().getStartDate();
 
-        if (semesterStartDate.minusWeeks(PRE_SEMESTER_TERM).isAfter(startDate)
-                || semesterStartDate.plusWeeks(PRE_SEMESTER_TERM).isBefore(startDate)) {
-            throw new CustomException(RECRUITMENT_PERIOD_NOT_WITHIN_TWO_WEEKS);
-        }
+        validateDateTimeWithinTwoWeeks(startDate, semesterStartDate);
+        validateDateTimeWithinTwoWeeks(endDate, semesterStartDate);
+    }
 
-        if (semesterStartDate.minusWeeks(PRE_SEMESTER_TERM).isAfter(endDate)
-                || semesterStartDate.plusWeeks(PRE_SEMESTER_TERM).isBefore(endDate)) {
+    private void validateDateTimeWithinTwoWeeks(LocalDateTime dateTime, LocalDateTime semesterStartDate) {
+        if (semesterStartDate.minusWeeks(PRE_SEMESTER_TERM).isAfter(dateTime)
+                || semesterStartDate.plusWeeks(PRE_SEMESTER_TERM).isBefore(dateTime)) {
             throw new CustomException(RECRUITMENT_PERIOD_NOT_WITHIN_TWO_WEEKS);
         }
     }
