@@ -55,9 +55,7 @@ public class RecruitmentRoundValidator {
     // 1차 모집이 없는데 2차 모집을 생성하려고 하는 경우
     private void validateRoundOneExist(List<RecruitmentRound> recruitmentRounds, RoundType roundType) {
         if (roundType.equals(RoundType.SECOND)
-                && recruitmentRounds.stream()
-                        .noneMatch(recruitmentRound ->
-                                recruitmentRound.getRoundType().equals(RoundType.FIRST))) {
+                && recruitmentRounds.stream().noneMatch(RecruitmentRound::isFirstRound)) {
             throw new CustomException(ROUND_ONE_DOES_NOT_EXIST);
         }
     }

@@ -94,4 +94,8 @@ public class RecruitmentRound extends BaseSemesterEntity {
             throw new CustomException(RECRUITMENT_ROUND_STARTDATE_ALREADY_PASSED);
         }
     }
+
+    public boolean isFirstRound() {
+        return roundType.equals(RoundType.FIRST);
+    }
 }
