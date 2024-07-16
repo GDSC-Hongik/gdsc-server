@@ -8,6 +8,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,5 +32,20 @@ public class Assignment {
     private Difficulty difficulty;
 
     @Comment("과제 상태")
+    @Enumerated(EnumType.STRING)
     private StudyStatus status;
+
+    @Builder(access = AccessLevel.PRIVATE)
+    private Assignment(
+            String title, LocalDateTime deadline, String descriptionLink, Difficulty difficulty, StudyStatus status) {
+        this.title = title;
+        this.deadline = deadline;
+        this.descriptionLink = descriptionLink;
+        this.difficulty = difficulty;
+        this.status = status;
+    }
+
+    public static Assignment createEmptyAssignment() {
+        return Assignment.builder().status(StudyStatus.NONE).build();
+    }
 }

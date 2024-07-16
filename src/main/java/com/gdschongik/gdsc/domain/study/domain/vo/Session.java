@@ -7,6 +7,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,5 +29,20 @@ public class Session {
     private Difficulty difficulty;
 
     @Comment("세션 상태")
+    @Enumerated(EnumType.STRING)
     private StudyStatus status;
+
+    @Builder(access = AccessLevel.PRIVATE)
+    private Session(
+            LocalDateTime startAt, String title, String description, Difficulty difficulty, StudyStatus status) {
+        this.startAt = startAt;
+        this.title = title;
+        this.description = description;
+        this.difficulty = difficulty;
+        this.status = status;
+    }
+
+    public static Session createEmptySession() {
+        return Session.builder().status(StudyStatus.NONE).build();
+    }
 }

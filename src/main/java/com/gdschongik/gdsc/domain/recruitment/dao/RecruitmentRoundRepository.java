@@ -8,7 +8,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface RecruitmentRoundRepository extends JpaRepository<RecruitmentRound, Long> {
 
     List<RecruitmentRound> findAllByAcademicYearAndSemesterType(Integer academicYear, SemesterType semesterType);
-
-    // boolean existsByAcademicYearAndSemesterTypeAndRoundType(
-    //         Integer academicYear, SemesterType semesterType, RoundType roundType);
 }

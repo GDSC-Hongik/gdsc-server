@@ -2,6 +2,7 @@ package com.gdschongik.gdsc.domain.recruitment.api;
 
 import com.gdschongik.gdsc.domain.recruitment.application.AdminRecruitmentService;
 import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentCreateRequest;
+import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentRoundCreateRequest;
 import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentRoundUpdateRequest;
 import com.gdschongik.gdsc.domain.recruitment.dto.response.AdminRecruitmentResponse;
 import com.gdschongik.gdsc.domain.recruitment.dto.response.AdminRecruitmentRoundResponse;
@@ -54,5 +55,12 @@ public class AdminRecruitmentController {
     public ResponseEntity<List<AdminRecruitmentRoundResponse>> getAllRecruitmentRounds() {
         List<AdminRecruitmentRoundResponse> response = adminRecruitmentService.getAllRecruitmentRounds();
         return ResponseEntity.ok().body(response);
+    }
+
+    @Operation(summary = "모집회차 생성", description = "새로운 모집회차를 생성합니다. 모집기간은 학기 시작일로부터 2주 이내입니다.")
+    @PostMapping("/rounds")
+    public ResponseEntity<Void> createRecruitmentRound(@Valid @RequestBody RecruitmentRoundCreateRequest request) {
+        adminRecruitmentService.createRecruitmentRound(request);
+        return ResponseEntity.ok().build();
     }
 }
