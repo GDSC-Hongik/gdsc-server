@@ -20,12 +20,14 @@ import com.gdschongik.gdsc.domain.recruitment.domain.RoundType;
 import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 
 class OrderValidatorTest {
 
+    public static final Money MONEY_0_WON = Money.from(0L);
     public static final Money MONEY_5000_WON = Money.from(5000L);
     public static final Money MONEY_10000_WON = Money.from(10000L);
     public static final Money MONEY_15000_WON = Money.from(15000L);
@@ -283,6 +285,155 @@ class OrderValidatorTest {
                             membership, issuedCoupon, moneyInfo, currentMember))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(ORDER_DISCOUNT_AMOUNT_MISMATCH.getMessage());
+        }
+    }
+
+    @Nested
+    class 주문_완료_검증할때 {
+
+        @Test
+        void 이미_완료된_주문이면_실패한다() {
+            // given
+            Member currentMember = createAssociateMember(1L);
+            RecruitmentRound recruitmentRound = createRecruitmentRound(
+                    LocalDateTime.now().minusDays(1),
+                    LocalDateTime.now().plusDays(1),
+                    2024,
+                    SemesterType.FIRST,
+                    MONEY_20000_WON);
+            Membership membership = createMembership(currentMember, recruitmentRound);
+
+            Order completedOrder = Order.createPending(
+                    "nanoId", membership, null, MoneyInfo.of(MONEY_20000_WON, MONEY_0_WON, MONEY_20000_WON));
+            completedOrder.complete("paymentKey");
+
+            // when & then
+            Optional<IssuedCoupon> emptyIssuedCoupon = Optional.empty();
+            assertThatThrownBy(() -> orderValidator.validateCompleteOrder(
+                            completedOrder, emptyIssuedCoupon, currentMember, MONEY_20000_WON))
+                    .isInstanceOf(CustomException.class)
+                    .hasMessage(ORDER_ALREADY_COMPLETED.getMessage());
+        }
+
+        @Test
+        void 발급쿠폰이_사용_불가능하면_실패한다() {
+            // given
+            Member currentMember = createAssociateMember(1L);
+            RecruitmentRound recruitmentRound = createRecruitmentRound(
+                    LocalDateTime.now().minusDays(1),
+                    LocalDateTime.now().plusDays(1),
+                    2024,
+                    SemesterType.FIRST,
+                    MONEY_20000_WON);
+            Membership membership = createMembership(currentMember, recruitmentRound);
+
+            IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, currentMember);
+            issuedCoupon.use(); // 쿠폰을 사용 불가능한 상태로 만듦
+
+            Order order = Order.createPending(
+                    "nanoId", membership, issuedCoupon, MoneyInfo.of(MONEY_20000_WON, MONEY_5000_WON, MONEY_15000_WON));
+
+            // when & then
+            Optional<IssuedCoupon> optionalIssuedCoupon = Optional.of(issuedCoupon);
+            assertThatThrownBy(() -> orderValidator.validateCompleteOrder(
+                            order, optionalIssuedCoupon, currentMember, MONEY_15000_WON))
+                    .isInstanceOf(CustomException.class)
+                    .hasMessage(COUPON_NOT_USABLE_ALREADY_USED.getMessage());
+        }
+
+        @Test
+        void 발급쿠폰_소유자와_현재_멤버가_다르면_실패한다() {
+            // given
+            Member currentMember = createAssociateMember(1L);
+            Member anotherMember = createAssociateMember(2L);
+            RecruitmentRound recruitmentRound = createRecruitmentRound(
+                    LocalDateTime.now().minusDays(1),
+                    LocalDateTime.now().plusDays(1),
+                    2024,
+                    SemesterType.FIRST,
+                    MONEY_20000_WON);
+            Membership membership = createMembership(currentMember, recruitmentRound);
+
+            IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, anotherMember);
+
+            Order order = Order.createPending(
+                    "nanoId", membership, issuedCoupon, MoneyInfo.of(MONEY_20000_WON, MONEY_5000_WON, MONEY_15000_WON));
+
+            // when & then
+            Optional<IssuedCoupon> optionalIssuedCoupon = Optional.of(issuedCoupon);
+            assertThatThrownBy(() -> orderValidator.validateCompleteOrder(
+                            order, optionalIssuedCoupon, currentMember, MONEY_15000_WON))
+                    .isInstanceOf(CustomException.class)
+                    .hasMessage(ORDER_ISSUED_COUPON_MEMBER_MISMATCH.getMessage());
+        }
+
+        @Test
+        void 주문_멤버십_멤버와_현재_멤버가_다르면_실패한다() {
+            // given
+            Member currentMember = createAssociateMember(1L);
+            Member anotherMember = createAssociateMember(2L);
+            RecruitmentRound recruitmentRound = createRecruitmentRound(
+                    LocalDateTime.now().minusDays(1),
+                    LocalDateTime.now().plusDays(1),
+                    2024,
+                    SemesterType.FIRST,
+                    MONEY_20000_WON);
+            Membership membership = createMembership(anotherMember, recruitmentRound);
+
+            Order order = Order.createPending(
+                    "nanoId", membership, null, MoneyInfo.of(MONEY_20000_WON, MONEY_0_WON, MONEY_20000_WON));
+
+            // when & then
+            Optional<IssuedCoupon> emptyIssuedCoupon = Optional.empty();
+            assertThatThrownBy(() -> orderValidator.validateCompleteOrder(
+                            order, emptyIssuedCoupon, currentMember, MONEY_20000_WON))
+                    .isInstanceOf(CustomException.class)
+                    .hasMessage(ORDER_MEMBERSHIP_MEMBER_MISMATCH.getMessage());
+        }
+
+        @Test
+        void 요청된_금액이_주문의_최종_결제_금액과_다르면_실패한다() {
+            // given
+            Member currentMember = createAssociateMember(1L);
+            RecruitmentRound recruitmentRound = createRecruitmentRound(
+                    LocalDateTime.now().minusDays(1),
+                    LocalDateTime.now().plusDays(1),
+                    2024,
+                    SemesterType.FIRST,
+                    MONEY_20000_WON);
+            Membership membership = createMembership(currentMember, recruitmentRound);
+
+            Order order = Order.createPending(
+                    "nanoId", membership, null, MoneyInfo.of(MONEY_20000_WON, MONEY_0_WON, MONEY_20000_WON));
+
+            // when & then
+            Optional<IssuedCoupon> emptyIssuedCoupon = Optional.empty();
+            assertThatThrownBy(() -> orderValidator.validateCompleteOrder(
+                            order, emptyIssuedCoupon, currentMember, MONEY_15000_WON))
+                    .isInstanceOf(CustomException.class)
+                    .hasMessage(ORDER_COMPLETE_AMOUNT_MISMATCH.getMessage());
+        }
+
+        @Test
+        void 모든_검증을_통과하면_예외가_발생하지_않는다() {
+            // given
+            Member currentMember = createAssociateMember(1L);
+            RecruitmentRound recruitmentRound = createRecruitmentRound(
+                    LocalDateTime.now().minusDays(1),
+                    LocalDateTime.now().plusDays(1),
+                    2024,
+                    SemesterType.FIRST,
+                    MONEY_20000_WON);
+            Membership membership = createMembership(currentMember, recruitmentRound);
+
+            IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, currentMember);
+            Order order = Order.createPending(
+                    "nanoId", membership, issuedCoupon, MoneyInfo.of(MONEY_20000_WON, MONEY_5000_WON, MONEY_15000_WON));
+
+            // when & then
+            assertThatCode(() -> orderValidator.validateCompleteOrder(
+                            order, Optional.of(issuedCoupon), currentMember, MONEY_15000_WON))
+                    .doesNotThrowAnyException();
         }
     }
 }
