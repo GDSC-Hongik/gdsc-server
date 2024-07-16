@@ -97,6 +97,13 @@ public enum ErrorCode {
     COUPON_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 쿠폰입니다."),
     ISSUED_COUPON_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 발급쿠폰입니다."),
 
+    // Study
+    STUDY_APPLICATION_START_DATE_INVALID(HttpStatus.CONFLICT, "스터디 신청기간 시작일이 스터디 시작일보다 빠릅니다."),
+    STUDY_MENTOR_IS_UNAUTHORIZED(HttpStatus.CONFLICT, "게스트인 회원은 멘토로 지정할 수 없습니다."),
+    ON_OFF_LINE_STUDY_TIME_IS_ESSENTIAL(HttpStatus.CONFLICT, "온오프라인 스터디는 스터디 시간이 필요합니다."),
+    STUDY_TIME_INVALID(HttpStatus.CONFLICT, "스터디종료 시각이 스터디시작 시각보다 빠릅니다."),
+    ASSIGNMENT_STUDY_CAN_NOT_INPUT_STUDY_TIME(HttpStatus.CONFLICT, "과제 스터디는 스터디 시간을 입력할 수 없습니다."),
+
     // Order
     ORDER_MEMBERSHIP_MEMBER_MISMATCH(HttpStatus.CONFLICT, "주문 대상 멤버십의 멤버와 현재 로그인한 멤버가 일치하지 않습니다."),
     ORDER_MEMBERSHIP_ALREADY_PAID(HttpStatus.CONFLICT, "주문 대상 멤버십의 회비가 이미 납부되었습니다."),
