@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class StudyService {
+public class AdminStudyService {
 
     private final StudyRepository studyRepository;
     private final MemberRepository memberRepository;
@@ -40,7 +40,7 @@ public class StudyService {
         List<StudyDetail> studyDetails = createNoneStudyDetail(savedStudy);
         studyDetailRepository.saveAll(studyDetails);
 
-        log.info("[StudyService] 스터디 생성: studyId = {}", study.getId());
+        log.info("[AdminStudyService] 스터디 생성: studyId = {}", study.getId());
     }
 
     private List<StudyDetail> createNoneStudyDetail(Study study) {
