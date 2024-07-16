@@ -129,7 +129,7 @@ class CouponServiceTest extends IntegrationTest {
 
             // then
             assertThat(issuedCouponRepository.findAll()).hasSize(1).first().satisfies(issuedCoupon -> assertThat(
-                            issuedCoupon.isRevoked())
+                            issuedCoupon.getHasRevoked())
                     .isTrue());
         }
 

@@ -6,9 +6,7 @@ import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface MembershipRepository extends JpaRepository<Membership, Long> {
-
-    // Optional<Membership> findByMember(Member member);
+public interface MembershipRepository extends JpaRepository<Membership, Long>, MembershipCustomRepository {
 
     Optional<Membership> findByMemberAndRecruitmentRound(Member member, RecruitmentRound recruitmentRound);
 }
