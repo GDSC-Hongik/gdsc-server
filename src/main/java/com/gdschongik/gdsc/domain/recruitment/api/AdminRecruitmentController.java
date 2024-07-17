@@ -41,14 +41,6 @@ public class AdminRecruitmentController {
         return ResponseEntity.ok().body(response);
     }
 
-    @Operation(summary = "모집회차 수정", description = "기존 모집회차를 수정합니다. 학년도와 학기는 수정 대상이 아닙니다.")
-    @PutMapping("/rounds/{recruitmentRoundId}")
-    public ResponseEntity<Void> updateRecruitmentRound(
-            @PathVariable Long recruitmentRoundId, @Valid @RequestBody RecruitmentRoundCreateUpdateRequest request) {
-        adminRecruitmentService.updateRecruitmentRound(recruitmentRoundId, request);
-        return ResponseEntity.ok().build();
-    }
-
     @Operation(summary = "모집회차 목록 조회", description = "전체 모집회차 목록을 조회합니다.")
     @GetMapping("/rounds")
     public ResponseEntity<List<AdminRecruitmentRoundResponse>> getAllRecruitmentRounds() {
@@ -61,6 +53,14 @@ public class AdminRecruitmentController {
     public ResponseEntity<Void> createRecruitmentRound(
             @Valid @RequestBody RecruitmentRoundCreateUpdateRequest request) {
         adminRecruitmentService.createRecruitmentRound(request);
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "모집회차 수정", description = "기존 모집회차를 수정합니다. 학년도와 학기는 수정 대상이 아닙니다.")
+    @PutMapping("/rounds/{recruitmentRoundId}")
+    public ResponseEntity<Void> updateRecruitmentRound(
+            @PathVariable Long recruitmentRoundId, @Valid @RequestBody RecruitmentRoundCreateUpdateRequest request) {
+        adminRecruitmentService.updateRecruitmentRound(recruitmentRoundId, request);
         return ResponseEntity.ok().build();
     }
 }
