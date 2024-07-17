@@ -73,6 +73,7 @@ public class RecruitmentRoundValidator {
         }
     }
 
+    // 1차 모집을 비워둬서는 안되므로, 1차 모집을 2차 모집으로 수정하려고 하는 경우 예외 발생
     private void validateRoundOneToTwo(RoundType previousRoundType, RoundType newRoundType) {
         if (previousRoundType.equals(FIRST) && newRoundType.equals(SECOND)) {
             throw new CustomException(ROUND_ONE_DOES_NOT_EXIST);
