@@ -17,6 +17,7 @@ public class RecruitmentConstant {
     public static final SemesterType SEMESTER_TYPE = SemesterType.FIRST;
     public static final Money FEE = Money.from(BigDecimal.valueOf(20000));
     public static final BigDecimal FEE_AMOUNT = BigDecimal.valueOf(20000);
+    public static final String FEE_NAME = "2024학년도 1학기 정회원 회비";
     public static final RoundType ROUND_TYPE = RoundType.FIRST;
 
     // 2차 모집 상수

@@ -37,7 +37,7 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
         void 성공한다() {
             // given
             RecruitmentCreateRequest request = new RecruitmentCreateRequest(
-                    SEMESTER_START_DATE, SEMESTER_END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE, FEE_AMOUNT);
+                    SEMESTER_START_DATE, SEMESTER_END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE, FEE_AMOUNT, FEE_NAME);
 
             // when
             adminRecruitmentService.createRecruitment(request);
@@ -70,7 +70,7 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
             // given
             LocalDateTime now = LocalDateTime.now().withNano(0);
             Recruitment recruitment = Recruitment.createRecruitment(
-                    ACADEMIC_YEAR, SEMESTER_TYPE, FEE, Period.createPeriod(now, now.plusMonths(3)));
+                    ACADEMIC_YEAR, SEMESTER_TYPE, FEE, FEE_NAME, Period.createPeriod(now, now.plusMonths(3)));
             recruitmentRepository.save(recruitment);
 
             RecruitmentRound recruitmentRound = RecruitmentRound.create(
