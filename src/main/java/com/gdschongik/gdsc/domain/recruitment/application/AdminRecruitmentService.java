@@ -87,7 +87,25 @@ public class AdminRecruitmentService {
     }
 
     @Transactional
-    public void updateRecruitmentRound(Long recruitmentRoundId, RecruitmentRoundUpdateRequest request) {}
+    public void updateRecruitmentRound(Long recruitmentRoundId, RecruitmentRoundCreateUpdateRequest request) {
+        List<RecruitmentRound> recruitmentRounds = recruitmentRoundRepository.findAllByAcademicYearAndSemesterType(
+                request.academicYear(), request.semesterType());
+
+        RecruitmentRound recruitmentRound = recruitmentRounds.stream()
+                .filter(r -> r.getId().equals(recruitmentRoundId))
+                .findAny()
+                .orElseThrow(() -> new CustomException(RECRUITMENT_ROUND_NOT_FOUND));
+
+        recruitmentRounds.remove(recruitmentRound);
+
+        recruitmentRoundValidator.validateRecruitmentRoundUpdate(
+                request.startDate(), request.endDate(), request.roundType(), recruitmentRound, recruitmentRounds);
+
+        recruitmentRound.updateRecruitmentRound(
+                request.name(), Period.createPeriod(request.startDate(), request.endDate()), request.roundType());
+
+        log.info("[AdminRecruitmentService] 모집회차 수정: recruitmentRoundId={}", recruitmentRoundId);
+    }
 
     /*
      1. 해당 학기에 리쿠르팅이 존재해야 함.
@@ -103,37 +121,4 @@ public class AdminRecruitmentService {
 
         recruitmentRounds.forEach(RecruitmentRound::validatePeriodNotStarted);
     }
-
-    // /**
-    //  * 기존 리쿠르팅 수정하는 경우,
-    //  * 자기 자신의 모집기간과 차수는 수정에 성공하면 소멸되므로 무의미함.
-    //  * 따라서, 자기 자신은 제외하고 검증.
-    //  */
-    // private void validatePeriodOverlapExcludingCurrentRecruitment(
-    //         Integer academicYear,
-    //         SemesterType semesterType,
-    //         LocalDateTime startDate,
-    //         LocalDateTime endDate,
-    //         Long currentRecruitmentId) {
-    //     List<RecruitmentRound> recruitmentRounds =
-    //             recruitmentRoundRepository.findAllByAcademicYearAndSemesterType(academicYear, semesterType);
-    //
-    //     recruitmentRounds.stream()
-    //             .filter(recruitment -> !recruitment.getId().equals(currentRecruitmentId))
-    //             .forEach(r -> r.validatePeriodOverlap(startDate, endDate));
-    // }
-    //
-    // private void validateRoundOverlapExcludingCurrentRecruitment(
-    //         Integer academicYear, SemesterType semesterType, RoundType roundType, Long currentRecruitmentId) {
-    //     List<RecruitmentRound> recruitmentRounds =
-    //             recruitmentRoundRepository.findAllByAcademicYearAndSemesterType(academicYear, semesterType);
-    //
-    //     recruitmentRounds.stream()
-    //             .filter(recruitment -> !recruitment.getId().equals(currentRecruitmentId)
-    //                     && recruitment.getRoundType().equals(roundType))
-    //             .findAny()
-    //             .ifPresent(ignored -> {
-    //                 throw new CustomException(RECRUITMENT_ROUND_TYPE_OVERLAP);
-    //             });
-    // }
 }
