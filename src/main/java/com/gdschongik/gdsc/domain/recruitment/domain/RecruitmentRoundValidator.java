@@ -24,6 +24,11 @@ public class RecruitmentRoundValidator {
         validateRoundOneExist(recruitmentRoundsInThisSemester, roundType);
     }
 
+    /**
+     * 수정하려는 모집회차의 차수와 기간은 수정 후에 유효하지 않으므로,
+     * 변경하려는 값들은 다른 모집회차들과 차수, 기간이 겹치는지 검증해야 합니다.
+     * 따라서, 수정하려는 모집회차와 이를 제외한 다른 모집회차들을 분리하여 매개변수로 받습니다.
+     */
     public void validateRecruitmentRoundUpdate(
             LocalDateTime startDate,
             LocalDateTime endDate,
