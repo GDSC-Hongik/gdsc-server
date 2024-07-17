@@ -23,22 +23,27 @@ public class Recruitment extends BaseSemesterEntity {
     @Embedded
     private Money fee;
 
+    private String feeName;
+
     @Embedded
     private Period semesterPeriod;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private Recruitment(Integer academicYear, SemesterType semesterType, Money fee, final Period semesterPeriod) {
+    private Recruitment(
+            Integer academicYear, SemesterType semesterType, Money fee, String feeName, final Period semesterPeriod) {
         super(academicYear, semesterType);
         this.fee = fee;
+        this.feeName = feeName;
         this.semesterPeriod = semesterPeriod;
     }
 
     public static Recruitment createRecruitment(
-            Integer academicYear, SemesterType semesterType, Money fee, Period semesterPeriod) {
+            Integer academicYear, SemesterType semesterType, Money fee, String feeName, Period semesterPeriod) {
         return Recruitment.builder()
                 .academicYear(academicYear)
                 .semesterType(semesterType)
                 .fee(fee)
+                .feeName(feeName)
                 .semesterPeriod(semesterPeriod)
                 .build();
     }
