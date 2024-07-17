@@ -15,7 +15,7 @@ public class RecruitmentConstant {
     public static final LocalDateTime END_DATE = LocalDateTime.of(2024, 3, 5, 0, 0);
     public static final Integer ACADEMIC_YEAR = 2024;
     public static final SemesterType SEMESTER_TYPE = SemesterType.FIRST;
-    public static final Money FEE = Money.from(BigDecimal.valueOf(20000));
+    public static final Money FEE = Money.from(20000L);
     public static final BigDecimal FEE_AMOUNT = BigDecimal.valueOf(20000);
     public static final RoundType ROUND_TYPE = RoundType.FIRST;
 

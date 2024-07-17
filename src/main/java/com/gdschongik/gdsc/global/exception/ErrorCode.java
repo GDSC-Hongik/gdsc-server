@@ -106,6 +106,7 @@ public enum ErrorCode {
     ASSIGNMENT_STUDY_CAN_NOT_INPUT_STUDY_TIME(HttpStatus.CONFLICT, "과제 스터디는 스터디 시간을 입력할 수 없습니다."),
 
     // Order
+    ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, "주문이 존재하지 않습니다."),
     ORDER_MEMBERSHIP_MEMBER_MISMATCH(HttpStatus.CONFLICT, "주문 대상 멤버십의 멤버와 현재 로그인한 멤버가 일치하지 않습니다."),
     ORDER_MEMBERSHIP_ALREADY_PAID(HttpStatus.CONFLICT, "주문 대상 멤버십의 회비가 이미 납부되었습니다."),
     ORDER_RECRUITMENT_PERIOD_INVALID(HttpStatus.CONFLICT, "주문 대상 멤버십의 리크루팅의 지원기간이 아닙니다."),
@@ -113,6 +114,9 @@ public enum ErrorCode {
     ORDER_TOTAL_AMOUNT_MISMATCH(HttpStatus.CONFLICT, "주문 금액은 리쿠르팅 회비와 일치해야 합니다."),
     ORDER_DISCOUNT_AMOUNT_NOT_ZERO(HttpStatus.CONFLICT, "쿠폰 미사용시 할인 금액은 0이어야 합니다."),
     ORDER_DISCOUNT_AMOUNT_MISMATCH(HttpStatus.CONFLICT, "쿠폰 사용시 할인 금액은 쿠폰의 할인 금액과 일치해야 합니다."),
+    ORDER_ALREADY_COMPLETED(HttpStatus.CONFLICT, "이미 완료된 주문입니다."),
+    ORDER_COMPLETE_AMOUNT_MISMATCH(HttpStatus.CONFLICT, "주문 최종결제금액이 주문완료요청의 결제금액과 일치하지 않습니다."),
+    ORDER_COMPLETE_MEMBER_MISMATCH(HttpStatus.CONFLICT, "주문자와 현재 로그인한 멤버가 일치하지 않습니다."),
 
     // Order - MoneyInfo
     ORDER_FINAL_PAYMENT_AMOUNT_MISMATCH(HttpStatus.CONFLICT, "주문 최종결제금액은 주문총액에서 할인금액을 뺀 값이어야 합니다."),

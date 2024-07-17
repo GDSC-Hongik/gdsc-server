@@ -14,8 +14,8 @@ class MoneyTest {
         @Test
         void 값과_스케일_모두_같으면_동일한_금액이다() {
             // given
-            Money money1 = Money.from(BigDecimal.valueOf(1000));
-            Money money2 = Money.from(BigDecimal.valueOf(1000));
+            Money money1 = Money.from(1000L);
+            Money money2 = Money.from(1000L);
 
             // when & then
             assertThat(money1).isEqualTo(money2);
@@ -24,7 +24,7 @@ class MoneyTest {
         @Test
         void 스케일이_달라도_같은_값이면_동일한_금액이다() {
             // given
-            Money money1 = Money.from(BigDecimal.valueOf(1000));
+            Money money1 = Money.from(1000L);
             Money money2 = Money.from(BigDecimal.valueOf(1000.0));
             Money money3 = Money.from(BigDecimal.valueOf(1000.00));
             Money money4 = Money.from(BigDecimal.valueOf(1000.000));
@@ -56,8 +56,8 @@ class MoneyTest {
         @Test
         void 값과_스케일_모두_같으면_동일한_해시코드이다() {
             // given
-            Money money1 = Money.from(BigDecimal.valueOf(1000));
-            Money money2 = Money.from(BigDecimal.valueOf(1000));
+            Money money1 = Money.from(1000L);
+            Money money2 = Money.from(1000L);
 
             // when & then
             int expected = money2.hashCode();
@@ -67,7 +67,7 @@ class MoneyTest {
         @Test
         void 스케일이_달라도_같은_값이면_동일한_해시코드이다() {
             // given
-            Money money1 = Money.from(BigDecimal.valueOf(1000));
+            Money money1 = Money.from(1000L);
             Money money2 = Money.from(BigDecimal.valueOf(1000.0));
             Money money3 = Money.from(BigDecimal.valueOf(1000.00));
             Money money4 = Money.from(BigDecimal.valueOf(1000.000));
