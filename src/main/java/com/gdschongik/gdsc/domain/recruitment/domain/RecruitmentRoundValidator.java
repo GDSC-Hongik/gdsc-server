@@ -1,5 +1,6 @@
 package com.gdschongik.gdsc.domain.recruitment.domain;
 
+import static com.gdschongik.gdsc.domain.recruitment.domain.RoundType.*;
 import static com.gdschongik.gdsc.global.common.constant.TemporalConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
@@ -67,14 +68,13 @@ public class RecruitmentRoundValidator {
 
     // 1차 모집이 없는데 2차 모집을 생성하려고 하는 경우
     private void validateRoundOneExist(List<RecruitmentRound> recruitmentRounds, RoundType roundType) {
-        if (roundType.equals(RoundType.SECOND)
-                && recruitmentRounds.stream().noneMatch(RecruitmentRound::isFirstRound)) {
+        if (roundType.equals(SECOND) && recruitmentRounds.stream().noneMatch(RecruitmentRound::isFirstRound)) {
             throw new CustomException(ROUND_ONE_DOES_NOT_EXIST);
         }
     }
 
     private void validateRoundOneToTwo(RoundType previousRoundType, RoundType newRoundType) {
-        if (previousRoundType.equals(RoundType.FIRST) && newRoundType.equals(RoundType.SECOND)) {
+        if (previousRoundType.equals(FIRST) && newRoundType.equals(SECOND)) {
             throw new CustomException(ROUND_ONE_DOES_NOT_EXIST);
         }
     }
