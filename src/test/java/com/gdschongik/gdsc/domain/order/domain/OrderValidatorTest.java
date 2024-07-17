@@ -87,8 +87,9 @@ class OrderValidatorTest {
 
             IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, currentMember);
 
-            // when & then
             MoneyInfo moneyInfo = MoneyInfo.of(MONEY_20000_WON, MONEY_5000_WON, MONEY_15000_WON);
+
+            // when & then
             assertThatThrownBy(() -> orderValidator.validatePendingOrderCreate(
                             membership, issuedCoupon, moneyInfo, currentMember))
                     .isInstanceOf(CustomException.class)
@@ -112,8 +113,9 @@ class OrderValidatorTest {
 
             IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, currentMember);
 
-            // when & then
             MoneyInfo moneyInfo = MoneyInfo.of(MONEY_20000_WON, MONEY_5000_WON, MONEY_15000_WON);
+
+            // when & then
             assertThatThrownBy(() -> orderValidator.validatePendingOrderCreate(
                             membership, issuedCoupon, moneyInfo, currentMember))
                     .isInstanceOf(CustomException.class)
@@ -134,8 +136,9 @@ class OrderValidatorTest {
 
             IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, currentMember);
 
-            // when & then
             MoneyInfo moneyInfo = MoneyInfo.of(MONEY_20000_WON, MONEY_5000_WON, MONEY_15000_WON);
+
+            // when & then
             assertThatThrownBy(() -> orderValidator.validatePendingOrderCreate(
                             membership, issuedCoupon, moneyInfo, currentMember))
                     .isInstanceOf(CustomException.class)
@@ -159,8 +162,9 @@ class OrderValidatorTest {
             Member anotherMember = createAssociateMember(2L);
             IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, anotherMember);
 
-            // when & then
             MoneyInfo moneyInfo = MoneyInfo.of(MONEY_20000_WON, MONEY_5000_WON, MONEY_15000_WON);
+
+            // when & then
             assertThatThrownBy(() -> orderValidator.validatePendingOrderCreate(
                             membership, issuedCoupon, moneyInfo, currentMember))
                     .isInstanceOf(CustomException.class)
@@ -184,8 +188,9 @@ class OrderValidatorTest {
             IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, currentMember);
             issuedCoupon.revoke();
 
-            // when & then
             MoneyInfo moneyInfo = MoneyInfo.of(MONEY_20000_WON, MONEY_5000_WON, MONEY_15000_WON);
+
+            // when & then
             assertThatThrownBy(() -> orderValidator.validatePendingOrderCreate(
                             membership, issuedCoupon, moneyInfo, currentMember))
                     .isInstanceOf(CustomException.class)
@@ -209,8 +214,9 @@ class OrderValidatorTest {
             IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, currentMember);
             issuedCoupon.use();
 
-            // when & then
             MoneyInfo moneyInfo = MoneyInfo.of(MONEY_20000_WON, MONEY_5000_WON, MONEY_15000_WON);
+
+            // when & then
             assertThatThrownBy(() -> orderValidator.validatePendingOrderCreate(
                             membership, issuedCoupon, moneyInfo, currentMember))
                     .isInstanceOf(CustomException.class)
@@ -233,8 +239,9 @@ class OrderValidatorTest {
 
             IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, currentMember);
 
-            // when & then
             MoneyInfo moneyInfo = MoneyInfo.of(MONEY_20000_WON, MONEY_5000_WON, MONEY_15000_WON);
+
+            // when & then
             assertThatThrownBy(() -> orderValidator.validatePendingOrderCreate(
                             membership, issuedCoupon, moneyInfo, currentMember))
                     .isInstanceOf(CustomException.class)
@@ -255,8 +262,9 @@ class OrderValidatorTest {
 
             Membership membership = createMembership(currentMember, recruitmentRound);
 
-            // when & then
             MoneyInfo moneyInfo = MoneyInfo.of(MONEY_20000_WON, MONEY_5000_WON, MONEY_15000_WON);
+
+            // when & then
             assertThatThrownBy(
                             () -> orderValidator.validatePendingOrderCreate(membership, null, moneyInfo, currentMember))
                     .isInstanceOf(CustomException.class)
@@ -279,8 +287,9 @@ class OrderValidatorTest {
 
             IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, currentMember);
 
-            // when & then
             MoneyInfo moneyInfo = MoneyInfo.of(MONEY_20000_WON, MONEY_10000_WON, MONEY_10000_WON);
+
+            // when & then
             assertThatThrownBy(() -> orderValidator.validatePendingOrderCreate(
                             membership, issuedCoupon, moneyInfo, currentMember))
                     .isInstanceOf(CustomException.class)
@@ -307,8 +316,9 @@ class OrderValidatorTest {
                     "nanoId", membership, null, MoneyInfo.of(MONEY_20000_WON, MONEY_0_WON, MONEY_20000_WON));
             completedOrder.complete("paymentKey");
 
-            // when & then
             Optional<IssuedCoupon> emptyIssuedCoupon = Optional.empty();
+
+            // when & then
             assertThatThrownBy(() -> orderValidator.validateCompleteOrder(
                             completedOrder, emptyIssuedCoupon, currentMember, MONEY_20000_WON))
                     .isInstanceOf(CustomException.class)
@@ -333,8 +343,9 @@ class OrderValidatorTest {
             Order order = Order.createPending(
                     "nanoId", membership, issuedCoupon, MoneyInfo.of(MONEY_20000_WON, MONEY_5000_WON, MONEY_15000_WON));
 
-            // when & then
             Optional<IssuedCoupon> optionalIssuedCoupon = Optional.of(issuedCoupon);
+
+            // when & then
             assertThatThrownBy(() -> orderValidator.validateCompleteOrder(
                             order, optionalIssuedCoupon, currentMember, MONEY_15000_WON))
                     .isInstanceOf(CustomException.class)
@@ -359,8 +370,9 @@ class OrderValidatorTest {
             Order order = Order.createPending(
                     "nanoId", membership, issuedCoupon, MoneyInfo.of(MONEY_20000_WON, MONEY_5000_WON, MONEY_15000_WON));
 
-            // when & then
             Optional<IssuedCoupon> optionalIssuedCoupon = Optional.of(issuedCoupon);
+
+            // when & then
             assertThatThrownBy(() -> orderValidator.validateCompleteOrder(
                             order, optionalIssuedCoupon, currentMember, MONEY_15000_WON))
                     .isInstanceOf(CustomException.class)
@@ -383,8 +395,9 @@ class OrderValidatorTest {
             Order order = Order.createPending(
                     "nanoId", membership, null, MoneyInfo.of(MONEY_20000_WON, MONEY_0_WON, MONEY_20000_WON));
 
-            // when & then
             Optional<IssuedCoupon> emptyIssuedCoupon = Optional.empty();
+
+            // when & then
             assertThatThrownBy(() -> orderValidator.validateCompleteOrder(
                             order, emptyIssuedCoupon, currentMember, MONEY_20000_WON))
                     .isInstanceOf(CustomException.class)
@@ -406,8 +419,9 @@ class OrderValidatorTest {
             Order order = Order.createPending(
                     "nanoId", membership, null, MoneyInfo.of(MONEY_20000_WON, MONEY_0_WON, MONEY_20000_WON));
 
-            // when & then
             Optional<IssuedCoupon> emptyIssuedCoupon = Optional.empty();
+
+            // when & then
             assertThatThrownBy(() -> orderValidator.validateCompleteOrder(
                             order, emptyIssuedCoupon, currentMember, MONEY_15000_WON))
                     .isInstanceOf(CustomException.class)
@@ -430,9 +444,11 @@ class OrderValidatorTest {
             Order order = Order.createPending(
                     "nanoId", membership, issuedCoupon, MoneyInfo.of(MONEY_20000_WON, MONEY_5000_WON, MONEY_15000_WON));
 
+            Optional<IssuedCoupon> optionalIssuedCoupon = Optional.of(issuedCoupon);
+
             // when & then
             assertThatCode(() -> orderValidator.validateCompleteOrder(
-                            order, Optional.of(issuedCoupon), currentMember, MONEY_15000_WON))
+                            order, optionalIssuedCoupon, currentMember, MONEY_15000_WON))
                     .doesNotThrowAnyException();
         }
     }
