@@ -2,8 +2,7 @@ package com.gdschongik.gdsc.domain.member.domain;
 
 import static com.gdschongik.gdsc.domain.common.model.RequirementStatus.*;
 import static com.gdschongik.gdsc.domain.member.domain.Department.*;
-import static com.gdschongik.gdsc.domain.member.domain.MemberRole.ASSOCIATE;
-import static com.gdschongik.gdsc.domain.member.domain.MemberRole.REGULAR;
+import static com.gdschongik.gdsc.domain.member.domain.MemberRole.*;
 import static com.gdschongik.gdsc.domain.member.domain.MemberStatus.*;
 import static com.gdschongik.gdsc.global.common.constant.MemberConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
@@ -332,6 +331,64 @@ class MemberTest {
 
             // then
             assertThat(member.getRole()).isEqualTo(REGULAR);
+        }
+    }
+
+    @Nested
+    class 비회원으로_강등시 {
+
+        @Test
+        void 성공한다() {
+            // given
+            Member member = Member.createGuestMember(OAUTH_ID);
+
+            member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
+            member.completeUnivEmailVerification(UNIV_EMAIL);
+            member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
+            member.verifyBevy();
+            member.advanceToAssociate();
+
+            // when
+            member.demoteToGuest();
+
+            // then
+            assertThat(member)
+                    .extracting(
+                            Member::getRole,
+                            Member::getUnivEmail,
+                            Member::getName,
+                            Member::getDepartment,
+                            Member::getStudentId,
+                            Member::getPhone,
+                            Member::getDiscordId,
+                            Member::getNickname,
+                            Member::getDiscordUsername)
+                    .containsExactly(GUEST, null, null, null, null, null, null, null, null);
+            assertThat(member.getAssociateRequirement())
+                    .extracting(
+                            AssociateRequirement::getDiscordStatus,
+                            AssociateRequirement::getInfoStatus,
+                            AssociateRequirement::getBevyStatus,
+                            AssociateRequirement::getUnivStatus)
+                    .containsExactly(PENDING, PENDING, PENDING, PENDING);
+        }
+
+        @Test
+        void 탈퇴한_회원이면_실패한다() {
+            // given
+            Member member = Member.createGuestMember(OAUTH_ID);
+
+            member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
+            member.completeUnivEmailVerification(UNIV_EMAIL);
+            member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
+            member.verifyBevy();
+            member.advanceToAssociate();
+            member.withdraw();
+
+            // when & then
+            assertThatThrownBy(() -> member.demoteToGuest())
+                    .isInstanceOf(CustomException.class)
+                    .hasMessage(MEMBER_DELETED.getMessage());
         }
     }
 }
