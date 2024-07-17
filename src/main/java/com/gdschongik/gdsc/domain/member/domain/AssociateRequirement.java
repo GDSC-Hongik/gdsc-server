@@ -114,4 +114,14 @@ public class AssociateRequirement {
             throw new CustomException(EMAIL_ALREADY_SATISFIED);
         }
     }
+
+    /**
+     * 모든 준회원 조건을 초기화합니다.
+     */
+    public void initiateRequirement() {
+        this.bevyStatus = PENDING;
+        this.discordStatus = PENDING;
+        this.infoStatus = PENDING;
+        this.univStatus = PENDING;
+    }
 }

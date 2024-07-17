@@ -235,6 +235,7 @@ public class Member extends BaseEntity {
 
         role = REGULAR;
     }
+
     /**
      * 정회원에서 준회원으로 강등합니다.
      */
@@ -242,6 +243,34 @@ public class Member extends BaseEntity {
         validateStatusUpdatable();
 
         role = ASSOCIATE;
+    }
+
+    /**
+     * 비회원으로 강등합니다.
+     * 다음 조건을 모두 초기화 시킵니다.
+     * 조건 1 : 회원 상태 초기화
+     * 조건 2 : 기본 회원정보
+     * 조건 3 : 디스코드 관련 정보
+     * 조건 3 : 재학생 인증
+     * 조건 4 : 디스코드 인증
+     * 조건 5 : Bevy 인증
+     */
+    public void demoteToGuest() {
+        validateStatusUpdatable();
+
+        this.role = GUEST;
+
+        this.univEmail = null;
+        this.name = null;
+        this.department = null;
+        this.studentId = null;
+        this.phone = null;
+
+        this.discordId = null;
+        this.nickname = null;
+        this.discordUsername = null;
+
+        associateRequirement.initiateRequirement();
     }
 
     // 기타 상태 변경 로직
