@@ -80,13 +80,11 @@ public class RecruitmentRound extends BaseSemesterEntity {
         period.validatePeriodOverlap(startDate, endDate);
     }
 
-    // public void updateRecruitmentRound(String name, Period period, RoundType roundType) {
-    //     validatePeriodNotStarted();
-    //
-    //     this.name = name;
-    //     this.period = period;
-    //     this.roundType = roundType;
-    // }
+    public void updateRecruitmentRound(String name, Period period, RoundType roundType) {
+        this.name = name;
+        this.period = period;
+        this.roundType = roundType;
+    }
 
     public void validatePeriodNotStarted() {
         LocalDateTime now = LocalDateTime.now();
