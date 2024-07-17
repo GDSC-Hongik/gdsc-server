@@ -23,6 +23,19 @@ public class RecruitmentRoundValidator {
         validateRoundOneExist(recruitmentRoundsInThisSemester, roundType);
     }
 
+    public void validateRecruitmentRoundUpdate(
+            LocalDateTime startDate,
+            LocalDateTime endDate,
+            RoundType roundType,
+            RecruitmentRound currentRecruitmentRound,
+            List<RecruitmentRound> otherRecruitmentRounds) {
+        validatePeriodWithinTwoWeeks(startDate, endDate, currentRecruitmentRound.getRecruitment());
+        validatePeriodOverlap(otherRecruitmentRounds, startDate, endDate);
+        validateRoundOverlap(otherRecruitmentRounds, roundType);
+        validateRoundOneToTwo(currentRecruitmentRound.getRoundType(), roundType);
+        currentRecruitmentRound.validatePeriodNotStarted();
+    }
+
     private void validatePeriodWithinTwoWeeks(LocalDateTime startDate, LocalDateTime endDate, Recruitment recruitment) {
         LocalDateTime semesterStartDate = recruitment.getSemesterPeriod().getStartDate();
 
@@ -56,6 +69,12 @@ public class RecruitmentRoundValidator {
     private void validateRoundOneExist(List<RecruitmentRound> recruitmentRounds, RoundType roundType) {
         if (roundType.equals(RoundType.SECOND)
                 && recruitmentRounds.stream().noneMatch(RecruitmentRound::isFirstRound)) {
+            throw new CustomException(ROUND_ONE_DOES_NOT_EXIST);
+        }
+    }
+
+    private void validateRoundOneToTwo(RoundType previousRoundType, RoundType newRoundType) {
+        if (previousRoundType.equals(RoundType.FIRST) && newRoundType.equals(RoundType.SECOND)) {
             throw new CustomException(ROUND_ONE_DOES_NOT_EXIST);
         }
     }
