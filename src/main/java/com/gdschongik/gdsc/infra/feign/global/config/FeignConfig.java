@@ -1,4 +1,4 @@
-package com.gdschongik.gdsc.global.config;
+package com.gdschongik.gdsc.infra.feign.global.config;
 
 import feign.Logger;
 import org.springframework.cloud.openfeign.EnableFeignClients;
