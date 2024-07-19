@@ -9,13 +9,19 @@ import com.gdschongik.gdsc.domain.member.dto.request.MemberDemoteRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryOption;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberUpdateRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.AdminMemberResponse;
+import com.gdschongik.gdsc.domain.membership.application.MembershipService;
+import com.gdschongik.gdsc.domain.membership.domain.Membership;
 import com.gdschongik.gdsc.domain.recruitment.application.AdminRecruitmentService;
+import com.gdschongik.gdsc.domain.recruitment.application.OnboardingRecruitmentService;
+import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
+import com.gdschongik.gdsc.global.util.EnvironmentUtil;
 import com.gdschongik.gdsc.global.util.ExcelUtil;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -33,6 +39,9 @@ public class AdminMemberService {
     private final ExcelUtil excelUtil;
     private final AdminRecruitmentService adminRecruitmentService;
     private final MemberUtil memberUtil;
+    private final EnvironmentUtil environmentUtil;
+    private final MembershipService membershipService;
+    private final OnboardingRecruitmentService onboardingRecruitmentService;
 
     public Page<AdminMemberResponse> searchMembers(MemberQueryOption queryOption, Pageable pageable) {
         Page<Member> members = memberRepository.searchMembers(queryOption, pageable);
@@ -74,11 +83,27 @@ public class AdminMemberService {
                 regularMembers.stream().map(Member::getId).toList());
     }
 
+    /**
+     * 정회원의 조건 PENDING으로 변경, 준회원 조건 PENDING으로 변경
+     */
     @Transactional
     public void demoteToGuest() {
+        validateProfile();
         Member member = memberUtil.getCurrentMember();
 
         member.demoteToGuest();
+
+        RecruitmentRound currentRecruitmentRound = onboardingRecruitmentService.findCurrentRecruitmentRound();
+        Optional<Membership> myMembership = membershipService.findMyMembership(member, currentRecruitmentRound);
+
+        myMembership.get().demoteToGuest();
         log.info("[AdminMemberService] 게스트로 강등: demotedMemberId={}", member.getId());
+    }
+
+    private void validateProfile() {
+        // TODO 슬기님 dev에 머지되면
+        //        if (!environmentUtil.isDevAndLocalProfile()) {
+        //            throw new CustomException(FORBIDDEN);
+        //        }
     }
 }

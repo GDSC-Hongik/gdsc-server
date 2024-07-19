@@ -53,4 +53,8 @@ public class RegularRequirement {
             throw new CustomException(PAYMENT_NOT_SATISFIED);
         }
     }
+
+    public void demoteToGuest() {
+        paymentStatus = RequirementStatus.PENDING;
+    }
 }
