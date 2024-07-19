@@ -12,7 +12,7 @@ import java.util.Optional;
 @DomainService
 public class HongikUnivEmailValidator {
 
-    public void validate(String email, Optional<Member> optionalMember) {
+    public void validateSendUnivEmailVerificationLink(String email, Optional<Member> optionalMember) {
         if (!email.contains(HONGIK_UNIV_MAIL_DOMAIN)) {
             throw new CustomException(UNIV_EMAIL_DOMAIN_MISMATCH);
         }

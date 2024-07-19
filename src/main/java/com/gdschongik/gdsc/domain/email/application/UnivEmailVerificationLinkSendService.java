@@ -47,7 +47,7 @@ public class UnivEmailVerificationLinkSendService {
     public void send(String univEmail) {
         Optional<Member> member = memberRepository.findByUnivEmail(univEmail);
 
-        hongikUnivEmailValidator.validate(univEmail, member);
+        hongikUnivEmailValidator.validateSendUnivEmailVerificationLink(univEmail, member);
 
         String verificationToken = generateVerificationToken(univEmail);
         String verificationLink = verificationLinkUtil.createLink(verificationToken);

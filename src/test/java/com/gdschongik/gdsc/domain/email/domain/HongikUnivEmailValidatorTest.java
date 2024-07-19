@@ -26,7 +26,8 @@ class HongikUnivEmailValidatorTest {
         Optional<Member> optionalMember = Optional.empty();
 
         // when & then
-        assertThatCode(() -> hongikUnivEmailValidator.validate(hongikDomainEmail, optionalMember))
+        assertThatCode(() -> hongikUnivEmailValidator.validateSendUnivEmailVerificationLink(
+                        hongikDomainEmail, optionalMember))
                 .doesNotThrowAnyException();
     }
 
@@ -38,7 +39,7 @@ class HongikUnivEmailValidatorTest {
         Optional<Member> optionalMember = Optional.empty();
 
         // when & then
-        assertThatThrownBy(() -> hongikUnivEmailValidator.validate(email, optionalMember))
+        assertThatThrownBy(() -> hongikUnivEmailValidator.validateSendUnivEmailVerificationLink(email, optionalMember))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(ErrorCode.UNIV_EMAIL_DOMAIN_MISMATCH.getMessage());
     }
@@ -50,7 +51,7 @@ class HongikUnivEmailValidatorTest {
         String email = "t.e.s.t@g.hongik.ac.kr";
         Optional<Member> optionalMember = Optional.empty();
 
-        assertThatCode(() -> hongikUnivEmailValidator.validate(email, optionalMember))
+        assertThatCode(() -> hongikUnivEmailValidator.validateSendUnivEmailVerificationLink(email, optionalMember))
                 .doesNotThrowAnyException();
     }
 
@@ -72,7 +73,7 @@ class HongikUnivEmailValidatorTest {
         Optional<Member> optionalMember = Optional.empty();
 
         // when & then
-        assertThatThrownBy(() -> hongikUnivEmailValidator.validate(email, optionalMember))
+        assertThatThrownBy(() -> hongikUnivEmailValidator.validateSendUnivEmailVerificationLink(email, optionalMember))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(ErrorCode.UNIV_EMAIL_FORMAT_MISMATCH.getMessage());
     }
@@ -85,7 +86,7 @@ class HongikUnivEmailValidatorTest {
         Optional<Member> optionalMember = Optional.empty();
 
         // when & then
-        assertThatThrownBy(() -> hongikUnivEmailValidator.validate(email, optionalMember))
+        assertThatThrownBy(() -> hongikUnivEmailValidator.validateSendUnivEmailVerificationLink(email, optionalMember))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(ErrorCode.UNIV_EMAIL_FORMAT_MISMATCH.getMessage());
     }
@@ -99,7 +100,8 @@ class HongikUnivEmailValidatorTest {
         Optional<Member> optionalMember = Optional.of(member);
 
         // when & then
-        assertThatThrownBy(() -> hongikUnivEmailValidator.validate(hongikDomainEmail, optionalMember))
+        assertThatThrownBy(() -> hongikUnivEmailValidator.validateSendUnivEmailVerificationLink(
+                        hongikDomainEmail, optionalMember))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(UNIV_EMAIL_ALREADY_SATISFIED.getMessage());
     }
