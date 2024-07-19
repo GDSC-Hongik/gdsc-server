@@ -19,9 +19,11 @@ import com.gdschongik.gdsc.global.util.MemberUtil;
 import java.security.SecureRandom;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class OnboardingDiscordService {
@@ -72,6 +74,8 @@ public class OnboardingDiscordService {
         currentMember.verifyDiscord(request.discordUsername(), request.nickname());
 
         updateDiscordId(request.discordUsername(), currentMember);
+
+        log.info("[OnboardingDiscordService] 디스코드 연동: memberId={}", currentMember.getId());
     }
 
     private void updateDiscordId(String discordUsername, Member currentMember) {
