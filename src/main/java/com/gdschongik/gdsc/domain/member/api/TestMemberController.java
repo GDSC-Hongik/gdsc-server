@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "Test Member", description = "회원 테스트용 API입니다.")
+@Tag(name = "Test Member", description = "회원 테스트용 API입니다. dev 환경에서만 사용 가능합니다")
 @RestController
-@RequestMapping("/test/member")
+@RequestMapping("/test/members")
 @RequiredArgsConstructor
 public class TestMemberController {
 

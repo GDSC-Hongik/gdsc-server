@@ -32,6 +32,10 @@ public class EnvironmentUtil {
         return getActiveProfiles().anyMatch(PROD_AND_DEV_ENV::contains);
     }
 
+    public boolean isDevAndLocalProfile() {
+        return getActiveProfiles().anyMatch(DEV_AND_LOCAL_ENV::contains);
+    }
+
     private Stream<String> getActiveProfiles() {
         return Stream.of(environment.getActiveProfiles());
     }

@@ -20,6 +20,7 @@ import com.gdschongik.gdsc.domain.membership.domain.Membership;
 import com.gdschongik.gdsc.domain.recruitment.application.OnboardingRecruitmentService;
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.global.exception.CustomException;
+import com.gdschongik.gdsc.global.util.EnvironmentUtil;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +37,7 @@ public class OnboardingMemberService {
     private final MembershipService membershipService;
     private final JwtService jwtService;
     private final MemberRepository memberRepository;
+    private final EnvironmentUtil environmentUtil;
 
     @Deprecated
     @Transactional
@@ -89,13 +91,21 @@ public class OnboardingMemberService {
     }
 
     public MemberTokenResponse createTemporaryToken(MemberTokenRequest request) {
+        validateProfile();
+
         final Member member = memberRepository
-                .findByOauthId(request.oauth_id())
+                .findByOauthId(request.oauthId())
                 .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
 
         AccessTokenDto accessTokenDto = jwtService.createAccessToken(member.getId(), member.getRole());
         RefreshTokenDto refreshTokenDto = jwtService.createRefreshToken(member.getId());
 
         return new MemberTokenResponse(accessTokenDto.tokenValue(), refreshTokenDto.tokenValue());
+    }
+
+    private void validateProfile() {
+        if (!environmentUtil.isDevAndLocalProfile()) {
+            throw new CustomException(FORBIDDEN);
+        }
     }
 }
