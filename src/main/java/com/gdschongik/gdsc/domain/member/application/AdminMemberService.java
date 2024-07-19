@@ -79,6 +79,6 @@ public class AdminMemberService {
         Member member = memberUtil.getCurrentMember();
 
         member.demoteToGuest();
-        log.info("[AdminMemberService] 비회원으로 강등: demotedMemberId={}", member.getId());
+        log.info("[AdminMemberService] 게스트로 강등: demotedMemberId={}", member.getId());
     }
 }

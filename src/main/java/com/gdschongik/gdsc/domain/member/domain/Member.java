@@ -258,19 +258,19 @@ public class Member extends BaseEntity {
     public void demoteToGuest() {
         validateStatusUpdatable();
 
-        this.role = GUEST;
+        role = GUEST;
 
-        this.univEmail = null;
-        this.name = null;
-        this.department = null;
-        this.studentId = null;
-        this.phone = null;
+        univEmail = null;
+        name = null;
+        department = null;
+        studentId = null;
+        phone = null;
 
-        this.discordId = null;
-        this.nickname = null;
-        this.discordUsername = null;
+        discordId = null;
+        nickname = null;
+        discordUsername = null;
 
-        associateRequirement.initiateRequirement();
+        associateRequirement.resetMembershipRequirement();
     }
 
     // 기타 상태 변경 로직

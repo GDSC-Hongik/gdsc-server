@@ -17,7 +17,7 @@ public class TestMemberController {
 
     private final AdminMemberService adminMemberService;
 
-    @Operation(summary = "비회원으로 강등", description = "테스트용 API입니다. 현재 회원 상태를 비회원으로 강등시키기 위해 사용합니다.")
+    @Operation(summary = "게스트로 강등", description = "테스트용 API입니다. 현재 멤버 역할을 게스트로 강등시키기 위해 사용합니다.")
     @PatchMapping("/demotion")
     public ResponseEntity<Void> demoteToGuest() {
         adminMemberService.demoteToGuest();
