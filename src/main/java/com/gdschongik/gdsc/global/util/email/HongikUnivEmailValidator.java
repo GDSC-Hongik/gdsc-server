@@ -3,13 +3,13 @@ package com.gdschongik.gdsc.global.util.email;
 import static com.gdschongik.gdsc.global.common.constant.EmailConstant.HONGIK_UNIV_MAIL_DOMAIN;
 import static com.gdschongik.gdsc.global.common.constant.RegexConstant.HONGIK_EMAIL;
 
+import com.gdschongik.gdsc.global.annotation.DomainService;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-@Component
-@RequiredArgsConstructor
+@DomainService
 public class HongikUnivEmailValidator {
 
     public void validate(String email) {
