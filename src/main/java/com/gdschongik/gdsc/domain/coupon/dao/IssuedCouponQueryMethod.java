@@ -25,7 +25,7 @@ public class IssuedCouponQueryMethod {
     }
 
     protected BooleanExpression hasUsed(Boolean hasUsed) {
-        return hasUsed != null ? issuedCoupon.usedAt.isNotNull() : null;
+        return hasUsed != null && hasUsed == true ? issuedCoupon.usedAt.isNotNull() : issuedCoupon.usedAt.isNull();
     }
 
     protected BooleanExpression hasRevoked(Boolean hasRevoked) {
