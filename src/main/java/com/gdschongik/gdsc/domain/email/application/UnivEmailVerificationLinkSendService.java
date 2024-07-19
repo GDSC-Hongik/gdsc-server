@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -53,11 +54,7 @@ public class UnivEmailVerificationLinkSendService {
         mailSender.send(univEmail, VERIFICATION_EMAIL_SUBJECT, mailContent);
     }
 
-    private void validateUnivEmailNotSatisfied(String univEmail) {
-        Optional<Member> member = memberRepository.findByUnivEmail(univEmail);
-        if (member.isPresent()) {
-            throw new CustomException(ErrorCode.UNIV_EMAIL_ALREADY_SATISFIED);
-        }
+        log.info("[UnivEmailVerificationLinkSendService] 학생 인증 메일 발송: univEmail={}", univEmail);
     }
 
     private String generateVerificationToken(String univEmail) {
