@@ -25,11 +25,17 @@ public class IssuedCouponQueryMethod {
     }
 
     protected BooleanExpression hasUsed(Boolean hasUsed) {
-        return hasUsed != null && hasUsed == true ? issuedCoupon.usedAt.isNotNull() : issuedCoupon.usedAt.isNull();
+        if (hasUsed == null) {
+            return null;
+        }
+        return hasUsed ? issuedCoupon.usedAt.isNotNull() : issuedCoupon.usedAt.isNull();
     }
 
     protected BooleanExpression hasRevoked(Boolean hasRevoked) {
-        return hasRevoked != null ? issuedCoupon.hasRevoked.isTrue() : null;
+        if (hasRevoked == null) {
+            return null;
+        }
+        return hasRevoked ? issuedCoupon.hasRevoked.isTrue() : issuedCoupon.hasRevoked.isFalse();
     }
 
     protected BooleanBuilder matchesQueryOption(IssuedCouponQueryOption queryOption) {
