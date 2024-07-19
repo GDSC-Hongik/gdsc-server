@@ -4,13 +4,11 @@ import static com.gdschongik.gdsc.global.common.constant.EmailConstant.VERIFICAT
 
 import com.gdschongik.gdsc.domain.email.domain.HongikUnivEmailValidator;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
-import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import com.gdschongik.gdsc.global.util.email.EmailVerificationTokenUtil;
 import com.gdschongik.gdsc.global.util.email.MailSender;
 import com.gdschongik.gdsc.global.util.email.VerificationLinkUtil;
 import java.time.Duration;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -45,9 +43,9 @@ public class UnivEmailVerificationLinkSendService {
 """;
 
     public void send(String univEmail) {
-        Optional<Member> member = memberRepository.findByUnivEmail(univEmail);
+        boolean isUnivEmailDuplicate = memberRepository.existsByUnivEmail(univEmail);
 
-        hongikUnivEmailValidator.validateSendUnivEmailVerificationLink(univEmail, member);
+        hongikUnivEmailValidator.validateSendUnivEmailVerificationLink(univEmail, isUnivEmailDuplicate);
 
         String verificationToken = generateVerificationToken(univEmail);
         String verificationLink = verificationLinkUtil.createLink(verificationToken);

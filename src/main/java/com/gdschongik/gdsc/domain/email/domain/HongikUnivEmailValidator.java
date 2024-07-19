@@ -4,15 +4,13 @@ import static com.gdschongik.gdsc.global.common.constant.EmailConstant.HONGIK_UN
 import static com.gdschongik.gdsc.global.common.constant.RegexConstant.HONGIK_EMAIL;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
-import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.global.annotation.DomainService;
 import com.gdschongik.gdsc.global.exception.CustomException;
-import java.util.Optional;
 
 @DomainService
 public class HongikUnivEmailValidator {
 
-    public void validateSendUnivEmailVerificationLink(String email, Optional<Member> optionalMember) {
+    public void validateSendUnivEmailVerificationLink(String email, boolean isUnivEmailDuplicate) {
         if (!email.contains(HONGIK_UNIV_MAIL_DOMAIN)) {
             throw new CustomException(UNIV_EMAIL_DOMAIN_MISMATCH);
         }
@@ -21,7 +19,7 @@ public class HongikUnivEmailValidator {
             throw new CustomException(UNIV_EMAIL_FORMAT_MISMATCH);
         }
 
-        if (optionalMember.isPresent()) {
+        if (isUnivEmailDuplicate) {
             throw new CustomException(UNIV_EMAIL_ALREADY_SATISFIED);
         }
     }
