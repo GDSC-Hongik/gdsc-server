@@ -9,12 +9,12 @@ import com.gdschongik.gdsc.global.exception.CustomException;
 public class DiscordValidator {
 
     public void validateVerifyDiscordCode(
-            Integer code,
+            Integer requestedCode,
             DiscordVerificationCode discordVerificationCode,
             boolean isDiscordUsernameDuplicate,
             boolean isNicknameDuplicate) {
         // 입력받은 코드가 일치하는지 검증
-        if (!discordVerificationCode.matchesCode(code)) {
+        if (!discordVerificationCode.matchesCode(requestedCode)) {
             throw new CustomException(DISCORD_CODE_MISMATCH);
         }
 
