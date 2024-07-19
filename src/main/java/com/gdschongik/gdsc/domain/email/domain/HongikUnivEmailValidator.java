@@ -1,4 +1,4 @@
-package com.gdschongik.gdsc.global.util.email;
+package com.gdschongik.gdsc.domain.email.domain;
 
 import static com.gdschongik.gdsc.global.common.constant.EmailConstant.HONGIK_UNIV_MAIL_DOMAIN;
 import static com.gdschongik.gdsc.global.common.constant.RegexConstant.HONGIK_EMAIL;
