@@ -10,7 +10,7 @@ spring:
           github:
             client-id: ${GITHUB_CLIENT_ID:default}
             client-secret: ${GITHUB_CLIENT_SECRET:default}
-            redirect-uri: "http://{baseHost}{basePort}{basePath}/login/oauth2/code/{registrationId}"
+            redirect-uri: "https://{baseHost}{basePort}{basePath}/login/oauth2/code/{registrationId}"
 
 jwt:
   token:
