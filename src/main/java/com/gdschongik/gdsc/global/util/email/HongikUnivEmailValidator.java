@@ -12,13 +12,17 @@ import org.springframework.stereotype.Component;
 @DomainService
 public class HongikUnivEmailValidator {
 
-    public void validate(String email) {
+    public void validate(String email, Optional<Member> optionalMember) {
         if (!email.contains(HONGIK_UNIV_MAIL_DOMAIN)) {
             throw new CustomException(ErrorCode.UNIV_EMAIL_DOMAIN_MISMATCH);
         }
 
         if (!email.matches(HONGIK_EMAIL)) {
-            throw new CustomException(ErrorCode.UNIV_EMAIL_FORMAT_MISMATCH);
+            throw new CustomException(UNIV_EMAIL_FORMAT_MISMATCH);
+        }
+
+        if (optionalMember.isPresent()) {
+            throw new CustomException(UNIV_EMAIL_ALREADY_SATISFIED);
         }
     }
 }
