@@ -44,6 +44,7 @@ public class AdminRecruitmentService {
                 request.academicYear(),
                 request.semesterType(),
                 Money.from(request.fee()),
+                request.feeName(),
                 Period.createPeriod(request.semesterStartDate(), request.semesterEndDate()));
         recruitmentRepository.save(recruitment);
 
