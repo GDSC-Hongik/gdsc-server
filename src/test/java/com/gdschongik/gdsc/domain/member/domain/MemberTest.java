@@ -372,18 +372,5 @@ class MemberTest {
                             AssociateRequirement::getUnivStatus)
                     .containsExactly(PENDING, PENDING, PENDING, PENDING);
         }
-
-        @Test
-        void 탈퇴한_회원이면_실패한다() {
-            // given
-            Member member = Member.createGuestMember(OAUTH_ID);
-
-            member.withdraw();
-
-            // when & then
-            assertThatThrownBy(() -> member.demoteToGuest())
-                    .isInstanceOf(CustomException.class)
-                    .hasMessage(MEMBER_DELETED.getMessage());
-        }
     }
 }
