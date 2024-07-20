@@ -9,9 +9,10 @@ import lombok.NonNull;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MoneyFormatter {
+
+    public static final NumberFormat KOREA_NUMBER_FORMAT = NumberFormat.getNumberInstance(Locale.KOREA);
+
     public static String format(@NonNull Money money) {
-        NumberFormat formatter = NumberFormat.getNumberInstance(Locale.KOREA);
-        String formattedAmount = formatter.format(money.getAmount());
-        return formattedAmount + "원";
+        return KOREA_NUMBER_FORMAT.format(money.getAmount()) + "원";
     }
 }
