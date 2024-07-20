@@ -15,12 +15,6 @@ public class DiscordConstant {
     public static final String DEFER_MESSAGE_ISSUING_CODE = "인증코드를 발급받는 중입니다...";
     public static final String REPLY_MESSAGE_ISSUING_CODE = "인증코드는 %d 입니다. 인증코드는 %d분 동안 유효합니다.";
 
-    // 가입하기 커맨드
-    public static final String COMMAND_NAME_JOIN = "가입하기";
-    public static final String COMMAND_DESCRIPTION_JOIN = "가입 신청이 승인된 멤버에게 역할을 부여합니다.";
-    public static final String DEFER_MESSAGE_JOIN = "가입 신청을 처리하는 중입니다...";
-    public static final String REPLY_MESSAGE_JOIN = "가입 신청이 승인되었습니다. GDSC Hongik에 합류하신 것을 환영합니다!";
-
     // 디스코드 ID 저장 커맨드
     public static final String COMMAND_NAME_BATCH_DISCORD_ID = "디스코드id-저장하기";
     public static final String COMMAND_DESCRIPTION_BATCH_DISCORD_ID = "디스코드 인증이 완료된 멤버들의 디스코드 ID를 저장합니다.";
