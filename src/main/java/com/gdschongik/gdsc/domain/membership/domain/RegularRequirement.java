@@ -54,7 +54,7 @@ public class RegularRequirement {
         }
     }
 
-    public void demoteToGuest() {
+    public void demoteRegularRequirementStatusToPending() {
         paymentStatus = RequirementStatus.PENDING;
     }
 }

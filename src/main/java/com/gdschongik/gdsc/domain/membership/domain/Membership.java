@@ -77,8 +77,8 @@ public class Membership extends BaseEntity {
         registerEvent(new MemberRegularEvent(member.getId(), member.getDiscordId()));
     }
 
-    public void demoteToGuest() {
-        regularRequirement.demoteToGuest();
+    public void demoteRegularRequirementToPending() {
+        regularRequirement.demoteRegularRequirementStatusToPending();
         recruitmentRound = null;
     }
 

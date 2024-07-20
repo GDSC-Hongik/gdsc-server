@@ -84,19 +84,20 @@ public class AdminMemberService {
     }
 
     /**
-     * 정회원의 조건 PENDING으로 변경, 준회원 조건 PENDING으로 변경
+     * 정회원 조건 PENDING으로 변경, 준회원 조건 PENDING으로 변경
      */
     @Transactional
-    public void demoteToGuest() {
+    public void demoteToGuestAndRegularRequirementToPending() {
         validateProfile();
         Member member = memberUtil.getCurrentMember();
-
-        member.demoteToGuest();
-
         RecruitmentRound currentRecruitmentRound = onboardingRecruitmentService.findCurrentRecruitmentRound();
         Optional<Membership> myMembership = membershipService.findMyMembership(member, currentRecruitmentRound);
 
-        myMembership.get().demoteToGuest();
+        member.demoteToGuest();
+
+        if (myMembership.isPresent()) {
+            myMembership.get().demoteRegularRequirementToPending();
+        }
         log.info("[AdminMemberService] 게스트로 강등: demotedMemberId={}", member.getId());
     }
 

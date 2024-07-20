@@ -30,7 +30,7 @@ public class TestMemberController {
     @Operation(summary = "게스트로 강등", description = "테스트용 API입니다. 현재 멤버 역할을 게스트로 강등시키기 위해 사용합니다.")
     @PatchMapping("/demotion")
     public ResponseEntity<Void> demoteToGuest() {
-        adminMemberService.demoteToGuest();
+        adminMemberService.demoteToGuestAndRegularRequirementToPending();
         return ResponseEntity.ok().build();
     }
 }

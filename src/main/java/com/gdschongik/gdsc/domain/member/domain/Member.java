@@ -246,18 +246,16 @@ public class Member extends BaseEntity {
     }
 
     /**
-     * 비회원으로 강등합니다.
-     * 다음 조건을 모두 초기화 시킵니다.
-     * 조건 1 : 회원 상태 초기화
-     * 조건 2 : 기본 회원정보
-     * 조건 3 : 디스코드 관련 정보
-     * 조건 3 : 재학생 인증
-     * 조건 4 : 디스코드 인증
-     * 조건 5 : Bevy 인증
+     * 테스트 환경 구성을 위한 사용자 상태 변경 메소드
+     * 1. 사용자의 회원 상태로 GUEST로 변경
+     * 2. 아래 나열된 모든 상태를 'PENDING'으로 설정
+     *    - 기본 회원 정보 작성 여부
+     *    - 디스코드 관련 정보
+     *    - 재학생 인증 상태
+     *    - 디스코드 계정 인증
+     *    - Bevy 인증
      */
     public void demoteToGuest() {
-        validateStatusUpdatable();
-
         role = GUEST;
 
         univEmail = null;
