@@ -9,7 +9,6 @@ import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.dto.request.BasicMemberInfoRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberTokenRequest;
-import com.gdschongik.gdsc.domain.member.dto.request.OnboardingMemberUpdateRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberBasicInfoResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberDashboardResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberTokenResponse;
@@ -37,20 +36,6 @@ public class OnboardingMemberService {
     private final JwtService jwtService;
     private final MemberRepository memberRepository;
     private final EnvironmentUtil environmentUtil;
-
-    @Deprecated
-    @Transactional
-    public void updateMember(OnboardingMemberUpdateRequest request) {
-        Member currentMember = memberUtil.getCurrentMember();
-        validateDiscordUsernameDuplicate(currentMember);
-        currentMember.verifyDiscord(request.discordUsername(), request.nickname());
-    }
-
-    private void validateDiscordUsernameDuplicate(Member member) {
-        if (memberRepository.existsByDiscordUsername(member.getDiscordUsername())) {
-            throw new CustomException(MEMBER_DISCORD_USERNAME_DUPLICATE);
-        }
-    }
 
     public MemberUnivStatusResponse checkUnivVerificationStatus() {
         Member currentMember = memberUtil.getCurrentMember();
