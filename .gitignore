@@ -43,3 +43,4 @@ out/
 
 ### Secrets ###
 .env
+.env.*
