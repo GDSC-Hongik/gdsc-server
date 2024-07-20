@@ -12,7 +12,6 @@ import com.gdschongik.gdsc.domain.member.dto.request.MemberTokenRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.OnboardingMemberUpdateRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberBasicInfoResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberDashboardResponse;
-import com.gdschongik.gdsc.domain.member.dto.response.MemberInfoResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberTokenResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberUnivStatusResponse;
 import com.gdschongik.gdsc.domain.membership.application.MembershipService;
@@ -51,12 +50,6 @@ public class OnboardingMemberService {
         if (memberRepository.existsByDiscordUsername(member.getDiscordUsername())) {
             throw new CustomException(MEMBER_DISCORD_USERNAME_DUPLICATE);
         }
-    }
-
-    public MemberInfoResponse getMemberInfo() {
-        // TODO: 대시보드 API로 통합
-        Member currentMember = memberUtil.getCurrentMember();
-        return MemberInfoResponse.of(currentMember);
     }
 
     public MemberUnivStatusResponse checkUnivVerificationStatus() {
