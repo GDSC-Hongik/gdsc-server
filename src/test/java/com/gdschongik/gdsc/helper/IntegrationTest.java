@@ -24,6 +24,7 @@ import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.domain.recruitment.domain.RoundType;
 import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import com.gdschongik.gdsc.global.security.PrincipalDetails;
+import com.gdschongik.gdsc.infra.feign.payment.client.PaymentClient;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +62,9 @@ public abstract class IntegrationTest {
 
     @MockBean
     protected OnboardingRecruitmentService onboardingRecruitmentService;
+
+    @MockBean
+    protected PaymentClient paymentClient;
 
     @BeforeEach
     void setUp() {
@@ -111,7 +115,7 @@ public abstract class IntegrationTest {
 
     protected Recruitment createRecruitment(Integer academicYear, SemesterType semesterType, Money fee) {
         Recruitment recruitment = Recruitment.createRecruitment(
-                academicYear, semesterType, fee, Period.createPeriod(SEMESTER_START_DATE, SEMESTER_END_DATE));
+                academicYear, semesterType, fee, FEE_NAME, Period.createPeriod(SEMESTER_START_DATE, SEMESTER_END_DATE));
         return recruitmentRepository.save(recruitment);
     }
 

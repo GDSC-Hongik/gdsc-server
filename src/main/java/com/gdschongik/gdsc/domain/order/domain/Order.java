@@ -53,6 +53,8 @@ public class Order extends BaseEntity {
     @Embedded
     private MoneyInfo moneyInfo;
 
+    private String paymentKey;
+
     @Builder(access = AccessLevel.PRIVATE)
     private Order(
             OrderStatus status,
@@ -86,5 +88,26 @@ public class Order extends BaseEntity {
                 .issuedCouponId(issuedCoupon != null ? issuedCoupon.getId() : null)
                 .moneyInfo(moneyInfo)
                 .build();
+    }
+
+    // 데이터 변경 로직
+
+    /**
+     * 주문을 완료 처리합니다.
+     * 상태 변경 및 결제 관련 정보를 저장하며, 예외를 발생시키지 않습니다.
+     * 이는 결제 승인 API 호출 후 완료 처리 과정에서 예외가 발생하는 것을 방지하기 위함입니다.
+     * 실제 완료 처리 유효성에 대한 검증은 {@link OrderValidator#validateCompleteOrder}에서 수행합니다.
+     */
+    public void complete(String paymentKey) {
+        this.status = OrderStatus.COMPLETED;
+        this.paymentKey = paymentKey;
+
+        registerEvent(new OrderCompletedEvent(id));
+    }
+
+    // 데이터 조회 로직
+
+    public boolean isCompleted() {
+        return status == OrderStatus.COMPLETED;
     }
 }

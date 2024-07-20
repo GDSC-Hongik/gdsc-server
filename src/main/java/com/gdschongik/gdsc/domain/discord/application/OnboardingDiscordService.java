@@ -4,6 +4,7 @@ import static com.gdschongik.gdsc.domain.discord.domain.DiscordVerificationCode.
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.discord.dao.DiscordVerificationCodeRepository;
+import com.gdschongik.gdsc.domain.discord.domain.DiscordValidator;
 import com.gdschongik.gdsc.domain.discord.domain.DiscordVerificationCode;
 import com.gdschongik.gdsc.domain.discord.dto.request.DiscordLinkRequest;
 import com.gdschongik.gdsc.domain.discord.dto.response.DiscordCheckDuplicateResponse;
@@ -18,9 +19,11 @@ import com.gdschongik.gdsc.global.util.MemberUtil;
 import java.security.SecureRandom;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class OnboardingDiscordService {
@@ -31,6 +34,7 @@ public class OnboardingDiscordService {
     private final MemberUtil memberUtil;
     private final DiscordUtil discordUtil;
     private final MemberRepository memberRepository;
+    private final DiscordValidator discordValidator;
 
     @Transactional
     public DiscordVerificationCodeResponse createVerificationCode(String discordUsername) {
@@ -58,9 +62,11 @@ public class OnboardingDiscordService {
                 .findById(request.discordUsername())
                 .orElseThrow(() -> new CustomException(DISCORD_CODE_NOT_FOUND));
 
-        validateDiscordCodeMatches(request, discordVerificationCode);
-        validateDiscordUsernameDuplicate(request.discordUsername());
-        validateNicknameDuplicate(request.nickname());
+        boolean isDiscordUsernameDuplicate = memberRepository.existsByDiscordUsername(request.discordUsername());
+        boolean isNicknameDuplicate = memberRepository.existsByNickname(request.nickname());
+
+        discordValidator.validateVerifyDiscordCode(
+                request.code(), discordVerificationCode, isDiscordUsernameDuplicate, isNicknameDuplicate);
 
         discordVerificationCodeRepository.delete(discordVerificationCode);
 
@@ -68,30 +74,13 @@ public class OnboardingDiscordService {
         currentMember.verifyDiscord(request.discordUsername(), request.nickname());
 
         updateDiscordId(request.discordUsername(), currentMember);
+
+        log.info("[OnboardingDiscordService] 디스코드 연동: memberId={}", currentMember.getId());
     }
 
     private void updateDiscordId(String discordUsername, Member currentMember) {
         String discordId = discordUtil.getMemberIdByUsername(discordUsername);
         currentMember.updateDiscordId(discordId);
-    }
-
-    private void validateDiscordUsernameDuplicate(String discordUsername) {
-        if (memberRepository.existsByDiscordUsername(discordUsername)) {
-            throw new CustomException(MEMBER_DISCORD_USERNAME_DUPLICATE);
-        }
-    }
-
-    private void validateNicknameDuplicate(String nickname) {
-        if (memberRepository.existsByNickname(nickname)) {
-            throw new CustomException(MEMBER_NICKNAME_DUPLICATE);
-        }
-    }
-
-    private void validateDiscordCodeMatches(
-            DiscordLinkRequest request, DiscordVerificationCode discordVerificationCode) {
-        if (!discordVerificationCode.matchesCode(request.code())) {
-            throw new CustomException(DISCORD_CODE_MISMATCH);
-        }
     }
 
     @Transactional(readOnly = true)

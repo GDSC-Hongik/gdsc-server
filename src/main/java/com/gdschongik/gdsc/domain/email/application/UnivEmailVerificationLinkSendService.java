@@ -2,21 +2,19 @@ package com.gdschongik.gdsc.domain.email.application;
 
 import static com.gdschongik.gdsc.global.common.constant.EmailConstant.VERIFICATION_EMAIL_SUBJECT;
 
+import com.gdschongik.gdsc.domain.email.domain.HongikUnivEmailValidator;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
-import com.gdschongik.gdsc.domain.member.domain.Member;
-import com.gdschongik.gdsc.global.exception.CustomException;
-import com.gdschongik.gdsc.global.exception.ErrorCode;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import com.gdschongik.gdsc.global.util.email.EmailVerificationTokenUtil;
-import com.gdschongik.gdsc.global.util.email.HongikUnivEmailValidator;
 import com.gdschongik.gdsc.global.util.email.MailSender;
 import com.gdschongik.gdsc.global.util.email.VerificationLinkUtil;
 import java.time.Duration;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -29,6 +27,7 @@ public class UnivEmailVerificationLinkSendService {
     private final EmailVerificationTokenUtil emailVerificationTokenUtil;
     private final VerificationLinkUtil verificationLinkUtil;
     private final MemberUtil memberUtil;
+
     public static final Duration VERIFICATION_TOKEN_TIME_TO_LIVE = Duration.ofMinutes(30);
 
     private static final String NOTIFICATION_MESSAGE =
@@ -44,20 +43,16 @@ public class UnivEmailVerificationLinkSendService {
 """;
 
     public void send(String univEmail) {
-        hongikUnivEmailValidator.validate(univEmail);
-        validateUnivEmailNotSatisfied(univEmail);
+        boolean isUnivEmailDuplicate = memberRepository.existsByUnivEmail(univEmail);
+
+        hongikUnivEmailValidator.validateSendUnivEmailVerificationLink(univEmail, isUnivEmailDuplicate);
 
         String verificationToken = generateVerificationToken(univEmail);
         String verificationLink = verificationLinkUtil.createLink(verificationToken);
         String mailContent = writeMailContentWithVerificationLink(verificationLink);
         mailSender.send(univEmail, VERIFICATION_EMAIL_SUBJECT, mailContent);
-    }
 
-    private void validateUnivEmailNotSatisfied(String univEmail) {
-        Optional<Member> member = memberRepository.findByUnivEmail(univEmail);
-        if (member.isPresent()) {
-            throw new CustomException(ErrorCode.UNIV_EMAIL_ALREADY_SATISFIED);
-        }
+        log.info("[UnivEmailVerificationLinkSendService] 학생 인증 메일 발송: univEmail={}", univEmail);
     }
 
     private String generateVerificationToken(String univEmail) {

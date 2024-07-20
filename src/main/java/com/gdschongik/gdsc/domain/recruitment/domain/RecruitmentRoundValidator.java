@@ -1,5 +1,6 @@
 package com.gdschongik.gdsc.domain.recruitment.domain;
 
+import static com.gdschongik.gdsc.domain.recruitment.domain.RoundType.*;
 import static com.gdschongik.gdsc.global.common.constant.TemporalConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
@@ -21,6 +22,27 @@ public class RecruitmentRoundValidator {
         validatePeriodOverlap(recruitmentRoundsInThisSemester, startDate, endDate);
         validateRoundOverlap(recruitmentRoundsInThisSemester, roundType);
         validateRoundOneExist(recruitmentRoundsInThisSemester, roundType);
+    }
+
+    /**
+     * 수정하려는 모집회차의 차수와 기간은 수정 후에 유효하지 않으므로,
+     * 변경하려는 값들은 다른 모집회차들과 차수, 기간이 겹치는지 검증해야 합니다.
+     * 따라서, 수정하려는 모집회차와 이를 제외한 다른 모집회차들을 분리하여 매개변수로 받습니다.
+     *
+     * @param currentRecruitmentRound: 수정하려는 모집회차
+     * @param otherRecruitmentRounds: 동일 리쿠르팅을 참조하는 모집회차 중 수정하려는 모집회차를 제외한 나머지 모집회차
+     */
+    public void validateRecruitmentRoundUpdate(
+            LocalDateTime startDate,
+            LocalDateTime endDate,
+            RoundType roundType,
+            RecruitmentRound currentRecruitmentRound,
+            List<RecruitmentRound> otherRecruitmentRounds) {
+        validatePeriodWithinTwoWeeks(startDate, endDate, currentRecruitmentRound.getRecruitment());
+        validatePeriodOverlap(otherRecruitmentRounds, startDate, endDate);
+        validateRoundOverlap(otherRecruitmentRounds, roundType);
+        validateRoundOneToTwo(currentRecruitmentRound.getRoundType(), roundType);
+        currentRecruitmentRound.validatePeriodNotStarted();
     }
 
     private void validatePeriodWithinTwoWeeks(LocalDateTime startDate, LocalDateTime endDate, Recruitment recruitment) {
@@ -54,8 +76,14 @@ public class RecruitmentRoundValidator {
 
     // 1차 모집이 없는데 2차 모집을 생성하려고 하는 경우
     private void validateRoundOneExist(List<RecruitmentRound> recruitmentRounds, RoundType roundType) {
-        if (roundType.equals(RoundType.SECOND)
-                && recruitmentRounds.stream().noneMatch(RecruitmentRound::isFirstRound)) {
+        if (roundType.equals(SECOND) && recruitmentRounds.stream().noneMatch(RecruitmentRound::isFirstRound)) {
+            throw new CustomException(ROUND_ONE_DOES_NOT_EXIST);
+        }
+    }
+
+    // 1차 모집을 비워둬서는 안되므로, 1차 모집을 2차 모집으로 수정하려고 하는 경우 예외 발생
+    private void validateRoundOneToTwo(RoundType previousRoundType, RoundType newRoundType) {
+        if (previousRoundType.equals(FIRST) && newRoundType.equals(SECOND)) {
             throw new CustomException(ROUND_ONE_DOES_NOT_EXIST);
         }
     }

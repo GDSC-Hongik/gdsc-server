@@ -1,5 +1,6 @@
 package com.gdschongik.gdsc.global.exception;
 
+import com.gdschongik.gdsc.infra.feign.payment.error.CustomPaymentException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
@@ -18,6 +19,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ErrorResponse> handleCustomException(CustomException e) {
         log.error("CustomException : {}", e.getMessage(), e);
         return ResponseEntity.status(e.getErrorCode().getStatus()).body(ErrorResponse.of(e.getErrorCode()));
+    }
+
+    @ExceptionHandler(CustomPaymentException.class)
+    public ResponseEntity<ErrorResponse> handleCustomPaymentException(CustomPaymentException e) {
+        log.error("CustomPaymentException : {}, {}", e.getCode(), e.getMessage());
+        return ResponseEntity.status(e.getStatus()).body(ErrorResponse.of(e.getCode(), e.getMessage()));
     }
 
     @ExceptionHandler(Exception.class)

@@ -12,9 +12,13 @@ import com.gdschongik.gdsc.domain.order.dao.OrderRepository;
 import com.gdschongik.gdsc.domain.order.domain.MoneyInfo;
 import com.gdschongik.gdsc.domain.order.domain.Order;
 import com.gdschongik.gdsc.domain.order.domain.OrderValidator;
+import com.gdschongik.gdsc.domain.order.dto.request.OrderCompleteRequest;
 import com.gdschongik.gdsc.domain.order.dto.request.OrderCreateRequest;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
+import com.gdschongik.gdsc.infra.feign.payment.client.PaymentClient;
+import com.gdschongik.gdsc.infra.feign.payment.dto.request.PaymentConfirmRequest;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class OrderService {
 
+    private final PaymentClient paymentClient;
     private final MemberUtil memberUtil;
     private final OrderRepository orderRepository;
     private final MembershipRepository membershipRepository;
@@ -59,5 +64,31 @@ public class OrderService {
         return issuedCouponRepository
                 .findById(issuedCouponId)
                 .orElseThrow(() -> new CustomException(ISSUED_COUPON_NOT_FOUND));
+    }
+
+    @Transactional
+    public void completeOrder(OrderCompleteRequest request) {
+        Order order = orderRepository
+                .findByNanoId(request.orderNanoId())
+                .orElseThrow(() -> new CustomException(ORDER_NOT_FOUND));
+
+        Optional<IssuedCoupon> issuedCoupon =
+                Optional.ofNullable(order.getIssuedCouponId()).map(this::getIssuedCoupon);
+
+        Member currentMember = memberUtil.getCurrentMember();
+
+        Money requestedAmount = Money.from(request.amount());
+
+        orderValidator.validateCompleteOrder(order, issuedCoupon, currentMember, requestedAmount);
+
+        var paymentRequest = new PaymentConfirmRequest(request.paymentKey(), order.getNanoId(), request.amount());
+        paymentClient.confirm(paymentRequest);
+
+        order.complete(request.paymentKey());
+        issuedCoupon.ifPresent(IssuedCoupon::use);
+
+        orderRepository.save(order);
+
+        log.info("[OrderService] 주문 완료: orderId={}", order.getId());
     }
 }
