@@ -101,9 +101,8 @@ public class AdminMemberService {
     }
 
     private void validateProfile() {
-        // TODO 슬기님 dev에 머지되면
-        //        if (!environmentUtil.isDevAndLocalProfile()) {
-        //            throw new CustomException(FORBIDDEN);
-        //        }
+        if (!environmentUtil.isDevAndLocalProfile()) {
+            throw new CustomException(FORBIDDEN);
+        }
     }
 }
