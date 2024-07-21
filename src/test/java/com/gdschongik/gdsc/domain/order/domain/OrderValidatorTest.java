@@ -20,6 +20,7 @@ import com.gdschongik.gdsc.domain.recruitment.domain.RoundType;
 import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.Optional;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -314,7 +315,7 @@ class OrderValidatorTest {
 
             Order completedOrder = Order.createPending(
                     "nanoId", membership, null, MoneyInfo.of(MONEY_20000_WON, MONEY_0_WON, MONEY_20000_WON));
-            completedOrder.complete("paymentKey");
+            completedOrder.complete("paymentKey", ZonedDateTime.now());
 
             Optional<IssuedCoupon> emptyIssuedCoupon = Optional.empty();
 

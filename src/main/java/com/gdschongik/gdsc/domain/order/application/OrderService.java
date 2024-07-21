@@ -18,6 +18,7 @@ import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import com.gdschongik.gdsc.infra.feign.payment.client.PaymentClient;
 import com.gdschongik.gdsc.infra.feign.payment.dto.request.PaymentConfirmRequest;
+import com.gdschongik.gdsc.infra.feign.payment.dto.response.PaymentResponse;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -82,9 +83,9 @@ public class OrderService {
         orderValidator.validateCompleteOrder(order, issuedCoupon, currentMember, requestedAmount);
 
         var paymentRequest = new PaymentConfirmRequest(request.paymentKey(), order.getNanoId(), request.amount());
-        paymentClient.confirm(paymentRequest);
+        PaymentResponse response = paymentClient.confirm(paymentRequest);
 
-        order.complete(request.paymentKey());
+        order.complete(request.paymentKey(), response.approvedAt());
         issuedCoupon.ifPresent(IssuedCoupon::use);
 
         orderRepository.save(order);

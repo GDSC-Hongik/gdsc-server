@@ -13,6 +13,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import java.time.ZonedDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -54,6 +55,8 @@ public class Order extends BaseEntity {
     private MoneyInfo moneyInfo;
 
     private String paymentKey;
+
+    private ZonedDateTime approvedAt;
 
     @Builder(access = AccessLevel.PRIVATE)
     private Order(
@@ -98,9 +101,10 @@ public class Order extends BaseEntity {
      * 이는 결제 승인 API 호출 후 완료 처리 과정에서 예외가 발생하는 것을 방지하기 위함입니다.
      * 실제 완료 처리 유효성에 대한 검증은 {@link OrderValidator#validateCompleteOrder}에서 수행합니다.
      */
-    public void complete(String paymentKey) {
+    public void complete(String paymentKey, ZonedDateTime approvedAt) {
         this.status = OrderStatus.COMPLETED;
         this.paymentKey = paymentKey;
+        this.approvedAt = approvedAt;
 
         registerEvent(new OrderCompletedEvent(id));
     }
