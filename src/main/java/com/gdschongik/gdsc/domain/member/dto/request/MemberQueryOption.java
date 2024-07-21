@@ -14,4 +14,6 @@ public record MemberQueryOption(
         @Schema(description = "이메일") String email,
         @Schema(description = "디스코드 유저네임") String discordUsername,
         @Schema(description = "커뮤니티 닉네임", pattern = NICKNAME) String nickname,
-        @Schema(description = "멤버 권한") List<MemberRole> roles) {}
+        @Schema(description = "멤버 권한") List<MemberRole> roles) {
+    // TODO: 키워드 기반 검색 고려하여 pattern 제약조건 제거
+}
