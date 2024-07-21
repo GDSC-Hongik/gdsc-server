@@ -3,7 +3,7 @@ package com.gdschongik.gdsc.domain.order.dto.request;
 import com.gdschongik.gdsc.domain.common.model.SemesterType;
 import com.gdschongik.gdsc.domain.order.domain.OrderStatus;
 import jakarta.validation.constraints.Min;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 public record OrderQueryOption(
         String name,
@@ -13,4 +13,4 @@ public record OrderQueryOption(
         OrderStatus status,
         String nanoId,
         String paymentKey,
-        LocalDateTime approvedAt) {}
+        ZonedDateTime approvedAt) {}

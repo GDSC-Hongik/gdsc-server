@@ -20,7 +20,7 @@ public record OrderAdminResponse(
         String totalAmount,
         String discountAmount,
         String finalPaymentAmount,
-        LocalDateTime updatedAt) {
+        ZonedDateTime approvedAt) {
     public static OrderAdminResponse from(Order order, Recruitment recruitment, Member member) {
         MoneyInfo moneyInfo = order.getMoneyInfo();
         return new OrderAdminResponse(

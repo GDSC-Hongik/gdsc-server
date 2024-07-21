@@ -35,7 +35,7 @@ public interface OrderQueryMethod {
         return paymentKey != null ? order.paymentKey.contains(paymentKey) : null;
     }
 
-    default BooleanExpression eqApprovedAt(LocalDateTime approvedAt) {
+    default BooleanExpression eqApprovedAt(ZonedDateTime approvedAt) {
         return approvedAt != null ? order.approvedAt.eq(approvedAt) : null;
     }
 }
