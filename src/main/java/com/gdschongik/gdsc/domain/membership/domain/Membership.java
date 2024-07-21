@@ -77,11 +77,6 @@ public class Membership extends BaseEntity {
         registerEvent(new MemberRegularEvent(member.getId(), member.getDiscordId()));
     }
 
-    public void demoteRegularRequirementToPending() {
-        regularRequirement.demoteRegularRequirementStatusToPending();
-        recruitmentRound = null;
-    }
-
     // 데이터 전달 로직
 
     public boolean isRegularRequirementAllSatisfied() {

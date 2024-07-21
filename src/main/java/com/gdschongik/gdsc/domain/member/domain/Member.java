@@ -247,13 +247,9 @@ public class Member extends BaseEntity {
 
     /**
      * 테스트 환경 구성을 위한 사용자 상태 변경 메소드
-     * 1. 사용자의 회원 상태로 GUEST로 변경
-     * 2. 아래 나열된 모든 상태를 'PENDING'으로 설정
+     * 1. 멤버 역할을 GUEST로 강등
+     * 2. 준회원 가입 조건을 'PENDING'으로 변경
      *    - 기본 회원 정보 작성 여부
-     *    - 디스코드 관련 정보
-     *    - 재학생 인증 상태
-     *    - 디스코드 계정 인증
-     *    - Bevy 인증
      */
     public void demoteToGuest() {
         role = GUEST;
@@ -268,7 +264,7 @@ public class Member extends BaseEntity {
         nickname = null;
         discordUsername = null;
 
-        associateRequirement.resetMembershipRequirement();
+        associateRequirement.demoteAssociateRequirement();
     }
 
     // 기타 상태 변경 로직

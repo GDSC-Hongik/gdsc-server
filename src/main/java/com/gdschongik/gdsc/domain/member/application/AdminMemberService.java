@@ -10,6 +10,7 @@ import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryOption;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberUpdateRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.AdminMemberResponse;
 import com.gdschongik.gdsc.domain.membership.application.MembershipService;
+import com.gdschongik.gdsc.domain.membership.dao.MembershipRepository;
 import com.gdschongik.gdsc.domain.membership.domain.Membership;
 import com.gdschongik.gdsc.domain.recruitment.application.AdminRecruitmentService;
 import com.gdschongik.gdsc.domain.recruitment.application.OnboardingRecruitmentService;
@@ -42,6 +43,7 @@ public class AdminMemberService {
     private final EnvironmentUtil environmentUtil;
     private final MembershipService membershipService;
     private final OnboardingRecruitmentService onboardingRecruitmentService;
+    private final MembershipRepository membershipRepository;
 
     public Page<AdminMemberResponse> searchMembers(MemberQueryOption queryOption, Pageable pageable) {
         Page<Member> members = memberRepository.searchMembers(queryOption, pageable);
@@ -96,8 +98,10 @@ public class AdminMemberService {
         member.demoteToGuest();
 
         if (myMembership.isPresent()) {
-            myMembership.get().demoteRegularRequirementToPending();
+            Membership membershipToErase = myMembership.get();
+            membershipRepository.delete(membershipToErase);
         }
+
         log.info("[AdminMemberService] 게스트로 강등: demotedMemberId={}", member.getId());
     }
 
