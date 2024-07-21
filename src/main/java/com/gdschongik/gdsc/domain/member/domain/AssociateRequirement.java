@@ -116,7 +116,7 @@ public class AssociateRequirement {
     }
 
     /**
-     * 모든 준회원 조건을 초기화합니다.
+     * 모든 준회원 조건을 강등합니다.
      */
     public void demoteAssociateRequirement() {
         bevyStatus = PENDING;

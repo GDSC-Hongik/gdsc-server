@@ -249,7 +249,6 @@ public class Member extends BaseEntity {
      * 테스트 환경 구성을 위한 사용자 상태 변경 메소드
      * 1. 멤버 역할을 GUEST로 강등
      * 2. 준회원 가입 조건을 'PENDING'으로 변경
-     *    - 기본 회원 정보 작성 여부
      */
     public void demoteToGuest() {
         role = GUEST;
