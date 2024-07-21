@@ -45,8 +45,8 @@ public class Order extends BaseEntity {
     @Comment("주문 대상 멤버십 ID")
     private Long membershipId;
 
-    @Comment("신청하려는 리쿠르팅 ID")
-    private Long recruitmentId;
+    @Comment("신청하려는 모집회차 ID")
+    private Long recruitmentRoundId;
 
     @Comment("사용하려는 발급쿠폰 ID")
     private Long issuedCouponId;
@@ -64,14 +64,14 @@ public class Order extends BaseEntity {
             String nanoId,
             Long memberId,
             Long membershipId,
-            Long recruitmentId,
+            Long recruitmentRoundId,
             Long issuedCouponId,
             MoneyInfo moneyInfo) {
         this.status = status;
         this.nanoId = nanoId;
         this.memberId = memberId;
         this.membershipId = membershipId;
-        this.recruitmentId = recruitmentId;
+        this.recruitmentRoundId = recruitmentRoundId;
         this.issuedCouponId = issuedCouponId;
         this.moneyInfo = moneyInfo;
     }
@@ -87,7 +87,7 @@ public class Order extends BaseEntity {
                 .nanoId(nanoId)
                 .memberId(membership.getMember().getId())
                 .membershipId(membership.getId())
-                .recruitmentId(membership.getRecruitmentRound().getRecruitment().getId())
+                .recruitmentRoundId(membership.getRecruitmentRound().getId())
                 .issuedCouponId(issuedCoupon != null ? issuedCoupon.getId() : null)
                 .moneyInfo(moneyInfo)
                 .build();
