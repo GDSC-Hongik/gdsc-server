@@ -9,7 +9,6 @@ import com.gdschongik.gdsc.domain.discord.domain.DiscordVerificationCode;
 import com.gdschongik.gdsc.domain.discord.dto.request.DiscordLinkRequest;
 import com.gdschongik.gdsc.domain.discord.dto.response.DiscordCheckDuplicateResponse;
 import com.gdschongik.gdsc.domain.discord.dto.response.DiscordCheckJoinResponse;
-import com.gdschongik.gdsc.domain.discord.dto.response.DiscordNicknameResponse;
 import com.gdschongik.gdsc.domain.discord.dto.response.DiscordVerificationCodeResponse;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
@@ -81,19 +80,6 @@ public class OnboardingDiscordService {
     private void updateDiscordId(String discordUsername, Member currentMember) {
         String discordId = discordUtil.getMemberIdByUsername(discordUsername);
         currentMember.updateDiscordId(discordId);
-    }
-
-    @Transactional(readOnly = true)
-    public DiscordNicknameResponse checkDiscordRoleAssignable(String discordUsername) {
-        Member member = memberRepository
-                .findByDiscordUsername(discordUsername)
-                .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
-
-        if (!member.isRegular()) {
-            throw new CustomException(DISCORD_ROLE_UNASSIGNABLE);
-        }
-
-        return DiscordNicknameResponse.of(member.getNickname());
     }
 
     @Transactional(readOnly = true)
