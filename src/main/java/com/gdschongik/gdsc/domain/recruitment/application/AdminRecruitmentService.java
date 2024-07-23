@@ -2,7 +2,6 @@ package com.gdschongik.gdsc.domain.recruitment.application;
 
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
-import com.gdschongik.gdsc.domain.common.model.SemesterType;
 import com.gdschongik.gdsc.domain.common.vo.Money;
 import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRepository;
 import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRoundRepository;
@@ -106,20 +105,5 @@ public class AdminRecruitmentService {
                 request.name(), Period.createPeriod(request.startDate(), request.endDate()), request.roundType());
 
         log.info("[AdminRecruitmentService] 모집회차 수정: recruitmentRoundId={}", recruitmentRoundId);
-    }
-
-    /*
-     1. 해당 학기에 리쿠르팅이 존재해야 함.
-     2. 해당 학기의 모든 리쿠르팅이 아직 시작되지 않았어야 함.
-    */
-    public void validateRecruitmentNotStarted(Integer academicYear, SemesterType semesterType) {
-        List<RecruitmentRound> recruitmentRounds =
-                recruitmentRoundRepository.findAllByAcademicYearAndSemesterType(academicYear, semesterType);
-
-        if (recruitmentRounds.isEmpty()) {
-            throw new CustomException(RECRUITMENT_ROUND_NOT_FOUND);
-        }
-
-        recruitmentRounds.forEach(RecruitmentRound::validatePeriodNotStarted);
     }
 }
