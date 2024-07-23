@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 public class RecruitmentConstant {
     // 1차 모집 상수
-    public static final String RECRUITMENT_NAME = "2024학년도 1학기 1차 모집";
+    public static final String RECRUITMENT_ROUND_NAME = "2024학년도 1학기 1차 모집";
     public static final LocalDateTime START_DATE = LocalDateTime.of(2024, 3, 2, 0, 0);
     public static final LocalDateTime BETWEEN_START_AND_END_DATE = LocalDateTime.of(2024, 3, 3, 0, 0);
     public static final LocalDateTime WRONG_END_DATE = LocalDateTime.of(2024, 3, 2, 0, 0);

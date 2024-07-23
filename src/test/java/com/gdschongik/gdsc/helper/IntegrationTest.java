@@ -94,7 +94,7 @@ public abstract class IntegrationTest {
         Recruitment recruitment = createRecruitment(ACADEMIC_YEAR, SEMESTER_TYPE, FEE);
 
         RecruitmentRound recruitmentRound =
-                RecruitmentRound.create(RECRUITMENT_NAME, START_DATE, END_DATE, recruitment, ROUND_TYPE);
+                RecruitmentRound.create(RECRUITMENT_ROUND_NAME, START_DATE, END_DATE, recruitment, ROUND_TYPE);
 
         return recruitmentRoundRepository.save(recruitmentRound);
     }
