@@ -114,4 +114,14 @@ public class AssociateRequirement {
             throw new CustomException(EMAIL_ALREADY_SATISFIED);
         }
     }
+
+    /**
+     * 모든 준회원 조건을 강등합니다.
+     */
+    public void demoteAssociateRequirement() {
+        bevyStatus = PENDING;
+        discordStatus = PENDING;
+        infoStatus = PENDING;
+        univStatus = PENDING;
+    }
 }

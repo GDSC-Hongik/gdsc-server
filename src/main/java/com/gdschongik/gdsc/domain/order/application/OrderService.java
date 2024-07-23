@@ -14,13 +14,18 @@ import com.gdschongik.gdsc.domain.order.domain.Order;
 import com.gdschongik.gdsc.domain.order.domain.OrderValidator;
 import com.gdschongik.gdsc.domain.order.dto.request.OrderCompleteRequest;
 import com.gdschongik.gdsc.domain.order.dto.request.OrderCreateRequest;
+import com.gdschongik.gdsc.domain.order.dto.request.OrderQueryOption;
+import com.gdschongik.gdsc.domain.order.dto.response.OrderAdminResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import com.gdschongik.gdsc.infra.feign.payment.client.PaymentClient;
 import com.gdschongik.gdsc.infra.feign.payment.dto.request.PaymentConfirmRequest;
+import com.gdschongik.gdsc.infra.feign.payment.dto.response.PaymentResponse;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -82,13 +87,28 @@ public class OrderService {
         orderValidator.validateCompleteOrder(order, issuedCoupon, currentMember, requestedAmount);
 
         var paymentRequest = new PaymentConfirmRequest(request.paymentKey(), order.getNanoId(), request.amount());
-        paymentClient.confirm(paymentRequest);
+        PaymentResponse response = paymentClient.confirm(paymentRequest);
 
-        order.complete(request.paymentKey());
+        order.complete(request.paymentKey(), response.approvedAt());
         issuedCoupon.ifPresent(IssuedCoupon::use);
 
         orderRepository.save(order);
 
         log.info("[OrderService] 주문 완료: orderId={}", order.getId());
+    }
+
+    @Transactional(readOnly = true)
+    public Page<OrderAdminResponse> searchOrders(OrderQueryOption queryOption, Pageable pageable) {
+        return orderRepository.searchOrders(queryOption, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public PaymentResponse getCompletedOrderPayment(Long orderId) {
+        Order order = orderRepository
+                .findById(orderId)
+                .filter(Order::isCompleted)
+                .orElseThrow(() -> new CustomException(ORDER_COMPLETED_NOT_FOUND));
+
+        return paymentClient.getPayment(order.getPaymentKey());
     }
 }

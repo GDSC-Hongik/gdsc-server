@@ -54,7 +54,7 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
         void 학년도와_학기가_일치하는_리쿠르팅이_존재하지_않는다면_실패한다() {
             // given
             RecruitmentRoundCreateUpdateRequest request = new RecruitmentRoundCreateUpdateRequest(
-                    ACADEMIC_YEAR, SEMESTER_TYPE, RECRUITMENT_NAME, START_DATE, END_DATE, ROUND_TYPE);
+                    ACADEMIC_YEAR, SEMESTER_TYPE, RECRUITMENT_ROUND_NAME, START_DATE, END_DATE, ROUND_TYPE);
 
             // when & then
             assertThatThrownBy(() -> adminRecruitmentService.createRecruitmentRound(request))
@@ -74,7 +74,7 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
             recruitmentRepository.save(recruitment);
 
             RecruitmentRound recruitmentRound = RecruitmentRound.create(
-                    RECRUITMENT_NAME, now.plusDays(1), now.plusDays(2), recruitment, ROUND_TYPE);
+                    RECRUITMENT_ROUND_NAME, now.plusDays(1), now.plusDays(2), recruitment, ROUND_TYPE);
             recruitmentRoundRepository.save(recruitmentRound);
 
             RecruitmentRoundCreateUpdateRequest request = new RecruitmentRoundCreateUpdateRequest(
@@ -96,7 +96,7 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
         void 모집회차가_존재하지_않는다면_실패한다() {
             // given
             RecruitmentRoundCreateUpdateRequest request = new RecruitmentRoundCreateUpdateRequest(
-                    ACADEMIC_YEAR, SEMESTER_TYPE, RECRUITMENT_NAME, START_DATE, END_DATE, ROUND_TYPE);
+                    ACADEMIC_YEAR, SEMESTER_TYPE, RECRUITMENT_ROUND_NAME, START_DATE, END_DATE, ROUND_TYPE);
 
             // when & then
             assertThatThrownBy(() -> adminRecruitmentService.updateRecruitmentRound(1L, request))
