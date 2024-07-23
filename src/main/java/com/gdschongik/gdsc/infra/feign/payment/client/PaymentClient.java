@@ -1,6 +1,7 @@
 package com.gdschongik.gdsc.infra.feign.payment.client;
 
 import com.gdschongik.gdsc.infra.feign.payment.config.PaymentClientConfig;
+import com.gdschongik.gdsc.infra.feign.payment.dto.request.PaymentCancelRequest;
 import com.gdschongik.gdsc.infra.feign.payment.dto.request.PaymentConfirmRequest;
 import com.gdschongik.gdsc.infra.feign.payment.dto.response.PaymentResponse;
 import jakarta.validation.Valid;
@@ -18,4 +19,7 @@ public interface PaymentClient {
 
     @GetMapping("/v1/payments/{paymentKey}")
     PaymentResponse getPayment(@PathVariable String paymentKey);
+
+    @PostMapping("/v1/payments/{paymentKey}/cancel")
+    PaymentResponse cancelPayment(@PathVariable String paymentKey, @Valid @RequestBody PaymentCancelRequest request);
 }
