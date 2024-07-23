@@ -24,6 +24,7 @@ import com.gdschongik.gdsc.infra.feign.payment.dto.request.PaymentCancelRequest;
 import com.gdschongik.gdsc.infra.feign.payment.dto.request.PaymentConfirmRequest;
 import com.gdschongik.gdsc.infra.feign.payment.dto.response.PaymentResponse;
 import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -131,12 +132,12 @@ public class OrderService {
     }
 
     private ZonedDateTime getCanceledAt(PaymentResponse response) {
-        var cancels = Optional.ofNullable(response.cancels())
+        return Optional.ofNullable(response.cancels())
+                .flatMap(this::findLatestCancelDate)
                 .orElseThrow(() -> new CustomException(ORDER_CANCEL_RESPONSE_NOT_FOUND));
+    }
 
-        return cancels.stream()
-                .findFirst()
-                .map(PaymentResponse.CancelDto::canceledAt)
-                .orElseThrow(() -> new CustomException(ORDER_CANCEL_RESPONSE_NOT_FOUND));
+    private Optional<ZonedDateTime> findLatestCancelDate(List<PaymentResponse.CancelDto> cancels) {
+        return cancels.stream().map(PaymentResponse.CancelDto::canceledAt).max(ZonedDateTime::compareTo);
     }
 }
