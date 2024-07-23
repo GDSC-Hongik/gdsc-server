@@ -34,7 +34,7 @@ public class CommonDiscordService {
                 .findByDiscordUsername(currentDiscordUsername)
                 .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
 
-        discordValidator.validatePermissionForCommand(currentMember);
+        discordValidator.validateAdminPermission(currentMember);
 
         List<Member> discordSatisfiedMembers = memberRepository.findAllByDiscordStatus(discordStatus);
 
