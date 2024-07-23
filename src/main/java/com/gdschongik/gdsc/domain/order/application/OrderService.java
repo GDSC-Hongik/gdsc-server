@@ -103,8 +103,12 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
-    public PaymentResponse getOrderPayment(Long orderId) {
-        Order order = orderRepository.findById(orderId).orElseThrow(() -> new CustomException(ORDER_NOT_FOUND));
+    public PaymentResponse getCompletedOrderPayment(Long orderId) {
+        Order order = orderRepository
+                .findById(orderId)
+                .filter(Order::isCompleted)
+                .orElseThrow(() -> new CustomException(ORDER_COMPLETED_NOT_FOUND));
+
         return paymentClient.getPayment(order.getPaymentKey());
     }
 }

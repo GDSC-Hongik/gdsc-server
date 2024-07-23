@@ -33,10 +33,12 @@ public class AdminOrderController {
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "주문 결제정보 조회하기", description = "주문 결제정보를 조회합니다. 토스페이먼츠 API의 결제 정보인 Payment 객체를 반환합니다.")
+    @Operation(
+            summary = "완료된 주문 결제정보 조회하기",
+            description = "주문 결제정보를 조회합니다. 토스페이먼츠 API의 결제 정보인 Payment 객체를 반환합니다. 완료된 주문에 대해서만 조회 가능합니다.")
     @GetMapping("/{orderId}")
-    public ResponseEntity<PaymentResponse> getOrderPayment(@PathVariable Long orderId) {
-        var response = orderService.getOrderPayment(orderId);
+    public ResponseEntity<PaymentResponse> getCompletedOrderPayment(@PathVariable Long orderId) {
+        var response = orderService.getCompletedOrderPayment(orderId);
         return ResponseEntity.ok(response);
     }
 }
