@@ -25,7 +25,7 @@ public class OnboardingRecruitmentService {
     }
 
     /**
-     * 테스트용 강등 API에서 멤버십 회차가 존재하지 않을 경우에 대해 필요한 메소드입니다.
+     * 테스트용 강등 API에서 모집 회차가 존재하지 않을 경우에 대해 필요한 메소드입니다.
      */
     public Optional<RecruitmentRound> findCurrentRecruitmentRoundToDemote() {
         return recruitmentRoundRepository.findAll().stream()
