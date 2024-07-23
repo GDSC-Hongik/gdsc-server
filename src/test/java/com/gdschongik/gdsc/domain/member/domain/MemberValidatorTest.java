@@ -26,7 +26,7 @@ public class MemberValidatorTest {
             Recruitment recruitment = Recruitment.createRecruitment(
                     ACADEMIC_YEAR, SEMESTER_TYPE, FEE, FEE_NAME, Period.createPeriod(START_DATE, END_DATE));
             RecruitmentRound recruitmentRound = RecruitmentRound.create(
-                    RECRUITMENT_NAME,
+                    RECRUITMENT_ROUND_NAME,
                     LocalDateTime.now().minusDays(1),
                     LocalDateTime.now().plusDays(1),
                     recruitment,
