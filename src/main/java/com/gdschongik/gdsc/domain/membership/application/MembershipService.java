@@ -61,12 +61,16 @@ public class MembershipService {
     }
 
     public void deleteMembership(Member member) {
-        RecruitmentRound currentRecruitmentRound = onboardingRecruitmentService.findCurrentRecruitmentRound();
-        Optional<Membership> myMembership = findMyMembership(member, currentRecruitmentRound);
+        Optional<RecruitmentRound> currentRecruitmentRoundOpt =
+                onboardingRecruitmentService.findCurrentRecruitmentRoundToDemote();
 
-        if (myMembership.isPresent()) {
-            Membership membershipToDelete = myMembership.get();
-            membershipRepository.delete(membershipToDelete);
+        if (!currentRecruitmentRoundOpt.isPresent()) {
+            return;
         }
+
+        RecruitmentRound currentRecruitmentRound = currentRecruitmentRoundOpt.get();
+        Optional<Membership> myMembershipOpt = findMyMembership(member, currentRecruitmentRound);
+
+        myMembershipOpt.ifPresent(membershipRepository::delete);
     }
 }
