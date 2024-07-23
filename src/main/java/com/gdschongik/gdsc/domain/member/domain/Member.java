@@ -235,6 +235,7 @@ public class Member extends BaseEntity {
 
         role = REGULAR;
     }
+
     /**
      * 정회원에서 준회원으로 강등합니다.
      */
@@ -242,6 +243,27 @@ public class Member extends BaseEntity {
         validateStatusUpdatable();
 
         role = ASSOCIATE;
+    }
+
+    /**
+     * 테스트 환경 구성을 위한 사용자 상태 변경 메소드
+     * 1. 멤버 역할을 GUEST로 강등
+     * 2. 준회원 가입 조건을 'PENDING'으로 변경
+     */
+    public void demoteToGuest() {
+        role = GUEST;
+
+        univEmail = null;
+        name = null;
+        department = null;
+        studentId = null;
+        phone = null;
+
+        discordId = null;
+        nickname = null;
+        discordUsername = null;
+
+        associateRequirement.demoteAssociateRequirement();
     }
 
     // 기타 상태 변경 로직

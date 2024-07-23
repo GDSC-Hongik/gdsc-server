@@ -6,6 +6,7 @@ import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.membership.dao.MembershipRepository;
 import com.gdschongik.gdsc.domain.membership.domain.Membership;
 import com.gdschongik.gdsc.domain.membership.domain.MembershipValidator;
+import com.gdschongik.gdsc.domain.recruitment.application.OnboardingRecruitmentService;
 import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRoundRepository;
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.global.exception.CustomException;
@@ -25,6 +26,7 @@ public class MembershipService {
     private final RecruitmentRoundRepository recruitmentRoundRepository;
     private final MemberUtil memberUtil;
     private final MembershipValidator membershipValidator;
+    private final OnboardingRecruitmentService onboardingRecruitmentService;
 
     @Transactional
     public void verifyPaymentStatus(Long membershipId) {
@@ -56,5 +58,19 @@ public class MembershipService {
 
     public Optional<Membership> findMyMembership(Member member, RecruitmentRound recruitmentRound) {
         return membershipRepository.findByMemberAndRecruitmentRound(member, recruitmentRound);
+    }
+
+    public void deleteMembership(Member member) {
+        Optional<RecruitmentRound> currentRecruitmentRoundOpt =
+                onboardingRecruitmentService.findCurrentRecruitmentRoundToDemote();
+
+        if (!currentRecruitmentRoundOpt.isPresent()) {
+            return;
+        }
+
+        RecruitmentRound currentRecruitmentRound = currentRecruitmentRoundOpt.get();
+        Optional<Membership> myMembershipOpt = findMyMembership(member, currentRecruitmentRound);
+
+        myMembershipOpt.ifPresent(membershipRepository::delete);
     }
 }
