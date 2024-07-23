@@ -46,7 +46,7 @@ class AdminMemberServiceTest extends IntegrationTest {
         void 해당_학기에_이미_시작된_모집기간이_있다면_실패한다() {
             // given
             createRecruitmentRound(
-                    RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE, ROUND_TYPE, FEE);
+                RECRUITMENT_ROUND_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE, ROUND_TYPE, FEE);
             MemberDemoteRequest request = new MemberDemoteRequest(ACADEMIC_YEAR, SEMESTER_TYPE);
 
             // when & then
