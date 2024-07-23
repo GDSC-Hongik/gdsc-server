@@ -6,6 +6,7 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.global.annotation.DomainService;
 import com.gdschongik.gdsc.global.exception.CustomException;
+import java.util.Optional;
 
 @DomainService
 public class HongikUnivEmailValidator {
@@ -21,6 +22,18 @@ public class HongikUnivEmailValidator {
 
         if (isUnivEmailDuplicate) {
             throw new CustomException(UNIV_EMAIL_ALREADY_SATISFIED);
+        }
+    }
+
+    public void validateUnivEmailVerification(
+            Optional<UnivEmailVerification> optionalUnivEmailVerification, String currentToken) {
+        // 토큰이 비었는데 인증하려할 시 에러 (인증메일을 보내지 않았거나, 만료된 경우)
+        if (optionalUnivEmailVerification.isEmpty()) {
+            throw new CustomException(EMAIL_NOT_SENT);
+        }
+        // 토큰이 redis에 저장된 토큰과 다르면 만료되었다는 에러 (메일 여러번 보낸 경우)
+        else if (!optionalUnivEmailVerification.get().getVerificationToken().equals(currentToken)) {
+            throw new CustomException(EXPIRED_EMAIL_VERIFICATION_TOKEN);
         }
     }
 }

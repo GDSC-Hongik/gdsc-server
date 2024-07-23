@@ -2,8 +2,13 @@ package com.gdschongik.gdsc.domain.email.application;
 
 import static com.gdschongik.gdsc.global.common.constant.EmailConstant.VERIFICATION_EMAIL_SUBJECT;
 
+import com.gdschongik.gdsc.domain.email.dao.UnivEmailVerificationRepository;
 import com.gdschongik.gdsc.domain.email.domain.HongikUnivEmailValidator;
+import com.gdschongik.gdsc.domain.email.domain.UnivEmailVerification;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
+import com.gdschongik.gdsc.domain.member.domain.Member;
+import com.gdschongik.gdsc.global.common.constant.JwtConstant;
+import com.gdschongik.gdsc.global.property.JwtProperty;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import com.gdschongik.gdsc.global.util.email.EmailVerificationTokenUtil;
 import com.gdschongik.gdsc.global.util.email.MailSender;
@@ -21,12 +26,14 @@ import org.springframework.transaction.annotation.Transactional;
 public class UnivEmailVerificationLinkSendService {
 
     private final MemberRepository memberRepository;
+    private final UnivEmailVerificationRepository univEmailVerificationRepository;
 
     private final MailSender mailSender;
     private final HongikUnivEmailValidator hongikUnivEmailValidator;
     private final EmailVerificationTokenUtil emailVerificationTokenUtil;
     private final VerificationLinkUtil verificationLinkUtil;
     private final MemberUtil memberUtil;
+    private final JwtProperty jwtProperty;
 
     public static final Duration VERIFICATION_TOKEN_TIME_TO_LIVE = Duration.ofMinutes(30);
 
@@ -50,14 +57,25 @@ public class UnivEmailVerificationLinkSendService {
         String verificationToken = generateVerificationToken(univEmail);
         String verificationLink = verificationLinkUtil.createLink(verificationToken);
         String mailContent = writeMailContentWithVerificationLink(verificationLink);
+
         mailSender.send(univEmail, VERIFICATION_EMAIL_SUBJECT, mailContent);
 
         log.info("[UnivEmailVerificationLinkSendService] 학생 인증 메일 발송: univEmail={}", univEmail);
     }
 
     private String generateVerificationToken(String univEmail) {
-        Long currentMemberId = memberUtil.getCurrentMemberId();
-        return emailVerificationTokenUtil.generateEmailVerificationToken(currentMemberId, univEmail);
+        final Member currentMember = memberUtil.getCurrentMember();
+        String verificationToken =
+                emailVerificationTokenUtil.generateEmailVerificationToken(currentMember.getId(), univEmail);
+
+        JwtProperty.TokenProperty emailVerificationTokenProperty =
+                jwtProperty.getToken().get(JwtConstant.EMAIL_VERIFICATION_TOKEN);
+
+        UnivEmailVerification univEmailVerification = UnivEmailVerification.of(
+                currentMember.getId(), verificationToken, emailVerificationTokenProperty.expirationTime());
+        univEmailVerificationRepository.save(univEmailVerification);
+
+        return verificationToken;
     }
 
     private String writeMailContentWithVerificationLink(String verificationLink) {

@@ -1,12 +1,17 @@
 package com.gdschongik.gdsc.domain.member.application;
 
-import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
+import static com.gdschongik.gdsc.global.exception.ErrorCode.FORBIDDEN;
+import static com.gdschongik.gdsc.global.exception.ErrorCode.MEMBER_NOT_FOUND;
 
 import com.gdschongik.gdsc.domain.auth.application.JwtService;
 import com.gdschongik.gdsc.domain.auth.dto.AccessTokenDto;
 import com.gdschongik.gdsc.domain.auth.dto.RefreshTokenDto;
+import com.gdschongik.gdsc.domain.common.model.RequirementStatus;
+import com.gdschongik.gdsc.domain.email.application.UnivEmailVerificationService;
+import com.gdschongik.gdsc.domain.email.domain.UnivEmailVerification;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
+import com.gdschongik.gdsc.domain.member.dto.UnivVerificationStatus;
 import com.gdschongik.gdsc.domain.member.dto.request.BasicMemberInfoRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberTokenRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberBasicInfoResponse;
@@ -33,6 +38,7 @@ public class OnboardingMemberService {
     private final MemberUtil memberUtil;
     private final OnboardingRecruitmentService onboardingRecruitmentService;
     private final MembershipService membershipService;
+    private final UnivEmailVerificationService univEmailVerificationService;
     private final JwtService jwtService;
     private final MemberRepository memberRepository;
     private final EnvironmentUtil environmentUtil;
@@ -61,11 +67,24 @@ public class OnboardingMemberService {
     }
 
     public MemberDashboardResponse getDashboard() {
-        Member currentMember = memberUtil.getCurrentMember();
-        RecruitmentRound currentRecruitmentRound = onboardingRecruitmentService.findCurrentRecruitmentRound();
-        Optional<Membership> myMembership = membershipService.findMyMembership(currentMember, currentRecruitmentRound);
+        final Member member = memberUtil.getCurrentMember();
+        final RecruitmentRound currentRecruitmentRound = onboardingRecruitmentService.findCurrentRecruitmentRound();
+        final Optional<Membership> myMembership = membershipService.findMyMembership(member, currentRecruitmentRound);
 
-        return MemberDashboardResponse.from(currentMember, currentRecruitmentRound, myMembership.orElse(null));
+        UnivVerificationStatus univVerificationStatus;
+
+        if (member.getAssociateRequirement().getUnivStatus() == RequirementStatus.SATISFIED) {
+            univVerificationStatus = UnivVerificationStatus.SATISFIED;
+        } else {
+            final Optional<UnivEmailVerification> univEmailVerification =
+                    univEmailVerificationService.getUnivEmailVerificationFromRedis(member.getId());
+            univVerificationStatus = univEmailVerification.isPresent()
+                    ? UnivVerificationStatus.IN_PROGRESS
+                    : UnivVerificationStatus.PENDING;
+        }
+
+        return MemberDashboardResponse.of(
+                member, univVerificationStatus, currentRecruitmentRound, myMembership.orElse(null));
     }
 
     public MemberTokenResponse createTemporaryToken(MemberTokenRequest request) {
