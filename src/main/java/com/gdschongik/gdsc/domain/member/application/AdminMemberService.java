@@ -5,11 +5,13 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
+import com.gdschongik.gdsc.domain.member.domain.MemberValidator;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberDemoteRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryOption;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberUpdateRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.AdminMemberResponse;
-import com.gdschongik.gdsc.domain.recruitment.application.AdminRecruitmentService;
+import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRoundRepository;
+import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
 import com.gdschongik.gdsc.global.util.ExcelUtil;
@@ -30,7 +32,8 @@ public class AdminMemberService {
 
     private final MemberRepository memberRepository;
     private final ExcelUtil excelUtil;
-    private final AdminRecruitmentService adminRecruitmentService;
+    private final RecruitmentRoundRepository recruitmentRoundRepository;
+    private final MemberValidator memberValidator;
 
     public Page<AdminMemberResponse> searchMembers(MemberQueryOption queryOption, Pageable pageable) {
         Page<Member> members = memberRepository.searchMembers(queryOption, pageable);
@@ -63,7 +66,11 @@ public class AdminMemberService {
 
     @Transactional
     public void demoteAllRegularMembersToAssociate(MemberDemoteRequest request) {
-        adminRecruitmentService.validateRecruitmentNotStarted(request.academicYear(), request.semesterType());
+        List<RecruitmentRound> recruitmentRounds = recruitmentRoundRepository.findAllByAcademicYearAndSemesterType(
+                request.academicYear(), request.semesterType());
+
+        memberValidator.validateMemberDemote(recruitmentRounds);
+
         List<Member> regularMembers = memberRepository.findAllByRole(MemberRole.REGULAR);
 
         regularMembers.forEach(Member::demoteToAssociate);
