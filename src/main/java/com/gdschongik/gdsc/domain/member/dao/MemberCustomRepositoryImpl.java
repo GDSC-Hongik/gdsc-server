@@ -19,7 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 
 @RequiredArgsConstructor
-public class MemberCustomRepositoryImpl extends MemberQueryMethod implements MemberCustomRepository {
+public class MemberCustomRepositoryImpl implements MemberCustomRepository, MemberQueryMethod {
 
     private final JPAQueryFactory queryFactory;
 
