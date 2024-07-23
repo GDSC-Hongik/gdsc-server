@@ -36,7 +36,7 @@ class MembershipTest {
                     FEE_NAME,
                     Period.createPeriod(SEMESTER_START_DATE, SEMESTER_END_DATE));
             RecruitmentRound recruitmentRound =
-                    RecruitmentRound.create(RECRUITMENT_NAME, START_DATE, END_DATE, recruitment, ROUND_TYPE);
+                    RecruitmentRound.create(RECRUITMENT_ROUND_NAME, START_DATE, END_DATE, recruitment, ROUND_TYPE);
 
             // when
             Membership membership = Membership.createMembership(member, recruitmentRound);

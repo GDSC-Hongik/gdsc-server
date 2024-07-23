@@ -3,9 +3,9 @@ package com.gdschongik.gdsc.domain.discord.application;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.common.model.RequirementStatus;
+import com.gdschongik.gdsc.domain.discord.domain.DiscordValidator;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
-import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.DiscordUtil;
 import java.util.List;
@@ -19,6 +19,7 @@ public class CommonDiscordService {
 
     private final MemberRepository memberRepository;
     private final DiscordUtil discordUtil;
+    private final DiscordValidator discordValidator;
 
     public String getNicknameByDiscordUsername(String discordUsername) {
         return memberRepository
@@ -28,7 +29,13 @@ public class CommonDiscordService {
     }
 
     @Transactional
-    public void batchDiscordId(RequirementStatus discordStatus) {
+    public void batchDiscordId(String currentDiscordUsername, RequirementStatus discordStatus) {
+        Member currentMember = memberRepository
+                .findByDiscordUsername(currentDiscordUsername)
+                .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
+
+        discordValidator.validateAdminPermission(currentMember);
+
         List<Member> discordSatisfiedMembers = memberRepository.findAllByDiscordStatus(discordStatus);
 
         discordSatisfiedMembers.forEach(member -> {
@@ -36,15 +43,5 @@ public class CommonDiscordService {
             String discordId = discordUtil.getMemberIdByUsername(discordUsername);
             member.updateDiscordId(discordId);
         });
-    }
-
-    public void checkPermissionForCommand(String discordUsername) {
-        Member member = memberRepository
-                .findByDiscordUsername(discordUsername)
-                .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
-
-        if (!member.getRole().equals(MemberRole.ADMIN)) {
-            throw new CustomException(INVALID_ROLE);
-        }
     }
 }

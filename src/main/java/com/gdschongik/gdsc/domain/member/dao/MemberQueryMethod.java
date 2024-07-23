@@ -11,50 +11,50 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.EnumPath;
 import java.util.List;
 
-public class MemberQueryMethod {
+public interface MemberQueryMethod {
 
-    protected BooleanExpression eqRole(MemberRole role) {
+    default BooleanExpression eqRole(MemberRole role) {
         return role != null ? member.role.eq(role) : null;
     }
 
-    protected BooleanExpression eqRoles(List<MemberRole> roles) {
+    default BooleanExpression eqRoles(List<MemberRole> roles) {
         return roles != null && !roles.isEmpty() ? member.role.in(roles) : null;
     }
 
-    protected BooleanExpression eqStudentId(String studentId) {
+    default BooleanExpression eqStudentId(String studentId) {
         return studentId != null ? member.studentId.containsIgnoreCase(studentId) : null;
     }
 
-    protected BooleanExpression eqName(String name) {
+    default BooleanExpression eqName(String name) {
         return name != null ? member.name.containsIgnoreCase(name) : null;
     }
 
-    protected BooleanExpression eqPhone(String phone) {
+    default BooleanExpression eqPhone(String phone) {
         return phone != null ? member.phone.contains(phone.replaceAll("-", "")) : null;
     }
 
-    protected BooleanExpression eqEmail(String email) {
+    default BooleanExpression eqEmail(String email) {
         return email != null ? member.email.containsIgnoreCase(email) : null;
     }
 
-    protected BooleanExpression eqDiscordUsername(String discordUsername) {
+    default BooleanExpression eqDiscordUsername(String discordUsername) {
         return discordUsername != null ? member.discordUsername.containsIgnoreCase(discordUsername) : null;
     }
 
-    protected BooleanExpression eqNickname(String nickname) {
+    default BooleanExpression eqNickname(String nickname) {
         return nickname != null ? member.nickname.containsIgnoreCase(nickname) : null;
     }
 
-    protected BooleanExpression eqRequirementStatus(
+    default BooleanExpression eqRequirementStatus(
             EnumPath<RequirementStatus> requirement, RequirementStatus requirementStatus) {
         return requirementStatus != null ? requirement.eq(requirementStatus) : null;
     }
 
-    protected BooleanExpression inDepartmentList(List<Department> departmentCodes) {
+    default BooleanExpression inDepartmentList(List<Department> departmentCodes) {
         return departmentCodes.isEmpty() ? null : member.department.in(departmentCodes);
     }
 
-    protected BooleanBuilder matchesQueryOption(MemberQueryOption queryOption) {
+    default BooleanBuilder matchesQueryOption(MemberQueryOption queryOption) {
         return new BooleanBuilder()
                 .and(eqStudentId(queryOption.studentId()))
                 .and(eqName(queryOption.name()))
