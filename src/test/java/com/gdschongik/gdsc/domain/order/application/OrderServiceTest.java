@@ -17,8 +17,10 @@ import com.gdschongik.gdsc.domain.order.dto.request.OrderCreateRequest;
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.helper.IntegrationTest;
 import com.gdschongik.gdsc.infra.feign.payment.dto.request.PaymentConfirmRequest;
+import com.gdschongik.gdsc.infra.feign.payment.dto.response.PaymentResponse;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,7 +104,11 @@ class OrderServiceTest extends IntegrationTest {
                     BigDecimal.valueOf(15000)));
 
             String paymentKey = "testPaymentKey";
-            when(paymentClient.confirm(any(PaymentConfirmRequest.class))).thenReturn(null);
+
+            ZonedDateTime approvedAt = ZonedDateTime.now();
+            PaymentResponse mockPaymentResponse = mock(PaymentResponse.class);
+            when(mockPaymentResponse.approvedAt()).thenReturn(approvedAt);
+            when(paymentClient.confirm(any(PaymentConfirmRequest.class))).thenReturn(mockPaymentResponse);
 
             // when
             var request = new OrderCompleteRequest(paymentKey, orderNanoId, 15000L);
