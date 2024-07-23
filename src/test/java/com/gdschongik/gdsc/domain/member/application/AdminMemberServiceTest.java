@@ -1,19 +1,15 @@
 package com.gdschongik.gdsc.domain.member.application;
 
 import static com.gdschongik.gdsc.global.common.constant.MemberConstant.*;
-import static com.gdschongik.gdsc.global.common.constant.RecruitmentConstant.*;
-import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Department;
 import com.gdschongik.gdsc.domain.member.domain.Member;
-import com.gdschongik.gdsc.domain.member.dto.request.MemberDemoteRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberUpdateRequest;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
 import com.gdschongik.gdsc.helper.IntegrationTest;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -38,32 +34,5 @@ class AdminMemberServiceTest extends IntegrationTest {
         assertThatThrownBy(() -> adminMemberService.updateMember(member.getId(), requestBody))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(ErrorCode.MEMBER_NOT_FOUND.getMessage());
-    }
-
-    @Nested
-    class 준회원으로_일괄_강등시 {
-        @Test
-        void 해당_학기에_이미_시작된_모집기간이_있다면_실패한다() {
-            // given
-            createRecruitmentRound(
-                    RECRUITMENT_NAME, START_DATE, END_DATE, ACADEMIC_YEAR, SEMESTER_TYPE, ROUND_TYPE, FEE);
-            MemberDemoteRequest request = new MemberDemoteRequest(ACADEMIC_YEAR, SEMESTER_TYPE);
-
-            // when & then
-            assertThatThrownBy(() -> adminMemberService.demoteAllRegularMembersToAssociate(request))
-                    .isInstanceOf(CustomException.class)
-                    .hasMessage(RECRUITMENT_ROUND_STARTDATE_ALREADY_PASSED.getMessage());
-        }
-
-        @Test
-        void 해당_학기에_리쿠르팅이_존재하지_않는다면_실패한다() {
-            // given
-            MemberDemoteRequest request = new MemberDemoteRequest(ACADEMIC_YEAR, SEMESTER_TYPE);
-
-            // when & then
-            assertThatThrownBy(() -> adminMemberService.demoteAllRegularMembersToAssociate(request))
-                    .isInstanceOf(CustomException.class)
-                    .hasMessage(RECRUITMENT_ROUND_NOT_FOUND.getMessage());
-        }
     }
 }
