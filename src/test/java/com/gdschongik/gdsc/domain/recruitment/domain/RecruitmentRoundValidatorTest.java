@@ -131,7 +131,7 @@ public class RecruitmentRoundValidatorTest {
             ReflectionTestUtils.setField(firstRound, "id", 1L);
 
             RecruitmentRound secondRound = RecruitmentRound.create(
-                RECRUITMENT_ROUND_NAME, ROUND_TWO_START_DATE, ROUND_TWO_END_DATE, recruitment, RoundType.SECOND);
+                    RECRUITMENT_ROUND_NAME, ROUND_TWO_START_DATE, ROUND_TWO_END_DATE, recruitment, RoundType.SECOND);
             ReflectionTestUtils.setField(secondRound, "id", 2L);
 
             // when & then
@@ -152,7 +152,7 @@ public class RecruitmentRoundValidatorTest {
             ReflectionTestUtils.setField(firstRound, "id", 1L);
 
             RecruitmentRound secondRound = RecruitmentRound.create(
-                RECRUITMENT_ROUND_NAME, ROUND_TWO_START_DATE, ROUND_TWO_END_DATE, recruitment, RoundType.SECOND);
+                    RECRUITMENT_ROUND_NAME, ROUND_TWO_START_DATE, ROUND_TWO_END_DATE, recruitment, RoundType.SECOND);
             ReflectionTestUtils.setField(secondRound, "id", 2L);
 
             // when & then

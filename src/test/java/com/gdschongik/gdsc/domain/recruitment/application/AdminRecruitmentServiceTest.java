@@ -74,7 +74,7 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
             recruitmentRepository.save(recruitment);
 
             RecruitmentRound recruitmentRound = RecruitmentRound.create(
-				RECRUITMENT_ROUND_NAME, now.plusDays(1), now.plusDays(2), recruitment, ROUND_TYPE);
+                    RECRUITMENT_ROUND_NAME, now.plusDays(1), now.plusDays(2), recruitment, ROUND_TYPE);
             recruitmentRoundRepository.save(recruitmentRound);
 
             RecruitmentRoundCreateUpdateRequest request = new RecruitmentRoundCreateUpdateRequest(

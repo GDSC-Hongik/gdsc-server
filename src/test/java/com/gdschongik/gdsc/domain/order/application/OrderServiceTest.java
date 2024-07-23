@@ -45,7 +45,7 @@ class OrderServiceTest extends IntegrationTest {
             Member member = createMember();
             logoutAndReloginAs(1L, MemberRole.ASSOCIATE);
             RecruitmentRound recruitmentRound = createRecruitmentRound(
-				RECRUITMENT_ROUND_NAME,
+                    RECRUITMENT_ROUND_NAME,
                     LocalDateTime.now().minusDays(1),
                     LocalDateTime.now().plusDays(1),
                     ACADEMIC_YEAR,
@@ -81,7 +81,7 @@ class OrderServiceTest extends IntegrationTest {
             Member member = createMember();
             logoutAndReloginAs(1L, MemberRole.ASSOCIATE);
             RecruitmentRound recruitmentRound = createRecruitmentRound(
-				RECRUITMENT_ROUND_NAME,
+                    RECRUITMENT_ROUND_NAME,
                     LocalDateTime.now().minusDays(1),
                     LocalDateTime.now().plusDays(1),
                     ACADEMIC_YEAR,
