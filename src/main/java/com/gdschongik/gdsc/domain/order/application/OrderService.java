@@ -101,4 +101,10 @@ public class OrderService {
     public Page<OrderAdminResponse> searchOrders(OrderQueryOption queryOption, Pageable pageable) {
         return orderRepository.searchOrders(queryOption, pageable);
     }
+
+    @Transactional(readOnly = true)
+    public PaymentResponse getOrderPayment(Long orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new CustomException(ORDER_NOT_FOUND));
+        return paymentClient.getPayment(order.getPaymentKey());
+    }
 }
