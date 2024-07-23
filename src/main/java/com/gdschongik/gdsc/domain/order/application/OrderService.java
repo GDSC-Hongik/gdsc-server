@@ -132,6 +132,7 @@ public class OrderService {
     }
 
     private ZonedDateTime getCanceledAt(PaymentResponse response) {
+        // TODO: 예외 발생하는 경우 대개 응답 DTO 매핑 오류이며, 결제 취소는 완료되었으나 DB 주문 취소는 실패한 것이므로 별도 처리 필요
         return Optional.ofNullable(response.cancels())
                 .flatMap(this::findLatestCancelDate)
                 .orElseThrow(() -> new CustomException(ORDER_CANCEL_RESPONSE_NOT_FOUND));
