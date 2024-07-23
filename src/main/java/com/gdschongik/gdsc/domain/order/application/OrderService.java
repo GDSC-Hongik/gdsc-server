@@ -12,6 +12,7 @@ import com.gdschongik.gdsc.domain.order.dao.OrderRepository;
 import com.gdschongik.gdsc.domain.order.domain.MoneyInfo;
 import com.gdschongik.gdsc.domain.order.domain.Order;
 import com.gdschongik.gdsc.domain.order.domain.OrderValidator;
+import com.gdschongik.gdsc.domain.order.dto.request.OrderCancelRequest;
 import com.gdschongik.gdsc.domain.order.dto.request.OrderCompleteRequest;
 import com.gdschongik.gdsc.domain.order.dto.request.OrderCreateRequest;
 import com.gdschongik.gdsc.domain.order.dto.request.OrderQueryOption;
@@ -19,8 +20,10 @@ import com.gdschongik.gdsc.domain.order.dto.response.OrderAdminResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import com.gdschongik.gdsc.infra.feign.payment.client.PaymentClient;
+import com.gdschongik.gdsc.infra.feign.payment.dto.request.PaymentCancelRequest;
 import com.gdschongik.gdsc.infra.feign.payment.dto.request.PaymentConfirmRequest;
 import com.gdschongik.gdsc.infra.feign.payment.dto.response.PaymentResponse;
+import java.time.ZonedDateTime;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -110,5 +113,30 @@ public class OrderService {
                 .orElseThrow(() -> new CustomException(ORDER_COMPLETED_NOT_FOUND));
 
         return paymentClient.getPayment(order.getPaymentKey());
+    }
+
+    @Transactional
+    public void cancelOrder(Long orderId, OrderCancelRequest request) {
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new CustomException(ORDER_NOT_FOUND));
+
+        order.validateCancelable();
+
+        var cancelRequest = new PaymentCancelRequest(request.cancelReason());
+        PaymentResponse response = paymentClient.cancelPayment(order.getPaymentKey(), cancelRequest);
+        ZonedDateTime canceledAt = getCanceledAt(response);
+
+        order.cancel(canceledAt);
+
+        log.info("[OrderService] 주문 취소: orderId={}", order.getId());
+    }
+
+    private ZonedDateTime getCanceledAt(PaymentResponse response) {
+        var cancels = Optional.ofNullable(response.cancels())
+                .orElseThrow(() -> new CustomException(ORDER_CANCEL_RESPONSE_NOT_FOUND));
+
+        return cancels.stream()
+                .findFirst()
+                .map(PaymentResponse.CancelDto::canceledAt)
+                .orElseThrow(() -> new CustomException(ORDER_CANCEL_RESPONSE_NOT_FOUND));
     }
 }
