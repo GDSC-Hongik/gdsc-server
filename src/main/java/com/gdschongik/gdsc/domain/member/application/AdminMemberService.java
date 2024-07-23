@@ -11,10 +11,8 @@ import com.gdschongik.gdsc.domain.member.dto.request.MemberUpdateRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.AdminMemberResponse;
 import com.gdschongik.gdsc.domain.membership.application.MembershipService;
 import com.gdschongik.gdsc.domain.membership.dao.MembershipRepository;
-import com.gdschongik.gdsc.domain.membership.domain.Membership;
 import com.gdschongik.gdsc.domain.recruitment.application.AdminRecruitmentService;
 import com.gdschongik.gdsc.domain.recruitment.application.OnboardingRecruitmentService;
-import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
 import com.gdschongik.gdsc.global.util.EnvironmentUtil;
@@ -22,7 +20,6 @@ import com.gdschongik.gdsc.global.util.ExcelUtil;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -92,15 +89,9 @@ public class AdminMemberService {
     public void demoteToGuestAndRegularRequirementToPending() {
         validateProfile();
         Member member = memberUtil.getCurrentMember();
-        RecruitmentRound currentRecruitmentRound = onboardingRecruitmentService.findCurrentRecruitmentRound();
-        Optional<Membership> myMembership = membershipService.findMyMembership(member, currentRecruitmentRound);
-
         member.demoteToGuest();
 
-        if (myMembership.isPresent()) {
-            Membership membershipToErase = myMembership.get();
-            membershipRepository.delete(membershipToErase);
-        }
+        membershipService.deleteMembership(member);
 
         log.info("[AdminMemberService] 게스트로 강등: demotedMemberId={}", member.getId());
     }
