@@ -5,7 +5,7 @@ public class MemberConstant {
     private MemberConstant() {}
 
     public static final String OAUTH_ID = "testOauthId";
-    public static final String UNIV_EMAIL = "test@g.hongik.ac.kr";
+    public static final String UNIV_EMAIL = "b000000@g.hongik.ac.kr";
     public static final String EMAIL = "test@email.com";
     public static final String DISCORD_USERNAME = "testDiscord";
     public static final String NICKNAME = "testNickname";
