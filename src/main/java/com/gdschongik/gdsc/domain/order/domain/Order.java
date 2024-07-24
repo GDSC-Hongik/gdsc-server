@@ -1,8 +1,11 @@
 package com.gdschongik.gdsc.domain.order.domain;
 
+import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
+
 import com.gdschongik.gdsc.domain.common.model.BaseEntity;
 import com.gdschongik.gdsc.domain.coupon.domain.IssuedCoupon;
 import com.gdschongik.gdsc.domain.membership.domain.Membership;
+import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -58,6 +61,8 @@ public class Order extends BaseEntity {
 
     private ZonedDateTime approvedAt;
 
+    private ZonedDateTime canceledAt;
+
     @Builder(access = AccessLevel.PRIVATE)
     private Order(
             OrderStatus status,
@@ -107,6 +112,22 @@ public class Order extends BaseEntity {
         this.approvedAt = approvedAt;
 
         registerEvent(new OrderCompletedEvent(id));
+    }
+
+    /**
+     * 주문을 취소 처리합니다.
+     * 상태 변경 및 취소 시각을 저장하며, 예외를 발생시키지 않도록 외부 취소 요청 전에 validateCancelable을 호출합니다.
+     */
+    public void cancel(ZonedDateTime canceledAt) {
+        validateCancelable();
+        this.status = OrderStatus.CANCELED;
+        this.canceledAt = canceledAt;
+    }
+
+    public void validateCancelable() {
+        if (status != OrderStatus.COMPLETED) {
+            throw new CustomException(ORDER_CANCEL_NOT_COMPLETED);
+        }
     }
 
     // 데이터 조회 로직

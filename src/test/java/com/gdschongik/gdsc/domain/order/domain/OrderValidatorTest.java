@@ -10,21 +10,17 @@ import static org.assertj.core.api.Assertions.*;
 
 import com.gdschongik.gdsc.domain.common.model.SemesterType;
 import com.gdschongik.gdsc.domain.common.vo.Money;
-import com.gdschongik.gdsc.domain.coupon.domain.Coupon;
 import com.gdschongik.gdsc.domain.coupon.domain.IssuedCoupon;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.membership.domain.Membership;
-import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
-import com.gdschongik.gdsc.domain.recruitment.domain.RoundType;
-import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import com.gdschongik.gdsc.global.exception.CustomException;
+import com.gdschongik.gdsc.helper.FixtureHelper;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.Optional;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.test.util.ReflectionTestUtils;
 
 class OrderValidatorTest {
 
@@ -34,17 +30,11 @@ class OrderValidatorTest {
     public static final Money MONEY_15000_WON = Money.from(15000L);
     public static final Money MONEY_20000_WON = Money.from(20000L);
 
+    FixtureHelper fixtureHelper = new FixtureHelper();
     OrderValidator orderValidator = new OrderValidator();
 
-    private Member createAssociateMember(Long id) {
-        Member member = createGuestMember(OAUTH_ID);
-        member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
-        member.completeUnivEmailVerification(UNIV_EMAIL);
-        member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
-        member.verifyBevy();
-        member.advanceToAssociate();
-        ReflectionTestUtils.setField(member, "id", id);
-        return member;
+    public Member createAssociateMember(Long id) {
+        return fixtureHelper.createAssociateMember(id);
     }
 
     private RecruitmentRound createRecruitmentRound(
@@ -53,19 +43,15 @@ class OrderValidatorTest {
             Integer academicYear,
             SemesterType semesterType,
             Money fee) {
-        Recruitment recruitment = Recruitment.createRecruitment(
-                academicYear, semesterType, fee, FEE_NAME, Period.createPeriod(SEMESTER_START_DATE, SEMESTER_END_DATE));
-
-        return RecruitmentRound.create(RECRUITMENT_ROUND_NAME, startDate, endDate, recruitment, RoundType.FIRST);
+        return fixtureHelper.createRecruitmentRound(startDate, endDate, academicYear, semesterType, fee);
     }
 
     private Membership createMembership(Member member, RecruitmentRound recruitmentRound) {
-        return Membership.createMembership(member, recruitmentRound);
+        return fixtureHelper.createMembership(member, recruitmentRound);
     }
 
     private IssuedCoupon createAndIssue(Money money, Member member) {
-        Coupon coupon = Coupon.createCoupon("테스트쿠폰", money);
-        return IssuedCoupon.issue(coupon, member);
+        return fixtureHelper.createAndIssue(money, member);
     }
 
     @Nested

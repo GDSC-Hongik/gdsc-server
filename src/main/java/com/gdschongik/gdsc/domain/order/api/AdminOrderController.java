@@ -1,6 +1,7 @@
 package com.gdschongik.gdsc.domain.order.api;
 
 import com.gdschongik.gdsc.domain.order.application.OrderService;
+import com.gdschongik.gdsc.domain.order.dto.request.OrderCancelRequest;
 import com.gdschongik.gdsc.domain.order.dto.request.OrderQueryOption;
 import com.gdschongik.gdsc.domain.order.dto.response.OrderAdminResponse;
 import com.gdschongik.gdsc.infra.feign.payment.dto.response.PaymentResponse;
@@ -14,6 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -40,5 +43,13 @@ public class AdminOrderController {
     public ResponseEntity<PaymentResponse> getCompletedOrderPayment(@PathVariable Long orderId) {
         var response = orderService.getCompletedOrderPayment(orderId);
         return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "주문 결제 취소하기", description = "주문 상태를 취소로 변경하고 결제를 취소합니다.")
+    @PostMapping("/{orderId}/cancel")
+    public ResponseEntity<Void> cancelOrder(
+            @PathVariable Long orderId, @Valid @RequestBody OrderCancelRequest request) {
+        orderService.cancelOrder(orderId, request);
+        return ResponseEntity.noContent().build();
     }
 }
