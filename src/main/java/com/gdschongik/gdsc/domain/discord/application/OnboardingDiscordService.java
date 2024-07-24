@@ -75,6 +75,7 @@ public class OnboardingDiscordService {
         updateDiscordId(request.discordUsername(), currentMember);
 
         memberRepository.save(currentMember);
+
         log.info("[OnboardingDiscordService] 디스코드 연동: memberId={}", currentMember.getId());
     }
 
