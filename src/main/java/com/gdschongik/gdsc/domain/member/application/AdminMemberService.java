@@ -77,6 +77,9 @@ public class AdminMemberService {
         List<Member> regularMembers = memberRepository.findAllByRole(MemberRole.REGULAR);
 
         regularMembers.forEach(Member::demoteToAssociate);
+
+        memberRepository.saveAll(regularMembers);
+
         log.info(
                 "[AdminMemberService] 정회원 일괄 강등: demotedMemberIds={}",
                 regularMembers.stream().map(Member::getId).toList());
