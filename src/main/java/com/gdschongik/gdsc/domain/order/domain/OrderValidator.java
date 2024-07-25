@@ -98,4 +98,35 @@ public class OrderValidator {
             throw new CustomException(ORDER_COMPLETE_AMOUNT_MISMATCH);
         }
     }
+
+    public void validateFreeOrderCreate(
+            Membership membership, Optional<IssuedCoupon> optionalIssuedCoupon, Member currentMember) {
+        // TODO: 공통 로직으로 추출
+
+        // 멤버십 관련 검증
+
+        if (!membership.getMember().getId().equals(currentMember.getId())) {
+            throw new CustomException(ORDER_MEMBERSHIP_MEMBER_MISMATCH);
+        }
+
+        if (membership.getRegularRequirement().isPaymentSatisfied()) {
+            throw new CustomException(ORDER_MEMBERSHIP_ALREADY_PAID);
+        }
+
+        // 리쿠르팅 관련 검증
+
+        RecruitmentRound recruitmentRound = membership.getRecruitmentRound();
+
+        if (!recruitmentRound.isOpen()) {
+            throw new CustomException(ORDER_RECRUITMENT_PERIOD_INVALID);
+        }
+
+        // 발급쿠폰 관련 검증
+
+        if (optionalIssuedCoupon.isPresent()) {
+            var issuedCoupon = optionalIssuedCoupon.get();
+            validateIssuedCouponOwnership(issuedCoupon, currentMember);
+            issuedCoupon.validateUsable();
+        }
+    }
 }

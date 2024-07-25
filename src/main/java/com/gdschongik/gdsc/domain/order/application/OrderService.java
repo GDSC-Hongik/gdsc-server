@@ -152,9 +152,12 @@ public class OrderService {
 
         Member currentMember = memberUtil.getCurrentMember();
 
-        orderValidator.validateFreeOrderCreate(membership, currentMember);
+        Optional<IssuedCoupon> issuedCoupon =
+                Optional.ofNullable(request.issuedCouponId()).map(this::getIssuedCoupon);
 
-        Order order = Order.createFree(request.orderNanoId(), membership);
+        orderValidator.validateFreeOrderCreate(membership, issuedCoupon, currentMember);
+
+        Order order = Order.createFree(request.orderNanoId(), membership, issuedCoupon.orElse(null));
 
         orderRepository.save(order);
 
