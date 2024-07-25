@@ -3,6 +3,7 @@ package com.gdschongik.gdsc.domain.order.domain;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.common.model.BaseEntity;
+import com.gdschongik.gdsc.domain.common.vo.Money;
 import com.gdschongik.gdsc.domain.coupon.domain.IssuedCoupon;
 import com.gdschongik.gdsc.domain.membership.domain.Membership;
 import com.gdschongik.gdsc.global.exception.CustomException;
@@ -95,6 +96,18 @@ public class Order extends BaseEntity {
                 .recruitmentRoundId(membership.getRecruitmentRound().getId())
                 .issuedCouponId(issuedCoupon != null ? issuedCoupon.getId() : null)
                 .moneyInfo(moneyInfo)
+                .build();
+    }
+
+    public static Order createFree(String nanoId, Membership membership, @Nullable IssuedCoupon issuedCoupon) {
+        return Order.builder()
+                .status(OrderStatus.COMPLETED)
+                .nanoId(nanoId)
+                .memberId(membership.getMember().getId())
+                .membershipId(membership.getId())
+                .recruitmentRoundId(membership.getRecruitmentRound().getId())
+                .issuedCouponId(issuedCoupon != null ? issuedCoupon.getId() : null)
+                .moneyInfo(MoneyInfo.of(Money.from(0L), Money.from(0L), Money.from(0L)))
                 .build();
     }
 
