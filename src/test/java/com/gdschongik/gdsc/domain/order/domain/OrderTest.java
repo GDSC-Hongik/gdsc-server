@@ -16,7 +16,6 @@ import org.junit.jupiter.api.Test;
 
 class OrderTest {
 
-    public static final Money MONEY_0_WON = Money.from(0L);
     public static final Money MONEY_5000_WON = Money.from(5000L);
     public static final Money MONEY_10000_WON = Money.from(10000L);
     public static final Money MONEY_15000_WON = Money.from(15000L);

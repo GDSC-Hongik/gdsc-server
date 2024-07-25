@@ -10,7 +10,6 @@ import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.global.annotation.DomainService;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.annotation.Nullable;
-import java.math.BigDecimal;
 import java.util.Optional;
 
 @DomainService
@@ -68,7 +67,7 @@ public class OrderValidator {
     }
 
     private void validateDiscountAmountZero(Money discountAmount) {
-        if (!discountAmount.equals(Money.from(BigDecimal.ZERO))) {
+        if (!discountAmount.equals(Money.ZERO)) {
             throw new CustomException(ORDER_DISCOUNT_AMOUNT_NOT_ZERO);
         }
     }

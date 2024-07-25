@@ -24,7 +24,6 @@ import org.junit.jupiter.api.Test;
 
 class OrderValidatorTest {
 
-    public static final Money MONEY_0_WON = Money.from(0L);
     public static final Money MONEY_5000_WON = Money.from(5000L);
     public static final Money MONEY_10000_WON = Money.from(10000L);
     public static final Money MONEY_15000_WON = Money.from(15000L);
@@ -300,7 +299,7 @@ class OrderValidatorTest {
             Membership membership = createMembership(currentMember, recruitmentRound);
 
             Order completedOrder = Order.createPending(
-                    "nanoId", membership, null, MoneyInfo.of(MONEY_20000_WON, MONEY_0_WON, MONEY_20000_WON));
+                    "nanoId", membership, null, MoneyInfo.of(MONEY_20000_WON, Money.ZERO, MONEY_20000_WON));
             completedOrder.complete("paymentKey", ZonedDateTime.now());
 
             Optional<IssuedCoupon> emptyIssuedCoupon = Optional.empty();
@@ -380,7 +379,7 @@ class OrderValidatorTest {
             Membership membership = createMembership(anotherMember, recruitmentRound);
 
             Order order = Order.createPending(
-                    "nanoId", membership, null, MoneyInfo.of(MONEY_20000_WON, MONEY_0_WON, MONEY_20000_WON));
+                    "nanoId", membership, null, MoneyInfo.of(MONEY_20000_WON, Money.ZERO, MONEY_20000_WON));
 
             Optional<IssuedCoupon> emptyIssuedCoupon = Optional.empty();
 
@@ -404,7 +403,7 @@ class OrderValidatorTest {
             Membership membership = createMembership(currentMember, recruitmentRound);
 
             Order order = Order.createPending(
-                    "nanoId", membership, null, MoneyInfo.of(MONEY_20000_WON, MONEY_0_WON, MONEY_20000_WON));
+                    "nanoId", membership, null, MoneyInfo.of(MONEY_20000_WON, Money.ZERO, MONEY_20000_WON));
 
             Optional<IssuedCoupon> emptyIssuedCoupon = Optional.empty();
 

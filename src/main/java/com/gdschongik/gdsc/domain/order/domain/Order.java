@@ -107,7 +107,7 @@ public class Order extends BaseEntity {
                 .membershipId(membership.getId())
                 .recruitmentRoundId(membership.getRecruitmentRound().getId())
                 .issuedCouponId(issuedCoupon != null ? issuedCoupon.getId() : null)
-                .moneyInfo(MoneyInfo.of(Money.from(0L), Money.from(0L), Money.from(0L)))
+                .moneyInfo(MoneyInfo.of(Money.ZERO, Money.ZERO, Money.ZERO))
                 .build();
     }
 
@@ -150,6 +150,6 @@ public class Order extends BaseEntity {
     }
 
     public boolean isFree() {
-        return moneyInfo.getTotalAmount().equals(Money.from(0L));
+        return moneyInfo.getTotalAmount().equals(Money.ZERO);
     }
 }
