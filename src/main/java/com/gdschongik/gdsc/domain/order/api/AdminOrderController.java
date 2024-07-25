@@ -37,11 +37,11 @@ public class AdminOrderController {
     }
 
     @Operation(
-            summary = "완료된 주문 결제정보 조회하기",
-            description = "주문 결제정보를 조회합니다. 토스페이먼츠 API의 결제 정보인 Payment 객체를 반환합니다. 완료된 주문에 대해서만 조회 가능합니다.")
+            summary = " 완료된 유료 주문 결제정보 조회하기",
+            description = "주문 결제정보를 조회합니다. 토스페이먼츠 API의 결제 정보인 Payment 객체를 반환합니다. 완료된 유료 주문만 조회할 수 있습니다")
     @GetMapping("/{orderId}")
     public ResponseEntity<PaymentResponse> getCompletedOrderPayment(@PathVariable Long orderId) {
-        var response = orderService.getCompletedOrderPayment(orderId);
+        var response = orderService.getCompletedPaidOrderPayment(orderId);
         return ResponseEntity.ok(response);
     }
 

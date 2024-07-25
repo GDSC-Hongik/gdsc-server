@@ -15,6 +15,7 @@ import com.gdschongik.gdsc.domain.order.domain.OrderValidator;
 import com.gdschongik.gdsc.domain.order.dto.request.OrderCancelRequest;
 import com.gdschongik.gdsc.domain.order.dto.request.OrderCompleteRequest;
 import com.gdschongik.gdsc.domain.order.dto.request.OrderCreateRequest;
+import com.gdschongik.gdsc.domain.order.dto.request.OrderFreeCreateRequest;
 import com.gdschongik.gdsc.domain.order.dto.request.OrderQueryOption;
 import com.gdschongik.gdsc.domain.order.dto.response.OrderAdminResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
@@ -107,11 +108,12 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
-    public PaymentResponse getCompletedOrderPayment(Long orderId) {
+    public PaymentResponse getCompletedPaidOrderPayment(Long orderId) {
         Order order = orderRepository
                 .findById(orderId)
                 .filter(Order::isCompleted)
-                .orElseThrow(() -> new CustomException(ORDER_COMPLETED_NOT_FOUND));
+                .filter(o -> !o.isFree())
+                .orElseThrow(() -> new CustomException(ORDER_COMPLETED_PAID_NOT_FOUND));
 
         return paymentClient.getPayment(order.getPaymentKey());
     }
@@ -140,5 +142,22 @@ public class OrderService {
 
     private Optional<ZonedDateTime> findLatestCancelDate(List<PaymentResponse.CancelDto> cancels) {
         return cancels.stream().map(PaymentResponse.CancelDto::canceledAt).max(ZonedDateTime::compareTo);
+    }
+
+    @Transactional
+    public void createFreeOrder(OrderFreeCreateRequest request) {
+        Membership membership = membershipRepository
+                .findById(request.membershipId())
+                .orElseThrow(() -> new CustomException(MEMBERSHIP_NOT_FOUND));
+
+        Member currentMember = memberUtil.getCurrentMember();
+
+        orderValidator.validateFreeOrderCreate(membership, currentMember);
+
+        Order order = Order.createFree(request.orderNanoId(), membership);
+
+        orderRepository.save(order);
+
+        log.info("[OrderService] 무료 주문 생성: orderId={}", order.getId());
     }
 }
