@@ -42,6 +42,48 @@ class OrderTest {
     }
 
     @Nested
+    class 무료주문_생성할때 {
+
+        @Test
+        void 주문상태는_완료이다() {
+            // given
+            Member currentMember = createAssociateMember(1L);
+            RecruitmentRound recruitmentRound = createRecruitmentRound(
+                    LocalDateTime.now().minusDays(1),
+                    LocalDateTime.now().plusDays(1),
+                    2021,
+                    SemesterType.FIRST,
+                    MONEY_10000_WON);
+            Membership membership = createMembership(currentMember, recruitmentRound);
+
+            // when
+            Order order = Order.createFree("testNanoId", membership, null);
+
+            // then
+            assertThat(order.getStatus()).isEqualTo(OrderStatus.COMPLETED);
+        }
+
+        @Test
+        void 최종결제금액은_0원이다() {
+            // given
+            Member currentMember = createAssociateMember(1L);
+            RecruitmentRound recruitmentRound = createRecruitmentRound(
+                    LocalDateTime.now().minusDays(1),
+                    LocalDateTime.now().plusDays(1),
+                    2021,
+                    SemesterType.FIRST,
+                    MONEY_10000_WON);
+            Membership membership = createMembership(currentMember, recruitmentRound);
+
+            // when
+            Order order = Order.createFree("testNanoId", membership, null);
+
+            // then
+            assertThat(order.getMoneyInfo().getFinalPaymentAmount()).isEqualTo(Money.ZERO);
+        }
+    }
+
+    @Nested
     class 주문_취소할때 {
 
         @Test
