@@ -3,7 +3,6 @@ package com.gdschongik.gdsc.domain.order.api;
 import com.gdschongik.gdsc.domain.order.application.OrderService;
 import com.gdschongik.gdsc.domain.order.dto.request.OrderCompleteRequest;
 import com.gdschongik.gdsc.domain.order.dto.request.OrderCreateRequest;
-import com.gdschongik.gdsc.domain.order.dto.request.OrderFreeCreateRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -38,7 +37,7 @@ public class OnboardingOrderController {
 
     @Operation(summary = "무료 주문 생성", description = "무료 주문을 생성합니다. 무료 주문은 완료된 상태로 생성됩니다.")
     @PostMapping("/free")
-    public ResponseEntity<Void> createFreeOrder(@Valid @RequestBody OrderFreeCreateRequest request) {
+    public ResponseEntity<Void> createFreeOrder(@Valid @RequestBody OrderCreateRequest request) {
         orderService.createFreeOrder(request);
         return ResponseEntity.ok().build();
     }
