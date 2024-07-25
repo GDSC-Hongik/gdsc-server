@@ -58,4 +58,8 @@ public class MoneyInfo {
             throw new CustomException(ErrorCode.ORDER_FINAL_PAYMENT_AMOUNT_MISMATCH);
         }
     }
+
+    public boolean isFree() {
+        return finalPaymentAmount.equals(Money.ZERO);
+    }
 }

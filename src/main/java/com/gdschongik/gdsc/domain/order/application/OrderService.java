@@ -15,7 +15,6 @@ import com.gdschongik.gdsc.domain.order.domain.OrderValidator;
 import com.gdschongik.gdsc.domain.order.dto.request.OrderCancelRequest;
 import com.gdschongik.gdsc.domain.order.dto.request.OrderCompleteRequest;
 import com.gdschongik.gdsc.domain.order.dto.request.OrderCreateRequest;
-import com.gdschongik.gdsc.domain.order.dto.request.OrderFreeCreateRequest;
 import com.gdschongik.gdsc.domain.order.dto.request.OrderQueryOption;
 import com.gdschongik.gdsc.domain.order.dto.response.OrderAdminResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
@@ -145,19 +144,24 @@ public class OrderService {
     }
 
     @Transactional
-    public void createFreeOrder(OrderFreeCreateRequest request) {
+    public void createFreeOrder(OrderCreateRequest request) {
         Membership membership = membershipRepository
                 .findById(request.membershipId())
                 .orElseThrow(() -> new CustomException(MEMBERSHIP_NOT_FOUND));
 
-        Member currentMember = memberUtil.getCurrentMember();
-
         Optional<IssuedCoupon> issuedCoupon =
                 Optional.ofNullable(request.issuedCouponId()).map(this::getIssuedCoupon);
 
+        MoneyInfo moneyInfo = MoneyInfo.of(
+                Money.from(request.totalAmount()),
+                Money.from(request.discountAmount()),
+                Money.from(request.finalPaymentAmount()));
+
+        Member currentMember = memberUtil.getCurrentMember();
+
         orderValidator.validateFreeOrderCreate(membership, issuedCoupon, currentMember);
 
-        Order order = Order.createFree(request.orderNanoId(), membership, issuedCoupon.orElse(null));
+        Order order = Order.createFree(request.orderNanoId(), membership, issuedCoupon.orElse(null), moneyInfo);
 
         orderRepository.save(order);
 

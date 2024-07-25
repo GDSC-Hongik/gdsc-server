@@ -3,7 +3,6 @@ package com.gdschongik.gdsc.domain.order.domain;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.common.model.BaseEntity;
-import com.gdschongik.gdsc.domain.common.vo.Money;
 import com.gdschongik.gdsc.domain.coupon.domain.IssuedCoupon;
 import com.gdschongik.gdsc.domain.membership.domain.Membership;
 import com.gdschongik.gdsc.global.exception.CustomException;
@@ -99,7 +98,9 @@ public class Order extends BaseEntity {
                 .build();
     }
 
-    public static Order createFree(String nanoId, Membership membership, @Nullable IssuedCoupon issuedCoupon) {
+    public static Order createFree(
+            String nanoId, Membership membership, @Nullable IssuedCoupon issuedCoupon, MoneyInfo moneyInfo) {
+        validateFreeOrder(moneyInfo);
         return Order.builder()
                 .status(OrderStatus.COMPLETED)
                 .nanoId(nanoId)
@@ -107,8 +108,14 @@ public class Order extends BaseEntity {
                 .membershipId(membership.getId())
                 .recruitmentRoundId(membership.getRecruitmentRound().getId())
                 .issuedCouponId(issuedCoupon != null ? issuedCoupon.getId() : null)
-                .moneyInfo(MoneyInfo.of(Money.ZERO, Money.ZERO, Money.ZERO))
+                .moneyInfo(moneyInfo)
                 .build();
+    }
+
+    private static void validateFreeOrder(MoneyInfo moneyInfo) {
+        if (!moneyInfo.isFree()) {
+            throw new CustomException(ORDER_FREE_FINAL_PAYMENT_NOT_ZERO);
+        }
     }
 
     // 데이터 변경 로직
@@ -155,6 +162,6 @@ public class Order extends BaseEntity {
     }
 
     public boolean isFree() {
-        return moneyInfo.getTotalAmount().equals(Money.ZERO);
+        return moneyInfo.isFree();
     }
 }
