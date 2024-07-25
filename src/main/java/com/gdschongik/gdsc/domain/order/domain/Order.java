@@ -142,6 +142,10 @@ public class Order extends BaseEntity {
         if (status != OrderStatus.COMPLETED) {
             throw new CustomException(ORDER_CANCEL_NOT_COMPLETED);
         }
+
+        if (isFree()) {
+            throw new CustomException(ORDER_CANCEL_FREE_ORDER);
+        }
     }
 
     // 데이터 조회 로직

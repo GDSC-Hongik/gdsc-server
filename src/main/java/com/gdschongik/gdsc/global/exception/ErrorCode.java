@@ -119,6 +119,7 @@ public enum ErrorCode {
     ORDER_COMPLETE_MEMBER_MISMATCH(HttpStatus.CONFLICT, "주문자와 현재 로그인한 멤버가 일치하지 않습니다."),
     ORDER_COMPLETED_PAID_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 주문이거나, 완료되지 않은 유료 주문입니다."),
     ORDER_CANCEL_NOT_COMPLETED(HttpStatus.CONFLICT, "완료되지 않은 주문은 취소할 수 없습니다."),
+    ORDER_CANCEL_FREE_ORDER(HttpStatus.CONFLICT, "무료 주문은 취소할 수 없습니다."),
     ORDER_CANCEL_RESPONSE_NOT_FOUND(
             HttpStatus.INTERNAL_SERVER_ERROR, "주문 결제가 취소되었지만, 응답에 취소 정보가 존재하지 않습니다. 관리자에게 문의 바랍니다."),
 

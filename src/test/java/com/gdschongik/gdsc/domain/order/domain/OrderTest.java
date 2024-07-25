@@ -89,6 +89,28 @@ class OrderTest {
     }
 
     @Test
+    void 무료주문이면_주문취소에_실패한다() {
+        // given
+        Member currentMember = createAssociateMember(1L);
+        RecruitmentRound recruitmentRound = createRecruitmentRound(
+                LocalDateTime.now().minusDays(1),
+                LocalDateTime.now().plusDays(1),
+                2021,
+                SemesterType.FIRST,
+                MONEY_10000_WON);
+        Membership membership = createMembership(currentMember, recruitmentRound);
+
+        Order order = Order.createFree("testNanoId", membership, null);
+
+        ZonedDateTime canceledAt = ZonedDateTime.now();
+
+        // when & then
+        assertThatThrownBy(() -> order.cancel(canceledAt))
+                .isInstanceOf(CustomException.class)
+                .hasMessage(ORDER_CANCEL_FREE_ORDER.getMessage());
+    }
+
+    @Test
     void 완료상태이면_주문취소에_성공한다() {
         // given
         Member currentMember = createAssociateMember(1L);
