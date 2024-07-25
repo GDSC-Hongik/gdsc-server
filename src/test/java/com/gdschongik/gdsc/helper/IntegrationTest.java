@@ -66,6 +66,8 @@ public abstract class IntegrationTest {
     @MockBean
     protected PaymentClient paymentClient;
 
+    protected FixtureHelper fixtureHelper = new FixtureHelper();
+
     @BeforeEach
     void setUp() {
         databaseCleaner.execute();
@@ -91,25 +93,17 @@ public abstract class IntegrationTest {
     }
 
     protected Member createGuestMember() {
-        Member member = Member.createGuestMember(OAUTH_ID);
-        return memberRepository.save(member);
+        Member guestMember = fixtureHelper.createGuestMember(1L);
+        return memberRepository.save(guestMember);
     }
 
     protected Member createAssociateMember() {
-        Member member = createGuestMember();
-
-        member.completeUnivEmailVerification(UNIV_EMAIL);
-        member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
-        member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
-        member.verifyBevy();
-
-        member.advanceToAssociate();
-        return memberRepository.save(member);
+        Member associateMember = fixtureHelper.createAssociateMember(1L);
+        return memberRepository.save(associateMember);
     }
 
     protected Member createRegularMember() {
         Member member = createAssociateMember();
-
         member.advanceToRegular();
         return memberRepository.save(member);
     }
