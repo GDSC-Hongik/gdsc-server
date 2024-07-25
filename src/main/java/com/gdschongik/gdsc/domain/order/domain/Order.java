@@ -132,6 +132,7 @@ public class Order extends BaseEntity {
      * 상태 변경 및 취소 시각을 저장하며, 예외를 발생시키지 않도록 외부 취소 요청 전에 validateCancelable을 호출합니다.
      */
     public void cancel(ZonedDateTime canceledAt) {
+        // TODO: 취소 이벤트 발행을 통해 멤버십 및 멤버 상태에 대한 변경 로직 추가
         validateCancelable();
         this.status = OrderStatus.CANCELED;
         this.canceledAt = canceledAt;

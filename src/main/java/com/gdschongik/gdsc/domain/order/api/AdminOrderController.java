@@ -45,7 +45,7 @@ public class AdminOrderController {
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "주문 결제 취소하기", description = "주문 상태를 취소로 변경하고 결제를 취소합니다.")
+    @Operation(summary = "주문 결제 취소하기", description = "주문 상태를 취소로 변경하고 결제를 취소합니다. 회비납입상태를 대기로 변경하고, 준회원으로 강등합니다.")
     @PostMapping("/{orderId}/cancel")
     public ResponseEntity<Void> cancelOrder(
             @PathVariable Long orderId, @Valid @RequestBody OrderCancelRequest request) {
