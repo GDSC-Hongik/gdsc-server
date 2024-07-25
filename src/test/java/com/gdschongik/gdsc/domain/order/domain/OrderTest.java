@@ -55,16 +55,17 @@ class OrderTest {
                     SemesterType.FIRST,
                     MONEY_10000_WON);
             Membership membership = createMembership(currentMember, recruitmentRound);
+            MoneyInfo freeMoneyInfo = MoneyInfo.of(MONEY_20000_WON, MONEY_20000_WON, Money.ZERO);
 
             // when
-            Order order = Order.createFree("testNanoId", membership, null);
+            Order order = Order.createFree("testNanoId", membership, null, freeMoneyInfo);
 
             // then
             assertThat(order.getStatus()).isEqualTo(OrderStatus.COMPLETED);
         }
 
         @Test
-        void 최종결제금액은_0원이다() {
+        void 최종결제금액이_0원이_아니면_실패한다() {
             // given
             Member currentMember = createAssociateMember(1L);
             RecruitmentRound recruitmentRound = createRecruitmentRound(
@@ -74,12 +75,12 @@ class OrderTest {
                     SemesterType.FIRST,
                     MONEY_10000_WON);
             Membership membership = createMembership(currentMember, recruitmentRound);
+            MoneyInfo freeMoneyInfo = MoneyInfo.of(MONEY_20000_WON, MONEY_15000_WON, MONEY_5000_WON);
 
-            // when
-            Order order = Order.createFree("testNanoId", membership, null);
-
-            // then
-            assertThat(order.getMoneyInfo().getFinalPaymentAmount()).isEqualTo(Money.ZERO);
+            // when & then
+            assertThatThrownBy(() -> Order.createFree("testNanoId", membership, null, freeMoneyInfo))
+                    .isInstanceOf(CustomException.class)
+                    .hasMessage(ORDER_FREE_FINAL_PAYMENT_NOT_ZERO.getMessage());
         }
     }
 
@@ -145,8 +146,9 @@ class OrderTest {
                     SemesterType.FIRST,
                     MONEY_10000_WON);
             Membership membership = createMembership(currentMember, recruitmentRound);
+            MoneyInfo freeMoneyInfo = MoneyInfo.of(MONEY_20000_WON, MONEY_20000_WON, Money.ZERO);
 
-            Order order = Order.createFree("testNanoId", membership, null);
+            Order order = Order.createFree("testNanoId", membership, null, freeMoneyInfo);
 
             ZonedDateTime canceledAt = ZonedDateTime.now();
 
