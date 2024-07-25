@@ -148,4 +148,8 @@ public class Order extends BaseEntity {
     public boolean isCompleted() {
         return status == OrderStatus.COMPLETED;
     }
+
+    public boolean isFree() {
+        return moneyInfo.getTotalAmount().equals(Money.from(0L));
+    }
 }
