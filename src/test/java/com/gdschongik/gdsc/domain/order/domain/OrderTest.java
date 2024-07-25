@@ -12,6 +12,7 @@ import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.helper.FixtureHelper;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 class OrderTest {
@@ -40,99 +41,103 @@ class OrderTest {
         return fixtureHelper.createMembership(member, recruitmentRound);
     }
 
-    @Test
-    void 대기상태이면_주문취소에_실패한다() {
-        // given
-        Member currentMember = createAssociateMember(1L);
-        RecruitmentRound recruitmentRound = createRecruitmentRound(
-                LocalDateTime.now().minusDays(1),
-                LocalDateTime.now().plusDays(1),
-                2021,
-                SemesterType.FIRST,
-                MONEY_10000_WON);
-        Membership membership = createMembership(currentMember, recruitmentRound);
+    @Nested
+    class 주문_취소할때 {
 
-        Order order = Order.createPending(
-                "testNanoId", membership, null, MoneyInfo.of(MONEY_20000_WON, MONEY_5000_WON, MONEY_15000_WON));
+        @Test
+        void 대기상태이면_실패한다() {
+            // given
+            Member currentMember = createAssociateMember(1L);
+            RecruitmentRound recruitmentRound = createRecruitmentRound(
+                    LocalDateTime.now().minusDays(1),
+                    LocalDateTime.now().plusDays(1),
+                    2021,
+                    SemesterType.FIRST,
+                    MONEY_10000_WON);
+            Membership membership = createMembership(currentMember, recruitmentRound);
 
-        ZonedDateTime canceledAt = ZonedDateTime.now();
+            Order order = Order.createPending(
+                    "testNanoId", membership, null, MoneyInfo.of(MONEY_20000_WON, MONEY_5000_WON, MONEY_15000_WON));
 
-        // when
-        assertThatThrownBy(() -> order.cancel(canceledAt))
-                .isInstanceOf(CustomException.class)
-                .hasMessage(ORDER_CANCEL_NOT_COMPLETED.getMessage());
-    }
+            ZonedDateTime canceledAt = ZonedDateTime.now();
 
-    @Test
-    void 취소상태이면_주문취소에_실패한다() {
-        // given
-        Member currentMember = createAssociateMember(1L);
-        RecruitmentRound recruitmentRound = createRecruitmentRound(
-                LocalDateTime.now().minusDays(1),
-                LocalDateTime.now().plusDays(1),
-                2021,
-                SemesterType.FIRST,
-                MONEY_10000_WON);
-        Membership membership = createMembership(currentMember, recruitmentRound);
+            // when
+            assertThatThrownBy(() -> order.cancel(canceledAt))
+                    .isInstanceOf(CustomException.class)
+                    .hasMessage(ORDER_CANCEL_NOT_COMPLETED.getMessage());
+        }
 
-        Order order = Order.createPending(
-                "testNanoId", membership, null, MoneyInfo.of(MONEY_20000_WON, MONEY_5000_WON, MONEY_15000_WON));
-        order.complete("testPaymentKey", ZonedDateTime.now());
-        order.cancel(ZonedDateTime.now());
+        @Test
+        void 취소상태이면_실패한다() {
+            // given
+            Member currentMember = createAssociateMember(1L);
+            RecruitmentRound recruitmentRound = createRecruitmentRound(
+                    LocalDateTime.now().minusDays(1),
+                    LocalDateTime.now().plusDays(1),
+                    2021,
+                    SemesterType.FIRST,
+                    MONEY_10000_WON);
+            Membership membership = createMembership(currentMember, recruitmentRound);
 
-        ZonedDateTime canceledAt = ZonedDateTime.now();
+            Order order = Order.createPending(
+                    "testNanoId", membership, null, MoneyInfo.of(MONEY_20000_WON, MONEY_5000_WON, MONEY_15000_WON));
+            order.complete("testPaymentKey", ZonedDateTime.now());
+            order.cancel(ZonedDateTime.now());
 
-        // when & then
-        assertThatThrownBy(() -> order.cancel(canceledAt))
-                .isInstanceOf(CustomException.class)
-                .hasMessage(ORDER_CANCEL_NOT_COMPLETED.getMessage());
-    }
+            ZonedDateTime canceledAt = ZonedDateTime.now();
 
-    @Test
-    void 무료주문이면_주문취소에_실패한다() {
-        // given
-        Member currentMember = createAssociateMember(1L);
-        RecruitmentRound recruitmentRound = createRecruitmentRound(
-                LocalDateTime.now().minusDays(1),
-                LocalDateTime.now().plusDays(1),
-                2021,
-                SemesterType.FIRST,
-                MONEY_10000_WON);
-        Membership membership = createMembership(currentMember, recruitmentRound);
+            // when & then
+            assertThatThrownBy(() -> order.cancel(canceledAt))
+                    .isInstanceOf(CustomException.class)
+                    .hasMessage(ORDER_CANCEL_NOT_COMPLETED.getMessage());
+        }
 
-        Order order = Order.createFree("testNanoId", membership, null);
+        @Test
+        void 무료주문이면_실패한다() {
+            // given
+            Member currentMember = createAssociateMember(1L);
+            RecruitmentRound recruitmentRound = createRecruitmentRound(
+                    LocalDateTime.now().minusDays(1),
+                    LocalDateTime.now().plusDays(1),
+                    2021,
+                    SemesterType.FIRST,
+                    MONEY_10000_WON);
+            Membership membership = createMembership(currentMember, recruitmentRound);
 
-        ZonedDateTime canceledAt = ZonedDateTime.now();
+            Order order = Order.createFree("testNanoId", membership, null);
 
-        // when & then
-        assertThatThrownBy(() -> order.cancel(canceledAt))
-                .isInstanceOf(CustomException.class)
-                .hasMessage(ORDER_CANCEL_FREE_ORDER.getMessage());
-    }
+            ZonedDateTime canceledAt = ZonedDateTime.now();
 
-    @Test
-    void 완료상태이면_주문취소에_성공한다() {
-        // given
-        Member currentMember = createAssociateMember(1L);
-        RecruitmentRound recruitmentRound = createRecruitmentRound(
-                LocalDateTime.now().minusDays(1),
-                LocalDateTime.now().plusDays(1),
-                2021,
-                SemesterType.FIRST,
-                MONEY_10000_WON);
-        Membership membership = createMembership(currentMember, recruitmentRound);
+            // when & then
+            assertThatThrownBy(() -> order.cancel(canceledAt))
+                    .isInstanceOf(CustomException.class)
+                    .hasMessage(ORDER_CANCEL_FREE_ORDER.getMessage());
+        }
 
-        Order order = Order.createPending(
-                "testNanoId", membership, null, MoneyInfo.of(MONEY_20000_WON, MONEY_5000_WON, MONEY_15000_WON));
-        order.complete("testPaymentKey", ZonedDateTime.now());
+        @Test
+        void 완료상태이면_성공한다() {
+            // given
+            Member currentMember = createAssociateMember(1L);
+            RecruitmentRound recruitmentRound = createRecruitmentRound(
+                    LocalDateTime.now().minusDays(1),
+                    LocalDateTime.now().plusDays(1),
+                    2021,
+                    SemesterType.FIRST,
+                    MONEY_10000_WON);
+            Membership membership = createMembership(currentMember, recruitmentRound);
 
-        ZonedDateTime canceledAt = ZonedDateTime.now();
+            Order order = Order.createPending(
+                    "testNanoId", membership, null, MoneyInfo.of(MONEY_20000_WON, MONEY_5000_WON, MONEY_15000_WON));
+            order.complete("testPaymentKey", ZonedDateTime.now());
 
-        // when
-        order.cancel(canceledAt);
+            ZonedDateTime canceledAt = ZonedDateTime.now();
 
-        // then
-        assertThat(order.getStatus()).isEqualTo(OrderStatus.CANCELED);
-        assertThat(order.getCanceledAt()).isEqualTo(canceledAt);
+            // when
+            order.cancel(canceledAt);
+
+            // then
+            assertThat(order.getStatus()).isEqualTo(OrderStatus.CANCELED);
+            assertThat(order.getCanceledAt()).isEqualTo(canceledAt);
+        }
     }
 }
