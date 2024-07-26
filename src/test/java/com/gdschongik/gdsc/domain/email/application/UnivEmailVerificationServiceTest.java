@@ -59,6 +59,7 @@ public class UnivEmailVerificationServiceTest extends IntegrationTest {
         @Test
         void 인증토큰과_레디스에_존재하는_인증정보의_토큰이_다르면_실패한다() {
             // given
+            // TODO: 아래 두줄 createGuestMember로 대체하기
             Member member = memberRepository.save(Member.createGuestMember(OAUTH_ID));
             logoutAndReloginAs(member.getId(), member.getRole());
 

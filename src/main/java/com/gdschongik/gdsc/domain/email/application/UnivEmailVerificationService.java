@@ -4,7 +4,6 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.EMAIL_NOT_SENT;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.EXPIRED_EMAIL_VERIFICATION_TOKEN;
 
 import com.gdschongik.gdsc.domain.email.dao.UnivEmailVerificationRepository;
-import com.gdschongik.gdsc.domain.email.domain.HongikUnivEmailValidator;
 import com.gdschongik.gdsc.domain.email.domain.UnivEmailVerification;
 import com.gdschongik.gdsc.domain.email.dto.request.EmailVerificationTokenDto;
 import com.gdschongik.gdsc.domain.email.dto.request.UnivEmailVerificationRequest;
@@ -26,8 +25,6 @@ public class UnivEmailVerificationService {
     private final EmailVerificationTokenUtil emailVerificationTokenUtil;
     private final MemberRepository memberRepository;
     private final UnivEmailVerificationRepository univEmailVerificationRepository;
-
-    private final HongikUnivEmailValidator hongikUnivEmailValidator;
 
     @Transactional
     public void verifyMemberUnivEmail(UnivEmailVerificationRequest request) {
@@ -55,15 +52,16 @@ public class UnivEmailVerificationService {
         return memberRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
     }
 
-    // redis 안의 존재하는 메일인증 정보로 검증
+    /**
+     * redis 안의 존재하는 메일인증 정보로 검증
+     * 1. 토큰이 비었는데 인증하려할 시 에러 (인증메일을 보내지 않았거나, 만료된 경우)
+     * 2. 토큰이 redis에 저장된 토큰과 다르면 만료되었다는 에러 (메일 여러번 보낸 경우)
+     */
     private void validateUnivEmailVerification(
             Optional<UnivEmailVerification> optionalUnivEmailVerification, String currentToken) {
-        // 토큰이 비었는데 인증하려할 시 에러 (인증메일을 보내지 않았거나, 만료된 경우)
         if (optionalUnivEmailVerification.isEmpty()) {
             throw new CustomException(EMAIL_NOT_SENT);
-        }
-        // 토큰이 redis에 저장된 토큰과 다르면 만료되었다는 에러 (메일 여러번 보낸 경우)
-        else if (!optionalUnivEmailVerification.get().getVerificationToken().equals(currentToken)) {
+        } else if (!optionalUnivEmailVerification.get().getVerificationToken().equals(currentToken)) {
             throw new CustomException(EXPIRED_EMAIL_VERIFICATION_TOKEN);
         }
     }

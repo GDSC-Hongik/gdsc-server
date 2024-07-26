@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public record MemberFullDto(
         Long memberId,
-        @Schema(description = "권한", implementation = MemberRole.class) MemberRole role,
+        @Schema(description = "멤버 역할", implementation = MemberRole.class) MemberRole role,
         @Schema(description = "회원정보", implementation = MemberBasicInfoDto.class) MemberBasicInfoDto basicInfo,
         @Schema(description = "인증상태정보", implementation = MemberAssociateRequirementDto.class)
                 MemberAssociateRequirementDto associateRequirement) {

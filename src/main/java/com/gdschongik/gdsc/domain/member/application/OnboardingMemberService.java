@@ -6,7 +6,6 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.MEMBER_NOT_FOUND;
 import com.gdschongik.gdsc.domain.auth.application.JwtService;
 import com.gdschongik.gdsc.domain.auth.dto.AccessTokenDto;
 import com.gdschongik.gdsc.domain.auth.dto.RefreshTokenDto;
-import com.gdschongik.gdsc.domain.common.model.RequirementStatus;
 import com.gdschongik.gdsc.domain.email.application.UnivEmailVerificationService;
 import com.gdschongik.gdsc.domain.email.domain.UnivEmailVerification;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
@@ -70,18 +69,7 @@ public class OnboardingMemberService {
         final Member member = memberUtil.getCurrentMember();
         final RecruitmentRound currentRecruitmentRound = onboardingRecruitmentService.findCurrentRecruitmentRound();
         final Optional<Membership> myMembership = membershipService.findMyMembership(member, currentRecruitmentRound);
-
-        UnivVerificationStatus univVerificationStatus;
-
-        if (member.getAssociateRequirement().getUnivStatus() == RequirementStatus.SATISFIED) {
-            univVerificationStatus = UnivVerificationStatus.SATISFIED;
-        } else {
-            final Optional<UnivEmailVerification> univEmailVerification =
-                    univEmailVerificationService.getUnivEmailVerificationFromRedis(member.getId());
-            univVerificationStatus = univEmailVerification.isPresent()
-                    ? UnivVerificationStatus.IN_PROGRESS
-                    : UnivVerificationStatus.PENDING;
-        }
+        UnivVerificationStatus univVerificationStatus = determineUnivVerificationStatus(member);
 
         return MemberDashboardResponse.of(
                 member, univVerificationStatus, currentRecruitmentRound, myMembership.orElse(null));
@@ -103,6 +91,18 @@ public class OnboardingMemberService {
     private void validateProfile() {
         if (!environmentUtil.isDevAndLocalProfile()) {
             throw new CustomException(FORBIDDEN);
+        }
+    }
+
+    private UnivVerificationStatus determineUnivVerificationStatus(Member member) {
+        if (member.getAssociateRequirement().isUnivSatisfied()) {
+            return UnivVerificationStatus.SATISFIED;
+        } else {
+            final Optional<UnivEmailVerification> univEmailVerification =
+                    univEmailVerificationService.getUnivEmailVerificationFromRedis(member.getId());
+            return univEmailVerification.isPresent()
+                    ? UnivVerificationStatus.IN_PROGRESS
+                    : UnivVerificationStatus.PENDING;
         }
     }
 }
