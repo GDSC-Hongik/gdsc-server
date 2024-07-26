@@ -92,18 +92,25 @@ public abstract class IntegrationTest {
         return memberRepository.save(member);
     }
 
-    protected Member createGuestMember(Long id) {
-        Member guestMember = fixtureHelper.createGuestMember(1L);
+    protected Member createGuestMember() {
+        Member guestMember = Member.createGuestMember(OAUTH_ID);
         return memberRepository.save(guestMember);
     }
 
-    protected Member createAssociateMember(Long id) {
-        Member associateMember = fixtureHelper.createAssociateMember(id);
-        return memberRepository.save(associateMember);
+    protected Member createAssociateMember() {
+        Member member = createGuestMember();
+
+        member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
+        member.completeUnivEmailVerification(UNIV_EMAIL);
+        member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
+        member.verifyBevy();
+        member.advanceToAssociate();
+        return memberRepository.save(member);
     }
 
-    protected Member createRegularMember(Long id) {
-        Member member = createAssociateMember(id);
+    protected Member createRegularMember() {
+        Member member = createAssociateMember();
+
         member.advanceToRegular();
         return memberRepository.save(member);
     }
