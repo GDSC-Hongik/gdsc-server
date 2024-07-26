@@ -15,13 +15,13 @@ spring:
 jwt:
   token:
     ACCESS_TOKEN:
-      secret: ${JWT_ACCESS_TOKEN_SECRET:3q2tqat432wtq23tq2387trq8723yrhfi87a2wuyh3efo7qa2y3fho2qa}
+      secret: ${JWT_ACCESS_TOKEN_SECRET:}
       expiration-time: ${JWT_ACCESS_TOKEN_EXPIRATION_TIME:7200}
     REFRESH_TOKEN:
-      secret: ${JWT_REFRESH_TOKEN_SECRET:3248oqy478ryq327owyhtfq2gaw3eygfq23867gq2o87}
+      secret: ${JWT_REFRESH_TOKEN_SECRET:}
       expiration-time: ${JWT_REFRESH_TOKEN_EXPIRATION_TIME:604800}
     EMAIL_VERIFICATION_TOKEN:
-      secret: ${JWT_EMAIL_VERIFICATION_TOKEN_SECRET:235872q3ywhtf87q243yt98qop42y3whtg8oiq92ayh4gq2g}
+      secret: ${JWT_EMAIL_VERIFICATION_TOKEN_SECRET:}
       expiration-time: ${JWT_EMAIL_VERIFICATION_TOKEN_EXPIRATION_TIME:1800}
   issuer: ${JWT_ISSUER:}
 
