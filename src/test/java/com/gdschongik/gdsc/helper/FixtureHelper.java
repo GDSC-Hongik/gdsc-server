@@ -21,14 +21,25 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 public class FixtureHelper {
 
+    public Member createGuestMember(Long id) {
+        Member member = Member.createGuestMember(OAUTH_ID);
+        ReflectionTestUtils.setField(member, "id", id);
+        return member;
+    }
+
     public Member createAssociateMember(Long id) {
-        Member member = createGuestMember(OAUTH_ID);
+        Member member = createGuestMember(id);
         member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
         member.completeUnivEmailVerification(UNIV_EMAIL);
         member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
         member.verifyBevy();
         member.advanceToAssociate();
-        ReflectionTestUtils.setField(member, "id", id);
+        return member;
+    }
+
+    public Member createRegularMember(Long id) {
+        Member member = createAssociateMember(id);
+        member.advanceToRegular();
         return member;
     }
 
