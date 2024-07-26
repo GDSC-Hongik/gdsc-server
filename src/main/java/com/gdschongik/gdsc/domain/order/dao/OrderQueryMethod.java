@@ -8,7 +8,7 @@ import com.gdschongik.gdsc.domain.common.model.SemesterType;
 import com.gdschongik.gdsc.domain.order.dto.request.OrderQueryOption;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import java.time.ZonedDateTime;
+import java.time.LocalDate;
 
 public interface OrderQueryMethod {
 
@@ -56,7 +56,7 @@ public interface OrderQueryMethod {
         return paymentKey != null ? order.paymentKey.contains(paymentKey) : null;
     }
 
-    default BooleanExpression eqApprovedAt(ZonedDateTime approvedAt) {
-        return approvedAt != null ? order.approvedAt.eq(approvedAt) : null;
+    default BooleanExpression eqApprovedAt(LocalDate approvedAt) {
+        return approvedAt != null ? order.approvedAt.stringValue().contains(approvedAt.toString()) : null;
     }
 }
