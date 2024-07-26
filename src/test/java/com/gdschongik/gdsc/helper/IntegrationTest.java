@@ -92,18 +92,18 @@ public abstract class IntegrationTest {
         return memberRepository.save(member);
     }
 
-    protected Member createGuestMember() {
+    protected Member createGuestMember(Long id) {
         Member guestMember = fixtureHelper.createGuestMember(1L);
         return memberRepository.save(guestMember);
     }
 
-    protected Member createAssociateMember() {
-        Member associateMember = fixtureHelper.createAssociateMember(1L);
+    protected Member createAssociateMember(Long id) {
+        Member associateMember = fixtureHelper.createAssociateMember(id);
         return memberRepository.save(associateMember);
     }
 
-    protected Member createRegularMember() {
-        Member member = createAssociateMember();
+    protected Member createRegularMember(Long id) {
+        Member member = createAssociateMember(id);
         member.advanceToRegular();
         return memberRepository.save(member);
     }
