@@ -34,6 +34,8 @@ public final class Money {
         this.amount = amount;
     }
 
+    public static final Money ZERO = Money.from(BigDecimal.ZERO);
+
     public static Money from(BigDecimal amount) {
         validateAmountNotNull(amount);
 

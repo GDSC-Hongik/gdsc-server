@@ -107,11 +107,12 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
-    public PaymentResponse getCompletedOrderPayment(Long orderId) {
+    public PaymentResponse getCompletedPaidOrderPayment(Long orderId) {
         Order order = orderRepository
                 .findById(orderId)
                 .filter(Order::isCompleted)
-                .orElseThrow(() -> new CustomException(ORDER_COMPLETED_NOT_FOUND));
+                .filter(o -> !o.isFree())
+                .orElseThrow(() -> new CustomException(ORDER_COMPLETED_PAID_NOT_FOUND));
 
         return paymentClient.getPayment(order.getPaymentKey());
     }
@@ -140,5 +141,30 @@ public class OrderService {
 
     private Optional<ZonedDateTime> findLatestCancelDate(List<PaymentResponse.CancelDto> cancels) {
         return cancels.stream().map(PaymentResponse.CancelDto::canceledAt).max(ZonedDateTime::compareTo);
+    }
+
+    @Transactional
+    public void createFreeOrder(OrderCreateRequest request) {
+        Membership membership = membershipRepository
+                .findById(request.membershipId())
+                .orElseThrow(() -> new CustomException(MEMBERSHIP_NOT_FOUND));
+
+        Optional<IssuedCoupon> issuedCoupon =
+                Optional.ofNullable(request.issuedCouponId()).map(this::getIssuedCoupon);
+
+        MoneyInfo moneyInfo = MoneyInfo.of(
+                Money.from(request.totalAmount()),
+                Money.from(request.discountAmount()),
+                Money.from(request.finalPaymentAmount()));
+
+        Member currentMember = memberUtil.getCurrentMember();
+
+        orderValidator.validateFreeOrderCreate(membership, issuedCoupon, currentMember);
+
+        Order order = Order.createFree(request.orderNanoId(), membership, issuedCoupon.orElse(null), moneyInfo);
+
+        orderRepository.save(order);
+
+        log.info("[OrderService] 무료 주문 생성: orderId={}", order.getId());
     }
 }
