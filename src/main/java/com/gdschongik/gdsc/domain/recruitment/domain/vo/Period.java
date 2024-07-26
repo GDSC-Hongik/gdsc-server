@@ -41,12 +41,10 @@ public class Period {
         return (now.isAfter(startDate) || now.isEqual(startDate)) && (now.isBefore(endDate) || now.isEqual(startDate));
     }
 
-    // TODO validateRegularRequirement처럼 로직 변경
     public void validatePeriodOverlap(LocalDateTime startDate, LocalDateTime endDate) {
-        if (this.endDate.isBefore(startDate) || this.startDate.isAfter(endDate)) {
-            return;
+        if (!this.endDate.isBefore(startDate) && !this.startDate.isAfter(endDate)) {
+            throw new CustomException(PERIOD_OVERLAP);
         }
-        throw new CustomException(PERIOD_OVERLAP);
     }
 
     @Override
