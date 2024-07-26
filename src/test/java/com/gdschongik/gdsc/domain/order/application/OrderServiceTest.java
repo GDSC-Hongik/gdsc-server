@@ -3,7 +3,6 @@ package com.gdschongik.gdsc.domain.order.application;
 import static com.gdschongik.gdsc.global.common.constant.RecruitmentConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 import com.gdschongik.gdsc.domain.common.vo.Money;
@@ -275,21 +274,20 @@ class OrderServiceTest extends IntegrationTest {
             PaymentResponse mockPaymentResponse = mock(PaymentResponse.class);
             when(mockPaymentResponse.approvedAt()).thenReturn(approvedAt);
             when(paymentClient.confirm(any(PaymentConfirmRequest.class))).thenReturn(mockPaymentResponse);
-
-            // when
             var request = new OrderCompleteRequest(paymentKey, orderNanoId, 15000L);
             orderService.completeOrder(request);
 
             LocalDate date = LocalDate.now();
             OrderQueryOption queryOption = new OrderQueryOption(null, null, null, null, null, null, null, date);
 
+            // when
             Page<OrderAdminResponse> orderResponse = orderService.searchOrders(queryOption, PageRequest.of(0, 10));
 
             // then
             boolean orderExists = orderResponse.getContent().stream()
                     .anyMatch(order -> order.nanoId().equals(orderNanoId));
 
-            assertTrue(orderExists);
+            assertThat(orderExists).isTrue();
         }
     }
 }
