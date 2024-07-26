@@ -66,8 +66,6 @@ public abstract class IntegrationTest {
     @MockBean
     protected PaymentClient paymentClient;
 
-    protected FixtureHelper fixtureHelper = new FixtureHelper();
-
     @BeforeEach
     void setUp() {
         databaseCleaner.execute();
