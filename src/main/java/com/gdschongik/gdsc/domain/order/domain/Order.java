@@ -133,7 +133,7 @@ public class Order extends BaseEntity {
         this.paymentKey = paymentKey;
         this.approvedAt = approvedAt;
 
-        registerEvent(new OrderCompletedEvent(id));
+        registerEvent(new OrderCompletedEvent(nanoId));
     }
 
     /**
