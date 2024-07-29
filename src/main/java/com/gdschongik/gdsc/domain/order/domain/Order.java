@@ -79,6 +79,8 @@ public class Order extends BaseEntity {
         this.recruitmentRoundId = recruitmentRoundId;
         this.issuedCouponId = issuedCouponId;
         this.moneyInfo = moneyInfo;
+
+        registerEvent(new OrderFreeCreatedEvent(nanoId));
     }
 
     /**
