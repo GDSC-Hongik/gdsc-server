@@ -13,4 +13,4 @@ public record OrderQueryOption(
         OrderStatus status,
         String nanoId,
         String paymentKey,
-        LocalDate approvedAt) {}
+        LocalDate approvedDate) {}
