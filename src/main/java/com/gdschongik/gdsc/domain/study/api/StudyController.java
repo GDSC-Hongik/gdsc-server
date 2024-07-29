@@ -18,7 +18,7 @@ public class StudyController {
 
     private final StudyService studyService;
 
-    @GetMapping("/applicable")
+    @GetMapping("/apply")
     public ResponseEntity<List<StudyResponse>> getAllApplicableStudies() {
         List<StudyResponse> response = studyService.getAllApplicableStudies();
         return ResponseEntity.ok().body(response);
