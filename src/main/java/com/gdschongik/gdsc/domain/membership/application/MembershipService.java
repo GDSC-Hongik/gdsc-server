@@ -56,6 +56,8 @@ public class MembershipService {
 
         currentMembership.verifyPaymentStatus();
 
+        membershipRepository.save(currentMembership);
+
         log.info("[MembershipService] 멤버십 회비납입 인증 완료: membershipId={}", currentMembership.getId());
     }
 
