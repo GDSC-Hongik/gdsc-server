@@ -18,6 +18,7 @@ public record StudyResponse(
         @Schema(description = "개강일") String openingDate) {
 
     public static StudyResponse from(Study study) {
+        // todo: 포맷터로 분리
         return new StudyResponse(
                 study.getId(),
                 study.getTitle(),
