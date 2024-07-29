@@ -26,7 +26,7 @@ public record StudyCreateRequest(
                 LocalDate startDate,
         @NotNull(message = "스터디 요일은 null이 될 수 없습니다.") @Schema(description = "스터디 요일", implementation = DayOfWeek.class)
                 DayOfWeek dayOfWeek,
-        @Schema(description = "스터디 시작 시간", implementation = LocalTime.class) LocalTime studyStartTime,
-        @Schema(description = "스터디 종료 시간", implementation = LocalTime.class) LocalTime studyEndTime,
+        @NotNull @Schema(description = "스터디 시작 시간", implementation = LocalTime.class) LocalTime studyStartTime,
+        @NotNull @Schema(description = "스터디 종료 시간", implementation = LocalTime.class) LocalTime studyEndTime,
         @NotNull(message = "스터디 타입은 null이 될 수 없습니다.") @Schema(description = "스터디 타입", implementation = StudyType.class)
                 StudyType studyType) {}

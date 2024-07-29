@@ -1,8 +1,6 @@
 package com.gdschongik.gdsc.domain.study.dto.response;
 
 import com.gdschongik.gdsc.domain.study.domain.Study;
-import com.gdschongik.gdsc.global.exception.CustomException;
-import com.gdschongik.gdsc.global.exception.ErrorCode;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
@@ -33,9 +31,6 @@ public record StudyResponse(
     }
 
     private static String getSchedule(DayOfWeek dayOfWeek, LocalTime startTime) {
-        if (startTime == null) {
-            throw new CustomException(ErrorCode.STUDY_START_TIME_IS_NULL);
-        }
         return getKoreanDayOfWeek(dayOfWeek) + startTime.format(DateTimeFormatter.ofPattern("HH")) + "시";
     }
 
