@@ -80,7 +80,7 @@ public class Order extends BaseEntity {
         this.issuedCouponId = issuedCouponId;
         this.moneyInfo = moneyInfo;
 
-        registerEvent(new OrderFreeCreatedEvent(nanoId));
+        registerEvent(new OrderCreatedEvent(nanoId, isFree()));
     }
 
     /**
