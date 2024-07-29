@@ -29,14 +29,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.List;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
-@Slf4j
 class OrderServiceTest extends IntegrationTest {
 
     public static final Money MONEY_20000_WON = Money.from(20000L);
@@ -289,7 +287,6 @@ class OrderServiceTest extends IntegrationTest {
             boolean orderExists = orderResponse.getContent().stream()
                     .anyMatch(order -> order.nanoId().equals(orderNanoId));
 
-            log.info("orderExists = {}", orderExists);
             assertThat(orderExists).isTrue();
         }
     }
