@@ -11,7 +11,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import java.math.BigDecimal;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -46,7 +45,7 @@ public class Coupon extends BaseEntity {
     // 검증 로직
 
     private static void validateDiscountAmountPositive(Money discountAmount) {
-        if (!discountAmount.isGreaterThan(Money.from(BigDecimal.ZERO))) {
+        if (!discountAmount.isGreaterThan(Money.ZERO)) {
             throw new CustomException(COUPON_DISCOUNT_AMOUNT_NOT_POSITIVE);
         }
     }

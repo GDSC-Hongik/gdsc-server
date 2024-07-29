@@ -90,6 +90,29 @@ public abstract class IntegrationTest {
         return memberRepository.save(member);
     }
 
+    protected Member createGuestMember() {
+        Member guestMember = Member.createGuestMember(OAUTH_ID);
+        return memberRepository.save(guestMember);
+    }
+
+    protected Member createAssociateMember() {
+        Member member = createGuestMember();
+
+        member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
+        member.completeUnivEmailVerification(UNIV_EMAIL);
+        member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
+        member.verifyBevy();
+        member.advanceToAssociate();
+        return memberRepository.save(member);
+    }
+
+    protected Member createRegularMember() {
+        Member member = createAssociateMember();
+
+        member.advanceToRegular();
+        return memberRepository.save(member);
+    }
+
     protected RecruitmentRound createRecruitmentRound() {
         Recruitment recruitment = createRecruitment(ACADEMIC_YEAR, SEMESTER_TYPE, FEE);
 
