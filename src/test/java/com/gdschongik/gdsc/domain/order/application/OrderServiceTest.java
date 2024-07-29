@@ -287,7 +287,7 @@ class OrderServiceTest extends IntegrationTest {
             boolean orderExists = orderResponse.getContent().stream()
                     .anyMatch(order -> order.nanoId().equals(orderNanoId));
 
-            // assertThat(orderExists).isTrue();
+            assertThat(orderExists).isTrue();
         }
     }
 }
