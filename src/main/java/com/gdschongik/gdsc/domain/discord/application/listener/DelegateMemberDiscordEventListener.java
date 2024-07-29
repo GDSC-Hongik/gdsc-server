@@ -4,6 +4,7 @@ import com.gdschongik.gdsc.domain.discord.application.handler.DelegateMemberDisc
 import com.gdschongik.gdsc.domain.member.domain.MemberRegularEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 @Component
@@ -12,7 +13,7 @@ public class DelegateMemberDiscordEventListener {
 
     private final DelegateMemberDiscordEventHandler delegateMemberDiscordEventHandler;
 
-    @TransactionalEventListener(classes = MemberRegularEvent.class)
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void delegateMemberDiscordEvent(MemberRegularEvent event) {
         delegateMemberDiscordEventHandler.delegate(event);
     }
