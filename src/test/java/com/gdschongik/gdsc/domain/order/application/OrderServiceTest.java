@@ -283,10 +283,10 @@ class OrderServiceTest extends IntegrationTest {
             // when
             Page<OrderAdminResponse> orderResponse = orderService.searchOrders(queryOption, PageRequest.of(0, 10));
 
-            // // then
-            // boolean orderExists = orderResponse.getContent().stream()
-            //         .anyMatch(order -> order.nanoId().equals(orderNanoId));
-            //
+            // then
+            boolean orderExists = orderResponse.getContent().stream()
+                    .anyMatch(order -> order.nanoId().equals(orderNanoId));
+
             // assertThat(orderExists).isTrue();
         }
     }
