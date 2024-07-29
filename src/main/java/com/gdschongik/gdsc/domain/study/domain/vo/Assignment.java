@@ -1,7 +1,10 @@
 package com.gdschongik.gdsc.domain.study.domain.vo;
 
+import static com.gdschongik.gdsc.global.exception.ErrorCode.ASSIGNMENT_CAN_NOT_BE_CREATED;
+
 import com.gdschongik.gdsc.domain.study.domain.Difficulty;
 import com.gdschongik.gdsc.domain.study.domain.StudyStatus;
+import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
@@ -47,5 +50,26 @@ public class Assignment {
 
     public static Assignment createEmptyAssignment() {
         return Assignment.builder().status(StudyStatus.NONE).build();
+    }
+
+    // 상태 변경 로직
+    public void update(String title, LocalDateTime deadline, String descriptionLink) {
+        validateAssignment();
+
+        this.title = title;
+        this.deadline = deadline;
+        this.descriptionLink = descriptionLink;
+        this.status = StudyStatus.OPEN;
+    }
+
+    public void updateStatus(StudyStatus status) {
+        this.status = status;
+    }
+
+    // 검증 로직
+    private void validateAssignment() {
+        if (this.status == StudyStatus.CANCELLED) {
+            throw new CustomException(ASSIGNMENT_CAN_NOT_BE_CREATED);
+        }
     }
 }
