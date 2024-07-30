@@ -157,7 +157,7 @@ public class StudyTest {
     class 과제_개설시 {
 
         @Test
-        void 휴강인_과제는_개설될_수_없다() {
+        void 과제상태가_휴강이라면_과제를_수정할_수_없다() {
             // given
             Assignment assignment = Assignment.createEmptyAssignment();
             assignment.updateStatus(StudyStatus.CANCELLED);

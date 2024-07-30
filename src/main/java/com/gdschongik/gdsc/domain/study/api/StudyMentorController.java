@@ -17,11 +17,11 @@ public class StudyMentorController {
 
     private final StudyMentorService studyMentorService;
 
-    @Operation(summary = "스터디 과제 개설", description = "멘토만 과제를 개설할 수 있습니다.")
-    @PutMapping("/assignment/{studyDetailId}")
-    public ResponseEntity<Void> createStudyAssignment(
+    @Operation(summary = "스터디 과제 생성/수정", description = "멘토만 과제를 생성/수정할 수 있습니다.")
+    @PatchMapping("/assignment/{studyDetailId}")
+    public ResponseEntity<Void> updateStudyAssignment(
             @PathVariable Long studyDetailId, @Valid @RequestBody AssignmentCreateRequest request) {
-        studyMentorService.createStudyAssignment(studyDetailId, request);
+        studyMentorService.updateStudyAssignment(studyDetailId, request);
         return ResponseEntity.ok().build();
     }
 }
