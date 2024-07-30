@@ -19,20 +19,6 @@ public class StudyHistoryValidatorTest {
     FixtureHelper fixtureHelper = new FixtureHelper();
     StudyHistoryValidator studyHistoryValidator = new StudyHistoryValidator();
 
-    private Study createStudy(Member mentor, Period period, Period applicationPeriod) {
-        return Study.createStudy(
-                ACADEMIC_YEAR,
-                SEMESTER_TYPE,
-                mentor,
-                period,
-                applicationPeriod,
-                TOTAL_WEEK,
-                ONLINE_STUDY,
-                DAY_OF_WEEK,
-                STUDY_START_TIME,
-                STUDY_END_TIME);
-    }
-
     @Nested
     class 스터디_수강신청시 {
 
@@ -44,7 +30,7 @@ public class StudyHistoryValidatorTest {
             LocalDateTime now = LocalDateTime.now();
             Period period = Period.createPeriod(now.plusDays(10), now.plusDays(15));
             Period applicationPeriod = Period.createPeriod(now.minusDays(10), now.plusDays(5));
-            Study study = createStudy(mentor, period, applicationPeriod);
+            Study study = fixtureHelper.createStudy(mentor, period, applicationPeriod);
 
             Member mentee = fixtureHelper.createGuestMember(2L);
             StudyHistory studyHistory = StudyHistory.create(mentee, study);
@@ -63,7 +49,7 @@ public class StudyHistoryValidatorTest {
             LocalDateTime now = LocalDateTime.now();
             Period period = Period.createPeriod(now.plusDays(10), now.plusDays(15));
             Period applicationPeriod = Period.createPeriod(now.minusDays(10), now.minusDays(5));
-            Study study = createStudy(mentor, period, applicationPeriod);
+            Study study = fixtureHelper.createStudy(mentor, period, applicationPeriod);
 
             // when & then
             assertThatThrownBy(() -> studyHistoryValidator.validateApplyStudy(study, List.of()))
@@ -79,9 +65,9 @@ public class StudyHistoryValidatorTest {
             LocalDateTime now = LocalDateTime.now();
             Period period = Period.createPeriod(now.minusDays(5), now.plusDays(15));
             Period applicationPeriod = Period.createPeriod(now.minusDays(15), now.plusDays(5));
-            Study study = createStudy(mentor, period, applicationPeriod);
+            Study study = fixtureHelper.createStudy(mentor, period, applicationPeriod);
 
-            Study anotherStudy = createStudy(mentor, period, applicationPeriod);
+            Study anotherStudy = fixtureHelper.createStudy(mentor, period, applicationPeriod);
 
             Member mentee = fixtureHelper.createGuestMember(2L);
             StudyHistory studyHistory = StudyHistory.create(mentee, anotherStudy);
