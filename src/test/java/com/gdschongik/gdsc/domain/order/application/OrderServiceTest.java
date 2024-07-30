@@ -178,6 +178,48 @@ class OrderServiceTest extends IntegrationTest {
                     membershipRepository.findById(membership.getId()).orElseThrow();
             assertThat(verifiedMembership.isRegularRequirementAllSatisfied()).isTrue();
         }
+
+        @Test
+        void 정회원으로_승급한다() {
+            // given
+            Member member = createMember();
+            logoutAndReloginAs(1L, MemberRole.ASSOCIATE);
+            RecruitmentRound recruitmentRound = createRecruitmentRound(
+                    RECRUITMENT_ROUND_NAME,
+                    LocalDateTime.now().minusDays(1),
+                    LocalDateTime.now().plusDays(1),
+                    ACADEMIC_YEAR,
+                    SEMESTER_TYPE,
+                    ROUND_TYPE,
+                    MONEY_20000_WON);
+
+            Membership membership = createMembership(member, recruitmentRound);
+            IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, member);
+
+            String orderNanoId = "HnbMWoSZRq3qK1W3tPXCW";
+            orderService.createPendingOrder(new OrderCreateRequest(
+                    orderNanoId,
+                    membership.getId(),
+                    issuedCoupon.getId(),
+                    BigDecimal.valueOf(20000),
+                    BigDecimal.valueOf(5000),
+                    BigDecimal.valueOf(15000)));
+
+            String paymentKey = "testPaymentKey";
+
+            ZonedDateTime approvedAt = ZonedDateTime.now();
+            PaymentResponse mockPaymentResponse = mock(PaymentResponse.class);
+            when(mockPaymentResponse.approvedAt()).thenReturn(approvedAt);
+            when(paymentClient.confirm(any(PaymentConfirmRequest.class))).thenReturn(mockPaymentResponse);
+
+            // when
+            var request = new OrderCompleteRequest(paymentKey, orderNanoId, 15000L);
+            orderService.completeOrder(request);
+
+            // then
+            Member regularMember = memberRepository.findById(member.getId()).orElseThrow();
+            assertThat(regularMember.getRole()).isEqualTo(MemberRole.REGULAR);
+        }
     }
 
     @Nested
