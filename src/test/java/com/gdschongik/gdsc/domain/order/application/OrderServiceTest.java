@@ -239,55 +239,55 @@ class OrderServiceTest extends IntegrationTest {
         }
     }
 
-    @Nested
-    class 일자기준으로_주문목록_조회시 {
+    // @Nested
+    // class 일자기준으로_주문목록_조회시 {
 
-        @Test
-        void 조회된다() {
-            // given
-            Member member = createMember();
-            logoutAndReloginAs(1L, MemberRole.ASSOCIATE);
-            RecruitmentRound recruitmentRound = createRecruitmentRound(
-                    RECRUITMENT_ROUND_NAME,
-                    LocalDateTime.now().minusDays(1),
-                    LocalDateTime.now().plusDays(1),
-                    ACADEMIC_YEAR,
-                    SEMESTER_TYPE,
-                    ROUND_TYPE,
-                    MONEY_20000_WON);
+    @Test
+    void 조회된다() {
+        // given
+        Member member = createAssociateMember();
+        logoutAndReloginAs(1L, MemberRole.ASSOCIATE);
+        RecruitmentRound recruitmentRound = createRecruitmentRound(
+                RECRUITMENT_ROUND_NAME,
+                LocalDateTime.now().minusDays(1),
+                LocalDateTime.now().plusDays(1),
+                ACADEMIC_YEAR,
+                SEMESTER_TYPE,
+                ROUND_TYPE,
+                MONEY_20000_WON);
 
-            Membership membership = createMembership(member, recruitmentRound);
-            IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, member);
+        Membership membership = createMembership(member, recruitmentRound);
+        IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, member);
 
-            String orderNanoId = "HnbMWoSZRq3qK1W3tPXCW";
-            orderService.createPendingOrder(new OrderCreateRequest(
-                    orderNanoId,
-                    membership.getId(),
-                    issuedCoupon.getId(),
-                    BigDecimal.valueOf(20000),
-                    BigDecimal.valueOf(5000),
-                    BigDecimal.valueOf(15000)));
+        String orderNanoId = "HnbMWoSZRq3qK1W3tPXCW";
+        orderService.createPendingOrder(new OrderCreateRequest(
+                orderNanoId,
+                membership.getId(),
+                issuedCoupon.getId(),
+                BigDecimal.valueOf(20000),
+                BigDecimal.valueOf(5000),
+                BigDecimal.valueOf(15000)));
 
-            String paymentKey = "testPaymentKey";
+        String paymentKey = "testPaymentKey";
 
-            ZonedDateTime approvedAt = ZonedDateTime.now();
-            PaymentResponse mockPaymentResponse = mock(PaymentResponse.class);
-            when(mockPaymentResponse.approvedAt()).thenReturn(approvedAt);
-            when(paymentClient.confirm(any(PaymentConfirmRequest.class))).thenReturn(mockPaymentResponse);
-            var request = new OrderCompleteRequest(paymentKey, orderNanoId, 15000L);
-            orderService.completeOrder(request);
+        ZonedDateTime approvedAt = ZonedDateTime.now();
+        PaymentResponse mockPaymentResponse = mock(PaymentResponse.class);
+        when(mockPaymentResponse.approvedAt()).thenReturn(approvedAt);
+        when(paymentClient.confirm(any(PaymentConfirmRequest.class))).thenReturn(mockPaymentResponse);
+        var request = new OrderCompleteRequest(paymentKey, orderNanoId, 15000L);
+        orderService.completeOrder(request);
 
-            LocalDate date = LocalDate.now();
-            OrderQueryOption queryOption = new OrderQueryOption(null, null, null, null, null, null, null, date);
+        LocalDate date = LocalDate.now();
+        OrderQueryOption queryOption = new OrderQueryOption(null, null, null, null, null, null, null, date);
 
-            // when
-            Page<OrderAdminResponse> orderResponse = orderService.searchOrders(queryOption, PageRequest.of(0, 10));
+        // when
+        Page<OrderAdminResponse> orderResponse = orderService.searchOrders(queryOption, PageRequest.of(0, 10));
 
-            // then
-            boolean orderExists = orderResponse.getContent().stream()
-                    .anyMatch(order -> order.nanoId().equals(orderNanoId));
+        // then
+        boolean orderExists = orderResponse.getContent().stream()
+                .anyMatch(order -> order.nanoId().equals(orderNanoId));
 
-            assertThat(orderExists).isTrue();
-        }
+        assertThat(orderExists).isTrue();
     }
+    // }
 }
