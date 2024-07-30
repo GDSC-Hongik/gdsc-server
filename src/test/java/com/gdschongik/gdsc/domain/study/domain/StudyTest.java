@@ -165,7 +165,7 @@ public class StudyTest {
             // when & then
             assertThatThrownBy(() -> assignment.update("HTTP 통신 코드 작성하기", START_DATE, "https://www.notion.com"))
                     .isInstanceOf(CustomException.class)
-                    .hasMessage(ASSIGNMENT_CAN_NOT_BE_CREATED.getMessage());
+                    .hasMessage(ASSIGNMENT_CAN_NOT_BE_UPDATED.getMessage());
         }
     }
 }

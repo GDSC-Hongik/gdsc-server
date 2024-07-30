@@ -2,7 +2,7 @@ package com.gdschongik.gdsc.domain.study.domain.vo;
 
 import static com.gdschongik.gdsc.domain.study.domain.StudyStatus.CANCELLED;
 import static com.gdschongik.gdsc.domain.study.domain.StudyStatus.OPEN;
-import static com.gdschongik.gdsc.global.exception.ErrorCode.ASSIGNMENT_CAN_NOT_BE_CREATED;
+import static com.gdschongik.gdsc.global.exception.ErrorCode.ASSIGNMENT_CAN_NOT_BE_UPDATED;
 
 import com.gdschongik.gdsc.domain.study.domain.Difficulty;
 import com.gdschongik.gdsc.domain.study.domain.StudyStatus;
@@ -71,11 +71,7 @@ public class Assignment {
     // 검증 로직
     private void validateAssignment() {
         if (this.status == CANCELLED) {
-            throw new CustomException(ASSIGNMENT_CAN_NOT_BE_CREATED);
-        }
-
-        if (this.status == OPEN) {
-            throw new CustomException(ASSIGNMENT_CAN_NOT_BE_CREATED);
+            throw new CustomException(ASSIGNMENT_CAN_NOT_BE_UPDATED);
         }
     }
 }
