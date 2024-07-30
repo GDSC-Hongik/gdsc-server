@@ -104,6 +104,7 @@ public enum ErrorCode {
     ON_OFF_LINE_STUDY_TIME_IS_ESSENTIAL(HttpStatus.CONFLICT, "온오프라인 스터디는 스터디 시간이 필요합니다."),
     STUDY_TIME_INVALID(HttpStatus.CONFLICT, "스터디종료 시각이 스터디시작 시각보다 빠릅니다."),
     ASSIGNMENT_STUDY_CAN_NOT_INPUT_STUDY_TIME(HttpStatus.CONFLICT, "과제 스터디는 스터디 시간을 입력할 수 없습니다."),
+    STUDY_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 스터디입니다."),
 
     // Order
     ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, "주문이 존재하지 않습니다."),

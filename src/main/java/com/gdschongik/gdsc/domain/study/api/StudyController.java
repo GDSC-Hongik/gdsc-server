@@ -7,6 +7,8 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,5 +24,11 @@ public class StudyController {
     public ResponseEntity<List<StudyResponse>> getAllApplicableStudies() {
         List<StudyResponse> response = studyService.getAllApplicableStudies();
         return ResponseEntity.ok().body(response);
+    }
+
+    @PostMapping("/apply/{studyId}")
+    public ResponseEntity<Void> applyStudy(@PathVariable Long studyId) {
+        studyService.applyStudy(studyId);
+        return ResponseEntity.ok().build();
     }
 }
