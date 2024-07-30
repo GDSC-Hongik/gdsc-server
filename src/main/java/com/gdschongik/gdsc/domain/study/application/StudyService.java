@@ -34,6 +34,7 @@ public class StudyService {
                 .toList();
     }
 
+    @Transactional
     public void applyStudy(Long studyId) {
         Study study =
                 studyRepository.findById(studyId).orElseThrow(() -> new CustomException(ErrorCode.STUDY_NOT_FOUND));
