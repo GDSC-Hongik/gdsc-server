@@ -66,6 +66,8 @@ public class OrderCustomRepositoryImpl implements OrderCustomRepository, OrderQu
         return queryFactory
                 .select(order.id)
                 .from(order)
+                .innerJoin(recruitmentRound)
+                .on(order.recruitmentRoundId.eq(recruitmentRound.id))
                 .where(matchesOrderQueryOption(queryOption), predicate)
                 .orderBy(orderSpecifiers)
                 .fetch();

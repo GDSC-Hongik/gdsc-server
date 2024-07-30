@@ -39,19 +39,11 @@ public interface OrderQueryMethod {
     }
 
     default BooleanExpression eqAcademicYear(Integer academicYear) {
-        return academicYear != null
-                ? order.recruitmentRoundId.in(select(recruitmentRound.id)
-                        .from(recruitmentRound)
-                        .where(recruitmentRound.academicYear.eq(academicYear)))
-                : null;
+        return academicYear != null ? recruitmentRound.academicYear.eq(academicYear) : null;
     }
 
     default BooleanExpression eqSemesterType(SemesterType semesterType) {
-        return semesterType != null
-                ? order.recruitmentRoundId.in(select(recruitmentRound.id)
-                        .from(recruitmentRound)
-                        .where(recruitmentRound.semesterType.eq(semesterType)))
-                : null;
+        return semesterType != null ? recruitmentRound.semesterType.eq(semesterType) : null;
     }
 
     default BooleanExpression eqStudentId(String studentId) {
