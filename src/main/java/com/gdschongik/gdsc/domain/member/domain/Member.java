@@ -234,6 +234,8 @@ public class Member extends BaseEntity {
         validateRegularAvailable();
 
         role = REGULAR;
+
+        registerEvent(new MemberRegularEvent(id, discordId));
     }
 
     /**
