@@ -3,6 +3,7 @@ package com.gdschongik.gdsc.domain.study.application;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.ASSIGNMENT_NOT_FOUND;
 
 import com.gdschongik.gdsc.domain.study.dao.StudyDetailRepository;
+import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
 import com.gdschongik.gdsc.domain.study.domain.request.AssignmentCreateRequest;
 import com.gdschongik.gdsc.domain.study.domain.vo.Assignment;
 import com.gdschongik.gdsc.global.exception.CustomException;
@@ -20,10 +21,11 @@ public class StudyMentorService {
     private final StudyDetailRepository studyDetailRepository;
 
     @Transactional
-    public void createStudyAssignment(Long assignmentId, AssignmentCreateRequest request) {
-        Assignment assignment = studyDetailRepository
-                .findByAssignmentId(assignmentId)
+    public void createStudyAssignment(Long studyDetailId, AssignmentCreateRequest request) {
+        StudyDetail studyDetail = studyDetailRepository
+                .findById(studyDetailId)
                 .orElseThrow(() -> new CustomException(ASSIGNMENT_NOT_FOUND));
+        Assignment assignment = studyDetail.getAssignment();
 
         assignment.update(request.title(), request.deadLine(), request.descriptionNotionLink());
     }
