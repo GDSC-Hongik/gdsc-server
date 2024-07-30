@@ -162,4 +162,9 @@ public class Study extends BaseSemesterEntity {
             throw new CustomException(ASSIGNMENT_STUDY_CAN_NOT_INPUT_STUDY_TIME);
         }
     }
+
+    // 데이터 전달 로직
+    public boolean isApplicable() {
+        return applicationPeriod.isOpen();
+    }
 }
