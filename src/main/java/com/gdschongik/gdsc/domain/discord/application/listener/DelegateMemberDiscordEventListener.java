@@ -12,7 +12,7 @@ public class DelegateMemberDiscordEventListener {
 
     private final DelegateMemberDiscordEventHandler delegateMemberDiscordEventHandler;
 
-    @EventListener
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void delegateMemberDiscordEvent(MemberRegularEvent event) {
         delegateMemberDiscordEventHandler.delegate(event);
     }
