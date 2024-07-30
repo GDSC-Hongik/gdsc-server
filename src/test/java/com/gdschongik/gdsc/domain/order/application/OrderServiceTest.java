@@ -176,7 +176,8 @@ class OrderServiceTest extends IntegrationTest {
             // then
             Membership verifiedMembership =
                     membershipRepository.findById(membership.getId()).orElseThrow();
-            assertThat(verifiedMembership.isRegularRequirementAllSatisfied()).isTrue();
+            assertThat(verifiedMembership.getRegularRequirement().isPaymentSatisfied())
+                    .isTrue();
         }
 
         @Test
@@ -218,7 +219,7 @@ class OrderServiceTest extends IntegrationTest {
 
             // then
             Member regularMember = memberRepository.findById(member.getId()).orElseThrow();
-            assertThat(regularMember.getRole()).isEqualTo(MemberRole.REGULAR);
+            assertThat(regularMember.isRegular()).isTrue();
         }
     }
 
