@@ -8,7 +8,7 @@ import com.gdschongik.gdsc.domain.common.model.SemesterType;
 import com.gdschongik.gdsc.domain.order.dto.request.OrderQueryOption;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import java.time.ZonedDateTime;
+import java.time.*;
 
 public interface OrderQueryMethod {
 
@@ -20,7 +20,7 @@ public interface OrderQueryMethod {
                 .and(eqStudentId(queryOption.studentId()))
                 .and(eqNanoId(queryOption.nanoId()))
                 .and(eqPaymentKey(queryOption.paymentKey()))
-                .and(eqApprovedAt(queryOption.approvedAt()));
+                .and(eqApprovedAt(queryOption.approvedDate()));
     }
 
     default BooleanExpression eqMember() {
@@ -56,7 +56,13 @@ public interface OrderQueryMethod {
         return paymentKey != null ? order.paymentKey.contains(paymentKey) : null;
     }
 
-    default BooleanExpression eqApprovedAt(ZonedDateTime approvedAt) {
-        return approvedAt != null ? order.approvedAt.eq(approvedAt) : null;
+    default BooleanExpression eqApprovedAt(LocalDate approvedAt) {
+        if (approvedAt == null) {
+            return null;
+        }
+        ZoneId seoulZone = ZoneId.of("Asia/Seoul");
+        ZonedDateTime startOfDay = approvedAt.atStartOfDay(seoulZone);
+        ZonedDateTime endOfDay = approvedAt.atTime(LocalTime.MAX).atZone(seoulZone);
+        return order.approvedAt.between(startOfDay, endOfDay);
     }
 }
