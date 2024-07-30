@@ -17,6 +17,6 @@ public class MembershipVerifiedEventHandler {
     @EventListener
     public void handleMembershipVerifiedEvent(MembershipVerifedEvent event) {
         log.info("[MembershipVerifiedEventHandler] 멤버십 인증 이벤트 수신: membershipId={}", event.membershipId());
-        commonMemberService.associateMemberByMembership(event.membershipId());
+        commonMemberService.advanceMemberToRegularByMembership(event.membershipId());
     }
 }

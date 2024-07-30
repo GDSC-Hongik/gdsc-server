@@ -12,9 +12,11 @@ import com.gdschongik.gdsc.global.exception.CustomException;
 import java.util.Arrays;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CommonMemberService {
@@ -39,5 +41,25 @@ public class CommonMemberService {
                 .filter(department -> department.getDepartmentName().contains(departmentName))
                 .map(MemberDepartmentResponse::from)
                 .toList();
+    }
+
+    /**
+     * 이벤트 핸들러에서 사용되므로, `@Transactional` 을 사용하지 않습니다.
+     */
+    public void advanceMemberToRegularByMembership(Long membershipId) {
+        Membership membership = membershipRepository
+                .findById(membershipId)
+                .orElseThrow(() -> new CustomException(MEMBERSHIP_NOT_FOUND));
+
+        Member member = memberRepository
+                .findById(membership.getMember().getId())
+                .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
+
+        if (membership.isRegularRequirementAllSatisfied()) {
+            member.advanceToRegular();
+            memberRepository.save(member);
+
+            log.info("[CommonMemberService] 정회원 승급 완료: memberId={}", member.getId());
+        }
     }
 }
