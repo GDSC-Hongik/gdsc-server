@@ -39,7 +39,7 @@ public class UnivEmailVerificationServiceTest extends IntegrationTest {
     private MailSender mailSender;
 
     @Nested
-    class 이메일검증시 {
+    class 재학생_메일_인증시 {
 
         @Test
         void 레디스에_이메일인증정보가_존재하지_않으면_실패한다() {

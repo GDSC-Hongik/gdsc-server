@@ -3,7 +3,7 @@ package com.gdschongik.gdsc.domain.email.application;
 import static com.gdschongik.gdsc.global.common.constant.EmailConstant.VERIFICATION_EMAIL_SUBJECT;
 
 import com.gdschongik.gdsc.domain.email.dao.UnivEmailVerificationRepository;
-import com.gdschongik.gdsc.domain.email.domain.HongikUnivEmailValidator;
+import com.gdschongik.gdsc.domain.email.domain.UnivEmailValidator;
 import com.gdschongik.gdsc.domain.email.domain.UnivEmailVerification;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
@@ -29,7 +29,7 @@ public class UnivEmailVerificationLinkSendService {
     private final UnivEmailVerificationRepository univEmailVerificationRepository;
 
     private final MailSender mailSender;
-    private final HongikUnivEmailValidator hongikUnivEmailValidator;
+    private final UnivEmailValidator univEmailValidator;
     private final EmailVerificationTokenUtil emailVerificationTokenUtil;
     private final VerificationLinkUtil verificationLinkUtil;
     private final MemberUtil memberUtil;
@@ -52,7 +52,7 @@ public class UnivEmailVerificationLinkSendService {
     public void send(String univEmail) {
         boolean isUnivEmailDuplicate = memberRepository.existsByUnivEmail(univEmail);
 
-        hongikUnivEmailValidator.validateSendUnivEmailVerificationLink(univEmail, isUnivEmailDuplicate);
+        univEmailValidator.validateSendUnivEmailVerificationLink(univEmail, isUnivEmailDuplicate);
 
         String verificationToken = generateVerificationToken(univEmail);
         String verificationLink = verificationLinkUtil.createLink(verificationToken);

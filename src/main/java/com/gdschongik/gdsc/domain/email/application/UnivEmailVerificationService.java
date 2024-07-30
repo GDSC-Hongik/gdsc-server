@@ -1,7 +1,7 @@
 package com.gdschongik.gdsc.domain.email.application;
 
 import com.gdschongik.gdsc.domain.email.dao.UnivEmailVerificationRepository;
-import com.gdschongik.gdsc.domain.email.domain.HongikUnivEmailValidator;
+import com.gdschongik.gdsc.domain.email.domain.UnivEmailValidator;
 import com.gdschongik.gdsc.domain.email.domain.UnivEmailVerification;
 import com.gdschongik.gdsc.domain.email.dto.request.EmailVerificationTokenDto;
 import com.gdschongik.gdsc.domain.email.dto.request.UnivEmailVerificationRequest;
@@ -23,7 +23,7 @@ public class UnivEmailVerificationService {
     private final EmailVerificationTokenUtil emailVerificationTokenUtil;
     private final MemberRepository memberRepository;
     private final UnivEmailVerificationRepository univEmailVerificationRepository;
-    private final HongikUnivEmailValidator hongikUnivEmailValidator;
+    private final UnivEmailValidator univEmailValidator;
 
     @Transactional
     public void verifyMemberUnivEmail(UnivEmailVerificationRequest request) {
@@ -42,7 +42,7 @@ public class UnivEmailVerificationService {
         final Optional<UnivEmailVerification> univEmailVerification =
                 getUnivEmailVerificationFromRedis(emailVerificationTokenDto.memberId());
 
-        hongikUnivEmailValidator.validateUnivEmailVerification(univEmailVerification, verificationToken);
+        univEmailValidator.validateUnivEmailVerification(univEmailVerification, verificationToken);
 
         return emailVerificationTokenDto;
     }

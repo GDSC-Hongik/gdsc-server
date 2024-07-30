@@ -9,7 +9,7 @@ import com.gdschongik.gdsc.global.exception.CustomException;
 import java.util.Optional;
 
 @DomainService
-public class HongikUnivEmailValidator {
+public class UnivEmailValidator {
 
     public void validateSendUnivEmailVerificationLink(String email, boolean isUnivEmailDuplicate) {
         if (!email.contains(HONGIK_UNIV_MAIL_DOMAIN)) {
@@ -34,7 +34,9 @@ public class HongikUnivEmailValidator {
             Optional<UnivEmailVerification> optionalUnivEmailVerification, String currentToken) {
         if (optionalUnivEmailVerification.isEmpty()) {
             throw new CustomException(EMAIL_NOT_SENT);
-        } else if (!optionalUnivEmailVerification.get().getVerificationToken().equals(currentToken)) {
+        }
+
+        if (!optionalUnivEmailVerification.get().getVerificationToken().equals(currentToken)) {
             throw new CustomException(EXPIRED_EMAIL_VERIFICATION_TOKEN);
         }
     }
