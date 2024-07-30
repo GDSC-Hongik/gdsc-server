@@ -2,7 +2,7 @@ package com.gdschongik.gdsc.domain.discord.application.handler;
 
 import static com.gdschongik.gdsc.global.common.constant.DiscordConstant.*;
 
-import com.gdschongik.gdsc.domain.member.domain.MemberRegularEvent;
+import com.gdschongik.gdsc.domain.member.domain.MemberAdvancedToRegularEvent;
 import com.gdschongik.gdsc.global.util.DiscordUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +20,7 @@ public class DelegateMemberDiscordEventHandler implements SpringEventHandler {
 
     @Override
     public void delegate(Object context) {
-        MemberRegularEvent event = (MemberRegularEvent) context;
+        MemberAdvancedToRegularEvent event = (MemberAdvancedToRegularEvent) context;
         Guild guild = discordUtil.getCurrentGuild();
         Member member = discordUtil.getMemberById(event.discordId());
         Role role = discordUtil.findRoleByName(MEMBER_ROLE_NAME);

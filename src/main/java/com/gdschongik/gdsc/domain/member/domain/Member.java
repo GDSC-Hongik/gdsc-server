@@ -235,7 +235,7 @@ public class Member extends BaseEntity {
 
         role = REGULAR;
 
-        registerEvent(new MemberRegularEvent(id, discordId));
+        registerEvent(new MemberAdvancedToRegularEvent(id, discordId));
     }
 
     /**

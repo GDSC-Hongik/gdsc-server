@@ -1,7 +1,7 @@
 package com.gdschongik.gdsc.domain.discord.application.listener;
 
 import com.gdschongik.gdsc.domain.discord.application.handler.DelegateMemberDiscordEventHandler;
-import com.gdschongik.gdsc.domain.member.domain.MemberRegularEvent;
+import com.gdschongik.gdsc.domain.member.domain.MemberAdvancedToRegularEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -16,7 +16,7 @@ public class DelegateMemberDiscordEventListener {
     private final DelegateMemberDiscordEventHandler delegateMemberDiscordEventHandler;
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    public void delegateMemberDiscordEvent(MemberRegularEvent event) {
+    public void delegateMemberDiscordEvent(MemberAdvancedToRegularEvent event) {
         log.info("[DelegateMemberDiscordEventListener] 정회원 승급 이벤트 수신: memberId={}", event.memberId());
         delegateMemberDiscordEventHandler.delegate(event);
     }
