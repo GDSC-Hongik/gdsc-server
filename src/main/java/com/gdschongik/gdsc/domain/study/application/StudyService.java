@@ -5,6 +5,7 @@ import com.gdschongik.gdsc.domain.study.dao.StudyHistoryRepository;
 import com.gdschongik.gdsc.domain.study.dao.StudyRepository;
 import com.gdschongik.gdsc.domain.study.domain.Study;
 import com.gdschongik.gdsc.domain.study.domain.StudyHistory;
+import com.gdschongik.gdsc.domain.study.domain.StudyHistoryValidator;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
@@ -24,6 +25,7 @@ public class StudyService {
     private final MemberUtil memberUtil;
     private final StudyRepository studyRepository;
     private final StudyHistoryRepository studyHistoryRepository;
+    private final StudyHistoryValidator studyHistoryValidator;
 
     public List<StudyResponse> getAllApplicableStudies() {
         return studyRepository.findAll().stream()
@@ -33,9 +35,13 @@ public class StudyService {
     }
 
     public void applyStudy(Long studyId) {
-        Member currentMember = memberUtil.getCurrentMember();
         Study study =
                 studyRepository.findById(studyId).orElseThrow(() -> new CustomException(ErrorCode.STUDY_NOT_FOUND));
+        Member currentMember = memberUtil.getCurrentMember();
+
+        List<StudyHistory> currentMemberStudyHistories = studyHistoryRepository.findAllByMentee(currentMember);
+
+        studyHistoryValidator.validateApplyStudy(study, currentMemberStudyHistories);
 
         StudyHistory studyHistory = StudyHistory.create(currentMember, study);
         studyHistoryRepository.save(studyHistory);

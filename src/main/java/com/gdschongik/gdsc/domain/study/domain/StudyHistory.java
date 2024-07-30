@@ -42,4 +42,9 @@ public class StudyHistory extends BaseEntity {
     public static StudyHistory create(Member mentee, Study study) {
         return StudyHistory.builder().mentee(mentee).study(study).build();
     }
+
+    // 데이터 전달 로직
+    public boolean isStudyOngoing() {
+        return study.isStudyOngoing();
+    }
 }
