@@ -1,7 +1,6 @@
 package com.gdschongik.gdsc.domain.study.domain.vo;
 
-import static com.gdschongik.gdsc.domain.study.domain.StudyStatus.CANCELLED;
-import static com.gdschongik.gdsc.domain.study.domain.StudyStatus.OPEN;
+import static com.gdschongik.gdsc.domain.study.domain.StudyStatus.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.ASSIGNMENT_CAN_NOT_BE_UPDATED;
 
 import com.gdschongik.gdsc.domain.study.domain.Difficulty;
@@ -70,8 +69,12 @@ public class Assignment {
 
     // 검증 로직
     private void validateAssignment() {
-        if (this.status == CANCELLED) {
+        if (isCancelled()) {
             throw new CustomException(ASSIGNMENT_CAN_NOT_BE_UPDATED);
         }
+    }
+
+    private boolean isCancelled() {
+        return status == CANCELLED;
     }
 }

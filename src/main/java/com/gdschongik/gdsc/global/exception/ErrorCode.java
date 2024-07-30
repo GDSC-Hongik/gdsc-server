@@ -128,7 +128,7 @@ public enum ErrorCode {
     ORDER_FINAL_PAYMENT_AMOUNT_MISMATCH(HttpStatus.CONFLICT, "주문 최종결제금액은 주문총액에서 할인금액을 뺀 값이어야 합니다."),
 
     // Assignment
-    ASSIGNMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "과제가 개설되어 있지 않습니다"),
+    ASSIGNMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "과제가 존재하지 않습니다."),
     ASSIGNMENT_CAN_NOT_BE_UPDATED(HttpStatus.CONFLICT, "휴강인 과제는 수정될 수 없습니다."),
     ;
 
