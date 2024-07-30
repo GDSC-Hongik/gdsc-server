@@ -3,6 +3,8 @@ package com.gdschongik.gdsc.domain.order.dao;
 import static com.gdschongik.gdsc.domain.member.domain.QMember.*;
 import static com.gdschongik.gdsc.domain.order.domain.QOrder.*;
 import static com.gdschongik.gdsc.domain.recruitment.domain.QRecruitment.*;
+import static com.gdschongik.gdsc.domain.recruitment.domain.QRecruitmentRound.*;
+import static com.querydsl.jpa.JPAExpressions.*;
 
 import com.gdschongik.gdsc.domain.common.model.SemesterType;
 import com.gdschongik.gdsc.domain.order.dto.request.OrderQueryOption;
@@ -37,11 +39,19 @@ public interface OrderQueryMethod {
     }
 
     default BooleanExpression eqAcademicYear(Integer academicYear) {
-        return academicYear != null ? recruitment.academicYear.eq(academicYear) : null;
+        return academicYear != null
+                ? order.recruitmentRoundId.in(select(recruitmentRound.id)
+                        .from(recruitmentRound)
+                        .where(recruitmentRound.academicYear.eq(academicYear)))
+                : null;
     }
 
     default BooleanExpression eqSemesterType(SemesterType semesterType) {
-        return semesterType != null ? recruitment.semesterType.eq(semesterType) : null;
+        return semesterType != null
+                ? order.recruitmentRoundId.in(select(recruitmentRound.id)
+                        .from(recruitmentRound)
+                        .where(recruitmentRound.semesterType.eq(semesterType)))
+                : null;
     }
 
     default BooleanExpression eqStudentId(String studentId) {
