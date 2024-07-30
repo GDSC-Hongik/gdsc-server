@@ -331,7 +331,7 @@ class OrderServiceTest extends IntegrationTest {
         @Test
         void 조회된다() {
             // given
-            Member member = createMember();
+            Member member = createAssociateMember();
             logoutAndReloginAs(1L, MemberRole.ASSOCIATE);
             RecruitmentRound recruitmentRound = createRecruitmentRound(
                     RECRUITMENT_ROUND_NAME,
