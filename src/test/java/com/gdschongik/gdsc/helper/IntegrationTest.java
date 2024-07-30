@@ -4,6 +4,7 @@ import static com.gdschongik.gdsc.domain.member.domain.Department.*;
 import static com.gdschongik.gdsc.global.common.constant.MemberConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.RecruitmentConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.SemesterConstant.*;
+import static org.mockito.Mockito.*;
 
 import com.gdschongik.gdsc.domain.common.model.SemesterType;
 import com.gdschongik.gdsc.domain.common.vo.Money;
@@ -11,6 +12,7 @@ import com.gdschongik.gdsc.domain.coupon.dao.CouponRepository;
 import com.gdschongik.gdsc.domain.coupon.dao.IssuedCouponRepository;
 import com.gdschongik.gdsc.domain.coupon.domain.Coupon;
 import com.gdschongik.gdsc.domain.coupon.domain.IssuedCoupon;
+import com.gdschongik.gdsc.domain.discord.application.handler.DelegateMemberDiscordEventHandler;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
@@ -66,9 +68,13 @@ public abstract class IntegrationTest {
     @MockBean
     protected PaymentClient paymentClient;
 
+    @MockBean
+    protected DelegateMemberDiscordEventHandler delegateMemberDiscordEventHandler;
+
     @BeforeEach
     void setUp() {
         databaseCleaner.execute();
+        doNothing().when(delegateMemberDiscordEventHandler).delegate(any());
     }
 
     protected void logoutAndReloginAs(Long memberId, MemberRole memberRole) {
