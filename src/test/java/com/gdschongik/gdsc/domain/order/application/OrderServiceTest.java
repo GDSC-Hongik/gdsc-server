@@ -376,4 +376,80 @@ class OrderServiceTest extends IntegrationTest {
             assertThat(orderExists).isTrue();
         }
     }
+
+    @Nested
+    class 무료주문_생성할때 {
+
+        @Test
+        void 멤버십의_회비납입상태가_VERIFIED로_변경된다() {
+            // given
+            Member member = createMember();
+            logoutAndReloginAs(1L, MemberRole.ASSOCIATE);
+            RecruitmentRound recruitmentRound = createRecruitmentRound(
+                    RECRUITMENT_ROUND_NAME,
+                    LocalDateTime.now().minusDays(1),
+                    LocalDateTime.now().plusDays(1),
+                    ACADEMIC_YEAR,
+                    SEMESTER_TYPE,
+                    ROUND_TYPE,
+                    MONEY_20000_WON);
+
+            Membership membership = createMembership(member, recruitmentRound);
+            IssuedCoupon issuedCoupon = createAndIssue(MONEY_20000_WON, member);
+
+            String orderNanoId = "HnbMWoSZRq3qK1W3tPXCW";
+
+            var request = new OrderCreateRequest(
+                    orderNanoId,
+                    membership.getId(),
+                    issuedCoupon.getId(),
+                    BigDecimal.valueOf(20000),
+                    BigDecimal.valueOf(20000),
+                    BigDecimal.ZERO);
+
+            // when
+            orderService.createFreeOrder(request);
+
+            // then
+            Membership verifiedMembership =
+                    membershipRepository.findById(membership.getId()).orElseThrow();
+            assertThat(verifiedMembership.getRegularRequirement().isPaymentSatisfied())
+                    .isTrue();
+        }
+
+        @Test
+        void 정회원으로_승급한다() {
+            // given
+            Member member = createMember();
+            logoutAndReloginAs(1L, MemberRole.ASSOCIATE);
+            RecruitmentRound recruitmentRound = createRecruitmentRound(
+                    RECRUITMENT_ROUND_NAME,
+                    LocalDateTime.now().minusDays(1),
+                    LocalDateTime.now().plusDays(1),
+                    ACADEMIC_YEAR,
+                    SEMESTER_TYPE,
+                    ROUND_TYPE,
+                    MONEY_20000_WON);
+
+            Membership membership = createMembership(member, recruitmentRound);
+            IssuedCoupon issuedCoupon = createAndIssue(MONEY_20000_WON, member);
+
+            String orderNanoId = "HnbMWoSZRq3qK1W3tPXCW";
+
+            var request = new OrderCreateRequest(
+                    orderNanoId,
+                    membership.getId(),
+                    issuedCoupon.getId(),
+                    BigDecimal.valueOf(20000),
+                    BigDecimal.valueOf(20000),
+                    BigDecimal.ZERO);
+
+            // when
+            orderService.createFreeOrder(request);
+
+            // then
+            Member regularMember = memberRepository.findById(member.getId()).orElseThrow();
+            assertThat(regularMember.isRegular()).isTrue();
+        }
+    }
 }
