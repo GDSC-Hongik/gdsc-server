@@ -72,7 +72,7 @@ public class Membership extends BaseEntity {
 
         regularRequirement.updatePaymentStatus(SATISFIED);
 
-        registerEvent(new MembershipVerifedEvent(id));
+        registerEvent(new MembershipVerifiedEvent(id));
     }
 
     // 데이터 전달 로직
