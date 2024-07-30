@@ -29,6 +29,6 @@ public class StudyMentorService {
 
         assignment.update(request.title(), request.deadLine(), request.descriptionNotionLink());
 
-        log.info("[StudyMentorService] 과제 생성 완료: studyDetailId={}", studyDetailId);
+        log.info("[StudyMentorService] 과제 개설/수정 완료: studyDetailId={}", studyDetailId);
     }
 }
