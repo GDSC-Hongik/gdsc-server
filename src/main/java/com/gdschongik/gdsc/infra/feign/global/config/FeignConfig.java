@@ -2,6 +2,7 @@ package com.gdschongik.gdsc.infra.feign.global.config;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import feign.Logger;
 import feign.codec.Decoder;
 import feign.jackson.JacksonDecoder;
@@ -22,6 +23,7 @@ public class FeignConfig {
 
     public ObjectMapper customObjectMapper() {
         return new ObjectMapper()
+                .registerModule(new JavaTimeModule())
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
                 .enable(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_AS_NULL);
     }
