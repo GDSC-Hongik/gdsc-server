@@ -1,5 +1,7 @@
 package com.gdschongik.gdsc.domain.study.application;
 
+import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
+
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.study.dao.StudyHistoryRepository;
 import com.gdschongik.gdsc.domain.study.dao.StudyRepository;
@@ -8,7 +10,6 @@ import com.gdschongik.gdsc.domain.study.domain.StudyHistory;
 import com.gdschongik.gdsc.domain.study.domain.StudyHistoryValidator;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
-import com.gdschongik.gdsc.global.exception.ErrorCode;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -36,8 +37,7 @@ public class StudyService {
 
     @Transactional
     public void applyStudy(Long studyId) {
-        Study study =
-                studyRepository.findById(studyId).orElseThrow(() -> new CustomException(ErrorCode.STUDY_NOT_FOUND));
+        Study study = studyRepository.findById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
         Member currentMember = memberUtil.getCurrentMember();
 
         List<StudyHistory> currentMemberStudyHistories = studyHistoryRepository.findAllByMentee(currentMember);
@@ -48,5 +48,20 @@ public class StudyService {
         studyHistoryRepository.save(studyHistory);
 
         log.info("[StudyService] 스터디 수강신청: studyHistoryId={}", studyHistory.getId());
+    }
+
+    @Transactional
+    public void cancelStudyApply(Long studyId) {
+        Study study = studyRepository.findById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
+        Member currentMember = memberUtil.getCurrentMember();
+
+        studyHistoryValidator.validateCancelStudyApply(study);
+
+        StudyHistory studyHistory = studyHistoryRepository
+                .findByMenteeAndStudy(currentMember, study)
+                .orElseThrow(() -> new CustomException(STUDY_HISTORY_NOT_FOUND));
+        studyHistoryRepository.delete(studyHistory);
+
+        log.info("[StudyService] 스터디 수강신청 취소: studyId={}, memberId={}", study.getId(), currentMember.getId());
     }
 }

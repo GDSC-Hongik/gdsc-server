@@ -1,7 +1,5 @@
 package com.gdschongik.gdsc.domain.study.domain;
 
-import static com.gdschongik.gdsc.global.common.constant.RecruitmentConstant.*;
-import static com.gdschongik.gdsc.global.common.constant.StudyConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 
@@ -76,6 +74,26 @@ public class StudyHistoryValidatorTest {
             assertThatThrownBy(() -> studyHistoryValidator.validateApplyStudy(study, List.of(studyHistory)))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(STUDY_HISTORY_ONGOING_ALREADY_EXISTS.getMessage());
+        }
+    }
+
+    @Nested
+    class 스터디_수강신청_취소시 {
+
+        @Test
+        void 해당_스터디의_신청기간이_아니라면_실패한다() {
+            // given
+            Member mentor = fixtureHelper.createAssociateMember(1L);
+
+            LocalDateTime now = LocalDateTime.now();
+            Period period = Period.createPeriod(now.plusDays(10), now.plusDays(15));
+            Period applicationPeriod = Period.createPeriod(now.minusDays(10), now.minusDays(5));
+            Study study = fixtureHelper.createStudy(mentor, period, applicationPeriod);
+
+            // when & then
+            assertThatThrownBy(() -> studyHistoryValidator.validateCancelStudyApply(study))
+                    .isInstanceOf(CustomException.class)
+                    .hasMessage(STUDY_NOT_CANCELABLE_APPLICATION_PERIOD.getMessage());
         }
     }
 }

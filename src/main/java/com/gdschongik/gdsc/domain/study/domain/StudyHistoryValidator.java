@@ -30,4 +30,11 @@ public class StudyHistoryValidator {
             throw new CustomException(STUDY_HISTORY_ONGOING_ALREADY_EXISTS);
         }
     }
+
+    public void validateCancelStudyApply(Study study) {
+        // 스터디 수강신청 기간이 아닌 경우
+        if (!study.isApplicable()) {
+            throw new CustomException(STUDY_NOT_CANCELABLE_APPLICATION_PERIOD);
+        }
+    }
 }
