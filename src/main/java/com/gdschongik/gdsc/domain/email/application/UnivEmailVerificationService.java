@@ -1,5 +1,8 @@
 package com.gdschongik.gdsc.domain.email.application;
 
+import com.gdschongik.gdsc.domain.email.dao.UnivEmailVerificationRepository;
+import com.gdschongik.gdsc.domain.email.domain.UnivEmailValidator;
+import com.gdschongik.gdsc.domain.email.domain.UnivEmailVerification;
 import com.gdschongik.gdsc.domain.email.dto.request.EmailVerificationTokenDto;
 import com.gdschongik.gdsc.domain.email.dto.request.UnivEmailVerificationRequest;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
@@ -7,6 +10,7 @@ import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
 import com.gdschongik.gdsc.global.util.email.EmailVerificationTokenUtil;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +22,8 @@ public class UnivEmailVerificationService {
 
     private final EmailVerificationTokenUtil emailVerificationTokenUtil;
     private final MemberRepository memberRepository;
+    private final UnivEmailVerificationRepository univEmailVerificationRepository;
+    private final UnivEmailValidator univEmailValidator;
 
     @Transactional
     public void verifyMemberUnivEmail(UnivEmailVerificationRequest request) {
@@ -27,8 +33,19 @@ public class UnivEmailVerificationService {
         memberRepository.save(member);
     }
 
+    public Optional<UnivEmailVerification> getUnivEmailVerificationFromRedis(Long memberId) {
+        return univEmailVerificationRepository.findById(memberId);
+    }
+
     private EmailVerificationTokenDto getEmailVerificationToken(String verificationToken) {
-        return emailVerificationTokenUtil.parseEmailVerificationTokenDto(verificationToken);
+        EmailVerificationTokenDto emailVerificationTokenDto =
+                emailVerificationTokenUtil.parseEmailVerificationTokenDto(verificationToken);
+        final Optional<UnivEmailVerification> univEmailVerification =
+                getUnivEmailVerificationFromRedis(emailVerificationTokenDto.memberId());
+
+        univEmailValidator.validateUnivEmailVerification(univEmailVerification, verificationToken);
+
+        return emailVerificationTokenDto;
     }
 
     private Member getMemberById(Long id) {

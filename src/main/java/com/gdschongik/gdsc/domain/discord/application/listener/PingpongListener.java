@@ -22,7 +22,7 @@ public class PingpongListener extends ListenerAdapter {
         Message message = event.getMessage();
         String content = message.getContentRaw(); // get only textual content of message
 
-        log.info("Message from {} in {}: {}", author.getName(), channel.getName(), message.getContentDisplay());
+        log.info("Message of {} in {}: {}", author.getName(), channel.getName(), message.getContentDisplay());
 
         if (author.isBot()) return;
 
