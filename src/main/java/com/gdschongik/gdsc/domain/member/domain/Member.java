@@ -280,6 +280,13 @@ public class Member extends BaseEntity {
         associateRequirement.demoteAssociateRequirement();
     }
 
+    // 기타 역할 변경 로직
+
+    public void assignToMentor() {
+        validateStatusUpdatable();
+        studyRole = MENTOR;
+    }
+
     // 기타 상태 변경 로직
 
     public void updateLastLoginAt() {
