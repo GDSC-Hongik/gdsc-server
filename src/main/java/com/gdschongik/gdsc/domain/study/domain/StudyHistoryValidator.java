@@ -34,7 +34,7 @@ public class StudyHistoryValidator {
     public void validateCancelStudyApply(Study study) {
         // 스터디 수강신청 기간이 아닌 경우
         if (!study.isApplicable()) {
-            throw new CustomException(STUDY_HISTORY_NOT_CANCELABLE);
+            throw new CustomException(STUDY_APPLY_NOT_CANCELABLE);
         }
     }
 }

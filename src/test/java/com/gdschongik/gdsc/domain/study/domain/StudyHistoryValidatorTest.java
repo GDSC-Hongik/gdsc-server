@@ -1,7 +1,5 @@
 package com.gdschongik.gdsc.domain.study.domain;
 
-import static com.gdschongik.gdsc.global.common.constant.RecruitmentConstant.*;
-import static com.gdschongik.gdsc.global.common.constant.StudyConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 
@@ -95,7 +93,7 @@ public class StudyHistoryValidatorTest {
             // when & then
             assertThatThrownBy(() -> studyHistoryValidator.validateCancelStudyApply(study))
                     .isInstanceOf(CustomException.class)
-                    .hasMessage(STUDY_HISTORY_NOT_CANCELABLE.getMessage());
+                    .hasMessage(STUDY_APPLY_NOT_CANCELABLE.getMessage());
         }
     }
 }
