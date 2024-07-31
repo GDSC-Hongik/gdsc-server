@@ -5,7 +5,6 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.common.model.BaseEntity;
 import com.gdschongik.gdsc.domain.member.domain.Member;
-import com.gdschongik.gdsc.domain.member.domain.MemberRegularEvent;
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.persistence.Column;
@@ -72,9 +71,8 @@ public class Membership extends BaseEntity {
         validateRegularRequirement();
 
         regularRequirement.updatePaymentStatus(SATISFIED);
-        regularRequirement.validateAllSatisfied();
 
-        registerEvent(new MemberRegularEvent(member.getId(), member.getDiscordId()));
+        registerEvent(new MembershipVerifiedEvent(id));
     }
 
     // 데이터 전달 로직
