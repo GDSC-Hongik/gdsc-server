@@ -138,7 +138,7 @@ class OrderServiceTest extends IntegrationTest {
         }
 
         @Test
-        void 멤버십의_회비납입상태가_VERIFIED로_변경된다() {
+        void 멤버십의_회비납입상태가_SATISFIED로_변경된다() {
             // given
             Member member = createMember();
             logoutAndReloginAs(1L, MemberRole.ASSOCIATE);
@@ -383,7 +383,7 @@ class OrderServiceTest extends IntegrationTest {
     class 무료주문_생성할때 {
 
         @Test
-        void 멤버십의_회비납입상태가_VERIFIED로_변경된다() {
+        void 멤버십의_회비납입상태가_SATISFIED로_변경된다() {
             // given
             Member member = createMember();
             logoutAndReloginAs(1L, MemberRole.ASSOCIATE);
