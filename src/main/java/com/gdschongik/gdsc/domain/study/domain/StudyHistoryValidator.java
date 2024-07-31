@@ -35,7 +35,7 @@ public class StudyHistoryValidator {
         // todo: 스터디 정정기간 고려하도록 수정
         // 스터디 수강신청 기간이 아닌 경우
         if (!study.isApplicable()) {
-            throw new CustomException(STUDY_APPLY_NOT_CANCELABLE);
+            throw new CustomException(STUDY_NOT_CANCELABLE_APPLICATION_PERIOD);
         }
     }
 }

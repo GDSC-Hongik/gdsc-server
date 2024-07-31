@@ -93,7 +93,7 @@ public class StudyHistoryValidatorTest {
             // when & then
             assertThatThrownBy(() -> studyHistoryValidator.validateCancelStudyApply(study))
                     .isInstanceOf(CustomException.class)
-                    .hasMessage(STUDY_APPLY_NOT_CANCELABLE.getMessage());
+                    .hasMessage(STUDY_NOT_CANCELABLE_APPLICATION_PERIOD.getMessage());
         }
     }
 }
