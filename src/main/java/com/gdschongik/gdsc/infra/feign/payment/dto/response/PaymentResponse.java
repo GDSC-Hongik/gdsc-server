@@ -25,7 +25,7 @@ public record PaymentResponse(
         Boolean cultureExpense,
         Long taxFreeAmount,
         Long taxExemtionAmount,
-        @Nullable List<PaymentCancelDto> cancels,
+        @Nullable List<CancelDto> cancels,
         Boolean isPartialCancelable,
         @Nullable CardDto card,
         @Nullable TransferDto transfer,
@@ -37,7 +37,7 @@ public record PaymentResponse(
         @Nullable CashReceiptDto cashReceipt,
         @Nullable List<CashReceiptsDto> cashReceipts) {
     // TODO: enum 관련 매핑 여부 검토
-    public record PaymentCancelDto(
+    public record CancelDto(
             Long cancelAmount,
             String cancelReason,
             Long taxFreeAmount,

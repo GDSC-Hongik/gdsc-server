@@ -12,6 +12,7 @@ import com.gdschongik.gdsc.domain.order.dao.OrderRepository;
 import com.gdschongik.gdsc.domain.order.domain.MoneyInfo;
 import com.gdschongik.gdsc.domain.order.domain.Order;
 import com.gdschongik.gdsc.domain.order.domain.OrderValidator;
+import com.gdschongik.gdsc.domain.order.dto.request.OrderCancelRequest;
 import com.gdschongik.gdsc.domain.order.dto.request.OrderCompleteRequest;
 import com.gdschongik.gdsc.domain.order.dto.request.OrderCreateRequest;
 import com.gdschongik.gdsc.domain.order.dto.request.OrderQueryOption;
@@ -19,8 +20,11 @@ import com.gdschongik.gdsc.domain.order.dto.response.OrderAdminResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import com.gdschongik.gdsc.infra.feign.payment.client.PaymentClient;
+import com.gdschongik.gdsc.infra.feign.payment.dto.request.PaymentCancelRequest;
 import com.gdschongik.gdsc.infra.feign.payment.dto.request.PaymentConfirmRequest;
 import com.gdschongik.gdsc.infra.feign.payment.dto.response.PaymentResponse;
+import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -103,12 +107,64 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
-    public PaymentResponse getCompletedOrderPayment(Long orderId) {
+    public PaymentResponse getCompletedPaidOrderPayment(Long orderId) {
         Order order = orderRepository
                 .findById(orderId)
                 .filter(Order::isCompleted)
-                .orElseThrow(() -> new CustomException(ORDER_COMPLETED_NOT_FOUND));
+                .filter(o -> !o.isFree())
+                .orElseThrow(() -> new CustomException(ORDER_COMPLETED_PAID_NOT_FOUND));
 
         return paymentClient.getPayment(order.getPaymentKey());
+    }
+
+    @Transactional
+    public void cancelOrder(Long orderId, OrderCancelRequest request) {
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new CustomException(ORDER_NOT_FOUND));
+
+        order.validateCancelable();
+
+        var cancelRequest = new PaymentCancelRequest(request.cancelReason());
+        PaymentResponse response = paymentClient.cancelPayment(order.getPaymentKey(), cancelRequest);
+        ZonedDateTime canceledAt = getCanceledAt(response);
+
+        order.cancel(canceledAt);
+
+        log.info("[OrderService] 주문 취소: orderId={}", order.getId());
+    }
+
+    private ZonedDateTime getCanceledAt(PaymentResponse response) {
+        // TODO: 예외 발생하는 경우 대개 응답 DTO 매핑 오류이며, 결제 취소는 완료되었으나 DB 주문 취소는 실패한 것이므로 별도 처리 필요
+        return Optional.ofNullable(response.cancels())
+                .flatMap(this::findLatestCancelDate)
+                .orElseThrow(() -> new CustomException(ORDER_CANCEL_RESPONSE_NOT_FOUND));
+    }
+
+    private Optional<ZonedDateTime> findLatestCancelDate(List<PaymentResponse.CancelDto> cancels) {
+        return cancels.stream().map(PaymentResponse.CancelDto::canceledAt).max(ZonedDateTime::compareTo);
+    }
+
+    @Transactional
+    public void createFreeOrder(OrderCreateRequest request) {
+        Membership membership = membershipRepository
+                .findById(request.membershipId())
+                .orElseThrow(() -> new CustomException(MEMBERSHIP_NOT_FOUND));
+
+        Optional<IssuedCoupon> issuedCoupon =
+                Optional.ofNullable(request.issuedCouponId()).map(this::getIssuedCoupon);
+
+        MoneyInfo moneyInfo = MoneyInfo.of(
+                Money.from(request.totalAmount()),
+                Money.from(request.discountAmount()),
+                Money.from(request.finalPaymentAmount()));
+
+        Member currentMember = memberUtil.getCurrentMember();
+
+        orderValidator.validateFreeOrderCreate(membership, issuedCoupon, currentMember);
+
+        Order order = Order.createFree(request.orderNanoId(), membership, issuedCoupon.orElse(null), moneyInfo);
+
+        orderRepository.save(order);
+
+        log.info("[OrderService] 무료 주문 생성: orderId={}", order.getId());
     }
 }

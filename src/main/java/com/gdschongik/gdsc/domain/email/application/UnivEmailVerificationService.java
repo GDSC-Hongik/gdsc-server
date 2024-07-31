@@ -30,6 +30,7 @@ public class UnivEmailVerificationService {
         EmailVerificationTokenDto emailVerificationToken = getEmailVerificationToken(request.token());
         Member member = getMemberById(emailVerificationToken.memberId());
         member.completeUnivEmailVerification(emailVerificationToken.email());
+        memberRepository.save(member);
     }
 
     public Optional<UnivEmailVerification> getUnivEmailVerificationFromRedis(Long memberId) {

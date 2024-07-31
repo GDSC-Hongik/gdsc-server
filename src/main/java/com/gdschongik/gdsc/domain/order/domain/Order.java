@@ -1,8 +1,11 @@
 package com.gdschongik.gdsc.domain.order.domain;
 
+import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
+
 import com.gdschongik.gdsc.domain.common.model.BaseEntity;
 import com.gdschongik.gdsc.domain.coupon.domain.IssuedCoupon;
 import com.gdschongik.gdsc.domain.membership.domain.Membership;
+import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -58,6 +61,8 @@ public class Order extends BaseEntity {
 
     private ZonedDateTime approvedAt;
 
+    private ZonedDateTime canceledAt;
+
     @Builder(access = AccessLevel.PRIVATE)
     private Order(
             OrderStatus status,
@@ -93,6 +98,26 @@ public class Order extends BaseEntity {
                 .build();
     }
 
+    public static Order createFree(
+            String nanoId, Membership membership, @Nullable IssuedCoupon issuedCoupon, MoneyInfo moneyInfo) {
+        validateFreeOrder(moneyInfo);
+        return Order.builder()
+                .status(OrderStatus.COMPLETED)
+                .nanoId(nanoId)
+                .memberId(membership.getMember().getId())
+                .membershipId(membership.getId())
+                .recruitmentRoundId(membership.getRecruitmentRound().getId())
+                .issuedCouponId(issuedCoupon != null ? issuedCoupon.getId() : null)
+                .moneyInfo(moneyInfo)
+                .build();
+    }
+
+    private static void validateFreeOrder(MoneyInfo moneyInfo) {
+        if (!moneyInfo.isFree()) {
+            throw new CustomException(ORDER_FREE_FINAL_PAYMENT_NOT_ZERO);
+        }
+    }
+
     // 데이터 변경 로직
 
     /**
@@ -109,9 +134,34 @@ public class Order extends BaseEntity {
         registerEvent(new OrderCompletedEvent(id));
     }
 
+    /**
+     * 주문을 취소 처리합니다.
+     * 상태 변경 및 취소 시각을 저장하며, 예외를 발생시키지 않도록 외부 취소 요청 전에 validateCancelable을 호출합니다.
+     */
+    public void cancel(ZonedDateTime canceledAt) {
+        // TODO: 취소 이벤트 발행을 통해 멤버십 및 멤버 상태에 대한 변경 로직 추가
+        validateCancelable();
+        this.status = OrderStatus.CANCELED;
+        this.canceledAt = canceledAt;
+    }
+
+    public void validateCancelable() {
+        if (status != OrderStatus.COMPLETED) {
+            throw new CustomException(ORDER_CANCEL_NOT_COMPLETED);
+        }
+
+        if (isFree()) {
+            throw new CustomException(ORDER_CANCEL_FREE_ORDER);
+        }
+    }
+
     // 데이터 조회 로직
 
     public boolean isCompleted() {
         return status == OrderStatus.COMPLETED;
+    }
+
+    public boolean isFree() {
+        return moneyInfo.isFree();
     }
 }

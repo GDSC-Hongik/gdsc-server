@@ -28,10 +28,17 @@ public class OnboardingOrderController {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "주문 완료하기", description = "주문을 완료합니다. 요청된 결제는 승인됩니다.")
+    @Operation(summary = "주문 완료", description = "임시 주문을 완료합니다. 요청된 결제는 승인됩니다.")
     @PostMapping("/complete")
     public ResponseEntity<Void> completeOrder(@Valid @RequestBody OrderCompleteRequest request) {
         orderService.completeOrder(request);
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "무료 주문 생성", description = "무료 주문을 생성합니다. 무료 주문은 완료된 상태로 생성됩니다.")
+    @PostMapping("/free")
+    public ResponseEntity<Void> createFreeOrder(@Valid @RequestBody OrderCreateRequest request) {
+        orderService.createFreeOrder(request);
         return ResponseEntity.ok().build();
     }
 }

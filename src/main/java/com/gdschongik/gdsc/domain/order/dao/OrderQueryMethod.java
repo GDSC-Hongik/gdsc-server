@@ -3,12 +3,14 @@ package com.gdschongik.gdsc.domain.order.dao;
 import static com.gdschongik.gdsc.domain.member.domain.QMember.*;
 import static com.gdschongik.gdsc.domain.order.domain.QOrder.*;
 import static com.gdschongik.gdsc.domain.recruitment.domain.QRecruitment.*;
+import static com.gdschongik.gdsc.domain.recruitment.domain.QRecruitmentRound.*;
+import static com.querydsl.jpa.JPAExpressions.*;
 
 import com.gdschongik.gdsc.domain.common.model.SemesterType;
 import com.gdschongik.gdsc.domain.order.dto.request.OrderQueryOption;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import java.time.ZonedDateTime;
+import java.time.*;
 
 public interface OrderQueryMethod {
 
@@ -20,7 +22,7 @@ public interface OrderQueryMethod {
                 .and(eqStudentId(queryOption.studentId()))
                 .and(eqNanoId(queryOption.nanoId()))
                 .and(eqPaymentKey(queryOption.paymentKey()))
-                .and(eqApprovedAt(queryOption.approvedAt()));
+                .and(eqApprovedAt(queryOption.approvedDate()));
     }
 
     default BooleanExpression eqMember() {
@@ -37,11 +39,11 @@ public interface OrderQueryMethod {
     }
 
     default BooleanExpression eqAcademicYear(Integer academicYear) {
-        return academicYear != null ? recruitment.academicYear.eq(academicYear) : null;
+        return academicYear != null ? recruitmentRound.academicYear.eq(academicYear) : null;
     }
 
     default BooleanExpression eqSemesterType(SemesterType semesterType) {
-        return semesterType != null ? recruitment.semesterType.eq(semesterType) : null;
+        return semesterType != null ? recruitmentRound.semesterType.eq(semesterType) : null;
     }
 
     default BooleanExpression eqStudentId(String studentId) {
@@ -56,7 +58,13 @@ public interface OrderQueryMethod {
         return paymentKey != null ? order.paymentKey.contains(paymentKey) : null;
     }
 
-    default BooleanExpression eqApprovedAt(ZonedDateTime approvedAt) {
-        return approvedAt != null ? order.approvedAt.eq(approvedAt) : null;
+    default BooleanExpression eqApprovedAt(LocalDate approvedAt) {
+        if (approvedAt == null) {
+            return null;
+        }
+        ZoneId seoulZone = ZoneId.of("Asia/Seoul");
+        ZonedDateTime startOfDay = approvedAt.atStartOfDay(seoulZone);
+        ZonedDateTime endOfDay = approvedAt.atTime(LocalTime.MAX).atZone(seoulZone);
+        return order.approvedAt.between(startOfDay, endOfDay);
     }
 }

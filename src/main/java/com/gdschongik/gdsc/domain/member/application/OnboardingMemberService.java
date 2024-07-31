@@ -53,6 +53,7 @@ public class OnboardingMemberService {
     public void verifyBevyStatus() {
         Member currentMember = memberUtil.getCurrentMember();
         currentMember.verifyBevy();
+        memberRepository.save(currentMember);
     }
 
     @Transactional
@@ -60,6 +61,7 @@ public class OnboardingMemberService {
         Member currentMember = memberUtil.getCurrentMember();
         currentMember.updateBasicMemberInfo(
                 request.studentId(), request.name(), request.phone(), request.department(), request.email());
+        memberRepository.save(currentMember);
     }
 
     public MemberBasicInfoResponse getMemberBasicInfo() {

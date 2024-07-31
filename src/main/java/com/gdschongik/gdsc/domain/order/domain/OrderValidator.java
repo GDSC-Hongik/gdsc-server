@@ -10,7 +10,6 @@ import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.global.annotation.DomainService;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.annotation.Nullable;
-import java.math.BigDecimal;
 import java.util.Optional;
 
 @DomainService
@@ -68,7 +67,7 @@ public class OrderValidator {
     }
 
     private void validateDiscountAmountZero(Money discountAmount) {
-        if (!discountAmount.equals(Money.from(BigDecimal.ZERO))) {
+        if (!discountAmount.equals(Money.ZERO)) {
             throw new CustomException(ORDER_DISCOUNT_AMOUNT_NOT_ZERO);
         }
     }
@@ -97,6 +96,37 @@ public class OrderValidator {
 
         if (!order.getMoneyInfo().getFinalPaymentAmount().equals(requestedAmount)) {
             throw new CustomException(ORDER_COMPLETE_AMOUNT_MISMATCH);
+        }
+    }
+
+    public void validateFreeOrderCreate(
+            Membership membership, Optional<IssuedCoupon> optionalIssuedCoupon, Member currentMember) {
+        // TODO: 공통 로직으로 추출
+
+        // 멤버십 관련 검증
+
+        if (!membership.getMember().getId().equals(currentMember.getId())) {
+            throw new CustomException(ORDER_MEMBERSHIP_MEMBER_MISMATCH);
+        }
+
+        if (membership.getRegularRequirement().isPaymentSatisfied()) {
+            throw new CustomException(ORDER_MEMBERSHIP_ALREADY_PAID);
+        }
+
+        // 리쿠르팅 관련 검증
+
+        RecruitmentRound recruitmentRound = membership.getRecruitmentRound();
+
+        if (!recruitmentRound.isOpen()) {
+            throw new CustomException(ORDER_RECRUITMENT_PERIOD_INVALID);
+        }
+
+        // 발급쿠폰 관련 검증
+
+        if (optionalIssuedCoupon.isPresent()) {
+            var issuedCoupon = optionalIssuedCoupon.get();
+            validateIssuedCouponOwnership(issuedCoupon, currentMember);
+            issuedCoupon.validateUsable();
         }
     }
 }
