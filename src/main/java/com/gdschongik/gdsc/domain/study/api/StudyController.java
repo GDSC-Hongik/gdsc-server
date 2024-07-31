@@ -40,6 +40,6 @@ public class StudyController {
     @DeleteMapping("/apply/{studyId}")
     public ResponseEntity<Void> cancelStudyApply(@PathVariable Long studyId) {
         studyService.cancelStudyApply(studyId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 }
