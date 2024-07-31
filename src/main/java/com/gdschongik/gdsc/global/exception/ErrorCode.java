@@ -108,8 +108,10 @@ public enum ErrorCode {
     STUDY_NOT_APPLICABLE(HttpStatus.CONFLICT, "스터디 신청기간이 아닙니다."),
 
     // StudyHistory
+    STUDY_HISTORY_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 스터디 수강 기록입니다."),
     STUDY_HISTORY_DUPLICATE(HttpStatus.CONFLICT, "이미 해당 스터디를 신청했습니다."),
     STUDY_HISTORY_ONGOING_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 진행중인 스터디가 있습니다."),
+    STUDY_HISTORY_NOT_CANCELABLE(HttpStatus.CONFLICT, "스터디 신청기간이 아니라면 취소할 수 없습니다."),
 
     // Order
     ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, "주문이 존재하지 않습니다."),

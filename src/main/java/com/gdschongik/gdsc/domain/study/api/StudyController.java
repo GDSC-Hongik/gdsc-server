@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,6 +33,13 @@ public class StudyController {
     @PostMapping("/apply/{studyId}")
     public ResponseEntity<Void> applyStudy(@PathVariable Long studyId) {
         studyService.applyStudy(studyId);
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "스터디 수강신청 취소", description = "수강 신청을 취소합니다. 모집 기간이 끝나지 않았어야 취소할 수 있습니다.")
+    @DeleteMapping("/apply/{studyId}")
+    public ResponseEntity<Void> cancelStudyApply(@PathVariable Long studyId) {
+        studyService.cancelStudyApply(studyId);
         return ResponseEntity.ok().build();
     }
 }
