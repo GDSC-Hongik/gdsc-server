@@ -1,6 +1,8 @@
 package com.gdschongik.gdsc.domain.member.domain;
 
+import static com.gdschongik.gdsc.domain.member.domain.MemberManageRole.*;
 import static com.gdschongik.gdsc.domain.member.domain.MemberRole.*;
+import static com.gdschongik.gdsc.domain.member.domain.MemberStudyRole.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.common.model.BaseEntity;
@@ -35,6 +37,12 @@ public class Member extends BaseEntity {
     private MemberRole role;
 
     @Enumerated(EnumType.STRING)
+    private MemberManageRole manageRole;
+
+    @Enumerated(EnumType.STRING)
+    private MemberStudyRole studyRole;
+
+    @Enumerated(EnumType.STRING)
     private MemberStatus status;
 
     private String name;
@@ -67,6 +75,8 @@ public class Member extends BaseEntity {
     @Builder(access = AccessLevel.PRIVATE)
     private Member(
             MemberRole role,
+            MemberManageRole manageRole,
+            MemberStudyRole studyRole,
             MemberStatus status,
             String name,
             String studentId,
@@ -80,6 +90,8 @@ public class Member extends BaseEntity {
             String univEmail,
             AssociateRequirement associateRequirement) {
         this.role = role;
+        this.manageRole = manageRole;
+        this.studyRole = studyRole;
         this.status = status;
         this.name = name;
         this.studentId = studentId;
@@ -99,6 +111,8 @@ public class Member extends BaseEntity {
         return Member.builder()
                 .oauthId(oauthId)
                 .role(GUEST)
+                .manageRole(NONE)
+                .studyRole(STUDENT)
                 .status(MemberStatus.NORMAL)
                 .associateRequirement(associateRequirement)
                 .build();
