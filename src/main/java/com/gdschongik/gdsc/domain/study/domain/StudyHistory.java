@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -31,4 +32,19 @@ public class StudyHistory extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "study_id")
     private Study study;
+
+    @Builder(access = AccessLevel.PRIVATE)
+    private StudyHistory(Member mentee, Study study) {
+        this.mentee = mentee;
+        this.study = study;
+    }
+
+    public static StudyHistory create(Member mentee, Study study) {
+        return StudyHistory.builder().mentee(mentee).study(study).build();
+    }
+
+    // 데이터 전달 로직
+    public boolean isStudyOngoing() {
+        return study.isStudyOngoing();
+    }
 }

@@ -167,4 +167,8 @@ public class Study extends BaseSemesterEntity {
     public boolean isApplicable() {
         return applicationPeriod.isOpen();
     }
+
+    public boolean isStudyOngoing() {
+        return period.isOpen();
+    }
 }
