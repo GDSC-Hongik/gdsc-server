@@ -60,6 +60,7 @@ dependencies {
 
     // Redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    testImplementation 'org.testcontainers:testcontainers'
 
     // Querydsl
     implementation 'com.querydsl:querydsl-jpa:5.1.0:jakarta'
@@ -91,6 +92,7 @@ dependencies {
     // OpenFeign
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
     implementation 'io.github.openfeign:feign-jackson'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 }
 
 tasks.named('test') {

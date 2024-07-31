@@ -5,6 +5,7 @@ import static com.gdschongik.gdsc.domain.member.domain.Member.*;
 import static com.gdschongik.gdsc.global.common.constant.MemberConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.RecruitmentConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.SemesterConstant.*;
+import static com.gdschongik.gdsc.global.common.constant.StudyConstant.*;
 
 import com.gdschongik.gdsc.domain.common.model.SemesterType;
 import com.gdschongik.gdsc.domain.common.vo.Money;
@@ -16,6 +17,7 @@ import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.domain.recruitment.domain.RoundType;
 import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
+import com.gdschongik.gdsc.domain.study.domain.Study;
 import java.time.LocalDateTime;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -62,5 +64,19 @@ public class FixtureHelper {
     public IssuedCoupon createAndIssue(Money money, Member member) {
         Coupon coupon = Coupon.createCoupon("테스트쿠폰", money);
         return IssuedCoupon.issue(coupon, member);
+    }
+
+    public Study createStudy(Member mentor, Period period, Period applicationPeriod) {
+        return Study.createStudy(
+                ACADEMIC_YEAR,
+                SEMESTER_TYPE,
+                mentor,
+                period,
+                applicationPeriod,
+                TOTAL_WEEK,
+                ONLINE_STUDY,
+                DAY_OF_WEEK,
+                STUDY_START_TIME,
+                STUDY_END_TIME);
     }
 }
