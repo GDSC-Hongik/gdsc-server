@@ -2,6 +2,7 @@ package com.gdschongik.gdsc.domain.study.domain.vo;
 
 import static com.gdschongik.gdsc.domain.study.domain.StudyStatus.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.ASSIGNMENT_CAN_NOT_BE_UPDATED;
+import static com.gdschongik.gdsc.global.exception.ErrorCode.ASSIGNMENT_DEADLINE_INVALID;
 
 import com.gdschongik.gdsc.domain.study.domain.Difficulty;
 import com.gdschongik.gdsc.domain.study.domain.StudyStatus;
@@ -68,6 +69,14 @@ public class Assignment {
         if (isCancelled()) {
             throw new CustomException(ASSIGNMENT_CAN_NOT_BE_UPDATED);
         }
+
+        if (isDeadLine()) {
+            throw new CustomException(ASSIGNMENT_DEADLINE_INVALID);
+        }
+    }
+
+    private boolean isDeadLine() {
+        return deadline.isBefore(LocalDateTime.now());
     }
 
     // 데이터 전달 로직
