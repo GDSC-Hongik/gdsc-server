@@ -54,13 +54,15 @@ public class Assignment {
     }
 
     // 상태 변경 로직
-    public void update(String title, LocalDateTime deadline, String descriptionLink) {
+    public Assignment update(String title, LocalDateTime deadline, String descriptionLink) {
         validateAssignment();
 
-        this.title = title;
-        this.deadline = deadline;
-        this.descriptionLink = descriptionLink;
-        this.status = OPEN;
+        return Assignment.builder()
+                .title(title)
+                .deadline(deadline)
+                .descriptionLink(descriptionLink)
+                .status(StudyStatus.OPEN)
+                .build();
     }
 
     public void updateStatus(StudyStatus status) {

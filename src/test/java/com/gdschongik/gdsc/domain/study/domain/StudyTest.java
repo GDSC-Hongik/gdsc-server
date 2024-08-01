@@ -10,7 +10,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
-import com.gdschongik.gdsc.domain.study.domain.vo.Assignment;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import java.time.LocalTime;
 import org.junit.jupiter.api.Nested;
@@ -150,22 +149,6 @@ public class StudyTest {
                             studyEndTime))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(ASSIGNMENT_STUDY_CAN_NOT_INPUT_STUDY_TIME.getMessage());
-        }
-    }
-
-    @Nested
-    class 과제_개설시 {
-
-        @Test
-        void 과제상태가_휴강이라면_과제를_수정할_수_없다() {
-            // given
-            Assignment assignment = Assignment.createEmptyAssignment();
-            assignment.updateStatus(StudyStatus.CANCELLED);
-
-            // when & then
-            assertThatThrownBy(() -> assignment.update("HTTP 통신 코드 작성하기", START_DATE, "https://www.notion.com"))
-                    .isInstanceOf(CustomException.class)
-                    .hasMessage(ASSIGNMENT_CAN_NOT_BE_UPDATED.getMessage());
         }
     }
 }

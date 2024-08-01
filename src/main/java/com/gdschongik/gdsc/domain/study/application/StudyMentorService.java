@@ -1,6 +1,6 @@
 package com.gdschongik.gdsc.domain.study.application;
 
-import static com.gdschongik.gdsc.global.exception.ErrorCode.ASSIGNMENT_NOT_FOUND;
+import static com.gdschongik.gdsc.global.exception.ErrorCode.STUDY_DETAIL_NOT_FOUND;
 
 import com.gdschongik.gdsc.domain.study.dao.StudyDetailRepository;
 import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
@@ -24,11 +24,13 @@ public class StudyMentorService {
     public void updateStudyAssignment(Long studyDetailId, AssignmentCreateRequest request) {
         StudyDetail studyDetail = studyDetailRepository
                 .findById(studyDetailId)
-                .orElseThrow(() -> new CustomException(ASSIGNMENT_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(STUDY_DETAIL_NOT_FOUND));
         Assignment assignment = studyDetail.getAssignment();
 
-        assignment.update(request.title(), request.deadLine(), request.descriptionNotionLink());
+        Assignment newAssignment =
+                assignment.update(request.title(), request.deadLine(), request.descriptionNotionLink());
 
+        studyDetail.updateAssignment(newAssignment);
         log.info("[StudyMentorService] 과제 개설/수정 완료: studyDetailId={}", studyDetailId);
     }
 }

@@ -139,7 +139,9 @@ public enum ErrorCode {
     // Assignment
     ASSIGNMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "과제가 존재하지 않습니다."),
     ASSIGNMENT_CAN_NOT_BE_UPDATED(HttpStatus.CONFLICT, "휴강인 과제는 수정할 수 없습니다."),
-    ;
+
+    // Study Detail
+    STUDY_DETAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "스터디 정보가 존재하지 않습니다.");
 
     private final HttpStatus status;
     private final String message;
