@@ -109,6 +109,9 @@ public enum ErrorCode {
     STUDY_NOT_APPLICABLE(HttpStatus.CONFLICT, "스터디 신청기간이 아닙니다."),
     STUDY_NOT_CANCELABLE_APPLICATION_PERIOD(HttpStatus.CONFLICT, "스터디 신청기간이 아니라면 취소할 수 없습니다."),
 
+    // StudyDetail
+    STUDY_DETAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 스터디 상세정보입니다."),
+
     // StudyHistory
     STUDY_HISTORY_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 스터디 수강 기록입니다."),
     STUDY_HISTORY_DUPLICATE(HttpStatus.CONFLICT, "이미 해당 스터디를 신청했습니다."),
@@ -135,9 +138,6 @@ public enum ErrorCode {
 
     // Order - MoneyInfo
     ORDER_FINAL_PAYMENT_AMOUNT_MISMATCH(HttpStatus.CONFLICT, "주문 최종결제금액은 주문총액에서 할인금액을 뺀 값이어야 합니다."),
-
-    // Assignment
-    ASSIGNMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "과제가 존재하지 않습니다."),
     ;
 
     private final HttpStatus status;

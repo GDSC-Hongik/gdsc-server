@@ -22,7 +22,7 @@ public class StudyMentorService {
     public void cancelStudyAssignment(Long studyDetailId) {
         StudyDetail studyDetail = studyDetailRepository
                 .findById(studyDetailId)
-                .orElseThrow(() -> new CustomException(ASSIGNMENT_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(STUDY_DETAIL_NOT_FOUND));
 
         studyDetail.cancelAssignment();
 
