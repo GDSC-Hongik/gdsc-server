@@ -5,7 +5,6 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.STUDY_DETAIL_NOT_FO
 import com.gdschongik.gdsc.domain.study.dao.StudyDetailRepository;
 import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
 import com.gdschongik.gdsc.domain.study.domain.request.AssignmentCreateRequest;
-import com.gdschongik.gdsc.domain.study.domain.vo.Assignment;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,12 +24,8 @@ public class StudyMentorService {
         StudyDetail studyDetail = studyDetailRepository
                 .findById(studyDetailId)
                 .orElseThrow(() -> new CustomException(STUDY_DETAIL_NOT_FOUND));
-        Assignment assignment = studyDetail.getAssignment();
 
-        Assignment newAssignment =
-                assignment.update(request.title(), request.deadLine(), request.descriptionNotionLink());
-
-        studyDetail.updateAssignment(newAssignment);
+        studyDetail.updateAssignment(request.title(), request.deadLine(), request.descriptionNotionLink());
         log.info("[StudyMentorService] 과제 개설/수정 완료: studyDetailId={}", studyDetailId);
     }
 }

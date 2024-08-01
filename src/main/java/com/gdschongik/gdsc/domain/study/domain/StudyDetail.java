@@ -5,6 +5,7 @@ import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import com.gdschongik.gdsc.domain.study.domain.vo.Assignment;
 import com.gdschongik.gdsc.domain.study.domain.vo.Session;
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -70,7 +71,9 @@ public class StudyDetail extends BaseEntity {
                 .build();
     }
 
-    public void updateAssignment(Assignment newAssignment) {
-        assignment = newAssignment;
+    public void updateAssignment(String title, LocalDateTime deadLine, String descriptionNotionLink) {
+        assignment.validateAssignment();
+
+        assignment = Assignment.createAssignment(title, deadLine, descriptionNotionLink);
     }
 }

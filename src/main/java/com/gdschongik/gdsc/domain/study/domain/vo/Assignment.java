@@ -53,9 +53,7 @@ public class Assignment {
         return Assignment.builder().status(StudyStatus.NONE).build();
     }
 
-    // 상태 변경 로직
-    public Assignment update(String title, LocalDateTime deadline, String descriptionLink) {
-        validateAssignment();
+    public static Assignment createAssignment(String title, LocalDateTime deadline, String descriptionLink) {
 
         return Assignment.builder()
                 .title(title)
@@ -65,17 +63,14 @@ public class Assignment {
                 .build();
     }
 
-    public void updateStatus(StudyStatus status) {
-        this.status = status;
-    }
-
     // 검증 로직
-    private void validateAssignment() {
+    public void validateAssignment() {
         if (isCancelled()) {
             throw new CustomException(ASSIGNMENT_CAN_NOT_BE_UPDATED);
         }
     }
 
+    // 데이터 전달 로직
     private boolean isCancelled() {
         return status == CANCELLED;
     }
