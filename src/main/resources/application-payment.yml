@@ -1,0 +1,2 @@
+toss:
+  secret-key: ${PAYMENT_TOSS_SECRET_KEY:}

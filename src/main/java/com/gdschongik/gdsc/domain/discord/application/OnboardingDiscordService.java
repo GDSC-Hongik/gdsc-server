@@ -4,30 +4,36 @@ import static com.gdschongik.gdsc.domain.discord.domain.DiscordVerificationCode.
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.discord.dao.DiscordVerificationCodeRepository;
+import com.gdschongik.gdsc.domain.discord.domain.DiscordValidator;
 import com.gdschongik.gdsc.domain.discord.domain.DiscordVerificationCode;
 import com.gdschongik.gdsc.domain.discord.dto.request.DiscordLinkRequest;
-import com.gdschongik.gdsc.domain.discord.dto.response.DiscordNicknameResponse;
+import com.gdschongik.gdsc.domain.discord.dto.response.DiscordCheckDuplicateResponse;
+import com.gdschongik.gdsc.domain.discord.dto.response.DiscordCheckJoinResponse;
 import com.gdschongik.gdsc.domain.discord.dto.response.DiscordVerificationCodeResponse;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.global.exception.CustomException;
+import com.gdschongik.gdsc.global.util.DiscordUtil;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import java.security.SecureRandom;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class OnboardingDiscordService {
 
     public static final long DISCORD_CODE_TTL_SECONDS = 300L;
 
     private final DiscordVerificationCodeRepository discordVerificationCodeRepository;
     private final MemberUtil memberUtil;
+    private final DiscordUtil discordUtil;
     private final MemberRepository memberRepository;
+    private final DiscordValidator discordValidator;
 
     @Transactional
     public DiscordVerificationCodeResponse createVerificationCode(String discordUsername) {
@@ -55,44 +61,44 @@ public class OnboardingDiscordService {
                 .findById(request.discordUsername())
                 .orElseThrow(() -> new CustomException(DISCORD_CODE_NOT_FOUND));
 
-        validateDiscordCodeMatches(request, discordVerificationCode);
-        validateDiscordUsernameDuplicate(request.discordUsername());
-        validateNicknameDuplicate(request.nickname());
+        boolean isDiscordUsernameDuplicate = memberRepository.existsByDiscordUsername(request.discordUsername());
+        boolean isNicknameDuplicate = memberRepository.existsByNickname(request.nickname());
+
+        discordValidator.validateVerifyDiscordCode(
+                request.code(), discordVerificationCode, isDiscordUsernameDuplicate, isNicknameDuplicate);
 
         discordVerificationCodeRepository.delete(discordVerificationCode);
 
         final Member currentMember = memberUtil.getCurrentMember();
         currentMember.verifyDiscord(request.discordUsername(), request.nickname());
+
+        updateDiscordId(request.discordUsername(), currentMember);
+
+        memberRepository.save(currentMember);
+
+        log.info("[OnboardingDiscordService] 디스코드 연동: memberId={}", currentMember.getId());
     }
 
-    private void validateDiscordUsernameDuplicate(String discordUsername) {
-        if (memberRepository.existsByDiscordUsername(discordUsername)) {
-            throw new CustomException(MEMBER_DISCORD_USERNAME_DUPLICATE);
-        }
+    private void updateDiscordId(String discordUsername, Member currentMember) {
+        String discordId = discordUtil.getMemberIdByUsername(discordUsername);
+        currentMember.updateDiscordId(discordId);
     }
 
-    private void validateNicknameDuplicate(String nickname) {
-        if (memberRepository.existsByNickname(nickname)) {
-            throw new CustomException(MEMBER_NICKNAME_DUPLICATE);
-        }
+    @Transactional(readOnly = true)
+    public DiscordCheckDuplicateResponse checkUsernameDuplicate(String discordUsername) {
+        boolean isExist = memberRepository.existsByDiscordUsername(discordUsername);
+        return DiscordCheckDuplicateResponse.from(isExist);
     }
 
-    private void validateDiscordCodeMatches(
-            DiscordLinkRequest request, DiscordVerificationCode discordVerificationCode) {
-        if (!discordVerificationCode.matchesCode(request.code())) {
-            throw new CustomException(DISCORD_CODE_MISMATCH);
-        }
+    @Transactional(readOnly = true)
+    public DiscordCheckDuplicateResponse checkNicknameDuplicate(String nickname) {
+        boolean isExist = memberRepository.existsByNickname(nickname);
+        return DiscordCheckDuplicateResponse.from(isExist);
     }
 
-    public DiscordNicknameResponse checkDiscordRoleAssignable(String discordUsername) {
-        Member member = memberRepository
-                .findByDiscordUsername(discordUsername)
-                .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
-
-        if (!member.isGranted()) {
-            throw new CustomException(DISCORD_ROLE_UNASSIGNABLE);
-        }
-
-        return DiscordNicknameResponse.of(member.getNickname());
+    public DiscordCheckJoinResponse checkServerJoined(String discordUsername) {
+        boolean isJoined =
+                discordUtil.getOptionalMemberByUsername(discordUsername).isPresent();
+        return DiscordCheckJoinResponse.from(isJoined);
     }
 }

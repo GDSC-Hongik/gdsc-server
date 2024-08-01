@@ -8,6 +8,9 @@ public class RegexConstant {
     public static final String NICKNAME = "[ㄱ-ㅣ가-힣]{1,6}$";
     public static final String DEPARTMENT = "^D[0-9]{3}$";
     public static final String HONGIK_EMAIL = "^[^\\W&=+'-+,<>]+(\\.[^\\W&=+'-+,<>]+)*@g\\.hongik\\.ac\\.kr$";
+    public static final String DATETIME = "yyyy-MM-dd'T'HH:mm:ss";
+    public static final String DATE = "yyyy-MM-dd";
+    public static final String ACADEMIC_YEAR = "^[0-9]{4}$";
 
     private RegexConstant() {}
 }

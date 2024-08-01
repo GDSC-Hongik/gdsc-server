@@ -1,8 +1,9 @@
 package com.gdschongik.gdsc.domain.member.dto.response;
 
+import com.gdschongik.gdsc.domain.member.domain.AssociateRequirement;
 import com.gdschongik.gdsc.domain.member.domain.Department;
 import com.gdschongik.gdsc.domain.member.domain.Member;
-import com.gdschongik.gdsc.domain.member.domain.Requirement;
+import com.gdschongik.gdsc.global.util.formatter.PhoneFormatter;
 import java.util.Optional;
 
 public record AdminMemberResponse(
@@ -21,15 +22,12 @@ public record AdminMemberResponse(
                 member.getId(),
                 member.getStudentId(),
                 member.getName(),
-                Optional.ofNullable(member.getPhone())
-                        .map(phone -> String.format(
-                                "%s-%s-%s", phone.substring(0, 3), phone.substring(3, 7), phone.substring(7)))
-                        .orElse(null),
+                PhoneFormatter.format(member.getPhone()),
                 DepartmentDto.from(member.getDepartment()),
                 member.getEmail(),
                 member.getDiscordUsername(),
                 member.getNickname(),
-                RequirementDto.from(member.getRequirement()));
+                RequirementDto.from(member.getAssociateRequirement()));
     }
 
     record DepartmentDto(Department code, String name) {
@@ -40,13 +38,12 @@ public record AdminMemberResponse(
         }
     }
 
-    record RequirementDto(String univStatus, String discordStatus, String paymentStatus, String bevyStatus) {
-        public static RequirementDto from(Requirement requirement) {
+    record RequirementDto(String univStatus, String discordStatus, String bevyStatus) {
+        public static RequirementDto from(AssociateRequirement associateRequirement) {
             return new RequirementDto(
-                    requirement.getUnivStatus().name(),
-                    requirement.getDiscordStatus().name(),
-                    requirement.getPaymentStatus().name(),
-                    requirement.getBevyStatus().name());
+                    associateRequirement.getUnivStatus().name(),
+                    associateRequirement.getDiscordStatus().name(),
+                    associateRequirement.getBevyStatus().name());
         }
     }
 }

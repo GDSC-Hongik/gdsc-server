@@ -4,7 +4,13 @@ spring:
       on-profile: "test"
 
   datasource:
-    url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false;MODE=MYSQL
+    url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false;MODE=MYSQL;NON_KEYWORDS=YEAR,ORDER
 
 discord:
   enabled: false
+
+jwt:
+  token:
+    EMAIL_VERIFICATION_TOKEN:
+      secret: 235872q3ywhtf87q243yt98qop42y3whtg8oiq92ayh4gq2g
+      expiration-time: 1800

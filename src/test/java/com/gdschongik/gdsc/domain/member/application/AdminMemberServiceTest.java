@@ -1,5 +1,6 @@
 package com.gdschongik.gdsc.domain.member.application;
 
+import static com.gdschongik.gdsc.global.common.constant.MemberConstant.*;
 import static org.assertj.core.api.Assertions.*;
 
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
@@ -8,7 +9,7 @@ import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberUpdateRequest;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
-import com.gdschongik.gdsc.integration.IntegrationTest;
+import com.gdschongik.gdsc.helper.IntegrationTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -23,7 +24,7 @@ class AdminMemberServiceTest extends IntegrationTest {
     @Test
     void status가_DELETED라면_예외_발생() {
         // given
-        Member member = Member.createGuestMember("oAuthId");
+        Member member = Member.createGuestMember(OAUTH_ID);
         member.withdraw();
         memberRepository.save(member);
 

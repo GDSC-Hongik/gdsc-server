@@ -12,4 +12,5 @@ public class DiscordProperty {
     private final String token;
     private final String serverId;
     private final String commandChannelId;
+    private final String adminChannelId;
 }
