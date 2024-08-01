@@ -2,14 +2,29 @@ package com.gdschongik.gdsc.domain.member.application;
 
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
+import com.gdschongik.gdsc.domain.auth.application.JwtService;
+import com.gdschongik.gdsc.domain.auth.dto.AccessTokenDto;
+import com.gdschongik.gdsc.domain.auth.dto.RefreshTokenDto;
+import com.gdschongik.gdsc.domain.email.application.UnivEmailVerificationService;
+import com.gdschongik.gdsc.domain.email.domain.EmailVerificationStatusService;
+import com.gdschongik.gdsc.domain.email.domain.UnivEmailVerification;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
-import com.gdschongik.gdsc.domain.member.dto.request.MemberSignupRequest;
-import com.gdschongik.gdsc.domain.member.dto.request.OnboardingMemberUpdateRequest;
-import com.gdschongik.gdsc.domain.member.dto.response.MemberInfoResponse;
+import com.gdschongik.gdsc.domain.member.dto.UnivVerificationStatus;
+import com.gdschongik.gdsc.domain.member.dto.request.BasicMemberInfoRequest;
+import com.gdschongik.gdsc.domain.member.dto.request.MemberTokenRequest;
+import com.gdschongik.gdsc.domain.member.dto.response.MemberBasicInfoResponse;
+import com.gdschongik.gdsc.domain.member.dto.response.MemberDashboardResponse;
+import com.gdschongik.gdsc.domain.member.dto.response.MemberTokenResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberUnivStatusResponse;
+import com.gdschongik.gdsc.domain.membership.application.MembershipService;
+import com.gdschongik.gdsc.domain.membership.domain.Membership;
+import com.gdschongik.gdsc.domain.recruitment.application.OnboardingRecruitmentService;
+import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.global.exception.CustomException;
+import com.gdschongik.gdsc.global.util.EnvironmentUtil;
 import com.gdschongik.gdsc.global.util.MemberUtil;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,36 +35,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class OnboardingMemberService {
 
     private final MemberUtil memberUtil;
+    private final OnboardingRecruitmentService onboardingRecruitmentService;
+    private final MembershipService membershipService;
+    private final UnivEmailVerificationService univEmailVerificationService;
+    private final JwtService jwtService;
     private final MemberRepository memberRepository;
-
-    @Transactional
-    public void signupMember(MemberSignupRequest request) {
-        Member currentMember = memberUtil.getCurrentMember();
-        currentMember.signup(
-                request.studentId(), request.name(), request.phone(), request.department(), request.email());
-    }
-
-    @Deprecated
-    @Transactional
-    public void updateMember(OnboardingMemberUpdateRequest request) {
-        Member currentMember = memberUtil.getCurrentMember();
-        validateDiscordUsernameDuplicate(currentMember);
-        currentMember.verifyDiscord(request.discordUsername(), request.nickname());
-    }
-
-    private void validateDiscordUsernameDuplicate(Member member) {
-        if (memberRepository.existsByDiscordUsername(member.getDiscordUsername())) {
-            throw new CustomException(MEMBER_DISCORD_USERNAME_DUPLICATE);
-        }
-    }
-
-    public MemberInfoResponse getMemberInfo() {
-        Member currentMember = memberUtil.getCurrentMember();
-        if (!currentMember.isApplied()) {
-            throw new CustomException(MEMBER_NOT_APPLIED);
-        }
-        return MemberInfoResponse.of(currentMember);
-    }
+    private final EnvironmentUtil environmentUtil;
+    private final EmailVerificationStatusService emailVerificationStatusService;
 
     public MemberUnivStatusResponse checkUnivVerificationStatus() {
         Member currentMember = memberUtil.getCurrentMember();
@@ -60,5 +52,51 @@ public class OnboardingMemberService {
     public void verifyBevyStatus() {
         Member currentMember = memberUtil.getCurrentMember();
         currentMember.verifyBevy();
+        memberRepository.save(currentMember);
+    }
+
+    @Transactional
+    public void updateBasicMemberInfo(BasicMemberInfoRequest request) {
+        Member currentMember = memberUtil.getCurrentMember();
+        currentMember.updateBasicMemberInfo(
+                request.studentId(), request.name(), request.phone(), request.department(), request.email());
+        memberRepository.save(currentMember);
+    }
+
+    public MemberBasicInfoResponse getMemberBasicInfo() {
+        Member currentMember = memberUtil.getCurrentMember();
+        return MemberBasicInfoResponse.from(currentMember);
+    }
+
+    public MemberDashboardResponse getDashboard() {
+        final Member member = memberUtil.getCurrentMember();
+        final RecruitmentRound currentRecruitmentRound = onboardingRecruitmentService.findCurrentRecruitmentRound();
+        final Optional<Membership> myMembership = membershipService.findMyMembership(member, currentRecruitmentRound);
+        final Optional<UnivEmailVerification> univEmailVerification =
+                univEmailVerificationService.getUnivEmailVerificationFromRedis(member.getId());
+        UnivVerificationStatus univVerificationStatus =
+                emailVerificationStatusService.determineStatus(member, univEmailVerification);
+
+        return MemberDashboardResponse.of(
+                member, univVerificationStatus, currentRecruitmentRound, myMembership.orElse(null));
+    }
+
+    public MemberTokenResponse createTemporaryToken(MemberTokenRequest request) {
+        validateProfile();
+
+        final Member member = memberRepository
+                .findByOauthId(request.oauthId())
+                .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
+
+        AccessTokenDto accessTokenDto = jwtService.createAccessToken(member.getId(), member.getRole());
+        RefreshTokenDto refreshTokenDto = jwtService.createRefreshToken(member.getId());
+
+        return new MemberTokenResponse(accessTokenDto.tokenValue(), refreshTokenDto.tokenValue());
+    }
+
+    private void validateProfile() {
+        if (!environmentUtil.isDevAndLocalProfile()) {
+            throw new CustomException(FORBIDDEN);
+        }
     }
 }

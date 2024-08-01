@@ -2,3 +2,4 @@ discord:
   token: ${DISCORD_BOT_TOKEN:}
   server-id: ${DISCORD_SERVER_ID:}
   command-channel-id: ${DISCORD_COMMAND_CHANNEL_ID:}
+  admin-channel-id: ${DISCORD_ADMIN_CHANNEL_ID:}

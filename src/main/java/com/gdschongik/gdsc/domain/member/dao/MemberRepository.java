@@ -9,9 +9,9 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberCus
 
     boolean existsByNickname(String nickname);
 
+    boolean existsByUnivEmail(String univEmail);
+
     Optional<Member> findByDiscordUsername(String discordUsername);
 
-    Optional<Member> findByUnivEmail(String univEmail);
-
-    Optional<Member> findByEmail(String email);
+    Optional<Member> findByOauthId(String oauthId);
 }

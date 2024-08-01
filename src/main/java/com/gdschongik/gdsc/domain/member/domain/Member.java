@@ -3,7 +3,7 @@ package com.gdschongik.gdsc.domain.member.domain;
 import static com.gdschongik.gdsc.domain.member.domain.MemberRole.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
-import com.gdschongik.gdsc.domain.common.model.BaseTimeEntity;
+import com.gdschongik.gdsc.domain.common.model.BaseEntity;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -24,7 +24,7 @@ import org.hibernate.annotations.SQLRestriction;
 @Getter
 @SQLRestriction("status='NORMAL'")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member extends BaseTimeEntity {
+public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,6 +52,8 @@ public class Member extends BaseTimeEntity {
 
     private String nickname;
 
+    private String discordId;
+
     @Column(nullable = false)
     private String oauthId;
 
@@ -60,7 +62,7 @@ public class Member extends BaseTimeEntity {
     private String univEmail;
 
     @Embedded
-    private Requirement requirement;
+    private AssociateRequirement associateRequirement;
 
     @Builder(access = AccessLevel.PRIVATE)
     private Member(
@@ -76,7 +78,7 @@ public class Member extends BaseTimeEntity {
             String oauthId,
             LocalDateTime lastLoginAt,
             String univEmail,
-            Requirement requirement) {
+            AssociateRequirement associateRequirement) {
         this.role = role;
         this.status = status;
         this.name = name;
@@ -89,103 +91,201 @@ public class Member extends BaseTimeEntity {
         this.oauthId = oauthId;
         this.lastLoginAt = lastLoginAt;
         this.univEmail = univEmail;
-        this.requirement = requirement;
+        this.associateRequirement = associateRequirement;
     }
 
     public static Member createGuestMember(String oauthId) {
-        Requirement requirement = Requirement.createRequirement();
+        AssociateRequirement associateRequirement = AssociateRequirement.createRequirement();
         return Member.builder()
                 .oauthId(oauthId)
-                .role(MemberRole.GUEST)
+                .role(GUEST)
                 .status(MemberStatus.NORMAL)
-                .requirement(requirement)
+                .associateRequirement(associateRequirement)
                 .build();
     }
 
-    // 회원 검증 로직
+    // 상태 검증 로직
 
     /**
      * 회원 상태를 변경할 수 있는지 검증합니다. 삭제되거나 차단된 회원은 상태를 변경할 수 없습니다.<br>
      * 대부분의 상태 변경 로직에서 사용됩니다.
      */
     private void validateStatusUpdatable() {
-        if (this.status.isDeleted()) {
+        if (status.isDeleted()) {
             throw new CustomException(MEMBER_DELETED);
         }
-        if (this.status.isForbidden()) {
+        if (status.isForbidden()) {
             throw new CustomException(MEMBER_FORBIDDEN);
         }
     }
 
     /**
-     * 재학생 인증 여부를 검증합니다.
+     * 준회원 승급 가능 여부를 검증합니다.
      */
-    private void validateUnivStatus() {
-        if (this.requirement.isUnivVerified() && this.univEmail != null) {
-            return;
+    private void validateAssociateAvailable() {
+        if (role.equals(ASSOCIATE)) {
+            throw new CustomException(MEMBER_ALREADY_ASSOCIATE);
         }
 
-        throw new CustomException(UNIV_NOT_VERIFIED);
+        associateRequirement.validateAllSatisfied();
     }
 
     /**
-     * 회원 승인 가능 여부를 검증합니다.
+     * 정회원 승급 가능 여부를 검증합니다.
      */
-    private void validateGrantAvailable() {
-        if (isGranted()) {
-            throw new CustomException(MEMBER_ALREADY_GRANTED);
+    private void validateRegularAvailable() {
+        if (isRegular()) {
+            throw new CustomException(MEMBER_ALREADY_REGULAR);
         }
 
-        if (!this.requirement.isPaymentVerified()) {
-            throw new CustomException(PAYMENT_NOT_VERIFIED);
+        if (!role.equals(ASSOCIATE)) {
+            throw new CustomException(MEMBER_NOT_ASSOCIATE);
         }
-
-        if (!this.requirement.isDiscordVerified() || this.discordUsername == null || this.nickname == null) {
-            throw new CustomException(DISCORD_NOT_VERIFIED);
-        }
-
-        if (!this.requirement.isBevyVerified()) {
-            throw new CustomException(BEVY_NOT_VERIFIED);
-        }
-
-        validateUnivStatus();
     }
 
-    // 회원 가입상태 변경 로직
+    // 준회원 승급 관련 로직
 
     /**
-     * 가입 신청 시 작성한 정보를 저장합니다. 재학생 인증을 완료한 회원만 신청할 수 있습니다.
+     * 기본 회원 정보를 작성합니다.
+     * 기본정보 인증상태를 인증 처리합니다.
      */
-    public void signup(String studentId, String name, String phone, Department department, String email) {
+    public void updateBasicMemberInfo(
+            String studentId, String name, String phone, Department department, String email) {
         validateStatusUpdatable();
-        validateUnivStatus();
 
         this.studentId = studentId;
         this.name = name;
         this.phone = phone;
         this.department = department;
         this.email = email;
+
+        associateRequirement.verifyInfo();
+
+        registerEvent(new MemberAssociateEvent(this.id));
     }
 
     /**
-     * 가입 신청을 승인합니다.<br>
-     * 어드민만 사용할 수 있어야 합니다.
+     * 재학생 이메일 인증을 진행합니다.
+     * 재학생 이메일 인증상태를 인증 처리합니다.
      */
-    public void grant() {
+    public void completeUnivEmailVerification(String univEmail) {
         validateStatusUpdatable();
-        validateGrantAvailable();
 
-        this.role = USER;
+        // 이미 인증되어있으면 에러
+        associateRequirement.checkVerifiableUniv();
+
+        this.univEmail = univEmail;
+
+        associateRequirement.verifyUniv();
+
+        registerEvent(new MemberAssociateEvent(this.id));
+    }
+
+    /**
+     * 디스코드 서버와의 연동을 진행합니다.
+     * 디스코드 인증상태를 인증 처리합니다.
+     */
+    public void verifyDiscord(String discordUsername, String nickname) {
+        validateStatusUpdatable();
+
+        this.discordUsername = discordUsername;
+        this.nickname = nickname;
+
+        associateRequirement.verifyDiscord();
+
+        registerEvent(new MemberAssociateEvent(this.id));
+    }
+
+    /**
+     * Bevy 서버와의 연동을 진행합니다.
+     * Bevy 인증상태를 인증 처리합니다.
+     */
+    public void verifyBevy() {
+        validateStatusUpdatable();
+
+        associateRequirement.verifyBevy();
+
+        registerEvent(new MemberAssociateEvent(id));
+    }
+
+    /**
+     * 게스트에서 준회원으로 승급합니다.
+     * 본 로직은 승급조건 충족 이벤트로 트리거됩니다. 다음 조건을 모두 충족하면 승급됩니다.
+     * 조건 1 : 기본 회원정보 작성
+     * 조건 2 : 재학생 인증
+     * 조건 3 : 디스코드 인증
+     * 조건 4 : Bevy 인증
+     */
+    public void advanceToAssociate() {
+        validateStatusUpdatable();
+
+        validateAssociateAvailable();
+
+        role = ASSOCIATE;
+    }
+
+    /**
+     * 준회원에서 정회원으로 승급합니다.
+     * 조건 1 : 멤버가 준회원이어야 함
+     */
+    public void advanceToRegular() {
+        validateStatusUpdatable();
+
+        validateRegularAvailable();
+
+        role = REGULAR;
+
+        registerEvent(new MemberAdvancedToRegularEvent(id, discordId));
+    }
+
+    /**
+     * 정회원에서 준회원으로 강등합니다.
+     */
+    public void demoteToAssociate() {
+        validateStatusUpdatable();
+
+        role = ASSOCIATE;
+    }
+
+    /**
+     * 테스트 환경 구성을 위한 사용자 상태 변경 메소드
+     * 1. 멤버 역할을 GUEST로 강등
+     * 2. 준회원 가입 조건을 'PENDING'으로 변경
+     */
+    public void demoteToGuest() {
+        role = GUEST;
+
+        univEmail = null;
+        name = null;
+        department = null;
+        studentId = null;
+        phone = null;
+
+        discordId = null;
+        nickname = null;
+        discordUsername = null;
+
+        associateRequirement.demoteAssociateRequirement();
+    }
+
+    // 기타 상태 변경 로직
+
+    public void updateLastLoginAt() {
+        this.lastLoginAt = LocalDateTime.now();
+    }
+
+    public void updateDiscordId(String discordId) {
+        this.discordId = discordId;
     }
 
     /**
      * 해당 회원을 탈퇴 처리합니다.
      */
     public void withdraw() {
-        if (this.status.isDeleted()) {
+        if (status.isDeleted()) {
             throw new CustomException(MEMBER_DELETED);
         }
-        this.status = MemberStatus.DELETED;
+        status = MemberStatus.DELETED;
     }
 
     /**
@@ -210,60 +310,16 @@ public class Member extends BaseTimeEntity {
         this.nickname = nickname;
     }
 
-    public void completeUnivEmailVerification(String univEmail) {
-        this.univEmail = univEmail;
-        requirement.updateUnivStatus(RequirementStatus.VERIFIED);
-    }
-
-    // 가입조건 인증 로직
-    public void verifyDiscord(String discordUsername, String nickname) {
-        validateStatusUpdatable();
-
-        this.requirement.verifyDiscord();
-        this.discordUsername = discordUsername;
-        this.nickname = nickname;
-    }
-
-    public void updatePaymentStatus(RequirementStatus status) {
-        validateStatusUpdatable();
-        this.requirement.updatePaymentStatus(status);
-    }
-
-    public void verifyBevy() {
-        validateStatusUpdatable();
-        this.requirement.verifyBevy();
-    }
-
     // 데이터 전달 로직
-
-    public boolean isGranted() {
-        return role.equals(USER) || role.equals(MemberRole.ADMIN);
+    public boolean isGuest() {
+        return role.equals(GUEST);
     }
 
-    /**
-     * 회원 승인 가능 여부를 반환합니다.
-     *
-     * @see com.gdschongik.gdsc.domain.member.dao.MemberQueryMethod#isGrantAvailable()
-     */
-    public boolean isGrantAvailable() {
-        try {
-            validateGrantAvailable();
-            return true;
-        } catch (CustomException e) {
-            return false;
-        }
+    public boolean isAssociate() {
+        return role.equals(ASSOCIATE);
     }
 
-    /**
-     * 가입 신청서 제출 여부를 반환합니다.
-     */
-    public boolean isApplied() {
-        return studentId != null;
-    }
-
-    // 기타 로직
-
-    public void updateLastLoginAt() {
-        this.lastLoginAt = LocalDateTime.now();
+    public boolean isRegular() {
+        return role.equals(REGULAR);
     }
 }

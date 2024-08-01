@@ -2,7 +2,7 @@ package com.gdschongik.gdsc.global.config;
 
 import static com.gdschongik.gdsc.global.common.constant.DiscordConstant.*;
 
-import com.gdschongik.gdsc.global.discord.ListenerBeanPostProcessor;
+import com.gdschongik.gdsc.domain.discord.application.listener.ListenerBeanPostProcessor;
 import com.gdschongik.gdsc.global.property.DiscordProperty;
 import com.gdschongik.gdsc.global.util.DiscordUtil;
 import java.util.Objects;
@@ -13,6 +13,7 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -33,6 +34,7 @@ public class DiscordConfig {
         JDA jda = JDABuilder.createDefault(discordProperty.getToken())
                 .setActivity(Activity.playing(DISCORD_BOT_STATUS_CONTENT))
                 .enableIntents(GatewayIntent.GUILD_MESSAGES, GatewayIntent.MESSAGE_CONTENT, GatewayIntent.GUILD_MEMBERS)
+                .setChunkingFilter(ChunkingFilter.ALL)
                 .setMemberCachePolicy(MemberCachePolicy.ALL)
                 .build();
 
@@ -40,7 +42,7 @@ public class DiscordConfig {
         Objects.requireNonNull(jda.awaitReady().getGuildById(discordProperty.getServerId()))
                 .updateCommands()
                 .addCommands(Commands.slash(COMMAND_NAME_ISSUING_CODE, COMMAND_DESCRIPTION_ISSUING_CODE))
-                .addCommands(Commands.slash(COMMAND_NAME_JOIN, COMMAND_DESCRIPTION_JOIN))
+                .addCommands(Commands.slash(COMMAND_NAME_BATCH_DISCORD_ID, COMMAND_DESCRIPTION_BATCH_DISCORD_ID))
                 .queue();
 
         return jda;
@@ -54,13 +56,13 @@ public class DiscordConfig {
 
     @Bean
     @ConditionalOnBean(JDA.class)
-    public DiscordUtil discordUtil(JDA jda) {
-        return new DiscordUtil(jda);
+    public DiscordUtil discordUtil(JDA jda, DiscordProperty discordProperty) {
+        return new DiscordUtil(jda, discordProperty);
     }
 
     @Bean
     @Order(1)
     public DiscordUtil fallbackDiscordUtil() {
-        return new DiscordUtil(null);
+        return new DiscordUtil(null, null);
     }
 }
