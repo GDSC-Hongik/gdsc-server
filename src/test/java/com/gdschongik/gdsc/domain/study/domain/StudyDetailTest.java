@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 public class StudyDetailTest {
+
     @Nested
     class 과제_개설시 {
 
