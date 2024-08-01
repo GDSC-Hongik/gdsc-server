@@ -69,4 +69,8 @@ public class StudyDetail extends BaseEntity {
                 .assignment(Assignment.createEmptyAssignment())
                 .build();
     }
+
+    public void cancelAssignment() {
+        assignment = Assignment.cancelAssignment();
+    }
 }
