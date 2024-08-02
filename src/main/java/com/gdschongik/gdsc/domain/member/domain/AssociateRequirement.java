@@ -73,7 +73,7 @@ public class AssociateRequirement {
 
     // 데이터 전달 로직
 
-    private boolean isUnivSatisfied() {
+    public boolean isUnivSatisfied() {
         return univStatus == SATISFIED;
     }
 

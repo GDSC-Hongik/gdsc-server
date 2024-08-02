@@ -68,6 +68,8 @@ public class OrderCustomRepositoryImpl implements OrderCustomRepository, OrderQu
                 .from(order)
                 .innerJoin(recruitmentRound)
                 .on(order.recruitmentRoundId.eq(recruitmentRound.id))
+                .innerJoin(member)
+                .on(order.memberId.eq(member.id))
                 .where(matchesOrderQueryOption(queryOption), predicate)
                 .orderBy(orderSpecifiers)
                 .fetch();

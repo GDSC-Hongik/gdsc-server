@@ -56,6 +56,7 @@ public enum ErrorCode {
     UNIV_EMAIL_DOMAIN_MISMATCH(HttpStatus.BAD_REQUEST, "재학생 메일의 도메인이 맞지 않습니다."),
     MESSAGING_EXCEPTION(HttpStatus.BAD_REQUEST, "수신자 이메일이 올바르지 않습니다."),
     VERIFICATION_CODE_NOT_FOUND(HttpStatus.NOT_FOUND, "재학생 인증 코드가 존재하지 않습니다."),
+    EMAIL_NOT_SENT(HttpStatus.BAD_REQUEST, "재학생 인증 메일이 발송되지 않았습니다."),
     EXPIRED_EMAIL_VERIFICATION_TOKEN(HttpStatus.BAD_REQUEST, "이메일 인증 토큰이 만료되었습니다."),
     INVALID_EMAIL_VERIFICATION_TOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않은 이메일 인증 토큰입니다."),
 
@@ -106,8 +107,13 @@ public enum ErrorCode {
     ASSIGNMENT_STUDY_CAN_NOT_INPUT_STUDY_TIME(HttpStatus.CONFLICT, "과제 스터디는 스터디 시간을 입력할 수 없습니다."),
     STUDY_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 스터디입니다."),
     STUDY_NOT_APPLICABLE(HttpStatus.CONFLICT, "스터디 신청기간이 아닙니다."),
+    STUDY_NOT_CANCELABLE_APPLICATION_PERIOD(HttpStatus.CONFLICT, "스터디 신청기간이 아니라면 취소할 수 없습니다."),
+
+    // StudyDetail
+    STUDY_DETAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 스터디 상세 정보입니다."),
 
     // StudyHistory
+    STUDY_HISTORY_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 스터디 수강 기록입니다."),
     STUDY_HISTORY_DUPLICATE(HttpStatus.CONFLICT, "이미 해당 스터디를 신청했습니다."),
     STUDY_HISTORY_ONGOING_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 진행중인 스터디가 있습니다."),
 
