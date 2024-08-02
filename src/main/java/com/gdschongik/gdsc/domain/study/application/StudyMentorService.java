@@ -33,16 +33,4 @@ public class StudyMentorService {
                 .orElseThrow(() -> new CustomException(STUDY_DETAIL_NOT_FOUND));
         return AssignmentResponse.from(studyDetail);
     }
-
-    @Transactional
-    public void publishStudyAssignment(Long studyDetailId, AssignmentCreateRequest request) {
-        StudyDetail studyDetail = studyDetailRepository
-                .findById(studyDetailId)
-                .orElseThrow(() -> new CustomException(STUDY_DETAIL_NOT_FOUND));
-
-        studyDetail.publishAssignment(request.title(), request.deadLine(), request.descriptionNotionLink());
-        studyDetailRepository.save(studyDetail);
-
-        log.info("[StudyMentorService] 과제 개설 완료: studyDetailId={}", studyDetailId);
-    }
 }
