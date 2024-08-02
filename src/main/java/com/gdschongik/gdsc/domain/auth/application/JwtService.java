@@ -6,9 +6,12 @@ import com.gdschongik.gdsc.domain.auth.dao.RefreshTokenRepository;
 import com.gdschongik.gdsc.domain.auth.domain.RefreshToken;
 import com.gdschongik.gdsc.domain.auth.dto.AccessTokenDto;
 import com.gdschongik.gdsc.domain.auth.dto.RefreshTokenDto;
+import com.gdschongik.gdsc.domain.member.domain.MemberManageRole;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
+import com.gdschongik.gdsc.domain.member.domain.MemberStudyRole;
 import com.gdschongik.gdsc.global.security.MemberAuthInfo;
 import com.gdschongik.gdsc.global.util.JwtUtil;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -87,9 +90,16 @@ public class JwtService {
             jwtUtil.parseAccessToken(accessTokenValue);
             return null;
         } catch (ExpiredJwtException e) {
-            Long memberId = Long.parseLong(e.getClaims().getSubject());
-            MemberRole memberRole = MemberRole.valueOf(e.getClaims().get(TOKEN_ROLE_NAME, String.class));
-            return createAccessToken(memberId, memberRole);
+            Claims claims = e.getClaims();
+
+            Long memberId = Long.parseLong(claims.getSubject());
+            MemberRole memberRole = MemberRole.valueOf(claims.get(TOKEN_ROLE_NAME, String.class));
+            MemberManageRole memberManageRole =
+                    MemberManageRole.valueOf(claims.get(TOKEN_MANAGE_ROLE_NAME, String.class));
+            MemberStudyRole memberStudyRole = MemberStudyRole.valueOf(claims.get(TOKEN_STUDY_ROLE_NAME, String.class));
+            var authInfo = new MemberAuthInfo(memberId, memberRole, memberManageRole, memberStudyRole);
+
+            return createAccessToken(authInfo);
         }
     }
 }
