@@ -188,14 +188,7 @@ public abstract class IntegrationTest {
         return studyRepository.save(study);
     }
 
-    protected StudyDetail createStudyDetail(LocalDateTime startDate, LocalDateTime endDate) {
-        Member mentor = createAssociateMember();
-        LocalDateTime now = LocalDateTime.now();
-        Study study = createStudy(
-                mentor,
-                Period.createPeriod(now.plusDays(5), now.plusDays(10)),
-                Period.createPeriod(now.minusDays(5), now));
-
+    protected StudyDetail createStudyDetail(Study study, LocalDateTime startDate, LocalDateTime endDate) {
         StudyDetail studyDetail =
                 StudyDetail.createStudyDetail(study, 1L, ATTENDANCE_NUMBER, Period.createPeriod(startDate, endDate));
         return studyDetailRepository.save(studyDetail);

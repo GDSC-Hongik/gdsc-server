@@ -2,8 +2,11 @@ package com.gdschongik.gdsc.domain.study.application;
 
 import static org.assertj.core.api.Assertions.*;
 
+import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
+import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import com.gdschongik.gdsc.domain.study.dao.StudyDetailRepository;
+import com.gdschongik.gdsc.domain.study.domain.Study;
 import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
 import com.gdschongik.gdsc.domain.study.domain.StudyStatus;
 import com.gdschongik.gdsc.helper.IntegrationTest;
@@ -27,7 +30,12 @@ public class StudyMentorServiceTest extends IntegrationTest {
         void 성공한다() {
             // given
             LocalDateTime now = LocalDateTime.now();
-            StudyDetail studyDetail = createStudyDetail(now, now.plusDays(7));
+            Member mentor = createAssociateMember();
+            Study study = createStudy(
+                    mentor,
+                    Period.createPeriod(now.plusDays(5), now.plusDays(10)),
+                    Period.createPeriod(now.minusDays(5), now));
+            StudyDetail studyDetail = createStudyDetail(study, now, now.plusDays(7));
             logoutAndReloginAs(studyDetail.getStudy().getMentor().getId(), MemberRole.ASSOCIATE);
 
             // when
