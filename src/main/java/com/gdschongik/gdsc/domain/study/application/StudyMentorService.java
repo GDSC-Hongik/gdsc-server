@@ -6,8 +6,10 @@ import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.study.dao.StudyDetailRepository;
 import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
 import com.gdschongik.gdsc.domain.study.domain.StudyDetailValidator;
+import com.gdschongik.gdsc.domain.study.dto.response.AssignmentResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,20 @@ public class StudyMentorService {
     private final MemberUtil memberUtil;
     private final StudyDetailRepository studyDetailRepository;
     private final StudyDetailValidator studyDetailValidator;
+
+    @Transactional(readOnly = true)
+    public List<AssignmentResponse> getWeeklyAssignments(Long studyId) {
+        List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyId(studyId);
+        return studyDetails.stream().map(AssignmentResponse::from).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public AssignmentResponse getAssignment(Long studyDetailId) {
+        StudyDetail studyDetail = studyDetailRepository
+                .findById(studyDetailId)
+                .orElseThrow(() -> new CustomException(STUDY_DETAIL_NOT_FOUND));
+        return AssignmentResponse.from(studyDetail);
+    }
 
     @Transactional
     public void cancelStudyAssignment(Long studyDetailId) {
