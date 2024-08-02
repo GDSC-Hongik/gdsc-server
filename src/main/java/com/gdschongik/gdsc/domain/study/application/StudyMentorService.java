@@ -2,9 +2,12 @@ package com.gdschongik.gdsc.domain.study.application;
 
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
+import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.study.dao.StudyDetailRepository;
 import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
+import com.gdschongik.gdsc.domain.study.domain.StudyDetailValidator;
 import com.gdschongik.gdsc.global.exception.CustomException;
+import com.gdschongik.gdsc.global.util.MemberUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,6 +33,7 @@ public class StudyMentorService {
         studyDetailValidator.validateCancelStudyAssignment(currentMember, studyDetail);
 
         studyDetail.cancelAssignment();
+        studyDetailRepository.save(studyDetail);
 
         log.info("[StudyMentorService] 과제 휴강 처리: studyDetailId={}", studyDetail.getId());
     }
