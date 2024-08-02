@@ -18,6 +18,7 @@ import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.domain.recruitment.domain.RoundType;
 import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import com.gdschongik.gdsc.domain.study.domain.Study;
+import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
 import java.time.LocalDateTime;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -78,5 +79,9 @@ public class FixtureHelper {
                 DAY_OF_WEEK,
                 STUDY_START_TIME,
                 STUDY_END_TIME);
+    }
+
+    public StudyDetail createStudyDetail(Study study, LocalDateTime startDate, LocalDateTime endDate) {
+        return StudyDetail.createStudyDetail(study, 1L, ATTENDANCE_NUMBER, Period.createPeriod(startDate, endDate));
     }
 }
