@@ -74,4 +74,10 @@ public class StudyDetail extends BaseEntity {
     public void cancelAssignment() {
         assignment = Assignment.cancelAssignment();
     }
+
+    public void publishAssignment(String title, LocalDateTime deadLine, String descriptionNotionLink) {
+        assignment.validateAssignment();
+
+        assignment = Assignment.publishAssignment(title, deadLine, descriptionNotionLink);
+    }
 }

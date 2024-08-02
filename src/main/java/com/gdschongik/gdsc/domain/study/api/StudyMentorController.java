@@ -19,6 +19,14 @@ public class StudyMentorController {
 
     private final StudyMentorService studyMentorService;
 
+    @Operation(summary = "스터디 과제 개설", description = "멘토만 과제를 개설할 수 있습니다.")
+    @PutMapping("/assignments/{studyDetailId}")
+    public ResponseEntity<Void> publishStudyAssignment(
+            @PathVariable Long studyDetailId, @Valid @RequestBody AssignmentCreateRequest request) {
+        studyMentorService.publishStudyAssignment(studyDetailId, request);
+        return ResponseEntity.ok().build();
+    }
+
     @Operation(summary = "스터디 주차별 과제 목록 조회", description = "주차별 스터디 과제 목록을 조회합니다.")
     @GetMapping("/assignments/{studyId}")
     public ResponseEntity<List<AssignmentResponse>> getWeeklyAssignments(@PathVariable Long studyId) {
