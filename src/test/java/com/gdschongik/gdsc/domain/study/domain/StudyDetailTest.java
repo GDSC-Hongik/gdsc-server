@@ -11,11 +11,10 @@ import org.junit.jupiter.api.Test;
 
 public class StudyDetailTest {
 
+    FixtureHelper fixtureHelper = new FixtureHelper();
+
     @Nested
     class 과제_휴강_처리시 {
-
-        FixtureHelper fixtureHelper = new FixtureHelper();
-
         @Test
         void 과제_상태가_휴강이_된다() {
             // given
@@ -37,8 +36,6 @@ public class StudyDetailTest {
 
     @Nested
     class 과제_개설시 {
-
-        FixtureHelper fixtureHelper = new FixtureHelper();
 
         @Test
         void 성공한다() {
