@@ -2,6 +2,7 @@ package com.gdschongik.gdsc.domain.study.application;
 
 import static org.assertj.core.api.Assertions.*;
 
+import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import com.gdschongik.gdsc.domain.study.dao.StudyDetailRepository;
 import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
 import com.gdschongik.gdsc.domain.study.domain.StudyStatus;
@@ -27,6 +28,7 @@ public class StudyMentorServiceTest extends IntegrationTest {
             // given
             LocalDateTime now = LocalDateTime.now();
             StudyDetail studyDetail = createStudyDetail(now, now.plusDays(7));
+            logoutAndReloginAs(studyDetail.getStudy().getMentor().getId(), MemberRole.ASSOCIATE);
 
             // when
             studyMentorService.cancelStudyAssignment(studyDetail.getId());
