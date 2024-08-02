@@ -1,5 +1,6 @@
 package com.gdschongik.gdsc.domain.study.domain;
 
+import static com.gdschongik.gdsc.global.common.constant.StudyConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 
@@ -7,7 +8,6 @@ import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import com.gdschongik.gdsc.domain.study.domain.request.AssignmentCreateRequest;
 import com.gdschongik.gdsc.global.exception.CustomException;
-import com.gdschongik.gdsc.global.exception.ErrorCode;
 import com.gdschongik.gdsc.helper.FixtureHelper;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.Nested;
@@ -34,7 +34,8 @@ public class StudyDetailValidatorTest {
             Member anotherMember = fixtureHelper.createAssociateMember(2L);
 
             // when & then
-            assertThatThrownBy(() -> studyDetailValidator.validateCancelStudyAssignment(anotherMember, studyDetail))
+            assertThatThrownBy(() ->
+                            studyDetailValidator.validateCancelStudyAssignment(anotherMember.getId(), studyDetail))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(STUDY_DETAIL_NOT_MODIFIABLE_INVALID_ROLE.getMessage());
         }
@@ -57,14 +58,14 @@ public class StudyDetailValidatorTest {
             AssignmentCreateRequest request = new AssignmentCreateRequest("testTitle", "www.link.com", now.plusDays(2));
 
             // when & then
-            assertThatThrownBy(() ->
-                            studyDetailValidator.validatePublishStudyAssignment(anotherMember, studyDetail, request))
+            assertThatThrownBy(() -> studyDetailValidator.validatePublishStudyAssignment(
+                            anotherMember.getId(), studyDetail, request))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(STUDY_DETAIL_NOT_MODIFIABLE_INVALID_ROLE.getMessage());
         }
 
         @Test
-        void 개설_시점이_마감_기한_보다_앞서면_실패한다() {
+        void 마감_기한이_개설_시점_보다_앞서면_실패한다() {
             // given
             Member mentor = fixtureHelper.createAssociateMember(1L);
             LocalDateTime now = LocalDateTime.now();
@@ -74,12 +75,13 @@ public class StudyDetailValidatorTest {
                     Period.createPeriod(now.minusDays(5), now));
             StudyDetail studyDetail = fixtureHelper.createStudyDetail(study, now, now.plusDays(7));
             AssignmentCreateRequest request =
-                    new AssignmentCreateRequest("testTitle", "www.link.com", now.minusDays(2));
+                    new AssignmentCreateRequest(ASSIGNMENT_TITLE, DESCRIPTION_LINK, now.minusDays(2));
 
             // when & then
-            assertThatThrownBy(() -> studyDetailValidator.validatePublishStudyAssignment(mentor, studyDetail, request))
+            assertThatThrownBy(() ->
+                            studyDetailValidator.validatePublishStudyAssignment(mentor.getId(), studyDetail, request))
                     .isInstanceOf(CustomException.class)
-                    .hasMessage(ErrorCode.ASSIGNMENT_DEADLINE_INVALID.getMessage());
+                    .hasMessage(ASSIGNMENT_DEADLINE_INVALID.getMessage());
         }
     }
 }

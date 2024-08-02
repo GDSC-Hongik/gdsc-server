@@ -1,5 +1,6 @@
 package com.gdschongik.gdsc.domain.study.domain;
 
+import static com.gdschongik.gdsc.global.common.constant.StudyConstant.*;
 import static org.assertj.core.api.Assertions.*;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
@@ -49,7 +50,7 @@ public class StudyDetailTest {
             StudyDetail studyDetail = fixtureHelper.createStudyDetail(study, now, now.plusDays(7));
 
             // when
-            studyDetail.publishAssignment("testTitle", now.plusDays(1), "www.link.com");
+            studyDetail.publishAssignment(ASSIGNMENT_TITLE, now.plusDays(1), DESCRIPTION_LINK);
 
             // then
             assertThat(studyDetail.getAssignment().getStatus()).isEqualTo(StudyStatus.OPEN);
