@@ -15,16 +15,17 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class StudyMentorService {
 
     private final StudyDetailRepository studyDetailRepository;
 
+    @Transactional(readOnly = true)
     public List<AssignmentResponse> getWeeklyAssignments(Long studyId) {
         List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyId(studyId);
         return studyDetails.stream().map(AssignmentResponse::from).toList();
     }
 
+    @Transactional(readOnly = true)
     public AssignmentResponse getAssignment(Long studyDetailId) {
         StudyDetail studyDetail = studyDetailRepository
                 .findById(studyDetailId)
