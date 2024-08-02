@@ -16,13 +16,18 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class StudyMentorService {
 
+    private final MemberUtil memberUtil;
     private final StudyDetailRepository studyDetailRepository;
+    private final StudyDetailValidator studyDetailValidator;
 
     @Transactional
     public void cancelStudyAssignment(Long studyDetailId) {
+        Member currentMember = memberUtil.getCurrentMember();
         StudyDetail studyDetail = studyDetailRepository
                 .findById(studyDetailId)
                 .orElseThrow(() -> new CustomException(STUDY_DETAIL_NOT_FOUND));
+
+        studyDetailValidator.validateCancelStudyAssignment(currentMember, studyDetail);
 
         studyDetail.cancelAssignment();
 
