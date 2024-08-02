@@ -1,5 +1,7 @@
 package com.gdschongik.gdsc.domain.study.domain.vo;
 
+import static com.gdschongik.gdsc.domain.study.domain.StudyStatus.*;
+
 import com.gdschongik.gdsc.domain.study.domain.Difficulty;
 import com.gdschongik.gdsc.domain.study.domain.StudyStatus;
 import jakarta.persistence.Column;
@@ -46,6 +48,10 @@ public class Assignment {
     }
 
     public static Assignment createEmptyAssignment() {
-        return Assignment.builder().status(StudyStatus.NONE).build();
+        return Assignment.builder().status(NONE).build();
+    }
+
+    public static Assignment cancelAssignment() {
+        return Assignment.builder().status(CANCELLED).build();
     }
 }

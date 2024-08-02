@@ -2,10 +2,13 @@ package com.gdschongik.gdsc.domain.study.application;
 
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
+import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.study.dao.StudyDetailRepository;
 import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
+import com.gdschongik.gdsc.domain.study.domain.StudyDetailValidator;
 import com.gdschongik.gdsc.domain.study.dto.response.AssignmentResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
+import com.gdschongik.gdsc.global.util.MemberUtil;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +20,9 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class StudyMentorService {
 
+    private final MemberUtil memberUtil;
     private final StudyDetailRepository studyDetailRepository;
+    private final StudyDetailValidator studyDetailValidator;
 
     @Transactional(readOnly = true)
     public List<AssignmentResponse> getWeeklyAssignments(Long studyId) {
@@ -31,5 +36,20 @@ public class StudyMentorService {
                 .findById(studyDetailId)
                 .orElseThrow(() -> new CustomException(STUDY_DETAIL_NOT_FOUND));
         return AssignmentResponse.from(studyDetail);
+    }
+
+    @Transactional
+    public void cancelStudyAssignment(Long studyDetailId) {
+        Member currentMember = memberUtil.getCurrentMember();
+        StudyDetail studyDetail = studyDetailRepository
+                .findById(studyDetailId)
+                .orElseThrow(() -> new CustomException(STUDY_DETAIL_NOT_FOUND));
+
+        studyDetailValidator.validateCancelStudyAssignment(currentMember, studyDetail);
+
+        studyDetail.cancelAssignment();
+        studyDetailRepository.save(studyDetail);
+
+        log.info("[StudyMentorService] 과제 휴강 처리: studyDetailId={}", studyDetail.getId());
     }
 }

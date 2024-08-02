@@ -4,6 +4,7 @@ import static com.gdschongik.gdsc.domain.member.domain.Department.*;
 import static com.gdschongik.gdsc.global.common.constant.MemberConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.RecruitmentConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.SemesterConstant.*;
+import static com.gdschongik.gdsc.global.common.constant.StudyConstant.*;
 import static org.mockito.Mockito.*;
 
 import com.gdschongik.gdsc.domain.common.model.SemesterType;
@@ -27,6 +28,10 @@ import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.domain.recruitment.domain.RoundType;
 import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
+import com.gdschongik.gdsc.domain.study.dao.StudyDetailRepository;
+import com.gdschongik.gdsc.domain.study.dao.StudyRepository;
+import com.gdschongik.gdsc.domain.study.domain.Study;
+import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
 import com.gdschongik.gdsc.global.security.PrincipalDetails;
 import com.gdschongik.gdsc.infra.feign.payment.client.PaymentClient;
 import java.time.LocalDateTime;
@@ -63,6 +68,12 @@ public abstract class IntegrationTest {
 
     @Autowired
     protected RecruitmentRoundRepository recruitmentRoundRepository;
+
+    @Autowired
+    protected StudyRepository studyRepository;
+
+    @Autowired
+    protected StudyDetailRepository studyDetailRepository;
 
     @MockBean
     protected OnboardingRecruitmentService onboardingRecruitmentService;
@@ -163,5 +174,27 @@ public abstract class IntegrationTest {
         couponRepository.save(coupon);
         IssuedCoupon issuedCoupon = IssuedCoupon.issue(coupon, member);
         return issuedCouponRepository.save(issuedCoupon);
+    }
+
+    protected Study createStudy(Member mentor, Period period, Period applicationPeriod) {
+        Study study = Study.createStudy(
+                ACADEMIC_YEAR,
+                SEMESTER_TYPE,
+                mentor,
+                period,
+                applicationPeriod,
+                TOTAL_WEEK,
+                ONLINE_STUDY,
+                DAY_OF_WEEK,
+                STUDY_START_TIME,
+                STUDY_END_TIME);
+
+        return studyRepository.save(study);
+    }
+
+    protected StudyDetail createStudyDetail(Study study, LocalDateTime startDate, LocalDateTime endDate) {
+        StudyDetail studyDetail =
+                StudyDetail.createStudyDetail(study, 1L, ATTENDANCE_NUMBER, Period.createPeriod(startDate, endDate));
+        return studyDetailRepository.save(studyDetail);
     }
 }
