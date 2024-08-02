@@ -13,4 +13,7 @@ public class StudyConstant {
     public static final DayOfWeek DAY_OF_WEEK = DayOfWeek.FRIDAY;
     public static final LocalTime STUDY_START_TIME = LocalTime.of(19, 0, 0);
     public static final LocalTime STUDY_END_TIME = LocalTime.of(20, 0, 0);
+
+    // StudyDetail
+    public static final String ATTENDANCE_NUMBER = "1234";
 }

@@ -32,4 +32,11 @@ public class StudyMentorController {
         AssignmentResponse response = studyMentorService.getAssignment(studyDetailId);
         return ResponseEntity.ok(response);
     }
+
+    @Operation(summary = "스터디 과제 휴강 처리", description = "해당 주차 과제를 휴강 처리합니다.")
+    @PatchMapping("/assignments/{studyDetailId}/cancel")
+    public ResponseEntity<Void> cancelStudyAssignment(@PathVariable Long studyDetailId) {
+        studyMentorService.cancelStudyAssignment(studyDetailId);
+        return ResponseEntity.noContent().build();
+    }
 }
