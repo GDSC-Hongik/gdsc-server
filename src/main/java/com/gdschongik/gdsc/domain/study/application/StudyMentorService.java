@@ -35,12 +35,12 @@ public class StudyMentorService {
     }
 
     @Transactional
-    public void createStudyAssignment(Long studyDetailId, AssignmentCreateRequest request) {
+    public void publishStudyAssignment(Long studyDetailId, AssignmentCreateRequest request) {
         StudyDetail studyDetail = studyDetailRepository
                 .findById(studyDetailId)
                 .orElseThrow(() -> new CustomException(STUDY_DETAIL_NOT_FOUND));
 
-        studyDetail.createAssignment(request.title(), request.deadLine(), request.descriptionNotionLink());
+        studyDetail.publishAssignment(request.title(), request.deadLine(), request.descriptionNotionLink());
         studyDetailRepository.save(studyDetail);
 
         log.info("[StudyMentorService] 과제 개설 완료: studyDetailId={}", studyDetailId);

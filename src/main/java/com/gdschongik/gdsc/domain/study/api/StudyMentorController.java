@@ -20,10 +20,10 @@ public class StudyMentorController {
     private final StudyMentorService studyMentorService;
 
     @Operation(summary = "스터디 과제 개설", description = "멘토만 과제를 개설할 수 있습니다.")
-    @PutMapping("/assignment/{studyDetailId}")
-    public ResponseEntity<Void> createStudyAssignment(
+    @PutMapping("/assignments/{studyDetailId}")
+    public ResponseEntity<Void> publishStudyAssignment(
             @PathVariable Long studyDetailId, @Valid @RequestBody AssignmentCreateRequest request) {
-        studyMentorService.createStudyAssignment(studyDetailId, request);
+        studyMentorService.publishStudyAssignment(studyDetailId, request);
         return ResponseEntity.ok().build();
     }
 

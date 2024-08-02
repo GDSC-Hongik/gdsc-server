@@ -53,7 +53,7 @@ public class Assignment {
         return Assignment.builder().status(StudyStatus.NONE).build();
     }
 
-    public static Assignment createAssignment(String title, LocalDateTime deadline, String descriptionLink) {
+    public static Assignment publishAssignment(String title, LocalDateTime deadline, String descriptionLink) {
 
         return Assignment.builder()
                 .title(title)
