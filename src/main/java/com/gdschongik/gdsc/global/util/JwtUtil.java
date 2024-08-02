@@ -1,18 +1,20 @@
 package com.gdschongik.gdsc.global.util;
 
-import static com.gdschongik.gdsc.global.common.constant.SecurityConstant.TOKEN_ROLE_NAME;
+import static com.gdschongik.gdsc.global.common.constant.SecurityConstant.*;
 
 import com.gdschongik.gdsc.domain.auth.dto.AccessTokenDto;
 import com.gdschongik.gdsc.domain.auth.dto.RefreshTokenDto;
+import com.gdschongik.gdsc.domain.member.domain.MemberManageRole;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
+import com.gdschongik.gdsc.domain.member.domain.MemberStudyRole;
 import com.gdschongik.gdsc.global.common.constant.JwtConstant;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
 import com.gdschongik.gdsc.global.property.JwtProperty;
+import com.gdschongik.gdsc.global.security.MemberAuthInfo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import java.security.Key;
@@ -33,14 +35,27 @@ public class JwtUtil {
 
     private final JwtProperty jwtProperty;
 
-    public AccessTokenDto generateAccessToken(Long memberId, MemberRole memberRole) {
+    public AccessTokenDto generateAccessToken(MemberAuthInfo authInfo) {
         Date issuedAt = new Date();
         Date expiredAt = new Date(issuedAt.getTime()
                 + jwtProperty.getToken().get(JwtConstant.ACCESS_TOKEN).expirationMilliTime());
         Key key = getKey(JwtConstant.ACCESS_TOKEN);
 
-        String tokenValue = buildToken(memberId, memberRole, issuedAt, expiredAt, key);
-        return new AccessTokenDto(memberId, memberRole, tokenValue);
+        String tokenValue = buildAccessToken(authInfo, issuedAt, expiredAt, key);
+        return new AccessTokenDto(authInfo, tokenValue);
+    }
+
+    private String buildAccessToken(MemberAuthInfo authInfo, Date issuedAt, Date expiredAt, Key key) {
+        return Jwts.builder()
+                .setIssuer(jwtProperty.getIssuer())
+                .setSubject(authInfo.memberId().toString())
+                .setIssuedAt(issuedAt)
+                .setExpiration(expiredAt)
+                .claim(TOKEN_ROLE_NAME, authInfo.role().name())
+                .claim(TOKEN_MANAGE_ROLE_NAME, authInfo.manageRole().name())
+                .claim(TOKEN_STUDY_ROLE_NAME, authInfo.studyRole().name())
+                .signWith(key)
+                .compact();
     }
 
     public RefreshTokenDto generateRefreshToken(Long memberId) {
@@ -49,24 +64,18 @@ public class JwtUtil {
         Date expiredAt = new Date(issuedAt.getTime() + refreshTokenProperty.expirationMilliTime());
         Key key = getKey(JwtConstant.REFRESH_TOKEN);
 
-        String tokenValue = buildToken(memberId, null, issuedAt, expiredAt, key);
+        String tokenValue = buildRefreshToken(memberId, issuedAt, expiredAt, key);
         return new RefreshTokenDto(memberId, tokenValue, refreshTokenProperty.expirationTime());
     }
 
-    private String buildToken(Long memberId, MemberRole memberRole, Date issuedAt, Date expiredAt, Key key) {
-
-        JwtBuilder jwtBuilder = Jwts.builder()
+    private String buildRefreshToken(Long memberId, Date issuedAt, Date expiredAt, Key key) {
+        return Jwts.builder()
                 .setIssuer(jwtProperty.getIssuer())
                 .setSubject(memberId.toString())
                 .setIssuedAt(issuedAt)
                 .setExpiration(expiredAt)
-                .signWith(key);
-
-        if (memberRole != null) {
-            jwtBuilder.claim(TOKEN_ROLE_NAME, memberRole.name());
-        }
-
-        return jwtBuilder.compact();
+                .signWith(key)
+                .compact();
     }
 
     private Key getKey(JwtConstant jwtConstant) {
@@ -78,10 +87,13 @@ public class JwtUtil {
         try {
             Jws<Claims> claims = getClaims(JwtConstant.ACCESS_TOKEN, accessTokenValue);
 
-            return new AccessTokenDto(
+            MemberAuthInfo parsedAuthInfo = new MemberAuthInfo(
                     Long.parseLong(claims.getBody().getSubject()),
                     MemberRole.valueOf(claims.getBody().get(TOKEN_ROLE_NAME, String.class)),
-                    accessTokenValue);
+                    MemberManageRole.valueOf(claims.getBody().get(TOKEN_MANAGE_ROLE_NAME, String.class)),
+                    MemberStudyRole.valueOf(claims.getBody().get(TOKEN_STUDY_ROLE_NAME, String.class)));
+
+            return new AccessTokenDto(parsedAuthInfo, accessTokenValue);
         } catch (ExpiredJwtException e) {
             throw e;
         } catch (Exception e) {
