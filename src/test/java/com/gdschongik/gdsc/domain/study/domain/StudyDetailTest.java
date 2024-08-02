@@ -21,12 +21,11 @@ public class StudyDetailTest {
             // given
             Member mentor = fixtureHelper.createAssociateMember(1L);
             LocalDateTime now = LocalDateTime.now();
-            StudyDetail studyDetail = fixtureHelper.createStudyDetail(
+            Study study = fixtureHelper.createStudy(
                     mentor,
                     Period.createPeriod(now.plusDays(5), now.plusDays(10)),
-                    Period.createPeriod(now.minusDays(5), now),
-                    now,
-                    now.plusDays(7));
+                    Period.createPeriod(now.minusDays(5), now));
+            StudyDetail studyDetail = fixtureHelper.createStudyDetail(study, now, now.plusDays(7));
 
             // when
             studyDetail.cancelAssignment();

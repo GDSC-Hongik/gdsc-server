@@ -81,10 +81,7 @@ public class FixtureHelper {
                 STUDY_END_TIME);
     }
 
-    public StudyDetail createStudyDetail(
-            Member mentor, Period period, Period applicationPeriod, LocalDateTime startDate, LocalDateTime endDate) {
-        Study study = createStudy(mentor, period, applicationPeriod);
-
+    public StudyDetail createStudyDetail(Study study, LocalDateTime startDate, LocalDateTime endDate) {
         return StudyDetail.createStudyDetail(study, 1L, ATTENDANCE_NUMBER, Period.createPeriod(startDate, endDate));
     }
 }
