@@ -9,8 +9,12 @@ import com.gdschongik.gdsc.global.exception.ErrorCode;
 public class StudyDetailValidator {
 
     public void validateCancelStudyAssignment(Member currentMember, StudyDetail studyDetail) {
-        // 멘토가 아니라면 과제를 휴강처리 할 수 없다.
-        if (!currentMember.equals(studyDetail.getStudy().getMentor())) {
+        validateMemberIsMentor(currentMember, studyDetail);
+    }
+
+    // 멘토가 아니라면 과제를 휴강처리 할 수 없다.
+    private void validateMemberIsMentor(Member member, StudyDetail studyDetail) {
+        if (!member.equals(studyDetail.getStudy().getMentor())) {
             throw new CustomException(ErrorCode.STUDY_DETAIL_NOT_MODIFIABLE_INVALID_ROLE);
         }
     }
