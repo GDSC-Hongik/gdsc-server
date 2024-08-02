@@ -1,6 +1,6 @@
 package com.gdschongik.gdsc.domain.study.application;
 
-import static com.gdschongik.gdsc.global.exception.ErrorCode.STUDY_DETAIL_NOT_FOUND;
+import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.study.dao.StudyDetailRepository;
 import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class StudyMentorService {
 
     private final StudyDetailRepository studyDetailRepository;

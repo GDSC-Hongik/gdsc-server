@@ -1,8 +1,7 @@
 package com.gdschongik.gdsc.domain.study.domain.vo;
 
 import static com.gdschongik.gdsc.domain.study.domain.StudyStatus.*;
-import static com.gdschongik.gdsc.global.exception.ErrorCode.ASSIGNMENT_CAN_NOT_BE_UPDATED;
-import static com.gdschongik.gdsc.global.exception.ErrorCode.ASSIGNMENT_DEADLINE_INVALID;
+import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.study.domain.Difficulty;
 import com.gdschongik.gdsc.domain.study.domain.StudyStatus;
