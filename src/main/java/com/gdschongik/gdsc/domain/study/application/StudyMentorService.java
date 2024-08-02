@@ -61,7 +61,7 @@ public class StudyMentorService {
                 .findById(studyDetailId)
                 .orElseThrow(() -> new CustomException(STUDY_DETAIL_NOT_FOUND));
 
-        studyDetailValidator.validatePublishStudyAssignment(currentMember, studyDetail);
+        studyDetailValidator.validatePublishStudyAssignment(currentMember, studyDetail, request);
 
         studyDetail.publishAssignment(request.title(), request.deadLine(), request.descriptionNotionLink());
         studyDetailRepository.save(studyDetail);

@@ -34,4 +34,28 @@ public class StudyDetailTest {
             assertThat(studyDetail.getAssignment().getStatus()).isEqualTo(StudyStatus.CANCELLED);
         }
     }
+
+    @Nested
+    class 과제_개설시 {
+
+        FixtureHelper fixtureHelper = new FixtureHelper();
+
+        @Test
+        void 성공한다() {
+            // given
+            Member mentor = fixtureHelper.createAssociateMember(1L);
+            LocalDateTime now = LocalDateTime.now();
+            Study study = fixtureHelper.createStudy(
+                    mentor,
+                    Period.createPeriod(now.plusDays(5), now.plusDays(10)),
+                    Period.createPeriod(now.minusDays(5), now));
+            StudyDetail studyDetail = fixtureHelper.createStudyDetail(study, now, now.plusDays(7));
+
+            // when
+            studyDetail.publishAssignment("testTitle", now.plusDays(1), "www.link.com");
+
+            // then
+            assertThat(studyDetail.getAssignment().getStatus()).isEqualTo(StudyStatus.OPEN);
+        }
+    }
 }
