@@ -7,6 +7,7 @@ import com.gdschongik.gdsc.domain.auth.domain.RefreshToken;
 import com.gdschongik.gdsc.domain.auth.dto.AccessTokenDto;
 import com.gdschongik.gdsc.domain.auth.dto.RefreshTokenDto;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
+import com.gdschongik.gdsc.global.security.MemberAuthInfo;
 import com.gdschongik.gdsc.global.util.JwtUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import java.util.Optional;
@@ -22,8 +23,8 @@ public class JwtService {
     private final JwtUtil jwtUtil;
     private final RefreshTokenRepository refreshTokenRepository;
 
-    public AccessTokenDto createAccessToken(Long memberId, MemberRole memberRole) {
-        return jwtUtil.generateAccessToken(memberId, memberRole);
+    public AccessTokenDto createAccessToken(MemberAuthInfo authInfo) {
+        return jwtUtil.generateAccessToken(authInfo);
     }
 
     public RefreshTokenDto createRefreshToken(Long memberId) {
