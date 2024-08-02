@@ -4,8 +4,8 @@ import com.gdschongik.gdsc.domain.auth.dto.AccessTokenDto;
 import com.gdschongik.gdsc.domain.member.domain.MemberManageRole;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import com.gdschongik.gdsc.domain.member.domain.MemberStudyRole;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,17 +15,24 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class PrincipalDetails implements UserDetails {
 
     private final Long memberId;
-    private final MemberRole memberRole;
-    private final MemberManageRole memberManageRole;
-    private final MemberStudyRole memberStudyRole;
+    private final MemberRole role;
+    private final MemberManageRole manageRole;
+    private final MemberStudyRole studyRole;
 
     public static PrincipalDetails from(AccessTokenDto token) {
-        return new PrincipalDetails(token.memberId(), token.memberRole(), null, null);
+        MemberAuthInfo authInfo = token.authInfo();
+        return new PrincipalDetails(authInfo.memberId(), authInfo.role(), authInfo.manageRole(), authInfo.studyRole());
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority(memberRole.getValue()));
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+
+        authorities.add(new SimpleGrantedAuthority(role.name()));
+        authorities.add(new SimpleGrantedAuthority(manageRole.name()));
+        authorities.add(new SimpleGrantedAuthority(studyRole.name()));
+
+        return authorities;
     }
 
     @Override
