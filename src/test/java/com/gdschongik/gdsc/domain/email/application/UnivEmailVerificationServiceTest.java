@@ -38,7 +38,7 @@ public class UnivEmailVerificationServiceTest extends IntegrationTest {
         @Test
         void 레디스에_이메일인증정보가_존재하지_않으면_실패한다() {
             // given
-            Member member = Member.createGuestMember(OAUTH_ID);
+            Member member = createGuestMember();
             memberRepository.save(member);
             String verificationToken =
                     emailVerificationTokenUtil.generateEmailVerificationToken(member.getId(), UNIV_EMAIL);
@@ -53,8 +53,7 @@ public class UnivEmailVerificationServiceTest extends IntegrationTest {
         @Test
         void 인증토큰과_레디스에_존재하는_인증정보의_토큰이_다르면_실패한다() {
             // given
-            // TODO: 아래 두줄 createGuestMember로 대체하기
-            Member member = memberRepository.save(Member.createGuestMember(OAUTH_ID));
+            Member member = createGuestMember();
             logoutAndReloginAs(member.getId(), member.getRole());
 
             // when
