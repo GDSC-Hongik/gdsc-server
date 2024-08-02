@@ -1,7 +1,6 @@
 package com.gdschongik.gdsc.helper;
 
 import com.gdschongik.gdsc.config.TestQuerydslConfig;
-import com.gdschongik.gdsc.config.TestRedisConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -11,7 +10,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
 @DataJpaTest
-@Import({TestQuerydslConfig.class, TestRedisConfig.class, DatabaseCleaner.class})
+@Import({TestQuerydslConfig.class, DatabaseCleaner.class, RedisCleaner.class})
 @ActiveProfiles("test")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public abstract class RepositoryTest {
@@ -22,8 +21,12 @@ public abstract class RepositoryTest {
     @Autowired
     protected TestEntityManager testEntityManager;
 
+    @Autowired
+    protected RedisCleaner redisCleaner;
+
     @BeforeEach
     void setUp() {
         databaseCleaner.execute();
+        redisCleaner.execute();
     }
 }

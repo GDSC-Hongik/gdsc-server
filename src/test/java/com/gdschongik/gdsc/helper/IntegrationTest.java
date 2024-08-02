@@ -52,6 +52,9 @@ public abstract class IntegrationTest {
     protected DatabaseCleaner databaseCleaner;
 
     @Autowired
+    protected RedisCleaner redisCleaner;
+
+    @Autowired
     protected MemberRepository memberRepository;
 
     @Autowired
@@ -87,6 +90,7 @@ public abstract class IntegrationTest {
     @BeforeEach
     void setUp() {
         databaseCleaner.execute();
+        redisCleaner.execute();
         doNothing().when(delegateMemberDiscordEventHandler).delegate(any());
     }
 
