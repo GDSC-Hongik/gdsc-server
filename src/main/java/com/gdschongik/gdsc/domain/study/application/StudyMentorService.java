@@ -4,6 +4,7 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.study.dao.StudyDetailRepository;
 import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
+import com.gdschongik.gdsc.domain.study.domain.request.AssignmentCreateRequest;
 import com.gdschongik.gdsc.domain.study.dto.response.AssignmentResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import java.util.List;
@@ -31,5 +32,17 @@ public class StudyMentorService {
                 .findById(studyDetailId)
                 .orElseThrow(() -> new CustomException(STUDY_DETAIL_NOT_FOUND));
         return AssignmentResponse.from(studyDetail);
+    }
+
+    @Transactional
+    public void publishStudyAssignment(Long studyDetailId, AssignmentCreateRequest request) {
+        StudyDetail studyDetail = studyDetailRepository
+                .findById(studyDetailId)
+                .orElseThrow(() -> new CustomException(STUDY_DETAIL_NOT_FOUND));
+
+        studyDetail.publishAssignment(request.title(), request.deadLine(), request.descriptionNotionLink());
+        studyDetailRepository.save(studyDetail);
+
+        log.info("[StudyMentorService] 과제 개설 완료: studyDetailId={}", studyDetailId);
     }
 }

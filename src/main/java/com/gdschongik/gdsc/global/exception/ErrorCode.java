@@ -111,6 +111,7 @@ public enum ErrorCode {
 
     // StudyDetail
     STUDY_DETAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 스터디 상세 정보입니다."),
+    STUDY_DETAIL_NOT_MODIFIABLE_INVALID_ROLE(HttpStatus.FORBIDDEN, "수정할 수 있는 권한이 없습니다."),
 
     // StudyHistory
     STUDY_HISTORY_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 스터디 수강 기록입니다."),
@@ -138,7 +139,10 @@ public enum ErrorCode {
 
     // Order - MoneyInfo
     ORDER_FINAL_PAYMENT_AMOUNT_MISMATCH(HttpStatus.CONFLICT, "주문 최종결제금액은 주문총액에서 할인금액을 뺀 값이어야 합니다."),
-    ;
+    // Assignment
+    ASSIGNMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "과제가 존재하지 않습니다."),
+    ASSIGNMENT_CAN_NOT_BE_UPDATED(HttpStatus.CONFLICT, "휴강인 과제는 수정할 수 없습니다."),
+    ASSIGNMENT_DEADLINE_INVALID(HttpStatus.CONFLICT, "과제 마감 기한이 현재보다 빠릅니다.");
 
     private final HttpStatus status;
     private final String message;
