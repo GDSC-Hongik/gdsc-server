@@ -75,6 +75,20 @@ public class Membership extends BaseEntity {
         registerEvent(new MembershipVerifiedEvent(id));
     }
 
+    public void revokePaymentStatus() {
+        validatePaymentStatusRevocable();
+
+        regularRequirement.updatePaymentStatus(PENDING);
+
+        registerEvent(new MembershipPaymentRevokedEvent(id));
+    }
+
+    private void validatePaymentStatusRevocable() {
+        if (!regularRequirement.isPaymentSatisfied()) {
+            throw new CustomException(MEMBERSHIP_PAYMENT_NOT_REVOCABLE_NOT_SATISFIED);
+        }
+    }
+
     // 데이터 전달 로직
 
     public boolean isRegularRequirementAllSatisfied() {

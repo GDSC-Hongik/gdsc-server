@@ -97,4 +97,19 @@ public class MembershipService {
 
         myMembershipOpt.ifPresent(membershipRepository::delete);
     }
+
+    /**
+     * 이벤트 핸들러에서 사용되므로, `@Transactional` 을 사용하지 않습니다.
+     */
+    public void revokePaymentStatus(Long orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new CustomException(ORDER_NOT_FOUND));
+
+        Membership membership = membershipRepository
+                .findById(order.getMembershipId())
+                .orElseThrow(() -> new CustomException(MEMBERSHIP_NOT_FOUND));
+
+        membership.revokePaymentStatus();
+
+        membershipRepository.save(membership);
+    }
 }

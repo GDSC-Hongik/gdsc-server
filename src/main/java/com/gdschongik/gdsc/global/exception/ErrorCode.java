@@ -76,6 +76,7 @@ public enum ErrorCode {
     MEMBERSHIP_ALREADY_SATISFIED(HttpStatus.CONFLICT, "이미 이번 학기에 정회원 승급을 완료한 회원입니다."),
     MEMBERSHIP_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 멤버십이 존재하지 않습니다."),
     MEMBERSHIP_RECRUITMENT_ROUND_NOT_OPEN(HttpStatus.CONFLICT, "리크루팅 회차 모집기간이 아닙니다."),
+    MEMBERSHIP_PAYMENT_NOT_REVOCABLE_NOT_SATISFIED(HttpStatus.CONFLICT, "회비납부를 완료한 경우에만 멤버십 회비납부상태를 취소할 수 있습니다."),
 
     // Recruitment
     DATE_PRECEDENCE_INVALID(HttpStatus.BAD_REQUEST, "종료일이 시작일과 같거나 앞설 수 없습니다."),
