@@ -16,7 +16,9 @@ import com.gdschongik.gdsc.domain.coupon.domain.IssuedCoupon;
 import com.gdschongik.gdsc.domain.discord.application.handler.DelegateMemberDiscordEventHandler;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
+import com.gdschongik.gdsc.domain.member.domain.MemberManageRole;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
+import com.gdschongik.gdsc.domain.member.domain.MemberStudyRole;
 import com.gdschongik.gdsc.domain.membership.dao.MembershipRepository;
 import com.gdschongik.gdsc.domain.membership.domain.Membership;
 import com.gdschongik.gdsc.domain.recruitment.application.OnboardingRecruitmentService;
@@ -48,6 +50,9 @@ public abstract class IntegrationTest {
 
     @Autowired
     protected DatabaseCleaner databaseCleaner;
+
+    @Autowired
+    protected RedisCleaner redisCleaner;
 
     @Autowired
     protected MemberRepository memberRepository;
@@ -85,11 +90,14 @@ public abstract class IntegrationTest {
     @BeforeEach
     void setUp() {
         databaseCleaner.execute();
+        redisCleaner.execute();
         doNothing().when(delegateMemberDiscordEventHandler).delegate(any());
     }
 
     protected void logoutAndReloginAs(Long memberId, MemberRole memberRole) {
-        PrincipalDetails principalDetails = new PrincipalDetails(memberId, memberRole);
+        // TODO: MemberManageRole, MemberStudyRole 추가
+        PrincipalDetails principalDetails =
+                new PrincipalDetails(memberId, memberRole, MemberManageRole.NONE, MemberStudyRole.STUDENT);
         Authentication authentication =
                 new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);

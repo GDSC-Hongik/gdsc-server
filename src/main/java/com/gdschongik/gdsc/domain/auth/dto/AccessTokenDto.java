@@ -1,5 +1,5 @@
 package com.gdschongik.gdsc.domain.auth.dto;
 
-import com.gdschongik.gdsc.domain.member.domain.MemberRole;
+import com.gdschongik.gdsc.global.security.MemberAuthInfo;
 
-public record AccessTokenDto(Long memberId, MemberRole memberRole, String tokenValue) {}
+public record AccessTokenDto(MemberAuthInfo authInfo, String tokenValue) {}

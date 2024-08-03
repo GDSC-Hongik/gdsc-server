@@ -22,6 +22,7 @@ import com.gdschongik.gdsc.domain.membership.domain.Membership;
 import com.gdschongik.gdsc.domain.recruitment.application.OnboardingRecruitmentService;
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.global.exception.CustomException;
+import com.gdschongik.gdsc.global.security.MemberAuthInfo;
 import com.gdschongik.gdsc.global.util.EnvironmentUtil;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import java.util.Optional;
@@ -88,7 +89,7 @@ public class OnboardingMemberService {
                 .findByOauthId(request.oauthId())
                 .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
 
-        AccessTokenDto accessTokenDto = jwtService.createAccessToken(member.getId(), member.getRole());
+        AccessTokenDto accessTokenDto = jwtService.createAccessToken(MemberAuthInfo.from(member));
         RefreshTokenDto refreshTokenDto = jwtService.createRefreshToken(member.getId());
 
         return new MemberTokenResponse(accessTokenDto.tokenValue(), refreshTokenDto.tokenValue());

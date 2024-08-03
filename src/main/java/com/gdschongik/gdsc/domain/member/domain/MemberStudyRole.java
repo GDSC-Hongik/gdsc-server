@@ -5,10 +5,9 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum MemberRole {
-    GUEST("ROLE_GUEST"),
-    ASSOCIATE("ROLE_ASSOCIATE"),
-    REGULAR("ROLE_REGULAR");
+public enum MemberStudyRole {
+    MENTOR("ROLE_MENTOR"),
+    STUDENT("ROLE_STUDENT");
 
     private final String value;
 }

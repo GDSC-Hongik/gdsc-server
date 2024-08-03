@@ -38,9 +38,9 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         CustomOAuth2User oAuth2User = (CustomOAuth2User) authentication.getPrincipal();
 
         // 토큰 생성 후 쿠키에 저장
-        AccessTokenDto accessTokenDto =
-                jwtService.createAccessToken(oAuth2User.getMemberId(), oAuth2User.getMemberRole());
-        RefreshTokenDto refreshTokenDto = jwtService.createRefreshToken(oAuth2User.getMemberId());
+        MemberAuthInfo memberAuthInfo = oAuth2User.getMemberAuthInfo();
+        AccessTokenDto accessTokenDto = jwtService.createAccessToken(memberAuthInfo);
+        RefreshTokenDto refreshTokenDto = jwtService.createRefreshToken(memberAuthInfo.memberId());
         cookieUtil.addTokenCookies(response, accessTokenDto.tokenValue(), refreshTokenDto.tokenValue());
 
         // 임시로 헤더에 엑세스 토큰 추가
