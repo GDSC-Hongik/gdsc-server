@@ -84,6 +84,7 @@ public class Membership extends BaseEntity {
     }
 
     private void validatePaymentStatusRevocable() {
+        // TODO: 이벤트로 트리거되는 로직이더라도 예외 던지도록 수정
         if (!regularRequirement.isPaymentSatisfied()) {
             throw new CustomException(MEMBERSHIP_PAYMENT_NOT_REVOCABLE_NOT_SATISFIED);
         }
