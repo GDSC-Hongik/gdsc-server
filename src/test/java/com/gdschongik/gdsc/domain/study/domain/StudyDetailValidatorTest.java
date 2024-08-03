@@ -55,8 +55,8 @@ public class StudyDetailValidatorTest {
                     Period.createPeriod(now.minusDays(5), now));
             StudyDetail studyDetail = fixtureHelper.createStudyDetail(study, now, now.plusDays(7));
             Member anotherMember = fixtureHelper.createAssociateMember(2L);
-            AssignmentCreateRequest request = new AssignmentCreateRequest("testTitle", "www.link.com", now.plusDays(2));
-
+            AssignmentCreateRequest request =
+                    new AssignmentCreateRequest(ASSIGNMENT_TITLE, DESCRIPTION_LINK, now.plusDays(2));
             // when & then
             assertThatThrownBy(() -> studyDetailValidator.validatePublishStudyAssignment(
                             anotherMember.getId(), studyDetail, request))
