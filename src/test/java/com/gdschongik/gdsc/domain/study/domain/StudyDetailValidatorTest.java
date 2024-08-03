@@ -57,6 +57,7 @@ public class StudyDetailValidatorTest {
             Member anotherMember = fixtureHelper.createAssociateMember(2L);
             AssignmentCreateRequest request =
                     new AssignmentCreateRequest(ASSIGNMENT_TITLE, DESCRIPTION_LINK, now.plusDays(2));
+
             // when & then
             assertThatThrownBy(() -> studyDetailValidator.validatePublishStudyAssignment(
                             anotherMember.getId(), studyDetail, request))
