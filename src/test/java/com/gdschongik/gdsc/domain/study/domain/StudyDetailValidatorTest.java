@@ -36,7 +36,7 @@ public class StudyDetailValidatorTest {
             // when & then
             assertThatThrownBy(() -> studyDetailValidator.validateCancelStudyAssignment(anotherMember, studyDetail))
                     .isInstanceOf(CustomException.class)
-                    .hasMessage(STUDY_DETAIL_NOT_MODIFIABLE_INVALID_ROLE.getMessage());
+                    .hasMessage(STUDY_DETAIL_UPDATE_RESTRICTED_TO_MENTOR.getMessage());
         }
     }
 
@@ -61,7 +61,7 @@ public class StudyDetailValidatorTest {
             assertThatThrownBy(() ->
                             studyDetailValidator.validatePublishStudyAssignment(anotherMember, studyDetail, request))
                     .isInstanceOf(CustomException.class)
-                    .hasMessage(STUDY_DETAIL_NOT_MODIFIABLE_INVALID_ROLE.getMessage());
+                    .hasMessage(STUDY_DETAIL_UPDATE_RESTRICTED_TO_MENTOR.getMessage());
         }
 
         @Test

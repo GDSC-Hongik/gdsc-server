@@ -21,10 +21,10 @@ public class StudyDetailValidator {
         validateDeadLine(request.deadLine());
     }
 
-    // 멘토가 아니라면 과제를 휴강처리 할 수 없다.
+    // 해당 스터디의 멘토가 아니라면 과제를 휴강처리 할 수 없다.
     private void validateStudyMentorAuthorization(Member member, StudyDetail studyDetail) {
         if (!member.getId().equals(studyDetail.getStudy().getMentor().getId())) {
-            throw new CustomException(STUDY_DETAIL_NOT_MODIFIABLE_INVALID_ROLE);
+            throw new CustomException(STUDY_DETAIL_UPDATE_RESTRICTED_TO_MENTOR);
         }
     }
 

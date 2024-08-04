@@ -112,7 +112,7 @@ public enum ErrorCode {
 
     // StudyDetail
     STUDY_DETAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 스터디 상세 정보입니다."),
-    STUDY_DETAIL_NOT_MODIFIABLE_INVALID_ROLE(HttpStatus.FORBIDDEN, "해당 스터디의 멘토만 수정할 수 있습니다."),
+    STUDY_DETAIL_UPDATE_RESTRICTED_TO_MENTOR(HttpStatus.FORBIDDEN, "해당 스터디의 멘토만 수정할 수 있습니다."),
 
     // StudyHistory
     STUDY_HISTORY_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 스터디 수강 기록입니다."),
