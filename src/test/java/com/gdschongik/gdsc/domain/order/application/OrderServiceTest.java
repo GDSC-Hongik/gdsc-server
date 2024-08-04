@@ -30,6 +30,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -49,6 +50,13 @@ class OrderServiceTest extends IntegrationTest {
 
     @Autowired
     private OrderRepository orderRepository;
+
+    private void stubPaymentConfirm() {
+        ZonedDateTime approvedAt = ZonedDateTime.now();
+        PaymentResponse mockPaymentResponse = mock(PaymentResponse.class);
+        when(mockPaymentResponse.approvedAt()).thenReturn(approvedAt);
+        when(paymentClient.confirm(any(PaymentConfirmRequest.class))).thenReturn(mockPaymentResponse);
+    }
 
     @Nested
     class 임시주문_생성할때 {
@@ -114,11 +122,6 @@ class OrderServiceTest extends IntegrationTest {
                     BigDecimal.valueOf(5000),
                     BigDecimal.valueOf(15000)));
 
-            ZonedDateTime approvedAt = ZonedDateTime.now();
-            PaymentResponse mockPaymentResponse = mock(PaymentResponse.class);
-            when(mockPaymentResponse.approvedAt()).thenReturn(approvedAt);
-            when(paymentClient.confirm(any(PaymentConfirmRequest.class))).thenReturn(mockPaymentResponse);
-
             // when
             var request = new OrderCompleteRequest(ORDER_PAYMENT_KEY, ORDER_NANO_ID, 15000L);
             orderService.completeOrder(request);
@@ -160,11 +163,6 @@ class OrderServiceTest extends IntegrationTest {
                     BigDecimal.valueOf(5000),
                     BigDecimal.valueOf(15000)));
 
-            ZonedDateTime approvedAt = ZonedDateTime.now();
-            PaymentResponse mockPaymentResponse = mock(PaymentResponse.class);
-            when(mockPaymentResponse.approvedAt()).thenReturn(approvedAt);
-            when(paymentClient.confirm(any(PaymentConfirmRequest.class))).thenReturn(mockPaymentResponse);
-
             // when
             var request = new OrderCompleteRequest(ORDER_PAYMENT_KEY, ORDER_NANO_ID, 15000L);
             orderService.completeOrder(request);
@@ -201,11 +199,6 @@ class OrderServiceTest extends IntegrationTest {
                     BigDecimal.valueOf(5000),
                     BigDecimal.valueOf(15000)));
 
-            ZonedDateTime approvedAt = ZonedDateTime.now();
-            PaymentResponse mockPaymentResponse = mock(PaymentResponse.class);
-            when(mockPaymentResponse.approvedAt()).thenReturn(approvedAt);
-            when(paymentClient.confirm(any(PaymentConfirmRequest.class))).thenReturn(mockPaymentResponse);
-
             // when
             var request = new OrderCompleteRequest(ORDER_PAYMENT_KEY, ORDER_NANO_ID, 15000L);
             orderService.completeOrder(request);
@@ -218,6 +211,22 @@ class OrderServiceTest extends IntegrationTest {
 
     @Nested
     class 주문_취소할때 {
+
+        @BeforeEach
+        void setUp() {
+            stubPaymentCancel();
+        }
+
+        private void stubPaymentCancel() {
+            ZonedDateTime canceledAt = ZonedDateTime.now();
+            PaymentResponse mockCancelResponse = mock(PaymentResponse.class);
+            PaymentResponse.CancelDto mockCancelDto = mock(PaymentResponse.CancelDto.class);
+
+            when(mockCancelResponse.cancels()).thenReturn(List.of(mockCancelDto));
+            when(mockCancelDto.canceledAt()).thenReturn(canceledAt);
+            when(paymentClient.cancelPayment(eq(ORDER_PAYMENT_KEY), any(PaymentCancelRequest.class)))
+                    .thenReturn(mockCancelResponse);
+        }
 
         @Test
         void 성공한다() {
@@ -244,24 +253,10 @@ class OrderServiceTest extends IntegrationTest {
                     BigDecimal.valueOf(5000),
                     BigDecimal.valueOf(15000)));
 
-            ZonedDateTime approvedAt = ZonedDateTime.now();
-            PaymentResponse mockPaymentResponse = mock(PaymentResponse.class);
-            when(mockPaymentResponse.approvedAt()).thenReturn(approvedAt);
-            when(paymentClient.confirm(any(PaymentConfirmRequest.class))).thenReturn(mockPaymentResponse);
-
             var completeRequest = new OrderCompleteRequest(ORDER_PAYMENT_KEY, ORDER_NANO_ID, 15000L);
             orderService.completeOrder(completeRequest);
 
             Order completedOrder = orderRepository.findByNanoId(ORDER_NANO_ID).orElseThrow();
-
-            ZonedDateTime canceledAt = ZonedDateTime.now();
-            PaymentResponse mockCancelResponse = mock(PaymentResponse.class);
-            PaymentResponse.CancelDto mockCancelDto = mock(PaymentResponse.CancelDto.class);
-
-            when(mockCancelResponse.cancels()).thenReturn(List.of(mockCancelDto));
-            when(mockCancelDto.canceledAt()).thenReturn(canceledAt);
-            when(paymentClient.cancelPayment(eq(ORDER_PAYMENT_KEY), any(PaymentCancelRequest.class)))
-                    .thenReturn(mockCancelResponse);
 
             // when
             var cancelRequest = new OrderCancelRequest(ORDER_CANCEL_REASON);
@@ -338,24 +333,10 @@ class OrderServiceTest extends IntegrationTest {
                     BigDecimal.valueOf(5000),
                     BigDecimal.valueOf(15000)));
 
-            ZonedDateTime approvedAt = ZonedDateTime.now();
-            PaymentResponse mockPaymentResponse = mock(PaymentResponse.class);
-            when(mockPaymentResponse.approvedAt()).thenReturn(approvedAt);
-            when(paymentClient.confirm(any(PaymentConfirmRequest.class))).thenReturn(mockPaymentResponse);
-
             var completeRequest = new OrderCompleteRequest(ORDER_PAYMENT_KEY, ORDER_NANO_ID, 15000L);
             orderService.completeOrder(completeRequest);
 
             Order completedOrder = orderRepository.findByNanoId(ORDER_NANO_ID).orElseThrow();
-
-            ZonedDateTime canceledAt = ZonedDateTime.now();
-            PaymentResponse mockCancelResponse = mock(PaymentResponse.class);
-            PaymentResponse.CancelDto mockCancelDto = mock(PaymentResponse.CancelDto.class);
-
-            when(mockCancelResponse.cancels()).thenReturn(List.of(mockCancelDto));
-            when(mockCancelDto.canceledAt()).thenReturn(canceledAt);
-            when(paymentClient.cancelPayment(eq(ORDER_PAYMENT_KEY), any(PaymentCancelRequest.class)))
-                    .thenReturn(mockCancelResponse);
 
             var cancelRequest = new OrderCancelRequest(ORDER_CANCEL_REASON);
 
@@ -394,26 +375,12 @@ class OrderServiceTest extends IntegrationTest {
                     BigDecimal.valueOf(5000),
                     BigDecimal.valueOf(15000)));
 
-            ZonedDateTime approvedAt = ZonedDateTime.now();
-            PaymentResponse mockPaymentResponse = mock(PaymentResponse.class);
-            when(mockPaymentResponse.approvedAt()).thenReturn(approvedAt);
-            when(paymentClient.confirm(any(PaymentConfirmRequest.class))).thenReturn(mockPaymentResponse);
-
             var completeRequest = new OrderCompleteRequest(ORDER_PAYMENT_KEY, ORDER_NANO_ID, 15000L);
             orderService.completeOrder(completeRequest);
 
             Order completedOrder = orderRepository.findByNanoId(ORDER_NANO_ID).orElseThrow();
             Member orderCompletedMember =
                     memberRepository.findById(member.getId()).orElseThrow();
-
-            ZonedDateTime canceledAt = ZonedDateTime.now();
-            PaymentResponse mockCancelResponse = mock(PaymentResponse.class);
-            PaymentResponse.CancelDto mockCancelDto = mock(PaymentResponse.CancelDto.class);
-
-            when(mockCancelResponse.cancels()).thenReturn(List.of(mockCancelDto));
-            when(mockCancelDto.canceledAt()).thenReturn(canceledAt);
-            when(paymentClient.cancelPayment(eq(ORDER_PAYMENT_KEY), any(PaymentCancelRequest.class)))
-                    .thenReturn(mockCancelResponse);
 
             var cancelRequest = new OrderCancelRequest(ORDER_CANCEL_REASON);
 
@@ -458,10 +425,6 @@ class OrderServiceTest extends IntegrationTest {
                     BigDecimal.valueOf(5000),
                     BigDecimal.valueOf(15000)));
 
-            ZonedDateTime approvedAt = ZonedDateTime.now();
-            PaymentResponse mockPaymentResponse = mock(PaymentResponse.class);
-            when(mockPaymentResponse.approvedAt()).thenReturn(approvedAt);
-            when(paymentClient.confirm(any(PaymentConfirmRequest.class))).thenReturn(mockPaymentResponse);
             var request = new OrderCompleteRequest(ORDER_PAYMENT_KEY, ORDER_NANO_ID, 15000L);
             orderService.completeOrder(request);
 
