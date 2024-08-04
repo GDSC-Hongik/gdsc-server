@@ -45,9 +45,6 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         String redirectUri = UriComponentsBuilder.fromHttpUrl(baseUri)
                 .path(OAUTH_REDIRECT_PATH_SEGMENT)
-                .queryParam(LANDING_STATUS_PARAM, oAuth2User.getLandingStatus().name())
-                .queryParam(ACCESS_TOKEN_PARAM, accessTokenDto.tokenValue())
-                .queryParam(REFRESH_TOKEN_PARAM, refreshTokenDto.tokenValue())
                 .toUriString();
 
         getRedirectStrategy().sendRedirect(request, response, redirectUri);
