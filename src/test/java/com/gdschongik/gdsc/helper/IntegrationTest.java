@@ -88,10 +88,20 @@ public abstract class IntegrationTest {
     protected DelegateMemberDiscordEventHandler delegateMemberDiscordEventHandler;
 
     @BeforeEach
-    void setUp() {
+    protected void setUp() {
         databaseCleaner.execute();
         redisCleaner.execute();
         doNothing().when(delegateMemberDiscordEventHandler).delegate(any());
+        doStubTemplate();
+    }
+
+    /**
+     * stubbing에 사용할 템플릿 메서드입니다.
+     * 하위 클래스에서 이 메서드를 오버라이드하여 stubbing을 수행합니다.
+     * 오버라이드된 경우, `@BeforeEach`의 맨 마지막에 호출됩니다.
+     */
+    protected void doStubTemplate() {
+        // 기본적으로 아무 것도 하지 않습니다. 필요한 경우에만 오버라이드하여 사용합니다.
     }
 
     protected void logoutAndReloginAs(Long memberId, MemberRole memberRole) {

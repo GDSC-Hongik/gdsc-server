@@ -51,6 +51,11 @@ class OrderServiceTest extends IntegrationTest {
     @Autowired
     private OrderRepository orderRepository;
 
+    @Override
+    protected void doStubTemplate() {
+        stubPaymentConfirm();
+    }
+
     private void stubPaymentConfirm() {
         ZonedDateTime approvedAt = ZonedDateTime.now();
         PaymentResponse mockPaymentResponse = mock(PaymentResponse.class);
