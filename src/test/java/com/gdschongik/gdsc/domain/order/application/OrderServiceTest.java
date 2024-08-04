@@ -399,6 +399,49 @@ class OrderServiceTest extends IntegrationTest {
             assertThat(orderCompletedMember.isRegular()).isTrue();
             assertThat(orderCanceledMember.isAssociate()).isTrue();
         }
+
+        @Test
+        void 디스코드_서버_정회원_역할을_회수한다() {
+            // given
+            Member member = createMember();
+            logoutAndReloginAs(1L, MemberRole.ASSOCIATE);
+            RecruitmentRound recruitmentRound = createRecruitmentRound(
+                    RECRUITMENT_ROUND_NAME,
+                    LocalDateTime.now().minusDays(1),
+                    LocalDateTime.now().plusDays(1),
+                    ACADEMIC_YEAR,
+                    SEMESTER_TYPE,
+                    ROUND_TYPE,
+                    MONEY_20000_WON);
+
+            Membership membership = createMembership(member, recruitmentRound);
+            IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, member);
+
+            orderService.createPendingOrder(new OrderCreateRequest(
+                    ORDER_NANO_ID,
+                    membership.getId(),
+                    issuedCoupon.getId(),
+                    BigDecimal.valueOf(20000),
+                    BigDecimal.valueOf(5000),
+                    BigDecimal.valueOf(15000)));
+
+            var completeRequest = new OrderCompleteRequest(ORDER_PAYMENT_KEY, ORDER_NANO_ID, 15000L);
+            orderService.completeOrder(completeRequest);
+
+            Order completedOrder = orderRepository.findByNanoId(ORDER_NANO_ID).orElseThrow();
+
+            // when
+            var cancelRequest = new OrderCancelRequest(ORDER_CANCEL_REASON);
+            orderService.cancelOrder(completedOrder.getId(), cancelRequest);
+
+            // then
+            Order canceledOrder =
+                    orderRepository.findById(completedOrder.getId()).orElseThrow();
+            assertThat(canceledOrder.getStatus()).isEqualTo(OrderStatus.CANCELED);
+            assertThat(canceledOrder.getCanceledAt()).isNotNull();
+
+            verify(memberDiscordRoleRevokeHandler).delegate(any());
+        }
     }
 
     @Disabled // TODO: CI 환경에서만 실패하는 테스트, TZ 관련 설정 확인 필요
