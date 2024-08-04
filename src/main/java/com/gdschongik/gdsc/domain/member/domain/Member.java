@@ -259,6 +259,8 @@ public class Member extends BaseEntity {
         validateStatusUpdatable();
 
         role = ASSOCIATE;
+
+        registerEvent(new MemberDemotedToAssociateEvent(id, discordId));
     }
 
     /**

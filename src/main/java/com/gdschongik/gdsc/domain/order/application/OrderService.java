@@ -129,6 +129,8 @@ public class OrderService {
 
         order.cancel(canceledAt);
 
+        orderRepository.save(order);
+
         log.info("[OrderService] 주문 취소: orderId={}", order.getId());
     }
 
