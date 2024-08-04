@@ -1,7 +1,7 @@
 package com.gdschongik.gdsc.domain.study.api;
 
 import com.gdschongik.gdsc.domain.study.application.StudyMentorService;
-import com.gdschongik.gdsc.domain.study.domain.request.AssignmentCreateRequest;
+import com.gdschongik.gdsc.domain.study.dto.request.AssignmentCreateRequest;
 import com.gdschongik.gdsc.domain.study.dto.response.AssignmentResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
