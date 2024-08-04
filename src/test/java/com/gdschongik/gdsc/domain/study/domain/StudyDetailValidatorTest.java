@@ -34,8 +34,7 @@ public class StudyDetailValidatorTest {
             Member anotherMember = fixtureHelper.createAssociateMember(2L);
 
             // when & then
-            assertThatThrownBy(() ->
-                            studyDetailValidator.validateCancelStudyAssignment(anotherMember.getId(), studyDetail))
+            assertThatThrownBy(() -> studyDetailValidator.validateCancelStudyAssignment(anotherMember, studyDetail))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(STUDY_DETAIL_NOT_MODIFIABLE_INVALID_ROLE.getMessage());
         }
@@ -59,8 +58,8 @@ public class StudyDetailValidatorTest {
                     new AssignmentCreateRequest(ASSIGNMENT_TITLE, DESCRIPTION_LINK, now.plusDays(2));
 
             // when & then
-            assertThatThrownBy(() -> studyDetailValidator.validatePublishStudyAssignment(
-                            anotherMember.getId(), studyDetail, request))
+            assertThatThrownBy(() ->
+                            studyDetailValidator.validatePublishStudyAssignment(anotherMember, studyDetail, request))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(STUDY_DETAIL_NOT_MODIFIABLE_INVALID_ROLE.getMessage());
         }
@@ -79,8 +78,7 @@ public class StudyDetailValidatorTest {
                     new AssignmentCreateRequest(ASSIGNMENT_TITLE, DESCRIPTION_LINK, now.minusDays(2));
 
             // when & then
-            assertThatThrownBy(() ->
-                            studyDetailValidator.validatePublishStudyAssignment(mentor.getId(), studyDetail, request))
+            assertThatThrownBy(() -> studyDetailValidator.validatePublishStudyAssignment(mentor, studyDetail, request))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(ASSIGNMENT_DEADLINE_INVALID.getMessage());
         }

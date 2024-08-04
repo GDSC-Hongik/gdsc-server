@@ -2,6 +2,7 @@ package com.gdschongik.gdsc.domain.study.application;
 
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
+import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.study.dao.StudyDetailRepository;
 import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
 import com.gdschongik.gdsc.domain.study.domain.StudyDetailValidator;
@@ -40,12 +41,12 @@ public class StudyMentorService {
 
     @Transactional
     public void cancelStudyAssignment(Long studyDetailId) {
-        Long currentMemberId = memberUtil.getCurrentMemberId();
+        Member currentMember = memberUtil.getCurrentMember();
         StudyDetail studyDetail = studyDetailRepository
                 .findById(studyDetailId)
                 .orElseThrow(() -> new CustomException(STUDY_DETAIL_NOT_FOUND));
 
-        studyDetailValidator.validateCancelStudyAssignment(currentMemberId, studyDetail);
+        studyDetailValidator.validateCancelStudyAssignment(currentMember, studyDetail);
 
         studyDetail.cancelAssignment();
         studyDetailRepository.save(studyDetail);
@@ -55,12 +56,12 @@ public class StudyMentorService {
 
     @Transactional
     public void publishStudyAssignment(Long studyDetailId, AssignmentCreateRequest request) {
-        Long currentMemberId = memberUtil.getCurrentMemberId();
+        Member currentMember = memberUtil.getCurrentMember();
         StudyDetail studyDetail = studyDetailRepository
                 .findById(studyDetailId)
                 .orElseThrow(() -> new CustomException(STUDY_DETAIL_NOT_FOUND));
 
-        studyDetailValidator.validatePublishStudyAssignment(currentMemberId, studyDetail, request);
+        studyDetailValidator.validatePublishStudyAssignment(currentMember, studyDetail, request);
 
         studyDetail.publishAssignment(request.title(), request.deadLine(), request.descriptionNotionLink());
         studyDetailRepository.save(studyDetail);
