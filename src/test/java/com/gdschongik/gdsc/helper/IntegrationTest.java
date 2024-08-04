@@ -14,6 +14,8 @@ import com.gdschongik.gdsc.domain.coupon.dao.IssuedCouponRepository;
 import com.gdschongik.gdsc.domain.coupon.domain.Coupon;
 import com.gdschongik.gdsc.domain.coupon.domain.IssuedCoupon;
 import com.gdschongik.gdsc.domain.discord.application.handler.DelegateMemberDiscordEventHandler;
+import com.gdschongik.gdsc.domain.discord.application.handler.MemberDiscordRoleRevokeHandler;
+import com.gdschongik.gdsc.domain.discord.application.handler.SpringEventHandler;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberManageRole;
@@ -87,11 +89,14 @@ public abstract class IntegrationTest {
     @MockBean
     protected DelegateMemberDiscordEventHandler delegateMemberDiscordEventHandler;
 
+    @MockBean
+    protected MemberDiscordRoleRevokeHandler memberDiscordRoleRevokeHandler;
+
     @BeforeEach
     void setUp() {
         databaseCleaner.execute();
         redisCleaner.execute();
-        doNothing().when(delegateMemberDiscordEventHandler).delegate(any());
+        doStubDiscordEventHandler();
         doStubTemplate();
     }
 
@@ -102,6 +107,17 @@ public abstract class IntegrationTest {
      */
     protected void doStubTemplate() {
         // 기본적으로 아무 것도 하지 않습니다. 필요한 경우에만 오버라이드하여 사용합니다.
+    }
+
+    /**
+     * {@link SpringEventHandler#delegate} 메서드를 stubbing합니다.
+     * 해당 핸들러 메서드는 스프링 이벤트를 수신하여 JDA를 통해 디스코드 관련 로직을 처리합니다.
+     * JDA는 외부 API의 커넥션을 필요로 하기 때문에 테스트에서는 `@MockBean`으로 주입한 핸들러를 stubbing하여 verify로 호출 여부만 확인합니다.
+     * 기본적으로 아무 것도 하지 않도록 설정합니다.
+     */
+    private void doStubDiscordEventHandler() {
+        doNothing().when(delegateMemberDiscordEventHandler).delegate(any());
+        doNothing().when(memberDiscordRoleRevokeHandler).delegate(any());
     }
 
     protected void logoutAndReloginAs(Long memberId, MemberRole memberRole) {
