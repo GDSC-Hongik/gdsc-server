@@ -88,7 +88,7 @@ public abstract class IntegrationTest {
     protected DelegateMemberDiscordEventHandler delegateMemberDiscordEventHandler;
 
     @BeforeEach
-    protected void setUp() {
+    void setUp() {
         databaseCleaner.execute();
         redisCleaner.execute();
         doNothing().when(delegateMemberDiscordEventHandler).delegate(any());
