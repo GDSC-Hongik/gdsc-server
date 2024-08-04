@@ -12,17 +12,17 @@ import java.time.LocalDateTime;
 public class StudyDetailValidator {
 
     public void validateCancelStudyAssignment(Member member, StudyDetail studyDetail) {
-        validateMemberIsMentor(member, studyDetail);
+        validateStudyMentorAuthorization(member, studyDetail);
     }
 
     public void validatePublishStudyAssignment(
             Member member, StudyDetail studyDetail, AssignmentCreateRequest request) {
-        validateMemberIsMentor(member, studyDetail);
+        validateStudyMentorAuthorization(member, studyDetail);
         validateDeadLine(request.deadLine());
     }
 
     // 멘토가 아니라면 과제를 휴강처리 할 수 없다.
-    private void validateMemberIsMentor(Member member, StudyDetail studyDetail) {
+    private void validateStudyMentorAuthorization(Member member, StudyDetail studyDetail) {
         if (!member.getId().equals(studyDetail.getStudy().getMentor().getId())) {
             throw new CustomException(STUDY_DETAIL_NOT_MODIFIABLE_INVALID_ROLE);
         }
