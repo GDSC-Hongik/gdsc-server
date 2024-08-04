@@ -5,7 +5,6 @@ import static com.gdschongik.gdsc.global.common.constant.SecurityConstant.*;
 import com.gdschongik.gdsc.domain.auth.application.JwtService;
 import com.gdschongik.gdsc.domain.auth.dto.AccessTokenDto;
 import com.gdschongik.gdsc.domain.auth.dto.RefreshTokenDto;
-import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import com.gdschongik.gdsc.global.common.constant.JwtConstant;
 import com.gdschongik.gdsc.global.util.CookieUtil;
 import jakarta.servlet.FilterChain;
@@ -42,7 +41,7 @@ public class JwtFilter extends OncePerRequestFilter {
         if (accessTokenHeaderValue != null) {
             AccessTokenDto accessTokenDto = jwtService.retrieveAccessToken(accessTokenHeaderValue);
             if (accessTokenDto != null) {
-                setAuthenticationToContext(accessTokenDto.memberId(), accessTokenDto.memberRole());
+                setAuthenticationToContext(PrincipalDetails.from(accessTokenDto));
                 filterChain.doFilter(request, response);
                 return;
             }
@@ -58,7 +57,8 @@ public class JwtFilter extends OncePerRequestFilter {
 
         // AT가 유효하면 통과
         if (accessTokenDto != null) {
-            setAuthenticationToContext(accessTokenDto.memberId(), accessTokenDto.memberRole());
+            UserDetails userDetails = PrincipalDetails.from(accessTokenDto);
+            setAuthenticationToContext(userDetails);
             filterChain.doFilter(request, response);
             return;
         }
@@ -72,7 +72,8 @@ public class JwtFilter extends OncePerRequestFilter {
             AccessTokenDto accessToken = reissueAccessToken.get();
             RefreshTokenDto refreshToken = jwtService.createRefreshToken(refreshTokenDto.memberId());
             cookieUtil.addTokenCookies(response, accessToken.tokenValue(), refreshToken.tokenValue());
-            setAuthenticationToContext(accessToken.memberId(), accessToken.memberRole());
+            UserDetails userDetails = PrincipalDetails.from(accessToken);
+            setAuthenticationToContext(userDetails);
         }
 
         // AT, RT 둘 다 만료되었으면 실패
@@ -92,8 +93,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 .orElse(null);
     }
 
-    private void setAuthenticationToContext(Long memberId, MemberRole memberRole) {
-        UserDetails userDetails = new PrincipalDetails(memberId, memberRole);
+    private void setAuthenticationToContext(UserDetails userDetails) {
         Authentication authentication =
                 new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
