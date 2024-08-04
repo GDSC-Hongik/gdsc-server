@@ -6,7 +6,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
-import com.gdschongik.gdsc.domain.study.domain.request.AssignmentCreateRequest;
+import com.gdschongik.gdsc.domain.study.dto.request.AssignmentCreateRequest;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.helper.FixtureHelper;
 import java.time.LocalDateTime;
