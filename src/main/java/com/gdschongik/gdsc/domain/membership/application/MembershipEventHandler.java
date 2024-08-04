@@ -24,6 +24,6 @@ public class MembershipEventHandler {
     @EventListener
     public void handleMembershipPaymentRevokedEvent(MembershipPaymentRevokedEvent event) {
         log.info("[MembershipEventHandler] 멤버십 회비납입 취소 이벤트 수신: membershipId={}", event.membershipId());
-        commonMemberService.demoteMemberToAssocidateByMembership(event.membershipId());
+        commonMemberService.demoteMemberToAssociateByMembership(event.membershipId());
     }
 }

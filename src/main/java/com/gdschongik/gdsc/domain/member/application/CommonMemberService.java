@@ -66,7 +66,7 @@ public class CommonMemberService {
     /**
      * 이벤트 핸들러에서 사용되므로, `@Transactional` 을 사용하지 않습니다.
      */
-    public void demoteMemberToAssocidateByMembership(Long membershipId) {
+    public void demoteMemberToAssociateByMembership(Long membershipId) {
         Membership membership = membershipRepository
                 .findById(membershipId)
                 .orElseThrow(() -> new CustomException(MEMBERSHIP_NOT_FOUND));
