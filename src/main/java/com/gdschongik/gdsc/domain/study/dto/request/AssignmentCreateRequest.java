@@ -1,4 +1,4 @@
-package com.gdschongik.gdsc.domain.study.domain.request;
+package com.gdschongik.gdsc.domain.study.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Future;
