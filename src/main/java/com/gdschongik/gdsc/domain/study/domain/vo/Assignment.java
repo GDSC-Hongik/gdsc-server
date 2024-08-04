@@ -1,6 +1,8 @@
 package com.gdschongik.gdsc.domain.study.domain.vo;
 
 import static com.gdschongik.gdsc.domain.study.domain.StudyStatus.*;
+import static com.gdschongik.gdsc.domain.study.domain.StudyStatus.CANCELLED;
+import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.study.domain.Difficulty;
 import com.gdschongik.gdsc.domain.study.domain.StudyStatus;
@@ -53,5 +55,14 @@ public class Assignment {
 
     public static Assignment cancelAssignment() {
         return Assignment.builder().status(CANCELLED).build();
+    }
+
+    public static Assignment publishAssignment(String title, LocalDateTime deadline, String descriptionLink) {
+        return Assignment.builder()
+                .title(title)
+                .deadline(deadline)
+                .descriptionLink(descriptionLink)
+                .status(StudyStatus.OPEN)
+                .build();
     }
 }

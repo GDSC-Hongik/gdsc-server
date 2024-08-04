@@ -16,4 +16,8 @@ public class StudyConstant {
 
     // StudyDetail
     public static final String ATTENDANCE_NUMBER = "1234";
+
+    // Assignment
+    public static final String ASSIGNMENT_TITLE = "testTitle";
+    public static final String DESCRIPTION_LINK = "www.link.com";
 }
