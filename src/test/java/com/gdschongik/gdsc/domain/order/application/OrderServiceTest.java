@@ -324,6 +324,127 @@ class OrderServiceTest extends IntegrationTest {
 
             verify(paymentClient, never()).cancelPayment(any(), any());
         }
+
+        @Test
+        void 멤버십의_회비납부상태가_취소된다() {
+            // given
+            Member member = createMember();
+            logoutAndReloginAs(1L, MemberRole.ASSOCIATE);
+            RecruitmentRound recruitmentRound = createRecruitmentRound(
+                    RECRUITMENT_ROUND_NAME,
+                    LocalDateTime.now().minusDays(1),
+                    LocalDateTime.now().plusDays(1),
+                    ACADEMIC_YEAR,
+                    SEMESTER_TYPE,
+                    ROUND_TYPE,
+                    MONEY_20000_WON);
+
+            Membership membership = createMembership(member, recruitmentRound);
+            IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, member);
+
+            String orderNanoId = "HnbMWoSZRq3qK1W3tPXCW";
+            orderService.createPendingOrder(new OrderCreateRequest(
+                    orderNanoId,
+                    membership.getId(),
+                    issuedCoupon.getId(),
+                    BigDecimal.valueOf(20000),
+                    BigDecimal.valueOf(5000),
+                    BigDecimal.valueOf(15000)));
+
+            String paymentKey = "testPaymentKey";
+
+            ZonedDateTime approvedAt = ZonedDateTime.now();
+            PaymentResponse mockPaymentResponse = mock(PaymentResponse.class);
+            when(mockPaymentResponse.approvedAt()).thenReturn(approvedAt);
+            when(paymentClient.confirm(any(PaymentConfirmRequest.class))).thenReturn(mockPaymentResponse);
+
+            var completeRequest = new OrderCompleteRequest(paymentKey, orderNanoId, 15000L);
+            orderService.completeOrder(completeRequest);
+
+            Order completedOrder = orderRepository.findByNanoId(orderNanoId).orElseThrow();
+
+            ZonedDateTime canceledAt = ZonedDateTime.now();
+            PaymentResponse mockCancelResponse = mock(PaymentResponse.class);
+            PaymentResponse.CancelDto mockCancelDto = mock(PaymentResponse.CancelDto.class);
+
+            when(mockCancelResponse.cancels()).thenReturn(List.of(mockCancelDto));
+            when(mockCancelDto.canceledAt()).thenReturn(canceledAt);
+            when(paymentClient.cancelPayment(eq(paymentKey), any(PaymentCancelRequest.class)))
+                    .thenReturn(mockCancelResponse);
+
+            var cancelRequest = new OrderCancelRequest("테스트 취소 사유");
+
+            // when
+            orderService.cancelOrder(completedOrder.getId(), cancelRequest);
+
+            // then
+            Membership verifiedMembership =
+                    membershipRepository.findById(membership.getId()).orElseThrow();
+            assertThat(verifiedMembership.getRegularRequirement().isPaymentSatisfied())
+                    .isFalse();
+        }
+
+        @Test
+        void 준회원으로_강등된다() {
+            // given
+            Member member = createMember();
+            logoutAndReloginAs(1L, MemberRole.ASSOCIATE);
+            RecruitmentRound recruitmentRound = createRecruitmentRound(
+                    RECRUITMENT_ROUND_NAME,
+                    LocalDateTime.now().minusDays(1),
+                    LocalDateTime.now().plusDays(1),
+                    ACADEMIC_YEAR,
+                    SEMESTER_TYPE,
+                    ROUND_TYPE,
+                    MONEY_20000_WON);
+
+            Membership membership = createMembership(member, recruitmentRound);
+            IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, member);
+
+            String orderNanoId = "HnbMWoSZRq3qK1W3tPXCW";
+            orderService.createPendingOrder(new OrderCreateRequest(
+                    orderNanoId,
+                    membership.getId(),
+                    issuedCoupon.getId(),
+                    BigDecimal.valueOf(20000),
+                    BigDecimal.valueOf(5000),
+                    BigDecimal.valueOf(15000)));
+
+            String paymentKey = "testPaymentKey";
+
+            ZonedDateTime approvedAt = ZonedDateTime.now();
+            PaymentResponse mockPaymentResponse = mock(PaymentResponse.class);
+            when(mockPaymentResponse.approvedAt()).thenReturn(approvedAt);
+            when(paymentClient.confirm(any(PaymentConfirmRequest.class))).thenReturn(mockPaymentResponse);
+
+            var completeRequest = new OrderCompleteRequest(paymentKey, orderNanoId, 15000L);
+            orderService.completeOrder(completeRequest);
+
+            Order completedOrder = orderRepository.findByNanoId(orderNanoId).orElseThrow();
+            Member orderCompletedMember =
+                    memberRepository.findById(member.getId()).orElseThrow();
+
+            ZonedDateTime canceledAt = ZonedDateTime.now();
+            PaymentResponse mockCancelResponse = mock(PaymentResponse.class);
+            PaymentResponse.CancelDto mockCancelDto = mock(PaymentResponse.CancelDto.class);
+
+            when(mockCancelResponse.cancels()).thenReturn(List.of(mockCancelDto));
+            when(mockCancelDto.canceledAt()).thenReturn(canceledAt);
+            when(paymentClient.cancelPayment(eq(paymentKey), any(PaymentCancelRequest.class)))
+                    .thenReturn(mockCancelResponse);
+
+            var cancelRequest = new OrderCancelRequest("테스트 취소 사유");
+
+            // when
+            orderService.cancelOrder(completedOrder.getId(), cancelRequest);
+
+            // then
+            Member orderCanceledMember =
+                    memberRepository.findById(member.getId()).orElseThrow();
+
+            assertThat(orderCompletedMember.isRegular()).isTrue();
+            assertThat(orderCanceledMember.isAssociate()).isTrue();
+        }
     }
 
     @Disabled // TODO: CI 환경에서만 실패하는 테스트, TZ 관련 설정 확인 필요
