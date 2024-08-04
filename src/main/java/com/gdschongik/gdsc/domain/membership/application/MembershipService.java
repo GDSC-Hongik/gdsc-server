@@ -111,5 +111,7 @@ public class MembershipService {
         membership.revokePaymentStatus();
 
         membershipRepository.save(membership);
+
+        log.info("[MembershipService] 멤버십 회비납입 취소 완료: membershipId={}", membership.getId());
     }
 }
