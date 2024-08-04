@@ -1,5 +1,6 @@
 package com.gdschongik.gdsc.domain.order.application;
 
+import static com.gdschongik.gdsc.global.common.constant.OrderConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.RecruitmentConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
@@ -72,7 +73,7 @@ class OrderServiceTest extends IntegrationTest {
 
             // when
             var request = new OrderCreateRequest(
-                    "HnbMWoSZRq3qK1W3tPXCW",
+                    ORDER_NANO_ID,
                     membership.getId(),
                     issuedCoupon.getId(),
                     BigDecimal.valueOf(20000),
@@ -105,16 +106,13 @@ class OrderServiceTest extends IntegrationTest {
             Membership membership = createMembership(member, recruitmentRound);
             IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, member);
 
-            String orderNanoId = "HnbMWoSZRq3qK1W3tPXCW";
             orderService.createPendingOrder(new OrderCreateRequest(
-                    orderNanoId,
+                    ORDER_NANO_ID,
                     membership.getId(),
                     issuedCoupon.getId(),
                     BigDecimal.valueOf(20000),
                     BigDecimal.valueOf(5000),
                     BigDecimal.valueOf(15000)));
-
-            String paymentKey = "testPaymentKey";
 
             ZonedDateTime approvedAt = ZonedDateTime.now();
             PaymentResponse mockPaymentResponse = mock(PaymentResponse.class);
@@ -122,13 +120,13 @@ class OrderServiceTest extends IntegrationTest {
             when(paymentClient.confirm(any(PaymentConfirmRequest.class))).thenReturn(mockPaymentResponse);
 
             // when
-            var request = new OrderCompleteRequest(paymentKey, orderNanoId, 15000L);
+            var request = new OrderCompleteRequest(ORDER_PAYMENT_KEY, ORDER_NANO_ID, 15000L);
             orderService.completeOrder(request);
 
             // then
-            Order completedOrder = orderRepository.findByNanoId(orderNanoId).orElseThrow();
+            Order completedOrder = orderRepository.findByNanoId(ORDER_NANO_ID).orElseThrow();
             assertThat(completedOrder.getStatus()).isEqualTo(OrderStatus.COMPLETED);
-            assertThat(completedOrder.getPaymentKey()).isEqualTo(paymentKey);
+            assertThat(completedOrder.getPaymentKey()).isEqualTo(ORDER_PAYMENT_KEY);
 
             IssuedCoupon usedCoupon =
                     issuedCouponRepository.findById(issuedCoupon.getId()).orElseThrow();
@@ -154,16 +152,13 @@ class OrderServiceTest extends IntegrationTest {
             Membership membership = createMembership(member, recruitmentRound);
             IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, member);
 
-            String orderNanoId = "HnbMWoSZRq3qK1W3tPXCW";
             orderService.createPendingOrder(new OrderCreateRequest(
-                    orderNanoId,
+                    ORDER_NANO_ID,
                     membership.getId(),
                     issuedCoupon.getId(),
                     BigDecimal.valueOf(20000),
                     BigDecimal.valueOf(5000),
                     BigDecimal.valueOf(15000)));
-
-            String paymentKey = "testPaymentKey";
 
             ZonedDateTime approvedAt = ZonedDateTime.now();
             PaymentResponse mockPaymentResponse = mock(PaymentResponse.class);
@@ -171,7 +166,7 @@ class OrderServiceTest extends IntegrationTest {
             when(paymentClient.confirm(any(PaymentConfirmRequest.class))).thenReturn(mockPaymentResponse);
 
             // when
-            var request = new OrderCompleteRequest(paymentKey, orderNanoId, 15000L);
+            var request = new OrderCompleteRequest(ORDER_PAYMENT_KEY, ORDER_NANO_ID, 15000L);
             orderService.completeOrder(request);
 
             // then
@@ -198,16 +193,13 @@ class OrderServiceTest extends IntegrationTest {
             Membership membership = createMembership(member, recruitmentRound);
             IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, member);
 
-            String orderNanoId = "HnbMWoSZRq3qK1W3tPXCW";
             orderService.createPendingOrder(new OrderCreateRequest(
-                    orderNanoId,
+                    ORDER_NANO_ID,
                     membership.getId(),
                     issuedCoupon.getId(),
                     BigDecimal.valueOf(20000),
                     BigDecimal.valueOf(5000),
                     BigDecimal.valueOf(15000)));
-
-            String paymentKey = "testPaymentKey";
 
             ZonedDateTime approvedAt = ZonedDateTime.now();
             PaymentResponse mockPaymentResponse = mock(PaymentResponse.class);
@@ -215,7 +207,7 @@ class OrderServiceTest extends IntegrationTest {
             when(paymentClient.confirm(any(PaymentConfirmRequest.class))).thenReturn(mockPaymentResponse);
 
             // when
-            var request = new OrderCompleteRequest(paymentKey, orderNanoId, 15000L);
+            var request = new OrderCompleteRequest(ORDER_PAYMENT_KEY, ORDER_NANO_ID, 15000L);
             orderService.completeOrder(request);
 
             // then
@@ -244,26 +236,23 @@ class OrderServiceTest extends IntegrationTest {
             Membership membership = createMembership(member, recruitmentRound);
             IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, member);
 
-            String orderNanoId = "HnbMWoSZRq3qK1W3tPXCW";
             orderService.createPendingOrder(new OrderCreateRequest(
-                    orderNanoId,
+                    ORDER_NANO_ID,
                     membership.getId(),
                     issuedCoupon.getId(),
                     BigDecimal.valueOf(20000),
                     BigDecimal.valueOf(5000),
                     BigDecimal.valueOf(15000)));
 
-            String paymentKey = "testPaymentKey";
-
             ZonedDateTime approvedAt = ZonedDateTime.now();
             PaymentResponse mockPaymentResponse = mock(PaymentResponse.class);
             when(mockPaymentResponse.approvedAt()).thenReturn(approvedAt);
             when(paymentClient.confirm(any(PaymentConfirmRequest.class))).thenReturn(mockPaymentResponse);
 
-            var completeRequest = new OrderCompleteRequest(paymentKey, orderNanoId, 15000L);
+            var completeRequest = new OrderCompleteRequest(ORDER_PAYMENT_KEY, ORDER_NANO_ID, 15000L);
             orderService.completeOrder(completeRequest);
 
-            Order completedOrder = orderRepository.findByNanoId(orderNanoId).orElseThrow();
+            Order completedOrder = orderRepository.findByNanoId(ORDER_NANO_ID).orElseThrow();
 
             ZonedDateTime canceledAt = ZonedDateTime.now();
             PaymentResponse mockCancelResponse = mock(PaymentResponse.class);
@@ -271,11 +260,11 @@ class OrderServiceTest extends IntegrationTest {
 
             when(mockCancelResponse.cancels()).thenReturn(List.of(mockCancelDto));
             when(mockCancelDto.canceledAt()).thenReturn(canceledAt);
-            when(paymentClient.cancelPayment(eq(paymentKey), any(PaymentCancelRequest.class)))
+            when(paymentClient.cancelPayment(eq(ORDER_PAYMENT_KEY), any(PaymentCancelRequest.class)))
                     .thenReturn(mockCancelResponse);
 
             // when
-            var cancelRequest = new OrderCancelRequest("테스트 취소 사유");
+            var cancelRequest = new OrderCancelRequest(ORDER_CANCEL_REASON);
             orderService.cancelOrder(completedOrder.getId(), cancelRequest);
 
             // then
@@ -284,7 +273,7 @@ class OrderServiceTest extends IntegrationTest {
             assertThat(canceledOrder.getStatus()).isEqualTo(OrderStatus.CANCELED);
             assertThat(canceledOrder.getCanceledAt()).isNotNull();
 
-            verify(paymentClient).cancelPayment(eq(paymentKey), any(PaymentCancelRequest.class));
+            verify(paymentClient).cancelPayment(eq(ORDER_PAYMENT_KEY), any(PaymentCancelRequest.class));
         }
 
         @Test
@@ -303,19 +292,18 @@ class OrderServiceTest extends IntegrationTest {
 
             Membership membership = createMembership(member, recruitmentRound);
 
-            String orderNanoId = "HnbMWoSZRq3qK1W3tPXCW";
             orderService.createPendingOrder(new OrderCreateRequest(
-                    orderNanoId,
+                    ORDER_NANO_ID,
                     membership.getId(),
                     null,
                     BigDecimal.valueOf(20000),
                     BigDecimal.valueOf(0),
                     BigDecimal.valueOf(20000)));
 
-            Order pendingOrder = orderRepository.findByNanoId(orderNanoId).orElseThrow();
+            Order pendingOrder = orderRepository.findByNanoId(ORDER_NANO_ID).orElseThrow();
             Long id = pendingOrder.getId();
 
-            OrderCancelRequest request = new OrderCancelRequest("테스트 취소 사유");
+            OrderCancelRequest request = new OrderCancelRequest(ORDER_CANCEL_REASON);
 
             // when & then
             assertThatThrownBy(() -> orderService.cancelOrder(id, request))
@@ -342,26 +330,23 @@ class OrderServiceTest extends IntegrationTest {
             Membership membership = createMembership(member, recruitmentRound);
             IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, member);
 
-            String orderNanoId = "HnbMWoSZRq3qK1W3tPXCW";
             orderService.createPendingOrder(new OrderCreateRequest(
-                    orderNanoId,
+                    ORDER_NANO_ID,
                     membership.getId(),
                     issuedCoupon.getId(),
                     BigDecimal.valueOf(20000),
                     BigDecimal.valueOf(5000),
                     BigDecimal.valueOf(15000)));
 
-            String paymentKey = "testPaymentKey";
-
             ZonedDateTime approvedAt = ZonedDateTime.now();
             PaymentResponse mockPaymentResponse = mock(PaymentResponse.class);
             when(mockPaymentResponse.approvedAt()).thenReturn(approvedAt);
             when(paymentClient.confirm(any(PaymentConfirmRequest.class))).thenReturn(mockPaymentResponse);
 
-            var completeRequest = new OrderCompleteRequest(paymentKey, orderNanoId, 15000L);
+            var completeRequest = new OrderCompleteRequest(ORDER_PAYMENT_KEY, ORDER_NANO_ID, 15000L);
             orderService.completeOrder(completeRequest);
 
-            Order completedOrder = orderRepository.findByNanoId(orderNanoId).orElseThrow();
+            Order completedOrder = orderRepository.findByNanoId(ORDER_NANO_ID).orElseThrow();
 
             ZonedDateTime canceledAt = ZonedDateTime.now();
             PaymentResponse mockCancelResponse = mock(PaymentResponse.class);
@@ -369,10 +354,10 @@ class OrderServiceTest extends IntegrationTest {
 
             when(mockCancelResponse.cancels()).thenReturn(List.of(mockCancelDto));
             when(mockCancelDto.canceledAt()).thenReturn(canceledAt);
-            when(paymentClient.cancelPayment(eq(paymentKey), any(PaymentCancelRequest.class)))
+            when(paymentClient.cancelPayment(eq(ORDER_PAYMENT_KEY), any(PaymentCancelRequest.class)))
                     .thenReturn(mockCancelResponse);
 
-            var cancelRequest = new OrderCancelRequest("테스트 취소 사유");
+            var cancelRequest = new OrderCancelRequest(ORDER_CANCEL_REASON);
 
             // when
             orderService.cancelOrder(completedOrder.getId(), cancelRequest);
@@ -401,26 +386,23 @@ class OrderServiceTest extends IntegrationTest {
             Membership membership = createMembership(member, recruitmentRound);
             IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, member);
 
-            String orderNanoId = "HnbMWoSZRq3qK1W3tPXCW";
             orderService.createPendingOrder(new OrderCreateRequest(
-                    orderNanoId,
+                    ORDER_NANO_ID,
                     membership.getId(),
                     issuedCoupon.getId(),
                     BigDecimal.valueOf(20000),
                     BigDecimal.valueOf(5000),
                     BigDecimal.valueOf(15000)));
 
-            String paymentKey = "testPaymentKey";
-
             ZonedDateTime approvedAt = ZonedDateTime.now();
             PaymentResponse mockPaymentResponse = mock(PaymentResponse.class);
             when(mockPaymentResponse.approvedAt()).thenReturn(approvedAt);
             when(paymentClient.confirm(any(PaymentConfirmRequest.class))).thenReturn(mockPaymentResponse);
 
-            var completeRequest = new OrderCompleteRequest(paymentKey, orderNanoId, 15000L);
+            var completeRequest = new OrderCompleteRequest(ORDER_PAYMENT_KEY, ORDER_NANO_ID, 15000L);
             orderService.completeOrder(completeRequest);
 
-            Order completedOrder = orderRepository.findByNanoId(orderNanoId).orElseThrow();
+            Order completedOrder = orderRepository.findByNanoId(ORDER_NANO_ID).orElseThrow();
             Member orderCompletedMember =
                     memberRepository.findById(member.getId()).orElseThrow();
 
@@ -430,10 +412,10 @@ class OrderServiceTest extends IntegrationTest {
 
             when(mockCancelResponse.cancels()).thenReturn(List.of(mockCancelDto));
             when(mockCancelDto.canceledAt()).thenReturn(canceledAt);
-            when(paymentClient.cancelPayment(eq(paymentKey), any(PaymentCancelRequest.class)))
+            when(paymentClient.cancelPayment(eq(ORDER_PAYMENT_KEY), any(PaymentCancelRequest.class)))
                     .thenReturn(mockCancelResponse);
 
-            var cancelRequest = new OrderCancelRequest("테스트 취소 사유");
+            var cancelRequest = new OrderCancelRequest(ORDER_CANCEL_REASON);
 
             // when
             orderService.cancelOrder(completedOrder.getId(), cancelRequest);
@@ -468,22 +450,19 @@ class OrderServiceTest extends IntegrationTest {
             Membership membership = createMembership(member, recruitmentRound);
             IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, member);
 
-            String orderNanoId = "HnbMWoSZRq3qK1W3tPXCW";
             orderService.createPendingOrder(new OrderCreateRequest(
-                    orderNanoId,
+                    ORDER_NANO_ID,
                     membership.getId(),
                     issuedCoupon.getId(),
                     BigDecimal.valueOf(20000),
                     BigDecimal.valueOf(5000),
                     BigDecimal.valueOf(15000)));
 
-            String paymentKey = "testPaymentKey";
-
             ZonedDateTime approvedAt = ZonedDateTime.now();
             PaymentResponse mockPaymentResponse = mock(PaymentResponse.class);
             when(mockPaymentResponse.approvedAt()).thenReturn(approvedAt);
             when(paymentClient.confirm(any(PaymentConfirmRequest.class))).thenReturn(mockPaymentResponse);
-            var request = new OrderCompleteRequest(paymentKey, orderNanoId, 15000L);
+            var request = new OrderCompleteRequest(ORDER_PAYMENT_KEY, ORDER_NANO_ID, 15000L);
             orderService.completeOrder(request);
 
             LocalDate date = LocalDate.now();
@@ -494,7 +473,7 @@ class OrderServiceTest extends IntegrationTest {
 
             // then
             boolean orderExists = orderResponse.getContent().stream()
-                    .anyMatch(order -> order.nanoId().equals(orderNanoId));
+                    .anyMatch(order -> order.nanoId().equals(ORDER_NANO_ID));
 
             assertThat(orderExists).isTrue();
         }
@@ -520,10 +499,8 @@ class OrderServiceTest extends IntegrationTest {
             Membership membership = createMembership(member, recruitmentRound);
             IssuedCoupon issuedCoupon = createAndIssue(MONEY_20000_WON, member);
 
-            String orderNanoId = "HnbMWoSZRq3qK1W3tPXCW";
-
             var request = new OrderCreateRequest(
-                    orderNanoId,
+                    ORDER_NANO_ID,
                     membership.getId(),
                     issuedCoupon.getId(),
                     BigDecimal.valueOf(20000),
@@ -557,10 +534,8 @@ class OrderServiceTest extends IntegrationTest {
             Membership membership = createMembership(member, recruitmentRound);
             IssuedCoupon issuedCoupon = createAndIssue(MONEY_20000_WON, member);
 
-            String orderNanoId = "HnbMWoSZRq3qK1W3tPXCW";
-
             var request = new OrderCreateRequest(
-                    orderNanoId,
+                    ORDER_NANO_ID,
                     membership.getId(),
                     issuedCoupon.getId(),
                     BigDecimal.valueOf(20000),
