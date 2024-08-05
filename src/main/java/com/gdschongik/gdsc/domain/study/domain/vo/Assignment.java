@@ -65,9 +65,4 @@ public class Assignment {
                 .status(StudyStatus.OPEN)
                 .build();
     }
-
-    public boolean isSubmittable() {
-        LocalDateTime now = LocalDateTime.now();
-        return now.isBefore(deadline);
-    }
 }

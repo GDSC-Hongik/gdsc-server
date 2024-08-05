@@ -78,8 +78,4 @@ public class StudyDetail extends BaseEntity {
     public void publishAssignment(String title, LocalDateTime deadLine, String descriptionNotionLink) {
         assignment = Assignment.publishAssignment(title, deadLine, descriptionNotionLink);
     }
-
-    public boolean isAssignmentSubmittable() {
-        return assignment.isSubmittable();
-    }
 }

@@ -4,7 +4,7 @@ import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface StudyDetailRepository extends JpaRepository<StudyDetail, Long> {
+public interface StudyDetailRepository extends JpaRepository<StudyDetail, Long>, StudyDetailCustomRepository {
 
     List<StudyDetail> findAllByStudyId(Long studyId);
 }
