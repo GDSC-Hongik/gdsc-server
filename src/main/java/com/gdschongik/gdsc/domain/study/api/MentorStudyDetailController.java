@@ -1,6 +1,6 @@
 package com.gdschongik.gdsc.domain.study.api;
 
-import com.gdschongik.gdsc.domain.study.application.StudyMentorService;
+import com.gdschongik.gdsc.domain.study.application.MentorStudyDetailService;
 import com.gdschongik.gdsc.domain.study.dto.request.AssignmentCreateRequest;
 import com.gdschongik.gdsc.domain.study.dto.response.AssignmentResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,34 +24,34 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class MentorStudyDetailController {
 
-    private final StudyMentorService studyMentorService;
+    private final MentorStudyDetailService mentorStudyDetailService;
 
     @Operation(summary = "스터디 과제 개설", description = "멘토만 과제를 개설할 수 있습니다.")
     @PutMapping("/{studyDetailId}/assignments")
     public ResponseEntity<Void> publishStudyAssignment(
             @PathVariable Long studyDetailId, @Valid @RequestBody AssignmentCreateRequest request) {
-        studyMentorService.publishStudyAssignment(studyDetailId, request);
+        mentorStudyDetailService.publishStudyAssignment(studyDetailId, request);
         return ResponseEntity.ok().build();
     }
 
     @Operation(summary = "스터디 주차별 과제 목록 조회", description = "주차별 스터디 과제 목록을 조회합니다.")
     @GetMapping("/assignments")
     public ResponseEntity<List<AssignmentResponse>> getWeeklyAssignments(@RequestParam(name = "studyId") Long studyId) {
-        List<AssignmentResponse> response = studyMentorService.getWeeklyAssignments(studyId);
+        List<AssignmentResponse> response = mentorStudyDetailService.getWeeklyAssignments(studyId);
         return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "스터디 과제 상세 조회", description = "멘토가 자신의 스터디 과제를 조회합니다.")
     @GetMapping("/{studyDetailId}/assignments")
     public ResponseEntity<AssignmentResponse> getStudyAssignment(@PathVariable Long studyDetailId) {
-        AssignmentResponse response = studyMentorService.getAssignment(studyDetailId);
+        AssignmentResponse response = mentorStudyDetailService.getAssignment(studyDetailId);
         return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "스터디 과제 휴강 처리", description = "해당 주차 과제를 휴강 처리합니다.")
     @PatchMapping("/{studyDetailId}/assignments/cancel")
     public ResponseEntity<Void> cancelStudyAssignment(@PathVariable Long studyDetailId) {
-        studyMentorService.cancelStudyAssignment(studyDetailId);
+        mentorStudyDetailService.cancelStudyAssignment(studyDetailId);
         return ResponseEntity.noContent().build();
     }
 }
