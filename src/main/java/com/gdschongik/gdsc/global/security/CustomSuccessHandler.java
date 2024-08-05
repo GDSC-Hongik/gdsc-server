@@ -65,8 +65,8 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     }
 
     private void validateBaseUri(String baseUri) {
-        if (!baseUri.endsWith(ROOT_DOMAIN) && !LOCAL_CLIENT_URLS.contains(baseUri)) {
-            log.error("허용되지 않은 BASE URI로의 리다이렉트 요청 발생: {}", baseUri);
+        if (!baseUri.endsWith(ROOT_DOMAIN)) {
+            log.warn("허용되지 않은 BASE URI로의 리다이렉트 요청 발생. 쿠키 조작이 의심됩니다: baseUri={}", baseUri);
             throw new CustomException(NOT_ALLOWED_BASE_URI);
         }
     }
