@@ -9,18 +9,25 @@ import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "Mentor Study", description = "멘토 스터디 관리 API입니다.")
+@Tag(name = "Mentor StudyDetail", description = "멘토 스터디 상세 관리 API입니다.")
 @RestController
-@RequestMapping("/mentor/studies")
+@RequestMapping("/mentor/studydetails")
 @RequiredArgsConstructor
-public class StudyMentorController {
+public class MentorStudyDetailController {
 
     private final StudyMentorService studyMentorService;
 
     @Operation(summary = "스터디 과제 개설", description = "멘토만 과제를 개설할 수 있습니다.")
-    @PutMapping("/assignments/{studyDetailId}")
+    @PutMapping("/{studyDetailId}/assignments")
     public ResponseEntity<Void> publishStudyAssignment(
             @PathVariable Long studyDetailId, @Valid @RequestBody AssignmentCreateRequest request) {
         studyMentorService.publishStudyAssignment(studyDetailId, request);
@@ -28,22 +35,23 @@ public class StudyMentorController {
     }
 
     @Operation(summary = "스터디 주차별 과제 목록 조회", description = "주차별 스터디 과제 목록을 조회합니다.")
-    @GetMapping("/assignments/{studyId}")
-    public ResponseEntity<List<AssignmentResponse>> getWeeklyAssignments(@PathVariable Long studyId) {
+    @GetMapping("/assignments")
+    public ResponseEntity<List<AssignmentResponse>> getWeeklyAssignments(@RequestParam(name = "studyId") Long studyId) {
         List<AssignmentResponse> response = studyMentorService.getWeeklyAssignments(studyId);
         return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "스터디 과제 상세 조회", description = "멘토가 자신의 스터디 과제를 조회합니다.")
-    @GetMapping("/assignments/{studyDetailId}")
-    public ResponseEntity<AssignmentResponse> getStudyAssignment(@PathVariable Long studyDetailId) {
+    @GetMapping("/{studyDetailId}/assignments")
+    public ResponseEntity<AssignmentResponse> getStudyAssignment(
+            @RequestParam(name = "studyDetailId") Long studyDetailId) {
         AssignmentResponse response = studyMentorService.getAssignment(studyDetailId);
         return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "스터디 과제 휴강 처리", description = "해당 주차 과제를 휴강 처리합니다.")
-    @PatchMapping("/assignments/{studyDetailId}/cancel")
-    public ResponseEntity<Void> cancelStudyAssignment(@PathVariable Long studyDetailId) {
+    @PatchMapping("/{studyDetailId}/assignments/cancel")
+    public ResponseEntity<Void> cancelStudyAssignment(@RequestParam(name = "studyDetailId") Long studyDetailId) {
         studyMentorService.cancelStudyAssignment(studyDetailId);
         return ResponseEntity.noContent().build();
     }
