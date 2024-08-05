@@ -11,11 +11,9 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 public class CustomOAuth2User extends DefaultOAuth2User {
 
     private final MemberAuthInfo memberAuthInfo;
-    private final LandingStatus landingStatus;
 
     public CustomOAuth2User(OAuth2User oAuth2User, Member member) {
         super(oAuth2User.getAuthorities(), oAuth2User.getAttributes(), GITHUB_NAME_ATTR_KEY);
         memberAuthInfo = MemberAuthInfo.from(member);
-        landingStatus = LandingStatus.TO_DASHBOARD;
     }
 }
