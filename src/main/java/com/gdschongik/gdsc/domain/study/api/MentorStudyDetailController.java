@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "Mentor StudyDetail", description = "멘토 스터디 상세 관리 API입니다.")
 @RestController
-@RequestMapping("/mentor/studydetails")
+@RequestMapping("/mentor/study-details")
 @RequiredArgsConstructor
 public class MentorStudyDetailController {
 
