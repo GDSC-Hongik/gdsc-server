@@ -43,15 +43,14 @@ public class MentorStudyDetailController {
 
     @Operation(summary = "스터디 과제 상세 조회", description = "멘토가 자신의 스터디 과제를 조회합니다.")
     @GetMapping("/{studyDetailId}/assignments")
-    public ResponseEntity<AssignmentResponse> getStudyAssignment(
-            @RequestParam(name = "studyDetailId") Long studyDetailId) {
+    public ResponseEntity<AssignmentResponse> getStudyAssignment(@PathVariable Long studyDetailId) {
         AssignmentResponse response = studyMentorService.getAssignment(studyDetailId);
         return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "스터디 과제 휴강 처리", description = "해당 주차 과제를 휴강 처리합니다.")
     @PatchMapping("/{studyDetailId}/assignments/cancel")
-    public ResponseEntity<Void> cancelStudyAssignment(@RequestParam(name = "studyDetailId") Long studyDetailId) {
+    public ResponseEntity<Void> cancelStudyAssignment(@PathVariable Long studyDetailId) {
         studyMentorService.cancelStudyAssignment(studyDetailId);
         return ResponseEntity.noContent().build();
     }
