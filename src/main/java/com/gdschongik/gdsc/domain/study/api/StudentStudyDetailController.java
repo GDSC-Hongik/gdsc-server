@@ -20,7 +20,7 @@ public class StudentStudyDetailController {
 
     private final StudentStudyDetailService studentStudyDetailService;
 
-    @Operation(summary = "제출 가능한 과제 조회", description = "제출 가능한 과제를 조회합니다.")
+    @Operation(summary = "내 제출 가능한 과제 조회", description = "나의 제출 가능한 과제를 조회합니다.")
     @GetMapping("/assignments/submit")
     public ResponseEntity<List<AssignmentResponse>> getSubmittableAssignments(
             @RequestParam(name = "studyId") Long studyId) {
