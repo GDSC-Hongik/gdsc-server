@@ -71,7 +71,7 @@ public class MentorStudyDetailService {
     }
 
     @Transactional
-    public void updateAssignment(Long studyDetailId, AssignmentUpdateRequest request) {
+    public void updateStudyAssignment(Long studyDetailId, AssignmentUpdateRequest request) {
         Member currentMember = memberUtil.getCurrentMember();
         StudyDetail studyDetail = studyDetailRepository
                 .findById(studyDetailId)
