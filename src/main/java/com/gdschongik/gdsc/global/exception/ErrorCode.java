@@ -113,6 +113,7 @@ public enum ErrorCode {
     // StudyDetail
     STUDY_DETAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 스터디 상세 정보입니다."),
     STUDY_DETAIL_UPDATE_RESTRICTED_TO_MENTOR(HttpStatus.CONFLICT, "해당 스터디의 멘토만 수정할 수 있습니다."),
+    STUDY_DETAIL_ASSIGNMENT_INVALID_DEADLINE(HttpStatus.CONFLICT, "마감기한이 지난 과제의 마감기한을 줄일 수 없습니다"),
 
     // StudyHistory
     STUDY_HISTORY_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 스터디 수강 기록입니다."),

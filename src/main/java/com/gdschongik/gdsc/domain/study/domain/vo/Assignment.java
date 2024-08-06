@@ -65,4 +65,13 @@ public class Assignment {
                 .status(StudyStatus.OPEN)
                 .build();
     }
+
+    public static Assignment updateAssignment(String title, LocalDateTime deadline, String descriptionLink) {
+        return Assignment.builder()
+                .title(title)
+                .deadline(deadline)
+                .descriptionLink(descriptionLink)
+                .status(StudyStatus.OPEN)
+                .build();
+    }
 }
