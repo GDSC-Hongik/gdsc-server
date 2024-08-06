@@ -116,6 +116,8 @@ public class WebSecurityConfig {
                 .authenticated()
                 .requestMatchers("/admin/**")
                 .hasRole("ADMIN")
+                .requestMatchers("/mentor/**")
+                .hasRole("MENTOR")
                 .anyRequest()
                 .authenticated());
 
