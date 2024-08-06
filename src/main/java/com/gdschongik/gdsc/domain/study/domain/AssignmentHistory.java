@@ -43,7 +43,10 @@ public class AssignmentHistory extends BaseEntity {
     private Long contentLength;
 
     @Enumerated(EnumType.STRING)
-    private AssignmentSubmissionStatus status;
+    private AssignmentSubmissionStatus submissionStatus;
+
+    @Enumerated(EnumType.STRING)
+    private SubmissionFailureType submissionFailureType;
 
     @Builder(access = AccessLevel.PRIVATE)
     private AssignmentHistory(
@@ -52,29 +55,24 @@ public class AssignmentHistory extends BaseEntity {
             String submissionLink,
             String commitHash,
             Long contentLength,
-            AssignmentSubmissionStatus status) {
+            AssignmentSubmissionStatus submissionStatus) {
         this.studyDetail = studyDetail;
         this.member = member;
         this.submissionLink = submissionLink;
         this.commitHash = commitHash;
         this.contentLength = contentLength;
-        this.status = status;
+        this.submissionStatus = submissionStatus;
     }
 
     public static AssignmentHistory create(
-            StudyDetail studyDetail,
-            Member member,
-            String submissionLink,
-            String commitHash,
-            Long contentLength,
-            AssignmentSubmissionStatus status) {
+            StudyDetail studyDetail, Member member, String submissionLink, String commitHash, Long contentLength) {
         return AssignmentHistory.builder()
                 .studyDetail(studyDetail)
                 .member(member)
                 .submissionLink(submissionLink)
                 .commitHash(commitHash)
                 .contentLength(contentLength)
-                .status(status)
+                .submissionStatus(AssignmentSubmissionStatus.PENDING)
                 .build();
     }
 }

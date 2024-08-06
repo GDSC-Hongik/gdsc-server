@@ -5,11 +5,10 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum AssignmentSubmissionStatus {
-    PENDING("제출 전"),
-    FAILURE("제출 실패"),
-    SUCCESS("제출 성공"),
-    CANCELLED("과제 휴강");
+public enum SubmissionFailureType {
+    NOT_SUBMITTED("미제출"),
+    WORD_COUNT_INSUFFICIENT("글자수 부족"),
+    LOCATION_UNIDENTIFIABLE("위치 확인불가");
 
     private final String value;
 }
