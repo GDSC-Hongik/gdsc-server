@@ -11,6 +11,7 @@ import com.gdschongik.gdsc.domain.recruitment.application.OnboardingRecruitmentS
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import com.gdschongik.gdsc.helper.IntegrationTest;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -31,7 +32,8 @@ class OnboardingMemberServiceTest extends IntegrationTest {
         @BeforeEach
         void setUp() {
             RecruitmentRound recruitmentRound = createRecruitmentRound();
-            when(onboardingRecruitmentService.findCurrentRecruitmentRound()).thenReturn(recruitmentRound);
+            when(onboardingRecruitmentService.findCurrentRecruitmentRound())
+                    .thenReturn(Optional.ofNullable(recruitmentRound));
         }
 
         @Test
