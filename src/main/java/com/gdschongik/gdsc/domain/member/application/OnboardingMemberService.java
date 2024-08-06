@@ -71,15 +71,16 @@ public class OnboardingMemberService {
 
     public MemberDashboardResponse getDashboard() {
         final Member member = memberUtil.getCurrentMember();
-        final RecruitmentRound currentRecruitmentRound = onboardingRecruitmentService.findCurrentRecruitmentRound();
-        final Optional<Membership> myMembership = membershipService.findMyMembership(member, currentRecruitmentRound);
         final Optional<UnivEmailVerification> univEmailVerification =
                 univEmailVerificationService.getUnivEmailVerificationFromRedis(member.getId());
         UnivVerificationStatus univVerificationStatus =
                 emailVerificationStatusService.determineStatus(member, univEmailVerification);
+        Optional<RecruitmentRound> currentRecruitmentRound = onboardingRecruitmentService.findCurrentRecruitmentRound();
+        Optional<Membership> myMembership = currentRecruitmentRound.flatMap(
+                recruitmentRound -> membershipService.findMyMembership(member, recruitmentRound));
 
         return MemberDashboardResponse.of(
-                member, univVerificationStatus, currentRecruitmentRound, myMembership.orElse(null));
+                member, univVerificationStatus, currentRecruitmentRound.orElse(null), myMembership.orElse(null));
     }
 
     public MemberTokenResponse createTemporaryToken(MemberTokenRequest request) {
