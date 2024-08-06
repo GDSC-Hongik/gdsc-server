@@ -2,6 +2,7 @@ package com.gdschongik.gdsc.domain.member.api;
 
 import com.gdschongik.gdsc.domain.member.application.AdminMemberService;
 import com.gdschongik.gdsc.domain.member.application.OnboardingMemberService;
+import com.gdschongik.gdsc.domain.member.application.TestMemberService;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberTokenRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberTokenResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,8 +18,16 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class TestMemberController {
 
+    private final TestMemberService testMemberService;
     private final OnboardingMemberService onboardingMemberService;
     private final AdminMemberService adminMemberService;
+
+    @Operation(summary = "게스트 회원 생성", description = "테스트용 API입니다. 깃허브 핸들명을 입력받아 임시 회원을 생성합니다.")
+    @PostMapping
+    public ResponseEntity<Void> createTemporaryMember(@RequestParam("handle") String githubHandle) {
+        testMemberService.createTestMember(githubHandle);
+        return ResponseEntity.ok().build();
+    }
 
     @Operation(summary = "임시 토큰 생성", description = "테스트용 API입니다. oauth_id를 입력받아 해당하는 유저의 토큰을 생성합니다.")
     @PostMapping("/token")
