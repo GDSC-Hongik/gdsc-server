@@ -3,6 +3,7 @@ package com.gdschongik.gdsc.domain.study.dto.response;
 import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
 import com.gdschongik.gdsc.domain.study.domain.StudyStatus;
 import com.gdschongik.gdsc.domain.study.domain.vo.Assignment;
+import com.gdschongik.gdsc.global.util.formatter.WeekFormatter;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 public record AssignmentResponse(
@@ -18,7 +19,7 @@ public record AssignmentResponse(
                 studyDetail.getId(),
                 assignment.getTitle(),
                 assignment.getDeadline().toString(),
-                studyDetail.getWeek() + "주차",
+                WeekFormatter.format(studyDetail.getWeek()),
                 assignment.getDescriptionLink(),
                 assignment.getStatus());
     }
