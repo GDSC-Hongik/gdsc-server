@@ -29,7 +29,7 @@ public class MentorStudyDetailController {
 
     @Operation(summary = "스터디 과제 수정", description = "멘토만 과제를 수정할 수 있습니다.")
     @PatchMapping("/{studyDetailId}/assignments")
-    public ResponseEntity<Void> publishStudyAssignment(
+    public ResponseEntity<Void> updateStudyAssignment(
             @PathVariable Long studyDetailId, @Valid @RequestBody AssignmentUpdateRequest request) {
         mentorStudyDetailService.updateStudyAssignment(studyDetailId, request);
         return ResponseEntity.ok().build();
