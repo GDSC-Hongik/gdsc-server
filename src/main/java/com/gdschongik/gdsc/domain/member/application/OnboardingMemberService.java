@@ -71,12 +71,14 @@ public class OnboardingMemberService {
 
     public MemberDashboardResponse getDashboard() {
         final Member member = memberUtil.getCurrentMember();
-        final RecruitmentRound currentRecruitmentRound = onboardingRecruitmentService.findCurrentRecruitmentRound();
-        final Optional<Membership> myMembership = membershipService.findMyMembership(member, currentRecruitmentRound);
         final Optional<UnivEmailVerification> univEmailVerification =
                 univEmailVerificationService.getUnivEmailVerificationFromRedis(member.getId());
         UnivVerificationStatus univVerificationStatus =
                 emailVerificationStatusService.determineStatus(member, univEmailVerification);
+        final RecruitmentRound currentRecruitmentRound =
+                onboardingRecruitmentService.findCurrentRecruitmentRound().orElse(null);
+        Optional<Membership> myMembership = Optional.ofNullable(currentRecruitmentRound)
+                .flatMap(recruitmentRound -> membershipService.findMyMembership(member, recruitmentRound));
 
         return MemberDashboardResponse.of(
                 member, univVerificationStatus, currentRecruitmentRound, myMembership.orElse(null));
