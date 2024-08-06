@@ -92,6 +92,9 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
     implementation 'io.github.openfeign:feign-jackson'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+
+    // Github
+    implementation 'org.kohsuke:github-api:1.323'
 }
 
 tasks.named('test') {

@@ -28,9 +28,9 @@ public class PrincipalDetails implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
 
-        authorities.add(new SimpleGrantedAuthority(role.name()));
-        authorities.add(new SimpleGrantedAuthority(manageRole.name()));
-        authorities.add(new SimpleGrantedAuthority(studyRole.name()));
+        authorities.add(new SimpleGrantedAuthority(role.getValue()));
+        authorities.add(new SimpleGrantedAuthority(manageRole.getValue()));
+        authorities.add(new SimpleGrantedAuthority(studyRole.getValue()));
 
         return authorities;
     }

@@ -15,10 +15,10 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class StudyMentorServiceTest extends IntegrationTest {
+public class MentorStudyDetailServiceTest extends IntegrationTest {
 
     @Autowired
-    private StudyMentorService studyMentorService;
+    private MentorStudyDetailService mentorStudyDetailService;
 
     @Autowired
     private StudyDetailRepository studyDetailRepository;
@@ -39,7 +39,7 @@ public class StudyMentorServiceTest extends IntegrationTest {
             logoutAndReloginAs(studyDetail.getStudy().getMentor().getId(), MemberRole.ASSOCIATE);
 
             // when
-            studyMentorService.cancelStudyAssignment(studyDetail.getId());
+            mentorStudyDetailService.cancelStudyAssignment(studyDetail.getId());
 
             // then
             StudyDetail cancelledStudyDetail =
