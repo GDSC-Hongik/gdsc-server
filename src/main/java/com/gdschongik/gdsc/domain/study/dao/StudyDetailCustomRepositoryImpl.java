@@ -15,7 +15,7 @@ public class StudyDetailCustomRepositoryImpl implements StudyDetailCustomReposit
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<StudyDetail> findAllWithSubmittableAssignmentsByStudyId(Long studyId) {
+    public List<StudyDetail> findAllSubmittableAssignments(Long studyId) {
         return queryFactory
                 .selectFrom(studyDetail)
                 .where(eqStudyId(studyId), isSubmittableAssignment())

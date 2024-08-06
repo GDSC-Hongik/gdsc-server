@@ -17,7 +17,7 @@ public class StudentStudyDetailService {
     @Transactional(readOnly = true)
     public List<AssignmentResponse> getSubmittableAssignments(Long studyId) {
         List<StudyDetail> studyDetailsWithSubmittableAssignments =
-                studyDetailRepository.findAllWithSubmittableAssignmentsByStudyId(studyId);
+                studyDetailRepository.findAllSubmittableAssignments(studyId);
         return studyDetailsWithSubmittableAssignments.stream()
                 .map(AssignmentResponse::from)
                 .toList();

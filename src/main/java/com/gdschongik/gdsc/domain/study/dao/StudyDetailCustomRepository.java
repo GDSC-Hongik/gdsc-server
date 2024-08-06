@@ -5,5 +5,5 @@ import java.util.List;
 
 public interface StudyDetailCustomRepository {
 
-    List<StudyDetail> findAllWithSubmittableAssignmentsByStudyId(Long studyId);
+    List<StudyDetail> findAllSubmittableAssignments(Long studyId);
 }
