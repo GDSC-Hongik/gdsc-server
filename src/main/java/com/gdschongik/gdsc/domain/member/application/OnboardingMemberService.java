@@ -75,13 +75,12 @@ public class OnboardingMemberService {
                 univEmailVerificationService.getUnivEmailVerificationFromRedis(member.getId());
         UnivVerificationStatus univVerificationStatus =
                 emailVerificationStatusService.determineStatus(member, univEmailVerification);
-        final RecruitmentRound currentRecruitmentRound =
-                onboardingRecruitmentService.findCurrentRecruitmentRound().orElse(null);
-        Optional<Membership> myMembership = Optional.ofNullable(currentRecruitmentRound)
-                .flatMap(recruitmentRound -> membershipService.findMyMembership(member, recruitmentRound));
+        Optional<RecruitmentRound> currentRecruitmentRound = onboardingRecruitmentService.findCurrentRecruitmentRound();
+        Optional<Membership> myMembership = currentRecruitmentRound.flatMap(
+                recruitmentRound -> membershipService.findMyMembership(member, recruitmentRound));
 
         return MemberDashboardResponse.of(
-                member, univVerificationStatus, currentRecruitmentRound, myMembership.orElse(null));
+                member, univVerificationStatus, currentRecruitmentRound.orElse(null), myMembership.orElse(null));
     }
 
     public MemberTokenResponse createTemporaryToken(MemberTokenRequest request) {
