@@ -1,8 +1,7 @@
 package com.gdschongik.gdsc.domain.study.api;
 
 import com.gdschongik.gdsc.domain.study.application.MentorStudyDetailService;
-import com.gdschongik.gdsc.domain.study.dto.request.AssignmentCreateRequest;
-import com.gdschongik.gdsc.domain.study.dto.request.AssignmentUpdateRequest;
+import com.gdschongik.gdsc.domain.study.dto.request.AssignmentCreateUpdateRequest;
 import com.gdschongik.gdsc.domain.study.dto.response.AssignmentResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -30,15 +29,15 @@ public class MentorStudyDetailController {
     @Operation(summary = "스터디 과제 수정", description = "멘토만 과제를 수정할 수 있습니다.")
     @PatchMapping("/{studyDetailId}/assignments")
     public ResponseEntity<Void> updateStudyAssignment(
-            @PathVariable Long studyDetailId, @Valid @RequestBody AssignmentUpdateRequest request) {
+            @PathVariable Long studyDetailId, @Valid @RequestBody AssignmentCreateUpdateRequest request) {
         mentorStudyDetailService.updateStudyAssignment(studyDetailId, request);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @Operation(summary = "스터디 과제 개설", description = "멘토만 과제를 개설할 수 있습니다.")
     @PutMapping("/{studyDetailId}/assignments")
     public ResponseEntity<Void> publishStudyAssignment(
-            @PathVariable Long studyDetailId, @Valid @RequestBody AssignmentCreateRequest request) {
+            @PathVariable Long studyDetailId, @Valid @RequestBody AssignmentCreateUpdateRequest request) {
         mentorStudyDetailService.publishStudyAssignment(studyDetailId, request);
         return ResponseEntity.ok().build();
     }

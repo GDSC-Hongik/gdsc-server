@@ -57,16 +57,7 @@ public class Assignment {
         return Assignment.builder().status(CANCELLED).build();
     }
 
-    public static Assignment publishAssignment(String title, LocalDateTime deadline, String descriptionLink) {
-        return Assignment.builder()
-                .title(title)
-                .deadline(deadline)
-                .descriptionLink(descriptionLink)
-                .status(StudyStatus.OPEN)
-                .build();
-    }
-
-    public static Assignment updateAssignment(String title, LocalDateTime deadline, String descriptionLink) {
+    public static Assignment generateAssignment(String title, LocalDateTime deadline, String descriptionLink) {
         return Assignment.builder()
                 .title(title)
                 .deadline(deadline)

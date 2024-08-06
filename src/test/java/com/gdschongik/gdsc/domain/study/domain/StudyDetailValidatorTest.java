@@ -6,7 +6,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
-import com.gdschongik.gdsc.domain.study.dto.request.AssignmentCreateRequest;
+import com.gdschongik.gdsc.domain.study.dto.request.AssignmentCreateUpdateRequest;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.helper.FixtureHelper;
 import java.time.LocalDateTime;
@@ -54,8 +54,8 @@ public class StudyDetailValidatorTest {
                     Period.createPeriod(now.minusDays(5), now));
             StudyDetail studyDetail = fixtureHelper.createStudyDetail(study, now, now.plusDays(7));
             Member anotherMember = fixtureHelper.createAssociateMember(2L);
-            AssignmentCreateRequest request =
-                    new AssignmentCreateRequest(ASSIGNMENT_TITLE, DESCRIPTION_LINK, now.plusDays(2));
+            AssignmentCreateUpdateRequest request =
+                    new AssignmentCreateUpdateRequest(ASSIGNMENT_TITLE, DESCRIPTION_LINK, now.plusDays(2));
 
             // when & then
             assertThatThrownBy(() ->
@@ -74,8 +74,8 @@ public class StudyDetailValidatorTest {
                     Period.createPeriod(now.plusDays(5), now.plusDays(10)),
                     Period.createPeriod(now.minusDays(5), now));
             StudyDetail studyDetail = fixtureHelper.createStudyDetail(study, now, now.plusDays(7));
-            AssignmentCreateRequest request =
-                    new AssignmentCreateRequest(ASSIGNMENT_TITLE, DESCRIPTION_LINK, now.minusDays(2));
+            AssignmentCreateUpdateRequest request =
+                    new AssignmentCreateUpdateRequest(ASSIGNMENT_TITLE, DESCRIPTION_LINK, now.minusDays(2));
 
             // when & then
             assertThatThrownBy(() -> studyDetailValidator.validatePublishStudyAssignment(mentor, studyDetail, request))
