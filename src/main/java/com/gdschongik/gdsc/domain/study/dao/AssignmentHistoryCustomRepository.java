@@ -5,5 +5,5 @@ import com.gdschongik.gdsc.domain.study.domain.Study;
 
 public interface AssignmentHistoryCustomRepository {
 
-    boolean existsSubmittedAssignment(Member member, Study study);
+    boolean existsSubmittedAssignmentByMemberAndStudy(Member member, Study study);
 }

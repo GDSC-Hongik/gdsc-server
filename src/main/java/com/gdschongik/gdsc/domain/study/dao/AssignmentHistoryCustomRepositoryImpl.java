@@ -14,7 +14,7 @@ public class AssignmentHistoryCustomRepositoryImpl implements AssignmentHistoryC
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public boolean existsSubmittedAssignment(Member member, Study study) {
+    public boolean existsSubmittedAssignmentByMemberAndStudy(Member member, Study study) {
         Integer fetchOne = queryFactory
                 .selectOne()
                 .from(assignmentHistory)
