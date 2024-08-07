@@ -11,7 +11,8 @@ import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentCreateRequest;
-import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentRoundCreateUpdateRequest;
+import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentRoundCreateRequest;
+import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentRoundUpdateRequest;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.helper.IntegrationTest;
 import java.time.LocalDateTime;
@@ -53,7 +54,7 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
         @Test
         void 학년도와_학기가_일치하는_리쿠르팅이_존재하지_않는다면_실패한다() {
             // given
-            RecruitmentRoundCreateUpdateRequest request = new RecruitmentRoundCreateUpdateRequest(
+            RecruitmentRoundCreateRequest request = new RecruitmentRoundCreateRequest(
                     ACADEMIC_YEAR, SEMESTER_TYPE, RECRUITMENT_ROUND_NAME, START_DATE, END_DATE, ROUND_TYPE);
 
             // when & then
@@ -77,7 +78,7 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
                     RECRUITMENT_ROUND_NAME, now.plusDays(1), now.plusDays(2), recruitment, ROUND_TYPE);
             recruitmentRoundRepository.save(recruitmentRound);
 
-            RecruitmentRoundCreateUpdateRequest request = new RecruitmentRoundCreateUpdateRequest(
+            RecruitmentRoundUpdateRequest request = new RecruitmentRoundUpdateRequest(
                     ACADEMIC_YEAR, SEMESTER_TYPE, "수정된 모집회차 이름", now.plusDays(2), now.plusDays(3), ROUND_TYPE);
 
             // when
@@ -95,7 +96,7 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
         @Test
         void 모집회차가_존재하지_않는다면_실패한다() {
             // given
-            RecruitmentRoundCreateUpdateRequest request = new RecruitmentRoundCreateUpdateRequest(
+            RecruitmentRoundUpdateRequest request = new RecruitmentRoundUpdateRequest(
                     ACADEMIC_YEAR, SEMESTER_TYPE, RECRUITMENT_ROUND_NAME, START_DATE, END_DATE, ROUND_TYPE);
 
             // when & then
