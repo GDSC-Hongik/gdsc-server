@@ -37,4 +37,10 @@ public class StudyHistoryValidator {
             throw new CustomException(STUDY_NOT_CANCELABLE_APPLICATION_PERIOD);
         }
     }
+
+    public void validateUpdateRepository(boolean isRepositoryUpdatable) {
+        if (!isRepositoryUpdatable) {
+            throw new CustomException(STUDY_HISTORY_REPOSITORY_NOT_UPDATABLE);
+        }
+    }
 }

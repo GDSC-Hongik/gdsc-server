@@ -1,16 +1,20 @@
 package com.gdschongik.gdsc.domain.study.application;
 
+import static com.gdschongik.gdsc.global.common.constant.GithubConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
+import com.gdschongik.gdsc.domain.study.dao.AssignmentHistoryRepository;
 import com.gdschongik.gdsc.domain.study.dao.StudyHistoryRepository;
 import com.gdschongik.gdsc.domain.study.dao.StudyRepository;
 import com.gdschongik.gdsc.domain.study.domain.Study;
 import com.gdschongik.gdsc.domain.study.domain.StudyHistory;
 import com.gdschongik.gdsc.domain.study.domain.StudyHistoryValidator;
+import com.gdschongik.gdsc.domain.study.dto.request.RepositoryUpdateRequest;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
+import com.gdschongik.gdsc.infra.client.github.GithubClient;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,8 +28,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class StudyService {
 
     private final MemberUtil memberUtil;
+    private final GithubClient githubClient;
     private final StudyRepository studyRepository;
     private final StudyHistoryRepository studyHistoryRepository;
+    private final AssignmentHistoryRepository assignmentHistoryRepository;
     private final StudyHistoryValidator studyHistoryValidator;
 
     public List<StudyResponse> getAllApplicableStudies() {
@@ -63,5 +69,34 @@ public class StudyService {
         studyHistoryRepository.delete(studyHistory);
 
         log.info("[StudyService] 스터디 수강신청 취소: studyId={}, memberId={}", study.getId(), currentMember.getId());
+    }
+
+    @Transactional
+    public void updateRepository(Long studyId, RepositoryUpdateRequest request) {
+        Member currentMember = memberUtil.getCurrentMember();
+        Study study = studyRepository.findById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
+
+        StudyHistory studyHistory = studyHistoryRepository
+                .findByMenteeAndStudy(currentMember, study)
+                .orElseThrow(() -> new CustomException(STUDY_HISTORY_NOT_FOUND));
+
+        boolean isRepositoryUpdatable = assignmentHistoryRepository.existsSubmittedAssignment(currentMember, study);
+        studyHistoryValidator.validateUpdateRepository(isRepositoryUpdatable);
+        validateRepositoryLink(request.repositoryLink());
+
+        studyHistory.updateRepositoryLink(request.repositoryLink());
+        studyHistoryRepository.save(studyHistory);
+
+        log.info("[StudentStudyService] 레포지토리 입력: studyHistoryId={}", studyHistory.getId());
+    }
+
+    private void validateRepositoryLink(String repositoryLink) {
+        String ownerRepo = getOwnerRepo(repositoryLink);
+        githubClient.getRepositoryLink(ownerRepo);
+    }
+
+    private String getOwnerRepo(String repositoryLink) {
+        int startIndex = repositoryLink.indexOf(GITHUB_DOMAIN) + GITHUB_DOMAIN.length();
+        return repositoryLink.substring(startIndex);
     }
 }

@@ -45,6 +45,13 @@ public class StudyHistory extends BaseEntity {
         return StudyHistory.builder().mentee(mentee).study(study).build();
     }
 
+    /**
+     * 레포지토리 링크를 업데이트합니다.
+     */
+    public void updateRepositoryLink(String repositoryLink) {
+        this.repositoryLink = repositoryLink;
+    }
+
     // 데이터 전달 로직
     public boolean isStudyOngoing() {
         return study.isStudyOngoing();
