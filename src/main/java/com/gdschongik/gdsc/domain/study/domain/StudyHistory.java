@@ -33,6 +33,8 @@ public class StudyHistory extends BaseEntity {
     @JoinColumn(name = "study_id")
     private Study study;
 
+    private String repositoryLink;
+
     @Builder(access = AccessLevel.PRIVATE)
     private StudyHistory(Member mentee, Study study) {
         this.mentee = mentee;
