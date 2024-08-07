@@ -96,4 +96,19 @@ public class StudyHistoryValidatorTest {
                     .hasMessage(STUDY_NOT_CANCELABLE_APPLICATION_PERIOD.getMessage());
         }
     }
+
+    @Nested
+    class 레포지토리_입력시 {
+
+        @Test
+        void 이미_제출한_과제가_있다면_실패한다() {
+            // given
+            boolean isRepositoryUpdatable = false;
+
+            // when & then
+            assertThatThrownBy(() -> studyHistoryValidator.validateUpdateRepository(isRepositoryUpdatable))
+                    .isInstanceOf(CustomException.class)
+                    .hasMessage(STUDY_HISTORY_REPOSITORY_NOT_UPDATABLE.getMessage());
+        }
+    }
 }
