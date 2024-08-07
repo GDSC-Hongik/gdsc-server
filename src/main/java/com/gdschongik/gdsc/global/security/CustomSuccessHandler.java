@@ -1,8 +1,6 @@
 package com.gdschongik.gdsc.global.security;
 
 import static com.gdschongik.gdsc.global.common.constant.SecurityConstant.*;
-import static com.gdschongik.gdsc.global.common.constant.UrlConstant.*;
-import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.auth.application.JwtService;
 import com.gdschongik.gdsc.domain.auth.dto.AccessTokenDto;
