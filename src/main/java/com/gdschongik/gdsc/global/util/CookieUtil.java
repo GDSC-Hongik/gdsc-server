@@ -31,4 +31,10 @@ public class CookieUtil {
                 .httpOnly(true)
                 .build();
     }
+
+    public void deleteCookie(jakarta.servlet.http.Cookie cookie) {
+        cookie.setPath("/");
+        cookie.setValue("");
+        cookie.setMaxAge(0);
+    }
 }
