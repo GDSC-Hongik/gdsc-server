@@ -6,7 +6,7 @@ import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.study.dao.StudyDetailRepository;
 import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
 import com.gdschongik.gdsc.domain.study.domain.StudyDetailValidator;
-import com.gdschongik.gdsc.domain.study.dto.request.AssignmentCreateRequest;
+import com.gdschongik.gdsc.domain.study.dto.request.AssignmentCreateUpdateRequest;
 import com.gdschongik.gdsc.domain.study.dto.response.AssignmentResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
@@ -51,11 +51,11 @@ public class MentorStudyDetailService {
         studyDetail.cancelAssignment();
         studyDetailRepository.save(studyDetail);
 
-        log.info("[StudyMentorService] 과제 휴강 처리: studyDetailId={}", studyDetail.getId());
+        log.info("[MentorStudyDetailService] 과제 휴강 처리: studyDetailId={}", studyDetail.getId());
     }
 
     @Transactional
-    public void publishStudyAssignment(Long studyDetailId, AssignmentCreateRequest request) {
+    public void publishStudyAssignment(Long studyDetailId, AssignmentCreateUpdateRequest request) {
         Member currentMember = memberUtil.getCurrentMember();
         StudyDetail studyDetail = studyDetailRepository
                 .findById(studyDetailId)
@@ -66,6 +66,21 @@ public class MentorStudyDetailService {
         studyDetail.publishAssignment(request.title(), request.deadLine(), request.descriptionNotionLink());
         studyDetailRepository.save(studyDetail);
 
-        log.info("[StudyMentorService] 과제 개설 완료: studyDetailId={}", studyDetailId);
+        log.info("[MentorStudyDetailService] 과제 개설 완료: studyDetailId={}", studyDetailId);
+    }
+
+    @Transactional
+    public void updateStudyAssignment(Long studyDetailId, AssignmentCreateUpdateRequest request) {
+        Member currentMember = memberUtil.getCurrentMember();
+        StudyDetail studyDetail = studyDetailRepository
+                .findById(studyDetailId)
+                .orElseThrow(() -> new CustomException(STUDY_DETAIL_NOT_FOUND));
+
+        studyDetailValidator.validateUpdateStudyAssignment(currentMember, studyDetail, request);
+
+        studyDetail.updateAssignment(request.title(), request.deadLine(), request.descriptionNotionLink());
+        studyDetailRepository.save(studyDetail);
+
+        log.info("[MentorStudyDetailService] 과제 수정 완료: studyDetailId={}", studyDetailId);
     }
 }
