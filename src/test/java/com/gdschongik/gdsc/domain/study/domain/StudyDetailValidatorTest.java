@@ -135,7 +135,7 @@ public class StudyDetailValidatorTest {
         }
 
         @Test
-        void 수정힐_미김_기한이_기존_마감_기한_보다_앞서면_실패한다() {
+        void 수정할_미김_기한이_기존_마감_기한_보다_앞서면_실패한다() {
             // given
             LocalDateTime now = LocalDateTime.now();
             Member mentor = fixtureHelper.createAssociateMember(1L);
@@ -154,7 +154,7 @@ public class StudyDetailValidatorTest {
             // when & then
             assertThatThrownBy(() -> studyDetailValidator.validateUpdateStudyAssignment(mentor, studyDetail, request))
                     .isInstanceOf(CustomException.class)
-                    .hasMessage(STUDY_DETAIL_ASSIGNMENT_INVALID_DEADLINE.getMessage());
+                    .hasMessage(STUDY_DETAIL_ASSIGNMENT_INVALID_UPDATE_DEADLINE.getMessage());
         }
     }
 }

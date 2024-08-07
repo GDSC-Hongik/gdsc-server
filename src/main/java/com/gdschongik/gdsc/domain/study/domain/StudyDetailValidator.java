@@ -46,8 +46,12 @@ public class StudyDetailValidator {
      */
     private void validateUpdateDeadline(
             LocalDateTime currentTime, LocalDateTime deadLine, LocalDateTime updateDeadLine) {
-        if (currentTime.isAfter(deadLine) || deadLine.isAfter(updateDeadLine)) {
+        if (currentTime.isAfter(deadLine)) {
             throw new CustomException(STUDY_DETAIL_ASSIGNMENT_INVALID_DEADLINE);
+        }
+
+        if (deadLine.isAfter(updateDeadLine)) {
+            throw new CustomException(STUDY_DETAIL_ASSIGNMENT_INVALID_UPDATE_DEADLINE);
         }
     }
 }
