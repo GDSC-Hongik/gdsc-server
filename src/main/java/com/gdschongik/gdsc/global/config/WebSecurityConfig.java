@@ -174,9 +174,10 @@ public class WebSecurityConfig {
             configuration.addAllowedOriginPattern(LOCAL_REACT_CLIENT_SECURE_URL);
             configuration.addAllowedOriginPattern(LOCAL_VITE_CLIENT_URL);
             configuration.addAllowedOriginPattern(LOCAL_VITE_CLIENT_SECURE_URL);
-            configuration.addAllowedOriginPattern(LOCAL_PROXY_CLIENT_ONBOARDING_URL);
             configuration.addAllowedOriginPattern(DEV_SERVER_URL);
         }
+
+        configuration.addAllowedOriginPattern(LOCAL_PROXY_CLIENT_ONBOARDING_URL);
 
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
