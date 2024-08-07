@@ -1,7 +1,9 @@
 package com.gdschongik.gdsc.global.common.constant;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor
@@ -12,7 +14,8 @@ public enum JwtConstant {
 
     private final String cookieName;
 
-    private static class Constants {
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class Constants {
         public static final String ACCESS_TOKEN_COOKIE_NAME = "accessToken";
         public static final String REFRESH_TOKEN_COOKIE_NAME = "refreshToken";
         public static final String EMAIL_VERIFICATION_TOKEN_NAME = "emailVerificationToken";
