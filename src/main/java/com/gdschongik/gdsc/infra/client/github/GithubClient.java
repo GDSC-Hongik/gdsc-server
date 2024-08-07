@@ -14,7 +14,7 @@ public class GithubClient {
 
     private final GitHub github;
 
-    public GHRepository getRepositoryLink(String ownerRepo) {
+    public GHRepository getRepository(String ownerRepo) {
         try {
             return github.getRepository(ownerRepo);
         } catch (IOException e) {

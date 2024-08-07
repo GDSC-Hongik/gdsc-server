@@ -92,7 +92,7 @@ public class StudyService {
 
     private void validateRepositoryLink(String repositoryLink) {
         String ownerRepo = getOwnerRepo(repositoryLink);
-        githubClient.getRepositoryLink(ownerRepo);
+        githubClient.getRepository(ownerRepo);
     }
 
     private String getOwnerRepo(String repositoryLink) {
