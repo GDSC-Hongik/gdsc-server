@@ -103,10 +103,10 @@ public class StudyHistoryValidatorTest {
         @Test
         void 이미_제출한_과제가_있다면_실패한다() {
             // given
-            boolean isRepositoryUpdatable = false;
+            boolean isAnyAssignmentSubmitted = true;
 
             // when & then
-            assertThatThrownBy(() -> studyHistoryValidator.validateUpdateRepository(isRepositoryUpdatable))
+            assertThatThrownBy(() -> studyHistoryValidator.validateUpdateRepository(isAnyAssignmentSubmitted))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(STUDY_HISTORY_REPOSITORY_NOT_UPDATABLE.getMessage());
         }

@@ -80,8 +80,8 @@ public class StudyService {
                 .findByMenteeAndStudy(currentMember, study)
                 .orElseThrow(() -> new CustomException(STUDY_HISTORY_NOT_FOUND));
 
-        boolean isRepositoryUpdatable = assignmentHistoryRepository.existsSubmittedAssignment(currentMember, study);
-        studyHistoryValidator.validateUpdateRepository(isRepositoryUpdatable);
+        boolean isAnyAssignmentSubmitted = assignmentHistoryRepository.existsSubmittedAssignment(currentMember, study);
+        studyHistoryValidator.validateUpdateRepository(isAnyAssignmentSubmitted);
         validateRepositoryLink(request.repositoryLink());
 
         studyHistory.updateRepositoryLink(request.repositoryLink());
