@@ -9,10 +9,10 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class StudyServiceTest extends IntegrationTest {
+public class StudentStudyServiceTest extends IntegrationTest {
 
     @Autowired
-    private StudyService studyService;
+    private StudentStudyService studentStudyService;
 
     @Nested
     class 스터디_수강신청시 {
@@ -20,7 +20,7 @@ public class StudyServiceTest extends IntegrationTest {
         @Test
         void 존재하지_않는_스터디라면_실패한다() {
             // when & then
-            assertThatThrownBy(() -> studyService.applyStudy(1L))
+            assertThatThrownBy(() -> studentStudyService.applyStudy(1L))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(ErrorCode.STUDY_NOT_FOUND.getMessage());
         }
