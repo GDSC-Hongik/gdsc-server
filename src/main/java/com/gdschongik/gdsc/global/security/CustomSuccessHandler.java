@@ -13,6 +13,7 @@ import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Slf4j
 public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
@@ -39,5 +40,14 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         cookieUtil.addTokenCookies(response, accessTokenDto.tokenValue(), refreshTokenDto.tokenValue());
 
         super.onAuthenticationSuccess(request, response, authentication);
+    }
+
+    @Override
+    protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response) {
+        String baseUrl = super.determineTargetUrl(request, response);
+        return UriComponentsBuilder.fromHttpUrl(baseUrl)
+                .path(OAUTH_REDIRECT_PATH_SEGMENT)
+                .build()
+                .toUriString();
     }
 }
