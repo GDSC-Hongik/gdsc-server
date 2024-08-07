@@ -31,7 +31,7 @@ public class MentorStudyDetailController {
     public ResponseEntity<Void> updateStudyAssignment(
             @PathVariable Long studyDetailId, @Valid @RequestBody AssignmentCreateUpdateRequest request) {
         mentorStudyDetailService.updateStudyAssignment(studyDetailId, request);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
     @Operation(summary = "스터디 과제 개설", description = "멘토만 과제를 개설할 수 있습니다.")

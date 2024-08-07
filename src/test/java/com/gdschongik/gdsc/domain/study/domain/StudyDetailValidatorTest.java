@@ -112,7 +112,7 @@ public class StudyDetailValidatorTest {
         }
 
         @Test
-        void 기존_마감_기한이_수정_시점보다_앞서면_실패한다() {
+        void 기존마감기한이_수정시점보다_앞서면_실패한다() {
             // given
             Member mentor = fixtureHelper.createAssociateMember(1L);
             LocalDateTime assignmentCreatedDate = LocalDateTime.now().minusDays(1);
@@ -135,7 +135,7 @@ public class StudyDetailValidatorTest {
         }
 
         @Test
-        void 수정할_마감_기한이_기존_마감_기한_보다_앞서면_실패한다() {
+        void 수정할_마감기한이_기존마감기한_보다_앞서면_실패한다() {
             // given
             LocalDateTime now = LocalDateTime.now();
             Member mentor = fixtureHelper.createAssociateMember(1L);
@@ -144,10 +144,10 @@ public class StudyDetailValidatorTest {
                     Period.createPeriod(now.plusDays(5), now.plusDays(10)),
                     Period.createPeriod(now.minusDays(5), now));
             StudyDetail studyDetail = fixtureHelper.createStudyDetail(study, now, now.plusDays(10));
-            LocalDateTime savedDeadLine = now.plusDays(1);
+            LocalDateTime savedDeadLine = now.minusDays(1);
             studyDetail.publishAssignment(ASSIGNMENT_TITLE, savedDeadLine, DESCRIPTION_LINK);
 
-            LocalDateTime updatedDeadLine = savedDeadLine.minusDays(5);
+            LocalDateTime updatedDeadLine = savedDeadLine.minusDays(4);
             AssignmentCreateUpdateRequest request =
                     new AssignmentCreateUpdateRequest(ASSIGNMENT_TITLE, DESCRIPTION_LINK, updatedDeadLine);
 
