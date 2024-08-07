@@ -112,7 +112,7 @@ public class StudyDetailValidatorTest {
         }
 
         @Test
-        void 마감_기한이_수정_시점보다_앞서면_실패한다() {
+        void 기존의_마감_기한이_수정_시점보다_앞서면_실패한다() {
             // given
             Member mentor = fixtureHelper.createAssociateMember(1L);
             LocalDateTime assignmentCreatedDate = LocalDateTime.now().minusDays(1);
