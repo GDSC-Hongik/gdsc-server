@@ -5,6 +5,7 @@ import static com.gdschongik.gdsc.domain.study.domain.QAssignmentHistory.*;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.study.domain.Study;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
@@ -18,11 +19,21 @@ public class AssignmentHistoryCustomRepositoryImpl implements AssignmentHistoryC
         Integer fetchOne = queryFactory
                 .selectOne()
                 .from(assignmentHistory)
-                .where(
-                        assignmentHistory.studyDetail.study.eq(study),
-                        assignmentHistory.submissionStatus.in(FAILURE, SUCCESS))
+                .where(eqMember(member), eqStudy(study), isSubmitted())
                 .fetchFirst();
 
         return fetchOne != null;
+    }
+
+    private BooleanExpression eqMember(Member member) {
+        return member == null ? null : assignmentHistory.member.eq(member);
+    }
+
+    private BooleanExpression eqStudy(Study study) {
+        return study == null ? null : assignmentHistory.studyDetail.study.eq(study);
+    }
+
+    private BooleanExpression isSubmitted() {
+        return assignmentHistory.submissionStatus.in(FAILURE, SUCCESS);
     }
 }
