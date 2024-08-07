@@ -42,7 +42,7 @@ public class StudyDetailValidator {
     }
 
     /**
-     * 수정 시점이 과제 마감기한보다 앞서거나 수정할 마감기한이 현재 마감기한보다 앞서면 안된다.
+     * 과제 마감기한이 수정 시점보다 앞서거나 수정할 마감기한이 기존 마감기한보다 앞서면 안된다.
      */
     private void validateUpdateDeadline(
             LocalDateTime currentTime, LocalDateTime deadLine, LocalDateTime updateDeadLine) {
