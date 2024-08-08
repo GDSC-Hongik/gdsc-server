@@ -1,20 +1,16 @@
 package com.gdschongik.gdsc.domain.study.api;
 
 import com.gdschongik.gdsc.domain.study.application.StudyService;
-import com.gdschongik.gdsc.domain.study.dto.request.RepositoryUpdateRequest;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -45,13 +41,5 @@ public class StudyController {
     public ResponseEntity<Void> cancelStudyApply(@PathVariable Long studyId) {
         studyService.cancelStudyApply(studyId);
         return ResponseEntity.noContent().build();
-    }
-
-    @Operation(summary = "레포지토리 입력", description = "레포지토리를 입력합니다. 이미 제출한 과제가 있다면 수정할 수 없습니다.")
-    @PatchMapping("/{studyId}/repository")
-    public ResponseEntity<Void> updateRepository(
-            @PathVariable Long studyId, @Valid @RequestBody RepositoryUpdateRequest request) {
-        studyService.updateRepository(studyId, request);
-        return ResponseEntity.ok().build();
     }
 }
