@@ -37,4 +37,11 @@ public class StudyHistoryValidator {
             throw new CustomException(STUDY_NOT_CANCELABLE_APPLICATION_PERIOD);
         }
     }
+
+    public void validateUpdateRepository(boolean isAnyAssignmentSubmitted) {
+        // 이미 제출한 과제가 있는 경우
+        if (isAnyAssignmentSubmitted) {
+            throw new CustomException(STUDY_HISTORY_REPOSITORY_NOT_UPDATABLE);
+        }
+    }
 }
