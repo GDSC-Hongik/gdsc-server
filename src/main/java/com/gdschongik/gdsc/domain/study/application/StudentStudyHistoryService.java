@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class StudyHistoryService {
+public class StudentStudyHistoryService {
 
     private final MemberUtil memberUtil;
     private final GithubClient githubClient;
