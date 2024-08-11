@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum RequirementStatus {
-    PENDING("PENDING"),
+    UNSATISFIED("UNSATISFIED"),
     SATISFIED("SATISFIED");
 
     private final String value;
