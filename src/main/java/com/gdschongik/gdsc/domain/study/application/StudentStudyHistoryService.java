@@ -45,7 +45,10 @@ public class StudentStudyHistoryService {
         studyHistory.updateRepositoryLink(request.repositoryLink());
         studyHistoryRepository.save(studyHistory);
 
-        log.info("[StudyHistoryService] 레포지토리 입력: studyHistoryId={}", studyHistory.getId());
+        log.info(
+                "[StudyHistoryService] 레포지토리 입력: studyHistoryId={}, repositoryLink={}",
+                studyHistory.getId(),
+                request.repositoryLink());
     }
 
     private void validateRepositoryLink(String repositoryLink) {
