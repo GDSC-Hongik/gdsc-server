@@ -46,10 +46,10 @@ public class AssociateRequirement {
 
     public static AssociateRequirement createRequirement() {
         return AssociateRequirement.builder()
-                .univStatus(PENDING)
-                .discordStatus(PENDING)
-                .bevyStatus(PENDING)
-                .infoStatus(PENDING)
+                .univStatus(UNSATISFIED)
+                .discordStatus(UNSATISFIED)
+                .bevyStatus(UNSATISFIED)
+                .infoStatus(UNSATISFIED)
                 .build();
     }
 
@@ -119,9 +119,9 @@ public class AssociateRequirement {
      * 모든 준회원 조건을 강등합니다.
      */
     public void demoteAssociateRequirement() {
-        bevyStatus = PENDING;
-        discordStatus = PENDING;
-        infoStatus = PENDING;
-        univStatus = PENDING;
+        bevyStatus = UNSATISFIED;
+        discordStatus = UNSATISFIED;
+        infoStatus = UNSATISFIED;
+        univStatus = UNSATISFIED;
     }
 }
