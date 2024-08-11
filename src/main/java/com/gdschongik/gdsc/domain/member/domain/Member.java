@@ -345,4 +345,13 @@ public class Member extends BaseEntity {
     public boolean isRegular() {
         return role.equals(REGULAR);
     }
+
+    public boolean isAdvanceableToAssociate() {
+        try {
+            validateAssociateAvailable();
+            return true;
+        } catch (CustomException e) {
+            return false;
+        }
+    }
 }

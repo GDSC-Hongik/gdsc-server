@@ -13,16 +13,19 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class MemberAssociateEventHandler {
+
     private final MemberRepository memberRepository;
 
     public void advanceToAssociate(MemberAssociateEvent memberAssociateEvent) {
         Member member = memberRepository
                 .findById(memberAssociateEvent.memberId())
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
-        try {
+
+        if (member.isAdvanceableToAssociate()) {
             member.advanceToAssociate();
-        } catch (CustomException e) {
-            log.info("{}", e.getErrorCode());
+            log.info("[MemberAssociateEventHandler] 준회원 승급 완료: memberId={}", member.getId());
+        } else {
+            log.debug("[MemberAssociateEventHandler] 준회원 승급 시도 실패: memberId={}", member.getId());
         }
     }
 }
