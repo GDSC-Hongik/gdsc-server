@@ -6,6 +6,7 @@ import com.gdschongik.gdsc.global.util.CookieUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -25,9 +26,10 @@ public class AuthController {
     @GetMapping("/logout")
     public ResponseEntity<Void> logout(
             @CookieValue(ACCESS_TOKEN_COOKIE_NAME) Cookie accessToken,
-            @CookieValue(REFRESH_TOKEN_COOKIE_NAME) Cookie refreshToken) {
-        cookieUtil.deleteCookie(accessToken);
-        cookieUtil.deleteCookie(refreshToken);
+            @CookieValue(REFRESH_TOKEN_COOKIE_NAME) Cookie refreshToken,
+            HttpServletResponse response) {
+        cookieUtil.deleteCookie(accessToken, response);
+        cookieUtil.deleteCookie(refreshToken, response);
         return ResponseEntity.ok().build();
     }
 }
