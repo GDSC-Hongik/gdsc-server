@@ -11,7 +11,7 @@ import jakarta.annotation.Nullable;
 
 public record MemberDashboardResponse(
         MemberFullDto member,
-        RecruitmentRoundFullDto currentRecruitmentRound,
+        @Nullable RecruitmentRoundFullDto currentRecruitmentRound,
         @Nullable MembershipFullDto currentMembership) {
     public static MemberDashboardResponse of(
             Member member,
@@ -20,7 +20,7 @@ public record MemberDashboardResponse(
             Membership currentMembership) {
         return new MemberDashboardResponse(
                 MemberFullDto.of(member, univVerificationStatus),
-                RecruitmentRoundFullDto.from(currentRecruitmentRound),
+                currentRecruitmentRound == null ? null : RecruitmentRoundFullDto.from(currentRecruitmentRound),
                 currentMembership == null ? null : MembershipFullDto.from(currentMembership));
     }
 }

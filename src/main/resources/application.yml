@@ -12,6 +12,7 @@ spring:
       - discord
       - email
       - payment
+      - github
 
 logging:
   level:

@@ -1,0 +1,2 @@
+github:
+  secret-key: ${GITHUB_SECRET_KEY:}

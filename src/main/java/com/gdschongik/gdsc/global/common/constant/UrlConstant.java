@@ -1,7 +1,5 @@
 package com.gdschongik.gdsc.global.common.constant;
 
-import java.util.List;
-
 public class UrlConstant {
 
     private UrlConstant() {}
@@ -16,12 +14,6 @@ public class UrlConstant {
     public static final String LOCAL_VITE_CLIENT_URL = "http://localhost:5173";
     public static final String LOCAL_VITE_CLIENT_SECURE_URL = "https://localhost:5173";
     public static final String LOCAL_PROXY_CLIENT_ONBOARDING_URL = "https://local-onboarding.gdschongik.com";
-    public static final List<String> LOCAL_CLIENT_URLS = List.of(
-            LOCAL_REACT_CLIENT_URL,
-            LOCAL_REACT_CLIENT_SECURE_URL,
-            LOCAL_VITE_CLIENT_URL,
-            LOCAL_VITE_CLIENT_SECURE_URL,
-            LOCAL_PROXY_CLIENT_ONBOARDING_URL);
 
     // 서버 URL
     public static final String PROD_SERVER_URL = "https://api.gdschongik.com";

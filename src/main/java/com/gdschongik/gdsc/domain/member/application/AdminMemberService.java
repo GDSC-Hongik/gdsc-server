@@ -88,11 +88,8 @@ public class AdminMemberService {
                 regularMembers.stream().map(Member::getId).toList());
     }
 
-    /**
-     * 정회원 조건 PENDING으로 변경, 준회원 조건 PENDING으로 변경
-     */
     @Transactional
-    public void demoteToGuestAndRegularRequirementToPending() {
+    public void demoteToGuestAndRegularRequirementToUnsatisfied() {
         validateProfile();
         Member member = memberUtil.getCurrentMember();
         member.demoteToGuest();
