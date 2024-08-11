@@ -3,7 +3,9 @@ package com.gdschongik.gdsc.domain.member.dto;
 import com.gdschongik.gdsc.domain.common.model.RequirementStatus;
 import com.gdschongik.gdsc.domain.member.domain.Department;
 import com.gdschongik.gdsc.domain.member.domain.Member;
+import com.gdschongik.gdsc.domain.member.domain.MemberManageRole;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
+import com.gdschongik.gdsc.domain.member.domain.MemberStudyRole;
 import com.gdschongik.gdsc.global.util.formatter.PhoneFormatter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.Optional;
@@ -11,6 +13,8 @@ import java.util.Optional;
 public record MemberFullDto(
         Long memberId,
         @Schema(description = "멤버 역할", implementation = MemberRole.class) MemberRole role,
+        @Schema(description = "멤버 관리자 역할", implementation = MemberManageRole.class) MemberManageRole manageRole,
+        @Schema(description = "멤버 스터디 역할", implementation = MemberStudyRole.class) MemberStudyRole studyRole,
         @Schema(description = "회원정보", implementation = MemberBasicInfoDto.class) MemberBasicInfoDto basicInfo,
         @Schema(description = "인증상태정보", implementation = MemberAssociateRequirementDto.class)
                 MemberAssociateRequirementDto associateRequirement) {
@@ -18,6 +22,8 @@ public record MemberFullDto(
         return new MemberFullDto(
                 member.getId(),
                 member.getRole(),
+                member.getManageRole(),
+                member.getStudyRole(),
                 MemberBasicInfoDto.from(member),
                 MemberAssociateRequirementDto.of(member, univVerificationStatus));
     }
