@@ -13,8 +13,10 @@ import com.gdschongik.gdsc.domain.study.dto.request.RepositoryUpdateRequest;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import com.gdschongik.gdsc.infra.client.github.GithubClient;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.kohsuke.github.GHRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +32,7 @@ public class StudentStudyHistoryService {
     private final StudyHistoryValidator studyHistoryValidator;
 
     @Transactional
-    public void updateRepository(Long studyHistoryId, RepositoryUpdateRequest request) {
+    public void updateRepository(Long studyHistoryId, RepositoryUpdateRequest request) throws IOException {
         Member currentMember = memberUtil.getCurrentMember();
         StudyHistory studyHistory = studyHistoryRepository
                 .findById(studyHistoryId)
@@ -39,8 +41,10 @@ public class StudentStudyHistoryService {
 
         boolean isAnyAssignmentSubmitted =
                 assignmentHistoryRepository.existsSubmittedAssignmentByMemberAndStudy(currentMember, study);
-        studyHistoryValidator.validateUpdateRepository(isAnyAssignmentSubmitted);
-        validateRepositoryLink(request.repositoryLink());
+        String ownerRepo = getOwnerRepo(request.repositoryLink());
+        GHRepository repository = githubClient.getRepository(ownerRepo);
+        studyHistoryValidator.validateUpdateRepository(
+                isAnyAssignmentSubmitted, String.valueOf(repository.getOwner().getId()), currentMember.getOauthId());
 
         studyHistory.updateRepositoryLink(request.repositoryLink());
         studyHistoryRepository.save(studyHistory);
@@ -49,11 +53,6 @@ public class StudentStudyHistoryService {
                 "[StudyHistoryService] 레포지토리 입력: studyHistoryId={}, repositoryLink={}",
                 studyHistory.getId(),
                 request.repositoryLink());
-    }
-
-    private void validateRepositoryLink(String repositoryLink) {
-        String ownerRepo = getOwnerRepo(repositoryLink);
-        githubClient.getRepository(ownerRepo);
     }
 
     private String getOwnerRepo(String repositoryLink) {

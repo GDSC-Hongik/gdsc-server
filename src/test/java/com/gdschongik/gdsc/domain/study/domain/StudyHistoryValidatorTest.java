@@ -1,5 +1,6 @@
 package com.gdschongik.gdsc.domain.study.domain;
 
+import static com.gdschongik.gdsc.global.common.constant.MemberConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 
@@ -106,9 +107,21 @@ public class StudyHistoryValidatorTest {
             boolean isAnyAssignmentSubmitted = true;
 
             // when & then
-            assertThatThrownBy(() -> studyHistoryValidator.validateUpdateRepository(isAnyAssignmentSubmitted))
+            assertThatThrownBy(() -> studyHistoryValidator.validateUpdateRepository(
+                            isAnyAssignmentSubmitted, OAUTH_ID, OAUTH_ID))
                     .isInstanceOf(CustomException.class)
-                    .hasMessage(STUDY_HISTORY_REPOSITORY_NOT_UPDATABLE.getMessage());
+                    .hasMessage(STUDY_HISTORY_REPOSITORY_NOT_UPDATABLE_ASSIGNMENT_ALREADY_SUBMITTED.getMessage());
+        }
+
+        @Test
+        void 레포지토리의_소유자와_현재_멤버가_일치하지_않는다면_실패한다() {
+            // given
+            String wrongOauthId = "1234567";
+
+            // when & then
+            assertThatThrownBy(() -> studyHistoryValidator.validateUpdateRepository(false, wrongOauthId, OAUTH_ID))
+                    .isInstanceOf(CustomException.class)
+                    .hasMessage(STUDY_HISTORY_REPOSITORY_NOT_UPDATABLE_OWNER_MISMATCH.getMessage());
         }
     }
 }

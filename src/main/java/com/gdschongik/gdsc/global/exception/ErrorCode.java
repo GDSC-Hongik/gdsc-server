@@ -117,7 +117,9 @@ public enum ErrorCode {
     STUDY_HISTORY_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 스터디 수강 기록입니다."),
     STUDY_HISTORY_DUPLICATE(HttpStatus.CONFLICT, "이미 해당 스터디를 신청했습니다."),
     STUDY_HISTORY_ONGOING_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 진행중인 스터디가 있습니다."),
-    STUDY_HISTORY_REPOSITORY_NOT_UPDATABLE(HttpStatus.CONFLICT, "이미 제출한 과제가 있으므로 레포지토리를 수정할 수 없습니다."),
+    STUDY_HISTORY_REPOSITORY_NOT_UPDATABLE_ASSIGNMENT_ALREADY_SUBMITTED(
+            HttpStatus.CONFLICT, "이미 제출한 과제가 있으므로 레포지토리를 수정할 수 없습니다."),
+    STUDY_HISTORY_REPOSITORY_NOT_UPDATABLE_OWNER_MISMATCH(HttpStatus.CONFLICT, "레포지토리 소유자가 현재 멤버와 다릅니다."),
 
     // Order
     ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, "주문이 존재하지 않습니다."),
