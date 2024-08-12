@@ -1,9 +1,9 @@
 package com.gdschongik.gdsc.domain.study.dto.response;
 
+import static com.gdschongik.gdsc.global.util.formatter.StudyFormatter.getHalfSchedule;
+
 import com.gdschongik.gdsc.domain.study.domain.Study;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.time.DayOfWeek;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public record StudyResponse(
@@ -18,7 +18,6 @@ public record StudyResponse(
         @Schema(description = "개강일") String openingDate) {
 
     public static StudyResponse from(Study study) {
-        // todo: 포맷터로 분리
         return new StudyResponse(
                 study.getId(),
                 study.getTitle(),
@@ -26,25 +25,8 @@ public record StudyResponse(
                 study.getNotionLink(),
                 study.getIntroduction(),
                 study.getMentor().getName(),
-                getSchedule(study.getDayOfWeek(), study.getStartTime()),
+                getHalfSchedule(study.getDayOfWeek(), study.getStartTime()),
                 study.getTotalWeek().toString() + "주 코스",
                 DateTimeFormatter.ofPattern("MM.dd").format(study.getPeriod().getStartDate()) + " 개강");
-    }
-
-    private static String getSchedule(DayOfWeek dayOfWeek, LocalTime startTime) {
-        return getKoreanDayOfWeek(dayOfWeek) + startTime.format(DateTimeFormatter.ofPattern("HH")) + "시";
-    }
-
-    private static String getKoreanDayOfWeek(DayOfWeek dayOfWeek) {
-        return switch (dayOfWeek) {
-            case MONDAY -> "월";
-            case TUESDAY -> "화";
-            case WEDNESDAY -> "수";
-            case THURSDAY -> "목";
-            case FRIDAY -> "금";
-            case SATURDAY -> "토";
-            case SUNDAY -> "일";
-            default -> "";
-        };
     }
 }
