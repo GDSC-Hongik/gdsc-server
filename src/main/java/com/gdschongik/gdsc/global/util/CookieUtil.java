@@ -32,9 +32,10 @@ public class CookieUtil {
                 .build();
     }
 
-    public void deleteCookie(jakarta.servlet.http.Cookie cookie) {
+    public void deleteCookie(jakarta.servlet.http.Cookie cookie, HttpServletResponse response) {
         cookie.setPath("/");
         cookie.setValue("");
         cookie.setMaxAge(0);
+        response.addCookie(cookie);
     }
 }
