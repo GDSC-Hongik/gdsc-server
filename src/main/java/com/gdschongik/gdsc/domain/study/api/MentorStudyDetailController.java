@@ -3,6 +3,7 @@ package com.gdschongik.gdsc.domain.study.api;
 import com.gdschongik.gdsc.domain.study.application.MentorStudyDetailService;
 import com.gdschongik.gdsc.domain.study.dto.request.AssignmentCreateUpdateRequest;
 import com.gdschongik.gdsc.domain.study.dto.response.AssignmentResponse;
+import com.gdschongik.gdsc.domain.study.dto.response.SessionResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -61,5 +62,13 @@ public class MentorStudyDetailController {
     public ResponseEntity<Void> cancelStudyAssignment(@PathVariable Long studyDetailId) {
         mentorStudyDetailService.cancelStudyAssignment(studyDetailId);
         return ResponseEntity.noContent().build();
+    }
+
+    // TODO 스터디 세션 워딩을 커리큘럼으로 변경해야함
+    @Operation(summary = "스터디 주차별 커리큘럼 목록 조회", description = "멘토가 자신의 스터디 커리큘럼 목록을 조회합니다")
+    @GetMapping("/sessions")
+    public ResponseEntity<List<SessionResponse>> getStudySession(@RequestParam(name = "studyId") Long studyId) {
+        List<SessionResponse> response = mentorStudyDetailService.getSession(studyId);
+        return ResponseEntity.ok(response);
     }
 }
