@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface StudyHistoryRepository extends JpaRepository<StudyHistory, Long> {
+public interface StudyHistoryRepository extends JpaRepository<StudyHistory, Long>, AssignmentCustomRepository {
 
     List<StudyHistory> findAllByMentee(Member member);
 

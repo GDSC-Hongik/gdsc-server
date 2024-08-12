@@ -1,6 +1,7 @@
 package com.gdschongik.gdsc.domain.study.api;
 
 import com.gdschongik.gdsc.domain.study.application.StudyService;
+import com.gdschongik.gdsc.domain.study.dto.response.AssignmentHistoryResponse;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -21,6 +22,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class StudyController {
 
     private final StudyService studyService;
+
+    @Operation(summary = "스터디 과제 히스토리 목록 조회", description = "스터디의 지난 과제의 제출 목록을 조회합니다.")
+    @GetMapping("/{studyId}/assignments")
+    public ResponseEntity<List<AssignmentHistoryResponse>> getAllAssignmentHistory(@PathVariable Long studyId) {
+        List<AssignmentHistoryResponse> response = studyService.getAllAssignmentHistory(studyId);
+        return ResponseEntity.ok(response);
+    }
 
     @Operation(summary = "신청 가능한 스터디 조회", description = "모집 기간 중에 있는 스터디를 조회합니다.")
     @GetMapping("/apply")
