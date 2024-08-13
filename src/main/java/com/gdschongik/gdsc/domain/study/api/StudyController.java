@@ -23,10 +23,10 @@ public class StudyController {
 
     private final StudyService studyService;
 
-    @Operation(summary = "스터디 과제 히스토리 목록 조회", description = "스터디의 지난 과제의 제출 목록을 조회합니다.")
+    @Operation(summary = "스터디 과제 히스토리 목록 조회", description = "스터디 과제 제출 내역을 조회합니다.")
     @GetMapping("/{studyId}/assignments")
     public ResponseEntity<List<AssignmentHistoryResponse>> getAllAssignmentHistory(@PathVariable Long studyId) {
-        List<AssignmentHistoryResponse> response = studyService.getAllAssignmentHistory(studyId);
+        List<AssignmentHistoryResponse> response = studyService.getAllAssignmentHistories(studyId);
         return ResponseEntity.ok(response);
     }
 
