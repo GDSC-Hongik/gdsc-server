@@ -5,6 +5,7 @@ import static com.gdschongik.gdsc.domain.study.domain.QStudyDetail.studyDetail;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.study.domain.AssignmentHistory;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -20,12 +21,15 @@ public class AssignmentCustomRepositoryImpl implements AssignmentCustomRepositor
                 .selectFrom(assignmentHistory)
                 .join(assignmentHistory.studyDetail, studyDetail)
                 .fetchJoin()
-                .where(assignmentHistory
-                        .studyDetail
-                        .study
-                        .id
-                        .eq(studyId)
-                        .and(assignmentHistory.member.eq(currentMember)))
+                .where(eqStudyId(studyId).and(eqMember(currentMember)))
                 .fetch();
+    }
+
+    private BooleanExpression eqStudyId(Long studyId) {
+        return studyId != null ? studyDetail.study.id.eq(studyId) : null;
+    }
+
+    private BooleanExpression eqMember(Member member) {
+        return member != null ? assignmentHistory.member.eq(member) : null;
     }
 }
