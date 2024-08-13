@@ -1,10 +1,11 @@
 package com.gdschongik.gdsc.domain.study.dto.response;
 
-import static com.gdschongik.gdsc.global.util.formatter.StudyFormatter.*;
-
+import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import com.gdschongik.gdsc.domain.study.domain.Study;
 import com.gdschongik.gdsc.global.util.formatter.SemesterFormatter;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.time.DayOfWeek;
+import java.time.LocalTime;
 
 public record CommonStudyResponse(
         Long studyId,
@@ -14,9 +15,11 @@ public record CommonStudyResponse(
         @Schema(description = "상세설명 노션 링크") String notionLink,
         @Schema(description = "한 줄 소개") String introduction,
         @Schema(description = "멘토 이름") String mentorName,
-        @Schema(description = "스터디 시간") String schedule,
-        @Schema(description = "총 주차수") String totalWeek,
-        @Schema(description = "총 기간") String period) {
+        @Schema(description = "스터디 요일") DayOfWeek dayOfWeek,
+        @Schema(description = "스터디 시작 시간") LocalTime startTime,
+        @Schema(description = "스터디 종료 시간") LocalTime endTime,
+        @Schema(description = "총 주차수") Long totalWeek,
+        @Schema(description = "총 기간") Period period) {
     public static CommonStudyResponse from(Study study) {
         return new CommonStudyResponse(
                 study.getId(),
@@ -26,8 +29,10 @@ public record CommonStudyResponse(
                 study.getNotionLink(),
                 study.getIntroduction(),
                 study.getMentor().getName(),
-                getSchedule(study.getDayOfWeek(), study.getStartTime(), study.getEndTime()),
-                study.getTotalWeek().toString() + "주 코스",
-                getPeriod(study.getPeriod()));
+                study.getDayOfWeek(),
+                study.getStartTime(),
+                study.getEndTime(),
+                study.getTotalWeek(),
+                study.getPeriod());
     }
 }

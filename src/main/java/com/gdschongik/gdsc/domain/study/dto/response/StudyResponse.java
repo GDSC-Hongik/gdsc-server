@@ -1,10 +1,10 @@
 package com.gdschongik.gdsc.domain.study.dto.response;
 
-import static com.gdschongik.gdsc.global.util.formatter.StudyFormatter.getHalfSchedule;
-
 import com.gdschongik.gdsc.domain.study.domain.Study;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.time.format.DateTimeFormatter;
+import java.time.DayOfWeek;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public record StudyResponse(
         Long studyId,
@@ -13,9 +13,10 @@ public record StudyResponse(
         @Schema(description = "상세설명 노션 링크") String notionLink,
         @Schema(description = "한 줄 소개") String introduction,
         @Schema(description = "멘토 이름") String mentorName,
-        @Schema(description = "스터디 시간") String schedule,
-        @Schema(description = "총 주차수") String totalWeek,
-        @Schema(description = "개강일") String openingDate) {
+        @Schema(description = "스터디 요일") DayOfWeek dayOfWeek,
+        @Schema(description = "스터디 시작 시간") LocalTime startTime,
+        @Schema(description = "총 주차수") Long totalWeek,
+        @Schema(description = "개강일") LocalDateTime openingDate) {
 
     public static StudyResponse from(Study study) {
         return new StudyResponse(
@@ -25,8 +26,9 @@ public record StudyResponse(
                 study.getNotionLink(),
                 study.getIntroduction(),
                 study.getMentor().getName(),
-                getHalfSchedule(study.getDayOfWeek(), study.getStartTime()),
-                study.getTotalWeek().toString() + "주 코스",
-                DateTimeFormatter.ofPattern("MM.dd").format(study.getPeriod().getStartDate()) + " 개강");
+                study.getDayOfWeek(),
+                study.getStartTime(),
+                study.getTotalWeek(),
+                study.getPeriod().getStartDate());
     }
 }
