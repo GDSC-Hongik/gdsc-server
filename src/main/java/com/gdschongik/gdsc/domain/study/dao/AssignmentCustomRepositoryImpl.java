@@ -1,6 +1,7 @@
 package com.gdschongik.gdsc.domain.study.dao;
 
 import static com.gdschongik.gdsc.domain.study.domain.QAssignmentHistory.assignmentHistory;
+import static com.gdschongik.gdsc.domain.study.domain.QStudyDetail.studyDetail;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.study.domain.AssignmentHistory;
@@ -17,6 +18,8 @@ public class AssignmentCustomRepositoryImpl implements AssignmentCustomRepositor
     public List<AssignmentHistory> findAssignmentHistoriesByMenteeAndStudy(Long studyId, Member currentMember) {
         return queryFactory
                 .selectFrom(assignmentHistory)
+                .join(assignmentHistory.studyDetail, studyDetail)
+                .fetchJoin()
                 .where(assignmentHistory
                         .studyDetail
                         .study
