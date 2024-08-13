@@ -1,8 +1,8 @@
 package com.gdschongik.gdsc.domain.study.dto.response;
 
+import com.gdschongik.gdsc.domain.common.model.SemesterType;
 import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import com.gdschongik.gdsc.domain.study.domain.Study;
-import com.gdschongik.gdsc.global.util.formatter.SemesterFormatter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
@@ -10,7 +10,8 @@ import java.time.LocalTime;
 public record CommonStudyResponse(
         Long studyId,
         @Schema(description = "이름") String title,
-        @Schema(description = "활동 학기") String semester,
+        @Schema(description = "활동 년도") Integer academicYear,
+        @Schema(description = "활동 학기") SemesterType semester,
         @Schema(description = "종류") String studyType,
         @Schema(description = "상세설명 노션 링크") String notionLink,
         @Schema(description = "한 줄 소개") String introduction,
@@ -23,8 +24,9 @@ public record CommonStudyResponse(
     public static CommonStudyResponse from(Study study) {
         return new CommonStudyResponse(
                 study.getId(),
-                SemesterFormatter.format(study.getAcademicYear(), study.getSemesterType()),
                 study.getTitle(),
+                study.getAcademicYear(),
+                study.getSemesterType(),
                 study.getStudyType().getValue(),
                 study.getNotionLink(),
                 study.getIntroduction(),
