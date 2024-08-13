@@ -10,6 +10,7 @@ public record AssignmentHistoryResponse(
         @Schema(description = "과제 제목") String title,
         @Schema(description = "마감 기한") LocalDateTime deadline,
         @Schema(description = "과제 명세 링크") String descriptionLink,
+        @Schema(description = "과제 제출 링크") String submissionLink,
         @Schema(description = "과제 제출 상태") AssignmentSubmissionStatus assignmentSubmissionStatus,
         @Schema(description = "주차") Long week) {
     public static AssignmentHistoryResponse from(AssignmentHistory assignmentHistory) {
@@ -18,6 +19,7 @@ public record AssignmentHistoryResponse(
                 assignmentHistory.getStudyDetail().getAssignment().getTitle(),
                 assignmentHistory.getStudyDetail().getAssignment().getDeadline(),
                 assignmentHistory.getStudyDetail().getAssignment().getDescriptionLink(),
+                assignmentHistory.getSubmissionLink(),
                 assignmentHistory.getSubmissionStatus(),
                 assignmentHistory.getStudyDetail().getWeek());
     }
