@@ -8,6 +8,7 @@ import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
 import com.gdschongik.gdsc.domain.study.domain.StudyDetailValidator;
 import com.gdschongik.gdsc.domain.study.dto.request.AssignmentCreateUpdateRequest;
 import com.gdschongik.gdsc.domain.study.dto.response.AssignmentResponse;
+import com.gdschongik.gdsc.domain.study.dto.response.StudySessionResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import java.util.List;
@@ -82,5 +83,11 @@ public class MentorStudyDetailService {
         studyDetailRepository.save(studyDetail);
 
         log.info("[MentorStudyDetailService] 과제 수정 완료: studyDetailId={}", studyDetailId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<StudySessionResponse> getSessions(Long studyId) {
+        List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyId(studyId);
+        return studyDetails.stream().map(StudySessionResponse::from).toList();
     }
 }
