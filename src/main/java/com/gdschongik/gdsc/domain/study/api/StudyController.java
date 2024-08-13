@@ -25,7 +25,7 @@ public class StudyController {
 
     @Operation(summary = "스터디 과제 히스토리 목록 조회", description = "스터디 과제 제출 내역을 조회합니다.")
     @GetMapping("/{studyId}/assignments")
-    public ResponseEntity<List<AssignmentHistoryResponse>> getAllAssignmentHistory(@PathVariable Long studyId) {
+    public ResponseEntity<List<AssignmentHistoryResponse>> getAllAssignmentHistories(@PathVariable Long studyId) {
         List<AssignmentHistoryResponse> response = studyService.getAllAssignmentHistories(studyId);
         return ResponseEntity.ok(response);
     }

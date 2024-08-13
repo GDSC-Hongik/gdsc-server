@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface StudyHistoryRepository extends JpaRepository<StudyHistory, Long>, AssignmentCustomRepository {
 
+    // TODO mentee -> student로 변경
     List<StudyHistory> findAllByMentee(Member member);
 
     Optional<StudyHistory> findByMenteeAndStudy(Member member, Study study);
