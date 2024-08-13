@@ -21,8 +21,8 @@ public class MentorStudyController {
 
     @Operation(summary = "내 스터디 조회", description = "내가 멘토로 있는 스터디를 조회합니다.")
     @GetMapping("/me")
-    public ResponseEntity<List<MentorStudyResponse>> getMyStudies() {
-        List<MentorStudyResponse> response = mentorStudyService.getMyStudies();
+    public ResponseEntity<List<MentorStudyResponse>> getStudiesInCharge() {
+        List<MentorStudyResponse> response = mentorStudyService.getStudiesInCharge();
         return ResponseEntity.ok(response);
     }
 }

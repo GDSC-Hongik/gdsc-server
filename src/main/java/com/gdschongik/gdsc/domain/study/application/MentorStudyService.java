@@ -18,7 +18,7 @@ public class MentorStudyService {
     private final StudyRepository studyRepository;
 
     @Transactional(readOnly = true)
-    public List<MentorStudyResponse> getMyStudies() {
+    public List<MentorStudyResponse> getStudiesInCharge() {
         Member currentMember = memberUtil.getCurrentMember();
         List<Study> myStudies = studyRepository.findAllByMentor(currentMember);
         return myStudies.stream().map(MentorStudyResponse::from).toList();
