@@ -36,6 +36,7 @@ public class CookieUtil {
         cookie.setPath("/");
         cookie.setValue("");
         cookie.setMaxAge(0);
+        cookie.setDomain(ROOT_DOMAIN);
         response.addCookie(cookie);
     }
 }
