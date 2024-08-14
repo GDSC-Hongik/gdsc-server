@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum UnivVerificationStatus {
-    PENDING("PENDING"),
+    UNSATISFIED("UNSATISFIED"),
     IN_PROGRESS("IN_PROGRESS"),
     SATISFIED("SATISFIED");
 

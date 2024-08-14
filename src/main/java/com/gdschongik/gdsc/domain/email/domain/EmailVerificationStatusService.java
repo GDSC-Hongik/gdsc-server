@@ -15,7 +15,7 @@ public class EmailVerificationStatusService {
         } else {
             return univEmailVerification.isPresent()
                     ? UnivVerificationStatus.IN_PROGRESS
-                    : UnivVerificationStatus.PENDING;
+                    : UnivVerificationStatus.UNSATISFIED;
         }
     }
 }

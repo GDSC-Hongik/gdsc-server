@@ -1,8 +1,9 @@
 package com.gdschongik.gdsc.domain.study.api;
 
 import com.gdschongik.gdsc.domain.study.application.MentorStudyDetailService;
-import com.gdschongik.gdsc.domain.study.dto.request.AssignmentCreateRequest;
+import com.gdschongik.gdsc.domain.study.dto.request.AssignmentCreateUpdateRequest;
 import com.gdschongik.gdsc.domain.study.dto.response.AssignmentResponse;
+import com.gdschongik.gdsc.domain.study.dto.response.StudySessionResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -26,10 +27,18 @@ public class MentorStudyDetailController {
 
     private final MentorStudyDetailService mentorStudyDetailService;
 
+    @Operation(summary = "스터디 과제 수정", description = "멘토만 과제를 수정할 수 있습니다.")
+    @PatchMapping("/{studyDetailId}/assignments")
+    public ResponseEntity<Void> updateStudyAssignment(
+            @PathVariable Long studyDetailId, @Valid @RequestBody AssignmentCreateUpdateRequest request) {
+        mentorStudyDetailService.updateStudyAssignment(studyDetailId, request);
+        return ResponseEntity.ok().build();
+    }
+
     @Operation(summary = "스터디 과제 개설", description = "멘토만 과제를 개설할 수 있습니다.")
     @PutMapping("/{studyDetailId}/assignments")
     public ResponseEntity<Void> publishStudyAssignment(
-            @PathVariable Long studyDetailId, @Valid @RequestBody AssignmentCreateRequest request) {
+            @PathVariable Long studyDetailId, @Valid @RequestBody AssignmentCreateUpdateRequest request) {
         mentorStudyDetailService.publishStudyAssignment(studyDetailId, request);
         return ResponseEntity.ok().build();
     }
@@ -53,5 +62,13 @@ public class MentorStudyDetailController {
     public ResponseEntity<Void> cancelStudyAssignment(@PathVariable Long studyDetailId) {
         mentorStudyDetailService.cancelStudyAssignment(studyDetailId);
         return ResponseEntity.noContent().build();
+    }
+
+    // TODO 스터디 세션 워딩을 커리큘럼으로 변경해야함
+    @Operation(summary = "스터디 주차별 커리큘럼 목록 조회", description = "멘토가 자신의 스터디 커리큘럼 목록을 조회합니다")
+    @GetMapping("/sessions")
+    public ResponseEntity<List<StudySessionResponse>> getStudySessions(@RequestParam(name = "study") Long studyId) {
+        List<StudySessionResponse> response = mentorStudyDetailService.getSessions(studyId);
+        return ResponseEntity.ok(response);
     }
 }

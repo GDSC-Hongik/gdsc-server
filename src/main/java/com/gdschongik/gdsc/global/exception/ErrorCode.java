@@ -110,11 +110,16 @@ public enum ErrorCode {
     // StudyDetail
     STUDY_DETAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 스터디 상세 정보입니다."),
     STUDY_DETAIL_UPDATE_RESTRICTED_TO_MENTOR(HttpStatus.CONFLICT, "해당 스터디의 멘토만 수정할 수 있습니다."),
+    STUDY_DETAIL_ASSIGNMENT_INVALID_DEADLINE(HttpStatus.CONFLICT, "마감기한이 지난 과제의 마감기한을 수정할 수 없습니다"),
+    STUDY_DETAIL_ASSIGNMENT_INVALID_UPDATE_DEADLINE(HttpStatus.CONFLICT, "수정하려고 하는 과제의 마감기한은 기존의 마감기한보다 빠르면 안됩니다."),
 
     // StudyHistory
     STUDY_HISTORY_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 스터디 수강 기록입니다."),
     STUDY_HISTORY_DUPLICATE(HttpStatus.CONFLICT, "이미 해당 스터디를 신청했습니다."),
     STUDY_HISTORY_ONGOING_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 진행중인 스터디가 있습니다."),
+    STUDY_HISTORY_REPOSITORY_NOT_UPDATABLE_ASSIGNMENT_ALREADY_SUBMITTED(
+            HttpStatus.CONFLICT, "이미 제출한 과제가 있으므로 레포지토리를 수정할 수 없습니다."),
+    STUDY_HISTORY_REPOSITORY_NOT_UPDATABLE_OWNER_MISMATCH(HttpStatus.CONFLICT, "레포지토리 소유자가 현재 멤버와 다릅니다."),
 
     // Order
     ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, "주문이 존재하지 않습니다."),
@@ -140,7 +145,10 @@ public enum ErrorCode {
 
     // Assignment
     ASSIGNMENT_CAN_NOT_BE_UPDATED(HttpStatus.CONFLICT, "휴강인 과제는 수정할 수 없습니다."),
-    ASSIGNMENT_DEADLINE_INVALID(HttpStatus.CONFLICT, "과제 마감 기한이 현재보다 빠릅니다.");
+    ASSIGNMENT_DEADLINE_INVALID(HttpStatus.CONFLICT, "과제 마감 기한이 현재보다 빠릅니다."),
+
+    // Github
+    GITHUB_REPOSITORY_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 레포지토리입니다.");
 
     private final HttpStatus status;
     private final String message;

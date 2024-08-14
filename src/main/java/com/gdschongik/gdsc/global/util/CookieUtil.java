@@ -3,10 +3,7 @@ package com.gdschongik.gdsc.global.util;
 import static com.gdschongik.gdsc.global.common.constant.UrlConstant.*;
 
 import com.gdschongik.gdsc.global.common.constant.JwtConstant;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.Arrays;
-import java.util.Optional;
 import org.springframework.boot.web.server.Cookie;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -35,16 +32,11 @@ public class CookieUtil {
                 .build();
     }
 
-    public Optional<jakarta.servlet.http.Cookie> findCookie(HttpServletRequest request, String cookieName) {
-        return Arrays.stream(request.getCookies())
-                .filter(cookie -> cookie.getName().equals(cookieName))
-                .findFirst();
-    }
-
-    public void deleteCookie(HttpServletResponse response, jakarta.servlet.http.Cookie cookie) {
+    public void deleteCookie(jakarta.servlet.http.Cookie cookie, HttpServletResponse response) {
         cookie.setPath("/");
         cookie.setValue("");
         cookie.setMaxAge(0);
+        cookie.setDomain(ROOT_DOMAIN);
         response.addCookie(cookie);
     }
 }

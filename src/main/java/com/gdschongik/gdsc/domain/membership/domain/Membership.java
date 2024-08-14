@@ -78,7 +78,7 @@ public class Membership extends BaseEntity {
     public void revokePaymentStatus() {
         validatePaymentStatusRevocable();
 
-        regularRequirement.updatePaymentStatus(PENDING);
+        regularRequirement.updatePaymentStatus(UNSATISFIED);
 
         registerEvent(new MembershipPaymentRevokedEvent(id));
     }

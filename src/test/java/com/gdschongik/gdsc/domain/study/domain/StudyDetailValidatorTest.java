@@ -6,7 +6,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
-import com.gdschongik.gdsc.domain.study.dto.request.AssignmentCreateRequest;
+import com.gdschongik.gdsc.domain.study.dto.request.AssignmentCreateUpdateRequest;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.helper.FixtureHelper;
 import java.time.LocalDateTime;
@@ -54,8 +54,8 @@ public class StudyDetailValidatorTest {
                     Period.createPeriod(now.minusDays(5), now));
             StudyDetail studyDetail = fixtureHelper.createStudyDetail(study, now, now.plusDays(7));
             Member anotherMember = fixtureHelper.createAssociateMember(2L);
-            AssignmentCreateRequest request =
-                    new AssignmentCreateRequest(ASSIGNMENT_TITLE, DESCRIPTION_LINK, now.plusDays(2));
+            AssignmentCreateUpdateRequest request =
+                    new AssignmentCreateUpdateRequest(ASSIGNMENT_TITLE, DESCRIPTION_LINK, now.plusDays(2));
 
             // when & then
             assertThatThrownBy(() ->
@@ -74,13 +74,87 @@ public class StudyDetailValidatorTest {
                     Period.createPeriod(now.plusDays(5), now.plusDays(10)),
                     Period.createPeriod(now.minusDays(5), now));
             StudyDetail studyDetail = fixtureHelper.createStudyDetail(study, now, now.plusDays(7));
-            AssignmentCreateRequest request =
-                    new AssignmentCreateRequest(ASSIGNMENT_TITLE, DESCRIPTION_LINK, now.minusDays(2));
+            AssignmentCreateUpdateRequest request =
+                    new AssignmentCreateUpdateRequest(ASSIGNMENT_TITLE, DESCRIPTION_LINK, now.minusDays(2));
 
             // when & then
             assertThatThrownBy(() -> studyDetailValidator.validatePublishStudyAssignment(mentor, studyDetail, request))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(ASSIGNMENT_DEADLINE_INVALID.getMessage());
+        }
+    }
+
+    @Nested
+    class 과제_수정시 {
+
+        @Test
+        void 멘토가_아니라면_실패한다() {
+            // given
+            LocalDateTime now = LocalDateTime.now();
+            Member mentor = fixtureHelper.createAssociateMember(1L);
+            Study study = fixtureHelper.createStudy(
+                    mentor,
+                    Period.createPeriod(now.plusDays(5), now.plusDays(10)),
+                    Period.createPeriod(now.minusDays(5), now));
+
+            StudyDetail studyDetail = fixtureHelper.createStudyDetail(study, now, now.plusDays(10));
+            Member anotherMember = fixtureHelper.createAssociateMember(2L);
+            studyDetail.publishAssignment(ASSIGNMENT_TITLE, now.plusDays(2), DESCRIPTION_LINK);
+
+            AssignmentCreateUpdateRequest request =
+                    new AssignmentCreateUpdateRequest(ASSIGNMENT_TITLE, DESCRIPTION_LINK, now.plusDays(3));
+
+            // when & then
+            assertThatThrownBy(() ->
+                            studyDetailValidator.validateUpdateStudyAssignment(anotherMember, studyDetail, request))
+                    .isInstanceOf(CustomException.class)
+                    .hasMessage(STUDY_DETAIL_UPDATE_RESTRICTED_TO_MENTOR.getMessage());
+        }
+
+        @Test
+        void 기존마감기한이_수정시점보다_앞서면_실패한다() {
+            // given
+            Member mentor = fixtureHelper.createAssociateMember(1L);
+            LocalDateTime assignmentCreatedDate = LocalDateTime.now().minusDays(1);
+            Study study = fixtureHelper.createStudy(
+                    mentor,
+                    Period.createPeriod(assignmentCreatedDate.plusDays(5), assignmentCreatedDate.plusDays(10)),
+                    Period.createPeriod(assignmentCreatedDate.minusDays(5), assignmentCreatedDate));
+            StudyDetail studyDetail =
+                    fixtureHelper.createStudyDetail(study, assignmentCreatedDate, assignmentCreatedDate.plusDays(1));
+            studyDetail.publishAssignment(ASSIGNMENT_TITLE, assignmentCreatedDate.plusDays(1), DESCRIPTION_LINK);
+
+            LocalDateTime assignmentUpdateDate = assignmentCreatedDate.plusDays(3);
+            AssignmentCreateUpdateRequest request =
+                    new AssignmentCreateUpdateRequest(ASSIGNMENT_TITLE, DESCRIPTION_LINK, assignmentUpdateDate);
+
+            // when & then
+            assertThatThrownBy(() -> studyDetailValidator.validateUpdateStudyAssignment(mentor, studyDetail, request))
+                    .isInstanceOf(CustomException.class)
+                    .hasMessage(STUDY_DETAIL_ASSIGNMENT_INVALID_DEADLINE.getMessage());
+        }
+
+        @Test
+        void 수정할_마감기한이_기존마감기한_보다_앞서면_실패한다() {
+            // given
+            LocalDateTime now = LocalDateTime.now();
+            Member mentor = fixtureHelper.createAssociateMember(1L);
+            Study study = fixtureHelper.createStudy(
+                    mentor,
+                    Period.createPeriod(now.plusDays(5), now.plusDays(10)),
+                    Period.createPeriod(now.minusDays(5), now));
+            StudyDetail studyDetail = fixtureHelper.createStudyDetail(study, now, now.plusDays(10));
+            LocalDateTime savedDeadLine = now.minusDays(1);
+            studyDetail.publishAssignment(ASSIGNMENT_TITLE, savedDeadLine, DESCRIPTION_LINK);
+
+            LocalDateTime updatedDeadLine = savedDeadLine.minusDays(4);
+            AssignmentCreateUpdateRequest request =
+                    new AssignmentCreateUpdateRequest(ASSIGNMENT_TITLE, DESCRIPTION_LINK, updatedDeadLine);
+
+            // when & then
+            assertThatThrownBy(() -> studyDetailValidator.validateUpdateStudyAssignment(mentor, studyDetail, request))
+                    .isInstanceOf(CustomException.class)
+                    .hasMessage(STUDY_DETAIL_ASSIGNMENT_INVALID_DEADLINE.getMessage());
         }
     }
 }
