@@ -33,6 +33,8 @@ public class StudyHistory extends BaseEntity {
     @JoinColumn(name = "study_id")
     private Study study;
 
+    private String repositoryLink;
+
     @Builder(access = AccessLevel.PRIVATE)
     private StudyHistory(Member mentee, Study study) {
         this.mentee = mentee;
@@ -41,6 +43,13 @@ public class StudyHistory extends BaseEntity {
 
     public static StudyHistory create(Member mentee, Study study) {
         return StudyHistory.builder().mentee(mentee).study(study).build();
+    }
+
+    /**
+     * 레포지토리 링크를 업데이트합니다.
+     */
+    public void updateRepositoryLink(String repositoryLink) {
+        this.repositoryLink = repositoryLink;
     }
 
     // 데이터 전달 로직
