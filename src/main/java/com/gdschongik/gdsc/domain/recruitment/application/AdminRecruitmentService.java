@@ -11,7 +11,8 @@ import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRoundValidator;
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentValidator;
 import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentCreateRequest;
-import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentRoundCreateUpdateRequest;
+import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentRoundCreateRequest;
+import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentRoundUpdateRequest;
 import com.gdschongik.gdsc.domain.recruitment.dto.response.AdminRecruitmentResponse;
 import com.gdschongik.gdsc.domain.recruitment.dto.response.AdminRecruitmentRoundResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
@@ -63,7 +64,7 @@ public class AdminRecruitmentService {
     }
 
     @Transactional
-    public void createRecruitmentRound(RecruitmentRoundCreateUpdateRequest request) {
+    public void createRecruitmentRound(RecruitmentRoundCreateRequest request) {
         Recruitment recruitment = recruitmentRepository
                 .findByAcademicYearAndSemesterType(request.academicYear(), request.semesterType())
                 .orElseThrow(() -> new CustomException(RECRUITMENT_NOT_FOUND));
@@ -87,7 +88,7 @@ public class AdminRecruitmentService {
     }
 
     @Transactional
-    public void updateRecruitmentRound(Long recruitmentRoundId, RecruitmentRoundCreateUpdateRequest request) {
+    public void updateRecruitmentRound(Long recruitmentRoundId, RecruitmentRoundUpdateRequest request) {
         List<RecruitmentRound> recruitmentRounds = recruitmentRoundRepository.findAllByAcademicYearAndSemesterType(
                 request.academicYear(), request.semesterType());
 

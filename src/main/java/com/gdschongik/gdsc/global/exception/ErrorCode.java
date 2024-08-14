@@ -18,8 +18,6 @@ public enum ErrorCode {
     EXPIRED_JWT_TOKEN(HttpStatus.UNAUTHORIZED, "만료된 JWT 토큰입니다."),
     AUTH_NOT_EXIST(HttpStatus.INTERNAL_SERVER_ERROR, "시큐리티 인증 정보가 존재하지 않습니다."),
     AUTH_NOT_PARSABLE(HttpStatus.INTERNAL_SERVER_ERROR, "시큐리티 인증 정보 파싱에 실패했습니다."),
-    BASE_URI_COOKIE_NOT_FOUND(HttpStatus.NOT_FOUND, "Base URI 쿠키가 존재하지 않습니다."),
-    NOT_ALLOWED_BASE_URI(HttpStatus.FORBIDDEN, "허용되지 않은 Base URI입니다."),
     INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다."),
     INVALID_ROLE(HttpStatus.FORBIDDEN, "권한이 없습니다."),
 
@@ -76,6 +74,7 @@ public enum ErrorCode {
     MEMBERSHIP_ALREADY_SATISFIED(HttpStatus.CONFLICT, "이미 이번 학기에 정회원 승급을 완료한 회원입니다."),
     MEMBERSHIP_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 멤버십이 존재하지 않습니다."),
     MEMBERSHIP_RECRUITMENT_ROUND_NOT_OPEN(HttpStatus.CONFLICT, "리크루팅 회차 모집기간이 아닙니다."),
+    MEMBERSHIP_PAYMENT_NOT_REVOCABLE_NOT_SATISFIED(HttpStatus.CONFLICT, "회비납부를 완료한 경우에만 멤버십 회비납부상태를 취소할 수 있습니다."),
 
     // Recruitment
     DATE_PRECEDENCE_INVALID(HttpStatus.BAD_REQUEST, "종료일이 시작일과 같거나 앞설 수 없습니다."),
@@ -88,7 +87,6 @@ public enum ErrorCode {
     RECRUITMENT_ROUND_TYPE_OVERLAP(HttpStatus.BAD_REQUEST, "모집 차수가 중복됩니다."),
     RECRUITMENT_ROUND_STARTDATE_ALREADY_PASSED(HttpStatus.BAD_REQUEST, "이미 모집 시작일이 지난 모집회차입니다."),
     ROUND_ONE_DOES_NOT_EXIST(HttpStatus.CONFLICT, "1차 모집이 존재하지 않습니다."),
-    RECRUITMENT_ROUND_OPEN_NOT_FOUND(HttpStatus.NOT_FOUND, "진행중인 모집회차가 존재하지 않습니다."),
 
     // Coupon
     COUPON_DISCOUNT_AMOUNT_NOT_POSITIVE(HttpStatus.CONFLICT, "쿠폰의 할인 금액은 0보다 커야 합니다."),
@@ -106,13 +104,22 @@ public enum ErrorCode {
     STUDY_TIME_INVALID(HttpStatus.CONFLICT, "스터디종료 시각이 스터디시작 시각보다 빠릅니다."),
     ASSIGNMENT_STUDY_CAN_NOT_INPUT_STUDY_TIME(HttpStatus.CONFLICT, "과제 스터디는 스터디 시간을 입력할 수 없습니다."),
     STUDY_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 스터디입니다."),
-    STUDY_DETAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 스터디 회차입니다."),
     STUDY_NOT_APPLICABLE(HttpStatus.CONFLICT, "스터디 신청기간이 아닙니다."),
+    STUDY_NOT_CANCELABLE_APPLICATION_PERIOD(HttpStatus.CONFLICT, "스터디 신청기간이 아니라면 취소할 수 없습니다."),
+
+    // StudyDetail
+    STUDY_DETAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 스터디 상세 정보입니다."),
+    STUDY_DETAIL_UPDATE_RESTRICTED_TO_MENTOR(HttpStatus.CONFLICT, "해당 스터디의 멘토만 수정할 수 있습니다."),
+    STUDY_DETAIL_ASSIGNMENT_INVALID_DEADLINE(HttpStatus.CONFLICT, "마감기한이 지난 과제의 마감기한을 수정할 수 없습니다"),
+    STUDY_DETAIL_ASSIGNMENT_INVALID_UPDATE_DEADLINE(HttpStatus.CONFLICT, "수정하려고 하는 과제의 마감기한은 기존의 마감기한보다 빠르면 안됩니다."),
 
     // StudyHistory
-    STUDY_HISTORY_NOT_FOUND(HttpStatus.NOT_FOUND, "수강하지 않는 스터디입니다."),
+    STUDY_HISTORY_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 스터디 수강 기록입니다."),
     STUDY_HISTORY_DUPLICATE(HttpStatus.CONFLICT, "이미 해당 스터디를 신청했습니다."),
     STUDY_HISTORY_ONGOING_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 진행중인 스터디가 있습니다."),
+    STUDY_HISTORY_REPOSITORY_NOT_UPDATABLE_ASSIGNMENT_ALREADY_SUBMITTED(
+            HttpStatus.CONFLICT, "이미 제출한 과제가 있으므로 레포지토리를 수정할 수 없습니다."),
+    STUDY_HISTORY_REPOSITORY_NOT_UPDATABLE_OWNER_MISMATCH(HttpStatus.CONFLICT, "레포지토리 소유자가 현재 멤버와 다릅니다."),
 
     // Attendance
     ATTENDANCE_DATE_INVALID(HttpStatus.CONFLICT, "출석체크 날짜가 아닙니다."),
@@ -139,7 +146,13 @@ public enum ErrorCode {
 
     // Order - MoneyInfo
     ORDER_FINAL_PAYMENT_AMOUNT_MISMATCH(HttpStatus.CONFLICT, "주문 최종결제금액은 주문총액에서 할인금액을 뺀 값이어야 합니다."),
-    ;
+
+    // Assignment
+    ASSIGNMENT_CAN_NOT_BE_UPDATED(HttpStatus.CONFLICT, "휴강인 과제는 수정할 수 없습니다."),
+    ASSIGNMENT_DEADLINE_INVALID(HttpStatus.CONFLICT, "과제 마감 기한이 현재보다 빠릅니다."),
+
+    // Github
+    GITHUB_REPOSITORY_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 레포지토리입니다.");
 
     private final HttpStatus status;
     private final String message;

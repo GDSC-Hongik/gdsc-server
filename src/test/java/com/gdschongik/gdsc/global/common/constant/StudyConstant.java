@@ -14,10 +14,16 @@ public class StudyConstant {
     public static final StudyType ONLINE_STUDY = StudyType.ONLINE;
     public static final StudyType ASSIGNMENT_STUDY = StudyType.ASSIGNMENT;
     public static final DayOfWeek DAY_OF_WEEK = DayOfWeek.FRIDAY;
-    public static final String ATTENDANCE_NUMBER = "1234";
     public static final LocalTime STUDY_START_TIME = LocalTime.of(19, 0, 0);
     public static final LocalTime STUDY_END_TIME = LocalTime.of(20, 0, 0);
     public static final LocalDateTime STUDY_START_AT = LocalDateTime.of(2024, 3, 8, 19, 0, 0);
     public static final LocalDateTime STUDY_END_AT = LocalDateTime.of(2024, 3, 8, 20, 0, 0);
     public static final LocalDate STUDY_DATE = LocalDate.of(2024, 3, 2);
+
+    // StudyDetail
+    public static final String ATTENDANCE_NUMBER = "1234";
+
+    // Assignment
+    public static final String ASSIGNMENT_TITLE = "testTitle";
+    public static final String DESCRIPTION_LINK = "www.link.com";
 }

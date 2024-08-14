@@ -10,21 +10,15 @@ import java.util.Optional;
 @DomainService
 public class AttendanceValidator {
     public void validateAttendance(
-            Optional<StudyHistory> studyHistory,
             StudyDetail studyDetail,
             Study study,
             String attendanceNumber,
             LocalDate date) {
-        // 수강하는 스터디인지 검증
-        if (studyHistory.isEmpty()) {
-            throw new CustomException(STUDY_HISTORY_NOT_FOUND);
-        }
-
         // 출석체크 날짜 검증
         LocalDate attendanceDay = study.getPeriod()
                 .getStartDate()
                 .toLocalDate()
-                .plusDays(7
+                .plusDays(studyDetail.getWeek() * 7
                         - study.getPeriod().getStartDate().getDayOfWeek().getValue()
                         + study.getDayOfWeek().getValue());
         if (!attendanceDay.equals(date)) {

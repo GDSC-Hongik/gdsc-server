@@ -50,10 +50,10 @@ class MemberTest {
             AssociateRequirement requirement = member.getAssociateRequirement();
 
             // then
-            assertThat(requirement.getUnivStatus()).isEqualTo(PENDING);
-            assertThat(requirement.getDiscordStatus()).isEqualTo(PENDING);
-            assertThat(requirement.getBevyStatus()).isEqualTo(PENDING);
-            assertThat(requirement.getInfoStatus()).isEqualTo(PENDING);
+            assertThat(requirement.getUnivStatus()).isEqualTo(UNSATISFIED);
+            assertThat(requirement.getDiscordStatus()).isEqualTo(UNSATISFIED);
+            assertThat(requirement.getBevyStatus()).isEqualTo(UNSATISFIED);
+            assertThat(requirement.getInfoStatus()).isEqualTo(UNSATISFIED);
         }
     }
 
@@ -370,7 +370,7 @@ class MemberTest {
                             AssociateRequirement::getInfoStatus,
                             AssociateRequirement::getBevyStatus,
                             AssociateRequirement::getUnivStatus)
-                    .containsExactly(PENDING, PENDING, PENDING, PENDING);
+                    .containsExactly(UNSATISFIED, UNSATISFIED, UNSATISFIED, UNSATISFIED);
         }
     }
 }

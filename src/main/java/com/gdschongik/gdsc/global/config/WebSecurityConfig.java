@@ -116,6 +116,8 @@ public class WebSecurityConfig {
                 .authenticated()
                 .requestMatchers("/admin/**")
                 .hasRole("ADMIN")
+                .requestMatchers("/mentor/**")
+                .hasRole("MENTOR")
                 .anyRequest()
                 .authenticated());
 
@@ -161,19 +163,15 @@ public class WebSecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         if (environmentUtil.isProdProfile()) {
-            configuration.addAllowedOriginPattern(PROD_CLIENT_ONBOARDING_URL);
-            configuration.addAllowedOriginPattern(PROD_CLIENT_ADMIN_URL);
+            configuration.setAllowedOriginPatterns(PROD_CLIENT_URLS);
         }
 
         if (environmentUtil.isDevProfile()) {
-            configuration.addAllowedOriginPattern(DEV_CLIENT_ONBOARDING_URL);
-            configuration.addAllowedOriginPattern(DEV_CLIENT_ADMIN_URL);
-            configuration.addAllowedOriginPattern(LOCAL_REACT_CLIENT_URL);
-            configuration.addAllowedOriginPattern(LOCAL_REACT_CLIENT_SECURE_URL);
-            configuration.addAllowedOriginPattern(LOCAL_VITE_CLIENT_URL);
-            configuration.addAllowedOriginPattern(LOCAL_VITE_CLIENT_SECURE_URL);
-            configuration.addAllowedOriginPattern(LOCAL_PROXY_CLIENT_ONBOARDING_URL);
-            configuration.addAllowedOriginPattern(DEV_SERVER_URL);
+            configuration.setAllowedOriginPatterns(DEV_AND_LOCAL_CLIENT_URLS);
+        }
+
+        if (environmentUtil.isLocalProfile()) {
+            configuration.setAllowedOriginPatterns(LOCAL_CLIENT_URLS);
         }
 
         configuration.addAllowedHeader("*");

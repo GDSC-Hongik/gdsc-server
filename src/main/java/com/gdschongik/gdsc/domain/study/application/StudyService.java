@@ -1,5 +1,7 @@
 package com.gdschongik.gdsc.domain.study.application;
 
+import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
+
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.study.dao.AttendanceRepository;
 import com.gdschongik.gdsc.domain.study.dao.StudyDetailRepository;
@@ -14,7 +16,6 @@ import com.gdschongik.gdsc.domain.study.domain.StudyHistoryValidator;
 import com.gdschongik.gdsc.domain.study.dto.request.StudyAttendRequest;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
-import com.gdschongik.gdsc.global.exception.ErrorCode;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import java.time.LocalDate;
 import java.util.List;
@@ -47,8 +48,7 @@ public class StudyService {
 
     @Transactional
     public void applyStudy(Long studyId) {
-        Study study =
-                studyRepository.findById(studyId).orElseThrow(() -> new CustomException(ErrorCode.STUDY_NOT_FOUND));
+        Study study = studyRepository.findById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
         Member currentMember = memberUtil.getCurrentMember();
 
         List<StudyHistory> currentMemberStudyHistories = studyHistoryRepository.findAllByMentee(currentMember);
@@ -61,18 +61,32 @@ public class StudyService {
         log.info("[StudyService] 스터디 수강신청: studyHistoryId={}", studyHistory.getId());
     }
 
+    public void cancelStudyApply(Long studyId) {
+        Study study = studyRepository.findById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
+        Member currentMember = memberUtil.getCurrentMember();
+
+        studyHistoryValidator.validateCancelStudyApply(study);
+
+        StudyHistory studyHistory = studyHistoryRepository
+                .findByMenteeAndStudy(currentMember, study)
+                .orElseThrow(() -> new CustomException(STUDY_HISTORY_NOT_FOUND));
+        studyHistoryRepository.delete(studyHistory);
+
+        log.info("[StudyService] 스터디 수강신청 취소: studyId={}, memberId={}", study.getId(), currentMember.getId());
+    }
+
     @Transactional
     public void attend(Long studyDetailId, StudyAttendRequest request) {
         final StudyDetail studyDetail = studyDetailRepository
                 .findById(studyDetailId)
-                .orElseThrow(() -> new CustomException(ErrorCode.STUDY_DETAIL_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(STUDY_DETAIL_NOT_FOUND));
         final Member currentMember = memberUtil.getCurrentMember();
         final Study study = studyDetail.getStudy();
-        final Optional<StudyHistory> studyHistory =
-                studyHistoryRepository.findFirstByMenteeAndStudy(currentMember, study);
+        final StudyHistory studyHistory = studyHistoryRepository
+                .findByMenteeAndStudy(currentMember, study)
+                .orElseThrow(() -> new CustomException(STUDY_HISTORY_NOT_FOUND));
 
-        attendanceValidator.validateAttendance(
-                studyHistory, studyDetail, study, request.attendanceNumber(), LocalDate.now());
+        attendanceValidator.validateAttendance(studyDetail, study, request.attendanceNumber(), LocalDate.now());
 
         Attendance attendance = Attendance.create(currentMember, studyDetail);
         final Attendance savedAttendance = attendanceRepository.save(attendance);

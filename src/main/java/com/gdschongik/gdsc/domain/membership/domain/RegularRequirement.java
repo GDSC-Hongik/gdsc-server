@@ -29,7 +29,7 @@ public class RegularRequirement {
 
     public static RegularRequirement createUnsatisfiedRequirement() {
         return RegularRequirement.builder()
-                .paymentStatus(RequirementStatus.PENDING)
+                .paymentStatus(RequirementStatus.UNSATISFIED)
                 .build();
     }
 

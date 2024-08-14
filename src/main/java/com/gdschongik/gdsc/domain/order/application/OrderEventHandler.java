@@ -1,6 +1,7 @@
 package com.gdschongik.gdsc.domain.order.application;
 
 import com.gdschongik.gdsc.domain.membership.application.MembershipService;
+import com.gdschongik.gdsc.domain.order.domain.OrderCanceledEvent;
 import com.gdschongik.gdsc.domain.order.domain.OrderCompletedEvent;
 import com.gdschongik.gdsc.domain.order.domain.OrderCreatedEvent;
 import lombok.RequiredArgsConstructor;
@@ -31,5 +32,11 @@ public class OrderEventHandler {
     public void handleOrderCompletedEvent(OrderCompletedEvent orderCompletedEvent) {
         log.info("[OrderEventHandler] 주문 완료 이벤트 수신: nanoId={}", orderCompletedEvent.nanoId());
         membershipService.verifyPaymentStatus(orderCompletedEvent.nanoId());
+    }
+
+    @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
+    public void handleOrderCanceledEvent(OrderCanceledEvent orderCanceledEvent) {
+        log.info("[OrderEventHandler] 주문 취소 이벤트 수신: orderId={}", orderCanceledEvent.orderId());
+        membershipService.revokePaymentStatus(orderCanceledEvent.orderId());
     }
 }
