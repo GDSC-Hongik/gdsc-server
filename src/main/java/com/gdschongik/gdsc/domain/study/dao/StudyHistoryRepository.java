@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface StudyHistoryRepository extends JpaRepository<StudyHistory, Long>, AssignmentCustomRepository {
+public interface StudyHistoryRepository extends JpaRepository<StudyHistory, Long> {
 
     // TODO mentee -> student로 변경
     List<StudyHistory> findAllByMentee(Member member);

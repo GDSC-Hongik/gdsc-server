@@ -2,17 +2,15 @@ package com.gdschongik.gdsc.domain.study.api;
 
 import com.gdschongik.gdsc.domain.study.application.StudentStudyHistoryService;
 import com.gdschongik.gdsc.domain.study.dto.request.RepositoryUpdateRequest;
+import com.gdschongik.gdsc.domain.study.dto.response.AssignmentHistoryResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.io.IOException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Student Study History", description = "사용자 스터디 수강 이력 API입니다.")
 @RestController
@@ -28,5 +26,13 @@ public class StudentStudyHistoryController {
             @PathVariable Long studyHistoryId, @Valid @RequestBody RepositoryUpdateRequest request) throws IOException {
         studentStudyHistoryService.updateRepository(studyHistoryId, request);
         return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "스터디 과제 히스토리 목록 조회", description = "스터디 과제 제출 내역을 조회합니다.")
+    @GetMapping("/assignments")
+    public ResponseEntity<List<AssignmentHistoryResponse>> getAllAssignmentHistories(
+            @RequestParam(name = "study") Long studyId) {
+        List<AssignmentHistoryResponse> response = studentStudyHistoryService.getAllAssignmentHistories(studyId);
+        return ResponseEntity.ok(response);
     }
 }

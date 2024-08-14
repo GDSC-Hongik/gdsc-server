@@ -6,7 +6,6 @@ import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.study.dao.StudyHistoryRepository;
 import com.gdschongik.gdsc.domain.study.dao.StudyRepository;
 import com.gdschongik.gdsc.domain.study.domain.*;
-import com.gdschongik.gdsc.domain.study.dto.response.AssignmentHistoryResponse;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
@@ -62,15 +61,5 @@ public class StudyService {
         studyHistoryRepository.delete(studyHistory);
 
         log.info("[StudyService] 스터디 수강신청 취소: studyId={}, memberId={}", study.getId(), currentMember.getId());
-    }
-
-    // TODO mentee -> study 변환 작업 필요
-    @Transactional(readOnly = true)
-    public List<AssignmentHistoryResponse> getAllAssignmentHistories(Long studyId) {
-        Member currentMember = memberUtil.getCurrentMember();
-
-        return studyHistoryRepository.findAssignmentHistoriesByMenteeAndStudy(studyId, currentMember).stream()
-                .map(AssignmentHistoryResponse::from)
-                .toList();
     }
 }
