@@ -36,15 +36,12 @@ public class AttendanceValidatorTest {
                     .getStartDate()
                     .toLocalDate()
                     .plusDays(studyDetail.getWeek() * 7
-                              - study.getPeriod().getStartDate().getDayOfWeek().getValue()
-                              + study.getDayOfWeek().getValue());
+                            - study.getPeriod().getStartDate().getDayOfWeek().getValue()
+                            + study.getDayOfWeek().getValue());
 
             // when & then
             assertThatThrownBy(() -> attendanceValidator.validateAttendance(
-                            studyDetail,
-                            study,
-                            ATTENDANCE_NUMBER,
-                            attendanceDay.plusDays(1)))
+                            studyDetail, study, ATTENDANCE_NUMBER, attendanceDay.plusDays(1)))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(ATTENDANCE_DATE_INVALID.getMessage());
         }
@@ -64,8 +61,8 @@ public class AttendanceValidatorTest {
                     .getStartDate()
                     .toLocalDate()
                     .plusDays(studyDetail.getWeek() * 7
-                              - study.getPeriod().getStartDate().getDayOfWeek().getValue()
-                              + study.getDayOfWeek().getValue());
+                            - study.getPeriod().getStartDate().getDayOfWeek().getValue()
+                            + study.getDayOfWeek().getValue());
 
             // when & then
             assertThatThrownBy(() -> attendanceValidator.validateAttendance(studyDetail, study, "2345", attendanceDay))

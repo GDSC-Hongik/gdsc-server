@@ -10,5 +10,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface StudyHistoryRepository extends JpaRepository<StudyHistory, Long> {
 
     List<StudyHistory> findAllByMentee(Member member);
+
     Optional<StudyHistory> findByMenteeAndStudy(Member member, Study study);
 }

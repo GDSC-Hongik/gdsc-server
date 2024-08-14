@@ -19,7 +19,6 @@ import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

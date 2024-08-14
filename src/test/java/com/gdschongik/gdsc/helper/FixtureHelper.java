@@ -81,7 +81,6 @@ public class FixtureHelper {
                 STUDY_END_TIME);
     }
 
-
     public StudyDetail createStudyDetail(Study study, LocalDateTime startDate, LocalDateTime endDate) {
         return StudyDetail.createStudyDetail(study, 1L, ATTENDANCE_NUMBER, Period.createPeriod(startDate, endDate));
     }
