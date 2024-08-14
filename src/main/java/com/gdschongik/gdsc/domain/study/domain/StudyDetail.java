@@ -84,6 +84,7 @@ public class StudyDetail extends BaseEntity {
     }
 
     // 데이터 전달 로직
+
     public boolean isAssignmentDeadlineRemaining() {
         return assignment.isDeadlineRemaining();
     }
