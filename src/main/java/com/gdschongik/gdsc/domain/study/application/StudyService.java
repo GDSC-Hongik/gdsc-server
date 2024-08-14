@@ -1,16 +1,24 @@
 package com.gdschongik.gdsc.domain.study.application;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
+import com.gdschongik.gdsc.domain.study.dao.AttendanceRepository;
+import com.gdschongik.gdsc.domain.study.dao.StudyDetailRepository;
 import com.gdschongik.gdsc.domain.study.dao.StudyHistoryRepository;
 import com.gdschongik.gdsc.domain.study.dao.StudyRepository;
+import com.gdschongik.gdsc.domain.study.domain.Attendance;
+import com.gdschongik.gdsc.domain.study.domain.AttendanceValidator;
 import com.gdschongik.gdsc.domain.study.domain.Study;
+import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
 import com.gdschongik.gdsc.domain.study.domain.StudyHistory;
 import com.gdschongik.gdsc.domain.study.domain.StudyHistoryValidator;
+import com.gdschongik.gdsc.domain.study.dto.request.StudyAttendRequest;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
 import com.gdschongik.gdsc.global.util.MemberUtil;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,8 +32,11 @@ public class StudyService {
 
     private final MemberUtil memberUtil;
     private final StudyRepository studyRepository;
+    private final StudyDetailRepository studyDetailRepository;
     private final StudyHistoryRepository studyHistoryRepository;
     private final StudyHistoryValidator studyHistoryValidator;
+    private final AttendanceRepository attendanceRepository;
+    private final AttendanceValidator attendanceValidator;
 
     public List<StudyResponse> getAllApplicableStudies() {
         return studyRepository.findAll().stream()
@@ -48,5 +59,24 @@ public class StudyService {
         studyHistoryRepository.save(studyHistory);
 
         log.info("[StudyService] 스터디 수강신청: studyHistoryId={}", studyHistory.getId());
+    }
+
+    @Transactional
+    public void attend(Long studyDetailId, StudyAttendRequest request) {
+        final StudyDetail studyDetail = studyDetailRepository
+                .findById(studyDetailId)
+                .orElseThrow(() -> new CustomException(ErrorCode.STUDY_DETAIL_NOT_FOUND));
+        final Member currentMember = memberUtil.getCurrentMember();
+        final Study study = studyDetail.getStudy();
+        final Optional<StudyHistory> studyHistory =
+                studyHistoryRepository.findFirstByMenteeAndStudy(currentMember, study);
+
+        attendanceValidator.validateAttendance(
+                studyHistory, studyDetail, study, request.attendanceNumber(), LocalDate.now());
+
+        Attendance attendance = Attendance.create(currentMember, studyDetail);
+        final Attendance savedAttendance = attendanceRepository.save(attendance);
+
+        log.info("[StudyService] 스터디 출석: attendance={}", savedAttendance.getId());
     }
 }

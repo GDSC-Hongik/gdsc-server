@@ -19,13 +19,13 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"member_id", "study_detail_id"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"member_id", "study_id"})})
-public class StudyHistory extends BaseEntity {
+public class Attendance extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "study_history_id")
+    @Column(name = "attendance_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -33,21 +33,16 @@ public class StudyHistory extends BaseEntity {
     private Member mentee;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "study_id")
-    private Study study;
+    @JoinColumn(name = "study_detail_id")
+    private StudyDetail studyDetail;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private StudyHistory(Member mentee, Study study) {
+    private Attendance(Member mentee, StudyDetail studyDetail) {
         this.mentee = mentee;
-        this.study = study;
+        this.studyDetail = studyDetail;
     }
 
-    public static StudyHistory create(Member mentee, Study study) {
-        return StudyHistory.builder().mentee(mentee).study(study).build();
-    }
-
-    // 데이터 전달 로직
-    public boolean isStudyOngoing() {
-        return study.isStudyOngoing();
+    public static Attendance create(Member student, StudyDetail studyDetail) {
+        return Attendance.builder().mentee(student).studyDetail(studyDetail).build();
     }
 }
