@@ -7,6 +7,7 @@ import com.gdschongik.gdsc.domain.study.dao.StudyRepository;
 import com.gdschongik.gdsc.domain.study.domain.Study;
 import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
 import com.gdschongik.gdsc.domain.study.dto.request.StudyCreateRequest;
+import com.gdschongik.gdsc.domain.study.dto.response.StudyResponse;
 import com.gdschongik.gdsc.domain.study.factory.StudyDomainFactory;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
@@ -20,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class AdminStudyService {
 
     private final StudyRepository studyRepository;
@@ -54,5 +54,10 @@ public class AdminStudyService {
 
     private Member getMemberById(Long memberId) {
         return memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+    }
+
+    @Transactional(readOnly = true)
+    public List<StudyResponse> getAllStudies() {
+        return studyRepository.findAll().stream().map(StudyResponse::from).toList();
     }
 }
