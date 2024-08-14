@@ -82,4 +82,9 @@ public class StudyDetail extends BaseEntity {
     public void updateAssignment(String title, LocalDateTime deadLine, String descriptionNotionLink) {
         assignment = Assignment.generateAssignment(title, deadLine, descriptionNotionLink);
     }
+
+    // 데이터 전달 로직
+    public boolean isAssignmentDeadlineRemaining() {
+        return assignment.isDeadlineRemaining();
+    }
 }

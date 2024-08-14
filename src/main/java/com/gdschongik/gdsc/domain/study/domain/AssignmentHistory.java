@@ -1,5 +1,7 @@
 package com.gdschongik.gdsc.domain.study.domain;
 
+import static com.gdschongik.gdsc.domain.study.domain.AssignmentSubmissionStatus.*;
+
 import com.gdschongik.gdsc.domain.common.model.BaseEntity;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import jakarta.persistence.Column;
@@ -72,7 +74,11 @@ public class AssignmentHistory extends BaseEntity {
                 .submissionLink(submissionLink)
                 .commitHash(commitHash)
                 .contentLength(contentLength)
-                .submissionStatus(AssignmentSubmissionStatus.PENDING)
+                .submissionStatus(PENDING)
                 .build();
+    }
+
+    public boolean isSubmitted() {
+        return submissionStatus == SUCCESS || submissionStatus == FAILURE;
     }
 }

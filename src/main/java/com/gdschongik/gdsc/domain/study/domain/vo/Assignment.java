@@ -65,4 +65,15 @@ public class Assignment {
                 .status(StudyStatus.OPEN)
                 .build();
     }
+
+    // 데이터 전달 로직
+
+    public boolean isCancelled() {
+        return status == CANCELLED;
+    }
+
+    public boolean isDeadlineRemaining() {
+        LocalDateTime now = LocalDateTime.now();
+        return now.isBefore(deadline);
+    }
 }
