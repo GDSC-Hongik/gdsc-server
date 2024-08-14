@@ -24,6 +24,7 @@ public class StudyHistoryValidator {
         }
 
         // 이미 듣고 있는 스터디가 있는 경우
+        // todo: StudyHistory가 아닌 Study의 isOngoning 호출하도록 수정
         boolean isInOngoingStudy = currentMemberStudyHistories.stream().anyMatch(StudyHistory::isStudyOngoing);
 
         if (isInOngoingStudy) {
@@ -35,6 +36,19 @@ public class StudyHistoryValidator {
         // 스터디 수강신청 기간이 아닌 경우
         if (!study.isApplicable()) {
             throw new CustomException(STUDY_NOT_CANCELABLE_APPLICATION_PERIOD);
+        }
+    }
+
+    public void validateUpdateRepository(
+            boolean isAnyAssignmentSubmitted, String repositoryOwnerOauthId, String currentMemberOauthId) {
+        // 이미 제출한 과제가 있는 경우
+        if (isAnyAssignmentSubmitted) {
+            throw new CustomException(STUDY_HISTORY_REPOSITORY_NOT_UPDATABLE_ASSIGNMENT_ALREADY_SUBMITTED);
+        }
+
+        // 레포지토리 소유자가 현 멤버가 아닌 경우
+        if (!repositoryOwnerOauthId.equals(currentMemberOauthId)) {
+            throw new CustomException(STUDY_HISTORY_REPOSITORY_NOT_UPDATABLE_OWNER_MISMATCH);
         }
     }
 }
