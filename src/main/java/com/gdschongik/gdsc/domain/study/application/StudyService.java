@@ -60,6 +60,7 @@ public class StudyService {
         log.info("[StudyService] 스터디 수강신청: studyHistoryId={}", studyHistory.getId());
     }
 
+    @Transactional
     public void cancelStudyApply(Long studyId) {
         Study study = studyRepository.findById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
         Member currentMember = memberUtil.getCurrentMember();
