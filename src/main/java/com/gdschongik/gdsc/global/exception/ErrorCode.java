@@ -100,7 +100,7 @@ public enum ErrorCode {
     // Study
     STUDY_APPLICATION_START_DATE_INVALID(HttpStatus.CONFLICT, "스터디 신청기간 시작일이 스터디 시작일보다 빠릅니다."),
     STUDY_MENTOR_IS_UNAUTHORIZED(HttpStatus.CONFLICT, "게스트인 회원은 멘토로 지정할 수 없습니다."),
-    STUDY_MENTOR_INVALID(HttpStatus.CONFLICT, "사용자가 해당 스터디의 멘토가 아닙니다"),
+    STUDY_MENTOR_INVALID(HttpStatus.CONFLICT, "사용자가 해당 스터디의 멘토가 아닙니다."),
     ON_OFF_LINE_STUDY_TIME_IS_ESSENTIAL(HttpStatus.CONFLICT, "온오프라인 스터디는 스터디 시간이 필요합니다."),
     STUDY_TIME_INVALID(HttpStatus.CONFLICT, "스터디종료 시각이 스터디시작 시각보다 빠릅니다."),
     ASSIGNMENT_STUDY_CAN_NOT_INPUT_STUDY_TIME(HttpStatus.CONFLICT, "과제 스터디는 스터디 시간을 입력할 수 없습니다."),

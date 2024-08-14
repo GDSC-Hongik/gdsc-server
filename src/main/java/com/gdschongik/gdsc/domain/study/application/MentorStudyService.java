@@ -33,10 +33,8 @@ public class MentorStudyService {
     @Transactional(readOnly = true)
     public List<StudyStudentResponse> getStudyStudents(Long studyId) {
         Member currentMember = memberUtil.getCurrentMember();
-
         Study study =
                 studyRepository.findById(studyId).orElseThrow(() -> new CustomException(ErrorCode.STUDY_NOT_FOUND));
-
         study.validateMentor(currentMember);
 
         List<StudyHistory> studyHistories = studyHistoryRepository.findByStudyId(studyId);
