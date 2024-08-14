@@ -31,7 +31,7 @@ public class StudentStudyHistoryController {
     @Operation(summary = "스터디 과제 히스토리 목록 조회", description = "스터디 과제 제출 내역을 조회합니다.")
     @GetMapping("/assignments")
     public ResponseEntity<List<AssignmentHistoryResponse>> getAllAssignmentHistories(
-            @RequestParam(name = "study") Long studyId) {
+            @RequestParam(name = "studyId") Long studyId) {
         List<AssignmentHistoryResponse> response = studentStudyHistoryService.getAllAssignmentHistories(studyId);
         return ResponseEntity.ok(response);
     }

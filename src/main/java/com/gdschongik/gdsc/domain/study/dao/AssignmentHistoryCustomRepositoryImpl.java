@@ -41,7 +41,7 @@ public class AssignmentHistoryCustomRepositoryImpl implements AssignmentHistoryC
     }
 
     @Override
-    public List<AssignmentHistory> findAssignmentHistoriesByMenteeAndStudy(Long studyId, Member currentMember) {
+    public List<AssignmentHistory> findAssignmentHistoriesByMenteeAndStudy(Member currentMember, Long studyId) {
         return queryFactory
                 .selectFrom(assignmentHistory)
                 .join(assignmentHistory.studyDetail, studyDetail)
