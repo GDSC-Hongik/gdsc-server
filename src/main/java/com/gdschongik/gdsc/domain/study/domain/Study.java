@@ -127,6 +127,8 @@ public class Study extends BaseSemesterEntity {
                 .build();
     }
 
+    // 검증 로직
+
     private static void validateApplicationStartDateBeforeSessionStartDate(
             LocalDateTime applicationStartDate, LocalDateTime startDate) {
         if (!applicationStartDate.isBefore(startDate)) {
@@ -160,6 +162,12 @@ public class Study extends BaseSemesterEntity {
     private static void validateAssignmentLineStudyTime(LocalTime studyStartTime, LocalTime studyEndTime) {
         if (!(studyStartTime == null && studyEndTime == null)) {
             throw new CustomException(ASSIGNMENT_STUDY_CAN_NOT_INPUT_STUDY_TIME);
+        }
+    }
+
+    public void validateMentor(Member currentMember) {
+        if (currentMember != mentor) {
+            throw new CustomException(STUDY_MENTOR_INVALID);
         }
     }
 

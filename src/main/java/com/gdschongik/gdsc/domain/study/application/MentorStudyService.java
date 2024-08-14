@@ -7,6 +7,8 @@ import com.gdschongik.gdsc.domain.study.domain.Study;
 import com.gdschongik.gdsc.domain.study.domain.StudyHistory;
 import com.gdschongik.gdsc.domain.study.dto.response.MentorStudyResponse;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyStudentResponse;
+import com.gdschongik.gdsc.global.exception.CustomException;
+import com.gdschongik.gdsc.global.exception.ErrorCode;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +32,13 @@ public class MentorStudyService {
 
     @Transactional(readOnly = true)
     public List<StudyStudentResponse> getStudyStudents(Long studyId) {
+        Member currentMember = memberUtil.getCurrentMember();
+
+        Study study =
+                studyRepository.findById(studyId).orElseThrow(() -> new CustomException(ErrorCode.STUDY_NOT_FOUND));
+
+        study.validateMentor(currentMember);
+
         List<StudyHistory> studyHistories = studyHistoryRepository.findByStudyId(studyId);
 
         return studyHistories.stream().map(StudyStudentResponse::from).toList();
