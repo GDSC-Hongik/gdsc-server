@@ -5,6 +5,7 @@ import com.gdschongik.gdsc.domain.study.dao.StudyHistoryRepository;
 import com.gdschongik.gdsc.domain.study.dao.StudyRepository;
 import com.gdschongik.gdsc.domain.study.domain.Study;
 import com.gdschongik.gdsc.domain.study.domain.StudyHistory;
+import com.gdschongik.gdsc.domain.study.domain.StudyValidator;
 import com.gdschongik.gdsc.domain.study.dto.response.MentorStudyResponse;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyStudentResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
@@ -22,6 +23,7 @@ public class MentorStudyService {
     private final MemberUtil memberUtil;
     private final StudyRepository studyRepository;
     private final StudyHistoryRepository studyHistoryRepository;
+    private final StudyValidator studyValidator;
 
     @Transactional(readOnly = true)
     public List<MentorStudyResponse> getStudiesInCharge() {
@@ -35,8 +37,9 @@ public class MentorStudyService {
         Member currentMember = memberUtil.getCurrentMember();
         Study study =
                 studyRepository.findById(studyId).orElseThrow(() -> new CustomException(ErrorCode.STUDY_NOT_FOUND));
-        study.validateMentor(currentMember);
 
+        studyValidator.validateStudyMentor(
+                currentMember.getId(), study.getMentor().getId());
         List<StudyHistory> studyHistories = studyHistoryRepository.findByStudyId(studyId);
 
         return studyHistories.stream().map(StudyStudentResponse::from).toList();

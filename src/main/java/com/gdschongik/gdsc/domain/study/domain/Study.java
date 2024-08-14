@@ -165,12 +165,6 @@ public class Study extends BaseSemesterEntity {
         }
     }
 
-    public void validateMentor(Member currentMember) {
-        if (currentMember != mentor) {
-            throw new CustomException(STUDY_MENTOR_INVALID);
-        }
-    }
-
     // 데이터 전달 로직
     public boolean isApplicable() {
         return applicationPeriod.isOpen();
