@@ -13,7 +13,7 @@ import com.gdschongik.gdsc.domain.study.dto.request.RepositoryUpdateRequest;
 import com.gdschongik.gdsc.domain.study.dto.response.AssignmentHistoryResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
-import com.gdschongik.gdsc.infra.client.github.GithubClient;
+import com.gdschongik.gdsc.infra.github.client.GithubClient;
 import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
