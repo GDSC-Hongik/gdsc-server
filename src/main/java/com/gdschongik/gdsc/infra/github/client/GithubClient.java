@@ -51,7 +51,7 @@ public class GithubClient {
                     .atZone(ZoneId.systemDefault())
                     .toLocalDateTime();
 
-            return new GithubAssignmentSubmissionResponse(content.length(), committedAt);
+            return new GithubAssignmentSubmissionResponse(ghLatestCommit.getSHA1(), content.length(), committedAt);
         } catch (IOException e) {
             throw new CustomException(ErrorCode.GITHUB_ASSIGNMENT_NOT_FOUND);
         }
