@@ -1,4 +1,4 @@
-package com.gdschongik.gdsc.infra.client.github;
+package com.gdschongik.gdsc.infra.github.client;
 
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
