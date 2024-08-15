@@ -34,6 +34,7 @@ public class GithubClient {
             GHRepository ghRepository = getRepository(repo);
             String assignmentPath = GITHUB_ASSIGNMENT_PATH.formatted(week);
 
+            // GHContent#getSize() 의 경우 한글 문자열을 byte 단위로 계산하기 때문에, 직접 content를 읽어서 길이를 계산
             GHContent ghContent = ghRepository.getFileContent(assignmentPath);
             String content = new String(ghContent.read().readAllBytes());
 
