@@ -12,4 +12,12 @@ public class StudyAssignmentHistoryValidator {
     public void validateCreateAssignmentHistory(LocalDateTime now, StudyDetail studyDetail) {
         studyDetail.validateAssignmentSubmittable(now);
     }
+
+    /**
+     * 채점을 수행하기 전, 과제 제출이 가능한지 검증합니다.
+     */
+    public void validateSubmit(LocalDateTime now, AssignmentHistory assignmentHistory) {
+        StudyDetail studyDetail = assignmentHistory.getStudyDetail();
+        studyDetail.validateAssignmentSubmittable(now);
+    }
 }
