@@ -2,8 +2,6 @@ package com.gdschongik.gdsc.global.common.constant;
 
 import com.gdschongik.gdsc.domain.study.domain.StudyType;
 import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class StudyConstant {

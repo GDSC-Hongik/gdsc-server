@@ -30,19 +30,19 @@ public class Attendance extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    private Member mentee;
+    private Member student;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "study_detail_id")
     private StudyDetail studyDetail;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private Attendance(Member mentee, StudyDetail studyDetail) {
-        this.mentee = mentee;
+    private Attendance(Member student, StudyDetail studyDetail) {
+        this.student = student;
         this.studyDetail = studyDetail;
     }
 
     public static Attendance create(Member student, StudyDetail studyDetail) {
-        return Attendance.builder().mentee(student).studyDetail(studyDetail).build();
+        return Attendance.builder().student(student).studyDetail(studyDetail).build();
     }
 }

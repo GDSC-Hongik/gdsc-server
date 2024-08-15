@@ -7,11 +7,10 @@ import com.gdschongik.gdsc.domain.study.dao.AttendanceRepository;
 import com.gdschongik.gdsc.domain.study.dao.StudyDetailRepository;
 import com.gdschongik.gdsc.domain.study.dao.StudyHistoryRepository;
 import com.gdschongik.gdsc.domain.study.dao.StudyRepository;
-<<<<<<< HEAD
+import com.gdschongik.gdsc.domain.study.domain.*;
 import com.gdschongik.gdsc.domain.study.domain.Attendance;
 import com.gdschongik.gdsc.domain.study.domain.AttendanceValidator;
 import com.gdschongik.gdsc.domain.study.dto.request.StudyAttendRequest;
-import com.gdschongik.gdsc.domain.study.domain.*;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
@@ -89,6 +88,6 @@ public class StudyService {
         Attendance attendance = Attendance.create(currentMember, studyDetail);
         final Attendance savedAttendance = attendanceRepository.save(attendance);
 
-        log.info("[StudyService] 스터디 출석: attendance={}", savedAttendance.getId());
+        log.info("[StudyService] 스터디 출석: attendanceId={}", savedAttendance.getId());
     }
 }
