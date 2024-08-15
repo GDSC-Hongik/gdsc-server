@@ -82,4 +82,8 @@ public class StudyDetail extends BaseEntity {
     public void updateAssignment(String title, LocalDateTime deadLine, String descriptionNotionLink) {
         assignment = Assignment.generateAssignment(title, deadLine, descriptionNotionLink);
     }
+
+    public void validateAssignmentSubmittable(LocalDateTime now) {
+        assignment.validateSubmittable(now);
+    }
 }
