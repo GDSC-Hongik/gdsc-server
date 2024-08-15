@@ -17,3 +17,4 @@ logging:
   level:
     org.springframework.orm.jpa: DEBUG
     org.springframework.transaction: DEBUG
+    org.kohsuke.github: debug
