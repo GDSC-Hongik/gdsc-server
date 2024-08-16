@@ -19,7 +19,7 @@ public class StudyAssignmentHistoryValidator {
         }
 
         if (now.isBefore(assignmentHistory.getStudyDetail().getPeriod().getStartDate())) {
-            throw new CustomException(ASSIGNMENT_NOT_STARTED);
+            throw new CustomException(ASSIGNMENT_SUBMIT_NOT_STARTED);
         }
 
         StudyDetail studyDetail = assignmentHistory.getStudyDetail();
