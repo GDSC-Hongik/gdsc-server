@@ -28,7 +28,11 @@ public class MentorStudyDetailController {
     private final MentorStudyDetailService mentorStudyDetailService;
 
     @Operation(summary = "스터디 상세 작성", description = "멘토가 자신의 스터디 상세 정보를 작성합니다.")
-    @PutMapping("/")
+    @PatchMapping("/{studyDetailId}")
+    public ResponseEntity<> updateStudyDetail(@PathVariable Long studyDetailId) {
+        mentorStudyDetailService.updateStudyDetail();
+        return ResponseEntity.ok().build();
+    }
 
     @Operation(summary = "스터디 과제 수정", description = "멘토만 과제를 수정할 수 있습니다.")
     @PatchMapping("/{studyDetailId}/assignments")
