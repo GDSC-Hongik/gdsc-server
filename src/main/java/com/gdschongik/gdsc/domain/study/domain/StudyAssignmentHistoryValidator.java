@@ -17,6 +17,8 @@ public class StudyAssignmentHistoryValidator {
             throw new CustomException(ASSIGNMENT_STUDY_NOT_APPLIED);
         }
 
+        // TODO: 과제 시작기간 이전에 생성하는 경우도 고려해야 함
+
         studyDetail.validateAssignmentSubmittable(now);
     }
 
