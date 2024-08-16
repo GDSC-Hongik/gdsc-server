@@ -1,7 +1,6 @@
 package com.gdschongik.gdsc.helper;
 
 import static com.gdschongik.gdsc.domain.member.domain.Department.*;
-import static com.gdschongik.gdsc.domain.member.domain.Member.*;
 import static com.gdschongik.gdsc.global.common.constant.MemberConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.RecruitmentConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.SemesterConstant.*;
@@ -83,5 +82,12 @@ public class FixtureHelper {
 
     public StudyDetail createStudyDetail(Study study, LocalDateTime startDate, LocalDateTime endDate) {
         return StudyDetail.createStudyDetail(study, 1L, ATTENDANCE_NUMBER, Period.createPeriod(startDate, endDate));
+    }
+
+    public StudyDetail createStudyDetailWithAssignment(
+            Study study, LocalDateTime startDate, LocalDateTime endDate, LocalDateTime deadline) {
+        StudyDetail studyDetail = createStudyDetail(study, startDate, endDate);
+        studyDetail.publishAssignment(ASSIGNMENT_TITLE, deadline, DESCRIPTION_LINK);
+        return studyDetail;
     }
 }
