@@ -68,7 +68,7 @@ class StudyAssignmentHistoryValidatorTest {
             assertThatThrownBy(
                             () -> validator.validateSubmitAvailable(isAppliedToStudy, beforeStart, assignmentHistory))
                     .isInstanceOf(CustomException.class)
-                    .hasMessage(ASSIGNMENT_NOT_STARTED.getMessage());
+                    .hasMessage(ASSIGNMENT_SUBMIT_NOT_STARTED.getMessage());
         }
 
         @Test
