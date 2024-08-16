@@ -71,6 +71,7 @@ public class FixtureHelper {
         return Study.createStudy(
                 ACADEMIC_YEAR,
                 SEMESTER_TYPE,
+                STUDY_TITLE,
                 mentor,
                 period,
                 applicationPeriod,

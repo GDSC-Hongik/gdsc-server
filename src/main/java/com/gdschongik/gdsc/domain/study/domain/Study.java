@@ -80,6 +80,7 @@ public class Study extends BaseSemesterEntity {
     private Study(
             Integer academicYear,
             SemesterType semesterType,
+            String title,
             Member mentor,
             Period period,
             Period applicationPeriod,
@@ -89,6 +90,7 @@ public class Study extends BaseSemesterEntity {
             LocalTime startTime,
             LocalTime endTime) {
         super(academicYear, semesterType);
+        this.title = title;
         this.mentor = mentor;
         this.period = period;
         this.applicationPeriod = applicationPeriod;
@@ -102,6 +104,7 @@ public class Study extends BaseSemesterEntity {
     public static Study createStudy(
             Integer academicYear,
             SemesterType semesterType,
+            String title,
             Member mentor,
             Period period,
             Period applicationPeriod,
@@ -116,6 +119,7 @@ public class Study extends BaseSemesterEntity {
         return Study.builder()
                 .academicYear(academicYear)
                 .semesterType(semesterType)
+                .title(title)
                 .mentor(mentor)
                 .period(period)
                 .applicationPeriod(applicationPeriod)
