@@ -122,7 +122,7 @@ public enum ErrorCode {
     STUDY_HISTORY_REPOSITORY_NOT_UPDATABLE_OWNER_MISMATCH(HttpStatus.CONFLICT, "레포지토리 소유자가 현재 멤버와 다릅니다."),
 
     // Attendance
-    ATTENDANCE_DATE_INVALID(HttpStatus.CONFLICT, "출석체크 날짜가 아닙니다."),
+    ATTENDANCE_DATE_INVALID(HttpStatus.CONFLICT, "강의일이 아니면 출석체크할 수 없습니다."),
     ATTENDANCE_NUMBER_MISMATCH(HttpStatus.CONFLICT, "출석번호가 일치하지 않습니다."),
 
     // Order
