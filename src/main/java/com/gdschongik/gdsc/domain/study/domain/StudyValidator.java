@@ -8,8 +8,9 @@ import com.gdschongik.gdsc.global.exception.CustomException;
 
 @DomainService
 public class StudyValidator {
-    public void validateStudyMentor(Member currentMember, Long mentorId) {
-        if (!currentMember.isAdmin() && !currentMember.getId().equals(mentorId)) {
+    public void validateStudyMentor(Member currentMember, Study study) {
+        if (!currentMember.isAdmin()
+                && !currentMember.getId().equals(study.getMentor().getId())) {
             throw new CustomException(STUDY_MENTOR_INVALID);
         }
     }
