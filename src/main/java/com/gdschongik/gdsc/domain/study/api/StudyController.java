@@ -47,7 +47,7 @@ public class StudyController {
     }
 
     @Operation(summary = "스터디 출석체크", description = "스터디에 출석체크합니다. 현재 진행중인 스터디 회차에 출석체크해야 하며, 중복출석체크할 수 없습니다.")
-    @PostMapping("/details/{studyDetailId}/attend")
+    @PostMapping("/study-details/{studyDetailId}/attend")
     public ResponseEntity<Void> attend(
             @PathVariable Long studyDetailId, @Valid @RequestBody StudyAttendRequest request) {
         studyService.attend(studyDetailId, request);
