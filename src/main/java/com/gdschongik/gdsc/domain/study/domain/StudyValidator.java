@@ -10,7 +10,7 @@ import com.gdschongik.gdsc.global.exception.CustomException;
 @DomainService
 public class StudyValidator {
     public void validateStudyMentor(Member currentMember, Long mentorId) {
-        if (currentMember.isGuest()) {
+        if (currentMember.isGuest() || currentMember.isAssociate() || currentMember.isRegular()) {
             throw new CustomException(STUDY_MENTOR_IS_UNAUTHORIZED);
         }
 

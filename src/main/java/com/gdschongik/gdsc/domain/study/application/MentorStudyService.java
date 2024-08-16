@@ -38,8 +38,11 @@ public class MentorStudyService {
         Study study =
                 studyRepository.findById(studyId).orElseThrow(() -> new CustomException(ErrorCode.STUDY_NOT_FOUND));
 
-        studyValidator.validateStudyMentor(currentMember, study.getMentor().getId());
         List<StudyHistory> studyHistories = studyHistoryRepository.findByStudyId(studyId);
+
+        if (!currentMember.isAdmin()) {
+            studyValidator.validateStudyMentor(currentMember, study.getMentor().getId());
+        }
 
         return studyHistories.stream().map(StudyStudentResponse::from).toList();
     }
