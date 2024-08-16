@@ -20,6 +20,7 @@ public class StudyDomainFactory {
         return Study.createStudy(
                 request.academicYear(),
                 request.semesterType(),
+                request.title(),
                 mentor,
                 Period.createPeriod(request.startDate().atStartOfDay(), endDate.atTime(LocalTime.MAX)),
                 Period.createPeriod(
@@ -28,8 +29,8 @@ public class StudyDomainFactory {
                 request.totalWeek(),
                 request.studyType(),
                 request.dayOfWeek(),
-                request.studyStartTime(),
-                request.studyEndTime());
+                request.studyStartTime().toLocalTime(),
+                request.studyEndTime().toLocalTime());
     }
 
     // 해당 주의 비어있는 스터디상세를 생성합니다.
