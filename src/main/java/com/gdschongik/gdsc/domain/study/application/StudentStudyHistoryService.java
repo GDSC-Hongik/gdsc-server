@@ -88,7 +88,7 @@ public class StudentStudyHistoryService {
         boolean isAppliedToStudy = studyHistoryRepository.existsByMenteeAndStudy(currentMember, studyDetail.getStudy());
         LocalDateTime now = LocalDateTime.now();
 
-        AssignmentHistory assignmentHistory = findOrCreate(isAppliedToStudy, now, currentMember, studyDetail);
+        AssignmentHistory assignmentHistory = findOrCreate(currentMember, studyDetail);
 
         studyAssignmentHistoryValidator.validateSubmitAvailable(isAppliedToStudy, now, assignmentHistory);
 
@@ -97,16 +97,9 @@ public class StudentStudyHistoryService {
         assignmentHistoryRepository.save(assignmentHistory);
     }
 
-    private AssignmentHistory findOrCreate(
-            boolean isAppliedToStudy, LocalDateTime now, Member currentMember, StudyDetail studyDetail) {
+    private AssignmentHistory findOrCreate(Member currentMember, StudyDetail studyDetail) {
         return assignmentHistoryRepository
                 .findByMemberAndStudyDetail(currentMember, studyDetail)
-                .orElseGet(() -> createAssignmentHistory(isAppliedToStudy, now, studyDetail, currentMember));
-    }
-
-    private AssignmentHistory createAssignmentHistory(
-            boolean isAppliedToStudy, LocalDateTime now, StudyDetail studyDetail, Member currentMember) {
-        studyAssignmentHistoryValidator.validateCreateAssignmentHistory(isAppliedToStudy, now, studyDetail);
-        return AssignmentHistory.create(studyDetail, currentMember);
+                .orElseGet(() -> AssignmentHistory.create(studyDetail, currentMember));
     }
 }

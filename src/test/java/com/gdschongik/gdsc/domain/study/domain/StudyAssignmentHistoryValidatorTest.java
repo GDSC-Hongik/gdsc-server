@@ -36,67 +36,6 @@ class StudyAssignmentHistoryValidatorTest {
     }
 
     @Nested
-    class 과제_제출이력_생성_검증할때 {
-
-        @Test
-        void 스터디_수강신청_기록이_없다면_실패한다() {
-            // given
-            Study study = createStudyWithMentor(1L);
-            StudyDetail studyDetail = createStudyDetailWithAssignment(study);
-            boolean isAppliedToStudy = false;
-
-            // when & then
-            assertThatThrownBy(() -> validator.validateCreateAssignmentHistory(
-                            isAppliedToStudy, STUDY_DETAIL_START_DATETIME, studyDetail))
-                    .isInstanceOf(CustomException.class)
-                    .hasMessage(ASSIGNMENT_STUDY_NOT_APPLIED.getMessage());
-        }
-
-        @Test
-        void 과제가_시작되지_않았다면_실패한다() {
-            // given
-            Study study = createStudyWithMentor(1L);
-            StudyDetail studyDetail = createStudyDetailWithAssignment(study);
-            boolean isAppliedToStudy = true;
-            LocalDateTime beforeStart = STUDY_DETAIL_START_DATETIME.minusDays(1);
-
-            // when & then
-            assertThatThrownBy(
-                            () -> validator.validateCreateAssignmentHistory(isAppliedToStudy, beforeStart, studyDetail))
-                    .isInstanceOf(CustomException.class)
-                    .hasMessage(ASSIGNMENT_NOT_STARTED.getMessage());
-        }
-
-        @Test
-        void 과제_마감기한이_지났다면_실패한다() {
-            // given
-            Study study = createStudyWithMentor(1L);
-            StudyDetail studyDetail = createStudyDetailWithAssignment(study);
-            boolean isAppliedToStudy = true;
-            LocalDateTime afterDeadline = STUDY_ASSIGNMENT_DEADLINE_DATETIME.plusDays(1);
-
-            // when & then
-            assertThatThrownBy(() ->
-                            validator.validateCreateAssignmentHistory(isAppliedToStudy, afterDeadline, studyDetail))
-                    .isInstanceOf(CustomException.class)
-                    .hasMessage(ASSIGNMENT_SUBMIT_DEADLINE_PASSED.getMessage());
-        }
-
-        @Test
-        void 모든_조건을_만족하는_경우_성공한다() {
-            // given
-            Study study = createStudyWithMentor(1L);
-            StudyDetail studyDetail = createStudyDetailWithAssignment(study);
-            boolean isAppliedToStudy = true;
-
-            // when & then
-            assertThatCode(() -> validator.validateCreateAssignmentHistory(
-                            isAppliedToStudy, STUDY_DETAIL_START_DATETIME, studyDetail))
-                    .doesNotThrowAnyException();
-        }
-    }
-
-    @Nested
     class 과제_제출가능_여부_검증할때 {
 
         @Test
@@ -124,8 +63,7 @@ class StudyAssignmentHistoryValidatorTest {
             LocalDateTime beforeStart = STUDY_DETAIL_START_DATETIME.minusDays(1);
 
             // when & then
-            assertThatThrownBy(
-                            () -> validator.validateCreateAssignmentHistory(isAppliedToStudy, beforeStart, studyDetail))
+            assertThatThrownBy(() -> validator.validateSubmitAvailable(isAppliedToStudy, beforeStart, studyDetail))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(ASSIGNMENT_NOT_STARTED.getMessage());
         }
