@@ -85,29 +85,28 @@ public class StudentStudyHistoryService {
         StudyDetail studyDetail = studyDetailRepository
                 .findById(studyDetailId)
                 .orElseThrow(() -> new CustomException(STUDY_DETAIL_NOT_FOUND));
-        StudyHistory studyHistory = studyHistoryRepository
-                .findByMenteeAndStudy(currentMember, studyDetail.getStudy())
-                .orElseThrow(() -> new CustomException(STUDY_HISTORY_NOT_APPLIED));
-
+        boolean isAppliedToStudy = studyHistoryRepository.existsByMenteeAndStudy(currentMember, studyDetail.getStudy());
         LocalDateTime now = LocalDateTime.now();
-        AssignmentHistory assignmentHistory = findOrCreate(now, currentMember, studyDetail);
 
-        studyAssignmentHistoryValidator.validateSubmit(now, assignmentHistory);
+        AssignmentHistory assignmentHistory = findOrCreate(isAppliedToStudy, now, currentMember, studyDetail);
+
+        studyAssignmentHistoryValidator.validateSubmit(isAppliedToStudy, now, assignmentHistory);
 
         // TODO: 과제 채점 및 과제이력 업데이트 로직 추가
 
         assignmentHistoryRepository.save(assignmentHistory);
     }
 
-    private AssignmentHistory findOrCreate(LocalDateTime now, Member currentMember, StudyDetail studyDetail) {
+    private AssignmentHistory findOrCreate(
+            boolean isAppliedToStudy, LocalDateTime now, Member currentMember, StudyDetail studyDetail) {
         return assignmentHistoryRepository
                 .findByMemberAndStudyDetail(currentMember, studyDetail)
-                .orElseGet(() -> createAssignmentHistory(now, studyDetail, currentMember));
+                .orElseGet(() -> createAssignmentHistory(isAppliedToStudy, now, studyDetail, currentMember));
     }
 
     private AssignmentHistory createAssignmentHistory(
-            LocalDateTime now, StudyDetail studyDetail, Member currentMember) {
-        studyAssignmentHistoryValidator.validateCreateAssignmentHistory(now, studyDetail);
+            boolean isAppliedToStudy, LocalDateTime now, StudyDetail studyDetail, Member currentMember) {
+        studyAssignmentHistoryValidator.validateCreateAssignmentHistory(isAppliedToStudy, now, studyDetail);
         return AssignmentHistory.create(studyDetail, currentMember);
     }
 }
