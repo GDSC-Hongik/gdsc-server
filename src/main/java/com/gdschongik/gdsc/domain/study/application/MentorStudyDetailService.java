@@ -8,15 +8,18 @@ import com.gdschongik.gdsc.domain.study.dao.StudyRepository;
 import com.gdschongik.gdsc.domain.study.domain.Study;
 import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
 import com.gdschongik.gdsc.domain.study.domain.StudyDetailValidator;
-import com.gdschongik.gdsc.domain.study.domain.vo.Session;
 import com.gdschongik.gdsc.domain.study.dto.request.AssignmentCreateUpdateRequest;
+import com.gdschongik.gdsc.domain.study.dto.request.StudyDetailUpdateRequest;
+import com.gdschongik.gdsc.domain.study.dto.request.StudySessionCreateRequest;
 import com.gdschongik.gdsc.domain.study.dto.response.AssignmentResponse;
 import com.gdschongik.gdsc.domain.study.dto.response.StudySessionResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -98,22 +101,48 @@ public class MentorStudyDetailService {
     }
 
     @Transactional
-    public void updateStudyDetail(Long studyId) {
-        Study study = studyRepository.findById(studyId).orElseThrow(()->new CustomException(STUDY_NOT_FOUND));
-        study.update();
-        studyRepository.save(study);
+    public void updateStudyDetail(Long studyId, StudyDetailUpdateRequest request) {
+        Member currentMember = memberUtil.getCurrentMember();
+        Study study = studyRepository.findById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
+
+        // TODO studyValidator에서 mentor인지 검증하는 validator사용하기
 
         List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyId(studyId);
+        studyDetailValidator.validateUpdateStudyDetail(studyDetails, request.studySessions());
 
-        // validate필요
+        // 스터디 저장
+        study.update(request.notionLink(), request.introduction());
+        studyRepository.save(study);
 
-        // 세션 정보 bulk insert
+        Map<Long, StudySessionCreateRequest> requestMap = request.studySessions().stream()
+                .collect(Collectors.toMap(StudySessionCreateRequest::studyDetailId, Function.identity()));
+
+        // StudyDetail을 업데이트하는 작업
         List<StudyDetail> updatedStudyDetails = new ArrayList<>();
         for (StudyDetail studyDetail : studyDetails) {
-            studyDetail.updateSession();
+            Long id = studyDetail.getId();
+            StudySessionCreateRequest matchingSession = requestMap.get(id);
+
+            studyDetail.updateSession(
+                    studyDetail.getStudy().getPeriod().getStartDate(),
+                    matchingSession.title(),
+                    matchingSession.description(),
+                    matchingSession.difficulty(),
+                    matchingSession.status());
 
             updatedStudyDetails.add(studyDetail);
         }
+        //
+        //        // 세션 정보 bulk insert
+        //        List<StudyDetail> updatedStudyDetails = new ArrayList<>();
+        //        for (StudyDetail studyDetail : studyDetails) {
+        //            StudySessionCreateRequest matchingSession =
+        // request.studySessions().stream().filter(s->s.studyDetailId().equals(studyDetail.getId())).findFirst().get();
+        //
+        // studyDetail.updateSession(studyDetail.getStudy().getPeriod().getStartDate(),matchingSession.title(),matchingSession.description(),matchingSession.difficulty(),matchingSession.status());
+        //
+        //            updatedStudyDetails.add(studyDetail);
+        //        }
         studyDetailRepository.saveAll(updatedStudyDetails);
     }
 }

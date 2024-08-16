@@ -91,4 +91,9 @@ public class StudyDetail extends BaseEntity {
                         + study.getDayOfWeek().getValue()
                         - study.getStartDate().getDayOfWeek().getValue());
     }
+
+    public void updateSession(
+            LocalDateTime startAt, String title, String description, Difficulty difficulty, StudyStatus status) {
+        session = Session.generateSession(startAt, title, description, difficulty, status);
+    }
 }

@@ -2,6 +2,7 @@ package com.gdschongik.gdsc.domain.study.api;
 
 import com.gdschongik.gdsc.domain.study.application.MentorStudyDetailService;
 import com.gdschongik.gdsc.domain.study.dto.request.AssignmentCreateUpdateRequest;
+import com.gdschongik.gdsc.domain.study.dto.request.StudyDetailUpdateRequest;
 import com.gdschongik.gdsc.domain.study.dto.response.AssignmentResponse;
 import com.gdschongik.gdsc.domain.study.dto.response.StudySessionResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,10 +28,11 @@ public class MentorStudyDetailController {
 
     private final MentorStudyDetailService mentorStudyDetailService;
 
-    @Operation(summary = "스터디 상세 작성", description = "멘토가 자신의 스터디 상세 정보를 작성합니다.")
-    @PatchMapping("/{studyDetailId}")
-    public ResponseEntity<> updateStudyDetail(@PathVariable Long studyDetailId) {
-        mentorStudyDetailService.updateStudyDetail();
+    @Operation(summary = "스터디 상세 정보 작성", description = "스터디 상세 정보를 작성합니다.")
+    @PatchMapping
+    public ResponseEntity<Void> updateStudyDetail(
+            @RequestParam(name = "studyId") Long studyId, @RequestBody StudyDetailUpdateRequest request) {
+        mentorStudyDetailService.updateStudyDetail(studyId, request);
         return ResponseEntity.ok().build();
     }
 

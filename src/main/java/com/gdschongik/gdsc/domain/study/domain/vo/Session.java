@@ -45,4 +45,15 @@ public class Session {
     public static Session createEmptySession() {
         return Session.builder().status(StudyStatus.NONE).build();
     }
+
+    public static Session generateSession(
+            LocalDateTime startAt, String title, String description, Difficulty difficulty, StudyStatus status) {
+        return Session.builder()
+                .startAt(startAt)
+                .title(title)
+                .description(description)
+                .difficulty(difficulty)
+                .status(status)
+                .build();
+    }
 }

@@ -4,9 +4,13 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.study.dto.request.AssignmentCreateUpdateRequest;
+import com.gdschongik.gdsc.domain.study.dto.request.StudySessionCreateRequest;
 import com.gdschongik.gdsc.global.annotation.DomainService;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @DomainService
 public class StudyDetailValidator {
@@ -52,6 +56,24 @@ public class StudyDetailValidator {
 
         if (deadLine.isAfter(updateDeadLine)) {
             throw new CustomException(STUDY_DETAIL_ASSIGNMENT_INVALID_UPDATE_DEADLINE);
+        }
+    }
+
+    // 요청이 들어온 총 studyDetail수가 맞는지 validate, 각 studyDetail이 studyDetail Id와 같은지 검증
+    public void validateUpdateStudyDetail(List<StudyDetail> studyDetails, List<StudySessionCreateRequest> request) {
+        // StudyDetail ID와 요청된 StudySessionCreateRequest ID의 집합을 생성
+        Set<Long> studyDetailIds = studyDetails.stream().map(StudyDetail::getId).collect(Collectors.toSet());
+
+        Set<Long> requestIds =
+                request.stream().map(StudySessionCreateRequest::studyDetailId).collect(Collectors.toSet());
+
+        if (studyDetailIds.size() != requestIds.size()) {
+            throw new CustomException(STUDY_DETAIL_SESSION_SIZE_MISMATCH);
+        }
+
+        // 두 집합이 일치하는지 검증
+        if (!studyDetailIds.equals(requestIds)) {
+            throw new CustomException(STUDY_DETAIL_SESSION_ID_INVALID);
         }
     }
 }
