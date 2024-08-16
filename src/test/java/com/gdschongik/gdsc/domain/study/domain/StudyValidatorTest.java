@@ -32,8 +32,7 @@ public class StudyValidatorTest {
                     Period.createPeriod(assignmentCreatedDate.minusDays(5), assignmentCreatedDate));
 
             // when & then
-            assertThatThrownBy(() -> studyValidator.validateStudyMentor(
-                            currentMember, study.getMentor().getId()))
+            assertThatThrownBy(() -> studyValidator.validateStudyMentor(currentMember, study))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(STUDY_MENTOR_INVALID.getMessage());
         }
@@ -56,8 +55,7 @@ public class StudyValidatorTest {
 
             // when & then
             assertThat(currentMentorStudy.getMentor().getId()).isEqualTo(currentMember.getId());
-            assertThatThrownBy(() -> studyValidator.validateStudyMentor(
-                            currentMember, study.getMentor().getId()))
+            assertThatThrownBy(() -> studyValidator.validateStudyMentor(currentMember, study))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(STUDY_MENTOR_INVALID.getMessage());
         }
@@ -74,8 +72,7 @@ public class StudyValidatorTest {
                     Period.createPeriod(assignmentCreatedDate.minusDays(5), assignmentCreatedDate));
 
             // when & then
-            assertThatThrownBy(() -> studyValidator.validateStudyMentor(
-                            admin, study.getMentor().getId()))
+            assertThatThrownBy(() -> studyValidator.validateStudyMentor(admin, study))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(STUDY_MENTOR_INVALID.getMessage());
         }
