@@ -347,6 +347,6 @@ public class Member extends BaseEntity {
     }
 
     public boolean isAdmin() {
-        return role.equals(ADMIN);
+        return manageRole.equals(ADMIN);
     }
 }
