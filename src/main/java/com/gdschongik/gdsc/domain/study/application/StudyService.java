@@ -83,7 +83,7 @@ public class StudyService {
                 .findByMenteeAndStudy(currentMember, study)
                 .orElseThrow(() -> new CustomException(STUDY_HISTORY_NOT_FOUND));
 
-        attendanceValidator.validateAttendance(studyDetail, study, request.attendanceNumber(), LocalDate.now());
+        attendanceValidator.validateAttendance(studyDetail, request.attendanceNumber(), LocalDate.now());
 
         Attendance attendance = Attendance.create(currentMember, studyDetail);
         attendanceRepository.save(attendance);

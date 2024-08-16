@@ -8,7 +8,6 @@ public class StudyConstant {
     private StudyConstant() {}
 
     public static final Long TOTAL_WEEK = 8L;
-    public static final Long CURRENT_WEEK = 1L;
     public static final StudyType ONLINE_STUDY = StudyType.ONLINE;
     public static final StudyType ASSIGNMENT_STUDY = StudyType.ASSIGNMENT;
     public static final DayOfWeek DAY_OF_WEEK = DayOfWeek.FRIDAY;

@@ -32,16 +32,11 @@ public class AttendanceValidatorTest {
             Study study = fixtureHelper.createStudy(mentor, period, applicationPeriod);
             StudyDetail studyDetail = fixtureHelper.createStudyDetail(study, now, now.plusDays(7));
 
-            LocalDate attendanceDay = study.getPeriod()
-                    .getStartDate()
-                    .toLocalDate()
-                    .plusDays(studyDetail.getWeek() * 7
-                            - study.getPeriod().getStartDate().getDayOfWeek().getValue()
-                            + study.getDayOfWeek().getValue());
+            LocalDate attendanceDay = studyDetail.getAttendanceDay();
 
             // when & then
             assertThatThrownBy(() -> attendanceValidator.validateAttendance(
-                            studyDetail, study, ATTENDANCE_NUMBER, attendanceDay.plusDays(1)))
+                            studyDetail, ATTENDANCE_NUMBER, attendanceDay.plusDays(1)))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(ATTENDANCE_DATE_INVALID.getMessage());
         }
@@ -57,15 +52,11 @@ public class AttendanceValidatorTest {
             Study study = fixtureHelper.createStudy(mentor, period, applicationPeriod);
             StudyDetail studyDetail = fixtureHelper.createStudyDetail(study, now, now.plusDays(7));
 
-            LocalDate attendanceDay = study.getPeriod()
-                    .getStartDate()
-                    .toLocalDate()
-                    .plusDays(studyDetail.getWeek() * 7
-                            - study.getPeriod().getStartDate().getDayOfWeek().getValue()
-                            + study.getDayOfWeek().getValue());
+            LocalDate attendanceDay = studyDetail.getAttendanceDay();
 
             // when & then
-            assertThatThrownBy(() -> attendanceValidator.validateAttendance(studyDetail, study, "2345", attendanceDay))
+            assertThatThrownBy(() ->
+                            attendanceValidator.validateAttendance(studyDetail, ATTENDANCE_NUMBER + 1, attendanceDay))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(ATTENDANCE_NUMBER_MISMATCH.getMessage());
         }

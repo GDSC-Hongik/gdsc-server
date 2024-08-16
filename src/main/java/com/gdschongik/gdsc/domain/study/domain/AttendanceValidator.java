@@ -8,14 +8,9 @@ import java.time.LocalDate;
 
 @DomainService
 public class AttendanceValidator {
-    public void validateAttendance(StudyDetail studyDetail, Study study, String attendanceNumber, LocalDate date) {
+    public void validateAttendance(StudyDetail studyDetail, String attendanceNumber, LocalDate date) {
         // 출석체크 날짜 검증
-        LocalDate attendanceDay = study.getPeriod()
-                .getStartDate()
-                .toLocalDate()
-                .plusDays(studyDetail.getWeek() * 7
-                        - study.getPeriod().getStartDate().getDayOfWeek().getValue()
-                        + study.getDayOfWeek().getValue());
+        LocalDate attendanceDay = studyDetail.getAttendanceDay();
         if (!attendanceDay.equals(date)) {
             throw new CustomException(ATTENDANCE_DATE_INVALID);
         }
