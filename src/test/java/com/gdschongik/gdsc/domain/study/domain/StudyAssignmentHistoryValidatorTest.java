@@ -58,12 +58,15 @@ class StudyAssignmentHistoryValidatorTest {
         void 과제가_시작되지_않았다면_실패한다() {
             // given
             Study study = createStudyWithMentor(1L);
+            Member student = createMember(2L);
             StudyDetail studyDetail = createStudyDetailWithAssignment(study);
+            AssignmentHistory assignmentHistory = AssignmentHistory.create(studyDetail, student);
             boolean isAppliedToStudy = true;
             LocalDateTime beforeStart = STUDY_DETAIL_START_DATETIME.minusDays(1);
 
             // when & then
-            assertThatThrownBy(() -> validator.validateSubmitAvailable(isAppliedToStudy, beforeStart, studyDetail))
+            assertThatThrownBy(
+                            () -> validator.validateSubmitAvailable(isAppliedToStudy, beforeStart, assignmentHistory))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(ASSIGNMENT_NOT_STARTED.getMessage());
         }
