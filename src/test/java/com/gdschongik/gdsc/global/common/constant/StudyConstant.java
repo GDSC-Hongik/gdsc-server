@@ -8,6 +8,7 @@ import java.time.LocalTime;
 public class StudyConstant {
     private StudyConstant() {}
 
+    public static final String STUDY_TITLE = "스터디 제목";
     public static final Long TOTAL_WEEK = 8L;
     public static final StudyType ONLINE_STUDY = StudyType.ONLINE;
     public static final StudyType ASSIGNMENT_STUDY = StudyType.ASSIGNMENT;

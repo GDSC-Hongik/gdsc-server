@@ -5,6 +5,7 @@ import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import com.gdschongik.gdsc.domain.study.domain.vo.Assignment;
 import com.gdschongik.gdsc.domain.study.domain.vo.Session;
 import jakarta.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -81,6 +82,14 @@ public class StudyDetail extends BaseEntity {
 
     public void updateAssignment(String title, LocalDateTime deadLine, String descriptionNotionLink) {
         assignment = Assignment.generateAssignment(title, deadLine, descriptionNotionLink);
+    }
+
+    // 스터디 시작일자 + 현재 주차 * 7 + (스터디 요일 - 스터디 기간 시작 요일)
+    public LocalDate getAttendanceDay() {
+        return study.getStartDate()
+                .plusDays(week * 7
+                        + study.getDayOfWeek().getValue()
+                        - study.getStartDate().getDayOfWeek().getValue());
     }
 
     public void validateAssignmentSubmittable(LocalDateTime now) {

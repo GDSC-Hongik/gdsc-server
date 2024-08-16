@@ -210,6 +210,7 @@ public abstract class IntegrationTest {
         Study study = Study.createStudy(
                 ACADEMIC_YEAR,
                 SEMESTER_TYPE,
+                STUDY_TITLE,
                 mentor,
                 period,
                 applicationPeriod,
