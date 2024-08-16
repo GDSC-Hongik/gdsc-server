@@ -1,7 +1,8 @@
 package com.gdschongik.gdsc.helper;
 
 import static com.gdschongik.gdsc.domain.member.domain.Department.*;
-import static com.gdschongik.gdsc.domain.member.domain.Member.*;
+import static com.gdschongik.gdsc.domain.member.domain.MemberManageRole.ADMIN;
+import static com.gdschongik.gdsc.domain.member.domain.MemberStudyRole.MENTOR;
 import static com.gdschongik.gdsc.global.common.constant.MemberConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.RecruitmentConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.SemesterConstant.*;
@@ -43,6 +44,19 @@ public class FixtureHelper {
     public Member createRegularMember(Long id) {
         Member member = createAssociateMember(id);
         member.advanceToRegular();
+        return member;
+    }
+
+    public Member createAdmin(Long id) {
+        Member member = createRegularMember(id);
+        ReflectionTestUtils.setField(member, "manageRole", ADMIN);
+        return member;
+    }
+
+    public Member createMentor(Long id) {
+        Member member = createRegularMember(id);
+        member.assignToMentor();
+        ReflectionTestUtils.setField(member, "studyRole", MENTOR);
         return member;
     }
 

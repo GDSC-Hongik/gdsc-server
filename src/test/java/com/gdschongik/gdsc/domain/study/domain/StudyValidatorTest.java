@@ -1,6 +1,7 @@
 package com.gdschongik.gdsc.domain.study.domain;
 
 import static com.gdschongik.gdsc.global.exception.ErrorCode.STUDY_MENTOR_INVALID;
+import static com.gdschongik.gdsc.global.exception.ErrorCode.STUDY_MENTOR_IS_UNAUTHORIZED;
 import static org.assertj.core.api.Assertions.*;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
@@ -17,14 +18,27 @@ public class StudyValidatorTest {
 
     StudyValidator studyValidator = new StudyValidator();
 
+    // FixtureHelper 래핑 메서드
+    private Member createMentor(Long id) {
+        return fixtureHelper.createMentor(id);
+    }
+
+    private Member createMember(Long id) {
+        return fixtureHelper.createAssociateMember(id);
+    }
+
+    private Member createAdmin(Long id) {
+        return fixtureHelper.createAdmin(id);
+    }
+
     @Nested
     class 스터디_수강원_명단_조회시 {
 
         @Test
-        public void 멘토가_아니라면_실패한다() {
+        public void 멘토역할이_아니라면_실패한다() {
             // given
-            Member currentMember = fixtureHelper.createAssociateMember(1L);
-            Member mentor = fixtureHelper.createAssociateMember(2L);
+            Member currentMember = createMember(1L);
+            Member mentor = createMentor(2L);
             LocalDateTime assignmentCreatedDate = LocalDateTime.now().minusDays(1);
             Study study = fixtureHelper.createStudy(
                     mentor,
@@ -34,14 +48,14 @@ public class StudyValidatorTest {
             // when & then
             assertThatThrownBy(() -> studyValidator.validateStudyMentor(currentMember, study))
                     .isInstanceOf(CustomException.class)
-                    .hasMessage(STUDY_MENTOR_INVALID.getMessage());
+                    .hasMessage(STUDY_MENTOR_IS_UNAUTHORIZED.getMessage());
         }
 
         @Test
         public void 멘토이지만_자신이_맡은_스터디가_아니라면_실패한다() {
             // given
-            Member currentMember = fixtureHelper.createAssociateMember(1L);
-            Member mentor = fixtureHelper.createAssociateMember(2L);
+            Member currentMember = createMentor(1L);
+            Member mentor = createMentor(2L);
             LocalDateTime assignmentCreatedDate = LocalDateTime.now().minusDays(1);
             Study study = fixtureHelper.createStudy(
                     mentor,
@@ -63,8 +77,8 @@ public class StudyValidatorTest {
         @Test
         public void 어드민이라면_성공한다() {
             // given
-            Member admin = fixtureHelper.createAssociateMember(1L);
-            Member mentor = fixtureHelper.createAssociateMember(2L);
+            Member admin = createAdmin(1L);
+            Member mentor = createMentor(2L);
             LocalDateTime assignmentCreatedDate = LocalDateTime.now().minusDays(1);
             Study study = fixtureHelper.createStudy(
                     mentor,
@@ -72,9 +86,8 @@ public class StudyValidatorTest {
                     Period.createPeriod(assignmentCreatedDate.minusDays(5), assignmentCreatedDate));
 
             // when & then
-            assertThatThrownBy(() -> studyValidator.validateStudyMentor(admin, study))
-                    .isInstanceOf(CustomException.class)
-                    .hasMessage(STUDY_MENTOR_INVALID.getMessage());
+            assertThatCode(() -> studyValidator.validateStudyMentor(admin, study))
+                    .doesNotThrowAnyException();
         }
     }
 }
