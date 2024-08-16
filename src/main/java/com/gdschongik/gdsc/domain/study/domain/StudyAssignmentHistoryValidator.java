@@ -17,7 +17,9 @@ public class StudyAssignmentHistoryValidator {
             throw new CustomException(ASSIGNMENT_STUDY_NOT_APPLIED);
         }
 
-        // TODO: 과제 시작기간 이전에 생성하는 경우도 고려해야 함
+        if (now.isBefore(studyDetail.getPeriod().getStartDate())) {
+            throw new CustomException(ASSIGNMENT_NOT_STARTED);
+        }
 
         studyDetail.validateAssignmentSubmittable(now);
     }
@@ -30,6 +32,11 @@ public class StudyAssignmentHistoryValidator {
         if (!isAppliedToStudy) {
             throw new CustomException(ASSIGNMENT_STUDY_NOT_APPLIED);
         }
+
+        if (now.isBefore(assignmentHistory.getStudyDetail().getPeriod().getStartDate())) {
+            throw new CustomException(ASSIGNMENT_NOT_STARTED);
+        }
+
         StudyDetail studyDetail = assignmentHistory.getStudyDetail();
         studyDetail.validateAssignmentSubmittable(now);
     }
