@@ -53,6 +53,21 @@ class StudyAssignmentHistoryValidatorTest {
         }
 
         @Test
+        void 과제가_시작되지_않았다면_실패한다() {
+            // given
+            Study study = createStudyWithMentor(1L);
+            StudyDetail studyDetail = createStudyDetailWithAssignment(study);
+            boolean isAppliedToStudy = true;
+            LocalDateTime beforeStart = STUDY_DETAIL_START_DATETIME.minusDays(1);
+
+            // when & then
+            assertThatThrownBy(
+                            () -> validator.validateCreateAssignmentHistory(isAppliedToStudy, beforeStart, studyDetail))
+                    .isInstanceOf(CustomException.class)
+                    .hasMessage(ASSIGNMENT_NOT_STARTED.getMessage());
+        }
+
+        @Test
         void 과제_마감기한이_지났다면_실패한다() {
             // given
             Study study = createStudyWithMentor(1L);
@@ -98,6 +113,21 @@ class StudyAssignmentHistoryValidatorTest {
                             isAppliedToStudy, STUDY_DETAIL_START_DATETIME, assignmentHistory))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(ASSIGNMENT_STUDY_NOT_APPLIED.getMessage());
+        }
+
+        @Test
+        void 과제가_시작되지_않았다면_실패한다() {
+            // given
+            Study study = createStudyWithMentor(1L);
+            StudyDetail studyDetail = createStudyDetailWithAssignment(study);
+            boolean isAppliedToStudy = true;
+            LocalDateTime beforeStart = STUDY_DETAIL_START_DATETIME.minusDays(1);
+
+            // when & then
+            assertThatThrownBy(
+                            () -> validator.validateCreateAssignmentHistory(isAppliedToStudy, beforeStart, studyDetail))
+                    .isInstanceOf(CustomException.class)
+                    .hasMessage(ASSIGNMENT_NOT_STARTED.getMessage());
         }
 
         @Test
