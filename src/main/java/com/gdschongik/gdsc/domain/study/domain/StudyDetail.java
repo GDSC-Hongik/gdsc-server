@@ -1,9 +1,12 @@
 package com.gdschongik.gdsc.domain.study.domain;
 
+import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
+
 import com.gdschongik.gdsc.domain.common.model.BaseEntity;
 import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import com.gdschongik.gdsc.domain.study.domain.vo.Assignment;
 import com.gdschongik.gdsc.domain.study.domain.vo.Session;
+import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -93,6 +96,9 @@ public class StudyDetail extends BaseEntity {
     }
 
     public void validateAssignmentSubmittable(LocalDateTime now) {
+        if (now.isBefore(period.getStartDate())) {
+            throw new CustomException(ASSIGNMENT_SUBMIT_NOT_STARTED);
+        }
         assignment.validateSubmittable(now);
     }
 }
