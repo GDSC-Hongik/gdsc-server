@@ -16,7 +16,7 @@ public class StudyValidator {
         }
 
         // 어드민이 아니고 멘토 역할도 아니면 경우에 예외가 밸생합니다.
-        if (!currentMember.isAdmin() && !currentMember.isMentor()) {
+        if (!currentMember.isMentor()) {
             throw new CustomException(STUDY_MENTOR_IS_UNAUTHORIZED);
         }
 
