@@ -12,5 +12,7 @@ public class RegexConstant {
     public static final String DATE = "yyyy-MM-dd";
     public static final String ACADEMIC_YEAR = "^[0-9]{4}$";
 
+    public static final String ATTENDANCE_NUMBER = "^[0-9]{4}$";
+
     private RegexConstant() {}
 }

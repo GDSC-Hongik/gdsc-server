@@ -21,6 +21,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import lombok.AccessLevel;
@@ -174,5 +175,9 @@ public class Study extends BaseSemesterEntity {
 
     public boolean isStudyOngoing() {
         return period.isOpen();
+    }
+
+    public LocalDate getStartDate() {
+        return period.getStartDate().toLocalDate();
     }
 }

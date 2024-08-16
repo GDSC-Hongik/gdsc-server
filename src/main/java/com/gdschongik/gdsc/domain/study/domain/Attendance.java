@@ -19,44 +19,30 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"member_id", "study_detail_id"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"member_id", "study_id"})})
-public class StudyHistory extends BaseEntity {
+public class Attendance extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "study_history_id")
+    @Column(name = "attendance_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    private Member mentee;
+    private Member student;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "study_id")
-    private Study study;
-
-    private String repositoryLink;
+    @JoinColumn(name = "study_detail_id")
+    private StudyDetail studyDetail;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private StudyHistory(Member mentee, Study study) {
-        this.mentee = mentee;
-        this.study = study;
+    private Attendance(Member student, StudyDetail studyDetail) {
+        this.student = student;
+        this.studyDetail = studyDetail;
     }
 
-    public static StudyHistory create(Member mentee, Study study) {
-        return StudyHistory.builder().mentee(mentee).study(study).build();
-    }
-
-    /**
-     * 레포지토리 링크를 업데이트합니다.
-     */
-    public void updateRepositoryLink(String repositoryLink) {
-        this.repositoryLink = repositoryLink;
-    }
-
-    // 데이터 전달 로직
-    public boolean isStudyOngoing() {
-        return study.isStudyOngoing();
+    public static Attendance create(Member student, StudyDetail studyDetail) {
+        return Attendance.builder().student(student).studyDetail(studyDetail).build();
     }
 }
