@@ -23,7 +23,7 @@ public class StudyAssignmentHistoryValidator {
     /**
      * 채점을 수행하기 전, 과제 제출이 가능한지 검증합니다.
      */
-    public void validateSubmit(boolean isAppliedToStudy, LocalDateTime now, AssignmentHistory assignmentHistory) {
+    public void validateSubmitAvailable(boolean isAppliedToStudy, LocalDateTime now, AssignmentHistory assignmentHistory) {
         if (!isAppliedToStudy) {
             throw new CustomException(ASSIGNMENT_STUDY_NOT_APPLIED);
         }

@@ -90,7 +90,7 @@ public class StudentStudyHistoryService {
 
         AssignmentHistory assignmentHistory = findOrCreate(isAppliedToStudy, now, currentMember, studyDetail);
 
-        studyAssignmentHistoryValidator.validateSubmit(isAppliedToStudy, now, assignmentHistory);
+        studyAssignmentHistoryValidator.validateSubmitAvailable(isAppliedToStudy, now, assignmentHistory);
 
         // TODO: 과제 채점 및 과제이력 업데이트 로직 추가
 
