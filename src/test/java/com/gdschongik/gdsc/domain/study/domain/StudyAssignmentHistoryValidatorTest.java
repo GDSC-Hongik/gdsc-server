@@ -23,11 +23,10 @@ class StudyAssignmentHistoryValidatorTest {
     }
 
     private Study createStudyWithMentor(Long mentorId) {
-        Member mentor = createMember(mentorId);
         Period period = Period.createPeriod(STUDY_START_DATETIME, STUDY_END_DATETIME);
         Period applicationPeriod =
                 Period.createPeriod(STUDY_START_DATETIME.minusDays(7), STUDY_START_DATETIME.minusDays(1));
-        return fixtureHelper.createStudy(mentor, period, applicationPeriod);
+        return fixtureHelper.createStudyWithMentor(mentorId, period, applicationPeriod);
     }
 
     private StudyDetail createStudyDetailWithAssignment(Study study) {
