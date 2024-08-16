@@ -100,7 +100,7 @@ class StudyAssignmentHistoryValidatorTest {
     class 과제_제출가능_여부_검증할때 {
 
         @Test
-        void 스터디에_신청하지_않은_경우_실패한다() {
+        void 스터디_수강신청_기록이_없다면_실패한다() {
             // given
             Study study = createStudyWithMentor(1L);
             Member student = createMember(2L);
@@ -131,7 +131,7 @@ class StudyAssignmentHistoryValidatorTest {
         }
 
         @Test
-        void 과제_제출_기간이_지난_경우_실패한다() {
+        void 과제_마감기한이_지났다면_실패한다() {
             // given
             Study study = createStudyWithMentor(1L);
             Member student = createMember(2L);
