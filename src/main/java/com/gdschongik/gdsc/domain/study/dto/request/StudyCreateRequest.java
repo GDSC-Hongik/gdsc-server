@@ -12,6 +12,9 @@ import jakarta.validation.constraints.Positive;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Range;
 
 public record StudyCreateRequest(
         @NotNull(message = "스터디 멘토 ID는 null이 될 수 없습니다.") @Schema(description = "스터디 멘토 ID") Long mentorId,
@@ -35,10 +38,14 @@ public record StudyCreateRequest(
         @NotNull(message = "스터디 타입은 null이 될 수 없습니다.") @Schema(description = "스터디 타입", implementation = StudyType.class)
                 StudyType studyType) {
 
+    @Getter
+    @NoArgsConstructor
     public class SimpleLocalTime {
-        @NotNull(message = "스터디 시간중 시간은 null이 될 수 없습니다.") private byte hour;
+        @NotNull(message = "스터디 시간중 시간은 null이 될 수 없습니다.") @Range(min = 0, max = 24)
+        private int hour;
 
-        @NotNull(message = "스터디 시간중 분은 null이 될 수 없습니다.") private byte minute;
+        @NotNull(message = "스터디 시간중 분은 null이 될 수 없습니다.") @Range(min = 0, max = 60)
+        private int minute;
 
         public LocalTime toLocalTime() {
             return LocalTime.of(hour, minute);
