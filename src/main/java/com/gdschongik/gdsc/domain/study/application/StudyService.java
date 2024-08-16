@@ -86,8 +86,8 @@ public class StudyService {
         attendanceValidator.validateAttendance(studyDetail, study, request.attendanceNumber(), LocalDate.now());
 
         Attendance attendance = Attendance.create(currentMember, studyDetail);
-        final Attendance savedAttendance = attendanceRepository.save(attendance);
+        attendanceRepository.save(attendance);
 
-        log.info("[StudyService] 스터디 출석: attendanceId={}", savedAttendance.getId());
+        log.info("[StudyService] 스터디 출석: attendanceId={}", attendance.getId());
     }
 }
