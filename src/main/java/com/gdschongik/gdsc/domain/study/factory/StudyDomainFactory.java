@@ -29,8 +29,8 @@ public class StudyDomainFactory {
                 request.totalWeek(),
                 request.studyType(),
                 request.dayOfWeek(),
-                request.studyStartTime().toLocalTime(),
-                request.studyEndTime().toLocalTime());
+                request.studyStartTime(),
+                request.studyEndTime());
     }
 
     // 해당 주의 비어있는 스터디상세를 생성합니다.
