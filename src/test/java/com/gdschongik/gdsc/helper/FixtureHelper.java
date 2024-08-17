@@ -1,12 +1,12 @@
 package com.gdschongik.gdsc.helper;
 
 import static com.gdschongik.gdsc.domain.member.domain.Department.*;
-import static com.gdschongik.gdsc.domain.member.domain.MemberManageRole.ADMIN;
-import static com.gdschongik.gdsc.domain.member.domain.MemberStudyRole.MENTOR;
 import static com.gdschongik.gdsc.global.common.constant.MemberConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.RecruitmentConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.SemesterConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.StudyConstant.*;
+import static com.gdschongik.gdsc.domain.member.domain.MemberManageRole.ADMIN;
+import static com.gdschongik.gdsc.domain.member.domain.MemberStudyRole.MENTOR;
 
 import com.gdschongik.gdsc.domain.common.model.SemesterType;
 import com.gdschongik.gdsc.domain.common.vo.Money;
