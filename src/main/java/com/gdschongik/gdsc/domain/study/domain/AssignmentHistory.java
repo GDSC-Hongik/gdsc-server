@@ -67,7 +67,7 @@ public class AssignmentHistory extends BaseEntity {
         return AssignmentHistory.builder()
                 .studyDetail(studyDetail)
                 .member(member)
-                .submissionStatus(AssignmentSubmissionStatus.PENDING)
+                .submissionStatus(FAILURE)
                 .build();
     }
 
