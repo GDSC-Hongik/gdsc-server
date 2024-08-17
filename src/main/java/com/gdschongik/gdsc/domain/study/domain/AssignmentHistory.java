@@ -78,7 +78,7 @@ public class AssignmentHistory extends BaseEntity {
     // 데이터 조회 로직
 
     public boolean isSubmitted() {
-        return submissionStatus == SUCCESS || submissionStatus == FAILURE;
+        return submissionFailureType != NOT_SUBMITTED;
     }
 
     // 데이터 변경 로직
