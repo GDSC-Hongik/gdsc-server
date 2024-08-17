@@ -1,7 +1,6 @@
 package com.gdschongik.gdsc.domain.study.domain;
 
-import static com.gdschongik.gdsc.global.exception.ErrorCode.STUDY_MENTOR_INVALID;
-import static com.gdschongik.gdsc.global.exception.ErrorCode.STUDY_MENTOR_IS_UNAUTHORIZED;
+import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
@@ -31,7 +30,7 @@ public class StudyValidatorTest {
     }
 
     @Nested
-    class 스터디_수강자_명단_조회시 {
+    class 스터디_검증시{
 
         @Test
         void 멘토역할이_아니라면_실패한다() {
@@ -47,7 +46,7 @@ public class StudyValidatorTest {
             // when & then
             assertThatThrownBy(() -> studyValidator.validateStudyMentor(currentMember, study))
                     .isInstanceOf(CustomException.class)
-                    .hasMessage(STUDY_MENTOR_IS_UNAUTHORIZED.getMessage());
+                    .hasMessage(STUDY_ACCESS_NOT_ALLOWED.getMessage());
         }
 
         @Test

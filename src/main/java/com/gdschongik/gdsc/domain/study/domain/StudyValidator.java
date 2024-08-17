@@ -1,11 +1,10 @@
 package com.gdschongik.gdsc.domain.study.domain;
 
-import static com.gdschongik.gdsc.global.exception.ErrorCode.STUDY_MENTOR_INVALID;
-import static com.gdschongik.gdsc.global.exception.ErrorCode.STUDY_MENTOR_IS_UNAUTHORIZED;
-
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.global.annotation.DomainService;
 import com.gdschongik.gdsc.global.exception.CustomException;
+
+import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 @DomainService
 public class StudyValidator {
@@ -15,9 +14,9 @@ public class StudyValidator {
             return;
         }
 
-        // 어드민이 아니고 멘토 역할도 아니면 경우에 예외가 밸생합니다.
+        // 어드민이 아니고 멘토 역할도 아니면 예외가 밸생합니다.
         if (!currentMember.isMentor()) {
-            throw new CustomException(STUDY_MENTOR_IS_UNAUTHORIZED);
+            throw new CustomException(STUDY_ACCESS_NOT_ALLOWED);
         }
 
         // 해당 스터디의 담당 멘토인지 검증
