@@ -1,6 +1,7 @@
 package com.gdschongik.gdsc.domain.study.domain;
 
 import static com.gdschongik.gdsc.domain.study.domain.AssignmentSubmissionStatus.*;
+import static com.gdschongik.gdsc.domain.study.domain.SubmissionFailureType.*;
 
 import com.gdschongik.gdsc.domain.common.model.BaseEntity;
 import com.gdschongik.gdsc.domain.member.domain.Member;
@@ -57,10 +58,12 @@ public class AssignmentHistory extends BaseEntity {
     private AssignmentHistory(
             StudyDetail studyDetail,
             Member member,
-            AssignmentSubmissionStatus submissionStatus) {
+            AssignmentSubmissionStatus submissionStatus,
+            SubmissionFailureType submissionFailureType) {
         this.studyDetail = studyDetail;
         this.member = member;
         this.submissionStatus = submissionStatus;
+        this.submissionFailureType = submissionFailureType;
     }
 
     public static AssignmentHistory create(StudyDetail studyDetail, Member member) {
@@ -68,6 +71,7 @@ public class AssignmentHistory extends BaseEntity {
                 .studyDetail(studyDetail)
                 .member(member)
                 .submissionStatus(FAILURE)
+                .submissionFailureType(NOT_SUBMITTED)
                 .build();
     }
 
