@@ -1,13 +1,15 @@
 package com.gdschongik.gdsc.infra.github.client;
 
 import static com.gdschongik.gdsc.global.common.constant.GithubConstant.*;
+import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.global.exception.CustomException;
-import com.gdschongik.gdsc.global.exception.ErrorCode;
 import com.gdschongik.gdsc.infra.github.dto.response.GithubAssignmentSubmissionResponse;
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Date;
 import lombok.RequiredArgsConstructor;
 import org.kohsuke.github.GHCommit;
 import org.kohsuke.github.GHContent;
@@ -25,7 +27,7 @@ public class GithubClient {
         try {
             return github.getRepository(ownerRepo);
         } catch (IOException e) {
-            throw new CustomException(ErrorCode.GITHUB_REPOSITORY_NOT_FOUND);
+            throw new CustomException(GITHUB_REPOSITORY_NOT_FOUND);
         }
     }
 
