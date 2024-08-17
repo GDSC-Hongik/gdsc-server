@@ -80,4 +80,15 @@ public class Assignment {
             throw new CustomException(ASSIGNMENT_SUBMIT_DEADLINE_PASSED);
         }
     }
+
+    // 데이터 전달 로직
+
+    public boolean isCancelled() {
+        return status == CANCELLED;
+    }
+
+    public boolean isDeadlineRemaining() {
+        LocalDateTime now = LocalDateTime.now();
+        return now.isBefore(deadline);
+    }
 }

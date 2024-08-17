@@ -87,6 +87,12 @@ public class StudyDetail extends BaseEntity {
         assignment = Assignment.generateAssignment(title, deadLine, descriptionNotionLink);
     }
 
+    // 데이터 전달 로직
+
+    public boolean isAssignmentDeadlineRemaining() {
+        return assignment.isDeadlineRemaining();
+    }
+
     // 스터디 시작일자 + 현재 주차 * 7 + (스터디 요일 - 스터디 기간 시작 요일)
     public LocalDate getAttendanceDay() {
         return study.getStartDate()
