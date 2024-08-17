@@ -5,6 +5,8 @@ import static com.gdschongik.gdsc.domain.study.domain.SubmissionFailureType.*;
 
 import com.gdschongik.gdsc.domain.common.model.BaseEntity;
 import com.gdschongik.gdsc.domain.member.domain.Member;
+import com.gdschongik.gdsc.global.exception.CustomException;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -93,8 +95,11 @@ public class AssignmentHistory extends BaseEntity {
     }
 
     public void fail(SubmissionFailureType submissionFailureType) {
+        if (submissionFailureType == NOT_SUBMITTED) {
+            throw new CustomException()
+        }
+
         this.submissionStatus = FAILURE;
         this.submissionFailureType = submissionFailureType;
-        this.committedAt = null;
     }
 }
