@@ -15,7 +15,6 @@ import org.junit.jupiter.api.Test;
 public class StudyValidatorTest {
 
     FixtureHelper fixtureHelper = new FixtureHelper();
-
     StudyValidator studyValidator = new StudyValidator();
 
     // FixtureHelper 래핑 메서드
@@ -32,10 +31,10 @@ public class StudyValidatorTest {
     }
 
     @Nested
-    class 스터디_수강원_명단_조회시 {
+    class 스터디_수강자_명단_조회시 {
 
         @Test
-        public void 멘토역할이_아니라면_실패한다() {
+        void 멘토역할이_아니라면_실패한다() {
             // given
             Member currentMember = createMember(1L);
             Member mentor = createMentor(2L);
@@ -52,7 +51,7 @@ public class StudyValidatorTest {
         }
 
         @Test
-        public void 멘토이지만_자신이_맡은_스터디가_아니라면_실패한다() {
+        void 멘토이지만_자신이_맡은_스터디가_아니라면_실패한다() {
             // given
             Member currentMember = createMentor(1L);
             Member mentor = createMentor(2L);
@@ -75,7 +74,7 @@ public class StudyValidatorTest {
         }
 
         @Test
-        public void 어드민이라면_성공한다() {
+        void 어드민이라면_성공한다() {
             // given
             Member admin = createAdmin(1L);
             Member mentor = createMentor(2L);
