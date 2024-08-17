@@ -89,6 +89,7 @@ public class AssignmentHistory extends BaseEntity {
         this.contentLength = contentLength;
         this.committedAt = committedAt;
         this.submissionStatus = SUCCESS;
+        this.submissionFailureType = NONE;
     }
 
     public void fail(SubmissionFailureType submissionFailureType) {
