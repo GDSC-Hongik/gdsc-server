@@ -2,11 +2,11 @@ package com.gdschongik.gdsc.domain.study.domain;
 
 import static com.gdschongik.gdsc.domain.study.domain.AssignmentSubmissionStatus.*;
 import static com.gdschongik.gdsc.domain.study.domain.SubmissionFailureType.*;
+import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.common.model.BaseEntity;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.global.exception.CustomException;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -95,10 +95,14 @@ public class AssignmentHistory extends BaseEntity {
     }
 
     public void fail(SubmissionFailureType submissionFailureType) {
-        if (submissionFailureType == NOT_SUBMITTED) {
-            throw new CustomException()
+        if (submissionFailureType == NOT_SUBMITTED || submissionFailureType == NONE) {
+            throw new CustomException(ASSIGNMENT_INVALID_FAILURE_TYPE);
         }
 
+        this.submissionLink = null;
+        this.commitHash = null;
+        this.contentLength = null;
+        this.committedAt = null;
         this.submissionStatus = FAILURE;
         this.submissionFailureType = submissionFailureType;
     }
