@@ -6,6 +6,7 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.study.domain.Difficulty;
 import com.gdschongik.gdsc.domain.study.domain.StudyStatus;
+import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
@@ -64,6 +65,20 @@ public class Assignment {
                 .descriptionLink(descriptionLink)
                 .status(StudyStatus.OPEN)
                 .build();
+    }
+
+    public void validateSubmittable(LocalDateTime now) {
+        if (status == NONE) {
+            throw new CustomException(ASSIGNMENT_SUBMIT_NOT_PUBLISHED);
+        }
+
+        if (status == CANCELLED) {
+            throw new CustomException(ASSIGNMENT_SUBMIT_CANCELLED);
+        }
+
+        if (now.isAfter(deadline)) {
+            throw new CustomException(ASSIGNMENT_SUBMIT_DEADLINE_PASSED);
+        }
     }
 
     // 데이터 전달 로직

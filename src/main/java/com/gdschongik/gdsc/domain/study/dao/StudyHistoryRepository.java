@@ -14,5 +14,7 @@ public interface StudyHistoryRepository extends JpaRepository<StudyHistory, Long
 
     Optional<StudyHistory> findByMenteeAndStudy(Member member, Study study);
 
+    boolean existsByMenteeAndStudy(Member member, Study study);
+
     Optional<StudyHistory> findByMenteeAndStudyId(Member member, Long studyId);
 }

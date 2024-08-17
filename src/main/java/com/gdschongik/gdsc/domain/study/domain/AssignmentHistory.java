@@ -66,15 +66,11 @@ public class AssignmentHistory extends BaseEntity {
         this.submissionStatus = submissionStatus;
     }
 
-    public static AssignmentHistory create(
-            StudyDetail studyDetail, Member member, String submissionLink, String commitHash, Long contentLength) {
+    public static AssignmentHistory create(StudyDetail studyDetail, Member member) {
         return AssignmentHistory.builder()
                 .studyDetail(studyDetail)
                 .member(member)
-                .submissionLink(submissionLink)
-                .commitHash(commitHash)
-                .contentLength(contentLength)
-                .submissionStatus(PENDING)
+                .submissionStatus(AssignmentSubmissionStatus.PENDING)
                 .build();
     }
 
