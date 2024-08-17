@@ -23,21 +23,27 @@ public record AssignmentSubmittableDto(
     public static AssignmentSubmittableDto from(AssignmentHistory assignmentHistory) {
         StudyDetail studyDetail = assignmentHistory.getStudyDetail();
         Assignment assignment = studyDetail.getAssignment();
-        boolean isCancelled = assignment.isCancelled();
+
+        if (assignment.isCancelled()) {
+            return cancelledAssignment(studyDetail, assignment);
+        }
 
         return new AssignmentSubmittableDto(
                 studyDetail.getId(),
                 assignment.getStatus(),
                 studyDetail.getWeek(),
-                isCancelled ? null : assignment.getTitle(),
-                isCancelled ? null : assignmentHistory.getSubmissionStatus(),
-                isCancelled ? null : assignment.getDescriptionLink(),
-                isCancelled ? null : assignment.getDeadline(),
-                isCancelled ? null : assignmentHistory.getSubmissionLink(),
-                isCancelled
+                assignment.getTitle(),
+                assignmentHistory.getSubmissionStatus(),
+                assignment.getDescriptionLink(),
+                assignment.getDeadline(),
+                assignmentHistory.getSubmissionLink(),
+                assignmentHistory.getSubmissionFailureType() == null
                         ? null
-                        : assignmentHistory.getSubmissionFailureType() == null
-                                ? null
-                                : assignmentHistory.getSubmissionFailureType());
+                        : assignmentHistory.getSubmissionFailureType());
+    }
+
+    private static AssignmentSubmittableDto cancelledAssignment(StudyDetail studyDetail, Assignment assignment) {
+        return new AssignmentSubmittableDto(
+                studyDetail.getId(), assignment.getStatus(), studyDetail.getWeek(), null, null, null, null, null, null);
     }
 }
