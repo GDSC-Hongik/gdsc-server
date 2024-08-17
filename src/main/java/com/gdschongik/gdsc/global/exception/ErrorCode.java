@@ -158,6 +158,9 @@ public enum ErrorCode {
 
     // Github
     GITHUB_REPOSITORY_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 레포지토리입니다."),
+    GITHUB_CONTENT_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 파일입니다."),
+    GITHUB_FILE_READ_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "깃허브 파일 읽기에 실패했습니다."),
+    GITHUB_COMMIT_DATE_FETCH_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "깃허브 커밋 날짜 조회에 실패했습니다."),
     GITHUB_ASSIGNMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 과제 파일입니다."),
     ;
 
