@@ -117,7 +117,7 @@ public class MentorStudyDetailService {
         Map<Long, StudySessionCreateRequest> requestMap = request.studySessions().stream()
                 .collect(Collectors.toMap(StudySessionCreateRequest::studyDetailId, Function.identity()));
 
-        // StudyDetail을 업데이트하는 작업
+        // StudyDetail 업데이트하는 작업
         List<StudyDetail> updatedStudyDetails = new ArrayList<>();
         for (StudyDetail studyDetail : studyDetails) {
             Long id = studyDetail.getId();
@@ -132,17 +132,6 @@ public class MentorStudyDetailService {
 
             updatedStudyDetails.add(studyDetail);
         }
-        //
-        //        // 세션 정보 bulk insert
-        //        List<StudyDetail> updatedStudyDetails = new ArrayList<>();
-        //        for (StudyDetail studyDetail : studyDetails) {
-        //            StudySessionCreateRequest matchingSession =
-        // request.studySessions().stream().filter(s->s.studyDetailId().equals(studyDetail.getId())).findFirst().get();
-        //
-        // studyDetail.updateSession(studyDetail.getStudy().getPeriod().getStartDate(),matchingSession.title(),matchingSession.description(),matchingSession.difficulty(),matchingSession.status());
-        //
-        //            updatedStudyDetails.add(studyDetail);
-        //        }
         studyDetailRepository.saveAll(updatedStudyDetails);
     }
 }

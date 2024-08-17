@@ -59,19 +59,20 @@ public class StudyDetailValidator {
         }
     }
 
-    // 요청이 들어온 총 studyDetail수가 맞는지 validate, 각 studyDetail이 studyDetail Id와 같은지 검증
-    public void validateUpdateStudyDetail(List<StudyDetail> studyDetails, List<StudySessionCreateRequest> request) {
-        // StudyDetail ID와 요청된 StudySessionCreateRequest ID의 집합을 생성
-        Set<Long> studyDetailIds = studyDetails.stream().map(StudyDetail::getId).collect(Collectors.toSet());
-
-        Set<Long> requestIds =
-                request.stream().map(StudySessionCreateRequest::studyDetailId).collect(Collectors.toSet());
-
-        if (studyDetailIds.size() != requestIds.size()) {
+    public void validateUpdateStudyDetail(List<StudyDetail> studyDetails, List<StudySessionCreateRequest> requests) {
+        // StudyDetail 목록과 요청된 StudySessionCreateRequest 목록의 크기를 먼저 비교
+        if (studyDetails.size() != requests.size()) {
             throw new CustomException(STUDY_DETAIL_SESSION_SIZE_MISMATCH);
         }
 
-        // 두 집합이 일치하는지 검증
+        // StudyDetail ID를 추출하여 Set으로 저장
+        Set<Long> studyDetailIds = studyDetails.stream().map(StudyDetail::getId).collect(Collectors.toSet());
+
+        // 요청된 StudySessionCreateRequest의 StudyDetail ID를 추출하여 Set으로 저장
+        Set<Long> requestIds =
+                requests.stream().map(StudySessionCreateRequest::studyDetailId).collect(Collectors.toSet());
+
+        // 두 집합이 동일한지 비교하여 ID 불일치 시 예외를 던짐
         if (!studyDetailIds.equals(requestIds)) {
             throw new CustomException(STUDY_DETAIL_SESSION_ID_INVALID);
         }
