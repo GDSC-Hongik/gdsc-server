@@ -41,14 +41,12 @@ class StudyAssignmentHistoryValidatorTest {
         void 스터디_수강신청_기록이_없다면_실패한다() {
             // given
             Study study = createStudyWithMentor(1L);
-            Member student = createMember(2L);
             StudyDetail studyDetail = createStudyDetailWithAssignment(study);
-            AssignmentHistory assignmentHistory = AssignmentHistory.create(studyDetail, student);
             boolean isAppliedToStudy = false;
 
             // when & then
             assertThatThrownBy(() -> validator.validateSubmitAvailable(
-                            isAppliedToStudy, STUDY_DETAIL_START_DATETIME, assignmentHistory))
+                            isAppliedToStudy, STUDY_DETAIL_START_DATETIME, studyDetail))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(ASSIGNMENT_STUDY_NOT_APPLIED.getMessage());
         }
@@ -57,15 +55,12 @@ class StudyAssignmentHistoryValidatorTest {
         void 과제가_시작되지_않았다면_실패한다() {
             // given
             Study study = createStudyWithMentor(1L);
-            Member student = createMember(2L);
             StudyDetail studyDetail = createStudyDetailWithAssignment(study);
-            AssignmentHistory assignmentHistory = AssignmentHistory.create(studyDetail, student);
             boolean isAppliedToStudy = true;
             LocalDateTime beforeStart = STUDY_DETAIL_START_DATETIME.minusDays(1);
 
             // when & then
-            assertThatThrownBy(
-                            () -> validator.validateSubmitAvailable(isAppliedToStudy, beforeStart, assignmentHistory))
+            assertThatThrownBy(() -> validator.validateSubmitAvailable(isAppliedToStudy, beforeStart, studyDetail))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(ASSIGNMENT_SUBMIT_NOT_STARTED.getMessage());
         }
@@ -74,15 +69,12 @@ class StudyAssignmentHistoryValidatorTest {
         void 과제_마감기한이_지났다면_실패한다() {
             // given
             Study study = createStudyWithMentor(1L);
-            Member student = createMember(2L);
             StudyDetail studyDetail = createStudyDetailWithAssignment(study);
-            AssignmentHistory assignmentHistory = AssignmentHistory.create(studyDetail, student);
             boolean isAppliedToStudy = true;
             LocalDateTime afterDeadline = STUDY_ASSIGNMENT_DEADLINE_DATETIME.plusDays(1);
 
             // when & then
-            assertThatThrownBy(
-                            () -> validator.validateSubmitAvailable(isAppliedToStudy, afterDeadline, assignmentHistory))
+            assertThatThrownBy(() -> validator.validateSubmitAvailable(isAppliedToStudy, afterDeadline, studyDetail))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(ASSIGNMENT_SUBMIT_DEADLINE_PASSED.getMessage());
         }
@@ -91,14 +83,12 @@ class StudyAssignmentHistoryValidatorTest {
         void 모든_조건을_만족하는_경우_성공한다() {
             // given
             Study study = createStudyWithMentor(1L);
-            Member student = createMember(2L);
             StudyDetail studyDetail = createStudyDetailWithAssignment(study);
-            AssignmentHistory assignmentHistory = AssignmentHistory.create(studyDetail, student);
             boolean isAppliedToStudy = true;
 
             // when & then
             assertThatCode(() -> validator.validateSubmitAvailable(
-                            isAppliedToStudy, STUDY_DETAIL_START_DATETIME, assignmentHistory))
+                            isAppliedToStudy, STUDY_DETAIL_START_DATETIME, studyDetail))
                     .doesNotThrowAnyException();
         }
     }
