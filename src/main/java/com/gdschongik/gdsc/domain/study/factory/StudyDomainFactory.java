@@ -20,6 +20,7 @@ public class StudyDomainFactory {
         return Study.createStudy(
                 request.academicYear(),
                 request.semesterType(),
+                request.title(),
                 mentor,
                 Period.createPeriod(request.startDate().atStartOfDay(), endDate.atTime(LocalTime.MAX)),
                 Period.createPeriod(

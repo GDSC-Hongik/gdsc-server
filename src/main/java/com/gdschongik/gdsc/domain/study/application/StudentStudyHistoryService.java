@@ -5,16 +5,21 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.study.dao.AssignmentHistoryRepository;
+import com.gdschongik.gdsc.domain.study.dao.StudyDetailRepository;
 import com.gdschongik.gdsc.domain.study.dao.StudyHistoryRepository;
+import com.gdschongik.gdsc.domain.study.domain.AssignmentHistory;
 import com.gdschongik.gdsc.domain.study.domain.Study;
+import com.gdschongik.gdsc.domain.study.domain.StudyAssignmentHistoryValidator;
+import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
 import com.gdschongik.gdsc.domain.study.domain.StudyHistory;
 import com.gdschongik.gdsc.domain.study.domain.StudyHistoryValidator;
 import com.gdschongik.gdsc.domain.study.dto.request.RepositoryUpdateRequest;
 import com.gdschongik.gdsc.domain.study.dto.response.AssignmentHistoryResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
-import com.gdschongik.gdsc.infra.client.github.GithubClient;
+import com.gdschongik.gdsc.infra.github.client.GithubClient;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,9 +34,11 @@ public class StudentStudyHistoryService {
 
     private final MemberUtil memberUtil;
     private final GithubClient githubClient;
+    private final StudyDetailRepository studyDetailRepository;
     private final StudyHistoryRepository studyHistoryRepository;
     private final AssignmentHistoryRepository assignmentHistoryRepository;
     private final StudyHistoryValidator studyHistoryValidator;
+    private final StudyAssignmentHistoryValidator studyAssignmentHistoryValidator;
 
     @Transactional
     public void updateRepository(Long studyHistoryId, RepositoryUpdateRequest request) throws IOException {
@@ -70,5 +77,29 @@ public class StudentStudyHistoryService {
         return assignmentHistoryRepository.findAssignmentHistoriesByMenteeAndStudy(currentMember, studyId).stream()
                 .map(AssignmentHistoryResponse::from)
                 .toList();
+    }
+
+    @Transactional
+    public void submitAssignment(Long studyDetailId) {
+        Member currentMember = memberUtil.getCurrentMember();
+        StudyDetail studyDetail = studyDetailRepository
+                .findById(studyDetailId)
+                .orElseThrow(() -> new CustomException(STUDY_DETAIL_NOT_FOUND));
+        boolean isAppliedToStudy = studyHistoryRepository.existsByMenteeAndStudy(currentMember, studyDetail.getStudy());
+        LocalDateTime now = LocalDateTime.now();
+
+        AssignmentHistory assignmentHistory = findOrCreate(currentMember, studyDetail);
+
+        studyAssignmentHistoryValidator.validateSubmitAvailable(isAppliedToStudy, now, studyDetail);
+
+        // TODO: 과제 채점 및 과제이력 업데이트 로직 추가
+
+        assignmentHistoryRepository.save(assignmentHistory);
+    }
+
+    private AssignmentHistory findOrCreate(Member currentMember, StudyDetail studyDetail) {
+        return assignmentHistoryRepository
+                .findByMemberAndStudyDetail(currentMember, studyDetail)
+                .orElseGet(() -> AssignmentHistory.create(studyDetail, currentMember));
     }
 }
