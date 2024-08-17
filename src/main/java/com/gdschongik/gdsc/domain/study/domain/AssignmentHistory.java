@@ -14,6 +14,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -43,6 +44,8 @@ public class AssignmentHistory extends BaseEntity {
     private String commitHash;
 
     private Long contentLength;
+
+    private LocalDateTime committedAt;
 
     @Enumerated(EnumType.STRING)
     private AssignmentSubmissionStatus submissionStatus;
@@ -74,7 +77,25 @@ public class AssignmentHistory extends BaseEntity {
                 .build();
     }
 
+    // 데이터 조회 로직
+
     public boolean isSubmitted() {
         return submissionStatus == SUCCESS || submissionStatus == FAILURE;
+    }
+
+    // 데이터 변경 로직
+
+    public void success(String submissionLink, String commitHash, Long contentLength, LocalDateTime committedAt) {
+        this.submissionLink = submissionLink;
+        this.commitHash = commitHash;
+        this.contentLength = contentLength;
+        this.submissionStatus = SUCCESS;
+        this.committedAt = committedAt;
+    }
+
+    public void fail(SubmissionFailureType submissionFailureType) {
+        this.submissionStatus = FAILURE;
+        this.submissionFailureType = submissionFailureType;
+        this.committedAt = null;
     }
 }
