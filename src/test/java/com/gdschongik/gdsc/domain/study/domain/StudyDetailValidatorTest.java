@@ -157,4 +157,14 @@ public class StudyDetailValidatorTest {
                     .hasMessage(STUDY_DETAIL_ASSIGNMENT_INVALID_DEADLINE.getMessage());
         }
     }
+
+    @Nested
+    class 스터디_상세정보_작성시 {
+
+        @Test
+        void 존재하는_스터디상세정보_총개수와_요청된_스터디상세정보_총개수가_다르면_실패한다() {}
+
+        @Test
+        void 요청한_상세정보_id와_기존의_상세정보_id가_맞지_않으면_실패한다() {}
+    }
 }

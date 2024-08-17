@@ -72,7 +72,7 @@ public class StudyDetailValidator {
         Set<Long> requestIds =
                 requests.stream().map(StudySessionCreateRequest::studyDetailId).collect(Collectors.toSet());
 
-        // 두 집합이 동일한지 비교하여 ID 불일치 시 예외를 던짐
+        // 두 ID 집합이 동일한지 비교하여 ID 불일치 시 예외를 던짐
         if (!studyDetailIds.equals(requestIds)) {
             throw new CustomException(STUDY_DETAIL_SESSION_ID_INVALID);
         }

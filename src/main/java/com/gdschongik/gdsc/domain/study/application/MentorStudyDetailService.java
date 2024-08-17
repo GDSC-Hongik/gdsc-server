@@ -117,7 +117,7 @@ public class MentorStudyDetailService {
         Map<Long, StudySessionCreateRequest> requestMap = request.studySessions().stream()
                 .collect(Collectors.toMap(StudySessionCreateRequest::studyDetailId, Function.identity()));
 
-        // StudyDetail 업데이트하는 작업
+        // StudyDetail을 업데이트하는 작업
         List<StudyDetail> updatedStudyDetails = new ArrayList<>();
         for (StudyDetail studyDetail : studyDetails) {
             Long id = studyDetail.getId();
