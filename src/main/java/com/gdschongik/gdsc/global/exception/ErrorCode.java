@@ -121,6 +121,10 @@ public enum ErrorCode {
             HttpStatus.CONFLICT, "이미 제출한 과제가 있으므로 레포지토리를 수정할 수 없습니다."),
     STUDY_HISTORY_REPOSITORY_NOT_UPDATABLE_OWNER_MISMATCH(HttpStatus.CONFLICT, "레포지토리 소유자가 현재 멤버와 다릅니다."),
 
+    // Attendance
+    ATTENDANCE_DATE_INVALID(HttpStatus.CONFLICT, "강의일이 아니면 출석체크할 수 없습니다."),
+    ATTENDANCE_NUMBER_MISMATCH(HttpStatus.CONFLICT, "출석번호가 일치하지 않습니다."),
+
     // Order
     ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, "주문이 존재하지 않습니다."),
     ORDER_MEMBERSHIP_MEMBER_MISMATCH(HttpStatus.CONFLICT, "주문 대상 멤버십의 멤버와 현재 로그인한 멤버가 일치하지 않습니다."),
@@ -148,7 +152,9 @@ public enum ErrorCode {
     ASSIGNMENT_DEADLINE_INVALID(HttpStatus.CONFLICT, "과제 마감 기한이 현재보다 빠릅니다."),
 
     // Github
-    GITHUB_REPOSITORY_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 레포지토리입니다.");
+    GITHUB_REPOSITORY_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 레포지토리입니다."),
+    GITHUB_ASSIGNMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 과제 파일입니다."),
+    ;
 
     private final HttpStatus status;
     private final String message;
