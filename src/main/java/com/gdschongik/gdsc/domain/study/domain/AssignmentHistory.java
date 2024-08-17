@@ -57,15 +57,9 @@ public class AssignmentHistory extends BaseEntity {
     private AssignmentHistory(
             StudyDetail studyDetail,
             Member member,
-            String submissionLink,
-            String commitHash,
-            Long contentLength,
             AssignmentSubmissionStatus submissionStatus) {
         this.studyDetail = studyDetail;
         this.member = member;
-        this.submissionLink = submissionLink;
-        this.commitHash = commitHash;
-        this.contentLength = contentLength;
         this.submissionStatus = submissionStatus;
     }
 
