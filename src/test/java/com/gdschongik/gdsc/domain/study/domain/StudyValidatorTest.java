@@ -30,7 +30,7 @@ public class StudyValidatorTest {
     }
 
     @Nested
-    class 스터디_검증시{
+    class 스터디_검증시 {
 
         @Test
         void 멘토역할이_아니라면_실패한다() {
