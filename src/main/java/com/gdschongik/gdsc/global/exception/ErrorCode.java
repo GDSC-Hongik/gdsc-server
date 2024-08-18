@@ -150,7 +150,7 @@ public enum ErrorCode {
     ORDER_FINAL_PAYMENT_AMOUNT_MISMATCH(HttpStatus.CONFLICT, "주문 최종결제금액은 주문총액에서 할인금액을 뺀 값이어야 합니다."),
 
     // Assignment
-    ASSIGNMENT_CAN_NOT_BE_UPDATED(HttpStatus.CONFLICT, "휴강인 과제는 수정할 수 없습니다."),
+    ASSIGNMENT_INVALID_FAILURE_TYPE(HttpStatus.CONFLICT, "유효하지 않은 제출 실패사유입니다."),
     ASSIGNMENT_DEADLINE_INVALID(HttpStatus.CONFLICT, "과제 마감 기한이 현재보다 빠릅니다."),
     ASSIGNMENT_STUDY_NOT_APPLIED(HttpStatus.CONFLICT, "해당 스터디에 대한 수강신청 기록이 존재하지 않습니다."),
     ASSIGNMENT_SUBMIT_NOT_STARTED(HttpStatus.CONFLICT, "아직 과제가 시작되지 않았습니다."),
@@ -160,6 +160,9 @@ public enum ErrorCode {
 
     // Github
     GITHUB_REPOSITORY_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 레포지토리입니다."),
+    GITHUB_CONTENT_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 파일입니다."),
+    GITHUB_FILE_READ_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "깃허브 파일 읽기에 실패했습니다."),
+    GITHUB_COMMIT_DATE_FETCH_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "깃허브 커밋 날짜 조회에 실패했습니다."),
     GITHUB_ASSIGNMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 과제 파일입니다."),
     ;
 
