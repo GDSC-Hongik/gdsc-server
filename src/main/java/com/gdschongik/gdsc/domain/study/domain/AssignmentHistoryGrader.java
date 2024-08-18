@@ -3,7 +3,6 @@ package com.gdschongik.gdsc.domain.study.domain;
 import static com.gdschongik.gdsc.domain.study.domain.SubmissionFailureType.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
-import com.gdschongik.gdsc.domain.study.domain.vo.AssignmentSubmissionFetcher;
 import com.gdschongik.gdsc.global.annotation.DomainService;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;

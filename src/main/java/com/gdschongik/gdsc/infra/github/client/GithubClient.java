@@ -4,7 +4,7 @@ import static com.gdschongik.gdsc.global.common.constant.GithubConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.study.domain.AssignmentSubmission;
-import com.gdschongik.gdsc.domain.study.domain.vo.AssignmentSubmissionFetcher;
+import com.gdschongik.gdsc.domain.study.domain.AssignmentSubmissionFetcher;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import java.io.IOException;
 import java.io.InputStream;

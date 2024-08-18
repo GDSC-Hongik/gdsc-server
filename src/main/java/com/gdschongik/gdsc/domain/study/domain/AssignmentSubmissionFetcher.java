@@ -1,6 +1,5 @@
-package com.gdschongik.gdsc.domain.study.domain.vo;
+package com.gdschongik.gdsc.domain.study.domain;
 
-import com.gdschongik.gdsc.domain.study.domain.AssignmentSubmission;
 import com.gdschongik.gdsc.global.exception.CustomException;
 
 @FunctionalInterface
