@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -31,4 +32,24 @@ public class StudyNotification extends BaseEntity {
 
     @Column(columnDefinition = "TEXT")
     private String link;
+
+    @Builder(access = AccessLevel.PRIVATE)
+    public StudyNotification(Study study, String title, String link) {
+        this.study = study;
+        this.title = title;
+        this.link = link;
+    }
+
+    public static StudyNotification createStudyNotification(Study study, String title, String link){
+        return StudyNotification.builder()
+                .study(study)
+                .title(title)
+                .link(link)
+                .build();
+    }
+
+    public void update(String title, String link){
+        this.title = title;
+        this.link = link;
+    }
 }
