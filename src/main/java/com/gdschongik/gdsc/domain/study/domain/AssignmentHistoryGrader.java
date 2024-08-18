@@ -11,6 +11,8 @@ import java.util.function.Supplier;
 @DomainService
 public class AssignmentHistoryGrader {
 
+    public static final int MINIMUM_ASSIGNMENT_CONTENT_LENGTH = 300;
+
     public void judge(
             Supplier<AssignmentSubmission> assignmentSubmissionSupplier, AssignmentHistory assignmentHistory) {
         try {
@@ -24,7 +26,7 @@ public class AssignmentHistoryGrader {
 
     private void judgeAssignmentSubmission(
             AssignmentSubmission assignmentSubmission, AssignmentHistory assignmentHistory) {
-        if (assignmentSubmission.contentLength() < 300) {
+        if (assignmentSubmission.contentLength() < MINIMUM_ASSIGNMENT_CONTENT_LENGTH) {
             assignmentHistory.fail(WORD_COUNT_INSUFFICIENT);
             return;
         }
