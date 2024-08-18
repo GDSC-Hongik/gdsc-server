@@ -10,7 +10,7 @@ import com.gdschongik.gdsc.domain.study.dao.StudyRepository;
 import com.gdschongik.gdsc.domain.study.domain.*;
 import com.gdschongik.gdsc.domain.study.domain.Attendance;
 import com.gdschongik.gdsc.domain.study.domain.AttendanceValidator;
-import com.gdschongik.gdsc.domain.study.dto.request.StudyAttendRequest;
+import com.gdschongik.gdsc.domain.study.dto.request.StudyAttendCreateRequest;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
@@ -73,7 +73,7 @@ public class StudentStudyService {
     }
 
     @Transactional
-    public void attend(Long studyDetailId, StudyAttendRequest request) {
+    public void attend(Long studyDetailId, StudyAttendCreateRequest request) {
         final StudyDetail studyDetail = studyDetailRepository
                 .findById(studyDetailId)
                 .orElseThrow(() -> new CustomException(STUDY_DETAIL_NOT_FOUND));
