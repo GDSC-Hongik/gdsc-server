@@ -115,6 +115,7 @@ public class MentorStudyDetailService {
         // 스터디 저장
         study.update(request.notionLink(), request.introduction());
         studyRepository.save(study);
+        log.info("[MentorStudyDetailService] 스터디 기본 정보 수정 완료: studyId={}", studyId);
 
         Map<Long, StudySessionCreateRequest> requestMap = request.studySessions().stream()
                 .collect(Collectors.toMap(StudySessionCreateRequest::studyDetailId, Function.identity()));
@@ -135,5 +136,6 @@ public class MentorStudyDetailService {
             updatedStudyDetails.add(studyDetail);
         }
         studyDetailRepository.saveAll(updatedStudyDetails);
+        log.info("[MentorStudyDetailService] 스터디 상세정보 작성 완료: studyDetailId={}", studyDetails);
     }
 }
