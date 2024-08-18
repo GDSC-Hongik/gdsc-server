@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -50,7 +51,7 @@ public class MentorStudyController {
     }
 
     @Operation(summary = "스터디 공지 수정", description = "스터디의 공지사항을 수정합니다.")
-    @PatchMapping("/announcements/{studyAnnouncementId}")
+    @PutMapping("/announcements/{studyAnnouncementId}")
     public ResponseEntity<Void> updateStudyAnnouncement(
             @PathVariable Long studyAnnouncementId, @Valid @RequestBody StudyAnnouncementRequest request) {
         mentorStudyService.updateStudyAnnouncement(studyAnnouncementId, request);
