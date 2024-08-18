@@ -47,7 +47,7 @@ public class CommonStudyService {
         studyValidator.validateStudyMentorOrStudent(currentMember, study, studyHistory);
 
         final List<StudyAnnouncement> studyAnnouncements =
-                studyAnnouncementRepository.findAllByStudyIdOOrderByCreatedAtDesc(studyId);
+                studyAnnouncementRepository.findAllByStudyIdOrderByCreatedAtDesc(studyId);
 
         return studyAnnouncements.stream().map(StudyAnnouncementResponse::from).toList();
     }

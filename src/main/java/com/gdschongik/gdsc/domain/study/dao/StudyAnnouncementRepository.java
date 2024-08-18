@@ -13,5 +13,5 @@ public interface StudyAnnouncementRepository extends JpaRepository<StudyAnnounce
         return findById(id).orElseThrow(() -> new CustomException(STUDY_ANNOUNCEMENT_NOT_FOUND));
     }
 
-    List<StudyAnnouncement> findAllByStudyIdOOrderByCreatedAtDesc(Long studyId);
+    List<StudyAnnouncement> findAllByStudyIdOrderByCreatedAtDesc(Long studyId);
 }
