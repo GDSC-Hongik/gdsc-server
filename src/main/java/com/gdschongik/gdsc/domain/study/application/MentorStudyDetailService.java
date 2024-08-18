@@ -112,7 +112,6 @@ public class MentorStudyDetailService {
         List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyId(studyId);
         studyDetailValidator.validateUpdateStudyDetail(studyDetails, request.studySessions());
 
-        // 스터디 저장
         study.update(request.notionLink(), request.introduction());
         studyRepository.save(study);
         log.info("[MentorStudyDetailService] 스터디 기본 정보 수정 완료: studyId={}", studyId);
@@ -120,7 +119,6 @@ public class MentorStudyDetailService {
         Map<Long, StudySessionCreateRequest> requestMap = request.studySessions().stream()
                 .collect(Collectors.toMap(StudySessionCreateRequest::studyDetailId, Function.identity()));
 
-        // StudyDetail을 업데이트하는 작업
         List<StudyDetail> updatedStudyDetails = new ArrayList<>();
         for (StudyDetail studyDetail : studyDetails) {
             Long id = studyDetail.getId();
@@ -136,6 +134,6 @@ public class MentorStudyDetailService {
             updatedStudyDetails.add(studyDetail);
         }
         studyDetailRepository.saveAll(updatedStudyDetails);
-        log.info("[MentorStudyDetailService] 스터디 상세정보 작성 완료: studyDetailId={}", studyDetails);
+        log.info("[MentorStudyDetailService] 스터디 상세정보 커리큘럼 작성 완료: studyDetailId={}", studyDetails);
     }
 }
