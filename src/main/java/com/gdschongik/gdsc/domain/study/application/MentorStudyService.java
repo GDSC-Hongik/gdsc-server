@@ -136,7 +136,7 @@ public class MentorStudyService {
                     .get();
 
             studyDetail.updateSession(
-                    studyDetail.getStudy().getPeriod().getStartDate(),
+                    studyDetail.getStudy().getStartTime(),
                     matchingSession.title(),
                     matchingSession.description(),
                     matchingSession.difficulty(),

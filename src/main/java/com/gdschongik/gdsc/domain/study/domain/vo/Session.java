@@ -5,7 +5,7 @@ import com.gdschongik.gdsc.domain.study.domain.StudyStatus;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -19,7 +19,7 @@ import org.hibernate.annotations.Comment;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Session {
 
-    private LocalDateTime startAt;
+    private LocalTime startAt;
 
     private String title;
 
@@ -33,8 +33,7 @@ public class Session {
     private StudyStatus status;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private Session(
-            LocalDateTime startAt, String title, String description, Difficulty difficulty, StudyStatus status) {
+    private Session(LocalTime startAt, String title, String description, Difficulty difficulty, StudyStatus status) {
         this.startAt = startAt;
         this.title = title;
         this.description = description;
@@ -47,7 +46,7 @@ public class Session {
     }
 
     public static Session generateSession(
-            LocalDateTime startAt, String title, String description, Difficulty difficulty, StudyStatus status) {
+            LocalTime startAt, String title, String description, Difficulty difficulty, StudyStatus status) {
         return Session.builder()
                 .startAt(startAt)
                 .title(title)

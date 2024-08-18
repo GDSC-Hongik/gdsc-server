@@ -10,6 +10,7 @@ import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -102,7 +103,7 @@ public class StudyDetail extends BaseEntity {
     }
 
     public void updateSession(
-            LocalDateTime startAt, String title, String description, Difficulty difficulty, StudyStatus status) {
+            LocalTime startAt, String title, String description, Difficulty difficulty, StudyStatus status) {
         session = Session.generateSession(startAt, title, description, difficulty, status);
     }
 
