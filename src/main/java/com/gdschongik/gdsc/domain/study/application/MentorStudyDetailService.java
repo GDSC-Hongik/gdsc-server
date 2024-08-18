@@ -8,6 +8,7 @@ import com.gdschongik.gdsc.domain.study.dao.StudyRepository;
 import com.gdschongik.gdsc.domain.study.domain.Study;
 import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
 import com.gdschongik.gdsc.domain.study.domain.StudyDetailValidator;
+import com.gdschongik.gdsc.domain.study.domain.StudyValidator;
 import com.gdschongik.gdsc.domain.study.dto.request.AssignmentCreateUpdateRequest;
 import com.gdschongik.gdsc.domain.study.dto.request.StudyDetailUpdateRequest;
 import com.gdschongik.gdsc.domain.study.dto.request.StudySessionCreateRequest;
@@ -34,6 +35,7 @@ public class MentorStudyDetailService {
     private final StudyDetailRepository studyDetailRepository;
     private final StudyDetailValidator studyDetailValidator;
     private final StudyRepository studyRepository;
+    private final StudyValidator studyValidator;
 
     @Transactional(readOnly = true)
     public List<AssignmentResponse> getWeeklyAssignments(Long studyId) {
@@ -100,12 +102,12 @@ public class MentorStudyDetailService {
         return studyDetails.stream().map(StudySessionResponse::from).toList();
     }
 
+    // TODO session -> curriculum 변경
     @Transactional
     public void updateStudyDetail(Long studyId, StudyDetailUpdateRequest request) {
         Member currentMember = memberUtil.getCurrentMember();
         Study study = studyRepository.findById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
-
-        // TODO studyValidator에서 mentor인지 검증하는 validator사용하기
+        studyValidator.validateStudyMentor(currentMember, study);
 
         List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyId(studyId);
         studyDetailValidator.validateUpdateStudyDetail(studyDetails, request.studySessions());

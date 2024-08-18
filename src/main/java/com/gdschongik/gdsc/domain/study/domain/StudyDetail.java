@@ -105,6 +105,7 @@ public class StudyDetail extends BaseEntity {
             LocalDateTime startAt, String title, String description, Difficulty difficulty, StudyStatus status) {
         session = Session.generateSession(startAt, title, description, difficulty, status);
     }
+
     public void validateAssignmentSubmittable(LocalDateTime now) {
         if (now.isBefore(period.getStartDate())) {
             throw new CustomException(ASSIGNMENT_SUBMIT_NOT_STARTED);
