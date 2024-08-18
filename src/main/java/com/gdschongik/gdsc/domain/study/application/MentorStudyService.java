@@ -1,14 +1,14 @@
 package com.gdschongik.gdsc.domain.study.application;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
+import com.gdschongik.gdsc.domain.study.dao.StudyAnnouncementRepository;
 import com.gdschongik.gdsc.domain.study.dao.StudyHistoryRepository;
-import com.gdschongik.gdsc.domain.study.dao.StudyNotificationRepository;
 import com.gdschongik.gdsc.domain.study.dao.StudyRepository;
 import com.gdschongik.gdsc.domain.study.domain.Study;
+import com.gdschongik.gdsc.domain.study.domain.StudyAnnouncement;
 import com.gdschongik.gdsc.domain.study.domain.StudyHistory;
-import com.gdschongik.gdsc.domain.study.domain.StudyNotification;
 import com.gdschongik.gdsc.domain.study.domain.StudyValidator;
-import com.gdschongik.gdsc.domain.study.dto.request.StudyNotificationRequest;
+import com.gdschongik.gdsc.domain.study.dto.request.StudyAnnouncementRequest;
 import com.gdschongik.gdsc.domain.study.dto.response.MentorStudyResponse;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyStudentResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
@@ -27,7 +27,7 @@ public class MentorStudyService {
 
     private final MemberUtil memberUtil;
     private final StudyRepository studyRepository;
-    private final StudyNotificationRepository studyNotificationRepository;
+    private final StudyAnnouncementRepository studyAnnouncementRepository;
     private final StudyHistoryRepository studyHistoryRepository;
     private final StudyValidator studyValidator;
 
@@ -51,43 +51,43 @@ public class MentorStudyService {
     }
 
     @Transactional
-    public void createStudyNotification(Long studyId, StudyNotificationRequest request) {
+    public void createStudyAnnouncement(Long studyId, StudyAnnouncementRequest request) {
         Member currentMember = memberUtil.getCurrentMember();
         final Study study = studyRepository.getById(studyId);
 
         studyValidator.validateStudyMentor(currentMember, study);
 
-        StudyNotification studyNotification =
-                StudyNotification.createStudyNotification(study, request.title(), request.link());
-        studyNotificationRepository.save(studyNotification);
+        StudyAnnouncement studyAnnouncement =
+                StudyAnnouncement.createStudyAnnouncement(study, request.title(), request.link());
+        studyAnnouncementRepository.save(studyAnnouncement);
 
-        log.info("[MentorStudyService] 스터디 공지 생성: studyNotificationId={}", studyNotification.getId());
+        log.info("[MentorStudyService] 스터디 공지 생성: studyAnnouncementId={}", studyAnnouncement.getId());
     }
 
     @Transactional
-    public void updateStudyNotification(Long updateStudyNotificationId, StudyNotificationRequest request) {
+    public void updateStudyAnnouncement(Long studyAnnouncementId, StudyAnnouncementRequest request) {
         Member currentMember = memberUtil.getCurrentMember();
-        final StudyNotification studyNotification = studyNotificationRepository.getById(updateStudyNotificationId);
-        Study study = studyNotification.getStudy();
+        final StudyAnnouncement studyAnnouncement = studyAnnouncementRepository.getById(studyAnnouncementId);
+        Study study = studyAnnouncement.getStudy();
 
         studyValidator.validateStudyMentor(currentMember, study);
 
-        studyNotification.update(request.title(), request.link());
-        studyNotificationRepository.save(studyNotification);
+        studyAnnouncement.update(request.title(), request.link());
+        studyAnnouncementRepository.save(studyAnnouncement);
 
-        log.info("[MentorStudyService] 스터디 공지 수정 완료: studyNotificationId={}", studyNotification.getId());
+        log.info("[MentorStudyService] 스터디 공지 수정 완료: studyAnnouncementId={}", studyAnnouncement.getId());
     }
 
     @Transactional
-    public void deleteStudyNotification(Long updateStudyNotificationId) {
+    public void deleteStudyAnnouncement(Long studyAnnouncementId) {
         Member currentMember = memberUtil.getCurrentMember();
-        final StudyNotification studyNotification = studyNotificationRepository.getById(updateStudyNotificationId);
-        Study study = studyNotification.getStudy();
+        final StudyAnnouncement studyAnnouncement = studyAnnouncementRepository.getById(studyAnnouncementId);
+        Study study = studyAnnouncement.getStudy();
 
         studyValidator.validateStudyMentor(currentMember, study);
 
-        studyNotificationRepository.delete(studyNotification);
+        studyAnnouncementRepository.delete(studyAnnouncement);
 
-        log.info("[MentorStudyService] 스터디 공지 삭제 완료: studyNotificationId={}", studyNotification.getId());
+        log.info("[MentorStudyService] 스터디 공지 삭제 완료: studyAnnouncementId={}", studyAnnouncement.getId());
     }
 }

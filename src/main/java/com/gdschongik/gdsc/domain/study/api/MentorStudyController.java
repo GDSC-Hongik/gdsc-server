@@ -1,7 +1,7 @@
 package com.gdschongik.gdsc.domain.study.api;
 
 import com.gdschongik.gdsc.domain.study.application.MentorStudyService;
-import com.gdschongik.gdsc.domain.study.dto.request.StudyNotificationRequest;
+import com.gdschongik.gdsc.domain.study.dto.request.StudyAnnouncementRequest;
 import com.gdschongik.gdsc.domain.study.dto.response.MentorStudyResponse;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyStudentResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -42,25 +42,25 @@ public class MentorStudyController {
     }
 
     @Operation(summary = "스터디 공지 생성", description = "스터디의 공지사항을 생성합니다.")
-    @PostMapping("/{studyId}/notifications")
-    public ResponseEntity<Void> createStudyNotification(
-            @PathVariable Long studyId, @Valid @RequestBody StudyNotificationRequest request) {
-        mentorStudyService.createStudyNotification(studyId, request);
+    @PostMapping("/{studyId}/announcements")
+    public ResponseEntity<Void> createStudyAnnouncement(
+            @PathVariable Long studyId, @Valid @RequestBody StudyAnnouncementRequest request) {
+        mentorStudyService.createStudyAnnouncement(studyId, request);
         return ResponseEntity.ok().build();
     }
 
     @Operation(summary = "스터디 공지 수정", description = "스터디의 공지사항을 수정합니다.")
-    @PatchMapping("/notifications/{studyNotificationId}")
-    public ResponseEntity<Void> updateStudyNotification(
-            @PathVariable Long studyNotificationId, @Valid @RequestBody StudyNotificationRequest request) {
-        mentorStudyService.updateStudyNotification(studyNotificationId, request);
+    @PatchMapping("/announcements/{studyAnnouncementId}")
+    public ResponseEntity<Void> updateStudyAnnouncement(
+            @PathVariable Long studyAnnouncementId, @Valid @RequestBody StudyAnnouncementRequest request) {
+        mentorStudyService.updateStudyAnnouncement(studyAnnouncementId, request);
         return ResponseEntity.ok().build();
     }
 
     @Operation(summary = "스터디 공지 삭제", description = "스터디의 공지사항을 삭제합니다.")
-    @DeleteMapping("/notifications/{studyNotificationId}")
-    public ResponseEntity<Void> deleteStudyNotification(@PathVariable Long studyNotificationId) {
-        mentorStudyService.deleteStudyNotification(studyNotificationId);
+    @DeleteMapping("/announcements/{studyAnnouncementId}")
+    public ResponseEntity<Void> deleteStudyAnnouncement(@PathVariable Long studyAnnouncementId) {
+        mentorStudyService.deleteStudyAnnouncement(studyAnnouncementId);
         return ResponseEntity.ok().build();
     }
 }

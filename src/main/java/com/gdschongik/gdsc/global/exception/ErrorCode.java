@@ -123,8 +123,8 @@ public enum ErrorCode {
             HttpStatus.CONFLICT, "이미 제출한 과제가 있으므로 레포지토리를 수정할 수 없습니다."),
     STUDY_HISTORY_REPOSITORY_NOT_UPDATABLE_OWNER_MISMATCH(HttpStatus.CONFLICT, "레포지토리 소유자가 현재 멤버와 다릅니다."),
 
-    // StudyNotification
-    STUDY_NOTIFICATION_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 스터디 공지입니다."),
+    // StudyAnnouncement
+    STUDY_ANNOUNCEMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 스터디 공지입니다."),
 
     // Attendance
     ATTENDANCE_DATE_INVALID(HttpStatus.CONFLICT, "강의일이 아니면 출석체크할 수 없습니다."),

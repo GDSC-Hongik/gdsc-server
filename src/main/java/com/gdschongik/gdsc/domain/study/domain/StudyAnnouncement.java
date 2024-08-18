@@ -17,11 +17,11 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class StudyNotification extends BaseEntity {
+public class StudyAnnouncement extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "study_notification_id")
+    @Column(name = "study_announcement_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -34,14 +34,14 @@ public class StudyNotification extends BaseEntity {
     private String link;
 
     @Builder(access = AccessLevel.PRIVATE)
-    public StudyNotification(Study study, String title, String link) {
+    public StudyAnnouncement(Study study, String title, String link) {
         this.study = study;
         this.title = title;
         this.link = link;
     }
 
-    public static StudyNotification createStudyNotification(Study study, String title, String link) {
-        return StudyNotification.builder().study(study).title(title).link(link).build();
+    public static StudyAnnouncement createStudyAnnouncement(Study study, String title, String link) {
+        return StudyAnnouncement.builder().study(study).title(title).link(link).build();
     }
 
     public void update(String title, String link) {
