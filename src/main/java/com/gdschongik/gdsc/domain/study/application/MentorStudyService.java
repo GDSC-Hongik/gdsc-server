@@ -8,7 +8,7 @@ import com.gdschongik.gdsc.domain.study.domain.Study;
 import com.gdschongik.gdsc.domain.study.domain.StudyAnnouncement;
 import com.gdschongik.gdsc.domain.study.domain.StudyHistory;
 import com.gdschongik.gdsc.domain.study.domain.StudyValidator;
-import com.gdschongik.gdsc.domain.study.dto.request.StudyAnnouncementRequest;
+import com.gdschongik.gdsc.domain.study.dto.request.StudyAnnouncementCreateUpdateRequest;
 import com.gdschongik.gdsc.domain.study.dto.response.MentorStudyResponse;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyStudentResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
@@ -51,7 +51,7 @@ public class MentorStudyService {
     }
 
     @Transactional
-    public void createStudyAnnouncement(Long studyId, StudyAnnouncementRequest request) {
+    public void createStudyAnnouncement(Long studyId, StudyAnnouncementCreateUpdateRequest request) {
         Member currentMember = memberUtil.getCurrentMember();
         final Study study = studyRepository.getById(studyId);
 
@@ -65,7 +65,7 @@ public class MentorStudyService {
     }
 
     @Transactional
-    public void updateStudyAnnouncement(Long studyAnnouncementId, StudyAnnouncementRequest request) {
+    public void updateStudyAnnouncement(Long studyAnnouncementId, StudyAnnouncementCreateUpdateRequest request) {
         Member currentMember = memberUtil.getCurrentMember();
         final StudyAnnouncement studyAnnouncement = studyAnnouncementRepository.getById(studyAnnouncementId);
         Study study = studyAnnouncement.getStudy();

@@ -1,7 +1,7 @@
 package com.gdschongik.gdsc.domain.study.api;
 
 import com.gdschongik.gdsc.domain.study.application.MentorStudyService;
-import com.gdschongik.gdsc.domain.study.dto.request.StudyAnnouncementRequest;
+import com.gdschongik.gdsc.domain.study.dto.request.StudyAnnouncementCreateUpdateRequest;
 import com.gdschongik.gdsc.domain.study.dto.response.MentorStudyResponse;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyStudentResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -45,7 +44,7 @@ public class MentorStudyController {
     @Operation(summary = "스터디 공지 생성", description = "스터디의 공지사항을 생성합니다.")
     @PostMapping("/{studyId}/announcements")
     public ResponseEntity<Void> createStudyAnnouncement(
-            @PathVariable Long studyId, @Valid @RequestBody StudyAnnouncementRequest request) {
+            @PathVariable Long studyId, @Valid @RequestBody StudyAnnouncementCreateUpdateRequest request) {
         mentorStudyService.createStudyAnnouncement(studyId, request);
         return ResponseEntity.ok().build();
     }
@@ -53,7 +52,7 @@ public class MentorStudyController {
     @Operation(summary = "스터디 공지 수정", description = "스터디의 공지사항을 수정합니다.")
     @PutMapping("/announcements/{studyAnnouncementId}")
     public ResponseEntity<Void> updateStudyAnnouncement(
-            @PathVariable Long studyAnnouncementId, @Valid @RequestBody StudyAnnouncementRequest request) {
+            @PathVariable Long studyAnnouncementId, @Valid @RequestBody StudyAnnouncementCreateUpdateRequest request) {
         mentorStudyService.updateStudyAnnouncement(studyAnnouncementId, request);
         return ResponseEntity.ok().build();
     }
