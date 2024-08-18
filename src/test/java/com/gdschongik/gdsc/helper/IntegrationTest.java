@@ -165,6 +165,12 @@ public abstract class IntegrationTest {
         return memberRepository.save(member);
     }
 
+    public Member createMentor() {
+        Member member = createAssociateMember();
+        member.assignToMentor();
+        return memberRepository.save(member);
+    }
+
     protected RecruitmentRound createRecruitmentRound() {
         Recruitment recruitment = createRecruitment(ACADEMIC_YEAR, SEMESTER_TYPE, FEE);
 

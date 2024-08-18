@@ -60,7 +60,7 @@ public class MentorStudyDetailServiceTest extends IntegrationTest {
         void 성공한다() {
             // given
             LocalDateTime now = LocalDateTime.now();
-            Member mentor = createAssociateMember();
+            Member mentor = createMentor();
             Study study = createNewStudy(
                     mentor,
                     4L,
@@ -77,7 +77,7 @@ public class MentorStudyDetailServiceTest extends IntegrationTest {
             for (int i = 1; i <= study.getTotalWeek(); i++) {
                 Long id = (long) i;
                 StudySessionCreateRequest request =
-                        new StudySessionCreateRequest(id, "title", "설명", Difficulty.HIGH, StudyStatus.OPEN);
+                        new StudySessionCreateRequest(id, "title " + i, "설명 " + i, Difficulty.HIGH, StudyStatus.OPEN);
                 sessionCreateRequests.add(request);
             }
 
@@ -88,8 +88,17 @@ public class MentorStudyDetailServiceTest extends IntegrationTest {
             mentorStudyDetailService.updateStudyDetail(1L, request);
 
             // then
-            StudyDetail studyDetail = studyDetailRepository.findAllByStudyId(1L).get(1);
-            assertThat(studyDetail.getSession().getTitle()).isEqualTo("title");
+            List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyId(1L);
+            for (int i = 0; i < studyDetails.size(); i++) {
+                StudyDetail studyDetail = studyDetails.get(i);
+                Long expectedId = studyDetail.getId();
+
+                assertThat(studyDetail.getId()).isEqualTo(expectedId);
+                assertThat(studyDetail.getSession().getTitle()).isEqualTo("title " + expectedId);
+                assertThat(studyDetail.getSession().getDescription()).isEqualTo("설명 " + expectedId);
+                assertThat(studyDetail.getSession().getDifficulty()).isEqualTo(Difficulty.HIGH);
+                assertThat(studyDetail.getSession().getStatus()).isEqualTo(StudyStatus.OPEN);
+            }
         }
     }
 }
