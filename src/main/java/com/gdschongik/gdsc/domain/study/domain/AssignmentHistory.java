@@ -1,9 +1,12 @@
 package com.gdschongik.gdsc.domain.study.domain;
 
 import static com.gdschongik.gdsc.domain.study.domain.AssignmentSubmissionStatus.*;
+import static com.gdschongik.gdsc.domain.study.domain.SubmissionFailureType.*;
+import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.common.model.BaseEntity;
 import com.gdschongik.gdsc.domain.member.domain.Member;
+import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -14,6 +17,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -44,6 +48,8 @@ public class AssignmentHistory extends BaseEntity {
 
     private Long contentLength;
 
+    private LocalDateTime committedAt;
+
     @Enumerated(EnumType.STRING)
     private AssignmentSubmissionStatus submissionStatus;
 
@@ -54,27 +60,50 @@ public class AssignmentHistory extends BaseEntity {
     private AssignmentHistory(
             StudyDetail studyDetail,
             Member member,
-            String submissionLink,
-            String commitHash,
-            Long contentLength,
-            AssignmentSubmissionStatus submissionStatus) {
+            AssignmentSubmissionStatus submissionStatus,
+            SubmissionFailureType submissionFailureType) {
         this.studyDetail = studyDetail;
         this.member = member;
-        this.submissionLink = submissionLink;
-        this.commitHash = commitHash;
-        this.contentLength = contentLength;
         this.submissionStatus = submissionStatus;
+        this.submissionFailureType = submissionFailureType;
     }
 
     public static AssignmentHistory create(StudyDetail studyDetail, Member member) {
         return AssignmentHistory.builder()
                 .studyDetail(studyDetail)
                 .member(member)
-                .submissionStatus(AssignmentSubmissionStatus.PENDING)
+                .submissionStatus(FAILURE)
+                .submissionFailureType(NOT_SUBMITTED)
                 .build();
     }
 
+    // 데이터 조회 로직
+
     public boolean isSubmitted() {
-        return submissionStatus == SUCCESS || submissionStatus == FAILURE;
+        return submissionFailureType != NOT_SUBMITTED;
+    }
+
+    // 데이터 변경 로직
+
+    public void success(String submissionLink, String commitHash, Long contentLength, LocalDateTime committedAt) {
+        this.submissionLink = submissionLink;
+        this.commitHash = commitHash;
+        this.contentLength = contentLength;
+        this.committedAt = committedAt;
+        this.submissionStatus = SUCCESS;
+        this.submissionFailureType = NONE;
+    }
+
+    public void fail(SubmissionFailureType submissionFailureType) {
+        if (submissionFailureType == NOT_SUBMITTED || submissionFailureType == NONE) {
+            throw new CustomException(ASSIGNMENT_INVALID_FAILURE_TYPE);
+        }
+
+        this.submissionLink = null;
+        this.commitHash = null;
+        this.contentLength = null;
+        this.committedAt = null;
+        this.submissionStatus = FAILURE;
+        this.submissionFailureType = submissionFailureType;
     }
 }

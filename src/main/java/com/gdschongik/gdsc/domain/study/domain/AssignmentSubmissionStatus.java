@@ -6,10 +6,9 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum AssignmentSubmissionStatus {
-    PENDING("제출 전"),
+    // TODO: 클라이언트 응답에는 PENDING 상태 필요하므로, 추후 응답용 enum 클래스 생성 구현
     FAILURE("제출 실패"),
-    SUCCESS("제출 성공"),
-    CANCELLED("과제 휴강"); // TODO: 제거 및 DB에서 삭제
+    SUCCESS("제출 성공");
 
     private final String value;
 }
