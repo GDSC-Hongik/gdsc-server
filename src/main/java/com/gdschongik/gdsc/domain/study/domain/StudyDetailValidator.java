@@ -74,7 +74,7 @@ public class StudyDetailValidator {
 
         // 두 ID 집합이 동일한지 비교하여 ID 불일치 시 예외를 던짐
         if (!studyDetailIds.equals(requestIds)) {
-            throw new CustomException(STUDY_DETAIL_SESSION_ID_INVALID);
+            throw new CustomException(STUDY_DETAIL_ID_INVALID);
         }
     }
 }

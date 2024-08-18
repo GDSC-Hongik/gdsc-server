@@ -229,7 +229,7 @@ public class StudyDetailValidatorTest {
             // when & then
             assertThatThrownBy(() -> studyDetailValidator.validateUpdateStudyDetail(studyDetails, sessionCreateRequest))
                     .isInstanceOf(CustomException.class)
-                    .hasMessage(STUDY_DETAIL_SESSION_ID_INVALID.getMessage());
+                    .hasMessage(STUDY_DETAIL_ID_INVALID.getMessage());
         }
     }
 }
