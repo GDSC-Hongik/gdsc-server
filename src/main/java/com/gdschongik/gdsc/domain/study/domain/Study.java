@@ -132,6 +132,8 @@ public class Study extends BaseSemesterEntity {
                 .build();
     }
 
+    // 검증 로직
+
     private static void validateApplicationStartDateBeforeSessionStartDate(
             LocalDateTime applicationStartDate, LocalDateTime startDate) {
         if (!applicationStartDate.isBefore(startDate)) {

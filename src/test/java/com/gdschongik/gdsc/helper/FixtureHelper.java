@@ -1,7 +1,8 @@
 package com.gdschongik.gdsc.helper;
 
 import static com.gdschongik.gdsc.domain.member.domain.Department.*;
-import static com.gdschongik.gdsc.domain.member.domain.Member.*;
+import static com.gdschongik.gdsc.domain.member.domain.MemberManageRole.ADMIN;
+import static com.gdschongik.gdsc.domain.member.domain.MemberStudyRole.MENTOR;
 import static com.gdschongik.gdsc.global.common.constant.MemberConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.RecruitmentConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.SemesterConstant.*;
@@ -46,6 +47,19 @@ public class FixtureHelper {
         return member;
     }
 
+    public Member createAdmin(Long id) {
+        Member member = createRegularMember(id);
+        ReflectionTestUtils.setField(member, "manageRole", ADMIN);
+        return member;
+    }
+
+    public Member createMentor(Long id) {
+        Member member = createRegularMember(id);
+        member.assignToMentor();
+        ReflectionTestUtils.setField(member, "studyRole", MENTOR);
+        return member;
+    }
+
     public RecruitmentRound createRecruitmentRound(
             LocalDateTime startDate,
             LocalDateTime endDate,
@@ -82,7 +96,19 @@ public class FixtureHelper {
                 STUDY_END_TIME);
     }
 
+    public Study createStudyWithMentor(Long mentorId, Period period, Period applicationPeriod) {
+        Member mentor = createAssociateMember(mentorId);
+        return createStudy(mentor, period, applicationPeriod);
+    }
+
     public StudyDetail createStudyDetail(Study study, LocalDateTime startDate, LocalDateTime endDate) {
         return StudyDetail.createStudyDetail(study, 1L, ATTENDANCE_NUMBER, Period.createPeriod(startDate, endDate));
+    }
+
+    public StudyDetail createStudyDetailWithAssignment(
+            Study study, LocalDateTime startDate, LocalDateTime endDate, LocalDateTime deadline) {
+        StudyDetail studyDetail = createStudyDetail(study, startDate, endDate);
+        studyDetail.publishAssignment(ASSIGNMENT_TITLE, deadline, DESCRIPTION_LINK);
+        return studyDetail;
     }
 }

@@ -10,6 +10,7 @@ public record AssignmentResponse(
         Long studyDetailId,
         @Schema(description = "과제 제목") String title,
         @Schema(description = "마감 기한") LocalDateTime deadline,
+        @Schema(description = "주차") Long week,
         @Schema(description = "과제 명세 링크") String descriptionLink,
         @Schema(description = "과제 상태") StudyStatus assignmentStatus) {
     public static AssignmentResponse from(StudyDetail studyDetail) {
@@ -18,6 +19,7 @@ public record AssignmentResponse(
                 studyDetail.getId(),
                 assignment.getTitle(),
                 assignment.getDeadline(),
+                studyDetail.getWeek(),
                 assignment.getDescriptionLink(),
                 assignment.getStatus());
     }
