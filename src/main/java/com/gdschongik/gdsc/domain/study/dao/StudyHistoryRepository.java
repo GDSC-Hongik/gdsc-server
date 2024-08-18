@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface StudyHistoryRepository extends JpaRepository<StudyHistory, Long> {
 
+    List<StudyHistory> findByStudyId(Long studyId);
+
     // TODO mentee -> student로 변경
     List<StudyHistory> findAllByMentee(Member member);
 

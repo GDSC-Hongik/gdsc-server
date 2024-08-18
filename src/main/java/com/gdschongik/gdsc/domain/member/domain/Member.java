@@ -345,4 +345,12 @@ public class Member extends BaseEntity {
     public boolean isRegular() {
         return role.equals(REGULAR);
     }
+
+    public boolean isAdmin() {
+        return manageRole.equals(ADMIN);
+    }
+
+    public boolean isMentor() {
+        return studyRole.equals(MENTOR);
+    }
 }
