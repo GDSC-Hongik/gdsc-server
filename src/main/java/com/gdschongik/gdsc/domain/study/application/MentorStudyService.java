@@ -20,10 +20,8 @@ import com.gdschongik.gdsc.domain.study.dto.response.StudyStudentResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
 import com.gdschongik.gdsc.global.util.MemberUtil;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
+import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -111,19 +109,31 @@ public class MentorStudyService {
         studyValidator.validateStudyMentor(currentMember, study);
 
         List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyId(studyId);
-        studyDetailValidator.validateUpdateStudyDetail(studyDetails, request.studySessions());
+        // StudyDetail ID를 추출하여 Set으로 저장
+        Set<Long> studyDetailIds = studyDetails.stream().map(StudyDetail::getId).collect(Collectors.toSet());
+
+        // 요청된 StudySessionCreateRequest의 StudyDetail ID를 추출하여 Set으로 저장
+        Set<Long> requestIds = request.studySessions().stream()
+                .map(StudySessionCreateRequest::studyDetailId)
+                .collect(Collectors.toSet());
+
+        studyDetailValidator.validateUpdateStudyDetail(studyDetailIds, requestIds);
 
         study.update(request.notionLink(), request.introduction());
         studyRepository.save(study);
         log.info("[MentorStudyService] 스터디 기본 정보 수정 완료: studyId={}", studyId);
 
-        Map<Long, StudySessionCreateRequest> requestMap = request.studySessions().stream()
-                .collect(Collectors.toMap(StudySessionCreateRequest::studyDetailId, Function.identity()));
+        updateAllStudyDetailSession(studyDetails, request.studySessions());
+    }
 
-        List<StudyDetail> updatedStudyDetails = new ArrayList<>();
+    private void updateAllStudyDetailSession(
+            List<StudyDetail> studyDetails, List<StudySessionCreateRequest> studySessions) {
         for (StudyDetail studyDetail : studyDetails) {
             Long id = studyDetail.getId();
-            StudySessionCreateRequest matchingSession = requestMap.get(id);
+            StudySessionCreateRequest matchingSession = studySessions.stream()
+                    .filter(session -> session.studyDetailId().equals(id))
+                    .findFirst()
+                    .get();
 
             studyDetail.updateSession(
                     studyDetail.getStudy().getPeriod().getStartDate(),
@@ -131,10 +141,8 @@ public class MentorStudyService {
                     matchingSession.description(),
                     matchingSession.difficulty(),
                     matchingSession.status());
-
-            updatedStudyDetails.add(studyDetail);
         }
-        studyDetailRepository.saveAll(updatedStudyDetails);
+        studyDetailRepository.saveAll(studyDetails);
         log.info("[MentorStudyService] 스터디 상세정보 커리큘럼 작성 완료: studyDetailId={}", studyDetails);
     }
 }

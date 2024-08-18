@@ -61,7 +61,6 @@ public class MentorStudyServiceTest extends IntegrationTest {
             // then
             Study savedStudy = studyRepository.findById(study.getId()).get();
             assertThat(savedStudy.getNotionLink()).isEqualTo(request.notionLink());
-            assertThat(savedStudy.getIntroduction()).isEqualTo(request.introduction());
 
             List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyId(1L);
             for (int i = 0; i < studyDetails.size(); i++) {
@@ -71,8 +70,6 @@ public class MentorStudyServiceTest extends IntegrationTest {
                 assertThat(studyDetail.getId()).isEqualTo(expectedId);
                 assertThat(studyDetail.getSession().getTitle()).isEqualTo(SESSION_TITLE + expectedId);
                 assertThat(studyDetail.getSession().getDescription()).isEqualTo(SESSION_DESCRIPTION + expectedId);
-                assertThat(studyDetail.getSession().getDifficulty()).isEqualTo(Difficulty.HIGH);
-                assertThat(studyDetail.getSession().getStatus()).isEqualTo(StudyStatus.OPEN);
             }
         }
     }

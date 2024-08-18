@@ -4,13 +4,10 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.study.dto.request.AssignmentCreateUpdateRequest;
-import com.gdschongik.gdsc.domain.study.dto.request.StudySessionCreateRequest;
 import com.gdschongik.gdsc.global.annotation.DomainService;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @DomainService
 public class StudyDetailValidator {
@@ -59,21 +56,14 @@ public class StudyDetailValidator {
         }
     }
 
-    public void validateUpdateStudyDetail(List<StudyDetail> studyDetails, List<StudySessionCreateRequest> requests) {
+    public void validateUpdateStudyDetail(Set<Long> studyDetails, Set<Long> requests) {
         // StudyDetail 목록과 요청된 StudySessionCreateRequest 목록의 크기를 먼저 비교
         if (studyDetails.size() != requests.size()) {
             throw new CustomException(STUDY_DETAIL_SESSION_SIZE_MISMATCH);
         }
 
-        // StudyDetail ID를 추출하여 Set으로 저장
-        Set<Long> studyDetailIds = studyDetails.stream().map(StudyDetail::getId).collect(Collectors.toSet());
-
-        // 요청된 StudySessionCreateRequest의 StudyDetail ID를 추출하여 Set으로 저장
-        Set<Long> requestIds =
-                requests.stream().map(StudySessionCreateRequest::studyDetailId).collect(Collectors.toSet());
-
         // 두 ID 집합이 동일한지 비교하여 ID 불일치 시 예외를 던짐
-        if (!studyDetailIds.equals(requestIds)) {
+        if (!studyDetails.equals(requests)) {
             throw new CustomException(STUDY_DETAIL_ID_INVALID);
         }
     }

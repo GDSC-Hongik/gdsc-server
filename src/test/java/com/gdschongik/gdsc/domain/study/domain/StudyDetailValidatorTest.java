@@ -13,6 +13,8 @@ import com.gdschongik.gdsc.helper.FixtureHelper;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -32,8 +34,9 @@ public class StudyDetailValidatorTest {
         return fixtureHelper.createMentor(id);
     }
 
-    private StudyDetail createNewStudyDetail(Long week, Study study, LocalDateTime now, LocalDateTime plusDays) {
-        return fixtureHelper.createNewStudyDetail(study, week, now, plusDays);
+    private StudyDetail createNewStudyDetail(
+            Long id, Long week, Study study, LocalDateTime now, LocalDateTime plusDays) {
+        return fixtureHelper.createNewStudyDetail(id, study, week, now, plusDays);
     }
 
     private List<StudySessionCreateRequest> createSessionCreateRequest(int count) {
@@ -198,14 +201,23 @@ public class StudyDetailValidatorTest {
             List<StudyDetail> studyDetails = new ArrayList<>();
             for (int i = 1; i <= 4; i++) {
                 Long week = (long) i;
-                StudyDetail studyDetail = createNewStudyDetail(week, study, now, now.plusDays(7));
+                Long studyDetailId = (long) i;
+                StudyDetail studyDetail = createNewStudyDetail(studyDetailId, week, study, now, now.plusDays(7));
                 now = now.plusDays(8);
                 studyDetails.add(studyDetail);
             }
             List<StudySessionCreateRequest> sessionCreateRequest = createSessionCreateRequest(5);
+            // StudyDetail ID를 추출하여 Set으로 저장
+            Set<Long> studyDetailIds =
+                    studyDetails.stream().map(StudyDetail::getId).collect(Collectors.toSet());
+
+            // 요청된 StudySessionCreateRequest의 StudyDetail ID를 추출하여 Set으로 저장
+            Set<Long> requestIds = sessionCreateRequest.stream()
+                    .map(StudySessionCreateRequest::studyDetailId)
+                    .collect(Collectors.toSet());
 
             // when & then
-            assertThatThrownBy(() -> studyDetailValidator.validateUpdateStudyDetail(studyDetails, sessionCreateRequest))
+            assertThatThrownBy(() -> studyDetailValidator.validateUpdateStudyDetail(studyDetailIds, requestIds))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(STUDY_DETAIL_SESSION_SIZE_MISMATCH.getMessage());
         }
@@ -220,14 +232,24 @@ public class StudyDetailValidatorTest {
             List<StudyDetail> studyDetails = new ArrayList<>();
             for (int i = 2; i <= 5; i++) {
                 Long week = (long) i;
-                StudyDetail studyDetail = createNewStudyDetail(week, study, now, now.plusDays(7));
+                Long studyDetailId = (long) i;
+                StudyDetail studyDetail = createNewStudyDetail(studyDetailId, week, study, now, now.plusDays(7));
                 now = now.plusDays(8);
                 studyDetails.add(studyDetail);
             }
             List<StudySessionCreateRequest> sessionCreateRequest = createSessionCreateRequest(4);
 
+            // StudyDetail ID를 추출하여 Set으로 저장
+            Set<Long> studyDetailIds =
+                    studyDetails.stream().map(StudyDetail::getId).collect(Collectors.toSet());
+
+            // 요청된 StudySessionCreateRequest의 StudyDetail ID를 추출하여 Set으로 저장
+            Set<Long> requestIds = sessionCreateRequest.stream()
+                    .map(StudySessionCreateRequest::studyDetailId)
+                    .collect(Collectors.toSet());
+
             // when & then
-            assertThatThrownBy(() -> studyDetailValidator.validateUpdateStudyDetail(studyDetails, sessionCreateRequest))
+            assertThatThrownBy(() -> studyDetailValidator.validateUpdateStudyDetail(studyDetailIds, requestIds))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(STUDY_DETAIL_ID_INVALID.getMessage());
         }
