@@ -350,7 +350,7 @@ public class Member extends BaseEntity {
         return manageRole.equals(ADMIN);
     }
 
-    public boolean isMentor() {
-        return studyRole.equals(MENTOR);
-    }
+    public boolean isMentor() { return studyRole.equals(MENTOR); }
+
+    public boolean isStudent() { return studyRole.equals(STUDENT); }
 }
