@@ -12,9 +12,9 @@ public class AssignmentHistoryGrader {
 
     public static final int MINIMUM_ASSIGNMENT_CONTENT_LENGTH = 300;
 
-    public void judge(AssignmentSubmissionFetcher assignmentSubmissionFetcher, AssignmentHistory assignmentHistory) {
+    public void judge(
+            AssignmentSubmissionFetchExecutor assignmentSubmissionFetchExecutor, AssignmentHistory assignmentHistory) {
         try {
-            AssignmentSubmission assignmentSubmission = assignmentSubmissionFetcher.fetch();
             judgeAssignmentSubmission(assignmentSubmission, assignmentHistory);
         } catch (CustomException e) {
             SubmissionFailureType failureType = translateException(e);

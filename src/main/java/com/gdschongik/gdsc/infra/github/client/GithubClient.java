@@ -32,10 +32,10 @@ public class GithubClient {
     }
 
     public AssignmentSubmissionFetcher getLatestAssignmentSubmissionFetcher(String repo, int week) {
-        return () -> getAssignmentSubmissionFetcher(repo, week);
+        return new AssignmentSubmissionFetcher(repo, week, this::getLatestAssignmentSubmission);
     }
 
-    private AssignmentSubmission getAssignmentSubmissionFetcher(String repo, int week) {
+    private AssignmentSubmission getLatestAssignmentSubmission(String repo, int week) {
         GHRepository ghRepository = getRepository(repo);
         String assignmentPath = GITHUB_ASSIGNMENT_PATH.formatted(week);
 

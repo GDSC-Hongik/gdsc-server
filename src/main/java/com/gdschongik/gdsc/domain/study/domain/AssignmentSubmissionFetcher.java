@@ -1,9 +1,7 @@
 package com.gdschongik.gdsc.domain.study.domain;
 
-import com.gdschongik.gdsc.global.exception.CustomException;
-
-@FunctionalInterface
-public interface AssignmentSubmissionFetcher {
-
-    AssignmentSubmission fetch() throws CustomException;
+public record AssignmentSubmissionFetcher(String repo, int week, AssignmentSubmissionFetchExecutor fetchExecutor) {
+    public AssignmentSubmission fetch() {
+        return fetchExecutor.execute(repo, week);
+    }
 }
