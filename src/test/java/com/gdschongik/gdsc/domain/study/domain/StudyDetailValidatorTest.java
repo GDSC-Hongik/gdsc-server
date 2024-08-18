@@ -169,7 +169,7 @@ public class StudyDetailValidatorTest {
             // given
             Set<Long> studyDetailIds = LongStream.rangeClosed(1, 4).boxed().collect(Collectors.toSet());
 
-            Set<Long> requestIds = LongStream.rangeClosed(2, 5).boxed().collect(Collectors.toSet());
+            Set<Long> requestIds = LongStream.rangeClosed(1, 5).boxed().collect(Collectors.toSet());
 
             // when & then
             assertThatThrownBy(() -> studyDetailValidator.validateUpdateStudyDetail(studyDetailIds, requestIds))
