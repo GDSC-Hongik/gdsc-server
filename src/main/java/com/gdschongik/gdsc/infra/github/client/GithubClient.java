@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Date;
 import java.util.function.Supplier;
 import lombok.RequiredArgsConstructor;
 import org.kohsuke.github.GHCommit;
@@ -48,10 +47,7 @@ public class GithubClient {
                 .iterator()
                 .next();
 
-        LocalDateTime committedAt = getCommitDate(ghLatestCommit)
-                .toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDateTime();
+        LocalDateTime committedAt = getCommitDate(ghLatestCommit);
 
         return () -> new AssignmentSubmission(
                 ghContent.getHtmlUrl(), ghLatestCommit.getSHA1(), content.length(), committedAt);
@@ -73,9 +69,13 @@ public class GithubClient {
         }
     }
 
-    private Date getCommitDate(GHCommit ghLatestCommit) {
+    private LocalDateTime getCommitDate(GHCommit ghLatestCommit) {
         try {
-            return ghLatestCommit.getCommitDate();
+            return ghLatestCommit
+                    .getCommitDate()
+                    .toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDateTime();
         } catch (IOException e) {
             throw new CustomException(GITHUB_COMMIT_DATE_FETCH_FAILED);
         }
