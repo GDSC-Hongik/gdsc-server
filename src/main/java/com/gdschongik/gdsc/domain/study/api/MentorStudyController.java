@@ -1,7 +1,7 @@
 package com.gdschongik.gdsc.domain.study.api;
 
 import com.gdschongik.gdsc.domain.study.application.MentorStudyService;
-import com.gdschongik.gdsc.domain.study.dto.request.StudyDetailUpdateRequest;
+import com.gdschongik.gdsc.domain.study.dto.request.StudyUpdateRequest;
 import com.gdschongik.gdsc.domain.study.dto.response.MentorStudyResponse;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyStudentResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,8 +21,7 @@ public class MentorStudyController {
 
     @Operation(summary = "스터디 상세 정보 작성", description = "스터디 상세 정보를 작성합니다.")
     @PatchMapping("/{studyId}")
-    public ResponseEntity<Void> updateStudyDetail(
-            @PathVariable Long studyId, @RequestBody StudyDetailUpdateRequest request) {
+    public ResponseEntity<Void> updateStudyDetail(@PathVariable Long studyId, @RequestBody StudyUpdateRequest request) {
         mentorStudyService.updateStudyDetail(studyId, request);
         return ResponseEntity.ok().build();
     }

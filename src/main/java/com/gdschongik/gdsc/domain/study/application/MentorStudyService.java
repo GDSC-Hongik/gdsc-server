@@ -7,8 +7,8 @@ import com.gdschongik.gdsc.domain.study.dao.StudyDetailRepository;
 import com.gdschongik.gdsc.domain.study.dao.StudyHistoryRepository;
 import com.gdschongik.gdsc.domain.study.dao.StudyRepository;
 import com.gdschongik.gdsc.domain.study.domain.*;
-import com.gdschongik.gdsc.domain.study.dto.request.StudyDetailUpdateRequest;
 import com.gdschongik.gdsc.domain.study.dto.request.StudySessionCreateRequest;
+import com.gdschongik.gdsc.domain.study.dto.request.StudyUpdateRequest;
 import com.gdschongik.gdsc.domain.study.dto.response.MentorStudyResponse;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyStudentResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
@@ -58,7 +58,7 @@ public class MentorStudyService {
 
     // TODO session -> curriculum 변경
     @Transactional
-    public void updateStudyDetail(Long studyId, StudyDetailUpdateRequest request) {
+    public void updateStudyDetail(Long studyId, StudyUpdateRequest request) {
         Member currentMember = memberUtil.getCurrentMember();
         Study study = studyRepository.findById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
         studyValidator.validateStudyMentor(currentMember, study);

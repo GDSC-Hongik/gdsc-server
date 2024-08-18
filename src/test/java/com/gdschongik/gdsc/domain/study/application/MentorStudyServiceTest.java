@@ -11,8 +11,8 @@ import com.gdschongik.gdsc.domain.study.domain.Difficulty;
 import com.gdschongik.gdsc.domain.study.domain.Study;
 import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
 import com.gdschongik.gdsc.domain.study.domain.StudyStatus;
-import com.gdschongik.gdsc.domain.study.dto.request.StudyDetailUpdateRequest;
 import com.gdschongik.gdsc.domain.study.dto.request.StudySessionCreateRequest;
+import com.gdschongik.gdsc.domain.study.dto.request.StudyUpdateRequest;
 import com.gdschongik.gdsc.helper.IntegrationTest;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -52,8 +52,8 @@ public class MentorStudyServiceTest extends IntegrationTest {
                 sessionCreateRequests.add(sessionCreateRequest);
             }
 
-            StudyDetailUpdateRequest request =
-                    new StudyDetailUpdateRequest(STUDY_NOTION_LINK, STUDY_INTRODUCTION, sessionCreateRequests);
+            StudyUpdateRequest request =
+                    new StudyUpdateRequest(STUDY_NOTION_LINK, STUDY_INTRODUCTION, sessionCreateRequests);
 
             // when
             mentorStudyService.updateStudyDetail(1L, request);
