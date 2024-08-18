@@ -21,6 +21,17 @@ public class StudyDetailValidatorTest {
     FixtureHelper fixtureHelper = new FixtureHelper();
     StudyDetailValidator studyDetailValidator = new StudyDetailValidator();
 
+    private Study createStudy(Member mentor, LocalDateTime now) {
+        return fixtureHelper.createStudy(
+                mentor,
+                Period.createPeriod(now.plusDays(5), now.plusDays(10)),
+                Period.createPeriod(now.minusDays(5), now));
+    }
+
+    private Member createMentor(Long id) {
+        return fixtureHelper.createMentor(id);
+    }
+
     private StudyDetail createNewStudyDetail(Long week, Study study, LocalDateTime now, LocalDateTime plusDays) {
         return fixtureHelper.createNewStudyDetail(study, week, now, plusDays);
     }
@@ -29,7 +40,7 @@ public class StudyDetailValidatorTest {
         List<StudySessionCreateRequest> requests = new ArrayList<>();
         for (int i = 1; i <= count; i++) {
             requests.add(new StudySessionCreateRequest(
-                    (long) i, "title " + i, "설명 " + i, Difficulty.HIGH, StudyStatus.OPEN));
+                    (long) i, SESSION_TITLE + i, SESSION_DESCRIPTION + i, Difficulty.HIGH, StudyStatus.OPEN));
         }
         return requests;
     }
@@ -181,11 +192,8 @@ public class StudyDetailValidatorTest {
         void 존재하는_스터디상세정보_총개수와_요청된_스터디상세정보_총개수가_다르면_실패한다() {
             // given
             LocalDateTime now = LocalDateTime.now();
-            Member mentor = fixtureHelper.createMentor(1L);
-            Study study = fixtureHelper.createStudy(
-                    mentor,
-                    Period.createPeriod(now.plusDays(5), now.plusDays(10)),
-                    Period.createPeriod(now.minusDays(5), now));
+            Member mentor = createMentor(1L);
+            Study study = createStudy(mentor, now);
 
             List<StudyDetail> studyDetails = new ArrayList<>();
             for (int i = 1; i <= 4; i++) {
@@ -206,11 +214,8 @@ public class StudyDetailValidatorTest {
         void 요청한_상세정보_id와_기존의_상세정보_id가_맞지_않으면_실패한다() {
             // given
             LocalDateTime now = LocalDateTime.now();
-            Member mentor = fixtureHelper.createMentor(1L);
-            Study study = fixtureHelper.createStudy(
-                    mentor,
-                    Period.createPeriod(now.plusDays(5), now.plusDays(10)),
-                    Period.createPeriod(now.minusDays(5), now));
+            Member mentor = createMentor(1L);
+            Study study = createStudy(mentor, now);
 
             List<StudyDetail> studyDetails = new ArrayList<>();
             for (int i = 2; i <= 5; i++) {

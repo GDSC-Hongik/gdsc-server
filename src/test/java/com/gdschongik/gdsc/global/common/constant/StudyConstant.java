@@ -26,9 +26,15 @@ public class StudyConstant {
     // Study (2024-09-01 ~ 2024-10-27)
     public static final LocalDateTime STUDY_START_DATETIME = LocalDateTime.of(2024, 9, 1, 0, 0);
     public static final LocalDateTime STUDY_END_DATETIME = STUDY_START_DATETIME.plusWeeks(8);
+    public static final String STUDY_NOTION_LINK = "notionLink";
+    public static final String STUDY_INTRODUCTION = "introduction";
 
     // StudyDetail (1주차: 2024-09-01 ~ 2024-09-08)
     public static final LocalDateTime STUDY_DETAIL_START_DATETIME = STUDY_START_DATETIME;
     public static final LocalDateTime STUDY_DETAIL_END_DATETIME = STUDY_DETAIL_START_DATETIME.plusWeeks(1);
     public static final LocalDateTime STUDY_ASSIGNMENT_DEADLINE_DATETIME = STUDY_DETAIL_END_DATETIME;
+
+    // Session
+    public static final String SESSION_TITLE = "sessionTitle";
+    public static final String SESSION_DESCRIPTION = "sessionDescription";
 }

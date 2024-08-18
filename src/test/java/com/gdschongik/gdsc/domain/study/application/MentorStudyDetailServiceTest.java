@@ -1,5 +1,6 @@
 package com.gdschongik.gdsc.domain.study.application;
 
+import static com.gdschongik.gdsc.global.common.constant.StudyConstant.*;
 import static org.assertj.core.api.Assertions.*;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
@@ -76,26 +77,30 @@ public class MentorStudyDetailServiceTest extends IntegrationTest {
             List<StudySessionCreateRequest> sessionCreateRequests = new ArrayList<>();
             for (int i = 1; i <= study.getTotalWeek(); i++) {
                 Long id = (long) i;
-                StudySessionCreateRequest request =
-                        new StudySessionCreateRequest(id, "title " + i, "설명 " + i, Difficulty.HIGH, StudyStatus.OPEN);
-                sessionCreateRequests.add(request);
+                StudySessionCreateRequest sessionCreateRequest = new StudySessionCreateRequest(
+                        id, SESSION_TITLE + i, SESSION_DESCRIPTION + i, Difficulty.HIGH, StudyStatus.OPEN);
+                sessionCreateRequests.add(sessionCreateRequest);
             }
 
             StudyDetailUpdateRequest request =
-                    new StudyDetailUpdateRequest("notionLink", "introduction", sessionCreateRequests);
+                    new StudyDetailUpdateRequest(STUDY_NOTION_LINK, STUDY_INTRODUCTION, sessionCreateRequests);
 
             // when
             mentorStudyDetailService.updateStudyDetail(1L, request);
 
             // then
+            Study savedStudy = studyRepository.findById(study.getId()).get();
+            assertThat(savedStudy.getNotionLink()).isEqualTo(request.notionLink());
+            assertThat(savedStudy.getIntroduction()).isEqualTo(request.introduction());
+
             List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyId(1L);
             for (int i = 0; i < studyDetails.size(); i++) {
                 StudyDetail studyDetail = studyDetails.get(i);
                 Long expectedId = studyDetail.getId();
 
                 assertThat(studyDetail.getId()).isEqualTo(expectedId);
-                assertThat(studyDetail.getSession().getTitle()).isEqualTo("title " + expectedId);
-                assertThat(studyDetail.getSession().getDescription()).isEqualTo("설명 " + expectedId);
+                assertThat(studyDetail.getSession().getTitle()).isEqualTo(SESSION_TITLE + expectedId);
+                assertThat(studyDetail.getSession().getDescription()).isEqualTo(SESSION_DESCRIPTION + expectedId);
                 assertThat(studyDetail.getSession().getDifficulty()).isEqualTo(Difficulty.HIGH);
                 assertThat(studyDetail.getSession().getStatus()).isEqualTo(StudyStatus.OPEN);
             }
