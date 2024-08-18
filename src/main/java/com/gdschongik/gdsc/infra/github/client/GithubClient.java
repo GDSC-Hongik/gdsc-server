@@ -3,13 +3,14 @@ package com.gdschongik.gdsc.infra.github.client;
 import static com.gdschongik.gdsc.global.common.constant.GithubConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
+import com.gdschongik.gdsc.domain.study.domain.AssignmentSubmission;
 import com.gdschongik.gdsc.global.exception.CustomException;
-import com.gdschongik.gdsc.infra.github.dto.response.GithubAssignmentSubmissionResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.function.Supplier;
 import lombok.RequiredArgsConstructor;
 import org.kohsuke.github.GHCommit;
 import org.kohsuke.github.GHContent;
@@ -31,7 +32,7 @@ public class GithubClient {
         }
     }
 
-    public GithubAssignmentSubmissionResponse getLatestAssignmentSubmission(String repo, int week) {
+    public Supplier<AssignmentSubmission> getLatestAssignmentSubmission(String repo, int week) {
         GHRepository ghRepository = getRepository(repo);
         String assignmentPath = GITHUB_ASSIGNMENT_PATH.formatted(week);
 
@@ -52,7 +53,8 @@ public class GithubClient {
                 .atZone(ZoneId.systemDefault())
                 .toLocalDateTime();
 
-        return new GithubAssignmentSubmissionResponse(ghLatestCommit.getSHA1(), content.length(), committedAt);
+        return () -> new AssignmentSubmission(
+                ghContent.getHtmlUrl(), ghLatestCommit.getSHA1(), content.length(), committedAt);
     }
 
     private GHContent getFileContent(GHRepository ghRepository, String filePath) {
