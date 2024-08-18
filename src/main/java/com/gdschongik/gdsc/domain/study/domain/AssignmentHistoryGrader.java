@@ -43,10 +43,6 @@ public class AssignmentHistoryGrader {
             return LOCATION_UNIDENTIFIABLE;
         }
 
-        if (errorCode == GITHUB_FILE_READ_FAILED || errorCode == GITHUB_COMMIT_DATE_FETCH_FAILED) {
-            return UNKNOWN;
-        }
-
-        throw e;
+        return UNKNOWN;
     }
 }
