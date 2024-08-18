@@ -1,7 +1,7 @@
 package com.gdschongik.gdsc.domain.study.api;
 
 import com.gdschongik.gdsc.domain.study.application.StudentStudyService;
-import com.gdschongik.gdsc.domain.study.dto.request.StudyAttendRequest;
+import com.gdschongik.gdsc.domain.study.dto.request.StudyAttendCreateRequest;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -49,7 +49,7 @@ public class StudentStudyController {
     @Operation(summary = "스터디 출석체크", description = "스터디에 출석체크합니다. 현재 진행중인 스터디 회차에 출석체크해야 하며, 중복출석체크할 수 없습니다.")
     @PostMapping("/study-details/{studyDetailId}/attend")
     public ResponseEntity<Void> attend(
-            @PathVariable Long studyDetailId, @Valid @RequestBody StudyAttendRequest request) {
+            @PathVariable Long studyDetailId, @Valid @RequestBody StudyAttendCreateRequest request) {
         studentStudyService.attend(studyDetailId, request);
         return ResponseEntity.ok().build();
     }

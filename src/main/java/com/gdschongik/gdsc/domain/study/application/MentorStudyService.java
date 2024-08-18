@@ -3,10 +3,16 @@ package com.gdschongik.gdsc.domain.study.application;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.STUDY_NOT_FOUND;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
+import com.gdschongik.gdsc.domain.study.dao.StudyAnnouncementRepository;
 import com.gdschongik.gdsc.domain.study.dao.StudyDetailRepository;
 import com.gdschongik.gdsc.domain.study.dao.StudyHistoryRepository;
 import com.gdschongik.gdsc.domain.study.dao.StudyRepository;
 import com.gdschongik.gdsc.domain.study.domain.*;
+import com.gdschongik.gdsc.domain.study.domain.Study;
+import com.gdschongik.gdsc.domain.study.domain.StudyAnnouncement;
+import com.gdschongik.gdsc.domain.study.domain.StudyHistory;
+import com.gdschongik.gdsc.domain.study.domain.StudyValidator;
+import com.gdschongik.gdsc.domain.study.dto.request.StudyAnnouncementCreateUpdateRequest;
 import com.gdschongik.gdsc.domain.study.dto.request.StudySessionCreateRequest;
 import com.gdschongik.gdsc.domain.study.dto.request.StudyUpdateRequest;
 import com.gdschongik.gdsc.domain.study.dto.response.MentorStudyResponse;
@@ -24,13 +30,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class MentorStudyService {
 
     private final MemberUtil memberUtil;
     private final StudyRepository studyRepository;
+    private final StudyAnnouncementRepository studyAnnouncementRepository;
     private final StudyHistoryRepository studyHistoryRepository;
     private final StudyValidator studyValidator;
     private final StudyDetailRepository studyDetailRepository;
@@ -53,6 +60,47 @@ public class MentorStudyService {
         List<StudyHistory> studyHistories = studyHistoryRepository.findByStudyId(studyId);
 
         return studyHistories.stream().map(StudyStudentResponse::from).toList();
+    }
+
+    @Transactional
+    public void createStudyAnnouncement(Long studyId, StudyAnnouncementCreateUpdateRequest request) {
+        Member currentMember = memberUtil.getCurrentMember();
+        final Study study = studyRepository.getById(studyId);
+
+        studyValidator.validateStudyMentor(currentMember, study);
+
+        StudyAnnouncement studyAnnouncement =
+                StudyAnnouncement.createStudyAnnouncement(study, request.title(), request.link());
+        studyAnnouncementRepository.save(studyAnnouncement);
+
+        log.info("[MentorStudyService] 스터디 공지 생성: studyAnnouncementId={}", studyAnnouncement.getId());
+    }
+
+    @Transactional
+    public void updateStudyAnnouncement(Long studyAnnouncementId, StudyAnnouncementCreateUpdateRequest request) {
+        Member currentMember = memberUtil.getCurrentMember();
+        final StudyAnnouncement studyAnnouncement = studyAnnouncementRepository.getById(studyAnnouncementId);
+        Study study = studyAnnouncement.getStudy();
+
+        studyValidator.validateStudyMentor(currentMember, study);
+
+        studyAnnouncement.update(request.title(), request.link());
+        studyAnnouncementRepository.save(studyAnnouncement);
+
+        log.info("[MentorStudyService] 스터디 공지 수정 완료: studyAnnouncementId={}", studyAnnouncement.getId());
+    }
+
+    @Transactional
+    public void deleteStudyAnnouncement(Long studyAnnouncementId) {
+        Member currentMember = memberUtil.getCurrentMember();
+        final StudyAnnouncement studyAnnouncement = studyAnnouncementRepository.getById(studyAnnouncementId);
+        Study study = studyAnnouncement.getStudy();
+
+        studyValidator.validateStudyMentor(currentMember, study);
+
+        studyAnnouncementRepository.delete(studyAnnouncement);
+
+        log.info("[MentorStudyService] 스터디 공지 삭제 완료: studyAnnouncementId={}", studyAnnouncement.getId());
     }
 
     // TODO session -> curriculum 변경
