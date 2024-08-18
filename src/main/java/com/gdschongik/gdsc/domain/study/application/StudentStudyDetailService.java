@@ -6,6 +6,7 @@ import com.gdschongik.gdsc.domain.study.dao.StudyHistoryRepository;
 import com.gdschongik.gdsc.domain.study.domain.AssignmentHistory;
 import com.gdschongik.gdsc.domain.study.domain.StudyHistory;
 import com.gdschongik.gdsc.domain.study.dto.response.AssignmentDashboardResponse;
+import com.gdschongik.gdsc.domain.study.dto.response.AssignmentStatusResponse;
 import com.gdschongik.gdsc.domain.study.dto.response.AssignmentSubmittableDto;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
@@ -39,5 +40,17 @@ public class StudentStudyDetailService {
                 .toList();
 
         return AssignmentDashboardResponse.of(studyHistory.getRepositoryLink(), isAnySubmitted, submittableAssignments);
+    }
+
+    @Transactional(readOnly = true)
+    public List<AssignmentStatusResponse> getAssignmentsToSubmit(Long studyId) {
+        Member currentMember = memberUtil.getCurrentMember();
+        List<AssignmentHistory> assignmentHistories =
+                assignmentHistoryRepository.findAssignmentHistoriesByMenteeAndStudy(currentMember, studyId).stream()
+                        .filter(assignmentHistory ->
+                                assignmentHistory.getStudyDetail().isAssignmentDeadlineRemaining())
+                        .toList();
+
+        return assignmentHistories.stream().map(AssignmentStatusResponse::from).toList();
     }
 }
