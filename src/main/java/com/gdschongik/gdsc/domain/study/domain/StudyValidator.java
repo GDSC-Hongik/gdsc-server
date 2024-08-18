@@ -5,7 +5,6 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.global.annotation.DomainService;
 import com.gdschongik.gdsc.global.exception.CustomException;
-import jakarta.annotation.Nullable;
 import java.util.Optional;
 
 @DomainService
