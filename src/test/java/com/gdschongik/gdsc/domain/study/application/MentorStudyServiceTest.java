@@ -30,7 +30,7 @@ public class MentorStudyServiceTest extends IntegrationTest {
         @Test
         void 성공한다() {
             // given
-            LocalDateTime now = LocalDateTime.now();
+            LocalDateTime now = STUDY_START_DATETIME;
             Member mentor = createMentor();
             Study study = createNewStudy(
                     mentor,

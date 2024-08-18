@@ -194,7 +194,7 @@ public class StudyDetailValidatorTest {
         @Test
         void 존재하는_스터디상세정보_총개수와_요청된_스터디상세정보_총개수가_다르면_실패한다() {
             // given
-            LocalDateTime now = LocalDateTime.now();
+            LocalDateTime now = STUDY_START_DATETIME;
             Member mentor = createMentor(1L);
             Study study = createStudy(mentor, now);
 
@@ -225,7 +225,7 @@ public class StudyDetailValidatorTest {
         @Test
         void 요청한_상세정보_id와_기존의_상세정보_id가_맞지_않으면_실패한다() {
             // given
-            LocalDateTime now = LocalDateTime.now();
+            LocalDateTime now = STUDY_START_DATETIME;
             Member mentor = createMentor(1L);
             Study study = createStudy(mentor, now);
 
