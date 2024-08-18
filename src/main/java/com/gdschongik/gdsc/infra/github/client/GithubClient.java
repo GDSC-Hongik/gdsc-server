@@ -31,7 +31,11 @@ public class GithubClient {
         }
     }
 
-    public AssignmentSubmissionFetcher getLatestAssignmentSubmission(String repo, int week) {
+    public AssignmentSubmissionFetcher getLatestAssignmentSubmissionFetcher(String repo, int week) {
+        return () -> getAssignmentSubmissionFetcher(repo, week);
+    }
+
+    private AssignmentSubmission getAssignmentSubmissionFetcher(String repo, int week) {
         GHRepository ghRepository = getRepository(repo);
         String assignmentPath = GITHUB_ASSIGNMENT_PATH.formatted(week);
 
@@ -49,7 +53,7 @@ public class GithubClient {
 
         LocalDateTime committedAt = getCommitDate(ghLatestCommit);
 
-        return () -> new AssignmentSubmission(
+        return new AssignmentSubmission(
                 ghContent.getHtmlUrl(), ghLatestCommit.getSHA1(), content.length(), committedAt);
     }
 
