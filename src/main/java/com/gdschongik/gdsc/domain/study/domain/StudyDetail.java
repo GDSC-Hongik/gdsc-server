@@ -1,9 +1,12 @@
 package com.gdschongik.gdsc.domain.study.domain;
 
+import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
+
 import com.gdschongik.gdsc.domain.common.model.BaseEntity;
 import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import com.gdschongik.gdsc.domain.study.domain.vo.Assignment;
 import com.gdschongik.gdsc.domain.study.domain.vo.Session;
+import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -84,11 +87,24 @@ public class StudyDetail extends BaseEntity {
         assignment = Assignment.generateAssignment(title, deadLine, descriptionNotionLink);
     }
 
+    // 데이터 전달 로직
+
+    public boolean isAssignmentDeadlineRemaining() {
+        return assignment.isDeadlineRemaining();
+    }
+
     // 스터디 시작일자 + 현재 주차 * 7 + (스터디 요일 - 스터디 기간 시작 요일)
     public LocalDate getAttendanceDay() {
         return study.getStartDate()
                 .plusDays(week * 7
                         + study.getDayOfWeek().getValue()
                         - study.getStartDate().getDayOfWeek().getValue());
+    }
+
+    public void validateAssignmentSubmittable(LocalDateTime now) {
+        if (now.isBefore(period.getStartDate())) {
+            throw new CustomException(ASSIGNMENT_SUBMIT_NOT_STARTED);
+        }
+        assignment.validateSubmittable(now);
     }
 }

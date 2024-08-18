@@ -25,7 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class StudyService {
+public class StudentStudyService {
 
     private final MemberUtil memberUtil;
     private final StudyRepository studyRepository;
