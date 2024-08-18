@@ -25,7 +25,7 @@ public class MentorStudyServiceTest extends IntegrationTest {
     private MentorStudyService mentorStudyService;
 
     @Nested
-    class 스터디_상세정보_작성시 {
+    class 스터디_정보_작성시 {
 
         @Test
         void 성공한다() {
@@ -56,7 +56,7 @@ public class MentorStudyServiceTest extends IntegrationTest {
                     new StudyUpdateRequest(STUDY_NOTION_LINK, STUDY_INTRODUCTION, sessionCreateRequests);
 
             // when
-            mentorStudyService.updateStudyDetail(1L, request);
+            mentorStudyService.updateStudy(1L, request);
 
             // then
             Study savedStudy = studyRepository.findById(study.getId()).get();

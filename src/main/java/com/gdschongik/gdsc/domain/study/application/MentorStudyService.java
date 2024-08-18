@@ -33,7 +33,6 @@ public class MentorStudyService {
     private final StudyRepository studyRepository;
     private final StudyHistoryRepository studyHistoryRepository;
     private final StudyValidator studyValidator;
-
     private final StudyDetailRepository studyDetailRepository;
     private final StudyDetailValidator studyDetailValidator;
 
@@ -58,7 +57,7 @@ public class MentorStudyService {
 
     // TODO session -> curriculum 변경
     @Transactional
-    public void updateStudyDetail(Long studyId, StudyUpdateRequest request) {
+    public void updateStudy(Long studyId, StudyUpdateRequest request) {
         Member currentMember = memberUtil.getCurrentMember();
         Study study = studyRepository.findById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
         studyValidator.validateStudyMentor(currentMember, study);
@@ -68,7 +67,7 @@ public class MentorStudyService {
 
         study.update(request.notionLink(), request.introduction());
         studyRepository.save(study);
-        log.info("[MentorStudyDetailService] 스터디 기본 정보 수정 완료: studyId={}", studyId);
+        log.info("[MentorStudyService] 스터디 기본 정보 수정 완료: studyId={}", studyId);
 
         Map<Long, StudySessionCreateRequest> requestMap = request.studySessions().stream()
                 .collect(Collectors.toMap(StudySessionCreateRequest::studyDetailId, Function.identity()));
@@ -88,6 +87,6 @@ public class MentorStudyService {
             updatedStudyDetails.add(studyDetail);
         }
         studyDetailRepository.saveAll(updatedStudyDetails);
-        log.info("[MentorStudyDetailService] 스터디 상세정보 커리큘럼 작성 완료: studyDetailId={}", studyDetails);
+        log.info("[MentorStudyService] 스터디 상세정보 커리큘럼 작성 완료: studyDetailId={}", studyDetails);
     }
 }

@@ -19,10 +19,10 @@ public class MentorStudyController {
 
     private final MentorStudyService mentorStudyService;
 
-    @Operation(summary = "스터디 상세 정보 작성", description = "스터디 상세 정보를 작성합니다.")
+    @Operation(summary = "스터디 정보 작성", description = "스터디 기본 정보와 상세 정보를 작성합니다.")
     @PatchMapping("/{studyId}")
-    public ResponseEntity<Void> updateStudyDetail(@PathVariable Long studyId, @RequestBody StudyUpdateRequest request) {
-        mentorStudyService.updateStudyDetail(studyId, request);
+    public ResponseEntity<Void> updateStudy(@PathVariable Long studyId, @RequestBody StudyUpdateRequest request) {
+        mentorStudyService.updateStudy(studyId, request);
         return ResponseEntity.ok().build();
     }
 
