@@ -10,6 +10,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface StudyRepository extends JpaRepository<Study, Long> {
 
-    default Study getById(Long id){ return findById(id).orElseThrow(()-> new CustomException(STUDY_NOT_FOUND));}
+    default Study getById(Long id) {
+        return findById(id).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
+    }
+
     List<Study> findAllByMentor(Member mentor);
 }

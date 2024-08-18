@@ -40,15 +40,11 @@ public class StudyNotification extends BaseEntity {
         this.link = link;
     }
 
-    public static StudyNotification createStudyNotification(Study study, String title, String link){
-        return StudyNotification.builder()
-                .study(study)
-                .title(title)
-                .link(link)
-                .build();
+    public static StudyNotification createStudyNotification(Study study, String title, String link) {
+        return StudyNotification.builder().study(study).title(title).link(link).build();
     }
 
-    public void update(String title, String link){
+    public void update(String title, String link) {
         this.title = title;
         this.link = link;
     }

@@ -1,14 +1,14 @@
 package com.gdschongik.gdsc.domain.study.application;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
+import com.gdschongik.gdsc.domain.study.dao.StudyHistoryRepository;
 import com.gdschongik.gdsc.domain.study.dao.StudyNotificationRepository;
 import com.gdschongik.gdsc.domain.study.dao.StudyRepository;
 import com.gdschongik.gdsc.domain.study.domain.Study;
-import com.gdschongik.gdsc.domain.study.domain.StudyNotification;
-import com.gdschongik.gdsc.domain.study.dto.request.StudyNotificationRequest;
-import com.gdschongik.gdsc.domain.study.dao.StudyHistoryRepository;
 import com.gdschongik.gdsc.domain.study.domain.StudyHistory;
+import com.gdschongik.gdsc.domain.study.domain.StudyNotification;
 import com.gdschongik.gdsc.domain.study.domain.StudyValidator;
+import com.gdschongik.gdsc.domain.study.dto.request.StudyNotificationRequest;
 import com.gdschongik.gdsc.domain.study.dto.response.MentorStudyResponse;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyStudentResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
@@ -51,20 +51,21 @@ public class MentorStudyService {
     }
 
     @Transactional
-    public void createStudyNotification(Long studyId, StudyNotificationRequest request){
+    public void createStudyNotification(Long studyId, StudyNotificationRequest request) {
         Member currentMember = memberUtil.getCurrentMember();
         final Study study = studyRepository.getById(studyId);
 
         studyValidator.validateStudyMentor(currentMember, study);
 
-        StudyNotification studyNotification = StudyNotification.createStudyNotification(study, request.title(), request.link());
+        StudyNotification studyNotification =
+                StudyNotification.createStudyNotification(study, request.title(), request.link());
         studyNotificationRepository.save(studyNotification);
 
         log.info("[MentorStudyService] 스터디 공지 생성: studyNotificationId={}", studyNotification.getId());
     }
 
     @Transactional
-    public void updateStudyNotification(Long updateStudyNotificationId, StudyNotificationRequest request){
+    public void updateStudyNotification(Long updateStudyNotificationId, StudyNotificationRequest request) {
         Member currentMember = memberUtil.getCurrentMember();
         final StudyNotification studyNotification = studyNotificationRepository.getById(updateStudyNotificationId);
         Study study = studyNotification.getStudy();
