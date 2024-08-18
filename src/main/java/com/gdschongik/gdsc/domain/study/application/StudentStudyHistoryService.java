@@ -8,6 +8,8 @@ import com.gdschongik.gdsc.domain.study.dao.AssignmentHistoryRepository;
 import com.gdschongik.gdsc.domain.study.dao.StudyDetailRepository;
 import com.gdschongik.gdsc.domain.study.dao.StudyHistoryRepository;
 import com.gdschongik.gdsc.domain.study.domain.AssignmentHistory;
+import com.gdschongik.gdsc.domain.study.domain.AssignmentHistoryGrader;
+import com.gdschongik.gdsc.domain.study.domain.AssignmentSubmissionFetcher;
 import com.gdschongik.gdsc.domain.study.domain.Study;
 import com.gdschongik.gdsc.domain.study.domain.StudyAssignmentHistoryValidator;
 import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
@@ -21,6 +23,7 @@ import com.gdschongik.gdsc.infra.github.client.GithubClient;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.kohsuke.github.GHRepository;
@@ -39,6 +42,7 @@ public class StudentStudyHistoryService {
     private final AssignmentHistoryRepository assignmentHistoryRepository;
     private final StudyHistoryValidator studyHistoryValidator;
     private final StudyAssignmentHistoryValidator studyAssignmentHistoryValidator;
+    private final AssignmentHistoryGrader assignmentHistoryGrader;
 
     @Transactional
     public void updateRepository(Long studyHistoryId, RepositoryUpdateRequest request) throws IOException {
@@ -85,14 +89,18 @@ public class StudentStudyHistoryService {
         StudyDetail studyDetail = studyDetailRepository
                 .findById(studyDetailId)
                 .orElseThrow(() -> new CustomException(STUDY_DETAIL_NOT_FOUND));
-        boolean isAppliedToStudy = studyHistoryRepository.existsByMenteeAndStudy(currentMember, studyDetail.getStudy());
+        Optional<StudyHistory> studyHistory =
+                studyHistoryRepository.findByMenteeAndStudy(currentMember, studyDetail.getStudy());
         LocalDateTime now = LocalDateTime.now();
 
         AssignmentHistory assignmentHistory = findOrCreate(currentMember, studyDetail);
 
-        studyAssignmentHistoryValidator.validateSubmitAvailable(isAppliedToStudy, now, studyDetail);
+        studyAssignmentHistoryValidator.validateSubmitAvailable(studyHistory.isPresent(), now, studyDetail);
 
-        // TODO: 과제 채점 및 과제이력 업데이트 로직 추가
+        AssignmentSubmissionFetcher fetcher = githubClient.getLatestAssignmentSubmissionFetcher(
+                studyHistory.get().getRepositoryLink(), Math.toIntExact(studyDetail.getWeek()));
+
+        assignmentHistoryGrader.judge(fetcher, assignmentHistory);
 
         assignmentHistoryRepository.save(assignmentHistory);
     }
