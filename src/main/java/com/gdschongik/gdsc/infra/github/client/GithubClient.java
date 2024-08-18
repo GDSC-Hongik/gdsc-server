@@ -4,12 +4,12 @@ import static com.gdschongik.gdsc.global.common.constant.GithubConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.study.domain.AssignmentSubmission;
+import com.gdschongik.gdsc.domain.study.domain.vo.AssignmentSubmissionFetcher;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.function.Supplier;
 import lombok.RequiredArgsConstructor;
 import org.kohsuke.github.GHCommit;
 import org.kohsuke.github.GHContent;
@@ -31,7 +31,7 @@ public class GithubClient {
         }
     }
 
-    public Supplier<AssignmentSubmission> getLatestAssignmentSubmission(String repo, int week) {
+    public AssignmentSubmissionFetcher getLatestAssignmentSubmission(String repo, int week) {
         GHRepository ghRepository = getRepository(repo);
         String assignmentPath = GITHUB_ASSIGNMENT_PATH.formatted(week);
 
