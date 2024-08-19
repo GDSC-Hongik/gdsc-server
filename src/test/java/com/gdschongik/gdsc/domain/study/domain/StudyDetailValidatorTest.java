@@ -10,6 +10,9 @@ import com.gdschongik.gdsc.domain.study.dto.request.AssignmentCreateUpdateReques
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.helper.FixtureHelper;
 import java.time.LocalDateTime;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.LongStream;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -155,6 +158,36 @@ public class StudyDetailValidatorTest {
             assertThatThrownBy(() -> studyDetailValidator.validateUpdateStudyAssignment(mentor, studyDetail, request))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(STUDY_DETAIL_ASSIGNMENT_INVALID_DEADLINE.getMessage());
+        }
+    }
+
+    @Nested
+    class 스터디_상세정보_작성시 {
+
+        @Test
+        void 존재하는_스터디상세정보_총개수와_요청된_스터디상세정보_총개수가_다르면_실패한다() {
+            // given
+            Set<Long> studyDetailIds = LongStream.rangeClosed(1, 4).boxed().collect(Collectors.toSet());
+
+            Set<Long> requestIds = LongStream.rangeClosed(1, 5).boxed().collect(Collectors.toSet());
+
+            // when & then
+            assertThatThrownBy(() -> studyDetailValidator.validateUpdateStudyDetail(studyDetailIds, requestIds))
+                    .isInstanceOf(CustomException.class)
+                    .hasMessage(STUDY_DETAIL_SESSION_SIZE_MISMATCH.getMessage());
+        }
+
+        @Test
+        void 요청한_상세정보_id와_기존의_상세정보_id가_맞지_않으면_실패한다() {
+            // given
+            Set<Long> studyDetailIds = LongStream.rangeClosed(1, 4).boxed().collect(Collectors.toSet());
+
+            Set<Long> requestIds = LongStream.rangeClosed(2, 5).boxed().collect(Collectors.toSet());
+
+            // when & then
+            assertThatThrownBy(() -> studyDetailValidator.validateUpdateStudyDetail(studyDetailIds, requestIds))
+                    .isInstanceOf(CustomException.class)
+                    .hasMessage(STUDY_DETAIL_ID_INVALID.getMessage());
         }
     }
 }
