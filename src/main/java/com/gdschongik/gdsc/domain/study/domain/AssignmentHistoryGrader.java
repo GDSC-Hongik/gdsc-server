@@ -6,7 +6,9 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import com.gdschongik.gdsc.global.annotation.DomainService;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @DomainService
 public class AssignmentHistoryGrader {
 
@@ -42,6 +44,8 @@ public class AssignmentHistoryGrader {
         if (errorCode == GITHUB_CONTENT_NOT_FOUND) {
             return LOCATION_UNIDENTIFIABLE;
         }
+
+        log.warn("[AssignmentHistoryGrader] 과제 제출정보 조회 중 알 수 없는 오류 발생: {}", e.getMessage());
 
         return UNKNOWN;
     }

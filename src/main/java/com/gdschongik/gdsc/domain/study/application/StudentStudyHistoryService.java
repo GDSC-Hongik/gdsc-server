@@ -104,6 +104,13 @@ public class StudentStudyHistoryService {
         assignmentHistoryGrader.judge(fetcher, assignmentHistory);
 
         assignmentHistoryRepository.save(assignmentHistory);
+
+        log.info(
+                "[StudyHistoryService] 과제 제출: studyDetailId={}, menteeId={}, submissionStatus={}, submissionFailureType={}",
+                studyDetailId,
+                currentMember.getId(),
+                assignmentHistory.getSubmissionStatus(),
+                assignmentHistory.getSubmissionFailureType());
     }
 
     private AssignmentHistory findOrCreate(Member currentMember, StudyDetail studyDetail) {
