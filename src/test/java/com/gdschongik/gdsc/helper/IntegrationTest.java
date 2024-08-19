@@ -36,6 +36,7 @@ import com.gdschongik.gdsc.domain.study.domain.Study;
 import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
 import com.gdschongik.gdsc.global.security.PrincipalDetails;
 import com.gdschongik.gdsc.infra.feign.payment.client.PaymentClient;
+import com.gdschongik.gdsc.infra.github.client.GithubClient;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,6 +86,9 @@ public abstract class IntegrationTest {
 
     @MockBean
     protected PaymentClient paymentClient;
+
+    @MockBean
+    protected GithubClient githubClient;
 
     @MockBean
     protected DelegateMemberDiscordEventHandler delegateMemberDiscordEventHandler;
