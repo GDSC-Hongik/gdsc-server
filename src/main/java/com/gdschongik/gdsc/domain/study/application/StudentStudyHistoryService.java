@@ -56,6 +56,7 @@ public class StudentStudyHistoryService {
                 assignmentHistoryRepository.existsSubmittedAssignmentByMemberAndStudy(currentMember, study);
         String ownerRepo = getOwnerRepo(request.repositoryLink());
         GHRepository repository = githubClient.getRepository(ownerRepo);
+        // TODO: GHRepository 등을 wrapper로 감싸서 테스트 가능하도록 변경
         studyHistoryValidator.validateUpdateRepository(
                 isAnyAssignmentSubmitted, String.valueOf(repository.getOwner().getId()), currentMember.getOauthId());
 
