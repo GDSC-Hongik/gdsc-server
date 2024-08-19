@@ -232,4 +232,9 @@ public abstract class IntegrationTest {
                 StudyDetail.createStudyDetail(study, 1L, ATTENDANCE_NUMBER, Period.createPeriod(startDate, endDate));
         return studyDetailRepository.save(studyDetail);
     }
+
+    protected StudyDetail publishAssignment(StudyDetail studyDetail) {
+        studyDetail.publishAssignment(ASSIGNMENT_TITLE, studyDetail.getPeriod().getEndDate(), DESCRIPTION_LINK);
+        return studyDetailRepository.save(studyDetail);
+    }
 }
