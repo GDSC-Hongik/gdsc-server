@@ -169,6 +169,12 @@ public abstract class IntegrationTest {
         return memberRepository.save(member);
     }
 
+    public Member createMentor() {
+        Member member = createAssociateMember();
+        member.assignToMentor();
+        return memberRepository.save(member);
+    }
+
     protected RecruitmentRound createRecruitmentRound() {
         Recruitment recruitment = createRecruitment(ACADEMIC_YEAR, SEMESTER_TYPE, FEE);
 
@@ -227,9 +233,32 @@ public abstract class IntegrationTest {
         return studyRepository.save(study);
     }
 
+    protected Study createNewStudy(Member mentor, Long totalWeek, Period period, Period applicationPeriod) {
+        Study study = Study.createStudy(
+                ACADEMIC_YEAR,
+                SEMESTER_TYPE,
+                STUDY_TITLE,
+                mentor,
+                period,
+                applicationPeriod,
+                totalWeek,
+                ONLINE_STUDY,
+                DAY_OF_WEEK,
+                STUDY_START_TIME,
+                STUDY_END_TIME);
+
+        return studyRepository.save(study);
+    }
+
     protected StudyDetail createStudyDetail(Study study, LocalDateTime startDate, LocalDateTime endDate) {
         StudyDetail studyDetail =
                 StudyDetail.createStudyDetail(study, 1L, ATTENDANCE_NUMBER, Period.createPeriod(startDate, endDate));
+        return studyDetailRepository.save(studyDetail);
+    }
+
+    protected StudyDetail createNewStudyDetail(Long week, Study study, LocalDateTime startDate, LocalDateTime endDate) {
+        StudyDetail studyDetail =
+                StudyDetail.createStudyDetail(study, week, ATTENDANCE_NUMBER, Period.createPeriod(startDate, endDate));
         return studyDetailRepository.save(studyDetail);
     }
 
