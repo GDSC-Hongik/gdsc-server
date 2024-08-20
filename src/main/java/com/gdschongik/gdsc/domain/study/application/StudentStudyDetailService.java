@@ -46,7 +46,7 @@ public class StudentStudyDetailService {
     public List<AssignmentStatusResponse> getAssignmentsToSubmit(Long studyId) {
         Member currentMember = memberUtil.getCurrentMember();
         List<AssignmentHistory> assignmentHistories =
-                assignmentHistoryRepository.findAssignmentHistoriesByMenteeAndStudy(currentMember, studyId).stream()
+                assignmentHistoryRepository.findAssignmentHistoriesByMenteeAndStudyId(currentMember, studyId).stream()
                         .filter(assignmentHistory ->
                                 assignmentHistory.getStudyDetail().isAssignmentDeadlineRemaining())
                         .toList();
