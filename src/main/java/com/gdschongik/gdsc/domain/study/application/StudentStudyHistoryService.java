@@ -74,7 +74,7 @@ public class StudentStudyHistoryService {
     public List<AssignmentHistoryResponse> getAllAssignmentHistories(Long studyId) {
         Member currentMember = memberUtil.getCurrentMember();
 
-        return assignmentHistoryRepository.findAssignmentHistoriesByMenteeAndStudy(currentMember, studyId).stream()
+        return assignmentHistoryRepository.findAssignmentHistoriesByMenteeAndStudyId(currentMember, studyId).stream()
                 .map(AssignmentHistoryResponse::from)
                 .toList();
     }
