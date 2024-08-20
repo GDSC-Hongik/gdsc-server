@@ -7,6 +7,7 @@ import com.gdschongik.gdsc.domain.study.dto.request.AssignmentCreateUpdateReques
 import com.gdschongik.gdsc.global.annotation.DomainService;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @DomainService
 public class StudyDetailValidator {
@@ -52,6 +53,18 @@ public class StudyDetailValidator {
 
         if (deadLine.isAfter(updateDeadLine)) {
             throw new CustomException(STUDY_DETAIL_ASSIGNMENT_INVALID_UPDATE_DEADLINE);
+        }
+    }
+
+    public void validateUpdateStudyDetail(Set<Long> studyDetails, Set<Long> requests) {
+        // StudyDetail 목록과 요청된 StudySessionCreateRequest 목록의 크기를 먼저 비교
+        if (studyDetails.size() != requests.size()) {
+            throw new CustomException(STUDY_DETAIL_SESSION_SIZE_MISMATCH);
+        }
+
+        // 두 ID 집합이 동일한지 비교하여 ID 불일치 시 예외를 던짐
+        if (!studyDetails.equals(requests)) {
+            throw new CustomException(STUDY_DETAIL_ID_INVALID);
         }
     }
 }

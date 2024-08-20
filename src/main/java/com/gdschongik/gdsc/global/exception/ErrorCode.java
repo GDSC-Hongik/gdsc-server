@@ -114,7 +114,8 @@ public enum ErrorCode {
     STUDY_DETAIL_UPDATE_RESTRICTED_TO_MENTOR(HttpStatus.CONFLICT, "해당 스터디의 멘토만 수정할 수 있습니다."),
     STUDY_DETAIL_ASSIGNMENT_INVALID_DEADLINE(HttpStatus.CONFLICT, "마감기한이 지난 과제의 마감기한을 수정할 수 없습니다"),
     STUDY_DETAIL_ASSIGNMENT_INVALID_UPDATE_DEADLINE(HttpStatus.CONFLICT, "수정하려고 하는 과제의 마감기한은 기존의 마감기한보다 빠르면 안됩니다."),
-
+    STUDY_DETAIL_ID_INVALID(HttpStatus.CONFLICT, "수정하려는 스터디 상세정보가 서버에 존재하지 않거나 유효하지 않습니다."),
+    STUDY_DETAIL_SESSION_SIZE_MISMATCH(HttpStatus.BAD_REQUEST, "스터디 커리큘럼의 총 개수가 일치하지 않습니다."),
     // StudyHistory
     STUDY_HISTORY_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 스터디 수강 기록입니다."),
     STUDY_HISTORY_DUPLICATE(HttpStatus.CONFLICT, "이미 해당 스터디를 신청했습니다."),
@@ -168,7 +169,6 @@ public enum ErrorCode {
     GITHUB_COMMIT_DATE_FETCH_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "깃허브 커밋 날짜 조회에 실패했습니다."),
     GITHUB_ASSIGNMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 과제 파일입니다."),
     ;
-
     private final HttpStatus status;
     private final String message;
 }

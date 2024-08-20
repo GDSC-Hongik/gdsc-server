@@ -1,5 +1,6 @@
 package com.gdschongik.gdsc.domain.study.dto.response;
 
+import com.gdschongik.gdsc.domain.common.model.SemesterType;
 import com.gdschongik.gdsc.domain.study.domain.Study;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.DayOfWeek;
@@ -8,6 +9,8 @@ import java.time.LocalTime;
 
 public record StudyResponse(
         Long studyId,
+        @Schema(description = "학년도") Integer academicYear,
+        @Schema(description = "학기") SemesterType semesterType,
         @Schema(description = "이름") String title,
         @Schema(description = "종류") String studyType,
         @Schema(description = "상세설명 노션 링크") String notionLink,
@@ -21,6 +24,8 @@ public record StudyResponse(
     public static StudyResponse from(Study study) {
         return new StudyResponse(
                 study.getId(),
+                study.getAcademicYear(),
+                study.getSemesterType(),
                 study.getTitle(),
                 study.getStudyType().getValue(),
                 study.getNotionLink(),
