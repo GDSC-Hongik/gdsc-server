@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 @DomainService
 public class AssignmentHistoryGrader {
 
-    public static final int MINIMUM_ASSIGNMENT_CONTENT_LENGTH = 300;
+    private static final int MINIMUM_ASSIGNMENT_CONTENT_LENGTH = 300;
 
     public void judge(AssignmentSubmissionFetcher assignmentSubmissionFetcher, AssignmentHistory assignmentHistory) {
         try {
