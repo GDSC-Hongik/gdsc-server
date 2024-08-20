@@ -11,6 +11,7 @@ public record AssignmentStatusResponse(
         @Schema(description = "과제 상태") StudyStatus assignmentStatus,
         @Schema(description = "주차") Long week,
         @Nullable @Schema(description = "과제 제목") String title,
+        // TODO 추후 처리 예정
         @Nullable @Schema(description = "과제 제출 상태") AssignmentSubmissionStatus assignmentSubmissionStatus,
         @Nullable @Schema(description = "과제 명세 링크") String descriptionLink,
         @Nullable @Schema(description = "마감 기한") LocalDateTime deadline,
@@ -29,9 +30,7 @@ public record AssignmentStatusResponse(
                 assignment.getDescriptionLink(),
                 assignment.getDeadline(),
                 assignmentHistory.getSubmissionLink(),
-                assignmentHistory.getSubmissionFailureType() == null
-                        ? null
-                        : assignmentHistory.getSubmissionFailureType(),
-                assignmentHistory.getCommittedAt() == null ? null : assignmentHistory.getCommittedAt());
+                assignmentHistory.getSubmissionFailureType(),
+                assignmentHistory.getCommittedAt());
     }
 }
