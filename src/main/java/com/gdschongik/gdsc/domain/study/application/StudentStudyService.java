@@ -40,7 +40,7 @@ public class StudentStudyService {
     public StudyApplicableResponse getAllApplicableStudies() {
         Member currentMember = memberUtil.getCurrentMember();
         List<StudyHistory> studyHistories = studyHistoryRepository.findAllByMentee(currentMember);
-        Optional<Study> study = studyHistories.stream()
+        Optional<Study> appliedStudy = studyHistories.stream()
                 .map(StudyHistory::getStudy)
                 .filter(Study::isStudyOngoing)
                 .findFirst();
@@ -49,7 +49,7 @@ public class StudentStudyService {
                 .map(StudyResponse::from)
                 .toList();
 
-        return StudyApplicableResponse.of(study.orElse(null), studyResponses);
+        return StudyApplicableResponse.of(appliedStudy.orElse(null), studyResponses);
     }
 
     @Transactional
@@ -79,7 +79,7 @@ public class StudentStudyService {
                 .orElseThrow(() -> new CustomException(STUDY_HISTORY_NOT_FOUND));
         studyHistoryRepository.delete(studyHistory);
 
-        log.info("[StudyService] 스터디 수강신청 취소: studyId={}, memberId={}", study.getId(), currentMember.getId());
+        log.info("[StudyService] 스터디 수강신청 취소: appliedStudyId={}, memberId={}", study.getId(), currentMember.getId());
     }
 
     @Transactional
