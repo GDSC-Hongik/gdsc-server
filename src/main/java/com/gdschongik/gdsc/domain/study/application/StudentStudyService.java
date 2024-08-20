@@ -96,8 +96,9 @@ public class StudentStudyService {
     @Transactional(readOnly = true)
     public StudentOngoingStudyResponse getMyOngoingStudy() {
         Member currentMember = memberUtil.getCurrentMember();
-        Optional<StudyHistory> studyHistory =
-                studyHistoryRepository.findAllByMentee(currentMember).stream().findFirst();
+        Optional<StudyHistory> studyHistory = studyHistoryRepository.findAllByMentee(currentMember).stream()
+                .filter(s -> s.getStudy().isStudyOngoing())
+                .findFirst();
         return StudentOngoingStudyResponse.from(studyHistory.orElse(null));
     }
 }
