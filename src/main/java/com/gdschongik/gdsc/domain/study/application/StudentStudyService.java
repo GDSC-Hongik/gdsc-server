@@ -11,11 +11,13 @@ import com.gdschongik.gdsc.domain.study.domain.*;
 import com.gdschongik.gdsc.domain.study.domain.Attendance;
 import com.gdschongik.gdsc.domain.study.domain.AttendanceValidator;
 import com.gdschongik.gdsc.domain.study.dto.request.StudyAttendCreateRequest;
+import com.gdschongik.gdsc.domain.study.dto.response.StudentOngoingStudyResponse;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -89,5 +91,13 @@ public class StudentStudyService {
         attendanceRepository.save(attendance);
 
         log.info("[StudyService] 스터디 출석: attendanceId={}", attendance.getId());
+    }
+
+    @Transactional(readOnly = true)
+    public StudentOngoingStudyResponse getMyOngoingStudy() {
+        Member currentMember = memberUtil.getCurrentMember();
+        Optional<StudyHistory> studyHistory =
+                studyHistoryRepository.findAllByMentee(currentMember).stream().findFirst();
+        return StudentOngoingStudyResponse.from(studyHistory.orElse(null));
     }
 }
