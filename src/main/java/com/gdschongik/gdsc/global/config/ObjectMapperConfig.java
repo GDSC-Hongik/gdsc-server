@@ -35,16 +35,13 @@ public class ObjectMapperConfig {
             @Override
             public LocalTime deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
                     throws IOException {
-                // JSON 객체를 읽어들여 JsonNode로 변환
                 JsonNode node = jsonParser.getCodec().readTree(jsonParser);
 
-                // JsonNode에서 값을 추출
                 int hour = node.get("hour").asInt();
                 int minute = node.get("minute").asInt();
                 int second = node.get("second").asInt();
                 int nano = node.get("nano").asInt();
 
-                // LocalTime 객체 생성
                 return LocalTime.of(hour, minute, second, nano);
             }
         });
