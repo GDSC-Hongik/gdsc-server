@@ -11,6 +11,7 @@ import com.gdschongik.gdsc.domain.study.domain.*;
 import com.gdschongik.gdsc.domain.study.domain.Attendance;
 import com.gdschongik.gdsc.domain.study.domain.AttendanceValidator;
 import com.gdschongik.gdsc.domain.study.dto.request.StudyAttendCreateRequest;
+import com.gdschongik.gdsc.domain.study.dto.response.StudentMyCurrentStudyResponse;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyApplicableResponse;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
@@ -99,5 +100,15 @@ public class StudentStudyService {
         attendanceRepository.save(attendance);
 
         log.info("[StudyService] 스터디 출석: attendanceId={}", attendance.getId());
+    }
+
+    @Transactional(readOnly = true)
+    public StudentMyCurrentStudyResponse getMyCurrentStudy() {
+        Member currentMember = memberUtil.getCurrentMember();
+        StudyHistory studyHistory = studyHistoryRepository.findAllByMentee(currentMember).stream()
+                .filter(s -> s.getStudy().isStudyOngoing())
+                .findFirst()
+                .orElse(null);
+        return StudentMyCurrentStudyResponse.from(studyHistory);
     }
 }

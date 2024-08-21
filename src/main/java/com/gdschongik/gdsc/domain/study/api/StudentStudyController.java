@@ -2,6 +2,7 @@ package com.gdschongik.gdsc.domain.study.api;
 
 import com.gdschongik.gdsc.domain.study.application.StudentStudyService;
 import com.gdschongik.gdsc.domain.study.dto.request.StudyAttendCreateRequest;
+import com.gdschongik.gdsc.domain.study.dto.response.StudentMyCurrentStudyResponse;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyApplicableResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -51,5 +52,12 @@ public class StudentStudyController {
             @PathVariable Long studyDetailId, @Valid @RequestBody StudyAttendCreateRequest request) {
         studentStudyService.attend(studyDetailId, request);
         return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "내 수강중인 스터디 조회", description = "나의 수강 중인 스터디를 조회합니다.")
+    @GetMapping("/me/ongoing")
+    public ResponseEntity<StudentMyCurrentStudyResponse> getMyCurrentStudy() {
+        StudentMyCurrentStudyResponse response = studentStudyService.getMyCurrentStudy();
+        return ResponseEntity.ok(response);
     }
 }
