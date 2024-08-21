@@ -11,7 +11,7 @@ import com.gdschongik.gdsc.domain.study.domain.*;
 import com.gdschongik.gdsc.domain.study.domain.Attendance;
 import com.gdschongik.gdsc.domain.study.domain.AttendanceValidator;
 import com.gdschongik.gdsc.domain.study.dto.request.StudyAttendCreateRequest;
-import com.gdschongik.gdsc.domain.study.dto.response.StudentOngoingStudyResponse;
+import com.gdschongik.gdsc.domain.study.dto.response.StudentMyCurrentStudyResponse;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyApplicableResponse;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
@@ -103,11 +103,12 @@ public class StudentStudyService {
     }
 
     @Transactional(readOnly = true)
-    public StudentOngoingStudyResponse getMyOngoingStudy() {
+    public StudentMyCurrentStudyResponse getMyCurrentStudy() {
         Member currentMember = memberUtil.getCurrentMember();
-        Optional<StudyHistory> studyHistory = studyHistoryRepository.findAllByMentee(currentMember).stream()
+        StudyHistory studyHistory = studyHistoryRepository.findAllByMentee(currentMember).stream()
                 .filter(s -> s.getStudy().isStudyOngoing())
-                .findFirst();
-        return StudentOngoingStudyResponse.from(studyHistory.orElse(null));
+                .findFirst()
+                .orElse(null);
+        return StudentMyCurrentStudyResponse.from(studyHistory);
     }
 }
