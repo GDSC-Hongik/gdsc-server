@@ -95,12 +95,13 @@ public class Assignment {
     }
 
     public boolean isDeadLineThisWeek() {
-        LocalDate now = LocalDate.now(); // 현재 날짜
-        LocalDate deadlineDate = deadline.toLocalDate(); // 마감일의 날짜 부분
+        // 현재 날짜와 마감일의 날짜 부분을 비교할 것이므로 LocalDate로 변환
+        LocalDate now = LocalDate.now();
+        LocalDate startOfWeek = now.with(DayOfWeek.MONDAY); // 이번 주 월요일
+        LocalDate endOfWeek = now.with(DayOfWeek.SUNDAY); // 이번 주 일요일
 
-        // 이번 주의 첫 번째 요일과 마지막 요일 가져오기 (월요일 ~ 일요일)
-        LocalDate startOfWeek = now.with(DayOfWeek.MONDAY);
-        LocalDate endOfWeek = now.with(DayOfWeek.SUNDAY);
+        // 마감일의 날짜 부분을 가져옴
+        LocalDate deadlineDate = deadline.toLocalDate();
 
         // 마감일이 이번 주 내에 있는지 확인
         return !deadlineDate.isBefore(startOfWeek) && !deadlineDate.isAfter(endOfWeek);
