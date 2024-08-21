@@ -91,4 +91,10 @@ public class Assignment {
         LocalDateTime now = LocalDateTime.now();
         return now.isBefore(deadline);
     }
+
+    public boolean isDeadLineThisWeek() {
+        LocalDateTime now = LocalDateTime.now();
+
+        // 구현 후 validator작성 + 테스트 작성
+    }
 }

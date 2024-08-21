@@ -31,9 +31,9 @@ public class StudentStudyDetailController {
 
     @Operation(summary = "이번주 제출해야 할 과제 조회", description = "마감 기한이 이번주까지인 과제를 조회합니다.")
     @GetMapping("/assignments/upcoming")
-    public ResponseEntity<List<AssignmentStatusResponse>> getAssignmentsToSubmit(
+    public ResponseEntity<List<AssignmentStatusResponse>> getUpcomingAssignments(
             @RequestParam(name = "studyId") Long studyId) {
-        List<AssignmentStatusResponse> response = studentStudyDetailService.getAssignmentsToSubmit(studyId);
+        List<AssignmentStatusResponse> response = studentStudyDetailService.getUpcomingAssignments(studyId);
         return ResponseEntity.ok(response);
     }
 }

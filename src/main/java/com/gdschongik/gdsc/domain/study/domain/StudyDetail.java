@@ -92,6 +92,9 @@ public class StudyDetail extends BaseEntity {
     public boolean isAssignmentDeadlineRemaining() {
         return assignment.isDeadlineRemaining();
     }
+    public boolean isAssignmentDeadlineThisWeek() {
+        return assignment.isDeadLineThisWeek();
+    }
 
     // 스터디 시작일자 + 현재 주차 * 7 + (스터디 요일 - 스터디 기간 시작 요일)
     public LocalDate getAttendanceDay() {
