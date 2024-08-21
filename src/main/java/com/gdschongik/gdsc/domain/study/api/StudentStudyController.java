@@ -2,11 +2,11 @@ package com.gdschongik.gdsc.domain.study.api;
 
 import com.gdschongik.gdsc.domain.study.application.StudentStudyService;
 import com.gdschongik.gdsc.domain.study.dto.request.StudyAttendCreateRequest;
-import com.gdschongik.gdsc.domain.study.dto.response.StudyResponse;
+import com.gdschongik.gdsc.domain.study.dto.response.StudentMyCurrentStudyResponse;
+import com.gdschongik.gdsc.domain.study.dto.response.StudyApplicableResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,8 +27,8 @@ public class StudentStudyController {
 
     @Operation(summary = "신청 가능한 스터디 조회", description = "모집 기간 중에 있는 스터디를 조회합니다.")
     @GetMapping("/apply")
-    public ResponseEntity<List<StudyResponse>> getAllApplicableStudies() {
-        List<StudyResponse> response = studentStudyService.getAllApplicableStudies();
+    public ResponseEntity<StudyApplicableResponse> getAllApplicableStudies() {
+        StudyApplicableResponse response = studentStudyService.getAllApplicableStudies();
         return ResponseEntity.ok().body(response);
     }
 
@@ -52,5 +52,12 @@ public class StudentStudyController {
             @PathVariable Long studyDetailId, @Valid @RequestBody StudyAttendCreateRequest request) {
         studentStudyService.attend(studyDetailId, request);
         return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "내 수강중인 스터디 조회", description = "나의 수강 중인 스터디를 조회합니다.")
+    @GetMapping("/me/ongoing")
+    public ResponseEntity<StudentMyCurrentStudyResponse> getMyCurrentStudy() {
+        StudentMyCurrentStudyResponse response = studentStudyService.getMyCurrentStudy();
+        return ResponseEntity.ok(response);
     }
 }

@@ -26,15 +26,24 @@ public class StudyConstant {
     // Study (2024-09-01 ~ 2024-10-27)
     public static final LocalDateTime STUDY_START_DATETIME = LocalDateTime.of(2024, 9, 1, 0, 0);
     public static final LocalDateTime STUDY_END_DATETIME = STUDY_START_DATETIME.plusWeeks(8);
+    public static final String STUDY_NOTION_LINK = "notionLink";
+    public static final String STUDY_INTRODUCTION = "introduction";
 
     // StudyDetail (1주차: 2024-09-01 ~ 2024-09-08)
     public static final LocalDateTime STUDY_DETAIL_START_DATETIME = STUDY_START_DATETIME;
     public static final LocalDateTime STUDY_DETAIL_END_DATETIME = STUDY_DETAIL_START_DATETIME.plusWeeks(1);
     public static final LocalDateTime STUDY_ASSIGNMENT_DEADLINE_DATETIME = STUDY_DETAIL_END_DATETIME;
 
+    // Session
+    public static final String SESSION_TITLE = "sessionTitle";
+    public static final String SESSION_DESCRIPTION = "sessionDescription";
+
     // AssignmentHistory
     public static final String SUBMISSION_LINK = "https://github.com/ownername/reponame/blob/main/week1/WIL.md";
     public static final String COMMIT_HASH = "aa11bb22cc33";
-    public static final Long CONTENT_LENGTH = 2000L;
+    public static final Integer CONTENT_LENGTH = 2000;
     public static final LocalDateTime COMMITTED_AT = LocalDateTime.of(2024, 9, 8, 0, 0);
+
+    // StudyHistory
+    public static final String REPOSITORY_LINK = "ownername/reponame";
 }

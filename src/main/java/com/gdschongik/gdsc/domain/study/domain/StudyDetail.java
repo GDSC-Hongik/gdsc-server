@@ -10,6 +10,7 @@ import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,7 +32,7 @@ public class StudyDetail extends BaseEntity {
     private Study study;
 
     @Comment("현 주차수")
-    private Long week;
+    private Long week; // TODO: Integer로 변경
 
     private String attendanceNumber;
 
@@ -102,6 +103,11 @@ public class StudyDetail extends BaseEntity {
                 .plusDays(week * 7
                         + study.getDayOfWeek().getValue()
                         - study.getStartDate().getDayOfWeek().getValue());
+    }
+
+    public void updateSession(
+            LocalTime startAt, String title, String description, Difficulty difficulty, StudyStatus status) {
+        session = Session.generateSession(startAt, title, description, difficulty, status);
     }
 
     public void validateAssignmentSubmittable(LocalDateTime now) {

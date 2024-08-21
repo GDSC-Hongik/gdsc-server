@@ -182,4 +182,9 @@ public class Study extends BaseSemesterEntity {
     public LocalDate getStartDate() {
         return period.getStartDate().toLocalDate();
     }
+
+    public void update(String link, String introduction) {
+        notionLink = link;
+        this.introduction = introduction;
+    }
 }

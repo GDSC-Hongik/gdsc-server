@@ -11,11 +11,14 @@ import com.gdschongik.gdsc.domain.study.domain.*;
 import com.gdschongik.gdsc.domain.study.domain.Attendance;
 import com.gdschongik.gdsc.domain.study.domain.AttendanceValidator;
 import com.gdschongik.gdsc.domain.study.dto.request.StudyAttendCreateRequest;
+import com.gdschongik.gdsc.domain.study.dto.response.StudentMyCurrentStudyResponse;
+import com.gdschongik.gdsc.domain.study.dto.response.StudyApplicableResponse;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -35,11 +38,19 @@ public class StudentStudyService {
     private final AttendanceRepository attendanceRepository;
     private final AttendanceValidator attendanceValidator;
 
-    public List<StudyResponse> getAllApplicableStudies() {
-        return studyRepository.findAll().stream()
+    public StudyApplicableResponse getAllApplicableStudies() {
+        Member currentMember = memberUtil.getCurrentMember();
+        List<StudyHistory> studyHistories = studyHistoryRepository.findAllByMentee(currentMember);
+        Optional<Study> appliedStudy = studyHistories.stream()
+                .map(StudyHistory::getStudy)
+                .filter(Study::isStudyOngoing)
+                .findFirst();
+        List<StudyResponse> studyResponses = studyRepository.findAll().stream()
                 .filter(Study::isApplicable)
                 .map(StudyResponse::from)
                 .toList();
+
+        return StudyApplicableResponse.of(appliedStudy.orElse(null), studyResponses);
     }
 
     @Transactional
@@ -69,7 +80,7 @@ public class StudentStudyService {
                 .orElseThrow(() -> new CustomException(STUDY_HISTORY_NOT_FOUND));
         studyHistoryRepository.delete(studyHistory);
 
-        log.info("[StudyService] 스터디 수강신청 취소: studyId={}, memberId={}", study.getId(), currentMember.getId());
+        log.info("[StudyService] 스터디 수강신청 취소: appliedStudyId={}, memberId={}", study.getId(), currentMember.getId());
     }
 
     @Transactional
@@ -89,5 +100,15 @@ public class StudentStudyService {
         attendanceRepository.save(attendance);
 
         log.info("[StudyService] 스터디 출석: attendanceId={}", attendance.getId());
+    }
+
+    @Transactional(readOnly = true)
+    public StudentMyCurrentStudyResponse getMyCurrentStudy() {
+        Member currentMember = memberUtil.getCurrentMember();
+        StudyHistory studyHistory = studyHistoryRepository.findAllByMentee(currentMember).stream()
+                .filter(s -> s.getStudy().isStudyOngoing())
+                .findFirst()
+                .orElse(null);
+        return StudentMyCurrentStudyResponse.from(studyHistory);
     }
 }
