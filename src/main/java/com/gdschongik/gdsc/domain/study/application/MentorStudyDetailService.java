@@ -28,7 +28,7 @@ public class MentorStudyDetailService {
 
     @Transactional(readOnly = true)
     public List<AssignmentResponse> getWeeklyAssignments(Long studyId) {
-        List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyId(studyId);
+        List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyIdOrderByWeekAsc(studyId);
         return studyDetails.stream().map(AssignmentResponse::from).toList();
     }
 
@@ -87,7 +87,7 @@ public class MentorStudyDetailService {
 
     @Transactional(readOnly = true)
     public List<StudySessionResponse> getSessions(Long studyId) {
-        List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyId(studyId);
+        List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyIdOrderByWeekAsc(studyId);
         return studyDetails.stream().map(StudySessionResponse::from).toList();
     }
 }
