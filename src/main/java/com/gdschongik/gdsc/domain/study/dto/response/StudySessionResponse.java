@@ -5,7 +5,8 @@ import com.gdschongik.gdsc.domain.study.domain.Difficulty;
 import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
 import com.gdschongik.gdsc.domain.study.domain.vo.Session;
 
-public record StudySessionResponse(Long studyDetailId, Period period, Long week, String title, Difficulty difficulty) {
+public record StudySessionResponse(
+        Long studyDetailId, Period period, Long week, String title, String description, Difficulty difficulty) {
 
     public static StudySessionResponse from(StudyDetail studyDetail) {
         Session session = studyDetail.getSession();
@@ -14,6 +15,7 @@ public record StudySessionResponse(Long studyDetailId, Period period, Long week,
                 studyDetail.getPeriod(),
                 studyDetail.getWeek(),
                 session.getTitle(),
+                session.getDescription(),
                 session.getDifficulty());
     }
 }
