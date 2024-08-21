@@ -93,6 +93,7 @@ public class StudyDetail extends BaseEntity {
     public boolean isAssignmentDeadlineRemaining() {
         return assignment.isDeadlineRemaining();
     }
+
     public boolean isAssignmentDeadlineThisWeek() {
         return assignment.isDeadLineThisWeek();
     }
