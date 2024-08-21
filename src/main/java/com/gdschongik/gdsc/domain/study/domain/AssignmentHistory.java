@@ -46,7 +46,7 @@ public class AssignmentHistory extends BaseEntity {
 
     private String commitHash;
 
-    private Long contentLength;
+    private Integer contentLength;
 
     private LocalDateTime committedAt;
 
@@ -93,7 +93,7 @@ public class AssignmentHistory extends BaseEntity {
 
     // 데이터 변경 로직
 
-    public void success(String submissionLink, String commitHash, Long contentLength, LocalDateTime committedAt) {
+    public void success(String submissionLink, String commitHash, Integer contentLength, LocalDateTime committedAt) {
         this.submissionLink = submissionLink;
         this.commitHash = commitHash;
         this.contentLength = contentLength;

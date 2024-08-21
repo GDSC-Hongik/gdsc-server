@@ -35,4 +35,11 @@ public class StudentStudyHistoryController {
         List<AssignmentHistoryResponse> response = studentStudyHistoryService.getAllAssignmentHistories(studyId);
         return ResponseEntity.ok(response);
     }
+
+    @Operation(summary = "과제 제출하기", description = "과제를 제출합니다. 제출된 과제는 채점되어 제출내역에 반영됩니다.")
+    @PostMapping("/submit")
+    public ResponseEntity<Void> submitAssignment(@RequestParam(name = "studyDetailId") Long studyDetailId) {
+        studentStudyHistoryService.submitAssignment(studyDetailId);
+        return ResponseEntity.ok().build();
+    }
 }
