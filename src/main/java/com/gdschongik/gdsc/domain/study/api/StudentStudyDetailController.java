@@ -2,8 +2,10 @@ package com.gdschongik.gdsc.domain.study.api;
 
 import com.gdschongik.gdsc.domain.study.application.StudentStudyDetailService;
 import com.gdschongik.gdsc.domain.study.dto.response.AssignmentDashboardResponse;
+import com.gdschongik.gdsc.domain.study.dto.response.StudyTodoResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +26,13 @@ public class StudentStudyDetailController {
     public ResponseEntity<AssignmentDashboardResponse> getSubmittableAssignments(
             @RequestParam(name = "studyId") Long studyId) {
         AssignmentDashboardResponse response = studentStudyDetailService.getSubmittableAssignments(studyId);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "내 할일 리스트 조회", description = "해당 스터디의 내 할일 리스트를 조회합니다")
+    @GetMapping("/todo")
+    public ResponseEntity<List<StudyTodoResponse>> getStudyTodoList(@RequestParam(name = "studyId") Long studyId) {
+        List<StudyTodoResponse> response = studentStudyDetailService.getStudyTodoList(studyId);
         return ResponseEntity.ok(response);
     }
 }

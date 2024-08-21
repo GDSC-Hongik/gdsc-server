@@ -7,6 +7,7 @@ import com.gdschongik.gdsc.domain.study.domain.AssignmentHistory;
 import com.gdschongik.gdsc.domain.study.domain.StudyHistory;
 import com.gdschongik.gdsc.domain.study.dto.response.AssignmentDashboardResponse;
 import com.gdschongik.gdsc.domain.study.dto.response.AssignmentSubmittableDto;
+import com.gdschongik.gdsc.domain.study.dto.response.StudyTodoResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
 import com.gdschongik.gdsc.global.util.MemberUtil;
@@ -40,4 +41,7 @@ public class StudentStudyDetailService {
 
         return AssignmentDashboardResponse.of(studyHistory.getRepositoryLink(), isAnySubmitted, submittableAssignments);
     }
+
+    @Transactional(readOnly = true)
+    public List<StudyTodoResponse> getStudyTodoList(Long studyId) {}
 }
