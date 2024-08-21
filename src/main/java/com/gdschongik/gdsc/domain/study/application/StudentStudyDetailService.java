@@ -27,11 +27,11 @@ public class StudentStudyDetailService {
     public AssignmentDashboardResponse getSubmittableAssignments(Long studyId) {
         Member currentMember = memberUtil.getCurrentMember();
         StudyHistory studyHistory = studyHistoryRepository
-                .findByMenteeAndStudyId(currentMember, studyId)
+                .findByStudentAndStudyId(currentMember, studyId)
                 .orElseThrow(() -> new CustomException(ErrorCode.STUDY_HISTORY_NOT_FOUND));
 
         List<AssignmentHistory> assignmentHistories =
-                assignmentHistoryRepository.findAssignmentHistoriesByMenteeAndStudy(currentMember, studyId);
+                assignmentHistoryRepository.findAssignmentHistoriesByStudentAndStudy(currentMember, studyId);
         boolean isAnySubmitted = assignmentHistories.stream().anyMatch(AssignmentHistory::isSubmitted);
         List<AssignmentSubmittableDto> submittableAssignments = assignmentHistories.stream()
                 .filter(assignmentHistory -> assignmentHistory.getStudyDetail().isAssignmentDeadlineRemaining())

@@ -40,7 +40,7 @@ public class StudentStudyService {
 
     public StudyApplicableResponse getAllApplicableStudies() {
         Member currentMember = memberUtil.getCurrentMember();
-        List<StudyHistory> studyHistories = studyHistoryRepository.findAllByMentee(currentMember);
+        List<StudyHistory> studyHistories = studyHistoryRepository.findAllByStudent(currentMember);
         Optional<Study> appliedStudy = studyHistories.stream()
                 .map(StudyHistory::getStudy)
                 .filter(Study::isStudyOngoing)
@@ -58,7 +58,7 @@ public class StudentStudyService {
         Study study = studyRepository.findById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
         Member currentMember = memberUtil.getCurrentMember();
 
-        List<StudyHistory> currentMemberStudyHistories = studyHistoryRepository.findAllByMentee(currentMember);
+        List<StudyHistory> currentMemberStudyHistories = studyHistoryRepository.findAllByStudent(currentMember);
 
         studyHistoryValidator.validateApplyStudy(study, currentMemberStudyHistories);
 
@@ -76,7 +76,7 @@ public class StudentStudyService {
         studyHistoryValidator.validateCancelStudyApply(study);
 
         StudyHistory studyHistory = studyHistoryRepository
-                .findByMenteeAndStudy(currentMember, study)
+                .findByStudentAndStudy(currentMember, study)
                 .orElseThrow(() -> new CustomException(STUDY_HISTORY_NOT_FOUND));
         studyHistoryRepository.delete(studyHistory);
 
@@ -91,7 +91,7 @@ public class StudentStudyService {
         final Member currentMember = memberUtil.getCurrentMember();
         final Study study = studyDetail.getStudy();
         final StudyHistory studyHistory = studyHistoryRepository
-                .findByMenteeAndStudy(currentMember, study)
+                .findByStudentAndStudy(currentMember, study)
                 .orElseThrow(() -> new CustomException(STUDY_HISTORY_NOT_FOUND));
 
         attendanceValidator.validateAttendance(studyDetail, request.attendanceNumber(), LocalDate.now());
@@ -105,7 +105,7 @@ public class StudentStudyService {
     @Transactional(readOnly = true)
     public StudentMyCurrentStudyResponse getMyCurrentStudy() {
         Member currentMember = memberUtil.getCurrentMember();
-        StudyHistory studyHistory = studyHistoryRepository.findAllByMentee(currentMember).stream()
+        StudyHistory studyHistory = studyHistoryRepository.findAllByStudent(currentMember).stream()
                 .filter(s -> s.getStudy().isStudyOngoing())
                 .findFirst()
                 .orElse(null);
