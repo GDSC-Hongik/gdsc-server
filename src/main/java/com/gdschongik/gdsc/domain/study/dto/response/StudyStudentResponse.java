@@ -12,11 +12,11 @@ public record StudyStudentResponse(
         @Schema(description = "깃허브 링크") String githubLink) {
     public static StudyStudentResponse from(StudyHistory studyHistory) {
         return new StudyStudentResponse(
-                studyHistory.getMentee().getId(),
-                studyHistory.getMentee().getName(),
-                studyHistory.getMentee().getStudentId(),
-                studyHistory.getMentee().getDiscordUsername(),
-                studyHistory.getMentee().getNickname(),
+                studyHistory.getStudent().getId(),
+                studyHistory.getStudent().getName(),
+                studyHistory.getStudent().getStudentId(),
+                studyHistory.getStudent().getDiscordUsername(),
+                studyHistory.getStudent().getNickname(),
                 studyHistory.getRepositoryLink());
     }
 }

@@ -9,5 +9,5 @@ public interface AssignmentHistoryCustomRepository {
 
     boolean existsSubmittedAssignmentByMemberAndStudy(Member member, Study study);
 
-    List<AssignmentHistory> findAssignmentHistoriesByMenteeAndStudyId(Member member, Long studyId);
+    List<AssignmentHistory> findAssignmentHistoriesByStudentAndStudyId(Member member, Long studyId);
 }

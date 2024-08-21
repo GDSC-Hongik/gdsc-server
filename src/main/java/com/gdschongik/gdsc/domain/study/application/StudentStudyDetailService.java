@@ -28,11 +28,11 @@ public class StudentStudyDetailService {
     public AssignmentDashboardResponse getSubmittableAssignments(Long studyId) {
         Member currentMember = memberUtil.getCurrentMember();
         StudyHistory studyHistory = studyHistoryRepository
-                .findByMenteeAndStudyId(currentMember, studyId)
+                .findByStudentAndStudyId(currentMember, studyId)
                 .orElseThrow(() -> new CustomException(ErrorCode.STUDY_HISTORY_NOT_FOUND));
 
         List<AssignmentHistory> assignmentHistories =
-                assignmentHistoryRepository.findAssignmentHistoriesByMenteeAndStudyId(currentMember, studyId);
+                assignmentHistoryRepository.findAssignmentHistoriesByStudentAndStudyId(currentMember, studyId);
         boolean isAnySubmitted = assignmentHistories.stream().anyMatch(AssignmentHistory::isSubmitted);
         List<AssignmentSubmittableDto> submittableAssignments = assignmentHistories.stream()
                 .filter(assignmentHistory -> assignmentHistory.getStudyDetail().isAssignmentDeadlineRemaining())
@@ -46,7 +46,7 @@ public class StudentStudyDetailService {
     public List<AssignmentStatusResponse> getUpcomingAssignments(Long studyId) {
         Member currentMember = memberUtil.getCurrentMember();
         List<AssignmentHistory> assignmentHistories =
-                assignmentHistoryRepository.findAssignmentHistoriesByMenteeAndStudyId(currentMember, studyId).stream()
+                assignmentHistoryRepository.findAssignmentHistoriesByStudentAndStudyId(currentMember, studyId).stream()
                         .filter(assignmentHistory ->
                                 assignmentHistory.getStudyDetail().isAssignmentDeadlineThisWeek())
                         .toList();

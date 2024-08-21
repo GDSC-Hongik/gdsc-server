@@ -74,12 +74,11 @@ public class StudentStudyHistoryService {
         return repositoryLink.substring(startIndex);
     }
 
-    // TODO mentee -> study 변환 작업 필요
     @Transactional(readOnly = true)
     public List<AssignmentHistoryResponse> getAllAssignmentHistories(Long studyId) {
         Member currentMember = memberUtil.getCurrentMember();
 
-        return assignmentHistoryRepository.findAssignmentHistoriesByMenteeAndStudyId(currentMember, studyId).stream()
+        return assignmentHistoryRepository.findAssignmentHistoriesByStudentAndStudyId(currentMember, studyId).stream()
                 .map(AssignmentHistoryResponse::from)
                 .toList();
     }
@@ -91,7 +90,7 @@ public class StudentStudyHistoryService {
                 .findById(studyDetailId)
                 .orElseThrow(() -> new CustomException(STUDY_DETAIL_NOT_FOUND));
         Optional<StudyHistory> studyHistory =
-                studyHistoryRepository.findByMenteeAndStudy(currentMember, studyDetail.getStudy());
+                studyHistoryRepository.findByStudentAndStudy(currentMember, studyDetail.getStudy());
         LocalDateTime now = LocalDateTime.now();
 
         AssignmentHistory assignmentHistory = findOrCreate(currentMember, studyDetail);
@@ -106,7 +105,7 @@ public class StudentStudyHistoryService {
         assignmentHistoryRepository.save(assignmentHistory);
 
         log.info(
-                "[StudyHistoryService] 과제 제출: studyDetailId={}, menteeId={}, submissionStatus={}, submissionFailureType={}",
+                "[StudyHistoryService] 과제 제출: studyDetailId={}, studentId={}, submissionStatus={}, submissionFailureType={}",
                 studyDetailId,
                 currentMember.getId(),
                 assignmentHistory.getSubmissionStatus(),
