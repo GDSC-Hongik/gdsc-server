@@ -30,7 +30,7 @@ public class StudyHistory extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    private Member mentee;
+    private Member student;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "study_id")
@@ -39,13 +39,13 @@ public class StudyHistory extends BaseEntity {
     private String repositoryLink;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private StudyHistory(Member mentee, Study study) {
-        this.mentee = mentee;
+    private StudyHistory(Member student, Study study) {
+        this.student = student;
         this.study = study;
     }
 
-    public static StudyHistory create(Member mentee, Study study) {
-        return StudyHistory.builder().mentee(mentee).study(study).build();
+    public static StudyHistory create(Member student, Study study) {
+        return StudyHistory.builder().student(student).study(study).build();
     }
 
     /**
