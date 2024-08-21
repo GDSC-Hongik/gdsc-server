@@ -2,6 +2,7 @@ package com.gdschongik.gdsc.domain.study.dto.response;
 
 import com.gdschongik.gdsc.domain.study.domain.AssignmentHistory;
 import com.gdschongik.gdsc.domain.study.domain.AssignmentSubmissionStatus;
+import com.gdschongik.gdsc.domain.study.domain.SubmissionFailureType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 
@@ -12,6 +13,7 @@ public record AssignmentHistoryResponse(
         @Schema(description = "과제 명세 링크") String descriptionLink,
         @Schema(description = "과제 제출 링크") String submissionLink,
         @Schema(description = "과제 제출 상태") AssignmentSubmissionStatus assignmentSubmissionStatus,
+        @Schema(description = "과제 제출 실패 사유") SubmissionFailureType submissionFailureType,
         @Schema(description = "주차") Long week) {
     public static AssignmentHistoryResponse from(AssignmentHistory assignmentHistory) {
         return new AssignmentHistoryResponse(
@@ -21,6 +23,7 @@ public record AssignmentHistoryResponse(
                 assignmentHistory.getStudyDetail().getAssignment().getDescriptionLink(),
                 assignmentHistory.getSubmissionLink(),
                 assignmentHistory.getSubmissionStatus(),
+                assignmentHistory.getSubmissionFailureType(),
                 assignmentHistory.getStudyDetail().getWeek());
     }
 }
