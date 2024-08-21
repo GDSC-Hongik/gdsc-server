@@ -26,8 +26,8 @@ public class AttendanceCustomRepositoryImpl implements AttendanceCustomRepositor
                 .fetch();
     }
 
-    private BooleanExpression eqMemberId(Long studyId) {
-        return studyId != null ? attendance.student.id.eq(studyId) : null;
+    private BooleanExpression eqMemberId(Long memberId) {
+        return memberId != null ? attendance.student.id.eq(memberId) : null;
     }
 
     private BooleanExpression eqStudyId(Long studyId) {
