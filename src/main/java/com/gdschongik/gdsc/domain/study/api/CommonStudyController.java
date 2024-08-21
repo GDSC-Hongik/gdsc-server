@@ -2,8 +2,10 @@ package com.gdschongik.gdsc.domain.study.api;
 
 import com.gdschongik.gdsc.domain.study.application.CommonStudyService;
 import com.gdschongik.gdsc.domain.study.dto.response.CommonStudyResponse;
+import com.gdschongik.gdsc.domain.study.dto.response.StudyAnnouncementResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +25,13 @@ public class CommonStudyController {
     @GetMapping("/{studyId}")
     public ResponseEntity<CommonStudyResponse> getStudyInformation(@PathVariable Long studyId) {
         CommonStudyResponse response = commonStudyService.getStudyInformation(studyId);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "스터디 공지 목록 조회", description = "스터디 공지 목록을 조회합니다.")
+    @GetMapping("/{studyId}/announcements")
+    public ResponseEntity<List<StudyAnnouncementResponse>> getStudyAnnouncements(@PathVariable Long studyId) {
+        List<StudyAnnouncementResponse> response = commonStudyService.getStudyAnnouncements(studyId);
         return ResponseEntity.ok(response);
     }
 }

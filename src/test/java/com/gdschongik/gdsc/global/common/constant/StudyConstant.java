@@ -41,6 +41,9 @@ public class StudyConstant {
     // AssignmentHistory
     public static final String SUBMISSION_LINK = "https://github.com/ownername/reponame/blob/main/week1/WIL.md";
     public static final String COMMIT_HASH = "aa11bb22cc33";
-    public static final Long CONTENT_LENGTH = 2000L;
+    public static final Integer CONTENT_LENGTH = 2000;
     public static final LocalDateTime COMMITTED_AT = LocalDateTime.of(2024, 9, 8, 0, 0);
+
+    // StudyHistory
+    public static final String REPOSITORY_LINK = "ownername/reponame";
 }

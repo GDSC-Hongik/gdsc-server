@@ -36,6 +36,7 @@ import com.gdschongik.gdsc.domain.study.domain.Study;
 import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
 import com.gdschongik.gdsc.global.security.PrincipalDetails;
 import com.gdschongik.gdsc.infra.feign.payment.client.PaymentClient;
+import com.gdschongik.gdsc.infra.github.client.GithubClient;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,6 +86,9 @@ public abstract class IntegrationTest {
 
     @MockBean
     protected PaymentClient paymentClient;
+
+    @MockBean
+    protected GithubClient githubClient;
 
     @MockBean
     protected DelegateMemberDiscordEventHandler delegateMemberDiscordEventHandler;
@@ -255,6 +259,11 @@ public abstract class IntegrationTest {
     protected StudyDetail createNewStudyDetail(Long week, Study study, LocalDateTime startDate, LocalDateTime endDate) {
         StudyDetail studyDetail =
                 StudyDetail.createStudyDetail(study, week, ATTENDANCE_NUMBER, Period.createPeriod(startDate, endDate));
+        return studyDetailRepository.save(studyDetail);
+    }
+
+    protected StudyDetail publishAssignment(StudyDetail studyDetail) {
+        studyDetail.publishAssignment(ASSIGNMENT_TITLE, studyDetail.getPeriod().getEndDate(), DESCRIPTION_LINK);
         return studyDetailRepository.save(studyDetail);
     }
 }

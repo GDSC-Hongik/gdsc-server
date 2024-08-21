@@ -32,7 +32,7 @@ public class StudyDetail extends BaseEntity {
     private Study study;
 
     @Comment("현 주차수")
-    private Long week;
+    private Long week; // TODO: Integer로 변경
 
     private String attendanceNumber;
 
