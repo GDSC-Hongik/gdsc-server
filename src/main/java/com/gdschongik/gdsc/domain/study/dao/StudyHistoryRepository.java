@@ -11,12 +11,11 @@ public interface StudyHistoryRepository extends JpaRepository<StudyHistory, Long
 
     List<StudyHistory> findByStudyId(Long studyId);
 
-    // TODO mentee -> student로 변경
-    List<StudyHistory> findAllByMentee(Member member);
+    List<StudyHistory> findAllByStudent(Member member);
 
-    Optional<StudyHistory> findByMenteeAndStudy(Member member, Study study);
+    Optional<StudyHistory> findByStudentAndStudy(Member member, Study study);
 
-    boolean existsByMenteeAndStudy(Member member, Study study);
+    boolean existsByStudentAndStudy(Member member, Study study);
 
-    Optional<StudyHistory> findByMenteeAndStudyId(Member member, Long studyId);
+    Optional<StudyHistory> findByStudentAndStudyId(Member member, Long studyId);
 }

@@ -42,7 +42,7 @@ public class CommonStudyService {
     public List<StudyAnnouncementResponse> getStudyAnnouncements(Long studyId) {
         Member currentMember = memberUtil.getCurrentMember();
         final Study study = studyRepository.findById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
-        Optional<StudyHistory> studyHistory = studyHistoryRepository.findByMenteeAndStudyId(currentMember, studyId);
+        Optional<StudyHistory> studyHistory = studyHistoryRepository.findByStudentAndStudyId(currentMember, studyId);
 
         studyValidator.validateStudyMentorOrStudent(currentMember, study, studyHistory);
 
