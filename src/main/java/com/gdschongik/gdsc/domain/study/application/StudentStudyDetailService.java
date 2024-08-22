@@ -2,8 +2,10 @@ package com.gdschongik.gdsc.domain.study.application;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.study.dao.AssignmentHistoryRepository;
+import com.gdschongik.gdsc.domain.study.dao.StudyDetailRepository;
 import com.gdschongik.gdsc.domain.study.dao.StudyHistoryRepository;
 import com.gdschongik.gdsc.domain.study.domain.AssignmentHistory;
+import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
 import com.gdschongik.gdsc.domain.study.domain.StudyHistory;
 import com.gdschongik.gdsc.domain.study.dto.response.AssignmentDashboardResponse;
 import com.gdschongik.gdsc.domain.study.dto.response.AssignmentSubmittableDto;
@@ -23,6 +25,7 @@ public class StudentStudyDetailService {
     private final MemberUtil memberUtil;
     private final StudyHistoryRepository studyHistoryRepository;
     private final AssignmentHistoryRepository assignmentHistoryRepository;
+    private final StudyDetailRepository studyDetailRepository;
 
     @Transactional(readOnly = true)
     public AssignmentDashboardResponse getSubmittableAssignments(Long studyId) {
@@ -43,5 +46,11 @@ public class StudentStudyDetailService {
     }
 
     @Transactional(readOnly = true)
-    public List<StudyTodoResponse> getStudyTodoList(Long studyId) {}
+    public List<StudyTodoResponse> getStudyTodoList(Long studyId) {
+        Member member = memberUtil.getCurrentMember();
+        final List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyIdOrderByWeekAsc(studyId);
+        final List<AssignmentHistory> assignmentHistories =
+                assignmentHistoryRepository.findAssignmentHistoriesByMenteeAndStudy(member, studyId);
+        return ;
+    }
 }
