@@ -3,19 +3,24 @@ package com.gdschongik.gdsc.infra.github.client;
 import static com.gdschongik.gdsc.global.common.constant.GithubConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gdschongik.gdsc.domain.study.domain.AssignmentSubmission;
 import com.gdschongik.gdsc.domain.study.domain.AssignmentSubmissionFetchExecutor;
 import com.gdschongik.gdsc.domain.study.domain.AssignmentSubmissionFetcher;
 import com.gdschongik.gdsc.global.exception.CustomException;
+import com.gdschongik.gdsc.infra.github.GithubHandleRequest;
+import com.gdschongik.gdsc.infra.github.GithubHttpConnector;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.kohsuke.github.GHCommit;
 import org.kohsuke.github.GHContent;
 import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GitHub;
+import org.kohsuke.github.connector.GitHubConnectorResponse;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -23,12 +28,23 @@ import org.springframework.stereotype.Component;
 public class GithubClient {
 
     private final GitHub github;
+    private final GithubHttpConnector githubHttpConnector;
 
     public GHRepository getRepository(String ownerRepo) {
         try {
             return github.getRepository(ownerRepo);
         } catch (IOException e) {
             throw new CustomException(GITHUB_REPOSITORY_NOT_FOUND);
+        }
+    }
+
+    public String getGithubHandle(String oauthId) {
+        try (GitHubConnectorResponse response = githubHttpConnector.send(new GithubHandleRequest(oauthId));
+                InputStream inputStream = response.bodyStream(); ) {
+            // api가 login이라는 이름으로 사용자의 github handle을 반환합니다.
+            return (String) new ObjectMapper().readValue(inputStream, Map.class).get("login");
+        } catch (IOException e) {
+            throw new CustomException(GITHUB_USER_NOT_FOUND);
         }
     }
 

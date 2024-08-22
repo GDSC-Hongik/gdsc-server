@@ -1,6 +1,7 @@
 package com.gdschongik.gdsc.domain.member.api;
 
 import com.gdschongik.gdsc.domain.member.application.CommonMemberService;
+import com.gdschongik.gdsc.domain.member.dto.response.MemberAccountInfoResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberDepartmentResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,6 +33,13 @@ public class CommonMemberController {
     public ResponseEntity<List<MemberDepartmentResponse>> searchDepartments(
             @RequestParam(name = "department", required = false) String departmentName) {
         List<MemberDepartmentResponse> response = commonMemberService.searchDepartments(departmentName);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @Operation(summary = "내 계정 정보 조회", description = "내 계정 정보를 조회합니다.")
+    @GetMapping("/me/account-info")
+    public ResponseEntity<MemberAccountInfoResponse> getAccountInfo() {
+        MemberAccountInfoResponse response = commonMemberService.getAccountInfo();
         return ResponseEntity.ok().body(response);
     }
 }
