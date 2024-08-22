@@ -62,7 +62,7 @@ public class MentorStudyServiceTest extends IntegrationTest {
             Study savedStudy = studyRepository.findById(study.getId()).get();
             assertThat(savedStudy.getNotionLink()).isEqualTo(request.notionLink());
 
-            List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyId(1L);
+            List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyIdOrderByWeekAsc(1L);
             for (int i = 0; i < studyDetails.size(); i++) {
                 StudyDetail studyDetail = studyDetails.get(i);
                 Long expectedId = studyDetail.getId();

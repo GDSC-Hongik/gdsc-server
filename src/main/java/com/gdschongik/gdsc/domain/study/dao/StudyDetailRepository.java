@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface StudyDetailRepository extends JpaRepository<StudyDetail, Long> {
 
-    List<StudyDetail> findAllByStudyId(Long studyId);
+    List<StudyDetail> findAllByStudyIdOrderByWeekAsc(Long studyId);
 }
