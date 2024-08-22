@@ -1,5 +1,7 @@
 package com.gdschongik.gdsc.domain.study.dto.response;
 
+import static com.gdschongik.gdsc.domain.study.domain.SubmissionFailureType.NOT_SUBMITTED;
+
 import com.gdschongik.gdsc.domain.study.domain.*;
 import com.gdschongik.gdsc.domain.study.domain.vo.Assignment;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -16,11 +18,27 @@ public record AssignmentStatusResponse(
         @Nullable @Schema(description = "과제 명세 링크") String descriptionLink,
         @Nullable @Schema(description = "마감 기한") LocalDateTime deadline,
         @Nullable @Schema(description = "과제 제출 링크") String submissionLink,
-        @Nullable @Schema(description = "과제 제출 실패 사유") SubmissionFailureType submissionFailureType,
+        @Nullable @Schema(description = "과제 제출 실패 사유. 제출 여부도 포함되어 있습니다. 미제출 상태라면 기본 과제 정보만 반환합니다.")
+                SubmissionFailureType submissionFailureType,
         @Nullable @Schema(description = "최종 수정 일시") LocalDateTime committedAt) {
     public static AssignmentStatusResponse from(AssignmentHistory assignmentHistory) {
         StudyDetail studyDetail = assignmentHistory.getStudyDetail();
         Assignment assignment = studyDetail.getAssignment();
+
+        if (assignmentHistory == null) {
+            // 과제 제출이 없는 경우, 과제 정보만 사용하여 AssignmentStatusResponse 생성
+            return new AssignmentStatusResponse(
+                    studyDetail.getId(),
+                    assignment.getStatus(),
+                    studyDetail.getWeek(),
+                    assignment.getTitle(),
+                    null,
+                    assignment.getDescriptionLink(),
+                    assignment.getDeadline(),
+                    null,
+                    NOT_SUBMITTED,
+                    null);
+        }
         return new AssignmentStatusResponse(
                 studyDetail.getId(),
                 assignment.getStatus(),
