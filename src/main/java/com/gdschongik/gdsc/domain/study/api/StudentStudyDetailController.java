@@ -2,8 +2,8 @@ package com.gdschongik.gdsc.domain.study.api;
 
 import com.gdschongik.gdsc.domain.study.application.StudentStudyDetailService;
 import com.gdschongik.gdsc.domain.study.dto.response.AssignmentDashboardResponse;
-import com.gdschongik.gdsc.domain.study.dto.response.StudyTodoResponse;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyStudentSessionResponse;
+import com.gdschongik.gdsc.domain.study.dto.response.StudyTodoResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;

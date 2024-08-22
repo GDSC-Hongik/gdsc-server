@@ -91,6 +91,10 @@ public class Assignment {
         return status == NONE;
     }
 
+    public boolean isOpened() {
+        return status == OPEN;
+    }
+
     public boolean isDeadlineRemaining() {
         LocalDateTime now = LocalDateTime.now();
         return now.isBefore(deadline);
