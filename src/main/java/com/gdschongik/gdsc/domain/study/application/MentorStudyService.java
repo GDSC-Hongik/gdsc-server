@@ -108,7 +108,7 @@ public class MentorStudyService {
         Study study = studyRepository.findById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
         studyValidator.validateStudyMentor(currentMember, study);
 
-        List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyId(studyId);
+        List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyIdOrderByWeekAsc(studyId);
         // StudyDetail ID를 추출하여 Set으로 저장
         Set<Long> studyDetailIds = studyDetails.stream().map(StudyDetail::getId).collect(Collectors.toSet());
 

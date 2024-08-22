@@ -83,6 +83,10 @@ public class AssignmentHistory extends BaseEntity {
         return submissionFailureType != NOT_SUBMITTED;
     }
 
+    public boolean isSuccess() {
+        return submissionStatus == SUCCESS;
+    }
+
     // 데이터 변경 로직
 
     public void success(String submissionLink, String commitHash, Integer contentLength, LocalDateTime committedAt) {
