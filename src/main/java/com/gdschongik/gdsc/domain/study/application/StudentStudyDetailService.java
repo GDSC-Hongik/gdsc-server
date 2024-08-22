@@ -52,11 +52,11 @@ public class StudentStudyDetailService {
     }
 
     @Transactional(readOnly = true)
-    public List<StudyStudentSessionResponse> getSessions(Long studyId) {
+    public List<StudyStudentSessionResponse> getStudySessions(Long studyId) {
         Member member = memberUtil.getCurrentMember();
         final List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyIdOrderByWeekAsc(studyId);
         final List<AssignmentHistory> assignmentHistories =
-                assignmentHistoryRepository.findAssignmentHistoriesByMenteeAndStudy(member, studyId);
+                assignmentHistoryRepository.findAssignmentHistoriesByStudentAndStudy(member, studyId);
         final List<Attendance> attendances = attendanceRepository.findByMemberAndStudyId(member, studyId);
 
         return studyDetails.stream()

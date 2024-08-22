@@ -34,7 +34,7 @@ public class StudentStudyDetailController {
     @GetMapping("/sessions")
     public ResponseEntity<List<StudyStudentSessionResponse>> getStudySessions(
             @RequestParam(name = "studyId") Long studyId) {
-        List<StudyStudentSessionResponse> response = studentStudyDetailService.getSessions(studyId);
+        List<StudyStudentSessionResponse> response = studentStudyDetailService.getStudySessions(studyId);
         return ResponseEntity.ok(response);
     }
 }

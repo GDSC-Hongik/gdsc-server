@@ -2,12 +2,12 @@ package com.gdschongik.gdsc.domain.study.dto.response;
 
 import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
 import java.time.LocalDate;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 // 응답용 enum
 @Getter
-@AllArgsConstructor
+@RequiredArgsConstructor
 public enum AttendanceStatusResponse {
     ATTENDED("출석"),
     NOT_ATTENDED("미출석"),
