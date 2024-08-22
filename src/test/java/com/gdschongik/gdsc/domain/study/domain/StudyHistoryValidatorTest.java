@@ -31,8 +31,8 @@ public class StudyHistoryValidatorTest {
             Period applicationPeriod = Period.createPeriod(now.minusDays(10), now.plusDays(5));
             Study study = fixtureHelper.createStudy(mentor, period, applicationPeriod);
 
-            Member mentee = fixtureHelper.createGuestMember(2L);
-            StudyHistory studyHistory = StudyHistory.create(mentee, study);
+            Member student = fixtureHelper.createGuestMember(2L);
+            StudyHistory studyHistory = StudyHistory.create(student, study);
 
             // when & then
             assertThatThrownBy(() -> studyHistoryValidator.validateApplyStudy(study, List.of(studyHistory)))
@@ -68,8 +68,8 @@ public class StudyHistoryValidatorTest {
 
             Study anotherStudy = fixtureHelper.createStudy(mentor, period, applicationPeriod);
 
-            Member mentee = fixtureHelper.createGuestMember(2L);
-            StudyHistory studyHistory = StudyHistory.create(mentee, anotherStudy);
+            Member student = fixtureHelper.createGuestMember(2L);
+            StudyHistory studyHistory = StudyHistory.create(student, anotherStudy);
 
             // when & then
             assertThatThrownBy(() -> studyHistoryValidator.validateApplyStudy(study, List.of(studyHistory)))

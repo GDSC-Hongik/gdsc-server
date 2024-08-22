@@ -3,6 +3,7 @@ package com.gdschongik.gdsc.domain.study.api;
 import com.gdschongik.gdsc.domain.study.application.StudentStudyDetailService;
 import com.gdschongik.gdsc.domain.study.dto.response.AssignmentDashboardResponse;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyTodoResponse;
+import com.gdschongik.gdsc.domain.study.dto.response.StudyStudentSessionResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
@@ -33,6 +34,15 @@ public class StudentStudyDetailController {
     @GetMapping("/todo")
     public ResponseEntity<List<StudyTodoResponse>> getStudyTodoList(@RequestParam(name = "studyId") Long studyId) {
         List<StudyTodoResponse> response = studentStudyDetailService.getStudyTodoList(studyId);
+        return ResponseEntity.ok(response);
+    }
+
+    // TODO 스터디 세션 워딩을 커리큘럼으로 변경해야함
+    @Operation(summary = "스터디 커리큘럼 조회", description = "해당 스터디의 커리큘럼들을 조회합니다.")
+    @GetMapping("/sessions")
+    public ResponseEntity<List<StudyStudentSessionResponse>> getStudySessions(
+            @RequestParam(name = "studyId") Long studyId) {
+        List<StudyStudentSessionResponse> response = studentStudyDetailService.getStudySessions(studyId);
         return ResponseEntity.ok(response);
     }
 }

@@ -87,6 +87,10 @@ public class Assignment {
         return status == CANCELLED;
     }
 
+    public boolean isNone() {
+        return status == NONE;
+    }
+
     public boolean isDeadlineRemaining() {
         LocalDateTime now = LocalDateTime.now();
         return now.isBefore(deadline);
