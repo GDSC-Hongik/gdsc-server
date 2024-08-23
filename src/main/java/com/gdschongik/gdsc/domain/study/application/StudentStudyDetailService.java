@@ -58,7 +58,8 @@ public class StudentStudyDetailService {
     public List<AssignmentHistoryStatusResponse> getUpcomingAssignments(Long studyId) {
         Member currentMember = memberUtil.getCurrentMember();
         List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyId(studyId).stream()
-                .filter(studyDetail -> studyDetail.isAssignmentDeadlineThisWeek())
+                .filter(studyDetail ->
+                        studyDetail.getAssignment().isOpen() && studyDetail.isAssignmentDeadlineThisWeek())
                 .toList();
         List<AssignmentHistory> assignmentHistories =
                 assignmentHistoryRepository.findAssignmentHistoriesByStudentAndStudyId(currentMember, studyId).stream()
