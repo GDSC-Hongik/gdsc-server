@@ -2,6 +2,8 @@ package com.gdschongik.gdsc.infra.github;
 
 import static com.gdschongik.gdsc.global.common.constant.GithubConstant.*;
 
+import com.gdschongik.gdsc.global.exception.CustomException;
+import com.gdschongik.gdsc.global.exception.ErrorCode;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -45,7 +47,7 @@ public class GithubUserRequest implements GitHubConnectorRequest {
         try {
             return new URL(GITHUB_USER_API_URL.formatted(oauthId));
         } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
+            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
     }
 
