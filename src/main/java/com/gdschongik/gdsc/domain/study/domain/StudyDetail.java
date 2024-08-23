@@ -49,7 +49,8 @@ public class StudyDetail extends BaseEntity {
 
     @Embedded
     @AttributeOverride(name = "title", column = @Column(name = "assignment_title"))
-    @AttributeOverride(name = "difficulty", column = @Column(name = "assignment_difficulty"))
+    @AttributeOverride(name = "deadline", column = @Column(name = "assignment_deadline"))
+    @AttributeOverride(name = "descriptionLink", column = @Column(name = "assignment_description_link"))
     @AttributeOverride(name = "status", column = @Column(name = "assignment_status"))
     private Assignment assignment;
 
