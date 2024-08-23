@@ -39,13 +39,21 @@ public class StudentStudyDetailService {
         StudyHistory studyHistory = studyHistoryRepository
                 .findByStudentAndStudyId(currentMember, studyId)
                 .orElseThrow(() -> new CustomException(ErrorCode.STUDY_HISTORY_NOT_FOUND));
-
         List<AssignmentHistory> assignmentHistories =
                 assignmentHistoryRepository.findAssignmentHistoriesByStudentAndStudy(currentMember, studyId);
+        List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyIdOrderByWeekAsc(studyId).stream()
+                .filter(StudyDetail::isAssignmentDeadlineRemaining)
+                .toList();
+
         boolean isAnySubmitted = assignmentHistories.stream().anyMatch(AssignmentHistory::isSubmitted);
-        List<AssignmentSubmittableDto> submittableAssignments = assignmentHistories.stream()
-                .filter(assignmentHistory -> assignmentHistory.getStudyDetail().isAssignmentDeadlineRemaining())
-                .map(AssignmentSubmittableDto::from)
+        List<AssignmentSubmittableDto> submittableAssignments = studyDetails.stream()
+                .map(studyDetail -> AssignmentSubmittableDto.of(
+                        studyDetail,
+                        assignmentHistories.stream()
+                                .filter(assignmentHistory ->
+                                        assignmentHistory.getStudyDetail().equals(studyDetail))
+                                .findAny()
+                                .orElse(null)))
                 .toList();
 
         return AssignmentDashboardResponse.of(studyHistory.getRepositoryLink(), isAnySubmitted, submittableAssignments);
