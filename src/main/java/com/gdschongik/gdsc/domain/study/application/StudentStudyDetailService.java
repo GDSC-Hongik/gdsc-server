@@ -63,6 +63,7 @@ public class StudentStudyDetailService {
                         .filter(assignmentHistory ->
                                 assignmentHistory.getStudyDetail().isAssignmentDeadlineThisWeek())
                         .toList();
+        List<AssignmentHistoryStatusResponse> response = studyDetails.stream().map(studyDetail -> AssignmentHistoryStatusResponse.of(studyDetail,assignmentHistories)).toList();
 
         if (assignmentHistories.isEmpty()) {
             return studyDetails.stream()
