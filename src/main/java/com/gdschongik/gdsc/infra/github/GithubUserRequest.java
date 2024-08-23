@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.kohsuke.github.connector.GitHubConnectorRequest;
 
 @RequiredArgsConstructor
-public class GithubHandleRequest implements GitHubConnectorRequest {
+public class GithubUserRequest implements GitHubConnectorRequest {
 
     private final String oauthId;
 

@@ -8,8 +8,8 @@ import com.gdschongik.gdsc.domain.study.domain.AssignmentSubmission;
 import com.gdschongik.gdsc.domain.study.domain.AssignmentSubmissionFetchExecutor;
 import com.gdschongik.gdsc.domain.study.domain.AssignmentSubmissionFetcher;
 import com.gdschongik.gdsc.global.exception.CustomException;
-import com.gdschongik.gdsc.infra.github.GithubHandleRequest;
 import com.gdschongik.gdsc.infra.github.GithubHttpConnector;
+import com.gdschongik.gdsc.infra.github.GithubUserRequest;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
@@ -39,7 +39,7 @@ public class GithubClient {
     }
 
     public String getGithubHandle(String oauthId) {
-        try (GitHubConnectorResponse response = githubHttpConnector.send(new GithubHandleRequest(oauthId));
+        try (GitHubConnectorResponse response = githubHttpConnector.send(new GithubUserRequest(oauthId));
                 InputStream inputStream = response.bodyStream(); ) {
             // api가 login이라는 이름으로 사용자의 github handle을 반환합니다.
             return (String) new ObjectMapper().readValue(inputStream, Map.class).get("login");
