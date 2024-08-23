@@ -17,6 +17,8 @@ import com.gdschongik.gdsc.global.security.JwtExceptionFilter;
 import com.gdschongik.gdsc.global.security.JwtFilter;
 import com.gdschongik.gdsc.global.util.CookieUtil;
 import com.gdschongik.gdsc.global.util.EnvironmentUtil;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -167,7 +169,11 @@ public class WebSecurityConfig {
         }
 
         if (environmentUtil.isDevProfile()) {
-            configuration.setAllowedOriginPatterns(DEV_AND_LOCAL_CLIENT_URLS);
+            List<String> urls = new ArrayList<>();
+            urls.addAll(DEV_AND_LOCAL_CLIENT_URLS);
+            urls.add(DEV_SERVER_URL);
+            urls.add(LOCAL_SERVER_URL);
+            configuration.setAllowedOriginPatterns(urls);
         }
 
         if (environmentUtil.isLocalProfile()) {
