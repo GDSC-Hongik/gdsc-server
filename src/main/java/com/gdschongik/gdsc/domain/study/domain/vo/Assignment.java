@@ -77,6 +77,10 @@ public class Assignment {
 
     // 데이터 전달 로직
 
+    public boolean isOpen() {
+        return status == OPEN;
+    }
+
     public boolean isCancelled() {
         return status == CANCELLED;
     }

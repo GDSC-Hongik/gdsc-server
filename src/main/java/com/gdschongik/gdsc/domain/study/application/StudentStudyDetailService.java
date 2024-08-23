@@ -40,7 +40,8 @@ public class StudentStudyDetailService {
         List<AssignmentHistory> assignmentHistories =
                 assignmentHistoryRepository.findAssignmentHistoriesByStudentAndStudy(currentMember, studyId);
         List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyIdOrderByWeekAsc(studyId).stream()
-                .filter(StudyDetail::isAssignmentDeadlineRemaining)
+                .filter(studyDetail ->
+                        studyDetail.getAssignment().isOpen() && studyDetail.isAssignmentDeadlineRemaining())
                 .toList();
 
         boolean isAnySubmitted = assignmentHistories.stream().anyMatch(AssignmentHistory::isSubmitted);
