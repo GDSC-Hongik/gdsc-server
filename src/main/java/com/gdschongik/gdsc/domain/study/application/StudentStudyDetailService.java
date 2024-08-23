@@ -5,7 +5,6 @@ import com.gdschongik.gdsc.domain.study.dao.AssignmentHistoryRepository;
 import com.gdschongik.gdsc.domain.study.dao.AttendanceRepository;
 import com.gdschongik.gdsc.domain.study.dao.StudyDetailRepository;
 import com.gdschongik.gdsc.domain.study.dao.StudyHistoryRepository;
-import com.gdschongik.gdsc.domain.study.dao.StudyRepository;
 import com.gdschongik.gdsc.domain.study.domain.AssignmentHistory;
 import com.gdschongik.gdsc.domain.study.domain.Attendance;
 import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
@@ -27,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class StudentStudyDetailService {
 
     private final MemberUtil memberUtil;
-    private final StudyRepository studyRepository;
     private final StudyHistoryRepository studyHistoryRepository;
     private final AssignmentHistoryRepository assignmentHistoryRepository;
     private final StudyDetailRepository studyDetailRepository;
