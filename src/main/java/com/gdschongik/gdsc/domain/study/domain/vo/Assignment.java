@@ -4,7 +4,6 @@ import static com.gdschongik.gdsc.domain.study.domain.StudyStatus.*;
 import static com.gdschongik.gdsc.domain.study.domain.StudyStatus.CANCELLED;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
-import com.gdschongik.gdsc.domain.study.domain.Difficulty;
 import com.gdschongik.gdsc.domain.study.domain.StudyStatus;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.persistence.Column;
@@ -35,20 +34,15 @@ public class Assignment {
     @Column(columnDefinition = "TEXT")
     private String descriptionLink;
 
-    @Enumerated(EnumType.STRING)
-    private Difficulty difficulty;
-
     @Comment("과제 상태")
     @Enumerated(EnumType.STRING)
     private StudyStatus status;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private Assignment(
-            String title, LocalDateTime deadline, String descriptionLink, Difficulty difficulty, StudyStatus status) {
+    private Assignment(String title, LocalDateTime deadline, String descriptionLink, StudyStatus status) {
         this.title = title;
         this.deadline = deadline;
         this.descriptionLink = descriptionLink;
-        this.difficulty = difficulty;
         this.status = status;
     }
 
@@ -84,6 +78,10 @@ public class Assignment {
     }
 
     // 데이터 전달 로직
+
+    public boolean isOpen() {
+        return status == OPEN;
+    }
 
     public boolean isCancelled() {
         return status == CANCELLED;

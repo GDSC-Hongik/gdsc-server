@@ -7,7 +7,6 @@ import com.gdschongik.gdsc.domain.study.domain.vo.Assignment;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
 import java.time.LocalDateTime;
-import java.util.List;
 
 public record AssignmentHistoryStatusResponse(
         Long studyDetailId,
@@ -22,10 +21,24 @@ public record AssignmentHistoryStatusResponse(
         @Nullable @Schema(description = "과제 제출 실패 사유. 제출 여부도 포함되어 있습니다. 미제출 상태라면 기본 과제 정보만 반환합니다.")
                 SubmissionFailureType submissionFailureType,
         @Nullable @Schema(description = "최종 수정 일시") LocalDateTime committedAt) {
-    public static AssignmentHistoryStatusResponse from(AssignmentHistory assignmentHistory) {
-        StudyDetail studyDetail = assignmentHistory.getStudyDetail();
-        Assignment assignment = studyDetail.getAssignment();
 
+    // 과제 제출이 없는 경우, 과제 정보만 사용하여 AssignmentHistoryStatusResponse 생성
+    public static AssignmentHistoryStatusResponse of(StudyDetail studyDetail, AssignmentHistory assignmentHistory) {
+        if (assignmentHistory == null) {
+            return new AssignmentHistoryStatusResponse(
+                    studyDetail.getId(),
+                    studyDetail.getAssignment().getStatus(),
+                    studyDetail.getWeek(),
+                    studyDetail.getAssignment().getTitle(),
+                    null,
+                    studyDetail.getAssignment().getDescriptionLink(),
+                    studyDetail.getAssignment().getDeadline(),
+                    null,
+                    NOT_SUBMITTED,
+                    null);
+        }
+
+        Assignment assignment = studyDetail.getAssignment();
         return new AssignmentHistoryStatusResponse(
                 studyDetail.getId(),
                 assignment.getStatus(),
@@ -37,20 +50,5 @@ public record AssignmentHistoryStatusResponse(
                 assignmentHistory.getSubmissionLink(),
                 assignmentHistory.getSubmissionFailureType(),
                 assignmentHistory.getCommittedAt());
-    }
-
-    // 과제 제출이 없는 경우, 과제 정보만 사용하여 AssignmentHistoryStatusResponse 생성
-    public static AssignmentHistoryStatusResponse fromStudyDetail(StudyDetail studyDetail) {
-        return new AssignmentHistoryStatusResponse(
-                studyDetail.getId(),
-                studyDetail.getAssignment().getStatus(),
-                studyDetail.getWeek(),
-                studyDetail.getAssignment().getTitle(),
-                null,
-                studyDetail.getAssignment().getDescriptionLink(),
-                studyDetail.getAssignment().getDeadline(),
-                null,
-                NOT_SUBMITTED,
-                null);
     }
 }

@@ -20,12 +20,15 @@ public record AssignmentSubmittableDto(
         @Nullable @Schema(description = "마감 기한") LocalDateTime deadline,
         @Nullable @Schema(description = "과제 제출 링크") String submissionLink,
         @Nullable @Schema(description = "과제 제출 실패 사유") SubmissionFailureType submissionFailureType) {
-    public static AssignmentSubmittableDto from(AssignmentHistory assignmentHistory) {
-        StudyDetail studyDetail = assignmentHistory.getStudyDetail();
+    public static AssignmentSubmittableDto of(StudyDetail studyDetail, AssignmentHistory assignmentHistory) {
         Assignment assignment = studyDetail.getAssignment();
 
         if (assignment.isCancelled()) {
             return cancelledAssignment(studyDetail, assignment);
+        }
+
+        if (assignmentHistory == null) {
+            return notSubmittedAssignment(studyDetail, assignment);
         }
 
         return new AssignmentSubmittableDto(
@@ -37,13 +40,24 @@ public record AssignmentSubmittableDto(
                 assignment.getDescriptionLink(),
                 assignment.getDeadline(),
                 assignmentHistory.getSubmissionLink(),
-                assignmentHistory.getSubmissionFailureType() == null
-                        ? null
-                        : assignmentHistory.getSubmissionFailureType());
+                assignmentHistory.getSubmissionFailureType());
     }
 
     private static AssignmentSubmittableDto cancelledAssignment(StudyDetail studyDetail, Assignment assignment) {
         return new AssignmentSubmittableDto(
                 studyDetail.getId(), assignment.getStatus(), studyDetail.getWeek(), null, null, null, null, null, null);
+    }
+
+    private static AssignmentSubmittableDto notSubmittedAssignment(StudyDetail studyDetail, Assignment assignment) {
+        return new AssignmentSubmittableDto(
+                studyDetail.getId(),
+                assignment.getStatus(),
+                studyDetail.getWeek(),
+                assignment.getTitle(),
+                AssignmentSubmissionStatus.FAILURE,
+                assignment.getDescriptionLink(),
+                assignment.getDeadline(),
+                null,
+                SubmissionFailureType.NOT_SUBMITTED);
     }
 }

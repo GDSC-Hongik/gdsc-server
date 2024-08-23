@@ -5,7 +5,6 @@ import com.gdschongik.gdsc.domain.study.dao.AssignmentHistoryRepository;
 import com.gdschongik.gdsc.domain.study.dao.AttendanceRepository;
 import com.gdschongik.gdsc.domain.study.dao.StudyDetailRepository;
 import com.gdschongik.gdsc.domain.study.dao.StudyHistoryRepository;
-import com.gdschongik.gdsc.domain.study.dao.StudyRepository;
 import com.gdschongik.gdsc.domain.study.domain.AssignmentHistory;
 import com.gdschongik.gdsc.domain.study.domain.Attendance;
 import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
@@ -28,7 +27,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class StudentStudyDetailService {
 
     private final MemberUtil memberUtil;
-    private final StudyRepository studyRepository;
     private final StudyHistoryRepository studyHistoryRepository;
     private final AssignmentHistoryRepository assignmentHistoryRepository;
     private final StudyDetailRepository studyDetailRepository;
@@ -40,13 +38,17 @@ public class StudentStudyDetailService {
         StudyHistory studyHistory = studyHistoryRepository
                 .findByStudentAndStudyId(currentMember, studyId)
                 .orElseThrow(() -> new CustomException(ErrorCode.STUDY_HISTORY_NOT_FOUND));
-
         List<AssignmentHistory> assignmentHistories =
                 assignmentHistoryRepository.findAssignmentHistoriesByStudentAndStudyId(currentMember, studyId);
+        List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyIdOrderByWeekAsc(studyId).stream()
+                .filter(studyDetail ->
+                        studyDetail.getAssignment().isOpen() && studyDetail.isAssignmentDeadlineRemaining())
+                .toList();
+
         boolean isAnySubmitted = assignmentHistories.stream().anyMatch(AssignmentHistory::isSubmitted);
-        List<AssignmentSubmittableDto> submittableAssignments = assignmentHistories.stream()
-                .filter(assignmentHistory -> assignmentHistory.getStudyDetail().isAssignmentDeadlineRemaining())
-                .map(AssignmentSubmittableDto::from)
+        List<AssignmentSubmittableDto> submittableAssignments = studyDetails.stream()
+                .map(studyDetail -> AssignmentSubmittableDto.of(
+                        studyDetail, getSubmittedAssignment(assignmentHistories, studyDetail)))
                 .toList();
 
         return AssignmentDashboardResponse.of(studyHistory.getRepositoryLink(), isAnySubmitted, submittableAssignments);
@@ -63,15 +65,10 @@ public class StudentStudyDetailService {
                         .filter(assignmentHistory ->
                                 assignmentHistory.getStudyDetail().isAssignmentDeadlineThisWeek())
                         .toList();
-        List<AssignmentHistoryStatusResponse> response = studyDetails.stream().map(studyDetail -> AssignmentHistoryStatusResponse.of(studyDetail,assignmentHistories)).toList();
 
-        if (assignmentHistories.isEmpty()) {
-            return studyDetails.stream()
-                    .map(AssignmentHistoryStatusResponse::fromStudyDetail)
-                    .toList();
-        }
-        return assignmentHistories.stream()
-                .map(AssignmentHistoryStatusResponse::from)
+        return studyDetails.stream()
+                .map(studyDetail -> AssignmentHistoryStatusResponse.of(
+                        studyDetail, getSubmittedAssignment(assignmentHistories, studyDetail)))
                 .toList();
     }
 
