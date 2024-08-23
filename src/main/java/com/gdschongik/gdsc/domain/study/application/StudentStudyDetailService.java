@@ -46,12 +46,7 @@ public class StudentStudyDetailService {
         boolean isAnySubmitted = assignmentHistories.stream().anyMatch(AssignmentHistory::isSubmitted);
         List<AssignmentSubmittableDto> submittableAssignments = studyDetails.stream()
                 .map(studyDetail -> AssignmentSubmittableDto.of(
-                        studyDetail,
-                        assignmentHistories.stream()
-                                .filter(assignmentHistory ->
-                                        assignmentHistory.getStudyDetail().equals(studyDetail))
-                                .findAny()
-                                .orElse(null)))
+                        studyDetail, getSubmittedAssignment(assignmentHistories, studyDetail)))
                 .toList();
 
         return AssignmentDashboardResponse.of(studyHistory.getRepositoryLink(), isAnySubmitted, submittableAssignments);
