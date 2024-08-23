@@ -5,10 +5,13 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Department;
 import com.gdschongik.gdsc.domain.member.domain.Member;
+import com.gdschongik.gdsc.domain.member.dto.response.MemberAccountInfoResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberDepartmentResponse;
 import com.gdschongik.gdsc.domain.membership.dao.MembershipRepository;
 import com.gdschongik.gdsc.domain.membership.domain.Membership;
 import com.gdschongik.gdsc.global.exception.CustomException;
+import com.gdschongik.gdsc.global.util.MemberUtil;
+import com.gdschongik.gdsc.infra.github.client.GithubClient;
 import java.util.Arrays;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +26,8 @@ public class CommonMemberService {
 
     private final MembershipRepository membershipRepository;
     private final MemberRepository memberRepository;
+    private final MemberUtil memberUtil;
+    private final GithubClient githubClient;
 
     @Transactional(readOnly = true)
     public List<MemberDepartmentResponse> getDepartments() {
@@ -80,5 +85,12 @@ public class CommonMemberService {
         memberRepository.save(member);
 
         log.info("[CommonMemberService] 준회원 강등 완료: memberId={}", member.getId());
+    }
+
+    @Transactional(readOnly = true)
+    public MemberAccountInfoResponse getAccountInfo() {
+        Member currentMember = memberUtil.getCurrentMember();
+        String githubHandle = githubClient.getGithubHandle(currentMember.getOauthId());
+        return MemberAccountInfoResponse.of(currentMember, githubHandle);
     }
 }
