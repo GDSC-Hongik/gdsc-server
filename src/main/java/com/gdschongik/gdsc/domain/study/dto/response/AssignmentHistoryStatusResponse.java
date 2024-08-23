@@ -8,7 +8,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
 import java.time.LocalDateTime;
 
-public record AssignmentStatusResponse(
+public record AssignmentHistoryStatusResponse(
         Long studyDetailId,
         @Schema(description = "과제 상태") StudyStatus assignmentStatus,
         @Schema(description = "주차") Long week,
@@ -21,11 +21,11 @@ public record AssignmentStatusResponse(
         @Nullable @Schema(description = "과제 제출 실패 사유. 제출 여부도 포함되어 있습니다. 미제출 상태라면 기본 과제 정보만 반환합니다.")
                 SubmissionFailureType submissionFailureType,
         @Nullable @Schema(description = "최종 수정 일시") LocalDateTime committedAt) {
-    public static AssignmentStatusResponse from(AssignmentHistory assignmentHistory) {
+    public static AssignmentHistoryStatusResponse from(AssignmentHistory assignmentHistory) {
         StudyDetail studyDetail = assignmentHistory.getStudyDetail();
         Assignment assignment = studyDetail.getAssignment();
 
-        return new AssignmentStatusResponse(
+        return new AssignmentHistoryStatusResponse(
                 studyDetail.getId(),
                 assignment.getStatus(),
                 studyDetail.getWeek(),
@@ -38,9 +38,9 @@ public record AssignmentStatusResponse(
                 assignmentHistory.getCommittedAt());
     }
 
-    // 과제 제출이 없는 경우, 과제 정보만 사용하여 AssignmentStatusResponse 생성
-    public static AssignmentStatusResponse fromStudyDetail(StudyDetail studyDetail) {
-        return new AssignmentStatusResponse(
+    // 과제 제출이 없는 경우, 과제 정보만 사용하여 AssignmentHistoryStatusResponse 생성
+    public static AssignmentHistoryStatusResponse fromStudyDetail(StudyDetail studyDetail) {
+        return new AssignmentHistoryStatusResponse(
                 studyDetail.getId(),
                 studyDetail.getAssignment().getStatus(),
                 studyDetail.getWeek(),

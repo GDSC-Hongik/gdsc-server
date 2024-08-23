@@ -11,7 +11,7 @@ import com.gdschongik.gdsc.domain.study.domain.Attendance;
 import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
 import com.gdschongik.gdsc.domain.study.domain.StudyHistory;
 import com.gdschongik.gdsc.domain.study.dto.response.AssignmentDashboardResponse;
-import com.gdschongik.gdsc.domain.study.dto.response.AssignmentStatusResponse;
+import com.gdschongik.gdsc.domain.study.dto.response.AssignmentHistoryStatusResponse;
 import com.gdschongik.gdsc.domain.study.dto.response.AssignmentSubmittableDto;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyStudentSessionResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
@@ -53,7 +53,7 @@ public class StudentStudyDetailService {
     }
 
     @Transactional(readOnly = true)
-    public List<AssignmentStatusResponse> getUpcomingAssignments(Long studyId) {
+    public List<AssignmentHistoryStatusResponse> getUpcomingAssignments(Long studyId) {
         Member currentMember = memberUtil.getCurrentMember();
         List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyId(studyId).stream()
                 .filter(studyDetail -> studyDetail.isAssignmentDeadlineThisWeek())
@@ -66,10 +66,12 @@ public class StudentStudyDetailService {
 
         if (assignmentHistories.isEmpty()) {
             return studyDetails.stream()
-                    .map(AssignmentStatusResponse::fromStudyDetail)
+                    .map(AssignmentHistoryStatusResponse::fromStudyDetail)
                     .toList();
         }
-        return assignmentHistories.stream().map(AssignmentStatusResponse::from).toList();
+        return assignmentHistories.stream()
+                .map(AssignmentHistoryStatusResponse::from)
+                .toList();
     }
 
     @Transactional(readOnly = true)
