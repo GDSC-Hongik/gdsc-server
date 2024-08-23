@@ -8,7 +8,6 @@ import com.gdschongik.gdsc.domain.study.domain.AssignmentSubmission;
 import com.gdschongik.gdsc.domain.study.domain.AssignmentSubmissionFetchExecutor;
 import com.gdschongik.gdsc.domain.study.domain.AssignmentSubmissionFetcher;
 import com.gdschongik.gdsc.global.exception.CustomException;
-import com.gdschongik.gdsc.infra.github.GithubHttpConnector;
 import com.gdschongik.gdsc.infra.github.GithubUserRequest;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,6 +19,7 @@ import org.kohsuke.github.GHCommit;
 import org.kohsuke.github.GHContent;
 import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GitHub;
+import org.kohsuke.github.connector.GitHubConnector;
 import org.kohsuke.github.connector.GitHubConnectorResponse;
 import org.springframework.stereotype.Component;
 
@@ -28,7 +28,7 @@ import org.springframework.stereotype.Component;
 public class GithubClient {
 
     private final GitHub github;
-    private final GithubHttpConnector githubHttpConnector;
+    private final GitHubConnector gitHubConnector = GitHubConnector.DEFAULT;
 
     public GHRepository getRepository(String ownerRepo) {
         try {
@@ -39,7 +39,7 @@ public class GithubClient {
     }
 
     public String getGithubHandle(String oauthId) {
-        try (GitHubConnectorResponse response = githubHttpConnector.send(new GithubUserRequest(oauthId));
+        try (GitHubConnectorResponse response = gitHubConnector.send(new GithubUserRequest(oauthId));
                 InputStream inputStream = response.bodyStream(); ) {
             // api가 login이라는 이름으로 사용자의 github handle을 반환합니다.
             return (String) new ObjectMapper().readValue(inputStream, Map.class).get("login");
