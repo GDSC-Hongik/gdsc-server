@@ -57,7 +57,7 @@ public class Session {
     }
 
     // 데이터 전달 로직
-    public boolean isOpened() {
+    public boolean isOpen() {
         return status == StudyStatus.OPEN;
     }
 }

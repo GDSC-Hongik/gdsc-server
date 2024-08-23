@@ -8,8 +8,8 @@ import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 public record StudyTodoResponse(
         Long studyDetailId,
@@ -19,15 +19,6 @@ public record StudyTodoResponse(
         @Schema(description = "출석 상태 (출석타입일 때만 사용)") AttendanceStatusResponse attendanceStatus,
         @Schema(description = "과제 제목 (과제타입일 때만 사용)") String assignmentTitle,
         @Schema(description = "과제 제출 상태 (과제타입일 때만 사용)") AssignmentSubmissionStatusResponse assignmentSubmissionStatus) {
-
-    @Getter
-    @AllArgsConstructor
-    public enum StudyTodoType {
-        ATTENDANCE("출석"),
-        ASSIGNMENT("과제");
-
-        private final String value;
-    }
 
     public static StudyTodoResponse createAttendanceType(StudyDetail studyDetail, LocalDate now, boolean isAttended) {
         return new StudyTodoResponse(
@@ -49,5 +40,14 @@ public record StudyTodoResponse(
                 null,
                 studyDetail.getAssignment().getTitle(),
                 AssignmentSubmissionStatusResponse.from(assignmentHistory));
+    }
+
+    @Getter
+    @RequiredArgsConstructor
+    public enum StudyTodoType {
+        ATTENDANCE("출석"),
+        ASSIGNMENT("과제");
+
+        private final String value;
     }
 }

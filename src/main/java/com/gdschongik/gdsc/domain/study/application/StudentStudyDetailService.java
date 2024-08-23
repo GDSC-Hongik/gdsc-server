@@ -64,18 +64,18 @@ public class StudentStudyDetailService {
                 assignmentHistoryRepository.findAssignmentHistoriesByStudentAndStudy(member, studyId);
         final List<Attendance> attendances = attendanceRepository.findByMemberAndStudyId(member, studyId);
 
-        LocalDate now = LocalDate.of(2024, 9, 4);
+        LocalDate now = LocalDate.now();
         List<StudyTodoResponse> response = new ArrayList<>();
         // 출석체크 정보 (개설 상태이고, 오늘이 출석체크날짜인 것)
         studyDetails.stream()
-                .filter(studyDetail -> studyDetail.getSession().isOpened()
+                .filter(studyDetail -> studyDetail.getSession().isOpen()
                         && studyDetail.getAttendanceDay().equals(now))
                 .forEach(studyDetail -> response.add(StudyTodoResponse.createAttendanceType(
                         studyDetail, now, isAttended(attendances, studyDetail))));
 
         // 과제 정보 (오늘이 과제 제출 기간에 포함된 과제 정보)
         studyDetails.stream()
-                .filter(studyDetail -> studyDetail.getAssignment().isOpened()
+                .filter(studyDetail -> studyDetail.getAssignment().isOpen()
                         && studyDetail.getAssignment().isDeadlineRemaining())
                 .forEach(studyDetail -> response.add(StudyTodoResponse.createAssignmentType(
                         studyDetail, getSubmittedAssignment(assignmentHistories, studyDetail))));
