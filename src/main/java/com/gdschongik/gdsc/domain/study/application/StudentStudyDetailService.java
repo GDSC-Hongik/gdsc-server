@@ -55,12 +55,20 @@ public class StudentStudyDetailService {
     @Transactional(readOnly = true)
     public List<AssignmentStatusResponse> getUpcomingAssignments(Long studyId) {
         Member currentMember = memberUtil.getCurrentMember();
+        List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyId(studyId).stream()
+                .filter(studyDetail -> studyDetail.isAssignmentDeadlineThisWeek())
+                .toList();
         List<AssignmentHistory> assignmentHistories =
                 assignmentHistoryRepository.findAssignmentHistoriesByStudentAndStudyId(currentMember, studyId).stream()
                         .filter(assignmentHistory ->
                                 assignmentHistory.getStudyDetail().isAssignmentDeadlineThisWeek())
                         .toList();
 
+        if (assignmentHistories.isEmpty()) {
+            return studyDetails.stream()
+                    .map(AssignmentStatusResponse::fromStudyDetail)
+                    .toList();
+        }
         return assignmentHistories.stream().map(AssignmentStatusResponse::from).toList();
     }
 

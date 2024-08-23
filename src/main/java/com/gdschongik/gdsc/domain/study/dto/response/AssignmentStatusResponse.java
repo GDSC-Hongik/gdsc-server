@@ -25,20 +25,6 @@ public record AssignmentStatusResponse(
         StudyDetail studyDetail = assignmentHistory.getStudyDetail();
         Assignment assignment = studyDetail.getAssignment();
 
-        if (assignmentHistory == null) {
-            // 과제 제출이 없는 경우, 과제 정보만 사용하여 AssignmentStatusResponse 생성
-            return new AssignmentStatusResponse(
-                    studyDetail.getId(),
-                    assignment.getStatus(),
-                    studyDetail.getWeek(),
-                    assignment.getTitle(),
-                    null,
-                    assignment.getDescriptionLink(),
-                    assignment.getDeadline(),
-                    null,
-                    NOT_SUBMITTED,
-                    null);
-        }
         return new AssignmentStatusResponse(
                 studyDetail.getId(),
                 assignment.getStatus(),
@@ -50,5 +36,20 @@ public record AssignmentStatusResponse(
                 assignmentHistory.getSubmissionLink(),
                 assignmentHistory.getSubmissionFailureType(),
                 assignmentHistory.getCommittedAt());
+    }
+
+    // 과제 제출이 없는 경우, 과제 정보만 사용하여 AssignmentStatusResponse 생성
+    public static AssignmentStatusResponse fromStudyDetail(StudyDetail studyDetail) {
+        return new AssignmentStatusResponse(
+                studyDetail.getId(),
+                studyDetail.getAssignment().getStatus(),
+                studyDetail.getWeek(),
+                studyDetail.getAssignment().getTitle(),
+                null,
+                studyDetail.getAssignment().getDescriptionLink(),
+                studyDetail.getAssignment().getDeadline(),
+                null,
+                NOT_SUBMITTED,
+                null);
     }
 }
