@@ -10,6 +10,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -92,5 +94,18 @@ public class Assignment {
     public boolean isDeadlineRemaining() {
         LocalDateTime now = LocalDateTime.now();
         return now.isBefore(deadline);
+    }
+
+    public boolean isDeadLineThisWeek() {
+        // 현재 날짜와 마감일의 날짜 부분을 비교할 것이므로 LocalDate로 변환
+        LocalDate now = LocalDate.now();
+        LocalDate startOfWeek = now.with(DayOfWeek.MONDAY); // 이번 주 월요일
+        LocalDate endOfWeek = now.with(DayOfWeek.SUNDAY); // 이번 주 일요일
+
+        // 마감일의 날짜 부분을 가져옴
+        LocalDate deadlineDate = deadline.toLocalDate();
+
+        // 마감일이 이번 주 내에 있는지 확인
+        return !deadlineDate.isBefore(startOfWeek) && !deadlineDate.isAfter(endOfWeek);
     }
 }
