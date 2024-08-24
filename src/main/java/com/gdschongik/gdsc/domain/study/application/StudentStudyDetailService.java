@@ -55,25 +55,6 @@ public class StudentStudyDetailService {
     }
 
     @Transactional(readOnly = true)
-    public List<AssignmentHistoryStatusResponse> getUpcomingAssignments(Long studyId) {
-        Member currentMember = memberUtil.getCurrentMember();
-        List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyId(studyId).stream()
-                .filter(studyDetail ->
-                        studyDetail.getAssignment().isOpen() && studyDetail.isAssignmentDeadlineThisWeek())
-                .toList();
-        List<AssignmentHistory> assignmentHistories =
-                assignmentHistoryRepository.findAssignmentHistoriesByStudentAndStudyId(currentMember, studyId).stream()
-                        .filter(assignmentHistory ->
-                                assignmentHistory.getStudyDetail().isAssignmentDeadlineThisWeek())
-                        .toList();
-
-        return studyDetails.stream()
-                .map(studyDetail -> AssignmentHistoryStatusResponse.of(
-                        studyDetail, getSubmittedAssignment(assignmentHistories, studyDetail)))
-                .toList();
-    }
-
-    @Transactional(readOnly = true)
     public List<StudyStudentSessionResponse> getStudySessions(Long studyId) {
         Member member = memberUtil.getCurrentMember();
         final List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyIdOrderByWeekAsc(studyId);
@@ -102,5 +83,24 @@ public class StudentStudyDetailService {
     private boolean isAttended(List<Attendance> attendances, StudyDetail studyDetail) {
         return attendances.stream()
                 .anyMatch(attendance -> attendance.getStudyDetail().getId().equals(studyDetail.getId()));
+    }
+
+    @Transactional(readOnly = true)
+    public List<AssignmentHistoryStatusResponse> getUpcomingAssignments(Long studyId) {
+        Member currentMember = memberUtil.getCurrentMember();
+        List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyId(studyId).stream()
+                .filter(studyDetail ->
+                        studyDetail.getAssignment().isOpen() && studyDetail.isAssignmentDeadlineThisWeek())
+                .toList();
+        List<AssignmentHistory> assignmentHistories =
+                assignmentHistoryRepository.findAssignmentHistoriesByStudentAndStudyId(currentMember, studyId).stream()
+                        .filter(assignmentHistory ->
+                                assignmentHistory.getStudyDetail().isAssignmentDeadlineThisWeek())
+                        .toList();
+
+        return studyDetails.stream()
+                .map(studyDetail -> AssignmentHistoryStatusResponse.of(
+                        studyDetail, getSubmittedAssignment(assignmentHistories, studyDetail)))
+                .toList();
     }
 }
