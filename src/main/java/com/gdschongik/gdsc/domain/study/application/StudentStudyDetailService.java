@@ -10,6 +10,7 @@ import com.gdschongik.gdsc.domain.study.domain.Attendance;
 import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
 import com.gdschongik.gdsc.domain.study.domain.StudyHistory;
 import com.gdschongik.gdsc.domain.study.dto.response.AssignmentDashboardResponse;
+import com.gdschongik.gdsc.domain.study.dto.response.AssignmentHistoryStatusResponse;
 import com.gdschongik.gdsc.domain.study.dto.response.AssignmentSubmittableDto;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyStudentSessionResponse;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyTodoResponse;
@@ -41,7 +42,7 @@ public class StudentStudyDetailService {
                 .findByStudentAndStudyId(currentMember, studyId)
                 .orElseThrow(() -> new CustomException(ErrorCode.STUDY_HISTORY_NOT_FOUND));
         List<AssignmentHistory> assignmentHistories =
-                assignmentHistoryRepository.findAssignmentHistoriesByStudentAndStudy(currentMember, studyId);
+                assignmentHistoryRepository.findAssignmentHistoriesByStudentAndStudyId(currentMember, studyId);
         List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyIdOrderByWeekAsc(studyId).stream()
                 .filter(studyDetail ->
                         studyDetail.getAssignment().isOpen() && studyDetail.isAssignmentDeadlineRemaining())
@@ -61,7 +62,7 @@ public class StudentStudyDetailService {
         Member member = memberUtil.getCurrentMember();
         final List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyIdOrderByWeekAsc(studyId);
         final List<AssignmentHistory> assignmentHistories =
-                assignmentHistoryRepository.findAssignmentHistoriesByStudentAndStudy(member, studyId);
+                assignmentHistoryRepository.findAssignmentHistoriesByStudentAndStudyId(member, studyId);
         final List<Attendance> attendances = attendanceRepository.findByMemberAndStudyId(member, studyId);
 
         LocalDate now = LocalDate.now();
@@ -86,7 +87,7 @@ public class StudentStudyDetailService {
         Member member = memberUtil.getCurrentMember();
         final List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyIdOrderByWeekAsc(studyId);
         final List<AssignmentHistory> assignmentHistories =
-                assignmentHistoryRepository.findAssignmentHistoriesByStudentAndStudy(member, studyId);
+                assignmentHistoryRepository.findAssignmentHistoriesByStudentAndStudyId(member, studyId);
         final List<Attendance> attendances = attendanceRepository.findByMemberAndStudyId(member, studyId);
 
         return studyDetails.stream()
@@ -110,5 +111,24 @@ public class StudentStudyDetailService {
     private boolean isAttended(List<Attendance> attendances, StudyDetail studyDetail) {
         return attendances.stream()
                 .anyMatch(attendance -> attendance.getStudyDetail().getId().equals(studyDetail.getId()));
+    }
+
+    @Transactional(readOnly = true)
+    public List<AssignmentHistoryStatusResponse> getUpcomingAssignments(Long studyId) {
+        Member currentMember = memberUtil.getCurrentMember();
+        List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyId(studyId).stream()
+                .filter(studyDetail ->
+                        studyDetail.getAssignment().isOpen() && studyDetail.isAssignmentDeadlineThisWeek())
+                .toList();
+        List<AssignmentHistory> assignmentHistories =
+                assignmentHistoryRepository.findAssignmentHistoriesByStudentAndStudyId(currentMember, studyId).stream()
+                        .filter(assignmentHistory ->
+                                assignmentHistory.getStudyDetail().isAssignmentDeadlineThisWeek())
+                        .toList();
+
+        return studyDetails.stream()
+                .map(studyDetail -> AssignmentHistoryStatusResponse.of(
+                        studyDetail, getSubmittedAssignment(assignmentHistories, studyDetail)))
+                .toList();
     }
 }

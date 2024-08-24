@@ -2,6 +2,7 @@ package com.gdschongik.gdsc.domain.study.api;
 
 import com.gdschongik.gdsc.domain.study.application.StudentStudyDetailService;
 import com.gdschongik.gdsc.domain.study.dto.response.AssignmentDashboardResponse;
+import com.gdschongik.gdsc.domain.study.dto.response.AssignmentHistoryStatusResponse;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyStudentSessionResponse;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyTodoResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -43,6 +44,14 @@ public class StudentStudyDetailController {
     public ResponseEntity<List<StudyStudentSessionResponse>> getStudySessions(
             @RequestParam(name = "studyId") Long studyId) {
         List<StudyStudentSessionResponse> response = studentStudyDetailService.getStudySessions(studyId);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "이번주 제출해야 할 과제 조회", description = "마감 기한이 이번주까지인 과제를 조회합니다.")
+    @GetMapping("/assignments/upcoming")
+    public ResponseEntity<List<AssignmentHistoryStatusResponse>> getUpcomingAssignments(
+            @RequestParam(name = "studyId") Long studyId) {
+        List<AssignmentHistoryStatusResponse> response = studentStudyDetailService.getUpcomingAssignments(studyId);
         return ResponseEntity.ok(response);
     }
 }
