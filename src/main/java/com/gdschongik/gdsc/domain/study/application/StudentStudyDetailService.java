@@ -62,7 +62,7 @@ public class StudentStudyDetailService {
         Member member = memberUtil.getCurrentMember();
         final List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyIdOrderByWeekAsc(studyId);
         final List<AssignmentHistory> assignmentHistories =
-                assignmentHistoryRepository.findAssignmentHistoriesByStudentAndStudy(member, studyId);
+                assignmentHistoryRepository.findAssignmentHistoriesByStudentAndStudyId(member, studyId);
         final List<Attendance> attendances = attendanceRepository.findByMemberAndStudyId(member, studyId);
 
         LocalDate now = LocalDate.now();
