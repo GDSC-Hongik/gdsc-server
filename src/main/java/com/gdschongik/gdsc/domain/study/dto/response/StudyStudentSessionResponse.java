@@ -22,7 +22,8 @@ public record StudyStudentSessionResponse(
         @Schema(description = "출석 상태") AttendanceStatusResponse attendanceStatus,
         @Schema(description = "과제 개설 상태") StudyStatus assignmentStatus,
         @Schema(description = "과제 제출 상태") AssignmentSubmissionStatusResponse assignmentSubmissionStatus,
-        @Schema(description = "과제 실패 타입") SubmissionFailureType submissionFailureType) {
+        @Schema(description = "과제 실패 타입") SubmissionFailureType submissionFailureType,
+        @Schema(description = "과제 제출 링크") String submissionLink) {
 
     public static StudyStudentSessionResponse of(
             StudyDetail studyDetail, AssignmentHistory assignmentHistory, boolean isAttended, LocalDateTime now) {
@@ -37,6 +38,7 @@ public record StudyStudentSessionResponse(
                 AttendanceStatusResponse.of(studyDetail, now.toLocalDate(), isAttended),
                 studyDetail.getAssignment().getStatus(),
                 AssignmentSubmissionStatusResponse.from(assignmentHistory),
-                assignmentHistory != null ? assignmentHistory.getSubmissionFailureType() : NOT_SUBMITTED);
+                assignmentHistory != null ? assignmentHistory.getSubmissionFailureType() : NOT_SUBMITTED,
+                assignmentHistory != null ? assignmentHistory.getSubmissionLink() : null);
     }
 }

@@ -8,7 +8,8 @@ import lombok.Getter;
 public enum Difficulty {
     HIGH("상"),
     MEDIUM("중"),
-    LOW("하");
+    LOW("하"),
+    BASIC("기초");
 
     private final String value;
 }
