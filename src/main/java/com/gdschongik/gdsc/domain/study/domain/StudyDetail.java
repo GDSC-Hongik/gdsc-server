@@ -8,6 +8,7 @@ import com.gdschongik.gdsc.domain.study.domain.vo.Assignment;
 import com.gdschongik.gdsc.domain.study.domain.vo.Session;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.persistence.*;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -49,7 +50,8 @@ public class StudyDetail extends BaseEntity {
 
     @Embedded
     @AttributeOverride(name = "title", column = @Column(name = "assignment_title"))
-    @AttributeOverride(name = "difficulty", column = @Column(name = "assignment_difficulty"))
+    @AttributeOverride(name = "deadline", column = @Column(name = "assignment_deadline"))
+    @AttributeOverride(name = "descriptionLink", column = @Column(name = "assignment_description_link"))
     @AttributeOverride(name = "status", column = @Column(name = "assignment_status"))
     private Assignment assignment;
 
@@ -100,10 +102,25 @@ public class StudyDetail extends BaseEntity {
 
     // 스터디 시작일자 + 현재 주차 * 7 + (스터디 요일 - 스터디 기간 시작 요일)
     public LocalDate getAttendanceDay() {
-        return study.getStartDate()
-                .plusDays(week * 7
-                        + study.getDayOfWeek().getValue()
-                        - study.getStartDate().getDayOfWeek().getValue());
+        // 스터디 시작일자
+        LocalDate startDate = study.getStartDate();
+
+        // 스터디 요일
+        DayOfWeek studyDayOfWeek = study.getDayOfWeek();
+
+        // 스터디 기간 시작 요일
+        DayOfWeek startDayOfWeek = startDate.getDayOfWeek();
+
+        // 스터디 요일이 스터디 기간 시작 요일보다 앞서면, 다음 주로 넘어가게 처리
+        Long daysDifference = Long.valueOf(studyDayOfWeek.getValue() - startDayOfWeek.getValue());
+        if (daysDifference < 0) {
+            daysDifference += 7;
+        }
+
+        // 현재 주차에 따른 일수 계산
+        Long daysToAdd = (week - 1) * 7 + daysDifference;
+
+        return startDate.plusDays(daysToAdd);
     }
 
     public void updateSession(

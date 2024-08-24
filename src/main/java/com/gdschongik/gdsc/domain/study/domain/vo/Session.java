@@ -55,4 +55,9 @@ public class Session {
                 .status(status)
                 .build();
     }
+
+    // 데이터 전달 로직
+    public boolean isOpen() {
+        return status == StudyStatus.OPEN;
+    }
 }
