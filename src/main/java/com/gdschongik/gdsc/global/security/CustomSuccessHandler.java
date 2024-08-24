@@ -24,7 +24,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     public CustomSuccessHandler(JwtService jwtService, CookieUtil cookieUtil) {
         this.jwtService = jwtService;
         this.cookieUtil = cookieUtil;
-        setUseReferer(true);
+        setTargetUrlParameter(OAUTH_TARGET_URL_PARAM_NAME);
     }
 
     @Override
