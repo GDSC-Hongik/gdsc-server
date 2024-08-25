@@ -100,6 +100,8 @@ public enum ErrorCode {
     // Study
     STUDY_APPLICATION_START_DATE_INVALID(HttpStatus.CONFLICT, "스터디 신청기간 시작일이 스터디 시작일보다 빠릅니다."),
     STUDY_MENTOR_IS_UNAUTHORIZED(HttpStatus.CONFLICT, "게스트인 회원은 멘토로 지정할 수 없습니다."),
+    STUDY_ACCESS_NOT_ALLOWED(HttpStatus.FORBIDDEN, "관리자 또는 멘토 역할이 아닌 회원은 이 작업을 수행할 수 없습니다."),
+    STUDY_MENTOR_INVALID(HttpStatus.CONFLICT, "사용자가 해당 스터디의 멘토가 아닙니다."),
     ON_OFF_LINE_STUDY_TIME_IS_ESSENTIAL(HttpStatus.CONFLICT, "온오프라인 스터디는 스터디 시간이 필요합니다."),
     STUDY_TIME_INVALID(HttpStatus.CONFLICT, "스터디종료 시각이 스터디시작 시각보다 빠릅니다."),
     ASSIGNMENT_STUDY_CAN_NOT_INPUT_STUDY_TIME(HttpStatus.CONFLICT, "과제 스터디는 스터디 시간을 입력할 수 없습니다."),
@@ -112,11 +114,22 @@ public enum ErrorCode {
     STUDY_DETAIL_UPDATE_RESTRICTED_TO_MENTOR(HttpStatus.CONFLICT, "해당 스터디의 멘토만 수정할 수 있습니다."),
     STUDY_DETAIL_ASSIGNMENT_INVALID_DEADLINE(HttpStatus.CONFLICT, "마감기한이 지난 과제의 마감기한을 수정할 수 없습니다"),
     STUDY_DETAIL_ASSIGNMENT_INVALID_UPDATE_DEADLINE(HttpStatus.CONFLICT, "수정하려고 하는 과제의 마감기한은 기존의 마감기한보다 빠르면 안됩니다."),
-
+    STUDY_DETAIL_ID_INVALID(HttpStatus.CONFLICT, "수정하려는 스터디 상세정보가 서버에 존재하지 않거나 유효하지 않습니다."),
+    STUDY_DETAIL_SESSION_SIZE_MISMATCH(HttpStatus.BAD_REQUEST, "스터디 커리큘럼의 총 개수가 일치하지 않습니다."),
     // StudyHistory
     STUDY_HISTORY_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 스터디 수강 기록입니다."),
     STUDY_HISTORY_DUPLICATE(HttpStatus.CONFLICT, "이미 해당 스터디를 신청했습니다."),
     STUDY_HISTORY_ONGOING_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 진행중인 스터디가 있습니다."),
+    STUDY_HISTORY_REPOSITORY_NOT_UPDATABLE_ASSIGNMENT_ALREADY_SUBMITTED(
+            HttpStatus.CONFLICT, "이미 제출한 과제가 있으므로 레포지토리를 수정할 수 없습니다."),
+    STUDY_HISTORY_REPOSITORY_NOT_UPDATABLE_OWNER_MISMATCH(HttpStatus.CONFLICT, "레포지토리 소유자가 현재 멤버와 다릅니다."),
+
+    // StudyAnnouncement
+    STUDY_ANNOUNCEMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 스터디 공지입니다."),
+
+    // Attendance
+    ATTENDANCE_DATE_INVALID(HttpStatus.CONFLICT, "강의일이 아니면 출석체크할 수 없습니다."),
+    ATTENDANCE_NUMBER_MISMATCH(HttpStatus.CONFLICT, "출석번호가 일치하지 않습니다."),
 
     // Order
     ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, "주문이 존재하지 않습니다."),
@@ -141,9 +154,21 @@ public enum ErrorCode {
     ORDER_FINAL_PAYMENT_AMOUNT_MISMATCH(HttpStatus.CONFLICT, "주문 최종결제금액은 주문총액에서 할인금액을 뺀 값이어야 합니다."),
 
     // Assignment
-    ASSIGNMENT_CAN_NOT_BE_UPDATED(HttpStatus.CONFLICT, "휴강인 과제는 수정할 수 없습니다."),
-    ASSIGNMENT_DEADLINE_INVALID(HttpStatus.CONFLICT, "과제 마감 기한이 현재보다 빠릅니다.");
+    ASSIGNMENT_INVALID_FAILURE_TYPE(HttpStatus.CONFLICT, "유효하지 않은 제출 실패사유입니다."),
+    ASSIGNMENT_DEADLINE_INVALID(HttpStatus.CONFLICT, "과제 마감 기한이 현재보다 빠릅니다."),
+    ASSIGNMENT_STUDY_NOT_APPLIED(HttpStatus.CONFLICT, "해당 스터디에 대한 수강신청 기록이 존재하지 않습니다."),
+    ASSIGNMENT_SUBMIT_NOT_STARTED(HttpStatus.CONFLICT, "아직 과제가 시작되지 않았습니다."),
+    ASSIGNMENT_SUBMIT_NOT_PUBLISHED(HttpStatus.CONFLICT, "아직 과제가 등록되지 않았습니다."),
+    ASSIGNMENT_SUBMIT_CANCELLED(HttpStatus.CONFLICT, "과제 휴강 주간에는 과제를 제출할 수 없습니다."),
+    ASSIGNMENT_SUBMIT_DEADLINE_PASSED(HttpStatus.CONFLICT, "과제 마감 기한이 지났습니다."),
 
+    // Github
+    GITHUB_REPOSITORY_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 레포지토리입니다."),
+    GITHUB_CONTENT_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 파일입니다."),
+    GITHUB_FILE_READ_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "깃허브 파일 읽기에 실패했습니다."),
+    GITHUB_COMMIT_DATE_FETCH_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "깃허브 커밋 날짜 조회에 실패했습니다."),
+    GITHUB_USER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 깃허브 유저입니다."),
+    ;
     private final HttpStatus status;
     private final String message;
 }

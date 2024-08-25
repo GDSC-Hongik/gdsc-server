@@ -11,12 +11,15 @@ import com.gdschongik.gdsc.domain.auth.application.JwtService;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.global.annotation.ConditionalOnProfile;
 import com.gdschongik.gdsc.global.property.BasicAuthProperty;
+import com.gdschongik.gdsc.global.security.CustomOAuth2AuthorizationRequestResolver;
 import com.gdschongik.gdsc.global.security.CustomSuccessHandler;
 import com.gdschongik.gdsc.global.security.CustomUserService;
 import com.gdschongik.gdsc.global.security.JwtExceptionFilter;
 import com.gdschongik.gdsc.global.security.JwtFilter;
 import com.gdschongik.gdsc.global.util.CookieUtil;
 import com.gdschongik.gdsc.global.util.EnvironmentUtil;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,6 +32,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
@@ -47,6 +51,7 @@ public class WebSecurityConfig {
     private final ObjectMapper objectMapper;
     private final EnvironmentUtil environmentUtil;
     private final BasicAuthProperty basicAuthProperty;
+    private final ClientRegistrationRepository clientRegistrationRepository;
 
     private void defaultFilterChain(HttpSecurity http) throws Exception {
         http.httpBasic(AbstractHttpConfigurer::disable)
@@ -92,10 +97,11 @@ public class WebSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         defaultFilterChain(http);
 
-        http.oauth2Login(
-                oauth2 -> oauth2.userInfoEndpoint(userInfo -> userInfo.userService(customUserService(memberRepository)))
-                        .successHandler(customSuccessHandler(jwtService, cookieUtil))
-                        .failureHandler((request, response, exception) -> response.setStatus(401)));
+        http.oauth2Login(oauth2 -> oauth2.authorizationEndpoint(
+                        endpoint -> endpoint.authorizationRequestResolver(customOAuth2AuthorizationRequestResolver()))
+                .userInfoEndpoint(userInfo -> userInfo.userService(customUserService(memberRepository)))
+                .successHandler(customSuccessHandler(jwtService, cookieUtil))
+                .failureHandler((request, response, exception) -> response.setStatus(401)));
 
         http.exceptionHandling(exception ->
                 exception.authenticationEntryPoint((request, response, authException) -> response.setStatus(401)));
@@ -139,6 +145,11 @@ public class WebSecurityConfig {
     }
 
     @Bean
+    public CustomOAuth2AuthorizationRequestResolver customOAuth2AuthorizationRequestResolver() {
+        return new CustomOAuth2AuthorizationRequestResolver(clientRegistrationRepository);
+    }
+
+    @Bean
     public CustomUserService customUserService(MemberRepository memberRepository) {
         return new CustomUserService(memberRepository);
     }
@@ -163,21 +174,20 @@ public class WebSecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         if (environmentUtil.isProdProfile()) {
-            configuration.addAllowedOriginPattern(PROD_CLIENT_ONBOARDING_URL);
-            configuration.addAllowedOriginPattern(PROD_CLIENT_ADMIN_URL);
+            configuration.setAllowedOriginPatterns(PROD_CLIENT_URLS);
         }
 
         if (environmentUtil.isDevProfile()) {
-            configuration.addAllowedOriginPattern(DEV_CLIENT_ONBOARDING_URL);
-            configuration.addAllowedOriginPattern(DEV_CLIENT_ADMIN_URL);
-            configuration.addAllowedOriginPattern(LOCAL_REACT_CLIENT_URL);
-            configuration.addAllowedOriginPattern(LOCAL_REACT_CLIENT_SECURE_URL);
-            configuration.addAllowedOriginPattern(LOCAL_VITE_CLIENT_URL);
-            configuration.addAllowedOriginPattern(LOCAL_VITE_CLIENT_SECURE_URL);
-            configuration.addAllowedOriginPattern(DEV_SERVER_URL);
+            List<String> urls = new ArrayList<>();
+            urls.addAll(DEV_AND_LOCAL_CLIENT_URLS);
+            urls.add(DEV_SERVER_URL);
+            urls.add(LOCAL_SERVER_URL);
+            configuration.setAllowedOriginPatterns(urls);
         }
 
-        configuration.addAllowedOriginPattern(LOCAL_PROXY_CLIENT_ONBOARDING_URL);
+        if (environmentUtil.isLocalProfile()) {
+            configuration.setAllowedOriginPatterns(LOCAL_CLIENT_URLS);
+        }
 
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");

@@ -1,11 +1,17 @@
 package com.gdschongik.gdsc.domain.study.domain;
 
+import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
+
 import com.gdschongik.gdsc.domain.common.model.BaseEntity;
 import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import com.gdschongik.gdsc.domain.study.domain.vo.Assignment;
 import com.gdschongik.gdsc.domain.study.domain.vo.Session;
+import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.persistence.*;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,7 +33,7 @@ public class StudyDetail extends BaseEntity {
     private Study study;
 
     @Comment("현 주차수")
-    private Long week;
+    private Long week; // TODO: Integer로 변경
 
     private String attendanceNumber;
 
@@ -44,7 +50,8 @@ public class StudyDetail extends BaseEntity {
 
     @Embedded
     @AttributeOverride(name = "title", column = @Column(name = "assignment_title"))
-    @AttributeOverride(name = "difficulty", column = @Column(name = "assignment_difficulty"))
+    @AttributeOverride(name = "deadline", column = @Column(name = "assignment_deadline"))
+    @AttributeOverride(name = "descriptionLink", column = @Column(name = "assignment_description_link"))
     @AttributeOverride(name = "status", column = @Column(name = "assignment_status"))
     private Assignment assignment;
 
@@ -81,5 +88,50 @@ public class StudyDetail extends BaseEntity {
 
     public void updateAssignment(String title, LocalDateTime deadLine, String descriptionNotionLink) {
         assignment = Assignment.generateAssignment(title, deadLine, descriptionNotionLink);
+    }
+
+    // 데이터 전달 로직
+
+    public boolean isAssignmentDeadlineRemaining() {
+        return assignment.isDeadlineRemaining();
+    }
+
+    public boolean isAssignmentDeadlineThisWeek() {
+        return assignment.isDeadLineThisWeek();
+    }
+
+    // 스터디 시작일자 + 현재 주차 * 7 + (스터디 요일 - 스터디 기간 시작 요일)
+    public LocalDate getAttendanceDay() {
+        // 스터디 시작일자
+        LocalDate startDate = study.getStartDate();
+
+        // 스터디 요일
+        DayOfWeek studyDayOfWeek = study.getDayOfWeek();
+
+        // 스터디 기간 시작 요일
+        DayOfWeek startDayOfWeek = startDate.getDayOfWeek();
+
+        // 스터디 요일이 스터디 기간 시작 요일보다 앞서면, 다음 주로 넘어가게 처리
+        Long daysDifference = Long.valueOf(studyDayOfWeek.getValue() - startDayOfWeek.getValue());
+        if (daysDifference < 0) {
+            daysDifference += 7;
+        }
+
+        // 현재 주차에 따른 일수 계산
+        Long daysToAdd = (week - 1) * 7 + daysDifference;
+
+        return startDate.plusDays(daysToAdd);
+    }
+
+    public void updateSession(
+            LocalTime startAt, String title, String description, Difficulty difficulty, StudyStatus status) {
+        session = Session.generateSession(startAt, title, description, difficulty, status);
+    }
+
+    public void validateAssignmentSubmittable(LocalDateTime now) {
+        if (now.isBefore(period.getStartDate())) {
+            throw new CustomException(ASSIGNMENT_SUBMIT_NOT_STARTED);
+        }
+        assignment.validateSubmittable(now);
     }
 }

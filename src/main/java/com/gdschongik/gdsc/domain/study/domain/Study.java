@@ -21,6 +21,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import lombok.AccessLevel;
@@ -80,6 +81,7 @@ public class Study extends BaseSemesterEntity {
     private Study(
             Integer academicYear,
             SemesterType semesterType,
+            String title,
             Member mentor,
             Period period,
             Period applicationPeriod,
@@ -89,6 +91,7 @@ public class Study extends BaseSemesterEntity {
             LocalTime startTime,
             LocalTime endTime) {
         super(academicYear, semesterType);
+        this.title = title;
         this.mentor = mentor;
         this.period = period;
         this.applicationPeriod = applicationPeriod;
@@ -102,6 +105,7 @@ public class Study extends BaseSemesterEntity {
     public static Study createStudy(
             Integer academicYear,
             SemesterType semesterType,
+            String title,
             Member mentor,
             Period period,
             Period applicationPeriod,
@@ -116,6 +120,7 @@ public class Study extends BaseSemesterEntity {
         return Study.builder()
                 .academicYear(academicYear)
                 .semesterType(semesterType)
+                .title(title)
                 .mentor(mentor)
                 .period(period)
                 .applicationPeriod(applicationPeriod)
@@ -126,6 +131,8 @@ public class Study extends BaseSemesterEntity {
                 .endTime(endTime)
                 .build();
     }
+
+    // 검증 로직
 
     private static void validateApplicationStartDateBeforeSessionStartDate(
             LocalDateTime applicationStartDate, LocalDateTime startDate) {
@@ -170,5 +177,14 @@ public class Study extends BaseSemesterEntity {
 
     public boolean isStudyOngoing() {
         return period.isOpen();
+    }
+
+    public LocalDate getStartDate() {
+        return period.getStartDate().toLocalDate();
+    }
+
+    public void update(String link, String introduction) {
+        notionLink = link;
+        this.introduction = introduction;
     }
 }

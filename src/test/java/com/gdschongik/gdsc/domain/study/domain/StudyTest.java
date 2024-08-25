@@ -43,6 +43,7 @@ public class StudyTest {
             assertThatThrownBy(() -> Study.createStudy(
                             ACADEMIC_YEAR,
                             SEMESTER_TYPE,
+                            STUDY_TITLE,
                             guestMember,
                             period,
                             applicationPeriod,
@@ -66,6 +67,7 @@ public class StudyTest {
             assertThatThrownBy(() -> Study.createStudy(
                             ACADEMIC_YEAR,
                             SEMESTER_TYPE,
+                            STUDY_TITLE,
                             member,
                             period,
                             applicationPeriod,
@@ -89,6 +91,7 @@ public class StudyTest {
             assertThatThrownBy(() -> Study.createStudy(
                             ACADEMIC_YEAR,
                             SEMESTER_TYPE,
+                            STUDY_TITLE,
                             member,
                             period,
                             applicationPeriod,
@@ -114,6 +117,7 @@ public class StudyTest {
             assertThatThrownBy(() -> Study.createStudy(
                             ACADEMIC_YEAR,
                             SEMESTER_TYPE,
+                            STUDY_TITLE,
                             member,
                             period,
                             applicationPeriod,
@@ -139,6 +143,7 @@ public class StudyTest {
             assertThatThrownBy(() -> Study.createStudy(
                             ACADEMIC_YEAR,
                             SEMESTER_TYPE,
+                            STUDY_TITLE,
                             member,
                             period,
                             applicationPeriod,
