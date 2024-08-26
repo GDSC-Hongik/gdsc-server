@@ -124,7 +124,7 @@ public class StudyDetail extends BaseEntity {
     }
 
     // 출석일이 오늘 or 오늘이후인지 확인
-    public boolean isAttendanceDayPassed(LocalDate now) {
+    public boolean isAttendanceDayNotPassed(LocalDate now) {
         return !getAttendanceDay().isBefore(now);
     }
 

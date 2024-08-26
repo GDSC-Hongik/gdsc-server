@@ -99,7 +99,7 @@ public class MentorStudyDetailService {
 
         // 출석일이 오늘 or 오늘이후인 StudyDetail
         return studyDetails.stream()
-                .filter(studyDetail -> studyDetail.isAttendanceDayPassed(LocalDate.now()))
+                .filter(studyDetail -> studyDetail.isAttendanceDayNotPassed(LocalDate.now()))
                 .map(StudyMentorAttendanceResponse::from)
                 .toList();
     }
