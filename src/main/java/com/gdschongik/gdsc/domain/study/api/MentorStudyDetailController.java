@@ -3,6 +3,7 @@ package com.gdschongik.gdsc.domain.study.api;
 import com.gdschongik.gdsc.domain.study.application.MentorStudyDetailService;
 import com.gdschongik.gdsc.domain.study.dto.request.AssignmentCreateUpdateRequest;
 import com.gdschongik.gdsc.domain.study.dto.response.AssignmentResponse;
+import com.gdschongik.gdsc.domain.study.dto.response.StudyMentorAttendanceResponse;
 import com.gdschongik.gdsc.domain.study.dto.response.StudySessionResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -67,8 +68,16 @@ public class MentorStudyDetailController {
     // TODO 스터디 세션 워딩을 커리큘럼으로 변경해야함
     @Operation(summary = "스터디 주차별 커리큘럼 목록 조회", description = "멘토가 자신의 스터디 커리큘럼 목록을 조회합니다")
     @GetMapping("/sessions")
-    public ResponseEntity<List<StudySessionResponse>> getStudySessions(@RequestParam(name = "study") Long studyId) {
+    public ResponseEntity<List<StudySessionResponse>> getStudySessions(@RequestParam(name = "studyId") Long studyId) {
         List<StudySessionResponse> response = mentorStudyDetailService.getSessions(studyId);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "스터디 주차별 출결번호 조회", description = "멘토가 자신의 스터디 출결번호 목록을 조회합니다. 지난 출석은 목록에서 제외합니다.")
+    @GetMapping("/attendances")
+    public ResponseEntity<List<StudyMentorAttendanceResponse>> getAttendanceNumbers(
+            @RequestParam(name = "studyId") Long studyId) {
+        List<StudyMentorAttendanceResponse> response = mentorStudyDetailService.getAttendanceNumbers(studyId);
         return ResponseEntity.ok(response);
     }
 }
