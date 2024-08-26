@@ -8,9 +8,11 @@ import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
 import com.gdschongik.gdsc.domain.study.domain.StudyDetailValidator;
 import com.gdschongik.gdsc.domain.study.dto.request.AssignmentCreateUpdateRequest;
 import com.gdschongik.gdsc.domain.study.dto.response.AssignmentResponse;
+import com.gdschongik.gdsc.domain.study.dto.response.StudyMentorAttendanceResponse;
 import com.gdschongik.gdsc.domain.study.dto.response.StudySessionResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
+import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -89,5 +91,18 @@ public class MentorStudyDetailService {
     public List<StudySessionResponse> getSessions(Long studyId) {
         List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyIdOrderByWeekAsc(studyId);
         return studyDetails.stream().map(StudySessionResponse::from).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<StudyMentorAttendanceResponse> getAttendanceNumber(Long studyId) {
+        List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyIdOrderByWeekAsc(studyId);
+
+        // 출석일이 오늘 or 오늘이후 인 StudyDetail
+        List<StudyDetail> notAttendedStudyDetails = studyDetails.stream()
+                .filter(studyDetail -> !studyDetail.getAttendanceDay().isBefore(LocalDate.now()))
+                .toList();
+        return notAttendedStudyDetails.stream()
+                .map(StudyMentorAttendanceResponse::from)
+                .toList();
     }
 }
