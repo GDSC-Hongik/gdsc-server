@@ -3,12 +3,11 @@ package com.gdschongik.gdsc.global.security;
 import static com.gdschongik.gdsc.global.common.constant.SecurityConstant.*;
 
 import jakarta.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.Map;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizationRequestResolver;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestResolver;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
+import org.springframework.web.util.UriComponentsBuilder;
 
 public class CustomOAuth2AuthorizationRequestResolver implements OAuth2AuthorizationRequestResolver {
 
@@ -35,15 +34,17 @@ public class CustomOAuth2AuthorizationRequestResolver implements OAuth2Authoriza
             HttpServletRequest request, OAuth2AuthorizationRequest authorizationRequest) {
 
         String referer = request.getHeader("Referer");
+
         if (referer == null || referer.isEmpty()) {
             return authorizationRequest;
         }
 
-        Map<String, Object> additionalParameters = new HashMap<>();
-        additionalParameters.put(OAUTH_TARGET_URL_PARAM_NAME, referer);
+        String redirectUri = UriComponentsBuilder.fromHttpUrl(authorizationRequest.getRedirectUri())
+                .queryParam(OAUTH_TARGET_URL_PARAM_NAME, referer)
+                .toUriString();
 
         return OAuth2AuthorizationRequest.from(authorizationRequest)
-                .additionalParameters(additionalParameters)
+                .redirectUri(redirectUri)
                 .build();
     }
 }
