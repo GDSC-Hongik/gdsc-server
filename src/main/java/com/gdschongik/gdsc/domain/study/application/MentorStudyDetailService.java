@@ -94,14 +94,12 @@ public class MentorStudyDetailService {
     }
 
     @Transactional(readOnly = true)
-    public List<StudyMentorAttendanceResponse> getAttendanceNumber(Long studyId) {
+    public List<StudyMentorAttendanceResponse> getAttendanceNumbers(Long studyId) {
         List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyIdOrderByWeekAsc(studyId);
 
-        // 출석일이 오늘 or 오늘이후 인 StudyDetail
-        List<StudyDetail> notAttendedStudyDetails = studyDetails.stream()
-                .filter(studyDetail -> !studyDetail.getAttendanceDay().isBefore(LocalDate.now()))
-                .toList();
-        return notAttendedStudyDetails.stream()
+        // 출석일이 오늘 or 오늘이후인 StudyDetail
+        return studyDetails.stream()
+                .filter(studyDetail -> studyDetail.isAttendanceDayPassed(LocalDate.now()))
                 .map(StudyMentorAttendanceResponse::from)
                 .toList();
     }

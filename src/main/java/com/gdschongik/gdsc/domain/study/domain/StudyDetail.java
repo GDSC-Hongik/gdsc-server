@@ -123,6 +123,11 @@ public class StudyDetail extends BaseEntity {
         return startDate.plusDays(daysToAdd);
     }
 
+    // 출석일이 오늘 or 오늘이후인지 확인
+    public boolean isAttendanceDayPassed(LocalDate now) {
+        return !getAttendanceDay().isBefore(now);
+    }
+
     public void updateSession(
             LocalTime startAt, String title, String description, Difficulty difficulty, StudyStatus status) {
         session = Session.generateSession(startAt, title, description, difficulty, status);

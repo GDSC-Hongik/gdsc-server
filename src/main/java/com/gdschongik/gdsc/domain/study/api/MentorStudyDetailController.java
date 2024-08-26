@@ -75,9 +75,9 @@ public class MentorStudyDetailController {
 
     @Operation(summary = "스터디 주차별 출결번호 조회", description = "멘토가 자신의 스터디 출결번호 목록을 조회합니다. 지난 출석은 목록에서 제외합니다.")
     @GetMapping("/attendances")
-    public ResponseEntity<List<StudyMentorAttendanceResponse>> getAttendanceNumber(
+    public ResponseEntity<List<StudyMentorAttendanceResponse>> getAttendanceNumbers(
             @RequestParam(name = "studyId") Long studyId) {
-        List<StudyMentorAttendanceResponse> response = mentorStudyDetailService.getAttendanceNumber(studyId);
+        List<StudyMentorAttendanceResponse> response = mentorStudyDetailService.getAttendanceNumbers(studyId);
         return ResponseEntity.ok(response);
     }
 }
