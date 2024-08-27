@@ -38,7 +38,6 @@ public class StudentStudyDetailController {
         return ResponseEntity.ok(response);
     }
 
-    // TODO 스터디 세션 워딩을 커리큘럼으로 변경해야함
     @Operation(summary = "스터디 커리큘럼 조회", description = "해당 스터디의 커리큘럼들을 조회합니다.")
     @GetMapping("/curriculums")
     public ResponseEntity<List<StudyStudentCurriculumResponse>> getStudyCurriculums(
