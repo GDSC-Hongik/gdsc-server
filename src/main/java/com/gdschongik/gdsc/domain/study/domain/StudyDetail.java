@@ -5,7 +5,7 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import com.gdschongik.gdsc.domain.common.model.BaseEntity;
 import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import com.gdschongik.gdsc.domain.study.domain.vo.Assignment;
-import com.gdschongik.gdsc.domain.study.domain.vo.Session;
+import com.gdschongik.gdsc.domain.study.domain.vo.Curriculum;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.persistence.*;
 import java.time.DayOfWeek;
@@ -41,12 +41,12 @@ public class StudyDetail extends BaseEntity {
     private Period period;
 
     @Embedded
-    @AttributeOverride(name = "title", column = @Column(name = "session_title"))
-    @AttributeOverride(name = "difficulty", column = @Column(name = "session_difficulty"))
-    @AttributeOverride(name = "startAt", column = @Column(name = "session_start_at"))
-    @AttributeOverride(name = "description", column = @Column(name = "session_description"))
-    @AttributeOverride(name = "status", column = @Column(name = "session_status"))
-    private Session session;
+    @AttributeOverride(name = "title", column = @Column(name = "curriculum_title"))
+    @AttributeOverride(name = "difficulty", column = @Column(name = "curriculum_difficulty"))
+    @AttributeOverride(name = "startAt", column = @Column(name = "curriculum_start_at"))
+    @AttributeOverride(name = "description", column = @Column(name = "curriculum_description"))
+    @AttributeOverride(name = "status", column = @Column(name = "curriculum_status"))
+    private Curriculum curriculum;
 
     @Embedded
     @AttributeOverride(name = "title", column = @Column(name = "assignment_title"))
@@ -57,12 +57,17 @@ public class StudyDetail extends BaseEntity {
 
     @Builder(access = AccessLevel.PRIVATE)
     private StudyDetail(
-            Study study, Long week, String attendanceNumber, Period period, Session session, Assignment assignment) {
+            Study study,
+            Long week,
+            String attendanceNumber,
+            Period period,
+            Curriculum curriculum,
+            Assignment assignment) {
         this.study = study;
         this.week = week;
         this.attendanceNumber = attendanceNumber;
         this.period = period;
-        this.session = session;
+        this.curriculum = curriculum;
         this.assignment = assignment;
     }
 
@@ -73,7 +78,7 @@ public class StudyDetail extends BaseEntity {
                 .period(period)
                 .attendanceNumber(attendanceNumber)
                 .period(period)
-                .session(Session.createEmptySession())
+                .curriculum(Curriculum.createEmptyCurriculum())
                 .assignment(Assignment.createEmptyAssignment())
                 .build();
     }
@@ -128,9 +133,9 @@ public class StudyDetail extends BaseEntity {
         return !getAttendanceDay().isBefore(now);
     }
 
-    public void updateSession(
+    public void updateCurriculum(
             LocalTime startAt, String title, String description, Difficulty difficulty, StudyStatus status) {
-        session = Session.generateSession(startAt, title, description, difficulty, status);
+        curriculum = Curriculum.generateCurriculum(startAt, title, description, difficulty, status);
     }
 
     public void validateAssignmentSubmittable(LocalDateTime now) {

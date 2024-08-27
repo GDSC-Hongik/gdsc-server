@@ -9,11 +9,7 @@ import com.gdschongik.gdsc.domain.study.domain.AssignmentHistory;
 import com.gdschongik.gdsc.domain.study.domain.Attendance;
 import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
 import com.gdschongik.gdsc.domain.study.domain.StudyHistory;
-import com.gdschongik.gdsc.domain.study.dto.response.AssignmentDashboardResponse;
-import com.gdschongik.gdsc.domain.study.dto.response.AssignmentHistoryStatusResponse;
-import com.gdschongik.gdsc.domain.study.dto.response.AssignmentSubmittableDto;
-import com.gdschongik.gdsc.domain.study.dto.response.StudyStudentSessionResponse;
-import com.gdschongik.gdsc.domain.study.dto.response.StudyTodoResponse;
+import com.gdschongik.gdsc.domain.study.dto.response.*;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
 import com.gdschongik.gdsc.global.util.MemberUtil;
@@ -69,7 +65,7 @@ public class StudentStudyDetailService {
         List<StudyTodoResponse> response = new ArrayList<>();
         // 출석체크 정보 (개설 상태이고, 오늘이 출석체크날짜인 것)
         studyDetails.stream()
-                .filter(studyDetail -> studyDetail.getSession().isOpen()
+                .filter(studyDetail -> studyDetail.getCurriculum().isOpen()
                         && studyDetail.getAttendanceDay().equals(now))
                 .forEach(studyDetail -> response.add(StudyTodoResponse.createAttendanceType(
                         studyDetail, now, isAttended(attendances, studyDetail))));
@@ -83,7 +79,7 @@ public class StudentStudyDetailService {
         return response;
     }
 
-    public List<StudyStudentSessionResponse> getStudySessions(Long studyId) {
+    public List<StudyStudentCurriculumResponse> getStudyCurriculums(Long studyId) {
         Member member = memberUtil.getCurrentMember();
         final List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyIdOrderByWeekAsc(studyId);
         final List<AssignmentHistory> assignmentHistories =
@@ -91,7 +87,7 @@ public class StudentStudyDetailService {
         final List<Attendance> attendances = attendanceRepository.findByMemberAndStudyId(member, studyId);
 
         return studyDetails.stream()
-                .map(studyDetail -> StudyStudentSessionResponse.of(
+                .map(studyDetail -> StudyStudentCurriculumResponse.of(
                         studyDetail,
                         getSubmittedAssignment(assignmentHistories, studyDetail),
                         isAttended(attendances, studyDetail),

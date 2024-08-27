@@ -8,8 +8,8 @@ import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
 import com.gdschongik.gdsc.domain.study.domain.StudyDetailValidator;
 import com.gdschongik.gdsc.domain.study.dto.request.AssignmentCreateUpdateRequest;
 import com.gdschongik.gdsc.domain.study.dto.response.AssignmentResponse;
+import com.gdschongik.gdsc.domain.study.dto.response.StudyCurriculumResponse;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyMentorAttendanceResponse;
-import com.gdschongik.gdsc.domain.study.dto.response.StudySessionResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import java.time.LocalDate;
@@ -88,9 +88,9 @@ public class MentorStudyDetailService {
     }
 
     @Transactional(readOnly = true)
-    public List<StudySessionResponse> getSessions(Long studyId) {
+    public List<StudyCurriculumResponse> getCurriculums(Long studyId) {
         List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyIdOrderByWeekAsc(studyId);
-        return studyDetails.stream().map(StudySessionResponse::from).toList();
+        return studyDetails.stream().map(StudyCurriculumResponse::from).toList();
     }
 
     @Transactional(readOnly = true)

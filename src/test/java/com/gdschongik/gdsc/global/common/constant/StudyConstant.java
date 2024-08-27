@@ -34,9 +34,9 @@ public class StudyConstant {
     public static final LocalDateTime STUDY_DETAIL_END_DATETIME = STUDY_DETAIL_START_DATETIME.plusWeeks(1);
     public static final LocalDateTime STUDY_ASSIGNMENT_DEADLINE_DATETIME = STUDY_DETAIL_END_DATETIME;
 
-    // Session
-    public static final String SESSION_TITLE = "sessionTitle";
-    public static final String SESSION_DESCRIPTION = "sessionDescription";
+    // Curriculum
+    public static final String CURRICULUM_TITLE = "curriculumTitle";
+    public static final String CURRICULUM_DESCRIPTION = "curriculumDescription";
 
     // AssignmentHistory
     public static final String SUBMISSION_LINK = "https://github.com/ownername/reponame/blob/main/week1/WIL.md";
