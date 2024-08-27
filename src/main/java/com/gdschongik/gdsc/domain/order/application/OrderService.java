@@ -164,6 +164,7 @@ public class OrderService {
         orderValidator.validateFreeOrderCreate(membership, issuedCoupon, currentMember);
 
         Order order = Order.createFree(request.orderNanoId(), membership, issuedCoupon.orElse(null), moneyInfo);
+        issuedCoupon.ifPresent(IssuedCoupon::use);
 
         orderRepository.save(order);
 

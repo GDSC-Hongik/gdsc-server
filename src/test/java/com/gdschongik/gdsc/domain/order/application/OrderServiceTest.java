@@ -212,6 +212,41 @@ class OrderServiceTest extends IntegrationTest {
             Member regularMember = memberRepository.findById(member.getId()).orElseThrow();
             assertThat(regularMember.isRegular()).isTrue();
         }
+
+        @Test
+        void 쿠폰_존재한다면_사용처리한다() {
+            // given
+            Member member = createMember();
+            logoutAndReloginAs(1L, MemberRole.ASSOCIATE);
+            RecruitmentRound recruitmentRound = createRecruitmentRound(
+                    RECRUITMENT_ROUND_NAME,
+                    LocalDateTime.now().minusDays(1),
+                    LocalDateTime.now().plusDays(1),
+                    ACADEMIC_YEAR,
+                    SEMESTER_TYPE,
+                    ROUND_TYPE,
+                    MONEY_20000_WON);
+
+            Membership membership = createMembership(member, recruitmentRound);
+            IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, member);
+
+            orderService.createPendingOrder(new OrderCreateRequest(
+                    ORDER_NANO_ID,
+                    membership.getId(),
+                    issuedCoupon.getId(),
+                    BigDecimal.valueOf(20000),
+                    BigDecimal.valueOf(5000),
+                    BigDecimal.valueOf(15000)));
+
+            // when
+            var request = new OrderCompleteRequest(ORDER_PAYMENT_KEY, ORDER_NANO_ID, 15000L);
+            orderService.completeOrder(request);
+
+            // then
+            IssuedCoupon usedCoupon =
+                    issuedCouponRepository.findById(issuedCoupon.getId()).orElseThrow();
+            assertThat(usedCoupon.hasUsed()).isTrue();
+        }
     }
 
     @Nested
@@ -559,6 +594,40 @@ class OrderServiceTest extends IntegrationTest {
             // then
             Member regularMember = memberRepository.findById(member.getId()).orElseThrow();
             assertThat(regularMember.isRegular()).isTrue();
+        }
+
+        @Test
+        void 쿠폰_존재한다면_사용처리한다() {
+            // given
+            Member member = createMember();
+            logoutAndReloginAs(1L, MemberRole.ASSOCIATE);
+            RecruitmentRound recruitmentRound = createRecruitmentRound(
+                    RECRUITMENT_ROUND_NAME,
+                    LocalDateTime.now().minusDays(1),
+                    LocalDateTime.now().plusDays(1),
+                    ACADEMIC_YEAR,
+                    SEMESTER_TYPE,
+                    ROUND_TYPE,
+                    MONEY_20000_WON);
+
+            Membership membership = createMembership(member, recruitmentRound);
+            IssuedCoupon issuedCoupon = createAndIssue(MONEY_20000_WON, member);
+
+            var request = new OrderCreateRequest(
+                    ORDER_NANO_ID,
+                    membership.getId(),
+                    issuedCoupon.getId(),
+                    BigDecimal.valueOf(20000),
+                    BigDecimal.valueOf(20000),
+                    BigDecimal.ZERO);
+
+            // when
+            orderService.createFreeOrder(request);
+
+            // then
+            IssuedCoupon usedCoupon =
+                    issuedCouponRepository.findById(issuedCoupon.getId()).orElseThrow();
+            assertThat(usedCoupon.hasUsed()).isTrue();
         }
     }
 }
