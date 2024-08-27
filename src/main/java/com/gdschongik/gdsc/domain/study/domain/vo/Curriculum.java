@@ -17,7 +17,7 @@ import org.hibernate.annotations.Comment;
 @Embeddable
 @EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Session {
+public class Curriculum {
 
     private LocalTime startAt;
 
@@ -28,12 +28,12 @@ public class Session {
     @Enumerated(EnumType.STRING)
     private Difficulty difficulty;
 
-    @Comment("세션 상태")
+    @Comment("커리큘럼 상태")
     @Enumerated(EnumType.STRING)
     private StudyStatus status;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private Session(LocalTime startAt, String title, String description, Difficulty difficulty, StudyStatus status) {
+    private Curriculum(LocalTime startAt, String title, String description, Difficulty difficulty, StudyStatus status) {
         this.startAt = startAt;
         this.title = title;
         this.description = description;
@@ -41,13 +41,13 @@ public class Session {
         this.status = status;
     }
 
-    public static Session createEmptySession() {
-        return Session.builder().status(StudyStatus.NONE).build();
+    public static Curriculum createEmptyCurriculum() {
+        return Curriculum.builder().status(StudyStatus.NONE).build();
     }
 
-    public static Session generateSession(
+    public static Curriculum generateCurriculum(
             LocalTime startAt, String title, String description, Difficulty difficulty, StudyStatus status) {
-        return Session.builder()
+        return Curriculum.builder()
                 .startAt(startAt)
                 .title(title)
                 .description(description)

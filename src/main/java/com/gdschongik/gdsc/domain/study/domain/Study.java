@@ -114,7 +114,7 @@ public class Study extends BaseSemesterEntity {
             DayOfWeek dayOfWeek,
             LocalTime startTime,
             LocalTime endTime) {
-        validateApplicationStartDateBeforeSessionStartDate(applicationPeriod.getStartDate(), period.getStartDate());
+        validateApplicationStartDateBeforeCurriculumStartDate(applicationPeriod.getStartDate(), period.getStartDate());
         validateMentorRole(mentor);
         validateStudyTime(studyType, startTime, endTime);
         return Study.builder()
@@ -134,7 +134,7 @@ public class Study extends BaseSemesterEntity {
 
     // 검증 로직
 
-    private static void validateApplicationStartDateBeforeSessionStartDate(
+    private static void validateApplicationStartDateBeforeCurriculumStartDate(
             LocalDateTime applicationStartDate, LocalDateTime startDate) {
         if (!applicationStartDate.isBefore(startDate)) {
             throw new CustomException(STUDY_APPLICATION_START_DATE_INVALID);

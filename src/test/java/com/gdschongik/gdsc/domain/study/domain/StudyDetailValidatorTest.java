@@ -174,7 +174,7 @@ public class StudyDetailValidatorTest {
             // when & then
             assertThatThrownBy(() -> studyDetailValidator.validateUpdateStudyDetail(studyDetailIds, requestIds))
                     .isInstanceOf(CustomException.class)
-                    .hasMessage(STUDY_DETAIL_SESSION_SIZE_MISMATCH.getMessage());
+                    .hasMessage(STUDY_DETAIL_CURRICULUM_SIZE_MISMATCH.getMessage());
         }
 
         @Test

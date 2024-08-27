@@ -11,13 +11,13 @@ import com.gdschongik.gdsc.domain.study.domain.SubmissionFailureType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 
-public record StudyStudentSessionResponse(
+public record StudyStudentCurriculumResponse(
         Long studyDetailId,
         @Schema(description = "기간") Period period,
         @Schema(description = "주차수") Long week,
         @Schema(description = "제목") String title,
         @Schema(description = "설명") String description,
-        @Schema(description = "세션 상태") StudyStatus sessionStatus,
+        @Schema(description = "커리큘럼 상태") StudyStatus curriculumStatus,
         @Schema(description = "난이도") Difficulty difficulty,
         @Schema(description = "출석 상태") AttendanceStatusResponse attendanceStatus,
         @Schema(description = "과제 개설 상태") StudyStatus assignmentStatus,
@@ -25,16 +25,16 @@ public record StudyStudentSessionResponse(
         @Schema(description = "과제 실패 타입") SubmissionFailureType submissionFailureType,
         @Schema(description = "과제 제출 링크") String submissionLink) {
 
-    public static StudyStudentSessionResponse of(
+    public static StudyStudentCurriculumResponse of(
             StudyDetail studyDetail, AssignmentHistory assignmentHistory, boolean isAttended, LocalDateTime now) {
-        return new StudyStudentSessionResponse(
+        return new StudyStudentCurriculumResponse(
                 studyDetail.getId(),
                 studyDetail.getPeriod(),
                 studyDetail.getWeek(),
-                studyDetail.getSession().getTitle(),
-                studyDetail.getSession().getDescription(),
-                studyDetail.getSession().getStatus(),
-                studyDetail.getSession().getDifficulty(),
+                studyDetail.getCurriculum().getTitle(),
+                studyDetail.getCurriculum().getDescription(),
+                studyDetail.getCurriculum().getStatus(),
+                studyDetail.getCurriculum().getDifficulty(),
                 AttendanceStatusResponse.of(studyDetail, now.toLocalDate(), isAttended),
                 studyDetail.getAssignment().getStatus(),
                 AssignmentSubmissionStatusResponse.from(assignmentHistory),
