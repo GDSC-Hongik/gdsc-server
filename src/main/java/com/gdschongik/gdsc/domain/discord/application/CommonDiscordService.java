@@ -46,7 +46,7 @@ public class CommonDiscordService {
                 String discordId = discordUtil.getMemberIdByUsername(discordUsername);
                 member.updateDiscordId(discordId);
             } catch (CustomException e) {
-                log.info("[CommonDiscordService] {}: studyId = {}", e.getMessage(), member.getId());
+                log.info("[CommonDiscordService] 디스코드 id 배치 실패: 사유 = {} memberId = {}", e.getMessage(), member.getId());
             }
         });
     }
