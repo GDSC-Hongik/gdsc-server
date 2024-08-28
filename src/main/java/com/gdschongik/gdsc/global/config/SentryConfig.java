@@ -1,42 +1,40 @@
 package com.gdschongik.gdsc.global.config;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
 import com.gdschongik.gdsc.global.property.DockerProperty;
-
 import io.sentry.Sentry;
 import io.sentry.SentryOptions;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @RequiredArgsConstructor
 public class SentryConfig {
 
-	private final DockerProperty dockerProperty;
+    private final DockerProperty dockerProperty;
 
-	@Bean
-	Sentry.OptionsConfiguration<SentryOptions> customOptionsConfiguration() {
-		return options -> {
-			options.setRelease(convertTagToVersion(dockerProperty.getTag()));
-		};
-	}
+    @Bean
+    Sentry.OptionsConfiguration<SentryOptions> customOptionsConfiguration() {
+        return options -> {
+            options.setRelease(convertTagToVersion(dockerProperty.getTag()));
+        };
+    }
 
-	// gdscrepo/gdsc-server:v1.0.0 -> gdsc-server@1.0.0
-	// gdscrepo/gdsc-server:ffffff -> gdsc-server@ffffff
-	private String convertTagToVersion(String tag) {
-		if (tag.isBlank()) {
-			return "gdsc-server";
-		}
+    // gdscrepo/gdsc-server:v1.0.0 -> gdsc-server@1.0.0
+    // gdscrepo/gdsc-server:ffffff -> gdsc-server@ffffff
+    private String convertTagToVersion(String tag) {
+        if (tag.isBlank()) {
+            return "gdsc-server";
+        }
 
-		String imageWithVersion = tag.split("/")[1]; // gdsc-server:v1.0.0
-		String[] split = imageWithVersion.split(":"); // [gdsc-server, v1.0.0]
-		String version = split[1]; // v1.0.0 or ffffff (commit hash)
-		if (version.startsWith("v")) {
-			version = version.substring(1); // 1.0.0
-		}
-		String s = split[0] + "@" + version;// gdsc-server@1.0.0
-		System.out.println("s = " + s);
-		return s;
-	}
+        String imageWithVersion = tag.split("/")[1]; // gdsc-server:v1.0.0
+        String[] split = imageWithVersion.split(":"); // [gdsc-server, v1.0.0]
+        String version = split[1]; // v1.0.0 or ffffff (commit hash)
+        if (version.startsWith("v")) {
+            version = version.substring(1); // 1.0.0
+        }
+        String s = split[0] + "@" + version; // gdsc-server@1.0.0
+        System.out.println("s = " + s);
+        return s;
+    }
 }

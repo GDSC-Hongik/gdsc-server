@@ -1,13 +1,12 @@
 package com.gdschongik.gdsc.global.property;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @Getter
 @RequiredArgsConstructor
 @ConfigurationProperties(prefix = "docker")
 public class DockerProperty {
-	private final String tag;
+    private final String tag;
 }

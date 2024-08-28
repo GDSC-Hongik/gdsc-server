@@ -19,7 +19,7 @@ import org.springframework.context.annotation.Configuration;
     EmailProperty.class,
     PaymentProperty.class,
     GithubProperty.class,
-	DockerProperty.class
+    DockerProperty.class
 })
 @Configuration
 public class PropertyConfig {}
