@@ -16,13 +16,13 @@ public class SentryConfig {
     @Bean
     Sentry.OptionsConfiguration<SentryOptions> customOptionsConfiguration() {
         return options -> {
-            options.setRelease(convertTagToVersion(dockerProperty.getTag()));
+            options.setRelease(convertTagToRelease(dockerProperty.getTag()));
         };
     }
 
     // gdscrepo/gdsc-server:v1.0.0 -> gdsc-server@1.0.0
     // gdscrepo/gdsc-server:ffffff -> gdsc-server@ffffff
-    private String convertTagToVersion(String tag) {
+    private String convertTagToRelease(String tag) {
         if (tag.isBlank()) {
             return "gdsc-server";
         }
@@ -33,8 +33,6 @@ public class SentryConfig {
         if (version.startsWith("v")) {
             version = version.substring(1); // 1.0.0
         }
-        String s = split[0] + "@" + version; // gdsc-server@1.0.0
-        System.out.println("s = " + s);
-        return s;
+        return split[0] + "@" + version; // gdsc-server@1.0.0
     }
 }
