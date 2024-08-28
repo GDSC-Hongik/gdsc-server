@@ -96,6 +96,9 @@ dependencies {
 
     // Github
     implementation 'org.kohsuke:github-api:1.323'
+
+    // Sentry
+    implementation 'io.sentry:sentry-logback:7.14.0'
 }
 
 tasks.named('test') {

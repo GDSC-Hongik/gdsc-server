@@ -8,6 +8,9 @@ sentry:
   traces-sample-rate: 1.0
   exception-resolver-order: -2147483647
   environment: ${spring.profiles.active:local}
+  logging:
+    minimum-event-level: info
+    minimum-breadcrumb-level: debug
 
 docker:
   tag: ${DOCKER_IMAGE_TAG:}
