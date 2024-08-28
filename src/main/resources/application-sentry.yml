@@ -8,6 +8,7 @@ sentry:
   traces-sample-rate: 1.0
   exception-resolver-order: -2147483647
   environment: ${spring.profiles.active:local}
+  send-default-pii: true
   logging:
     minimum-event-level: info
     minimum-breadcrumb-level: debug
