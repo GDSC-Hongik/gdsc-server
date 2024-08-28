@@ -30,7 +30,7 @@ public interface OrderQueryMethod {
     }
 
     default BooleanExpression eqRecruitmentRound() {
-        return order.recruitmentRoundId.eq(recruitment.id);
+        return order.recruitmentRoundId.eq(recruitmentRound.id);
     }
 
     // TODO: MemberQueryMethod가 interface로 변경된 경우 해당 메서드 제거 및 대체

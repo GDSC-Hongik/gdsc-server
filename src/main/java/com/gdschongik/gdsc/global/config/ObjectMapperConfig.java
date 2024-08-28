@@ -2,6 +2,7 @@ package com.gdschongik.gdsc.global.config;
 
 import static com.gdschongik.gdsc.global.common.constant.RegexConstant.DATE;
 import static com.gdschongik.gdsc.global.common.constant.RegexConstant.DATETIME;
+import static com.gdschongik.gdsc.global.common.constant.RegexConstant.ZONED_DATETIME;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
@@ -16,6 +17,8 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,6 +41,9 @@ public class ObjectMapperConfig {
         // LocalTime
         module.addSerializer(LocalTime.class, new LocalTimeSerializer());
         module.addDeserializer(LocalTime.class, new LocalTimeDeserializer());
+
+        // ZonedDateTime
+        module.addDeserializer(ZonedDateTime.class, new ZonedDateTimeDeserializer());
 
         mapper.registerModule(module);
         return mapper;
@@ -105,6 +111,16 @@ public class ObjectMapperConfig {
             int nano = node.get("nano").asInt();
 
             return LocalTime.of(hour, minute, second, nano);
+        }
+    }
+
+    public class ZonedDateTimeDeserializer extends JsonDeserializer<ZonedDateTime> {
+        @Override
+        public ZonedDateTime deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
+                throws IOException {
+            return ZonedDateTime.parse(
+                    jsonParser.getValueAsString(),
+                    DateTimeFormatter.ofPattern(ZONED_DATETIME).withZone(ZoneId.of("Asia/Seoul")));
         }
     }
 }
