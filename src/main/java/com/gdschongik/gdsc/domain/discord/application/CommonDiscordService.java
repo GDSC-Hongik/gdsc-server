@@ -10,9 +10,11 @@ import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.DiscordUtil;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CommonDiscordService {
@@ -40,8 +42,12 @@ public class CommonDiscordService {
 
         discordSatisfiedMembers.forEach(member -> {
             String discordUsername = member.getDiscordUsername();
-            String discordId = discordUtil.getMemberIdByUsername(discordUsername);
-            member.updateDiscordId(discordId);
+            try {
+                String discordId = discordUtil.getMemberIdByUsername(discordUsername);
+                member.updateDiscordId(discordId);
+            } catch (CustomException e) {
+                log.info("[CommonDiscordService] {}: studyId = {}", e.getMessage(), member.getId());
+            }
         });
     }
 }
