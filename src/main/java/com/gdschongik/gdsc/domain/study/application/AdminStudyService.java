@@ -2,11 +2,13 @@ package com.gdschongik.gdsc.domain.study.application;
 
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
+import com.gdschongik.gdsc.domain.member.domain.MemberStudyRole;
 import com.gdschongik.gdsc.domain.study.dao.StudyDetailRepository;
 import com.gdschongik.gdsc.domain.study.dao.StudyRepository;
 import com.gdschongik.gdsc.domain.study.domain.Study;
 import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
 import com.gdschongik.gdsc.domain.study.dto.request.StudyCreateRequest;
+import com.gdschongik.gdsc.domain.study.dto.response.StudyMentorResponse;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyResponse;
 import com.gdschongik.gdsc.domain.study.factory.StudyDomainFactory;
 import com.gdschongik.gdsc.global.exception.CustomException;
@@ -59,5 +61,12 @@ public class AdminStudyService {
     @Transactional(readOnly = true)
     public List<StudyResponse> getAllStudies() {
         return studyRepository.findAll().stream().map(StudyResponse::from).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<StudyMentorResponse> getAllMentors() {
+        return memberRepository.findAllByStudyRole(MemberStudyRole.MENTOR).stream()
+                .map(StudyMentorResponse::from)
+                .toList();
     }
 }
