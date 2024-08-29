@@ -17,7 +17,6 @@ import com.gdschongik.gdsc.domain.study.dto.response.StudyResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -43,8 +42,8 @@ public class StudentStudyService {
         Member currentMember = memberUtil.getCurrentMember();
         List<StudyHistory> studyHistories = studyHistoryRepository.findAllByStudent(currentMember);
         Optional<Study> appliedStudy = studyHistories.stream()
+                .filter(StudyHistory::isStudyOngoing)
                 .map(StudyHistory::getStudy)
-                .filter(Study::isStudyOngoing)
                 .findFirst();
         List<StudyResponse> studyResponses = studyRepository.findAll().stream()
                 .filter(Study::isApplicable)
@@ -107,8 +106,7 @@ public class StudentStudyService {
     public StudentMyCurrentStudyResponse getMyCurrentStudy() {
         Member currentMember = memberUtil.getCurrentMember();
         StudyHistory studyHistory = studyHistoryRepository.findAllByStudent(currentMember).stream()
-                .filter(s -> s.getStudy().getApplicationPeriod().getStartDate().isBefore(LocalDateTime.now())
-                        && s.getStudy().getPeriod().getEndDate().isAfter(LocalDateTime.now()))
+                .filter(StudyHistory::isStudyOngoing)
                 .findFirst()
                 .orElse(null);
         return StudentMyCurrentStudyResponse.from(studyHistory);
