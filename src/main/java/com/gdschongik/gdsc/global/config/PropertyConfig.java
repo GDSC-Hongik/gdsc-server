@@ -2,6 +2,7 @@ package com.gdschongik.gdsc.global.config;
 
 import com.gdschongik.gdsc.global.property.BasicAuthProperty;
 import com.gdschongik.gdsc.global.property.DiscordProperty;
+import com.gdschongik.gdsc.global.property.DockerProperty;
 import com.gdschongik.gdsc.global.property.EmailProperty;
 import com.gdschongik.gdsc.global.property.GithubProperty;
 import com.gdschongik.gdsc.global.property.JwtProperty;
@@ -17,7 +18,8 @@ import org.springframework.context.annotation.Configuration;
     DiscordProperty.class,
     EmailProperty.class,
     PaymentProperty.class,
-    GithubProperty.class
+    GithubProperty.class,
+    DockerProperty.class
 })
 @Configuration
 public class PropertyConfig {}

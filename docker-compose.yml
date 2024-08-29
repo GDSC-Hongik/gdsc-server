@@ -10,6 +10,7 @@ services:
       - .env
     environment:
       - TZ=Asia/Seoul
+      - DOCKER_IMAGE_TAG=${IMAGE_FULL_URL}
   redis:
     image: "redis:alpine"
     container_name: redis
