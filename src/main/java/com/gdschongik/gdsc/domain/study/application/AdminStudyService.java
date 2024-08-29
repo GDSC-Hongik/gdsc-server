@@ -30,8 +30,9 @@ public class AdminStudyService {
 
     @Transactional
     public void createStudyAndStudyDetail(StudyCreateRequest request) {
-        // TODO: 멘토 권한 부여
-        final Member mentor = getMemberById(request.mentorId());
+        Member mentor = getMemberById(request.mentorId());
+        mentor.assignToMentor();
+        memberRepository.save(mentor);
 
         Study study = studyDomainFactory.createNewStudy(request, mentor);
         final Study savedStudy = studyRepository.save(study);
