@@ -5,7 +5,7 @@ import com.gdschongik.gdsc.domain.study.domain.StudyStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 
-public record StudySessionCreateRequest(
+public record StudyCurriculumCreateRequest(
         @NotNull Long studyDetailId,
         @Schema(description = "제목") String title,
         @Schema(description = "설명") String description,

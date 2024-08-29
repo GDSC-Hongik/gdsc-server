@@ -1,7 +1,6 @@
 package com.gdschongik.gdsc.domain.study.application;
 
 import static com.gdschongik.gdsc.global.common.constant.StudyConstant.*;
-import static com.gdschongik.gdsc.global.common.constant.StudyConstant.SESSION_DESCRIPTION;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
@@ -11,7 +10,7 @@ import com.gdschongik.gdsc.domain.study.domain.Difficulty;
 import com.gdschongik.gdsc.domain.study.domain.Study;
 import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
 import com.gdschongik.gdsc.domain.study.domain.StudyStatus;
-import com.gdschongik.gdsc.domain.study.dto.request.StudySessionCreateRequest;
+import com.gdschongik.gdsc.domain.study.dto.request.StudyCurriculumCreateRequest;
 import com.gdschongik.gdsc.domain.study.dto.request.StudyUpdateRequest;
 import com.gdschongik.gdsc.helper.IntegrationTest;
 import java.time.LocalDateTime;
@@ -44,16 +43,16 @@ public class MentorStudyServiceTest extends IntegrationTest {
             }
             logoutAndReloginAs(study.getMentor().getId(), MemberRole.ASSOCIATE);
 
-            List<StudySessionCreateRequest> sessionCreateRequests = new ArrayList<>();
+            List<StudyCurriculumCreateRequest> curriculumCreateRequests = new ArrayList<>();
             for (int i = 1; i <= study.getTotalWeek(); i++) {
                 Long id = (long) i;
-                StudySessionCreateRequest sessionCreateRequest = new StudySessionCreateRequest(
-                        id, SESSION_TITLE + i, SESSION_DESCRIPTION + i, Difficulty.HIGH, StudyStatus.OPEN);
-                sessionCreateRequests.add(sessionCreateRequest);
+                StudyCurriculumCreateRequest curriculumCreateRequest = new StudyCurriculumCreateRequest(
+                        id, CURRICULUM_TITLE + i, CURRICULUM_DESCRIPTION + i, Difficulty.HIGH, StudyStatus.OPEN);
+                curriculumCreateRequests.add(curriculumCreateRequest);
             }
 
             StudyUpdateRequest request =
-                    new StudyUpdateRequest(STUDY_NOTION_LINK, STUDY_INTRODUCTION, sessionCreateRequests);
+                    new StudyUpdateRequest(STUDY_NOTION_LINK, STUDY_INTRODUCTION, curriculumCreateRequests);
 
             // when
             mentorStudyService.updateStudy(1L, request);
@@ -68,8 +67,8 @@ public class MentorStudyServiceTest extends IntegrationTest {
                 Long expectedId = studyDetail.getId();
 
                 assertThat(studyDetail.getId()).isEqualTo(expectedId);
-                assertThat(studyDetail.getSession().getTitle()).isEqualTo(SESSION_TITLE + expectedId);
-                assertThat(studyDetail.getSession().getDescription()).isEqualTo(SESSION_DESCRIPTION + expectedId);
+                assertThat(studyDetail.getCurriculum().getTitle()).isEqualTo(CURRICULUM_TITLE + expectedId);
+                assertThat(studyDetail.getCurriculum().getDescription()).isEqualTo(CURRICULUM_DESCRIPTION + expectedId);
             }
         }
     }

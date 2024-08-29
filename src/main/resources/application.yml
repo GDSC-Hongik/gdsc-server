@@ -13,6 +13,7 @@ spring:
       - email
       - payment
       - github
+      - sentry
 
 logging:
   level:

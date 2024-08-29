@@ -57,9 +57,9 @@ public class StudyDetailValidator {
     }
 
     public void validateUpdateStudyDetail(Set<Long> studyDetails, Set<Long> requests) {
-        // StudyDetail 목록과 요청된 StudySessionCreateRequest 목록의 크기를 먼저 비교
+        // StudyDetail 목록과 요청된 StudyCurriculumCreateRequest 목록의 크기를 먼저 비교
         if (studyDetails.size() != requests.size()) {
-            throw new CustomException(STUDY_DETAIL_SESSION_SIZE_MISMATCH);
+            throw new CustomException(STUDY_DETAIL_CURRICULUM_SIZE_MISMATCH);
         }
 
         // 두 ID 집합이 동일한지 비교하여 ID 불일치 시 예외를 던짐

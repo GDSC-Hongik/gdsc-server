@@ -13,7 +13,7 @@ import com.gdschongik.gdsc.domain.study.domain.StudyAnnouncement;
 import com.gdschongik.gdsc.domain.study.domain.StudyHistory;
 import com.gdschongik.gdsc.domain.study.domain.StudyValidator;
 import com.gdschongik.gdsc.domain.study.dto.request.StudyAnnouncementCreateUpdateRequest;
-import com.gdschongik.gdsc.domain.study.dto.request.StudySessionCreateRequest;
+import com.gdschongik.gdsc.domain.study.dto.request.StudyCurriculumCreateRequest;
 import com.gdschongik.gdsc.domain.study.dto.request.StudyUpdateRequest;
 import com.gdschongik.gdsc.domain.study.dto.response.MentorStudyResponse;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyStudentResponse;
@@ -101,7 +101,6 @@ public class MentorStudyService {
         log.info("[MentorStudyService] 스터디 공지 삭제 완료: studyAnnouncementId={}", studyAnnouncement.getId());
     }
 
-    // TODO session -> curriculum 변경
     @Transactional
     public void updateStudy(Long studyId, StudyUpdateRequest request) {
         Member currentMember = memberUtil.getCurrentMember();
@@ -112,9 +111,9 @@ public class MentorStudyService {
         // StudyDetail ID를 추출하여 Set으로 저장
         Set<Long> studyDetailIds = studyDetails.stream().map(StudyDetail::getId).collect(Collectors.toSet());
 
-        // 요청된 StudySessionCreateRequest의 StudyDetail ID를 추출하여 Set으로 저장
-        Set<Long> requestIds = request.studySessions().stream()
-                .map(StudySessionCreateRequest::studyDetailId)
+        // 요청된 StudyCurriculumCreateRequest의 StudyDetail ID를 추출하여 Set으로 저장
+        Set<Long> requestIds = request.studyCurriculums().stream()
+                .map(StudyCurriculumCreateRequest::studyDetailId)
                 .collect(Collectors.toSet());
 
         studyDetailValidator.validateUpdateStudyDetail(studyDetailIds, requestIds);
@@ -123,24 +122,24 @@ public class MentorStudyService {
         studyRepository.save(study);
         log.info("[MentorStudyService] 스터디 기본 정보 수정 완료: studyId={}", studyId);
 
-        updateAllStudyDetailSession(studyDetails, request.studySessions());
+        updateAllStudyDetailCurriculum(studyDetails, request.studyCurriculums());
     }
 
-    private void updateAllStudyDetailSession(
-            List<StudyDetail> studyDetails, List<StudySessionCreateRequest> studySessions) {
+    private void updateAllStudyDetailCurriculum(
+            List<StudyDetail> studyDetails, List<StudyCurriculumCreateRequest> studyCurriculums) {
         for (StudyDetail studyDetail : studyDetails) {
             Long id = studyDetail.getId();
-            StudySessionCreateRequest matchingSession = studySessions.stream()
-                    .filter(session -> session.studyDetailId().equals(id))
+            StudyCurriculumCreateRequest matchingCurriculum = studyCurriculums.stream()
+                    .filter(curriculum -> curriculum.studyDetailId().equals(id))
                     .findFirst()
                     .get();
 
-            studyDetail.updateSession(
+            studyDetail.updateCurriculum(
                     studyDetail.getStudy().getStartTime(),
-                    matchingSession.title(),
-                    matchingSession.description(),
-                    matchingSession.difficulty(),
-                    matchingSession.status());
+                    matchingCurriculum.title(),
+                    matchingCurriculum.description(),
+                    matchingCurriculum.difficulty(),
+                    matchingCurriculum.status());
         }
         studyDetailRepository.saveAll(studyDetails);
         log.info("[MentorStudyService] 스터디 상세정보 커리큘럼 작성 완료: studyDetailId={}", studyDetails);

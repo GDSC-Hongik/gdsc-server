@@ -115,7 +115,7 @@ public enum ErrorCode {
     STUDY_DETAIL_ASSIGNMENT_INVALID_DEADLINE(HttpStatus.CONFLICT, "마감기한이 지난 과제의 마감기한을 수정할 수 없습니다"),
     STUDY_DETAIL_ASSIGNMENT_INVALID_UPDATE_DEADLINE(HttpStatus.CONFLICT, "수정하려고 하는 과제의 마감기한은 기존의 마감기한보다 빠르면 안됩니다."),
     STUDY_DETAIL_ID_INVALID(HttpStatus.CONFLICT, "수정하려는 스터디 상세정보가 서버에 존재하지 않거나 유효하지 않습니다."),
-    STUDY_DETAIL_SESSION_SIZE_MISMATCH(HttpStatus.BAD_REQUEST, "스터디 커리큘럼의 총 개수가 일치하지 않습니다."),
+    STUDY_DETAIL_CURRICULUM_SIZE_MISMATCH(HttpStatus.BAD_REQUEST, "스터디 커리큘럼의 총 개수가 일치하지 않습니다."),
     // StudyHistory
     STUDY_HISTORY_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 스터디 수강 기록입니다."),
     STUDY_HISTORY_DUPLICATE(HttpStatus.CONFLICT, "이미 해당 스터디를 신청했습니다."),

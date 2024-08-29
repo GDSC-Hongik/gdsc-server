@@ -123,7 +123,7 @@ public class WebSecurityConfig {
                 .requestMatchers("/admin/**")
                 .hasRole("ADMIN")
                 .requestMatchers("/mentor/**")
-                .hasRole("MENTOR")
+                .hasAnyRole("MENTOR", "ADMIN")
                 .anyRequest()
                 .authenticated());
 
