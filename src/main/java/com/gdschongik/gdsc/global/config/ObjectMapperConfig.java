@@ -2,6 +2,7 @@ package com.gdschongik.gdsc.global.config;
 
 import static com.gdschongik.gdsc.global.common.constant.RegexConstant.DATE;
 import static com.gdschongik.gdsc.global.common.constant.RegexConstant.DATETIME;
+import static com.gdschongik.gdsc.global.common.constant.RegexConstant.ZONED_DATETIME;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
@@ -11,11 +12,13 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,7 +28,7 @@ public class ObjectMapperConfig {
     @Bean
     public ObjectMapper objectMapper() {
         ObjectMapper mapper = new ObjectMapper();
-        SimpleModule module = new SimpleModule();
+        JavaTimeModule module = new JavaTimeModule();
 
         // LocalDate
         module.addSerializer(LocalDate.class, new LocalDateSerializer());
@@ -38,6 +41,10 @@ public class ObjectMapperConfig {
         // LocalTime
         module.addSerializer(LocalTime.class, new LocalTimeSerializer());
         module.addDeserializer(LocalTime.class, new LocalTimeDeserializer());
+
+        // ZonedDateTime
+        module.addSerializer(ZonedDateTime.class, new ZonedDateTimeSerializer());
+        module.addDeserializer(ZonedDateTime.class, new ZonedDateTimeDeserializer());
 
         mapper.registerModule(module);
         return mapper;
@@ -105,6 +112,25 @@ public class ObjectMapperConfig {
             int nano = node.get("nano").asInt();
 
             return LocalTime.of(hour, minute, second, nano);
+        }
+    }
+
+    public class ZonedDateTimeSerializer extends JsonSerializer<ZonedDateTime> {
+        @Override
+        public void serialize(ZonedDateTime value, JsonGenerator generator, SerializerProvider serializers)
+                throws IOException {
+            generator.writeString(
+                    value.format(DateTimeFormatter.ofPattern(DATETIME).withZone(ZoneId.of("Asia/Seoul"))));
+        }
+    }
+
+    public class ZonedDateTimeDeserializer extends JsonDeserializer<ZonedDateTime> {
+        @Override
+        public ZonedDateTime deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
+                throws IOException {
+            return ZonedDateTime.parse(
+                    jsonParser.getValueAsString(),
+                    DateTimeFormatter.ofPattern(ZONED_DATETIME).withZone(ZoneId.of("Asia/Seoul")));
         }
     }
 }
