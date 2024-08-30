@@ -42,7 +42,7 @@ public class StudentStudyService {
         Member currentMember = memberUtil.getCurrentMember();
         List<StudyHistory> studyHistories = studyHistoryRepository.findAllByStudent(currentMember);
         Optional<Study> appliedStudy = studyHistories.stream()
-                .filter(StudyHistory::isStudyOngoing)
+                .filter(StudyHistory::isWithinApplicationAndCourse)
                 .map(StudyHistory::getStudy)
                 .findFirst();
         List<StudyResponse> studyResponses = studyRepository.findAll().stream()
@@ -106,7 +106,7 @@ public class StudentStudyService {
     public StudentMyCurrentStudyResponse getMyCurrentStudy() {
         Member currentMember = memberUtil.getCurrentMember();
         StudyHistory studyHistory = studyHistoryRepository.findAllByStudent(currentMember).stream()
-                .filter(StudyHistory::isStudyOngoing)
+                .filter(StudyHistory::isWithinApplicationAndCourse)
                 .findFirst()
                 .orElse(null);
         return StudentMyCurrentStudyResponse.from(studyHistory);

@@ -175,7 +175,7 @@ public class Study extends BaseSemesterEntity {
         return applicationPeriod.isOpen();
     }
 
-    public boolean isStudyOngoing() {
+    public boolean isWithinApplicationAndCourse() {
         LocalDateTime now = LocalDateTime.now();
         return applicationPeriod.getStartDate().isBefore(now)
                 && period.getEndDate().isAfter(now);
