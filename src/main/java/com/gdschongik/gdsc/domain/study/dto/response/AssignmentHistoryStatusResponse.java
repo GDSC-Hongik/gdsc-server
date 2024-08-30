@@ -1,7 +1,5 @@
 package com.gdschongik.gdsc.domain.study.dto.response;
 
-import static com.gdschongik.gdsc.domain.study.domain.SubmissionFailureType.NOT_SUBMITTED;
-
 import com.gdschongik.gdsc.domain.study.domain.*;
 import com.gdschongik.gdsc.domain.study.domain.vo.Assignment;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -34,7 +32,7 @@ public record AssignmentHistoryStatusResponse(
                     studyDetail.getAssignment().getDescriptionLink(),
                     studyDetail.getAssignment().getDeadline(),
                     null,
-                    NOT_SUBMITTED,
+                    null,
                     null);
         }
 
