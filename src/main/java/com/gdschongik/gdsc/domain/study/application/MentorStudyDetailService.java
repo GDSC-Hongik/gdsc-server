@@ -58,7 +58,7 @@ public class MentorStudyDetailService {
     }
 
     @Transactional
-    public void publishStudyAssignment(Long studyDetailId, AssignmentCreateUpdateRequest request) {
+    public AssignmentResponse publishStudyAssignment(Long studyDetailId, AssignmentCreateUpdateRequest request) {
         Member currentMember = memberUtil.getCurrentMember();
         StudyDetail studyDetail = studyDetailRepository
                 .findById(studyDetailId)
@@ -67,13 +67,15 @@ public class MentorStudyDetailService {
         studyDetailValidator.validatePublishStudyAssignment(currentMember, studyDetail, request);
 
         studyDetail.publishAssignment(request.title(), request.deadLine(), request.descriptionNotionLink());
-        studyDetailRepository.save(studyDetail);
+        StudyDetail savedStudyDetail = studyDetailRepository.save(studyDetail);
 
         log.info("[MentorStudyDetailService] 과제 개설 완료: studyDetailId={}", studyDetailId);
+
+        return AssignmentResponse.from(savedStudyDetail);
     }
 
     @Transactional
-    public void updateStudyAssignment(Long studyDetailId, AssignmentCreateUpdateRequest request) {
+    public AssignmentResponse updateStudyAssignment(Long studyDetailId, AssignmentCreateUpdateRequest request) {
         Member currentMember = memberUtil.getCurrentMember();
         StudyDetail studyDetail = studyDetailRepository
                 .findById(studyDetailId)
@@ -82,9 +84,11 @@ public class MentorStudyDetailService {
         studyDetailValidator.validateUpdateStudyAssignment(currentMember, studyDetail, request);
 
         studyDetail.updateAssignment(request.title(), request.deadLine(), request.descriptionNotionLink());
-        studyDetailRepository.save(studyDetail);
+        StudyDetail savedStudyDetail = studyDetailRepository.save(studyDetail);
 
         log.info("[MentorStudyDetailService] 과제 수정 완료: studyDetailId={}", studyDetailId);
+
+        return AssignmentResponse.from(savedStudyDetail);
     }
 
     @Transactional(readOnly = true)
