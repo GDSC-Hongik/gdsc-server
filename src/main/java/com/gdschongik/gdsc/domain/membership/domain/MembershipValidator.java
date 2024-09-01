@@ -13,15 +13,15 @@ import lombok.RequiredArgsConstructor;
 public class MembershipValidator {
 
     public void validateMembershipSubmit(
-            Member currentMember, RecruitmentRound recruitmentRound, boolean isMembershipAlreadySubmitted) {
+            Member currentMember, RecruitmentRound recruitmentRound, boolean isMembershipDuplicate) {
         // 준회원인지 검증
         // TODO: 어드민인 경우 리쿠르팅 지원 및 결제에 대한 정책 검토 필요. 현재는 불가능하도록 설정
         if (!currentMember.isAssociate()) {
             throw new CustomException(MEMBERSHIP_NOT_APPLICABLE);
         }
 
-        // 이미 접수한 멤버십이 있는지 검증
-        if (isMembershipAlreadySubmitted) {
+        // 이미 멤버십이 있는지 검증
+        if (isMembershipDuplicate) {
             throw new CustomException(MEMBERSHIP_ALREADY_SUBMITTED);
         }
 

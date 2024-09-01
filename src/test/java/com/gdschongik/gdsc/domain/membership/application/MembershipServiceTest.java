@@ -37,6 +37,8 @@ public class MembershipServiceTest extends IntegrationTest {
                     .isInstanceOf(CustomException.class)
                     .hasMessage(RECRUITMENT_ROUND_NOT_FOUND.getMessage());
         }
+
+        // todo: 1차 모집시 멤버십 생성 후 실제 가입은 하지 않고 2차 모집 시 가입하려고 하는 케이스 추가
     }
 
     @Test
