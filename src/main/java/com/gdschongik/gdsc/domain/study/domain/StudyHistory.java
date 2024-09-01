@@ -56,7 +56,7 @@ public class StudyHistory extends BaseEntity {
     }
 
     // 데이터 전달 로직
-    public boolean isStudyOngoing() {
-        return study.isStudyOngoing();
+    public boolean isWithinApplicationAndCourse() {
+        return study.isWithinApplicationAndCourse();
     }
 }

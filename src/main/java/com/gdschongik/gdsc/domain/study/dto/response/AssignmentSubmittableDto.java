@@ -28,7 +28,7 @@ public record AssignmentSubmittableDto(
         }
 
         if (assignmentHistory == null) {
-            return notSubmittedAssignment(studyDetail, assignment);
+            return beforeAssignmentSubmit(studyDetail, assignment);
         }
 
         return new AssignmentSubmittableDto(
@@ -48,16 +48,16 @@ public record AssignmentSubmittableDto(
                 studyDetail.getId(), assignment.getStatus(), studyDetail.getWeek(), null, null, null, null, null, null);
     }
 
-    private static AssignmentSubmittableDto notSubmittedAssignment(StudyDetail studyDetail, Assignment assignment) {
+    private static AssignmentSubmittableDto beforeAssignmentSubmit(StudyDetail studyDetail, Assignment assignment) {
         return new AssignmentSubmittableDto(
                 studyDetail.getId(),
                 assignment.getStatus(),
                 studyDetail.getWeek(),
                 assignment.getTitle(),
-                AssignmentSubmissionStatus.FAILURE,
+                null,
                 assignment.getDescriptionLink(),
                 assignment.getDeadline(),
                 null,
-                SubmissionFailureType.NOT_SUBMITTED);
+                null);
     }
 }

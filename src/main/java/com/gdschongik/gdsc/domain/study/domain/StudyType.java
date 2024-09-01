@@ -7,8 +7,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum StudyType {
     ASSIGNMENT("과제 스터디"),
-    ONLINE("온라인 커리큘럼"),
-    OFFLINE("오프라인 커리큘럼");
+    ONLINE("온라인 스터디"),
+    OFFLINE("오프라인 스터디");
 
     private final String value;
 }
