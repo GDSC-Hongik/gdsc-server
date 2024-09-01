@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 
 public record AssignmentResponse(
         Long studyDetailId,
+        @Schema(description = "스터디 이름") String studyTitle,
         @Schema(description = "과제 제목") String title,
         @Schema(description = "마감 기한") LocalDateTime deadline,
         @Schema(description = "주차") Long week,
@@ -17,6 +18,7 @@ public record AssignmentResponse(
         Assignment assignment = studyDetail.getAssignment();
         return new AssignmentResponse(
                 studyDetail.getId(),
+                studyDetail.getStudy().getTitle(),
                 assignment.getTitle(),
                 assignment.getDeadline(),
                 studyDetail.getWeek(),

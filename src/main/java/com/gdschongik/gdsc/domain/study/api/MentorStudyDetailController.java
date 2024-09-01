@@ -30,18 +30,18 @@ public class MentorStudyDetailController {
 
     @Operation(summary = "스터디 과제 수정", description = "멘토만 과제를 수정할 수 있습니다.")
     @PatchMapping("/{studyDetailId}/assignments")
-    public ResponseEntity<Void> updateStudyAssignment(
+    public ResponseEntity<AssignmentResponse> updateStudyAssignment(
             @PathVariable Long studyDetailId, @Valid @RequestBody AssignmentCreateUpdateRequest request) {
-        mentorStudyDetailService.updateStudyAssignment(studyDetailId, request);
-        return ResponseEntity.ok().build();
+        AssignmentResponse response = mentorStudyDetailService.updateStudyAssignment(studyDetailId, request);
+        return ResponseEntity.ok().body(response);
     }
 
     @Operation(summary = "스터디 과제 개설", description = "멘토만 과제를 개설할 수 있습니다.")
     @PutMapping("/{studyDetailId}/assignments")
-    public ResponseEntity<Void> publishStudyAssignment(
+    public ResponseEntity<AssignmentResponse> publishStudyAssignment(
             @PathVariable Long studyDetailId, @Valid @RequestBody AssignmentCreateUpdateRequest request) {
-        mentorStudyDetailService.publishStudyAssignment(studyDetailId, request);
-        return ResponseEntity.ok().build();
+        AssignmentResponse response = mentorStudyDetailService.publishStudyAssignment(studyDetailId, request);
+        return ResponseEntity.ok().body(response);
     }
 
     @Operation(summary = "스터디 주차별 과제 목록 조회", description = "주차별 스터디 과제 목록을 조회합니다.")
