@@ -69,10 +69,10 @@ public class MembershipService {
                 .findById(recruitmentRoundId)
                 .orElseThrow(() -> new CustomException(RECRUITMENT_ROUND_NOT_FOUND));
 
-        boolean isMembershipAlreadySubmitted =
-                membershipRepository.existsByMemberAndRecruitment(currentMember, recruitmentRound.getRecruitment());
+        boolean isMembershipDuplicate = membershipRepository.existsByMemberAndRecruitmentWithSatisfiedRequirements(
+                currentMember, recruitmentRound.getRecruitment());
 
-        membershipValidator.validateMembershipSubmit(currentMember, recruitmentRound, isMembershipAlreadySubmitted);
+        membershipValidator.validateMembershipSubmit(currentMember, recruitmentRound, isMembershipDuplicate);
 
         Membership membership = Membership.createMembership(currentMember, recruitmentRound);
         membershipRepository.save(membership);

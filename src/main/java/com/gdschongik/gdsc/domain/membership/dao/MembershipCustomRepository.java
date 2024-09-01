@@ -5,5 +5,5 @@ import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 
 public interface MembershipCustomRepository {
 
-    boolean existsByMemberAndRecruitment(Member member, Recruitment recruitment);
+    boolean existsByMemberAndRecruitmentWithSatisfiedRequirements(Member member, Recruitment recruitment);
 }
