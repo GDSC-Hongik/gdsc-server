@@ -7,6 +7,7 @@ import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.study.dao.AssignmentHistoryRepository;
 import com.gdschongik.gdsc.domain.study.dao.StudyDetailRepository;
 import com.gdschongik.gdsc.domain.study.dao.StudyHistoryRepository;
+import com.gdschongik.gdsc.domain.study.dao.StudyRepository;
 import com.gdschongik.gdsc.domain.study.domain.AssignmentHistory;
 import com.gdschongik.gdsc.domain.study.domain.AssignmentHistoryGrader;
 import com.gdschongik.gdsc.domain.study.domain.AssignmentSubmissionFetcher;
@@ -43,14 +44,15 @@ public class StudentStudyHistoryService {
     private final StudyHistoryValidator studyHistoryValidator;
     private final StudyAssignmentHistoryValidator studyAssignmentHistoryValidator;
     private final AssignmentHistoryGrader assignmentHistoryGrader;
+    private final StudyRepository studyRepository;
 
     @Transactional
-    public void updateRepository(Long studyHistoryId, RepositoryUpdateRequest request) throws IOException {
+    public void updateRepository(Long studyId, RepositoryUpdateRequest request) throws IOException {
         Member currentMember = memberUtil.getCurrentMember();
+        Study study = studyRepository.findById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
         StudyHistory studyHistory = studyHistoryRepository
-                .findById(studyHistoryId)
+                .findByStudentAndStudy(currentMember, study)
                 .orElseThrow(() -> new CustomException(STUDY_HISTORY_NOT_FOUND));
-        Study study = studyHistory.getStudy();
 
         boolean isAnyAssignmentSubmitted =
                 assignmentHistoryRepository.existsSubmittedAssignmentByMemberAndStudy(currentMember, study);
