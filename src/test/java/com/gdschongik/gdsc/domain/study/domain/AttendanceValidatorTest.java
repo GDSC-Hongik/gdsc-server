@@ -63,7 +63,7 @@ public class AttendanceValidatorTest {
         }
 
         @Test
-        void 출석을_이미_진행했으면_실패한다() {
+        void 이미_출석했다면_실패한다() {
             // given
             Member mentor = fixtureHelper.createAssociateMember(1L);
 
