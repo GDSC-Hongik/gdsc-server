@@ -13,7 +13,7 @@ public class RegexConstant {
     public static final String DATE = "yyyy-MM-dd";
     public static final String ACADEMIC_YEAR = "^[0-9]{4}$";
     public static final String GITHUB_REPOSITORY =
-            "^https:\\/\\/github\\.com\\/[A-Za-z0-9]+(-[A-Za-z0-9]+)*\\/[A-Za-z0-9]+(-[A-Za-z0-9]+)*$";
+            "^https:\\/\\/github\\.com\\/[A-Za-z0-9]+(-[A-Za-z0-9]+)*\\/[A-Za-z0-9._-]+$";
 
     public static final String ATTENDANCE_NUMBER = "^[0-9]{4}$";
 
