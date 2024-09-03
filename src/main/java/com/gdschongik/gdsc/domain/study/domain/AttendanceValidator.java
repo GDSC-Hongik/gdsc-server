@@ -23,7 +23,7 @@ public class AttendanceValidator {
 
         // 출석체크 번호 검증
         if (isAlreadyAttended) {
-            throw new CustomException(ALREADY_ATTENDED_STUDY_DETAIL);
+            throw new CustomException(STUDY_DETAIL_ALREADY_ATTENDED);
         }
     }
 }

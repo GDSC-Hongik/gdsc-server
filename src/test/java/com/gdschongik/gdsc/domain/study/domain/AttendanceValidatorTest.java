@@ -1,9 +1,9 @@
 package com.gdschongik.gdsc.domain.study.domain;
 
 import static com.gdschongik.gdsc.global.common.constant.StudyConstant.ATTENDANCE_NUMBER;
-import static com.gdschongik.gdsc.global.exception.ErrorCode.ALREADY_ATTENDED_STUDY_DETAIL;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.ATTENDANCE_DATE_INVALID;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.ATTENDANCE_NUMBER_MISMATCH;
+import static com.gdschongik.gdsc.global.exception.ErrorCode.STUDY_DETAIL_ALREADY_ATTENDED;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
@@ -79,7 +79,7 @@ public class AttendanceValidatorTest {
             assertThatThrownBy(() ->
                             attendanceValidator.validateAttendance(studyDetail, ATTENDANCE_NUMBER, attendanceDay, true))
                     .isInstanceOf(CustomException.class)
-                    .hasMessage(ALREADY_ATTENDED_STUDY_DETAIL.getMessage());
+                    .hasMessage(STUDY_DETAIL_ALREADY_ATTENDED.getMessage());
         }
     }
 }
