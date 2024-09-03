@@ -105,7 +105,7 @@ public class MentorStudyDetailService {
         return studyDetails.stream()
                 .filter(studyDetail -> studyDetail.isAttendanceDayNotPassed(LocalDate.now()))
                 .map(StudyMentorAttendanceResponse::from)
-                .limit(2)
+                .limit(Math.min(2, studyDetails.size()))
                 .toList();
     }
 }
