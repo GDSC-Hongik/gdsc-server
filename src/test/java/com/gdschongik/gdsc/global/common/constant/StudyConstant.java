@@ -39,7 +39,7 @@ public class StudyConstant {
     public static final String CURRICULUM_DESCRIPTION = "curriculumDescription";
 
     // AssignmentHistory
-    public static final String SUBMISSION_LINK = "https://github.com/ownername/reponame/blob/main/week1/WIL.md";
+    public static final String SUBMISSION_LINK = "https://github.com/ownername/reponame/blob/main/week1/wil.md";
     public static final String COMMIT_HASH = "aa11bb22cc33";
     public static final Integer CONTENT_LENGTH = 2000;
     public static final LocalDateTime COMMITTED_AT = LocalDateTime.of(2024, 9, 8, 0, 0);
