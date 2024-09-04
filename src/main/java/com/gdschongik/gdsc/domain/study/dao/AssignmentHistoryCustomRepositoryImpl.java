@@ -7,7 +7,6 @@ import static com.gdschongik.gdsc.domain.study.domain.QStudyDetail.studyDetail;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.study.domain.AssignmentHistory;
 import com.gdschongik.gdsc.domain.study.domain.Study;
-import com.gdschongik.gdsc.domain.study.domain.StudyHistory;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
@@ -56,10 +55,14 @@ public class AssignmentHistoryCustomRepositoryImpl implements AssignmentHistoryC
     }
 
     @Override
-    public void deleteByStudyHistory(StudyHistory studyHistory) {
+    public void deleteByStudyIdAndMemberId(Long studyId, Long memberId) {
         queryFactory
                 .delete(assignmentHistory)
-                .where(eqMember(studyHistory.getStudent()).and(eqStudy(studyHistory.getStudy())))
+                .where(eqMemberId(memberId), eqStudyId(studyId))
                 .execute();
+    }
+
+    private BooleanExpression eqMemberId(Long memberId) {
+        return memberId != null ? assignmentHistory.member.id.eq(memberId) : null;
     }
 }

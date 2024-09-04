@@ -16,8 +16,8 @@ public class StudyEventHandler {
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     public void handleStudyApplyCanceledEvent(StudyApplyCanceledEvent event) {
-        log.info("[StudyEventHandler] 스터디 수강신청 취소 이벤트 수신: studyHistoryId={}", event.studyHistoryId());
-        commonStudyService.deleteAttendanceByStudyHistory(event.studyHistoryId());
-        commonStudyService.deleteAssignmentHistoryByStudyHistory(event.studyHistoryId());
+        log.info("[StudyEventHandler] 스터디 수강신청 취소 이벤트 수신: studyId={}, memberId={}", event.studyId(), event.memberId());
+        commonStudyService.deleteAttendance(event.studyId(), event.memberId());
+        commonStudyService.deleteAssignmentHistory(event.studyId(), event.memberId());
     }
 }

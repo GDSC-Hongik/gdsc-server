@@ -6,7 +6,6 @@ import static com.gdschongik.gdsc.domain.study.domain.QStudyDetail.studyDetail;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.study.domain.Attendance;
-import com.gdschongik.gdsc.domain.study.domain.StudyHistory;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
@@ -36,13 +35,10 @@ public class AttendanceCustomRepositoryImpl implements AttendanceCustomRepositor
     }
 
     @Override
-    public void deleteByStudyHistory(StudyHistory studyHistory) {
+    public void deleteByStudyIdAndMemberId(Long studyId, Long memberId) {
         queryFactory
                 .delete(attendance)
-                .where(attendance
-                        .student
-                        .eq(studyHistory.getStudent())
-                        .and(attendance.studyDetail.study.eq(studyHistory.getStudy())))
+                .where(eqMemberId(memberId), eqStudyId(studyId))
                 .execute();
     }
 }

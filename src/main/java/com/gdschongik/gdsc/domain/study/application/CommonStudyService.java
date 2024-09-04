@@ -59,22 +59,14 @@ public class CommonStudyService {
     /**
      * 이벤트 핸들러에서 사용되므로, `@Transactional` 을 사용하지 않습니다.
      */
-    public void deleteAttendanceByStudyHistory(Long studyHistoryId) {
-        StudyHistory studyHistory = studyHistoryRepository
-                .findById(studyHistoryId)
-                .orElseThrow(() -> new CustomException(STUDY_HISTORY_NOT_FOUND));
-
-        attendanceRepository.deleteByStudyHistory(studyHistory);
+    public void deleteAttendance(Long studyId, Long memberId) {
+        attendanceRepository.deleteByStudyIdAndMemberId(studyId, memberId);
     }
 
     /**
      * 이벤트 핸들러에서 사용되므로, `@Transactional` 을 사용하지 않습니다.
      */
-    public void deleteAssignmentHistoryByStudyHistory(Long studyHistoryId) {
-        StudyHistory studyHistory = studyHistoryRepository
-                .findById(studyHistoryId)
-                .orElseThrow(() -> new CustomException(STUDY_HISTORY_NOT_FOUND));
-
-        assignmentHistoryRepository.deleteByStudyHistory(studyHistory);
+    public void deleteAssignmentHistory(Long studyId, Long memberId) {
+        assignmentHistoryRepository.deleteByStudyIdAndMemberId(studyId, memberId);
     }
 }

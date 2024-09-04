@@ -51,7 +51,7 @@ public class StudyHistory extends BaseEntity {
 
     @PreRemove
     private void preRemove() {
-        registerEvent(new StudyApplyCanceledEvent(this.id));
+        registerEvent(new StudyApplyCanceledEvent(this.study.getId(), this.student.getId()));
     }
 
     /**
