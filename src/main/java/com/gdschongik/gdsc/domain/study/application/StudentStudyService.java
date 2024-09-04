@@ -70,6 +70,7 @@ public class StudentStudyService {
 
     @Transactional
     public void cancelStudyApply(Long studyId) {
+        // TODO: 통합 테스트 통해 수강철회 관련 이벤트 처리 확인
         Study study = studyRepository.findById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
         Member currentMember = memberUtil.getCurrentMember();
 
