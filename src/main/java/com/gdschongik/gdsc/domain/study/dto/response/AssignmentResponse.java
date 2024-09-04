@@ -5,7 +5,6 @@ import com.gdschongik.gdsc.domain.study.domain.StudyStatus;
 import com.gdschongik.gdsc.domain.study.domain.vo.Assignment;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 public record AssignmentResponse(
         Long studyDetailId,
@@ -15,7 +14,7 @@ public record AssignmentResponse(
         @Schema(description = "주차") Long week,
         @Schema(description = "과제 명세 링크") String descriptionLink,
         @Schema(description = "과제 상태") StudyStatus assignmentStatus,
-        @Schema(description = "커리큘럼 시작일") LocalTime curriculumStartAt) {
+        @Schema(description = "커리큘럼 시작일") LocalDateTime studyDetailStartDate) {
     public static AssignmentResponse from(StudyDetail studyDetail) {
         Assignment assignment = studyDetail.getAssignment();
         return new AssignmentResponse(
@@ -26,6 +25,6 @@ public record AssignmentResponse(
                 studyDetail.getWeek(),
                 assignment.getDescriptionLink(),
                 assignment.getStatus(),
-                studyDetail.getCurriculum().getStartAt());
+                studyDetail.getPeriod().getStartDate());
     }
 }
