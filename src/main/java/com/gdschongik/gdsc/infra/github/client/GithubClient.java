@@ -30,8 +30,9 @@ public class GithubClient {
     private final GitHub github;
     private final GitHubConnector gitHubConnector = GitHubConnector.DEFAULT;
 
-    public GHRepository getRepository(String ownerRepo) {
+    public GHRepository getRepository(String repo) {
         try {
+            String ownerRepo = getOwnerRepo(repo);
             return github.getRepository(ownerRepo);
         } catch (IOException e) {
             throw new CustomException(GITHUB_REPOSITORY_NOT_FOUND);
@@ -106,5 +107,10 @@ public class GithubClient {
         } catch (IOException e) {
             throw new CustomException(GITHUB_COMMIT_DATE_FETCH_FAILED);
         }
+    }
+
+    private String getOwnerRepo(String repositoryLink) {
+        int startIndex = repositoryLink.indexOf(GITHUB_DOMAIN) + GITHUB_DOMAIN.length();
+        return repositoryLink.substring(startIndex);
     }
 }

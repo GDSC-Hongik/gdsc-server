@@ -1,6 +1,5 @@
 package com.gdschongik.gdsc.domain.study.application;
 
-import static com.gdschongik.gdsc.global.common.constant.GithubConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
@@ -56,8 +55,7 @@ public class StudentStudyHistoryService {
 
         boolean isAnyAssignmentSubmitted =
                 assignmentHistoryRepository.existsSubmittedAssignmentByMemberAndStudy(currentMember, study);
-        String ownerRepo = getOwnerRepo(request.repositoryLink());
-        GHRepository repository = githubClient.getRepository(ownerRepo);
+        GHRepository repository = githubClient.getRepository(request.repositoryLink());
         // TODO: GHRepository 등을 wrapper로 감싸서 테스트 가능하도록 변경
         studyHistoryValidator.validateUpdateRepository(
                 isAnyAssignmentSubmitted, String.valueOf(repository.getOwner().getId()), currentMember.getOauthId());
@@ -69,11 +67,6 @@ public class StudentStudyHistoryService {
                 "[StudyHistoryService] 레포지토리 입력: studyHistoryId={}, repositoryLink={}",
                 studyHistory.getId(),
                 request.repositoryLink());
-    }
-
-    private String getOwnerRepo(String repositoryLink) {
-        int startIndex = repositoryLink.indexOf(GITHUB_DOMAIN) + GITHUB_DOMAIN.length();
-        return repositoryLink.substring(startIndex);
     }
 
     @Transactional(readOnly = true)
