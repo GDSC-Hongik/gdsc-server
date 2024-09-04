@@ -30,8 +30,9 @@ public class GithubClient {
     private final GitHub github;
     private final GitHubConnector gitHubConnector = GitHubConnector.DEFAULT;
 
-    public GHRepository getRepository(String ownerRepo) {
+    public GHRepository getRepository(String repo) {
         try {
+            String ownerRepo = getOwnerRepo(repo);
             return github.getRepository(ownerRepo);
         } catch (IOException e) {
             throw new CustomException(GITHUB_REPOSITORY_NOT_FOUND);
@@ -59,7 +60,8 @@ public class GithubClient {
     }
 
     private AssignmentSubmission getLatestAssignmentSubmission(String repo, int week) {
-        GHRepository ghRepository = getRepository(repo);
+        String ownerRepo = getOwnerRepo(repo);
+        GHRepository ghRepository = getRepository(ownerRepo);
         String assignmentPath = GITHUB_ASSIGNMENT_PATH.formatted(week);
 
         // GHContent#getSize() 의 경우 한글 문자열을 byte 단위로 계산하기 때문에, 직접 content를 읽어서 길이를 계산
@@ -106,5 +108,10 @@ public class GithubClient {
         } catch (IOException e) {
             throw new CustomException(GITHUB_COMMIT_DATE_FETCH_FAILED);
         }
+    }
+
+    private String getOwnerRepo(String repositoryLink) {
+        int startIndex = repositoryLink.indexOf(GITHUB_DOMAIN) + GITHUB_DOMAIN.length();
+        return repositoryLink.substring(startIndex);
     }
 }
