@@ -90,11 +90,14 @@ public class StudentStudyService {
                 .orElseThrow(() -> new CustomException(STUDY_DETAIL_NOT_FOUND));
         final Member currentMember = memberUtil.getCurrentMember();
         final Study study = studyDetail.getStudy();
+        final boolean isAlreadyAttended =
+                attendanceRepository.existsByStudentIdAndStudyDetailId(currentMember.getId(), studyDetailId);
         final StudyHistory studyHistory = studyHistoryRepository
                 .findByStudentAndStudy(currentMember, study)
                 .orElseThrow(() -> new CustomException(STUDY_HISTORY_NOT_FOUND));
 
-        attendanceValidator.validateAttendance(studyDetail, request.attendanceNumber(), LocalDate.now());
+        attendanceValidator.validateAttendance(
+                studyDetail, request.attendanceNumber(), LocalDate.now(), isAlreadyAttended);
 
         Attendance attendance = Attendance.create(currentMember, studyDetail);
         attendanceRepository.save(attendance);
