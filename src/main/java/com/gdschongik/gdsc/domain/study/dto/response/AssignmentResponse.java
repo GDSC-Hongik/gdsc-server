@@ -14,7 +14,7 @@ public record AssignmentResponse(
         @Schema(description = "주차") Long week,
         @Schema(description = "과제 명세 링크") String descriptionLink,
         @Schema(description = "과제 상태") StudyStatus assignmentStatus,
-        @Schema(description = "커리큘럼 시작일") LocalDateTime studyDetailStartDate) {
+        @Schema(description = "주차 시작일") LocalDateTime studyDetailStartDate) {
     public static AssignmentResponse from(StudyDetail studyDetail) {
         Assignment assignment = studyDetail.getAssignment();
         return new AssignmentResponse(
