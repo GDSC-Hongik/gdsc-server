@@ -1,5 +1,6 @@
 package com.gdschongik.gdsc.domain.study.application;
 
+import static com.gdschongik.gdsc.domain.study.domain.StudyStatus.OPEN;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.STUDY_NOT_FOUND;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
@@ -139,7 +140,7 @@ public class MentorStudyService {
                     matchingCurriculum.title(),
                     matchingCurriculum.description(),
                     matchingCurriculum.difficulty(),
-                    matchingCurriculum.status());
+                    OPEN);
         }
         studyDetailRepository.saveAll(studyDetails);
         log.info("[MentorStudyService] 스터디 상세정보 커리큘럼 작성 완료: studyDetailId={}", studyDetails);
