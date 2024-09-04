@@ -30,11 +30,7 @@ public class StudyDetailValidator {
     }
 
     private void validateDeadLine(LocalDateTime deadline, LocalDateTime studyStartDate) {
-        if (deadline.isBefore(LocalDateTime.now())) {
-            throw new CustomException(ASSIGNMENT_DEADLINE_INVALID);
-        }
-
-        if (deadline.isBefore(studyStartDate)) {
+        if (deadline.isBefore(LocalDateTime.now()) || deadline.isBefore(studyStartDate)) {
             throw new CustomException(ASSIGNMENT_DEADLINE_INVALID);
         }
     }
