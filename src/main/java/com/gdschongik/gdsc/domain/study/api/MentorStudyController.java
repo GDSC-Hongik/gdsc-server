@@ -3,7 +3,7 @@ package com.gdschongik.gdsc.domain.study.api;
 import com.gdschongik.gdsc.domain.study.application.MentorStudyService;
 import com.gdschongik.gdsc.domain.study.dto.request.StudyAnnouncementCreateUpdateRequest;
 import com.gdschongik.gdsc.domain.study.dto.request.StudyUpdateRequest;
-import com.gdschongik.gdsc.domain.study.dto.response.MentorStudyResponse;
+import com.gdschongik.gdsc.domain.study.dto.response.StudyResponse;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyStudentResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -30,8 +30,8 @@ public class MentorStudyController {
 
     @Operation(summary = "내 스터디 조회", description = "내가 멘토로 있는 스터디를 조회합니다.")
     @GetMapping("/me")
-    public ResponseEntity<List<MentorStudyResponse>> getStudiesInCharge() {
-        List<MentorStudyResponse> response = mentorStudyService.getStudiesInCharge();
+    public ResponseEntity<List<StudyResponse>> getStudiesInCharge() {
+        List<StudyResponse> response = mentorStudyService.getStudiesInCharge();
         return ResponseEntity.ok(response);
     }
 
