@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface AttendanceCustomRepository {
     List<Attendance> findByMemberAndStudyId(Member member, Long studyId);
+
+    void deleteByStudyIdAndMemberId(Long studyId, Long memberId);
 }

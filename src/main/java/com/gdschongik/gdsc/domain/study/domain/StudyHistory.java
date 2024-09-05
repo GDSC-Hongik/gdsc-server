@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PreRemove;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.AccessLevel;
@@ -46,6 +47,11 @@ public class StudyHistory extends BaseEntity {
 
     public static StudyHistory create(Member student, Study study) {
         return StudyHistory.builder().student(student).study(study).build();
+    }
+
+    @PreRemove
+    private void preRemove() {
+        registerEvent(new StudyApplyCanceledEvent(this.study.getId(), this.student.getId()));
     }
 
     /**

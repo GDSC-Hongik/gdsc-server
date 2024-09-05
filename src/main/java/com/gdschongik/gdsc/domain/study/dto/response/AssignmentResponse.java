@@ -13,7 +13,8 @@ public record AssignmentResponse(
         @Schema(description = "마감 기한") LocalDateTime deadline,
         @Schema(description = "주차") Long week,
         @Schema(description = "과제 명세 링크") String descriptionLink,
-        @Schema(description = "과제 상태") StudyStatus assignmentStatus) {
+        @Schema(description = "과제 상태") StudyStatus assignmentStatus,
+        @Schema(description = "주차 시작일") LocalDateTime studyDetailStartDate) {
     public static AssignmentResponse from(StudyDetail studyDetail) {
         Assignment assignment = studyDetail.getAssignment();
         return new AssignmentResponse(
@@ -23,6 +24,7 @@ public record AssignmentResponse(
                 assignment.getDeadline(),
                 studyDetail.getWeek(),
                 assignment.getDescriptionLink(),
-                assignment.getStatus());
+                assignment.getStatus(),
+                studyDetail.getPeriod().getStartDate());
     }
 }

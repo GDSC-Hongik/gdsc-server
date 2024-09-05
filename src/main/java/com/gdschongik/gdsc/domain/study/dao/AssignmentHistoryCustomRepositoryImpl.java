@@ -53,4 +53,16 @@ public class AssignmentHistoryCustomRepositoryImpl implements AssignmentHistoryC
     private BooleanExpression eqStudyId(Long studyId) {
         return studyId != null ? studyDetail.study.id.eq(studyId) : null;
     }
+
+    @Override
+    public void deleteByStudyIdAndMemberId(Long studyId, Long memberId) {
+        queryFactory
+                .delete(assignmentHistory)
+                .where(eqMemberId(memberId), eqStudyId(studyId))
+                .execute();
+    }
+
+    private BooleanExpression eqMemberId(Long memberId) {
+        return memberId != null ? assignmentHistory.member.id.eq(memberId) : null;
+    }
 }

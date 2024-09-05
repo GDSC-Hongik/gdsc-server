@@ -46,6 +46,7 @@ public class StudentStudyDetailController {
         return ResponseEntity.ok(response);
     }
 
+    @Deprecated
     @Operation(summary = "이번주 제출해야 할 과제 조회", description = "마감 기한이 이번주까지인 과제를 조회합니다.")
     @GetMapping("/assignments/upcoming")
     public ResponseEntity<List<AssignmentHistoryStatusResponse>> getUpcomingAssignments(

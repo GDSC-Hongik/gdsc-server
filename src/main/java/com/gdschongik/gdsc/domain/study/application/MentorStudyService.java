@@ -15,7 +15,7 @@ import com.gdschongik.gdsc.domain.study.domain.StudyValidator;
 import com.gdschongik.gdsc.domain.study.dto.request.StudyAnnouncementCreateUpdateRequest;
 import com.gdschongik.gdsc.domain.study.dto.request.StudyCurriculumCreateRequest;
 import com.gdschongik.gdsc.domain.study.dto.request.StudyUpdateRequest;
-import com.gdschongik.gdsc.domain.study.dto.response.MentorStudyResponse;
+import com.gdschongik.gdsc.domain.study.dto.response.StudyResponse;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyStudentResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
@@ -42,10 +42,10 @@ public class MentorStudyService {
     private final StudyDetailValidator studyDetailValidator;
 
     @Transactional(readOnly = true)
-    public List<MentorStudyResponse> getStudiesInCharge() {
+    public List<StudyResponse> getStudiesInCharge() {
         Member currentMember = memberUtil.getCurrentMember();
         List<Study> myStudies = studyRepository.findAllByMentor(currentMember);
-        return myStudies.stream().map(MentorStudyResponse::from).toList();
+        return myStudies.stream().map(StudyResponse::from).toList();
     }
 
     @Transactional(readOnly = true)

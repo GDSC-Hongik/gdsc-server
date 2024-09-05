@@ -33,4 +33,12 @@ public class AttendanceCustomRepositoryImpl implements AttendanceCustomRepositor
     private BooleanExpression eqStudyId(Long studyId) {
         return studyId != null ? attendance.studyDetail.study.id.eq(studyId) : null;
     }
+
+    @Override
+    public void deleteByStudyIdAndMemberId(Long studyId, Long memberId) {
+        queryFactory
+                .delete(attendance)
+                .where(eqMemberId(memberId), eqStudyId(studyId))
+                .execute();
+    }
 }
