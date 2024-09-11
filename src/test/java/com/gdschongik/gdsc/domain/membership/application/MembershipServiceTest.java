@@ -3,6 +3,7 @@ package com.gdschongik.gdsc.domain.membership.application;
 import static com.gdschongik.gdsc.domain.common.model.RequirementStatus.SATISFIED;
 import static com.gdschongik.gdsc.domain.member.domain.MemberRole.ASSOCIATE;
 import static com.gdschongik.gdsc.global.common.constant.RecruitmentConstant.*;
+import static com.gdschongik.gdsc.global.common.constant.TemporalConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 
