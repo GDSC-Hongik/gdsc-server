@@ -3,8 +3,8 @@ package com.gdschongik.gdsc.helper;
 import static com.gdschongik.gdsc.domain.member.domain.Department.*;
 import static com.gdschongik.gdsc.global.common.constant.MemberConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.RecruitmentConstant.*;
-import static com.gdschongik.gdsc.global.common.constant.SemesterConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.StudyConstant.*;
+import static com.gdschongik.gdsc.global.common.constant.TemporalConstant.*;
 import static org.mockito.Mockito.*;
 
 import com.gdschongik.gdsc.domain.common.model.SemesterType;

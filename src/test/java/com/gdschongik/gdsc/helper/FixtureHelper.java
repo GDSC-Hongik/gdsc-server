@@ -5,8 +5,8 @@ import static com.gdschongik.gdsc.domain.member.domain.MemberManageRole.ADMIN;
 import static com.gdschongik.gdsc.domain.member.domain.MemberStudyRole.MENTOR;
 import static com.gdschongik.gdsc.global.common.constant.MemberConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.RecruitmentConstant.*;
-import static com.gdschongik.gdsc.global.common.constant.SemesterConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.StudyConstant.*;
+import static com.gdschongik.gdsc.global.common.constant.TemporalConstant.*;
 
 import com.gdschongik.gdsc.domain.common.model.SemesterType;
 import com.gdschongik.gdsc.domain.common.vo.Money;
