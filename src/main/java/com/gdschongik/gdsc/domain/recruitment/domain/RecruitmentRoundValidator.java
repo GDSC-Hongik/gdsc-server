@@ -1,6 +1,5 @@
 package com.gdschongik.gdsc.domain.recruitment.domain;
 
-import static com.gdschongik.gdsc.domain.recruitment.domain.RoundType.*;
 import static com.gdschongik.gdsc.global.common.constant.TemporalConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
@@ -67,7 +66,7 @@ public class RecruitmentRoundValidator {
     // 학년도, 학기, 모집회차가 모두 같은 경우
     private void validateRoundOverlap(List<RecruitmentRound> recruitmentRounds, RoundType roundType) {
         recruitmentRounds.stream()
-                .filter(recruitmentRound -> recruitmentRound.getRoundType().equals(roundType))
+                .filter(recruitmentRound -> recruitmentRound.getRoundType() == roundType)
                 .findAny()
                 .ifPresent(ignored -> {
                     throw new CustomException(RECRUITMENT_ROUND_TYPE_OVERLAP);
@@ -76,14 +75,14 @@ public class RecruitmentRoundValidator {
 
     // 1차 모집이 없는데 2차 모집을 생성하려고 하는 경우
     private void validateRoundOneExist(List<RecruitmentRound> recruitmentRounds, RoundType roundType) {
-        if (roundType.equals(SECOND) && recruitmentRounds.stream().noneMatch(RecruitmentRound::isFirstRound)) {
+        if (roundType.isSecond() && recruitmentRounds.stream().noneMatch(RecruitmentRound::isFirstRound)) {
             throw new CustomException(ROUND_ONE_DOES_NOT_EXIST);
         }
     }
 
     // 1차 모집을 비워둬서는 안되므로, 1차 모집을 2차 모집으로 수정하려고 하는 경우 예외 발생
     private void validateRoundOneToTwo(RoundType previousRoundType, RoundType newRoundType) {
-        if (previousRoundType.equals(FIRST) && newRoundType.equals(SECOND)) {
+        if (previousRoundType.isFirst() && newRoundType.isSecond()) {
             throw new CustomException(ROUND_ONE_DOES_NOT_EXIST);
         }
     }
