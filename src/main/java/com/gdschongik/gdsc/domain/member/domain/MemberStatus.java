@@ -13,10 +13,10 @@ public enum MemberStatus {
     private final String value;
 
     public boolean isDeleted() {
-        return this.equals(DELETED);
+        return this == DELETED;
     }
 
     public boolean isForbidden() {
-        return this.equals(FORBIDDEN);
+        return this == FORBIDDEN;
     }
 }

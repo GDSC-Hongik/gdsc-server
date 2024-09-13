@@ -94,6 +94,6 @@ public class RecruitmentRound extends BaseSemesterEntity {
     }
 
     public boolean isFirstRound() {
-        return roundType.equals(RoundType.FIRST);
+        return roundType == RoundType.FIRST;
     }
 }
