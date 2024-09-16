@@ -16,6 +16,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,6 +25,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"member_id", "recruitment_round_id"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Membership extends BaseEntity {
 
@@ -59,7 +62,7 @@ public class Membership extends BaseEntity {
 
     // 검증 로직
 
-    public void validateRegularRequirement() {
+    private void validateRegularRequirement() {
         if (isRegularRequirementAllSatisfied()) {
             throw new CustomException(MEMBERSHIP_ALREADY_SATISFIED);
         }

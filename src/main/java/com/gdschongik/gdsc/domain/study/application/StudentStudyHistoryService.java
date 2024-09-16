@@ -1,12 +1,12 @@
 package com.gdschongik.gdsc.domain.study.application;
 
-import static com.gdschongik.gdsc.global.common.constant.GithubConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.study.dao.AssignmentHistoryRepository;
 import com.gdschongik.gdsc.domain.study.dao.StudyDetailRepository;
 import com.gdschongik.gdsc.domain.study.dao.StudyHistoryRepository;
+import com.gdschongik.gdsc.domain.study.dao.StudyRepository;
 import com.gdschongik.gdsc.domain.study.domain.AssignmentHistory;
 import com.gdschongik.gdsc.domain.study.domain.AssignmentHistoryGrader;
 import com.gdschongik.gdsc.domain.study.domain.AssignmentSubmissionFetcher;
@@ -43,19 +43,19 @@ public class StudentStudyHistoryService {
     private final StudyHistoryValidator studyHistoryValidator;
     private final StudyAssignmentHistoryValidator studyAssignmentHistoryValidator;
     private final AssignmentHistoryGrader assignmentHistoryGrader;
+    private final StudyRepository studyRepository;
 
     @Transactional
-    public void updateRepository(Long studyHistoryId, RepositoryUpdateRequest request) throws IOException {
+    public void updateRepository(Long studyId, RepositoryUpdateRequest request) throws IOException {
         Member currentMember = memberUtil.getCurrentMember();
+        Study study = studyRepository.findById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
         StudyHistory studyHistory = studyHistoryRepository
-                .findById(studyHistoryId)
+                .findByStudentAndStudy(currentMember, study)
                 .orElseThrow(() -> new CustomException(STUDY_HISTORY_NOT_FOUND));
-        Study study = studyHistory.getStudy();
 
         boolean isAnyAssignmentSubmitted =
                 assignmentHistoryRepository.existsSubmittedAssignmentByMemberAndStudy(currentMember, study);
-        String ownerRepo = getOwnerRepo(request.repositoryLink());
-        GHRepository repository = githubClient.getRepository(ownerRepo);
+        GHRepository repository = githubClient.getRepository(request.repositoryLink());
         // TODO: GHRepository 등을 wrapper로 감싸서 테스트 가능하도록 변경
         studyHistoryValidator.validateUpdateRepository(
                 isAnyAssignmentSubmitted, String.valueOf(repository.getOwner().getId()), currentMember.getOauthId());
@@ -67,11 +67,6 @@ public class StudentStudyHistoryService {
                 "[StudyHistoryService] 레포지토리 입력: studyHistoryId={}, repositoryLink={}",
                 studyHistory.getId(),
                 request.repositoryLink());
-    }
-
-    private String getOwnerRepo(String repositoryLink) {
-        int startIndex = repositoryLink.indexOf(GITHUB_DOMAIN) + GITHUB_DOMAIN.length();
-        return repositoryLink.substring(startIndex);
     }
 
     @Transactional(readOnly = true)

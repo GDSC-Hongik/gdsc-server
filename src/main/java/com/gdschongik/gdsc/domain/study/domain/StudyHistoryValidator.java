@@ -24,10 +24,10 @@ public class StudyHistoryValidator {
         }
 
         // 이미 듣고 있는 스터디가 있는 경우
-        // todo: StudyHistory가 아닌 Study의 isOngoning 호출하도록 수정
-        boolean isInOngoingStudy = currentMemberStudyHistories.stream().anyMatch(StudyHistory::isStudyOngoing);
+        boolean hasAppliedStudy =
+                currentMemberStudyHistories.stream().anyMatch(StudyHistory::isWithinApplicationAndCourse);
 
-        if (isInOngoingStudy) {
+        if (hasAppliedStudy) {
             throw new CustomException(STUDY_HISTORY_ONGOING_ALREADY_EXISTS);
         }
     }

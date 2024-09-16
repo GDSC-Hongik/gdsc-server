@@ -17,7 +17,6 @@ import com.gdschongik.gdsc.domain.study.dto.response.StudyResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -43,8 +42,8 @@ public class StudentStudyService {
         Member currentMember = memberUtil.getCurrentMember();
         List<StudyHistory> studyHistories = studyHistoryRepository.findAllByStudent(currentMember);
         Optional<Study> appliedStudy = studyHistories.stream()
+                .filter(StudyHistory::isWithinApplicationAndCourse)
                 .map(StudyHistory::getStudy)
-                .filter(Study::isStudyOngoing)
                 .findFirst();
         List<StudyResponse> studyResponses = studyRepository.findAll().stream()
                 .filter(Study::isApplicable)
@@ -71,6 +70,7 @@ public class StudentStudyService {
 
     @Transactional
     public void cancelStudyApply(Long studyId) {
+        // TODO: 통합 테스트 통해 수강철회 관련 이벤트 처리 확인
         Study study = studyRepository.findById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
         Member currentMember = memberUtil.getCurrentMember();
 
@@ -91,24 +91,24 @@ public class StudentStudyService {
                 .orElseThrow(() -> new CustomException(STUDY_DETAIL_NOT_FOUND));
         final Member currentMember = memberUtil.getCurrentMember();
         final Study study = studyDetail.getStudy();
-        final StudyHistory studyHistory = studyHistoryRepository
-                .findByStudentAndStudy(currentMember, study)
-                .orElseThrow(() -> new CustomException(STUDY_HISTORY_NOT_FOUND));
+        final boolean isAlreadyAttended =
+                attendanceRepository.existsByStudentIdAndStudyDetailId(currentMember.getId(), studyDetailId);
+        boolean isAppliedToStudy = studyHistoryRepository.existsByStudentAndStudy(currentMember, study);
 
-        attendanceValidator.validateAttendance(studyDetail, request.attendanceNumber(), LocalDate.now());
+        attendanceValidator.validateAttendance(
+                studyDetail, request.attendanceNumber(), LocalDate.now(), isAlreadyAttended, isAppliedToStudy);
 
         Attendance attendance = Attendance.create(currentMember, studyDetail);
         attendanceRepository.save(attendance);
 
-        log.info("[StudyService] 스터디 출석: attendanceId={}", attendance.getId());
+        log.info("[StudyService] 스터디 출석: attendanceId={}, memberId={}", attendance.getId(), currentMember.getId());
     }
 
     @Transactional(readOnly = true)
     public StudentMyCurrentStudyResponse getMyCurrentStudy() {
         Member currentMember = memberUtil.getCurrentMember();
         StudyHistory studyHistory = studyHistoryRepository.findAllByStudent(currentMember).stream()
-                .filter(s -> s.getStudy().getApplicationPeriod().getStartDate().isBefore(LocalDateTime.now())
-                        && s.getStudy().getPeriod().getEndDate().isAfter(LocalDateTime.now()))
+                .filter(StudyHistory::isWithinApplicationAndCourse)
                 .findFirst()
                 .orElse(null);
         return StudentMyCurrentStudyResponse.from(studyHistory);

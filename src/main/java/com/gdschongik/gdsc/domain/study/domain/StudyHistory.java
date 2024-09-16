@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PreRemove;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.AccessLevel;
@@ -48,6 +49,11 @@ public class StudyHistory extends BaseEntity {
         return StudyHistory.builder().student(student).study(study).build();
     }
 
+    @PreRemove
+    private void preRemove() {
+        registerEvent(new StudyApplyCanceledEvent(this.study.getId(), this.student.getId()));
+    }
+
     /**
      * 레포지토리 링크를 업데이트합니다.
      */
@@ -56,7 +62,7 @@ public class StudyHistory extends BaseEntity {
     }
 
     // 데이터 전달 로직
-    public boolean isStudyOngoing() {
-        return study.isStudyOngoing();
+    public boolean isWithinApplicationAndCourse() {
+        return study.isWithinApplicationAndCourse();
     }
 }

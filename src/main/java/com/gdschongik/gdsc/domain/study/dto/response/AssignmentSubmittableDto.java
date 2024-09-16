@@ -19,7 +19,8 @@ public record AssignmentSubmittableDto(
         @Nullable @Schema(description = "과제 명세 링크") String descriptionLink,
         @Nullable @Schema(description = "마감 기한") LocalDateTime deadline,
         @Nullable @Schema(description = "과제 제출 링크") String submissionLink,
-        @Nullable @Schema(description = "과제 제출 실패 사유") SubmissionFailureType submissionFailureType) {
+        @Nullable @Schema(description = "과제 제출 실패 사유") SubmissionFailureType submissionFailureType,
+        @Nullable @Schema(description = "최종 수정 일시") LocalDateTime committedAt) {
     public static AssignmentSubmittableDto of(StudyDetail studyDetail, AssignmentHistory assignmentHistory) {
         Assignment assignment = studyDetail.getAssignment();
 
@@ -28,7 +29,7 @@ public record AssignmentSubmittableDto(
         }
 
         if (assignmentHistory == null) {
-            return notSubmittedAssignment(studyDetail, assignment);
+            return beforeAssignmentSubmit(studyDetail, assignment);
         }
 
         return new AssignmentSubmittableDto(
@@ -40,24 +41,35 @@ public record AssignmentSubmittableDto(
                 assignment.getDescriptionLink(),
                 assignment.getDeadline(),
                 assignmentHistory.getSubmissionLink(),
-                assignmentHistory.getSubmissionFailureType());
+                assignmentHistory.getSubmissionFailureType(),
+                assignmentHistory.getCommittedAt());
     }
 
     private static AssignmentSubmittableDto cancelledAssignment(StudyDetail studyDetail, Assignment assignment) {
         return new AssignmentSubmittableDto(
-                studyDetail.getId(), assignment.getStatus(), studyDetail.getWeek(), null, null, null, null, null, null);
+                studyDetail.getId(),
+                assignment.getStatus(),
+                studyDetail.getWeek(),
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null);
     }
 
-    private static AssignmentSubmittableDto notSubmittedAssignment(StudyDetail studyDetail, Assignment assignment) {
+    private static AssignmentSubmittableDto beforeAssignmentSubmit(StudyDetail studyDetail, Assignment assignment) {
         return new AssignmentSubmittableDto(
                 studyDetail.getId(),
                 assignment.getStatus(),
                 studyDetail.getWeek(),
                 assignment.getTitle(),
-                AssignmentSubmissionStatus.FAILURE,
+                null,
                 assignment.getDescriptionLink(),
                 assignment.getDeadline(),
                 null,
-                SubmissionFailureType.NOT_SUBMITTED);
+                null,
+                null);
     }
 }

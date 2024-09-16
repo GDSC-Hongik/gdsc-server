@@ -2,6 +2,7 @@ package com.gdschongik.gdsc.domain.order.application;
 
 import static com.gdschongik.gdsc.global.common.constant.OrderConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.RecruitmentConstant.*;
+import static com.gdschongik.gdsc.global.common.constant.TemporalConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
