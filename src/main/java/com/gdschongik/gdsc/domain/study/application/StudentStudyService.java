@@ -93,17 +93,15 @@ public class StudentStudyService {
         final Study study = studyDetail.getStudy();
         final boolean isAlreadyAttended =
                 attendanceRepository.existsByStudentIdAndStudyDetailId(currentMember.getId(), studyDetailId);
-        final StudyHistory studyHistory = studyHistoryRepository
-                .findByStudentAndStudy(currentMember, study)
-                .orElseThrow(() -> new CustomException(STUDY_HISTORY_NOT_FOUND));
+        boolean isAppliedToStudy = studyHistoryRepository.existsByStudentAndStudy(currentMember, study);
 
         attendanceValidator.validateAttendance(
-                studyDetail, request.attendanceNumber(), LocalDate.now(), isAlreadyAttended);
+                studyDetail, request.attendanceNumber(), LocalDate.now(), isAlreadyAttended, isAppliedToStudy);
 
         Attendance attendance = Attendance.create(currentMember, studyDetail);
         attendanceRepository.save(attendance);
 
-        log.info("[StudyService] 스터디 출석: attendanceId={}", attendance.getId());
+        log.info("[StudyService] 스터디 출석: attendanceId={}, memberId={}", attendance.getId(), currentMember.getId());
     }
 
     @Transactional(readOnly = true)
