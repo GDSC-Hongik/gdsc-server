@@ -3,9 +3,12 @@ package com.gdschongik.gdsc.global.config;
 import com.gdschongik.gdsc.global.property.DockerProperty;
 import io.sentry.Sentry;
 import io.sentry.SentryOptions;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @Configuration
 @RequiredArgsConstructor
@@ -13,10 +16,16 @@ public class SentryConfig {
 
     private final DockerProperty dockerProperty;
 
+    private final List<Class<? extends Throwable>> exceptionsToIgnore = List.of(
+            NoResourceFoundException.class, // 존재하지 않는 정적 리소스 요청
+            MethodArgumentNotValidException.class // @Valid 검증 실패
+            );
+
     @Bean
     Sentry.OptionsConfiguration<SentryOptions> customOptionsConfiguration() {
         return options -> {
             options.setRelease(convertTagToRelease(dockerProperty.getTag()));
+            exceptionsToIgnore.forEach(options::addIgnoredExceptionForType);
         };
     }
 
