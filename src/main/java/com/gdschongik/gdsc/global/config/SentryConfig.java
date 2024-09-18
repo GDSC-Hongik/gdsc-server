@@ -17,7 +17,7 @@ public class SentryConfig {
     private final DockerProperty dockerProperty;
 
     private final List<Class<? extends Throwable>> exceptionsToIgnore = List.of(
-            NoResourceFoundException.class, // 존재하지 않는 엔드포인트로 요청이 들어왔을 때
+            NoResourceFoundException.class, // 존재하지 않는 정적 리소스 요청
             MethodArgumentNotValidException.class // @Valid 검증 실패
             );
 
