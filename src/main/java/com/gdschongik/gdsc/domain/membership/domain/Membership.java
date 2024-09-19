@@ -62,7 +62,7 @@ public class Membership extends BaseEntity {
 
     // 검증 로직
 
-    public void validateRegularRequirement() {
+    private void validateRegularRequirement() {
         if (isRegularRequirementAllSatisfied()) {
             throw new CustomException(MEMBERSHIP_ALREADY_SATISFIED);
         }

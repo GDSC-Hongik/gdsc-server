@@ -3,9 +3,11 @@ package com.gdschongik.gdsc.infra.feign.global.config;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import feign.Capability;
 import feign.Logger;
 import feign.codec.Decoder;
 import feign.jackson.JacksonDecoder;
+import io.sentry.openfeign.SentryCapability;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.cloud.openfeign.FeignFormatterRegistrar;
 import org.springframework.context.annotation.Bean;
@@ -40,5 +42,10 @@ public class FeignConfig {
             registrar.setUseIsoFormat(true);
             registrar.registerFormatters(registry);
         };
+    }
+
+    @Bean
+    public Capability sentryCapability() {
+        return new SentryCapability();
     }
 }

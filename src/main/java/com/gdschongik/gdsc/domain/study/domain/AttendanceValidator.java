@@ -8,8 +8,13 @@ import java.time.LocalDate;
 
 @DomainService
 public class AttendanceValidator {
+
     public void validateAttendance(
-            StudyDetail studyDetail, String attendanceNumber, LocalDate date, boolean isAlreadyAttended) {
+            StudyDetail studyDetail,
+            String attendanceNumber,
+            LocalDate date,
+            boolean isAlreadyAttended,
+            boolean isAppliedToStudy) {
         // 출석체크 날짜 검증
         LocalDate attendanceDay = studyDetail.getAttendanceDay();
         if (!attendanceDay.equals(date)) {
@@ -24,6 +29,11 @@ public class AttendanceValidator {
         // 출석체크 번호 검증
         if (isAlreadyAttended) {
             throw new CustomException(STUDY_DETAIL_ALREADY_ATTENDED);
+        }
+
+        // 스터디 신청 여부 검증
+        if (!isAppliedToStudy) {
+            throw new CustomException(STUDY_HISTORY_NOT_FOUND);
         }
     }
 }

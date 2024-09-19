@@ -44,11 +44,6 @@ public class MembershipService {
         findMembershipAndVerifyPayment(membershipId);
     }
 
-    @Transactional
-    public void verifyPaymentStatus(Long membershipId) {
-        findMembershipAndVerifyPayment(membershipId);
-    }
-
     private void findMembershipAndVerifyPayment(Long membershipId) {
         Membership currentMembership = membershipRepository
                 .findById(membershipId)

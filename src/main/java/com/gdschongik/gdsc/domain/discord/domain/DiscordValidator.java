@@ -32,7 +32,7 @@ public class DiscordValidator {
     }
 
     public void validateAdminPermission(Member currentMember) {
-        if (!currentMember.getManageRole().equals(MemberManageRole.ADMIN)) {
+        if (currentMember.getManageRole() != MemberManageRole.ADMIN) {
             throw new CustomException(INVALID_ROLE);
         }
     }

@@ -10,4 +10,12 @@ public enum RoundType {
     SECOND("2차");
 
     private final String value;
+
+    public boolean isFirst() {
+        return this == FIRST;
+    }
+
+    public boolean isSecond() {
+        return this == SECOND;
+    }
 }

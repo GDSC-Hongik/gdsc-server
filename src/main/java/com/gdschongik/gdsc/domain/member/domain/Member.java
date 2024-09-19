@@ -137,7 +137,7 @@ public class Member extends BaseEntity {
      * 준회원 승급 가능 여부를 검증합니다.
      */
     private void validateAssociateAvailable() {
-        if (role.equals(ASSOCIATE)) {
+        if (isAssociate()) {
             throw new CustomException(MEMBER_ALREADY_ASSOCIATE);
         }
 
@@ -152,7 +152,7 @@ public class Member extends BaseEntity {
             throw new CustomException(MEMBER_ALREADY_REGULAR);
         }
 
-        if (!role.equals(ASSOCIATE)) {
+        if (!isAssociate()) {
             throw new CustomException(MEMBER_NOT_ASSOCIATE);
         }
     }
@@ -335,26 +335,26 @@ public class Member extends BaseEntity {
 
     // 데이터 전달 로직
     public boolean isGuest() {
-        return role.equals(GUEST);
+        return role == GUEST;
     }
 
     public boolean isAssociate() {
-        return role.equals(ASSOCIATE);
+        return role == ASSOCIATE;
     }
 
     public boolean isRegular() {
-        return role.equals(REGULAR);
+        return role == REGULAR;
     }
 
     public boolean isAdmin() {
-        return manageRole.equals(ADMIN);
+        return manageRole == ADMIN;
     }
 
     public boolean isMentor() {
-        return studyRole.equals(MENTOR);
+        return studyRole == MENTOR;
     }
 
     public boolean isStudent() {
-        return studyRole.equals(STUDENT);
+        return studyRole == STUDENT;
     }
 }

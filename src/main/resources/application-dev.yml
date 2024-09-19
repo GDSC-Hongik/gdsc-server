@@ -8,5 +8,5 @@ spring:
 
 logging:
   level:
-    org.springframework.orm.jpa: DEBUG
-    org.springframework.transaction: DEBUG
+    com.gdschongik.gdsc.domain.*.api.*: info
+    com.gdschongik.gdsc.infra.feign: debug

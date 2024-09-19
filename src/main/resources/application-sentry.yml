@@ -10,7 +10,7 @@ sentry:
   environment: ${spring.profiles.active:local}
   send-default-pii: true
   logging:
-    minimum-event-level: info
+    minimum-event-level: warn
     minimum-breadcrumb-level: debug
 
 docker:
