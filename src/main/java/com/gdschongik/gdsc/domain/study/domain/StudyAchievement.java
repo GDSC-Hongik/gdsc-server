@@ -3,6 +3,8 @@ package com.gdschongik.gdsc.domain.study.domain;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -32,6 +34,7 @@ public class StudyAchievement {
     @JoinColumn(name = "study_id")
     private Study study;
 
+    @Enumerated(EnumType.STRING)
     private AchievementType achievementType;
 
     @Builder(access = AccessLevel.PRIVATE)
