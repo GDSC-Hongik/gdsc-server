@@ -17,6 +17,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Comment;
 
 @Getter
 @Entity
@@ -39,10 +40,14 @@ public class StudyHistory extends BaseEntity {
 
     private String repositoryLink;
 
+    @Comment("수료 여부")
+    private boolean hasCompleted;
+
     @Builder(access = AccessLevel.PRIVATE)
     private StudyHistory(Member student, Study study) {
         this.student = student;
         this.study = study;
+        this.hasCompleted = false;
     }
 
     public static StudyHistory create(Member student, Study study) {
@@ -59,6 +64,13 @@ public class StudyHistory extends BaseEntity {
      */
     public void updateRepositoryLink(String repositoryLink) {
         this.repositoryLink = repositoryLink;
+    }
+
+    /**
+     * 스터디 수료
+     */
+    public void complete() {
+        hasCompleted = true;
     }
 
     // 데이터 전달 로직
