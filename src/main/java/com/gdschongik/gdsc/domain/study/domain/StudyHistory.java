@@ -41,7 +41,7 @@ public class StudyHistory extends BaseEntity {
     private String repositoryLink;
 
     @Comment("수료 여부")
-    private boolean hasCompleted;
+    private Boolean hasCompleted;
 
     @Builder(access = AccessLevel.PRIVATE)
     private StudyHistory(Member student, Study study) {
