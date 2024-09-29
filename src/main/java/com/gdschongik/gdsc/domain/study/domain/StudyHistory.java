@@ -1,9 +1,13 @@
 package com.gdschongik.gdsc.domain.study.domain;
 
+import static com.gdschongik.gdsc.domain.study.domain.StudyHistoryStatus.*;
+
 import com.gdschongik.gdsc.domain.common.model.BaseEntity;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -40,14 +44,15 @@ public class StudyHistory extends BaseEntity {
 
     private String repositoryLink;
 
-    @Comment("수료 여부")
-    private Boolean hasCompleted;
+    @Comment("수료 상태")
+    @Enumerated(EnumType.STRING)
+    private StudyHistoryStatus studyHistoryStatus;
 
     @Builder(access = AccessLevel.PRIVATE)
     private StudyHistory(Member student, Study study) {
         this.student = student;
         this.study = study;
-        this.hasCompleted = false;
+        this.studyHistoryStatus = NONE;
     }
 
     public static StudyHistory create(Member student, Study study) {
@@ -70,7 +75,7 @@ public class StudyHistory extends BaseEntity {
      * 스터디 수료
      */
     public void complete() {
-        hasCompleted = true;
+        studyHistoryStatus = COMPLETED;
     }
 
     // 데이터 전달 로직

@@ -1,5 +1,6 @@
 package com.gdschongik.gdsc.domain.study.domain;
 
+import static com.gdschongik.gdsc.domain.study.domain.StudyHistoryStatus.*;
 import static org.assertj.core.api.Assertions.*;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
@@ -17,7 +18,7 @@ public class StudyHistoryTest {
     class 스터디_히스토리_생성시 {
 
         @Test
-        void 수료여부는_false이다() {
+        void 수료상태는_NONE이다() {
             // given
             Member student = fixtureHelper.createRegularMember(1L);
             Member mentor = fixtureHelper.createRegularMember(2L);
@@ -31,7 +32,7 @@ public class StudyHistoryTest {
             StudyHistory studyHistory = StudyHistory.create(student, study);
 
             // then
-            assertThat(studyHistory.getHasCompleted()).isFalse();
+            assertThat(studyHistory.getStudyHistoryStatus()).isEqualTo(NONE);
         }
     }
 
@@ -39,7 +40,7 @@ public class StudyHistoryTest {
     class 스터디_수료시 {
 
         @Test
-        void 수료여부는_true이다() {
+        void 수료상태는_COMPLETED이다() {
             // given
             Member student = fixtureHelper.createRegularMember(1L);
             Member mentor = fixtureHelper.createRegularMember(2L);
@@ -55,7 +56,7 @@ public class StudyHistoryTest {
             studyHistory.complete();
 
             // then
-            assertThat(studyHistory.getHasCompleted()).isTrue();
+            assertThat(studyHistory.getStudyHistoryStatus()).isEqualTo(COMPLETED);
         }
     }
 }
