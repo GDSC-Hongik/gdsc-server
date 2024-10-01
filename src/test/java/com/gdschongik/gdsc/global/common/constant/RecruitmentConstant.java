@@ -2,6 +2,7 @@ package com.gdschongik.gdsc.global.common.constant;
 
 import com.gdschongik.gdsc.domain.common.vo.Money;
 import com.gdschongik.gdsc.domain.recruitment.domain.RoundType;
+import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -12,6 +13,7 @@ public class RecruitmentConstant {
     public static final LocalDateTime BETWEEN_START_AND_END_DATE = LocalDateTime.of(2024, 3, 3, 0, 0);
     public static final LocalDateTime WRONG_END_DATE = LocalDateTime.of(2024, 3, 2, 0, 0);
     public static final LocalDateTime END_DATE = LocalDateTime.of(2024, 3, 5, 0, 0);
+    public static final Period START_TO_END_PERIOD = Period.createPeriod(START_DATE, END_DATE);
 
     public static final Money FEE = Money.from(20000L);
     public static final BigDecimal FEE_AMOUNT = BigDecimal.valueOf(20000);
