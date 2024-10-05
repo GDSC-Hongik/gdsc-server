@@ -9,7 +9,8 @@ import lombok.RequiredArgsConstructor;
 public enum AssignmentSubmissionStatusResponse {
     NOT_SUBMITTED("미제출"),
     FAILURE("제출 실패"),
-    SUCCESS("제출 성공");
+    SUCCESS("제출 성공"),
+    CANCELLED("휴강");
 
     private final String value;
 
@@ -22,5 +23,9 @@ public enum AssignmentSubmissionStatusResponse {
         } else {
             return FAILURE;
         }
+    }
+
+    public static AssignmentSubmissionStatusResponse getCancelled() {
+        return CANCELLED;
     }
 }
