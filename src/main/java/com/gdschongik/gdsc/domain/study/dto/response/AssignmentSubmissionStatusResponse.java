@@ -24,8 +24,4 @@ public enum AssignmentSubmissionStatusResponse {
             return FAILURE;
         }
     }
-
-    public static AssignmentSubmissionStatusResponse getCancelled() {
-        return CANCELLED;
-    }
 }

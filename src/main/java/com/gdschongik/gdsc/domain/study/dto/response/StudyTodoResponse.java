@@ -22,6 +22,16 @@ public record StudyTodoResponse(
         @Schema(description = "과제 제출 상태 (과제타입일 때만 사용)") AssignmentSubmissionStatusResponse assignmentSubmissionStatus) {
 
     public static StudyTodoResponse createAttendanceType(StudyDetail studyDetail, LocalDate now, boolean isAttended) {
+        if (studyDetail.getCurriculum().isCancelled()) {
+            return new StudyTodoResponse(
+                    studyDetail.getId(),
+                    studyDetail.getWeek(),
+                    ATTENDANCE,
+                    null,
+                    AttendanceStatusResponse.CANCELLED,
+                    null,
+                    null);
+        }
         return new StudyTodoResponse(
                 studyDetail.getId(),
                 studyDetail.getWeek(),
@@ -41,7 +51,7 @@ public record StudyTodoResponse(
                     null,
                     null,
                     null,
-                    AssignmentSubmissionStatusResponse.getCancelled());
+                    AssignmentSubmissionStatusResponse.CANCELLED);
         }
 
         return new StudyTodoResponse(
