@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+// todo: 활용이 다양해졌으므로 rename 필요
 public record StudyTodoResponse(
         Long studyDetailId,
         @Schema(description = "현 주차수") Long week,
@@ -32,6 +33,17 @@ public record StudyTodoResponse(
     }
 
     public static StudyTodoResponse createAssignmentType(StudyDetail studyDetail, AssignmentHistory assignmentHistory) {
+        if (studyDetail.getAssignment().isCancelled()) {
+            return new StudyTodoResponse(
+                    studyDetail.getId(),
+                    studyDetail.getWeek(),
+                    ASSIGNMENT,
+                    null,
+                    null,
+                    null,
+                    AssignmentSubmissionStatusResponse.getCancelled());
+        }
+
         return new StudyTodoResponse(
                 studyDetail.getId(),
                 studyDetail.getWeek(),
