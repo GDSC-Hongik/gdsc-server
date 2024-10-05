@@ -1,11 +1,12 @@
 package com.gdschongik.gdsc.domain.study.dto.response;
 
 import static com.gdschongik.gdsc.domain.study.domain.AchievementType.*;
+import static com.gdschongik.gdsc.domain.study.dto.response.AssignmentSubmissionStatusResponse.*;
+import static com.gdschongik.gdsc.domain.study.dto.response.StudyTodoResponse.StudyTodoType.*;
 
 import com.gdschongik.gdsc.domain.study.domain.AchievementType;
 import com.gdschongik.gdsc.domain.study.domain.StudyAchievement;
 import com.gdschongik.gdsc.domain.study.domain.StudyHistory;
-import com.gdschongik.gdsc.domain.study.dto.response.StudyTodoResponse.StudyTodoType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 
@@ -24,21 +25,19 @@ public record StudyStudentResponse(
     public static StudyStudentResponse of(
             StudyHistory studyHistory, List<StudyAchievement> studyAchievements, List<StudyTodoResponse> studyTodos) {
         List<StudyTodoResponse> assignments = studyTodos.stream()
-                .filter(studyTodoResponse -> studyTodoResponse.todoType() == StudyTodoType.ASSIGNMENT)
+                .filter(studyTodoResponse -> studyTodoResponse.todoType() == ASSIGNMENT)
                 .toList();
 
         List<StudyTodoResponse> attendances = studyTodos.stream()
-                .filter(studyTodoResponse -> studyTodoResponse.todoType() == StudyTodoType.ATTENDANCE)
+                .filter(studyTodoResponse -> studyTodoResponse.todoType() == ATTENDANCE)
                 .toList();
 
         long successAssignmentsCount = assignments.stream()
-                .filter(studyTodoResponse ->
-                        studyTodoResponse.assignmentSubmissionStatus() == AssignmentSubmissionStatusResponse.SUCCESS)
+                .filter(studyTodoResponse -> studyTodoResponse.assignmentSubmissionStatus() == SUCCESS)
                 .count();
 
         long cancelledAssignmentsCount = assignments.stream()
-                .filter(studyTodoResponse ->
-                        studyTodoResponse.assignmentSubmissionStatus() == AssignmentSubmissionStatusResponse.CANCELLED)
+                .filter(studyTodoResponse -> studyTodoResponse.assignmentSubmissionStatus() == CANCELLED)
                 .count();
 
         long attendedCount = attendances.stream()
