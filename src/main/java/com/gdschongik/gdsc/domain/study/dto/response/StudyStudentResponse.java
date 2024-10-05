@@ -32,21 +32,11 @@ public record StudyStudentResponse(
                 .filter(studyTodoResponse -> studyTodoResponse.todoType() == ATTENDANCE)
                 .toList();
 
-        long successAssignmentsCount = assignments.stream()
-                .filter(studyTodoResponse -> studyTodoResponse.assignmentSubmissionStatus() == SUCCESS)
-                .count();
+        long successAssignmentsCount = countAssignmentByStatus(assignments, SUCCESS);
+        long cancelledAssignmentsCount = countAssignmentByStatus(assignments, CANCELLED);
 
-        long cancelledAssignmentsCount = assignments.stream()
-                .filter(studyTodoResponse -> studyTodoResponse.assignmentSubmissionStatus() == CANCELLED)
-                .count();
-
-        long attendedCount = attendances.stream()
-                .filter(studyTodoResponse -> studyTodoResponse.attendanceStatus() == AttendanceStatusResponse.ATTENDED)
-                .count();
-
-        long cancelledAttendanceCount = attendances.stream()
-                .filter(studyTodoResponse -> studyTodoResponse.attendanceStatus() == AttendanceStatusResponse.CANCELLED)
-                .count();
+        long attendedCount = countAttendanceByStatus(attendances, AttendanceStatusResponse.ATTENDED);
+        long cancelledAttendanceCount = countAttendanceByStatus(attendances, AttendanceStatusResponse.CANCELLED);
 
         return new StudyStudentResponse(
                 studyHistory.getStudent().getId(),
@@ -66,5 +56,18 @@ public record StudyStudentResponse(
             AchievementType achievementType, List<StudyAchievement> studyAchievements) {
         return studyAchievements.stream()
                 .anyMatch(studyAchievement -> studyAchievement.getAchievementType() == achievementType);
+    }
+
+    private static long countAssignmentByStatus(
+            List<StudyTodoResponse> assignments, AssignmentSubmissionStatusResponse status) {
+        return assignments.stream()
+                .filter(studyTodoResponse -> studyTodoResponse.assignmentSubmissionStatus() == status)
+                .count();
+    }
+
+    private static long countAttendanceByStatus(List<StudyTodoResponse> attendances, AttendanceStatusResponse status) {
+        return attendances.stream()
+                .filter(studyTodoResponse -> studyTodoResponse.attendanceStatus() == status)
+                .count();
     }
 }
