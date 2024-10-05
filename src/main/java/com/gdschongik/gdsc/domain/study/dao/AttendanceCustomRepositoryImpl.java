@@ -26,6 +26,16 @@ public class AttendanceCustomRepositoryImpl implements AttendanceCustomRepositor
                 .fetch();
     }
 
+    @Override
+    public List<Attendance> findByStudyIdAndMemberIds(Long studyId, List<Long> memberIds) {
+        return queryFactory
+                .selectFrom(attendance)
+                .innerJoin(attendance.studyDetail, studyDetail)
+                .fetchJoin()
+                .where(attendance.student.id.in(memberIds), eqStudyId(studyId))
+                .fetch();
+    }
+
     private BooleanExpression eqMemberId(Long memberId) {
         return memberId != null ? attendance.student.id.eq(memberId) : null;
     }
