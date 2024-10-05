@@ -1,6 +1,5 @@
 package com.gdschongik.gdsc.domain.study.dao;
 
-import static com.gdschongik.gdsc.domain.member.domain.QMember.member;
 import static com.gdschongik.gdsc.domain.study.domain.QAttendance.attendance;
 import static com.gdschongik.gdsc.domain.study.domain.QStudyDetail.studyDetail;
 
