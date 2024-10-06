@@ -54,8 +54,4 @@ public class StudyAchievement {
                 .achievementType(achievementType)
                 .build();
     }
-
-    public boolean isSameStudyWithStudyHistory(StudyHistory history) {
-        return this.study == history.getStudy();
-    }
 }

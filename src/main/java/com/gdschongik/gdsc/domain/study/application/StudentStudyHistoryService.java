@@ -13,8 +13,11 @@ import com.gdschongik.gdsc.global.util.MemberUtil;
 import com.gdschongik.gdsc.infra.github.client.GithubClient;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.kohsuke.github.GHRepository;
@@ -105,13 +108,20 @@ public class StudentStudyHistoryService {
         List<StudyHistory> studyHistories = studyHistoryRepository.findAllByStudent(currentMember);
         List<StudyAchievement> studyAchievements = studyAchievementRepository.findAllByStudent(currentMember);
 
-        return studyHistories.stream().map(history -> {
-            List<AchievementType> achievements = studyAchievements.stream()
-                    .filter(studyAchievement -> studyAchievement.isSameStudyWithStudyHistory(history))
-                    .map(StudyAchievement::getAchievementType)
-                    .toList();
-            return StudentMyCompleteStudyResponse.of(history, achievements);
-        }).toList();
+        Map<Study, List<AchievementType>> achievementsByStudy = studyAchievements.stream()
+                .collect(Collectors.groupingBy(
+                        StudyAchievement::getStudy,
+                        Collectors.mapping(StudyAchievement::getAchievementType, Collectors.toList())));
+
+        return studyHistories.stream()
+                .map(history -> {
+                    List<AchievementType> achievementTypes = achievementsByStudy.get(history.getStudy());
+                    if (achievementTypes == null) {
+                        achievementTypes = new ArrayList<>();
+                    }
+                    return StudentMyCompleteStudyResponse.of(history, achievementTypes);
+                })
+                .toList();
     }
 
     private AssignmentHistory findOrCreate(Member currentMember, StudyDetail studyDetail) {
