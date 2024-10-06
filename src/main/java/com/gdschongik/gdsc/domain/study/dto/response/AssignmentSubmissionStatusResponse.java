@@ -1,6 +1,7 @@
 package com.gdschongik.gdsc.domain.study.dto.response;
 
 import com.gdschongik.gdsc.domain.study.domain.AssignmentHistory;
+import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -14,7 +15,10 @@ public enum AssignmentSubmissionStatusResponse {
 
     private final String value;
 
-    public static AssignmentSubmissionStatusResponse from(AssignmentHistory assignmentHistory) {
+    public static AssignmentSubmissionStatusResponse of(AssignmentHistory assignmentHistory, StudyDetail studyDetail) {
+        if (studyDetail.getAssignment().isCancelled()) {
+            return CANCELLED;
+        }
         if (assignmentHistory == null) {
             return NOT_SUBMITTED;
         }

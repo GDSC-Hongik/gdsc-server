@@ -51,7 +51,7 @@ public record StudyTodoResponse(
                     null,
                     null,
                     null,
-                    AssignmentSubmissionStatusResponse.CANCELLED);
+                    AssignmentSubmissionStatusResponse.of(null, studyDetail));
         }
 
         return new StudyTodoResponse(
@@ -61,7 +61,7 @@ public record StudyTodoResponse(
                 studyDetail.getAssignment().getDeadline(),
                 null,
                 studyDetail.getAssignment().getTitle(),
-                AssignmentSubmissionStatusResponse.from(assignmentHistory));
+                AssignmentSubmissionStatusResponse.of(assignmentHistory, studyDetail));
     }
 
     @Getter
