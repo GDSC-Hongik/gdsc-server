@@ -22,7 +22,6 @@ import com.gdschongik.gdsc.domain.study.dto.response.StudyResponse;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyStudentResponse;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyTodoResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
-import com.gdschongik.gdsc.global.exception.ErrorCode;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -63,8 +62,7 @@ public class MentorStudyService {
     @Transactional(readOnly = true)
     public Page<StudyStudentResponse> getStudyStudents(Long studyId, Pageable pageable) {
         Member currentMember = memberUtil.getCurrentMember();
-        Study study =
-                studyRepository.findById(studyId).orElseThrow(() -> new CustomException(ErrorCode.STUDY_NOT_FOUND));
+        Study study = studyRepository.findById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
         studyValidator.validateStudyMentor(currentMember, study);
 
         List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyId(studyId);
