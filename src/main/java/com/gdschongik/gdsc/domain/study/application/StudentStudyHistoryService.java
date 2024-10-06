@@ -1,6 +1,7 @@
 package com.gdschongik.gdsc.domain.study.application;
 
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
+import static java.util.stream.Collectors.*;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.study.dao.AssignmentHistoryRepository;
@@ -29,7 +30,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.kohsuke.github.GHRepository;
@@ -121,9 +121,8 @@ public class StudentStudyHistoryService {
         List<StudyAchievement> studyAchievements = studyAchievementRepository.findAllByStudent(currentMember);
 
         Map<Study, List<AchievementType>> achievementsByStudy = studyAchievements.stream()
-                .collect(Collectors.groupingBy(
-                        StudyAchievement::getStudy,
-                        Collectors.mapping(StudyAchievement::getAchievementType, Collectors.toList())));
+                .collect(groupingBy(
+                        StudyAchievement::getStudy, mapping(StudyAchievement::getAchievementType, toList())));
 
         return studyHistories.stream()
                 .map(history -> {
