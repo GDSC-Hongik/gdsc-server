@@ -26,7 +26,6 @@ import com.gdschongik.gdsc.global.util.MemberUtil;
 import com.gdschongik.gdsc.infra.github.client.GithubClient;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -129,9 +128,6 @@ public class StudentStudyHistoryService {
         return studyHistories.stream()
                 .map(history -> {
                     List<AchievementType> achievementTypes = achievementsByStudy.get(history.getStudy());
-                    if (achievementTypes == null) {
-                        achievementTypes = new ArrayList<>();
-                    }
                     return StudentMyCompleteStudyResponse.of(history, achievementTypes);
                 })
                 .toList();

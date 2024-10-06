@@ -5,6 +5,7 @@ import com.gdschongik.gdsc.domain.study.domain.AchievementType;
 import com.gdschongik.gdsc.domain.study.domain.StudyHistory;
 import com.gdschongik.gdsc.domain.study.domain.StudyHistoryStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
 import java.util.List;
 
 public record StudentMyCompleteStudyResponse(
@@ -32,6 +33,6 @@ public record StudentMyCompleteStudyResponse(
                 studyHistory.getStudy().getMentor().getName(),
                 studyHistory.getStudy().getTotalWeek(),
                 studyHistory.getStudyHistoryStatus(),
-                achievements);
+                (achievements == null) ? new ArrayList<>() : achievements);
     }
 }
