@@ -46,8 +46,8 @@ public class StudentStudyHistoryController {
 
     @Operation(summary = "내 스터디 수료 내역 조회", description = "내가 수료한 스터디를 조회합니다.")
     @GetMapping("/me/complete")
-    public ResponseEntity<List<StudentMyCompleteStudyResponse>> getMyCompleteStudy() {
-        List<StudentMyCompleteStudyResponse> response = studentStudyHistoryService.getMyCompleteStudies();
+    public ResponseEntity<List<StudentMyCompleteStudyResponse>> getMyCompletedStudy() {
+        List<StudentMyCompleteStudyResponse> response = studentStudyHistoryService.getMyCompletedStudies();
         return ResponseEntity.ok(response);
     }
 }

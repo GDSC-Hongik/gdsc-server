@@ -116,7 +116,7 @@ public class StudentStudyHistoryService {
     }
 
     @Transactional(readOnly = true)
-    public List<StudentMyCompleteStudyResponse> getMyCompleteStudies() {
+    public List<StudentMyCompleteStudyResponse> getMyCompletedStudies() {
         Member currentMember = memberUtil.getCurrentMember();
         List<StudyHistory> studyHistories = studyHistoryRepository.findAllByStudent(currentMember);
         List<StudyAchievement> studyAchievements = studyAchievementRepository.findAllByStudent(currentMember);
