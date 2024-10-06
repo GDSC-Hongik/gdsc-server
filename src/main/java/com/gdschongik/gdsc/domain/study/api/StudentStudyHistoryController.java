@@ -3,6 +3,7 @@ package com.gdschongik.gdsc.domain.study.api;
 import com.gdschongik.gdsc.domain.study.application.StudentStudyHistoryService;
 import com.gdschongik.gdsc.domain.study.dto.request.RepositoryUpdateRequest;
 import com.gdschongik.gdsc.domain.study.dto.response.AssignmentHistoryResponse;
+import com.gdschongik.gdsc.domain.study.dto.response.StudentMyCompleteStudyResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -41,5 +42,12 @@ public class StudentStudyHistoryController {
     public ResponseEntity<Void> submitAssignment(@RequestParam(name = "studyDetailId") Long studyDetailId) {
         studentStudyHistoryService.submitAssignment(studyDetailId);
         return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "내 스터디 수료 내역 조회", description = "내가 수료한 스터디를 조회합니다.")
+    @GetMapping("/me/complete")
+    public ResponseEntity<List<StudentMyCompleteStudyResponse>> getMyCompleteStudy() {
+        List<StudentMyCompleteStudyResponse> response = studentStudyHistoryService.getMyCompleteStudies();
+        return ResponseEntity.ok(response);
     }
 }
