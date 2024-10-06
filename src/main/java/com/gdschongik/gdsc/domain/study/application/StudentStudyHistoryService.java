@@ -3,20 +3,11 @@ package com.gdschongik.gdsc.domain.study.application;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
-import com.gdschongik.gdsc.domain.study.dao.AssignmentHistoryRepository;
-import com.gdschongik.gdsc.domain.study.dao.StudyDetailRepository;
-import com.gdschongik.gdsc.domain.study.dao.StudyHistoryRepository;
-import com.gdschongik.gdsc.domain.study.dao.StudyRepository;
-import com.gdschongik.gdsc.domain.study.domain.AssignmentHistory;
-import com.gdschongik.gdsc.domain.study.domain.AssignmentHistoryGrader;
-import com.gdschongik.gdsc.domain.study.domain.AssignmentSubmissionFetcher;
-import com.gdschongik.gdsc.domain.study.domain.Study;
-import com.gdschongik.gdsc.domain.study.domain.StudyAssignmentHistoryValidator;
-import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
-import com.gdschongik.gdsc.domain.study.domain.StudyHistory;
-import com.gdschongik.gdsc.domain.study.domain.StudyHistoryValidator;
+import com.gdschongik.gdsc.domain.study.dao.*;
+import com.gdschongik.gdsc.domain.study.domain.*;
 import com.gdschongik.gdsc.domain.study.dto.request.RepositoryUpdateRequest;
 import com.gdschongik.gdsc.domain.study.dto.response.AssignmentHistoryResponse;
+import com.gdschongik.gdsc.domain.study.dto.response.StudentMyCompleteStudyResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import com.gdschongik.gdsc.infra.github.client.GithubClient;
@@ -44,6 +35,7 @@ public class StudentStudyHistoryService {
     private final StudyAssignmentHistoryValidator studyAssignmentHistoryValidator;
     private final AssignmentHistoryGrader assignmentHistoryGrader;
     private final StudyRepository studyRepository;
+    private final StudyAchievementRepository studyAchievementRepository;
 
     @Transactional
     public void updateRepository(Long studyId, RepositoryUpdateRequest request) throws IOException {
@@ -105,6 +97,21 @@ public class StudentStudyHistoryService {
                 currentMember.getId(),
                 assignmentHistory.getSubmissionStatus(),
                 assignmentHistory.getSubmissionFailureType());
+    }
+
+    @Transactional(readOnly = true)
+    public List<StudentMyCompleteStudyResponse> getMyCompleteStudies() {
+        Member currentMember = memberUtil.getCurrentMember();
+        List<StudyHistory> studyHistories = studyHistoryRepository.findAllByStudent(currentMember);
+        List<StudyAchievement> studyAchievements = studyAchievementRepository.findAllByStudent(currentMember);
+
+        return studyHistories.stream().map(history -> {
+            List<AchievementType> achievements = studyAchievements.stream()
+                    .filter(studyAchievement -> studyAchievement.isSameStudyWithStudyHistory(history))
+                    .map(StudyAchievement::getAchievementType)
+                    .toList();
+            return StudentMyCompleteStudyResponse.of(history, achievements);
+        }).toList();
     }
 
     private AssignmentHistory findOrCreate(Member currentMember, StudyDetail studyDetail) {
