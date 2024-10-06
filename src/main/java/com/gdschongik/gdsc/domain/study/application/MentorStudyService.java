@@ -73,14 +73,14 @@ public class MentorStudyService {
                 .map(studyHistory -> studyHistory.getStudent().getId())
                 .toList();
 
+        List<StudyAchievement> studyAchievements =
+                studyAchievementRepository.findByStudyIdAndMemberIds(studyId, studentIds);
         List<Attendance> attendances = attendanceRepository.findByStudyIdAndMemberIds(studyId, studentIds);
         List<AssignmentHistory> assignmentHistories =
                 assignmentHistoryRepository.findByStudyIdAndMemberIds(studyId, studentIds);
-        List<StudyAchievement> studyAchievements =
-                studyAchievementRepository.findByStudyIdAndMemberIds(studyId, studentIds);
 
         List<StudyStudentResponse> response = new ArrayList<>();
-        studyHistories.forEach(studyHistory -> {
+        studyHistories.getContent().forEach(studyHistory -> {
             List<StudyAchievement> currentStudyAchievements = studyAchievements.stream()
                     .filter(studyAchievement -> studyAchievement
                             .getStudent()
