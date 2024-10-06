@@ -48,8 +48,12 @@ public record StudyStudentResponse(
                 isOutstandingStudent(FIRST_ROUND_OUTSTANDING_STUDENT, studyAchievements),
                 isOutstandingStudent(SECOND_ROUND_OUTSTANDING_STUDENT, studyAchievements),
                 studyTodos,
-                (double) successAssignmentsCount * 100 / (assignments.size() - cancelledAssignmentsCount),
-                (double) (attendedCount * 100) / (attendances.size() - cancelledAttendanceCount));
+                assignments.size() != cancelledAssignmentsCount
+                        ? (double) successAssignmentsCount * 100 / (assignments.size() - cancelledAssignmentsCount)
+                        : 0,
+                attendances.size() != cancelledAttendanceCount
+                        ? (double) (attendedCount * 100) / (attendances.size() - cancelledAttendanceCount)
+                        : 0);
     }
 
     private static boolean isOutstandingStudent(
