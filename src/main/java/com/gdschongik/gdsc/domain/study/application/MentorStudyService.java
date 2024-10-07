@@ -1,6 +1,7 @@
 package com.gdschongik.gdsc.domain.study.application;
 
-import static com.gdschongik.gdsc.global.exception.ErrorCode.STUDY_NOT_FOUND;
+import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
+import static java.util.stream.Collectors.*;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.study.dao.AssignmentHistoryRepository;
@@ -26,8 +27,8 @@ import com.gdschongik.gdsc.global.util.MemberUtil;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -70,33 +71,30 @@ public class MentorStudyService {
         List<Long> studentIds = studyHistories.getContent().stream()
                 .map(studyHistory -> studyHistory.getStudent().getId())
                 .toList();
-
         List<StudyAchievement> studyAchievements =
                 studyAchievementRepository.findByStudyIdAndMemberIds(studyId, studentIds);
         List<Attendance> attendances = attendanceRepository.findByStudyIdAndMemberIds(studyId, studentIds);
         List<AssignmentHistory> assignmentHistories =
                 assignmentHistoryRepository.findByStudyIdAndMemberIds(studyId, studentIds);
 
+        // StudyAchievement, Attendance, AssignmentHistory에 대해 Member의 id를 key로 하는 Map 생성
+        Map<Long, List<StudyAchievement>> studyAchievementMap = studyAchievements.stream()
+                .collect(groupingBy(
+                        studyAchievement -> studyAchievement.getStudent().getId()));
+        Map<Long, List<Attendance>> attendanceMap = attendances.stream()
+                .collect(groupingBy(attendance -> attendance.getStudent().getId()));
+        Map<Long, List<AssignmentHistory>> assignmentHistoryMap = assignmentHistories.stream()
+                .collect(groupingBy(
+                        assignmentHistory -> assignmentHistory.getMember().getId()));
+
         List<StudyStudentResponse> response = new ArrayList<>();
         studyHistories.getContent().forEach(studyHistory -> {
-            List<StudyAchievement> currentStudyAchievements = studyAchievements.stream()
-                    .filter(studyAchievement -> studyAchievement
-                            .getStudent()
-                            .getId()
-                            .equals(studyHistory.getStudent().getId()))
-                    .toList();
-            List<Attendance> currentAttendances = attendances.stream()
-                    .filter(attendance -> attendance
-                            .getStudent()
-                            .getId()
-                            .equals(studyHistory.getStudent().getId()))
-                    .toList();
-            List<AssignmentHistory> currentAssignmentHistories = assignmentHistories.stream()
-                    .filter(assignmentHistory -> assignmentHistory
-                            .getMember()
-                            .getId()
-                            .equals(studyHistory.getStudent().getId()))
-                    .toList();
+            List<StudyAchievement> currentStudyAchievements =
+                    studyAchievementMap.getOrDefault(studyHistory.getStudent().getId(), new ArrayList<>());
+            List<Attendance> currentAttendances =
+                    attendanceMap.getOrDefault(studyHistory.getStudent().getId(), new ArrayList<>());
+            List<AssignmentHistory> currentAssignmentHistories =
+                    assignmentHistoryMap.getOrDefault(studyHistory.getStudent().getId(), new ArrayList<>());
 
             List<StudyTodoResponse> studyTodos = new ArrayList<>();
             studyDetails.forEach(studyDetail -> {
@@ -175,12 +173,12 @@ public class MentorStudyService {
 
         List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyIdOrderByWeekAsc(studyId);
         // StudyDetail ID를 추출하여 Set으로 저장
-        Set<Long> studyDetailIds = studyDetails.stream().map(StudyDetail::getId).collect(Collectors.toSet());
+        Set<Long> studyDetailIds = studyDetails.stream().map(StudyDetail::getId).collect(toSet());
 
         // 요청된 StudyCurriculumCreateRequest의 StudyDetail ID를 추출하여 Set으로 저장
         Set<Long> requestIds = request.studyCurriculums().stream()
                 .map(StudyCurriculumCreateRequest::studyDetailId)
-                .collect(Collectors.toSet());
+                .collect(toSet());
 
         studyDetailValidator.validateUpdateStudyDetail(studyDetailIds, requestIds);
 
