@@ -48,12 +48,8 @@ public record StudyStudentResponse(
                 isOutstandingStudent(FIRST_ROUND_OUTSTANDING_STUDENT, studyAchievements),
                 isOutstandingStudent(SECOND_ROUND_OUTSTANDING_STUDENT, studyAchievements),
                 studyTodos,
-                assignments.size() != cancelledAssignmentsCount
-                        ? (double) successAssignmentsCount * 100 / (assignments.size() - cancelledAssignmentsCount)
-                        : 0,
-                attendances.size() != cancelledAttendanceCount
-                        ? (double) (attendedCount * 100) / (attendances.size() - cancelledAttendanceCount)
-                        : 0);
+                calculateRateOrZero(successAssignmentsCount, assignments.size() - cancelledAssignmentsCount),
+                calculateRateOrZero(attendedCount, attendances.size() - cancelledAttendanceCount));
     }
 
     private static boolean isOutstandingStudent(
@@ -73,5 +69,9 @@ public record StudyStudentResponse(
         return attendances.stream()
                 .filter(studyTodoResponse -> studyTodoResponse.attendanceStatus() == status)
                 .count();
+    }
+
+    private static double calculateRateOrZero(long dividend, long divisor) {
+        return divisor == 0 ? 0 : (double) dividend * 100 / divisor;
     }
 }
