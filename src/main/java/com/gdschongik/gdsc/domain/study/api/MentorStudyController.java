@@ -10,6 +10,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,10 +37,10 @@ public class MentorStudyController {
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "스터디 수강생 명단 조회", description = "해당 스터디의 수강생 명단을 조회합니다")
+    @Operation(summary = "스터디 수강생 관리", description = "해당 스터디의 수강생을 관리합니다")
     @GetMapping("/{studyId}/students")
-    public ResponseEntity<List<StudyStudentResponse>> getStudyStudents(@PathVariable Long studyId) {
-        List<StudyStudentResponse> response = mentorStudyService.getStudyStudents(studyId);
+    public ResponseEntity<Page<StudyStudentResponse>> getStudyStudents(@PathVariable Long studyId, Pageable pageable) {
+        Page<StudyStudentResponse> response = mentorStudyService.getStudyStudents(studyId, pageable);
         return ResponseEntity.ok(response);
     }
 

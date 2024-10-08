@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AssignmentHistoryRepository
         extends JpaRepository<AssignmentHistory, Long>, AssignmentHistoryCustomRepository {
-    public Optional<AssignmentHistory> findByMemberAndStudyDetail(Member member, StudyDetail studyDetail);
+    Optional<AssignmentHistory> findByMemberAndStudyDetail(Member member, StudyDetail studyDetail);
 }
