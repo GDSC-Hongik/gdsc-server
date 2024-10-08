@@ -11,5 +11,7 @@ public interface AssignmentHistoryCustomRepository {
 
     List<AssignmentHistory> findAssignmentHistoriesByStudentAndStudyId(Member member, Long studyId);
 
+    List<AssignmentHistory> findByStudyIdAndMemberIds(Long studyId, List<Long> memberIds);
+
     void deleteByStudyIdAndMemberId(Long studyId, Long memberId);
 }

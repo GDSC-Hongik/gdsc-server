@@ -1,6 +1,5 @@
 package com.gdschongik.gdsc.domain.study.dao;
 
-import static com.gdschongik.gdsc.domain.member.domain.QMember.member;
 import static com.gdschongik.gdsc.domain.study.domain.QAttendance.attendance;
 import static com.gdschongik.gdsc.domain.study.domain.QStudyDetail.studyDetail;
 
@@ -23,6 +22,16 @@ public class AttendanceCustomRepositoryImpl implements AttendanceCustomRepositor
                 .leftJoin(attendance.studyDetail, studyDetail)
                 .fetchJoin()
                 .where(eqMemberId(member.getId()), eqStudyId(studyId))
+                .fetch();
+    }
+
+    @Override
+    public List<Attendance> findByStudyIdAndMemberIds(Long studyId, List<Long> memberIds) {
+        return queryFactory
+                .selectFrom(attendance)
+                .innerJoin(attendance.studyDetail, studyDetail)
+                .fetchJoin()
+                .where(attendance.student.id.in(memberIds), eqStudyId(studyId))
                 .fetch();
     }
 
