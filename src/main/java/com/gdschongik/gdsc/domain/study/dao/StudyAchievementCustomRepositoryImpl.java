@@ -17,7 +17,7 @@ public class StudyAchievementCustomRepositoryImpl implements StudyAchievementCus
     public List<StudyAchievement> findByStudyIdAndMemberIds(Long studyId, List<Long> memberIds) {
         return queryFactory
                 .selectFrom(studyAchievement)
-                .where(studyAchievement.student.id.in(memberIds), eqStudyId(studyId))
+                .where(eqStudyId(studyId), studyAchievement.student.id.in(memberIds))
                 .fetch();
     }
 
