@@ -2,6 +2,7 @@ package com.gdschongik.gdsc.domain.study.dao;
 
 import static com.gdschongik.gdsc.domain.study.domain.QStudyAchievement.*;
 
+import com.gdschongik.gdsc.domain.study.domain.AchievementType;
 import com.gdschongik.gdsc.domain.study.domain.StudyAchievement;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -19,6 +20,18 @@ public class StudyAchievementCustomRepositoryImpl implements StudyAchievementCus
                 .selectFrom(studyAchievement)
                 .where(eqStudyId(studyId), studyAchievement.student.id.in(memberIds))
                 .fetch();
+    }
+
+    @Override
+    public void deleteByStudyAndAchievementTypeAndMemberIds(
+            Long studyId, AchievementType achievementType, List<Long> memberIds) {
+        queryFactory
+                .delete(studyAchievement)
+                .where(
+                        eqStudyId(studyId),
+                        studyAchievement.achievementType.eq(achievementType),
+                        studyAchievement.student.id.in(memberIds))
+                .execute();
     }
 
     private BooleanExpression eqStudyId(Long studyId) {

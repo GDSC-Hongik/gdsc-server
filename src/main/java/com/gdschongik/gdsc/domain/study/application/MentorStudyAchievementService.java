@@ -1,11 +1,15 @@
 package com.gdschongik.gdsc.domain.study.application;
 
+import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
+import com.gdschongik.gdsc.domain.study.dao.StudyAchievementRepository;
 import com.gdschongik.gdsc.domain.study.dao.StudyRepository;
 import com.gdschongik.gdsc.domain.study.domain.Study;
+import com.gdschongik.gdsc.domain.study.domain.StudyAchievement;
 import com.gdschongik.gdsc.domain.study.domain.StudyValidator;
 import com.gdschongik.gdsc.domain.study.dto.request.OutstandingStudentRequest;
 import com.gdschongik.gdsc.global.util.MemberUtil;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,6 +23,8 @@ public class MentorStudyAchievementService {
     private final MemberUtil memberUtil;
     private final StudyValidator studyValidator;
     private final StudyRepository studyRepository;
+    private final StudyAchievementRepository studyAchievementRepository;
+    private final MemberRepository memberRepository;
 
     @Transactional
     public void designateOutstandingStudent(Long studyId, OutstandingStudentRequest request) {
@@ -26,7 +32,12 @@ public class MentorStudyAchievementService {
         Study study = studyRepository.getById(studyId);
         studyValidator.validateStudyMentor(currentMember, study);
 
-        // todo: 지정 로직 추가
+        List<Member> outstandingStudents = memberRepository.findAllById(request.studentIds());
+        List<StudyAchievement> studyAchievements = outstandingStudents.stream()
+                .map(member -> StudyAchievement.create(member, study, request.achievementType()))
+                .toList();
+        studyAchievementRepository.saveAll(studyAchievements);
+
         log.info(
                 "[MentorStudyAchievementService] 우수 스터디원 지정: studyId={}, studentIds={}", studyId, request.studentIds());
     }
@@ -37,7 +48,9 @@ public class MentorStudyAchievementService {
         Study study = studyRepository.getById(studyId);
         studyValidator.validateStudyMentor(currentMember, study);
 
-        // todo: 철회 로직 추가
+        studyAchievementRepository.deleteByStudyAndAchievementTypeAndMemberIds(
+                studyId, request.achievementType(), request.studentIds());
+
         log.info(
                 "[MentorStudyAchievementService] 우수 스터디원 철회: studyId={}, studentIds={}", studyId, request.studentIds());
     }
