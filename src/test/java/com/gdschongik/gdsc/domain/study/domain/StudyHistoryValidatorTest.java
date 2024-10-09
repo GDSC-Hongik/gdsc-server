@@ -130,8 +130,13 @@ public class StudyHistoryValidatorTest {
 
         @Test
         void 해당_스터디를_신청하지_않은_멤버가_있다면_실패한다() {
+            // given
+            Long countStudyHistory = 1L;
+            int requestStudentCount = 2;
+
             // when & then
-            assertThatThrownBy(() -> studyHistoryValidator.validateAppliedToStudy(false))
+            assertThatThrownBy(
+                            () -> studyHistoryValidator.validateAppliedToStudy(countStudyHistory, requestStudentCount))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(STUDY_HISTORY_NOT_APPLIED_STUDENT_EXISTS.getMessage());
         }

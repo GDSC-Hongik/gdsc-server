@@ -4,5 +4,5 @@ import java.util.List;
 
 public interface StudyHistoryCustomRepository {
 
-    boolean existsByStudyIdAndStudentIds(Long studyId, List<Long> studentIds);
+    Long countByStudyIdAndStudentIds(Long studyId, List<Long> studentIds);
 }

@@ -52,8 +52,8 @@ public class StudyHistoryValidator {
         }
     }
 
-    public void validateAppliedToStudy(boolean isAllAppliedToStudy) {
-        if (!isAllAppliedToStudy) {
+    public void validateAppliedToStudy(Long countStudyHistory, int studentCount) {
+        if (countStudyHistory != studentCount) {
             throw new CustomException(STUDY_HISTORY_NOT_APPLIED_STUDENT_EXISTS);
         }
     }

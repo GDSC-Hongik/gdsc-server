@@ -34,11 +34,12 @@ public class MentorStudyAchievementService {
     public void designateOutstandingStudent(Long studyId, OutstandingStudentRequest request) {
         Member currentMember = memberUtil.getCurrentMember();
         Study study = studyRepository.getById(studyId);
-        boolean isAllAppliedToStudy =
-                studyHistoryRepository.existsByStudyIdAndStudentIds(studyId, request.studentIds());
+        Long countByStudyIdAndStudentIds =
+                studyHistoryRepository.countByStudyIdAndStudentIds(studyId, request.studentIds());
 
         studyValidator.validateStudyMentor(currentMember, study);
-        studyHistoryValidator.validateAppliedToStudy(isAllAppliedToStudy);
+        studyHistoryValidator.validateAppliedToStudy(
+                countByStudyIdAndStudentIds, request.studentIds().size());
 
         List<Member> outstandingStudents = memberRepository.findAllById(request.studentIds());
         List<StudyAchievement> studyAchievements = outstandingStudents.stream()
@@ -54,11 +55,12 @@ public class MentorStudyAchievementService {
     public void withdrawOutstandingStudent(Long studyId, OutstandingStudentRequest request) {
         Member currentMember = memberUtil.getCurrentMember();
         Study study = studyRepository.getById(studyId);
-        boolean isAllAppliedToStudy =
-                studyHistoryRepository.existsByStudyIdAndStudentIds(studyId, request.studentIds());
+        Long countByStudyIdAndStudentIds =
+                studyHistoryRepository.countByStudyIdAndStudentIds(studyId, request.studentIds());
 
         studyValidator.validateStudyMentor(currentMember, study);
-        studyHistoryValidator.validateAppliedToStudy(isAllAppliedToStudy);
+        studyHistoryValidator.validateAppliedToStudy(
+                countByStudyIdAndStudentIds, request.studentIds().size());
 
         studyAchievementRepository.deleteByStudyAndAchievementTypeAndMemberIds(
                 studyId, request.achievementType(), request.studentIds());
