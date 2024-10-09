@@ -3,9 +3,11 @@ package com.gdschongik.gdsc.domain.study.application;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.study.dao.StudyAchievementRepository;
+import com.gdschongik.gdsc.domain.study.dao.StudyHistoryRepository;
 import com.gdschongik.gdsc.domain.study.dao.StudyRepository;
 import com.gdschongik.gdsc.domain.study.domain.Study;
 import com.gdschongik.gdsc.domain.study.domain.StudyAchievement;
+import com.gdschongik.gdsc.domain.study.domain.StudyHistoryValidator;
 import com.gdschongik.gdsc.domain.study.domain.StudyValidator;
 import com.gdschongik.gdsc.domain.study.dto.request.OutstandingStudentRequest;
 import com.gdschongik.gdsc.global.util.MemberUtil;
@@ -22,7 +24,9 @@ public class MentorStudyAchievementService {
 
     private final MemberUtil memberUtil;
     private final StudyValidator studyValidator;
+    private final StudyHistoryValidator studyHistoryValidator;
     private final StudyRepository studyRepository;
+    private final StudyHistoryRepository studyHistoryRepository;
     private final StudyAchievementRepository studyAchievementRepository;
     private final MemberRepository memberRepository;
 
@@ -30,7 +34,11 @@ public class MentorStudyAchievementService {
     public void designateOutstandingStudent(Long studyId, OutstandingStudentRequest request) {
         Member currentMember = memberUtil.getCurrentMember();
         Study study = studyRepository.getById(studyId);
+        boolean isAllAppliedToStudy =
+                studyHistoryRepository.existsByStudyIdAndStudentIds(studyId, request.studentIds());
+
         studyValidator.validateStudyMentor(currentMember, study);
+        studyHistoryValidator.validateAppliedToStudy(isAllAppliedToStudy);
 
         List<Member> outstandingStudents = memberRepository.findAllById(request.studentIds());
         List<StudyAchievement> studyAchievements = outstandingStudents.stream()
@@ -46,7 +54,11 @@ public class MentorStudyAchievementService {
     public void withdrawOutstandingStudent(Long studyId, OutstandingStudentRequest request) {
         Member currentMember = memberUtil.getCurrentMember();
         Study study = studyRepository.getById(studyId);
+        boolean isAllAppliedToStudy =
+                studyHistoryRepository.existsByStudyIdAndStudentIds(studyId, request.studentIds());
+
         studyValidator.validateStudyMentor(currentMember, study);
+        studyHistoryValidator.validateAppliedToStudy(isAllAppliedToStudy);
 
         studyAchievementRepository.deleteByStudyAndAchievementTypeAndMemberIds(
                 studyId, request.achievementType(), request.studentIds());

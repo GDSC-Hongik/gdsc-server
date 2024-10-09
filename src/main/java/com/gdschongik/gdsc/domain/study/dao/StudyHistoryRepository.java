@@ -9,7 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface StudyHistoryRepository extends JpaRepository<StudyHistory, Long> {
+public interface StudyHistoryRepository extends JpaRepository<StudyHistory, Long>, StudyHistoryCustomRepository {
 
     List<StudyHistory> findAllByStudent(Member member);
 

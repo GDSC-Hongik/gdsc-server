@@ -63,6 +63,7 @@ public class MentorStudyAchievementServiceTest extends IntegrationTest {
                     mentor,
                     Period.createPeriod(now.plusDays(5), now.plusDays(10)),
                     Period.createPeriod(now.minusDays(5), now));
+            createStudyHistory(student, study);
             createStudyAchievement(student, study, FIRST_ROUND_OUTSTANDING_STUDENT);
 
             logoutAndReloginAs(mentor.getId(), mentor.getRole());
