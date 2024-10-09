@@ -18,7 +18,7 @@ public record StudentMyCompleteStudyResponse(
         @Schema(description = "멘토 이름") String mentorName,
         @Schema(description = "총 주차수") Long totalWeek,
         @Schema(description = "수료 여부") StudyHistoryStatus studyHistoryStatus,
-        @Schema(description = "우수 스터디원 여부") List<AchievementType> achievements) {
+        @Schema(description = "우수 스터디원 선정 내역") List<AchievementType> achievements) {
 
     public static StudentMyCompleteStudyResponse of(StudyHistory studyHistory, List<AchievementType> achievements) {
         return new StudentMyCompleteStudyResponse(
