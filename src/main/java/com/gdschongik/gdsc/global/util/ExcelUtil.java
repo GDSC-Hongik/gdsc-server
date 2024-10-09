@@ -6,9 +6,12 @@ import static com.gdschongik.gdsc.global.common.constant.WorkbookConstant.*;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Department;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
+import com.gdschongik.gdsc.domain.study.domain.Study;
+import com.gdschongik.gdsc.domain.study.dto.response.StudyStudentResponse;
 import jakarta.annotation.Nullable;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
@@ -27,13 +30,19 @@ public class ExcelUtil {
 
     public byte[] createMemberExcel() throws IOException {
         HSSFWorkbook workbook = new HSSFWorkbook();
-        createSheet(workbook, ALL_MEMBER_SHEET_NAME, null);
-        createSheet(workbook, REGULAR_MEMBER_SHEET_NAME, REGULAR);
+        createMemberSheetByRole(workbook, ALL_MEMBER_SHEET_NAME, null);
+        createMemberSheetByRole(workbook, REGULAR_MEMBER_SHEET_NAME, REGULAR);
         return createByteArray(workbook);
     }
 
-    private void createSheet(Workbook workbook, String sheetName, @Nullable MemberRole role) {
-        Sheet sheet = setUpSheet(workbook, sheetName);
+    public byte[] createStudyExcel(Study study, List<StudyStudentResponse> content) throws IOException {
+        HSSFWorkbook workbook = new HSSFWorkbook();
+        createStudySheet(workbook, study, content);
+        return createByteArray(workbook);
+    }
+
+    private void createMemberSheetByRole(Workbook workbook, String sheetName, @Nullable MemberRole role) {
+        Sheet sheet = setUpMemberSheet(workbook, sheetName);
 
         memberRepository.findAllByRole(role).forEach(member -> {
             Row memberRow = sheet.createRow(sheet.getLastRowNum() + 1);
@@ -52,7 +61,9 @@ public class ExcelUtil {
         });
     }
 
-    private Sheet setUpSheet(Workbook workbook, String sheetName) {
+    private void createStudySheet(Workbook workbook, Study study, List<StudyStudentResponse> content) {}
+
+    private Sheet setUpMemberSheet(Workbook workbook, String sheetName) {
         Sheet sheet = workbook.createSheet(sheetName);
 
         Row row = sheet.createRow(0);

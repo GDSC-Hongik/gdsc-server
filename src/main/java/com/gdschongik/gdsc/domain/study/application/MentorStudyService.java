@@ -23,7 +23,9 @@ import com.gdschongik.gdsc.domain.study.dto.response.StudyResponse;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyStudentResponse;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyTodoResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
+import com.gdschongik.gdsc.global.util.ExcelUtil;
 import com.gdschongik.gdsc.global.util.MemberUtil;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +45,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class MentorStudyService {
 
     private final MemberUtil memberUtil;
+    private final ExcelUtil excelUtil;
     private final StudyValidator studyValidator;
     private final StudyDetailValidator studyDetailValidator;
     private final StudyRepository studyRepository;
@@ -71,21 +74,10 @@ public class MentorStudyService {
         List<Long> studentIds = studyHistories.getContent().stream()
                 .map(studyHistory -> studyHistory.getStudent().getId())
                 .toList();
-        List<StudyAchievement> studyAchievements =
-                studyAchievementRepository.findByStudyIdAndMemberIds(studyId, studentIds);
-        List<Attendance> attendances = attendanceRepository.findByStudyIdAndMemberIds(studyId, studentIds);
-        List<AssignmentHistory> assignmentHistories =
-                assignmentHistoryRepository.findByStudyIdAndMemberIds(studyId, studentIds);
 
-        // StudyAchievement, Attendance, AssignmentHistory에 대해 Member의 id를 key로 하는 Map 생성
-        Map<Long, List<StudyAchievement>> studyAchievementMap = studyAchievements.stream()
-                .collect(groupingBy(
-                        studyAchievement -> studyAchievement.getStudent().getId()));
-        Map<Long, List<Attendance>> attendanceMap = attendances.stream()
-                .collect(groupingBy(attendance -> attendance.getStudent().getId()));
-        Map<Long, List<AssignmentHistory>> assignmentHistoryMap = assignmentHistories.stream()
-                .collect(groupingBy(
-                        assignmentHistory -> assignmentHistory.getMember().getId()));
+        Map<Long, List<StudyAchievement>> studyAchievementMap = getStudyAchievementMap(studyId, studentIds);
+        Map<Long, List<Attendance>> attendanceMap = getAttendanceMap(studyId, studentIds);
+        Map<Long, List<AssignmentHistory>> assignmentHistoryMap = getAssignmentHistoryMap(studyId, studentIds);
 
         List<StudyStudentResponse> response = new ArrayList<>();
         studyHistories.getContent().forEach(studyHistory -> {
@@ -207,5 +199,65 @@ public class MentorStudyService {
         }
         studyDetailRepository.saveAll(studyDetails);
         log.info("[MentorStudyService] 스터디 상세정보 커리큘럼 작성 완료: studyDetailId={}", studyDetails);
+    }
+
+    public byte[] createStudyExcel(Long studyId) throws IOException {
+        Member currentMember = memberUtil.getCurrentMember();
+        Study study = studyRepository.findById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
+        studyValidator.validateStudyMentor(currentMember, study);
+
+        List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyId(studyId);
+        List<StudyHistory> studyHistories = studyHistoryRepository.findAllByStudyId(studyId);
+        List<Long> studentIds = studyHistories.stream()
+                .map(studyHistory -> studyHistory.getStudent().getId())
+                .toList();
+
+        Map<Long, List<StudyAchievement>> studyAchievementMap = getStudyAchievementMap(studyId, studentIds);
+        Map<Long, List<Attendance>> attendanceMap = getAttendanceMap(studyId, studentIds);
+        Map<Long, List<AssignmentHistory>> assignmentHistoryMap = getAssignmentHistoryMap(studyId, studentIds);
+
+        List<StudyStudentResponse> content = new ArrayList<>();
+        studyHistories.forEach(studyHistory -> {
+            List<StudyAchievement> currentStudyAchievements =
+                    studyAchievementMap.getOrDefault(studyHistory.getStudent().getId(), new ArrayList<>());
+            List<Attendance> currentAttendances =
+                    attendanceMap.getOrDefault(studyHistory.getStudent().getId(), new ArrayList<>());
+            List<AssignmentHistory> currentAssignmentHistories =
+                    assignmentHistoryMap.getOrDefault(studyHistory.getStudent().getId(), new ArrayList<>());
+
+            List<StudyTodoResponse> studyTodos = new ArrayList<>();
+            studyDetails.forEach(studyDetail -> {
+                studyTodos.add(StudyTodoResponse.createAttendanceType(
+                        studyDetail, LocalDate.now(), isAttended(currentAttendances, studyDetail)));
+                studyTodos.add(StudyTodoResponse.createAssignmentType(
+                        studyDetail, getSubmittedAssignment(currentAssignmentHistories, studyDetail)));
+            });
+
+            content.add(StudyStudentResponse.of(studyHistory, currentStudyAchievements, studyTodos));
+        });
+
+        return excelUtil.createStudyExcel(study, content);
+    }
+
+    private Map<Long, List<StudyAchievement>> getStudyAchievementMap(Long studyId, List<Long> studentIds) {
+        List<StudyAchievement> studyAchievements =
+                studyAchievementRepository.findByStudyIdAndMemberIds(studyId, studentIds);
+        return studyAchievements.stream()
+                .collect(groupingBy(
+                        studyAchievement -> studyAchievement.getStudent().getId()));
+    }
+
+    private Map<Long, List<Attendance>> getAttendanceMap(Long studyId, List<Long> studentIds) {
+        List<Attendance> attendances = attendanceRepository.findByStudyIdAndMemberIds(studyId, studentIds);
+        return attendances.stream()
+                .collect(groupingBy(attendance -> attendance.getStudent().getId()));
+    }
+
+    private Map<Long, List<AssignmentHistory>> getAssignmentHistoryMap(Long studyId, List<Long> studentIds) {
+        List<AssignmentHistory> assignmentHistories =
+                assignmentHistoryRepository.findByStudyIdAndMemberIds(studyId, studentIds);
+        return assignmentHistories.stream()
+                .collect(groupingBy(
+                        assignmentHistory -> assignmentHistory.getMember().getId()));
     }
 }

@@ -8,10 +8,13 @@ import com.gdschongik.gdsc.domain.study.dto.response.StudyStudentResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -65,5 +68,20 @@ public class MentorStudyController {
     public ResponseEntity<Void> deleteStudyAnnouncement(@PathVariable Long studyAnnouncementId) {
         mentorStudyService.deleteStudyAnnouncement(studyAnnouncementId);
         return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "수강생 정보 엑셀 다운로드", description = "수강생 정보를 엑셀로 다운로드합니다.")
+    @GetMapping("/{studyId}/students/excel")
+    public ResponseEntity<byte[]> createStudyWorkbook(@PathVariable Long studyId) throws IOException {
+        byte[] response = mentorStudyService.createStudyExcel(studyId);
+        ContentDisposition contentDisposition =
+                ContentDisposition.builder("attachment").filename("study.xls").build();
+        return ResponseEntity.ok()
+                .headers(httpHeaders -> {
+                    httpHeaders.setContentDisposition(contentDisposition);
+                    httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+                    httpHeaders.setContentLength(response.length);
+                })
+                .body(response);
     }
 }
