@@ -1,5 +1,7 @@
 package com.gdschongik.gdsc.domain.study.application;
 
+import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
+
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.study.dao.StudyAchievementRepository;
@@ -10,6 +12,7 @@ import com.gdschongik.gdsc.domain.study.domain.StudyAchievement;
 import com.gdschongik.gdsc.domain.study.domain.StudyHistoryValidator;
 import com.gdschongik.gdsc.domain.study.domain.StudyValidator;
 import com.gdschongik.gdsc.domain.study.dto.request.OutstandingStudentRequest;
+import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +36,7 @@ public class MentorStudyAchievementService {
     @Transactional
     public void designateOutstandingStudent(Long studyId, OutstandingStudentRequest request) {
         Member currentMember = memberUtil.getCurrentMember();
-        Study study = studyRepository.getById(studyId);
+        Study study = studyRepository.findById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
         Long countByStudyIdAndStudentIds =
                 studyHistoryRepository.countByStudyIdAndStudentIds(studyId, request.studentIds());
 
@@ -54,7 +57,7 @@ public class MentorStudyAchievementService {
     @Transactional
     public void withdrawOutstandingStudent(Long studyId, OutstandingStudentRequest request) {
         Member currentMember = memberUtil.getCurrentMember();
-        Study study = studyRepository.getById(studyId);
+        Study study = studyRepository.findById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
         Long countByStudyIdAndStudentIds =
                 studyHistoryRepository.countByStudyIdAndStudentIds(studyId, request.studentIds());
 
