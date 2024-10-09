@@ -124,4 +124,16 @@ public class StudyHistoryValidatorTest {
                     .hasMessage(STUDY_HISTORY_REPOSITORY_NOT_UPDATABLE_OWNER_MISMATCH.getMessage());
         }
     }
+
+    @Nested
+    class 스터디_수강신청_여부_확인시 {
+
+        @Test
+        void 해당_스터디를_신청하지_않은_멤버가_있다면_실패한다() {
+            // when & then
+            assertThatThrownBy(() -> studyHistoryValidator.validateAppliedToStudy(false))
+                    .isInstanceOf(CustomException.class)
+                    .hasMessage(STUDY_HISTORY_NOT_APPLIED_STUDENT_EXISTS.getMessage());
+        }
+    }
 }
