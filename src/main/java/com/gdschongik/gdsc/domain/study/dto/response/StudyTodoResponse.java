@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+// todo: 활용이 다양해졌으므로 rename 필요
 public record StudyTodoResponse(
         Long studyDetailId,
         @Schema(description = "현 주차수") Long week,
@@ -21,6 +22,16 @@ public record StudyTodoResponse(
         @Schema(description = "과제 제출 상태 (과제타입일 때만 사용)") AssignmentSubmissionStatusResponse assignmentSubmissionStatus) {
 
     public static StudyTodoResponse createAttendanceType(StudyDetail studyDetail, LocalDate now, boolean isAttended) {
+        if (studyDetail.getCurriculum().isCancelled()) {
+            return new StudyTodoResponse(
+                    studyDetail.getId(),
+                    studyDetail.getWeek(),
+                    ATTENDANCE,
+                    null,
+                    AttendanceStatusResponse.CANCELLED,
+                    null,
+                    null);
+        }
         return new StudyTodoResponse(
                 studyDetail.getId(),
                 studyDetail.getWeek(),
@@ -32,6 +43,17 @@ public record StudyTodoResponse(
     }
 
     public static StudyTodoResponse createAssignmentType(StudyDetail studyDetail, AssignmentHistory assignmentHistory) {
+        if (studyDetail.getAssignment().isCancelled()) {
+            return new StudyTodoResponse(
+                    studyDetail.getId(),
+                    studyDetail.getWeek(),
+                    ASSIGNMENT,
+                    null,
+                    null,
+                    null,
+                    AssignmentSubmissionStatusResponse.of(null, studyDetail));
+        }
+
         return new StudyTodoResponse(
                 studyDetail.getId(),
                 studyDetail.getWeek(),
@@ -39,7 +61,7 @@ public record StudyTodoResponse(
                 studyDetail.getAssignment().getDeadline(),
                 null,
                 studyDetail.getAssignment().getTitle(),
-                AssignmentSubmissionStatusResponse.from(assignmentHistory));
+                AssignmentSubmissionStatusResponse.of(assignmentHistory, studyDetail));
     }
 
     @Getter

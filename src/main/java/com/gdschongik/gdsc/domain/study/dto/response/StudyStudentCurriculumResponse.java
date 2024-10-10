@@ -37,7 +37,7 @@ public record StudyStudentCurriculumResponse(
                 studyDetail.getCurriculum().getDifficulty(),
                 AttendanceStatusResponse.of(studyDetail, now.toLocalDate(), isAttended),
                 studyDetail.getAssignment().getStatus(),
-                AssignmentSubmissionStatusResponse.from(assignmentHistory),
+                AssignmentSubmissionStatusResponse.of(assignmentHistory, studyDetail),
                 assignmentHistory != null ? assignmentHistory.getSubmissionFailureType() : NOT_SUBMITTED,
                 assignmentHistory != null ? assignmentHistory.getSubmissionLink() : null);
     }
