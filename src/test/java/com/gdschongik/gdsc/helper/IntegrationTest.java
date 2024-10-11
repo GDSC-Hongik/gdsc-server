@@ -30,10 +30,15 @@ import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.domain.recruitment.domain.RoundType;
 import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
+import com.gdschongik.gdsc.domain.study.dao.StudyAchievementRepository;
 import com.gdschongik.gdsc.domain.study.dao.StudyDetailRepository;
+import com.gdschongik.gdsc.domain.study.dao.StudyHistoryRepository;
 import com.gdschongik.gdsc.domain.study.dao.StudyRepository;
+import com.gdschongik.gdsc.domain.study.domain.AchievementType;
 import com.gdschongik.gdsc.domain.study.domain.Study;
+import com.gdschongik.gdsc.domain.study.domain.StudyAchievement;
 import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
+import com.gdschongik.gdsc.domain.study.domain.StudyHistory;
 import com.gdschongik.gdsc.global.security.PrincipalDetails;
 import com.gdschongik.gdsc.infra.feign.payment.client.PaymentClient;
 import com.gdschongik.gdsc.infra.github.client.GithubClient;
@@ -80,6 +85,12 @@ public abstract class IntegrationTest {
 
     @Autowired
     protected StudyDetailRepository studyDetailRepository;
+
+    @Autowired
+    protected StudyHistoryRepository studyHistoryRepository;
+
+    @Autowired
+    protected StudyAchievementRepository studyAchievementRepository;
 
     @MockBean
     protected OnboardingRecruitmentService onboardingRecruitmentService;
@@ -260,6 +271,16 @@ public abstract class IntegrationTest {
         StudyDetail studyDetail =
                 StudyDetail.createStudyDetail(study, week, ATTENDANCE_NUMBER, Period.createPeriod(startDate, endDate));
         return studyDetailRepository.save(studyDetail);
+    }
+
+    protected StudyHistory createStudyHistory(Member member, Study study) {
+        StudyHistory studyHistory = StudyHistory.create(member, study);
+        return studyHistoryRepository.save(studyHistory);
+    }
+
+    protected StudyAchievement createStudyAchievement(Member member, Study study, AchievementType achievementType) {
+        StudyAchievement studyAchievement = StudyAchievement.create(member, study, achievementType);
+        return studyAchievementRepository.save(studyAchievement);
     }
 
     protected StudyDetail publishAssignment(StudyDetail studyDetail) {
