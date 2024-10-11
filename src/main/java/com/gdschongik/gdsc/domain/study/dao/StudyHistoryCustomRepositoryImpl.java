@@ -13,8 +13,8 @@ public class StudyHistoryCustomRepositoryImpl implements StudyHistoryCustomRepos
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Long countByStudyIdAndStudentIds(Long studyId, List<Long> studentIds) {
-        return queryFactory
+    public long countByStudyIdAndStudentIds(Long studyId, List<Long> studentIds) {
+        return (long) queryFactory
                 .select(studyHistory.count())
                 .from(studyHistory)
                 .where(eqStudyId(studyId), studyHistory.student.id.in(studentIds))

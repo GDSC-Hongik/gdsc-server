@@ -4,5 +4,5 @@ import java.util.List;
 
 public interface StudyHistoryCustomRepository {
 
-    Long countByStudyIdAndStudentIds(Long studyId, List<Long> studentIds);
+    long countByStudyIdAndStudentIds(Long studyId, List<Long> studentIds);
 }

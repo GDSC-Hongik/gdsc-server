@@ -58,7 +58,7 @@ public class MentorStudyAchievementService {
     public void withdrawOutstandingStudent(Long studyId, OutstandingStudentRequest request) {
         Member currentMember = memberUtil.getCurrentMember();
         Study study = studyRepository.findById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
-        Long countByStudyIdAndStudentIds =
+        long countByStudyIdAndStudentIds =
                 studyHistoryRepository.countByStudyIdAndStudentIds(studyId, request.studentIds());
 
         studyValidator.validateStudyMentor(currentMember, study);
