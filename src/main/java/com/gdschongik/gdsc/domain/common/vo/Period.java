@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Period {
+public final class Period {
     private LocalDateTime startDate;
 
     private LocalDateTime endDate;
