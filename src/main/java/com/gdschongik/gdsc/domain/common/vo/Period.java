@@ -5,16 +5,18 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.persistence.Embeddable;
 import java.time.LocalDateTime;
-import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @Embeddable
+@EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public final class Period {
+
     private LocalDateTime startDate;
 
     private LocalDateTime endDate;
@@ -45,18 +47,5 @@ public final class Period {
         if (!this.endDate.isBefore(startDate) && !this.startDate.isAfter(endDate)) {
             throw new CustomException(PERIOD_OVERLAP);
         }
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Period that = (Period) o;
-        return startDate == that.startDate && endDate == that.endDate;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(startDate, endDate);
     }
 }
