@@ -39,6 +39,7 @@ public final class Period {
     }
 
     public boolean isOpen() {
+        // TODO: now를 내부에서 선언하지 않고 파라미터로 받아서 테스트 가능하도록 변경
         LocalDateTime now = LocalDateTime.now();
         return (now.isAfter(startDate) || now.isEqual(startDate)) && (now.isBefore(endDate) || now.isEqual(startDate));
     }
