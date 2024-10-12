@@ -56,7 +56,7 @@ public class Membership extends BaseEntity {
         return Membership.builder()
                 .member(member)
                 .recruitmentRound(recruitmentRound)
-                .regularRequirement(RegularRequirement.createUnsatisfiedRequirement())
+                .regularRequirement(RegularRequirement.create())
                 .build();
     }
 
