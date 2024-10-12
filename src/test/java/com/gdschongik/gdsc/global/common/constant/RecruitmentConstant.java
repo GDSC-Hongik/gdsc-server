@@ -24,6 +24,8 @@ public class RecruitmentConstant {
     public static final String ROUND_TWO_RECRUITMENT_NAME = "2024학년도 1학기 2차 모집";
     public static final LocalDateTime ROUND_TWO_START_DATE = LocalDateTime.of(2024, 3, 8, 0, 0);
     public static final LocalDateTime ROUND_TWO_END_DATE = LocalDateTime.of(2024, 3, 10, 0, 0);
+    public static final Period ROUND_TWO_START_TO_END_PERIOD =
+            Period.createPeriod(ROUND_TWO_START_DATE, ROUND_TWO_END_DATE);
 
     private RecruitmentConstant() {}
 }
