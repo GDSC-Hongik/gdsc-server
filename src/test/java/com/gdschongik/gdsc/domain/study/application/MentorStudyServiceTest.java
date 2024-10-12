@@ -3,9 +3,9 @@ package com.gdschongik.gdsc.domain.study.application;
 import static com.gdschongik.gdsc.global.common.constant.StudyConstant.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.gdschongik.gdsc.domain.common.vo.Period;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
-import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import com.gdschongik.gdsc.domain.study.domain.Difficulty;
 import com.gdschongik.gdsc.domain.study.domain.Study;
 import com.gdschongik.gdsc.domain.study.domain.StudyDetail;

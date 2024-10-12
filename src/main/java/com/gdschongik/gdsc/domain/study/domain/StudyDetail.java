@@ -3,7 +3,7 @@ package com.gdschongik.gdsc.domain.study.domain;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.common.model.BaseEntity;
-import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
+import com.gdschongik.gdsc.domain.common.vo.Period;
 import com.gdschongik.gdsc.domain.study.domain.vo.Assignment;
 import com.gdschongik.gdsc.domain.study.domain.vo.Curriculum;
 import com.gdschongik.gdsc.global.exception.CustomException;

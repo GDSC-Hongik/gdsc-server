@@ -3,7 +3,7 @@ package com.gdschongik.gdsc.domain.recruitment.domain;
 import com.gdschongik.gdsc.domain.common.model.BaseSemesterEntity;
 import com.gdschongik.gdsc.domain.common.model.SemesterType;
 import com.gdschongik.gdsc.domain.common.vo.Money;
-import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
+import com.gdschongik.gdsc.domain.common.vo.Period;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

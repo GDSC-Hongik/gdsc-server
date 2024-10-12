@@ -1,4 +1,4 @@
-package com.gdschongik.gdsc.domain.recruitment.domain.vo;
+package com.gdschongik.gdsc.domain.common.vo;
 
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 

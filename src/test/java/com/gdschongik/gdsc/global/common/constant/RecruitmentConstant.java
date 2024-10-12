@@ -1,8 +1,8 @@
 package com.gdschongik.gdsc.global.common.constant;
 
 import com.gdschongik.gdsc.domain.common.vo.Money;
+import com.gdschongik.gdsc.domain.common.vo.Period;
 import com.gdschongik.gdsc.domain.recruitment.domain.RoundType;
-import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 

@@ -7,10 +7,10 @@ import static com.gdschongik.gdsc.global.common.constant.RecruitmentConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.TemporalConstant.*;
 import static org.assertj.core.api.Assertions.*;
 
+import com.gdschongik.gdsc.domain.common.vo.Period;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
-import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 

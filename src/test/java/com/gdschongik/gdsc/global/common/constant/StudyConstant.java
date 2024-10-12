@@ -1,6 +1,6 @@
 package com.gdschongik.gdsc.global.common.constant;
 
-import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
+import com.gdschongik.gdsc.domain.common.vo.Period;
 import com.gdschongik.gdsc.domain.study.domain.StudyType;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;

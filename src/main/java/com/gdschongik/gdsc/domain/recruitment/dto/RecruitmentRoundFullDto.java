@@ -1,8 +1,8 @@
 package com.gdschongik.gdsc.domain.recruitment.dto;
 
+import com.gdschongik.gdsc.domain.common.vo.Period;
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.domain.recruitment.domain.RoundType;
-import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import java.math.BigDecimal;
 
 public record RecruitmentRoundFullDto(

@@ -2,7 +2,7 @@ package com.gdschongik.gdsc.domain.study.dto.response;
 
 import static com.gdschongik.gdsc.domain.study.domain.SubmissionFailureType.NOT_SUBMITTED;
 
-import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
+import com.gdschongik.gdsc.domain.common.vo.Period;
 import com.gdschongik.gdsc.domain.study.domain.AssignmentHistory;
 import com.gdschongik.gdsc.domain.study.domain.Difficulty;
 import com.gdschongik.gdsc.domain.study.domain.StudyDetail;

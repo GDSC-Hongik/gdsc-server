@@ -5,7 +5,7 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.DATE_PRECEDENCE_INV
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
+import com.gdschongik.gdsc.domain.common.vo.Period;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
