@@ -81,7 +81,10 @@ public class AdminRecruitmentService {
                 recruitmentRoundsInThisSemester);
 
         RecruitmentRound recruitmentRound = RecruitmentRound.create(
-                request.name(), request.startDate(), request.endDate(), recruitment, request.roundType());
+                request.name(),
+                Period.createPeriod(request.startDate(), request.endDate()),
+                recruitment,
+                request.roundType());
         recruitmentRoundRepository.save(recruitmentRound);
 
         log.info("[AdminRecruitmentService] 모집회차 생성: recruitmentRoundId={}", recruitmentRound.getId());

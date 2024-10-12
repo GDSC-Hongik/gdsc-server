@@ -37,7 +37,6 @@ public class StudyTest {
         void 게스트인_회원을_멘토로_지정하면_실패한다() {
             // given
             Member guestMember = Member.createGuestMember(OAUTH_ID);
-            Period period = Period.createPeriod(START_DATE, END_DATE);
             Period applicationPeriod = Period.createPeriod(START_DATE.minusDays(10), START_DATE.minusDays(5));
 
             // when & then
@@ -46,7 +45,7 @@ public class StudyTest {
                             SEMESTER_TYPE,
                             STUDY_TITLE,
                             guestMember,
-                            period,
+                            START_TO_END_PERIOD,
                             applicationPeriod,
                             TOTAL_WEEK,
                             ONLINE_STUDY,

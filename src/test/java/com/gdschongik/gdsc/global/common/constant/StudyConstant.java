@@ -1,5 +1,6 @@
 package com.gdschongik.gdsc.global.common.constant;
 
+import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import com.gdschongik.gdsc.domain.study.domain.StudyType;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
@@ -26,6 +27,7 @@ public class StudyConstant {
     // Study (2024-09-01 ~ 2024-10-27)
     public static final LocalDateTime STUDY_START_DATETIME = LocalDateTime.of(2024, 9, 1, 0, 0);
     public static final LocalDateTime STUDY_END_DATETIME = STUDY_START_DATETIME.plusWeeks(8);
+    public static final Period STUDY_ONGOING_PERIOD = Period.createPeriod(STUDY_START_DATETIME, STUDY_END_DATETIME);
     public static final String STUDY_NOTION_LINK = "notionLink";
     public static final String STUDY_INTRODUCTION = "introduction";
 

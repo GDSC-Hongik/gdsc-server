@@ -190,7 +190,7 @@ public abstract class IntegrationTest {
         Recruitment recruitment = createRecruitment(ACADEMIC_YEAR, SEMESTER_TYPE, FEE);
 
         RecruitmentRound recruitmentRound =
-                RecruitmentRound.create(RECRUITMENT_ROUND_NAME, START_DATE, END_DATE, recruitment, ROUND_TYPE);
+                RecruitmentRound.create(RECRUITMENT_ROUND_NAME, START_TO_END_PERIOD, recruitment, ROUND_TYPE);
 
         return recruitmentRoundRepository.save(recruitmentRound);
     }
@@ -205,7 +205,8 @@ public abstract class IntegrationTest {
             Money fee) {
         Recruitment recruitment = createRecruitment(academicYear, semesterType, fee);
 
-        RecruitmentRound recruitmentRound = RecruitmentRound.create(name, startDate, endDate, recruitment, roundType);
+        RecruitmentRound recruitmentRound =
+                RecruitmentRound.create(name, Period.createPeriod(startDate, endDate), recruitment, roundType);
         return recruitmentRoundRepository.save(recruitmentRound);
     }
 
