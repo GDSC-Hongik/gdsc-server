@@ -17,6 +17,8 @@ import lombok.NonNull;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public final class Money {
 
+    public static final Money ZERO = Money.from(BigDecimal.ZERO);
+
     private BigDecimal amount;
 
     @Override
@@ -33,8 +35,6 @@ public final class Money {
     private Money(BigDecimal amount) {
         this.amount = amount;
     }
-
-    public static final Money ZERO = Money.from(BigDecimal.ZERO);
 
     public static Money from(BigDecimal amount) {
         validateAmountNotNull(amount);
