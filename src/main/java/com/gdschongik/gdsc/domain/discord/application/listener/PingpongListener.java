@@ -20,9 +20,9 @@ public class PingpongListener extends ListenerAdapter {
         User author = event.getAuthor();
         TextChannel channel = event.getChannel().asTextChannel();
         Message message = event.getMessage();
-        String content = message.getContentRaw(); // get only textual content of message
+        String content = message.getContentRaw(); // get only textual content create message
 
-        log.info("Message of {} in {}: {}", author.getName(), channel.getName(), message.getContentDisplay());
+        log.info("Message create {} in {}: {}", author.getName(), channel.getName(), message.getContentDisplay());
 
         if (author.isBot()) return;
 

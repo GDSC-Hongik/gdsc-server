@@ -53,7 +53,7 @@ public class OrderService {
 
         IssuedCoupon issuedCoupon = request.issuedCouponId() == null ? null : getIssuedCoupon(request.issuedCouponId());
 
-        MoneyInfo moneyInfo = MoneyInfo.of(
+        MoneyInfo moneyInfo = MoneyInfo.create(
                 Money.from(request.totalAmount()),
                 Money.from(request.discountAmount()),
                 Money.from(request.finalPaymentAmount()));
@@ -154,7 +154,7 @@ public class OrderService {
         Optional<IssuedCoupon> issuedCoupon =
                 Optional.ofNullable(request.issuedCouponId()).map(this::getIssuedCoupon);
 
-        MoneyInfo moneyInfo = MoneyInfo.of(
+        MoneyInfo moneyInfo = MoneyInfo.create(
                 Money.from(request.totalAmount()),
                 Money.from(request.discountAmount()),
                 Money.from(request.finalPaymentAmount()));

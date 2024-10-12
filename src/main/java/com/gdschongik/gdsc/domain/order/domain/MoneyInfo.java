@@ -42,7 +42,7 @@ public class MoneyInfo {
         this.finalPaymentAmount = finalPaymentAmount;
     }
 
-    public static MoneyInfo of(Money totalAmount, Money discountAmount, Money finalPaymentAmount) {
+    public static MoneyInfo create(Money totalAmount, Money discountAmount, Money finalPaymentAmount) {
         validateFinalPaymentAmount(totalAmount, discountAmount, finalPaymentAmount);
 
         return MoneyInfo.builder()
