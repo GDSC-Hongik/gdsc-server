@@ -46,21 +46,21 @@ public class Assignment {
         this.status = status;
     }
 
-    public static Assignment createEmptyAssignment() {
-        return Assignment.builder().status(NONE).build();
-    }
-
-    public static Assignment cancelAssignment() {
-        return Assignment.builder().status(CANCELLED).build();
-    }
-
-    public static Assignment generateAssignment(String title, LocalDateTime deadline, String descriptionLink) {
+    public static Assignment create(String title, LocalDateTime deadline, String descriptionLink) {
         return Assignment.builder()
                 .title(title)
                 .deadline(deadline)
                 .descriptionLink(descriptionLink)
                 .status(StudyStatus.OPEN)
                 .build();
+    }
+
+    public static Assignment createEmpty() {
+        return Assignment.builder().status(NONE).build();
+    }
+
+    public static Assignment createCanceled() {
+        return Assignment.builder().status(CANCELLED).build();
     }
 
     public void validateSubmittable(LocalDateTime now) {

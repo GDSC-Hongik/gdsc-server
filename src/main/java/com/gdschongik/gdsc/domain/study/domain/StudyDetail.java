@@ -79,20 +79,20 @@ public class StudyDetail extends BaseEntity {
                 .attendanceNumber(attendanceNumber)
                 .period(period)
                 .curriculum(Curriculum.createEmptyCurriculum())
-                .assignment(Assignment.createEmptyAssignment())
+                .assignment(Assignment.createEmpty())
                 .build();
     }
 
     public void cancelAssignment() {
-        assignment = Assignment.cancelAssignment();
+        assignment = Assignment.createCanceled();
     }
 
     public void publishAssignment(String title, LocalDateTime deadLine, String descriptionNotionLink) {
-        assignment = Assignment.generateAssignment(title, deadLine, descriptionNotionLink);
+        assignment = Assignment.create(title, deadLine, descriptionNotionLink);
     }
 
     public void updateAssignment(String title, LocalDateTime deadLine, String descriptionNotionLink) {
-        assignment = Assignment.generateAssignment(title, deadLine, descriptionNotionLink);
+        assignment = Assignment.create(title, deadLine, descriptionNotionLink);
     }
 
     // 데이터 전달 로직
