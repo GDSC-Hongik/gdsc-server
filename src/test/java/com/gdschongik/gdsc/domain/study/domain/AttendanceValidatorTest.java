@@ -27,8 +27,8 @@ public class AttendanceValidatorTest {
             Member student = fixtureHelper.createRegularMember(1L);
 
             LocalDateTime now = LocalDateTime.now();
-            Period period = Period.createPeriod(now.plusDays(10), now.plusDays(65));
-            Period applicationPeriod = Period.createPeriod(now.minusDays(10), now.plusDays(5));
+            Period period = Period.of(now.plusDays(10), now.plusDays(65));
+            Period applicationPeriod = Period.of(now.minusDays(10), now.plusDays(5));
             Study study = fixtureHelper.createStudy(student, period, applicationPeriod);
             StudyDetail studyDetail = fixtureHelper.createStudyDetail(study, now, now.plusDays(7));
 
@@ -47,8 +47,8 @@ public class AttendanceValidatorTest {
             Member student = fixtureHelper.createRegularMember(1L);
 
             LocalDateTime now = LocalDateTime.now();
-            Period period = Period.createPeriod(now.plusDays(10), now.plusDays(65));
-            Period applicationPeriod = Period.createPeriod(now.minusDays(10), now.plusDays(5));
+            Period period = Period.of(now.plusDays(10), now.plusDays(65));
+            Period applicationPeriod = Period.of(now.minusDays(10), now.plusDays(5));
             Study study = fixtureHelper.createStudy(student, period, applicationPeriod);
             StudyDetail studyDetail = fixtureHelper.createStudyDetail(study, now, now.plusDays(7));
 
@@ -67,8 +67,8 @@ public class AttendanceValidatorTest {
             Member student = fixtureHelper.createRegularMember(1L);
 
             LocalDateTime now = LocalDateTime.now();
-            Period period = Period.createPeriod(now.plusDays(10), now.plusDays(65));
-            Period applicationPeriod = Period.createPeriod(now.minusDays(10), now.plusDays(5));
+            Period period = Period.of(now.plusDays(10), now.plusDays(65));
+            Period applicationPeriod = Period.of(now.minusDays(10), now.plusDays(5));
             Study study = fixtureHelper.createStudy(student, period, applicationPeriod);
             StudyDetail studyDetail = fixtureHelper.createStudyDetail(study, now, now.plusDays(7));
 
@@ -87,8 +87,8 @@ public class AttendanceValidatorTest {
             Member student = fixtureHelper.createRegularMember(1L);
 
             LocalDateTime now = LocalDateTime.now();
-            Period period = Period.createPeriod(now.plusDays(10), now.plusDays(65));
-            Period applicationPeriod = Period.createPeriod(now.minusDays(10), now.plusDays(5));
+            Period period = Period.of(now.plusDays(10), now.plusDays(65));
+            Period applicationPeriod = Period.of(now.minusDays(10), now.plusDays(5));
             Study study = fixtureHelper.createStudy(student, period, applicationPeriod);
             StudyDetail studyDetail = fixtureHelper.createStudyDetail(study, now, now.plusDays(7));
 

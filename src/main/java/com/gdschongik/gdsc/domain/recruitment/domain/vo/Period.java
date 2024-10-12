@@ -25,7 +25,7 @@ public class Period {
         this.endDate = endDate;
     }
 
-    public static Period createPeriod(LocalDateTime startDate, LocalDateTime endDate) {
+    public static Period of(LocalDateTime startDate, LocalDateTime endDate) {
         validatePeriod(startDate, endDate);
         return Period.builder().startDate(startDate).endDate(endDate).build();
     }

@@ -22,8 +22,8 @@ public class StudyDomainFactory {
                 request.semesterType(),
                 request.title(),
                 mentor,
-                Period.createPeriod(request.startDate().atStartOfDay(), endDate.atTime(LocalTime.MAX)),
-                Period.createPeriod(
+                Period.of(request.startDate().atStartOfDay(), endDate.atTime(LocalTime.MAX)),
+                Period.of(
                         request.applicationStartDate().atStartOfDay(),
                         request.applicationEndDate().atTime(LocalTime.MAX)),
                 request.totalWeek(),
@@ -40,6 +40,6 @@ public class StudyDomainFactory {
 
         String attendanceNumber =
                 new Random().ints(4, 0, 10).mapToObj(String::valueOf).reduce("", String::concat);
-        return StudyDetail.createStudyDetail(study, week, attendanceNumber, Period.createPeriod(startDate, endDate));
+        return StudyDetail.createStudyDetail(study, week, attendanceNumber, Period.of(startDate, endDate));
     }
 }

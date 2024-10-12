@@ -45,7 +45,7 @@ public class AdminRecruitmentService {
                 request.semesterType(),
                 Money.from(request.fee()),
                 request.feeName(),
-                Period.createPeriod(request.semesterStartDate(), request.semesterEndDate()));
+                Period.of(request.semesterStartDate(), request.semesterEndDate()));
         recruitmentRepository.save(recruitment);
 
         log.info("[AdminRecruitmentService] 리쿠르팅 생성: recruitmentId={}", recruitment.getId());
@@ -81,10 +81,7 @@ public class AdminRecruitmentService {
                 recruitmentRoundsInThisSemester);
 
         RecruitmentRound recruitmentRound = RecruitmentRound.create(
-                request.name(),
-                Period.createPeriod(request.startDate(), request.endDate()),
-                recruitment,
-                request.roundType());
+                request.name(), Period.of(request.startDate(), request.endDate()), recruitment, request.roundType());
         recruitmentRoundRepository.save(recruitmentRound);
 
         log.info("[AdminRecruitmentService] 모집회차 생성: recruitmentRoundId={}", recruitmentRound.getId());
@@ -106,7 +103,7 @@ public class AdminRecruitmentService {
                 request.startDate(), request.endDate(), request.roundType(), recruitmentRound, recruitmentRounds);
 
         recruitmentRound.updateRecruitmentRound(
-                request.name(), Period.createPeriod(request.startDate(), request.endDate()), request.roundType());
+                request.name(), Period.of(request.startDate(), request.endDate()), request.roundType());
 
         log.info("[AdminRecruitmentService] 모집회차 수정: recruitmentRoundId={}", recruitmentRoundId);
     }

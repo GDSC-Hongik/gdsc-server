@@ -31,10 +31,8 @@ public class MentorStudyDetailServiceTest extends IntegrationTest {
             // given
             LocalDateTime now = LocalDateTime.now();
             Member mentor = createAssociateMember();
-            Study study = createStudy(
-                    mentor,
-                    Period.createPeriod(now.plusDays(5), now.plusDays(10)),
-                    Period.createPeriod(now.minusDays(5), now));
+            Study study =
+                    createStudy(mentor, Period.of(now.plusDays(5), now.plusDays(10)), Period.of(now.minusDays(5), now));
             StudyDetail studyDetail = createStudyDetail(study, now, now.plusDays(7));
             logoutAndReloginAs(studyDetail.getStudy().getMentor().getId(), MemberRole.ASSOCIATE);
 

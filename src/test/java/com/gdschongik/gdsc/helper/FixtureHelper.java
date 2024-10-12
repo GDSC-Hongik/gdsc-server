@@ -67,10 +67,10 @@ public class FixtureHelper {
             SemesterType semesterType,
             Money fee) {
         Recruitment recruitment = Recruitment.createRecruitment(
-                academicYear, semesterType, fee, FEE_NAME, Period.createPeriod(SEMESTER_START_DATE, SEMESTER_END_DATE));
+                academicYear, semesterType, fee, FEE_NAME, Period.of(SEMESTER_START_DATE, SEMESTER_END_DATE));
 
         return RecruitmentRound.create(
-                RECRUITMENT_ROUND_NAME, Period.createPeriod(startDate, endDate), recruitment, RoundType.FIRST);
+                RECRUITMENT_ROUND_NAME, Period.of(startDate, endDate), recruitment, RoundType.FIRST);
     }
 
     public Membership createMembership(Member member, RecruitmentRound recruitmentRound) {
@@ -103,13 +103,13 @@ public class FixtureHelper {
     }
 
     public StudyDetail createStudyDetail(Study study, LocalDateTime startDate, LocalDateTime endDate) {
-        return StudyDetail.createStudyDetail(study, 1L, ATTENDANCE_NUMBER, Period.createPeriod(startDate, endDate));
+        return StudyDetail.createStudyDetail(study, 1L, ATTENDANCE_NUMBER, Period.of(startDate, endDate));
     }
 
     public StudyDetail createNewStudyDetail(
             Long id, Study study, Long week, LocalDateTime startDate, LocalDateTime endDate) {
         StudyDetail studyDetail =
-                StudyDetail.createStudyDetail(study, week, ATTENDANCE_NUMBER, Period.createPeriod(startDate, endDate));
+                StudyDetail.createStudyDetail(study, week, ATTENDANCE_NUMBER, Period.of(startDate, endDate));
         ReflectionTestUtils.setField(studyDetail, "id", id);
         return studyDetail;
     }

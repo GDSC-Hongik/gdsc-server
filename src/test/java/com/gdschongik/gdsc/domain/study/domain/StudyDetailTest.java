@@ -22,9 +22,7 @@ public class StudyDetailTest {
             Member mentor = fixtureHelper.createAssociateMember(1L);
             LocalDateTime now = LocalDateTime.now();
             Study study = fixtureHelper.createStudy(
-                    mentor,
-                    Period.createPeriod(now.plusDays(5), now.plusDays(10)),
-                    Period.createPeriod(now.minusDays(5), now));
+                    mentor, Period.of(now.plusDays(5), now.plusDays(10)), Period.of(now.minusDays(5), now));
             StudyDetail studyDetail = fixtureHelper.createStudyDetail(study, now, now.plusDays(7));
 
             // when
@@ -44,9 +42,7 @@ public class StudyDetailTest {
             Member mentor = fixtureHelper.createAssociateMember(1L);
             LocalDateTime now = LocalDateTime.now();
             Study study = fixtureHelper.createStudy(
-                    mentor,
-                    Period.createPeriod(now.plusDays(5), now.plusDays(10)),
-                    Period.createPeriod(now.minusDays(5), now));
+                    mentor, Period.of(now.plusDays(5), now.plusDays(10)), Period.of(now.minusDays(5), now));
             StudyDetail studyDetail = fixtureHelper.createStudyDetail(study, now, now.plusDays(7));
 
             // when

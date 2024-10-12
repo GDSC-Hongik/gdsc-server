@@ -24,9 +24,7 @@ public class StudyHistoryTest {
             Member mentor = fixtureHelper.createRegularMember(2L);
             LocalDateTime now = LocalDateTime.now();
             Study study = fixtureHelper.createStudy(
-                    mentor,
-                    Period.createPeriod(now.plusDays(5), now.plusDays(10)),
-                    Period.createPeriod(now.minusDays(5), now));
+                    mentor, Period.of(now.plusDays(5), now.plusDays(10)), Period.of(now.minusDays(5), now));
 
             // when
             StudyHistory studyHistory = StudyHistory.create(student, study);
@@ -46,9 +44,7 @@ public class StudyHistoryTest {
             Member mentor = fixtureHelper.createRegularMember(2L);
             LocalDateTime now = LocalDateTime.now();
             Study study = fixtureHelper.createStudy(
-                    mentor,
-                    Period.createPeriod(now.plusDays(5), now.plusDays(10)),
-                    Period.createPeriod(now.minusDays(5), now));
+                    mentor, Period.of(now.plusDays(5), now.plusDays(10)), Period.of(now.minusDays(5), now));
 
             StudyHistory studyHistory = StudyHistory.create(student, study);
 

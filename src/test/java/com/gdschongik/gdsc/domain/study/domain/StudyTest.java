@@ -37,7 +37,7 @@ public class StudyTest {
         void 게스트인_회원을_멘토로_지정하면_실패한다() {
             // given
             Member guestMember = Member.createGuestMember(OAUTH_ID);
-            Period applicationPeriod = Period.createPeriod(START_DATE.minusDays(10), START_DATE.minusDays(5));
+            Period applicationPeriod = Period.of(START_DATE.minusDays(10), START_DATE.minusDays(5));
 
             // when & then
             assertThatThrownBy(() -> Study.createStudy(
@@ -60,8 +60,8 @@ public class StudyTest {
         void 신청기간_시작일이_스터디_시작일보다_늦으면_실패한다() {
             // given
             Member member = createAssociateMember(1L);
-            Period period = Period.createPeriod(START_DATE, END_DATE);
-            Period applicationPeriod = Period.createPeriod(START_DATE.plusDays(1), START_DATE.plusDays(2));
+            Period period = Period.of(START_DATE, END_DATE);
+            Period applicationPeriod = Period.of(START_DATE.plusDays(1), START_DATE.plusDays(2));
 
             // when & then
             assertThatThrownBy(() -> Study.createStudy(
@@ -84,8 +84,8 @@ public class StudyTest {
         void 온오프라인_스터디에_스터디_시각이_없으면_실패한다() {
             // given
             Member member = createAssociateMember(1L);
-            Period period = Period.createPeriod(START_DATE, END_DATE);
-            Period applicationPeriod = Period.createPeriod(START_DATE.minusDays(5), START_DATE.plusDays(3));
+            Period period = Period.of(START_DATE, END_DATE);
+            Period applicationPeriod = Period.of(START_DATE.minusDays(5), START_DATE.plusDays(3));
 
             // when & then
             assertThatThrownBy(() -> Study.createStudy(
@@ -108,8 +108,8 @@ public class StudyTest {
         void 온오프라인_스터디에_스터디_시작시각이_종료시각보다_늦으면_실패한다() {
             // given
             Member member = createAssociateMember(1L);
-            Period period = Period.createPeriod(START_DATE, END_DATE);
-            Period applicationPeriod = Period.createPeriod(START_DATE.minusDays(5), START_DATE.plusDays(3));
+            Period period = Period.of(START_DATE, END_DATE);
+            Period applicationPeriod = Period.of(START_DATE.minusDays(5), START_DATE.plusDays(3));
             LocalTime studyStartTime = STUDY_START_TIME;
             LocalTime studyEndTime = STUDY_START_TIME.minusHours(2);
 
@@ -134,8 +134,8 @@ public class StudyTest {
         void 과제_스터디에_스터디_시각이_있으면_실패한다() {
             // given
             Member member = createAssociateMember(1L);
-            Period period = Period.createPeriod(START_DATE, END_DATE);
-            Period applicationPeriod = Period.createPeriod(START_DATE.minusDays(5), START_DATE.plusDays(3));
+            Period period = Period.of(START_DATE, END_DATE);
+            Period applicationPeriod = Period.of(START_DATE.minusDays(5), START_DATE.plusDays(3));
             LocalTime studyStartTime = STUDY_START_TIME;
             LocalTime studyEndTime = STUDY_END_TIME;
 
