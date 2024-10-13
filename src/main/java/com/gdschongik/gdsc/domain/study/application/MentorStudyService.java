@@ -201,6 +201,7 @@ public class MentorStudyService {
         log.info("[MentorStudyService] 스터디 상세정보 커리큘럼 작성 완료: studyDetailId={}", studyDetails);
     }
 
+    @Transactional(readOnly = true)
     public byte[] createStudyExcel(Long studyId) throws IOException {
         Member currentMember = memberUtil.getCurrentMember();
         Study study = studyRepository.findById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));

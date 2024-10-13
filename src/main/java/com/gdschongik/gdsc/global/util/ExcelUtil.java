@@ -8,6 +8,7 @@ import com.gdschongik.gdsc.domain.member.domain.Department;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import com.gdschongik.gdsc.domain.study.domain.Study;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyStudentResponse;
+import com.gdschongik.gdsc.domain.study.dto.response.StudyTodoResponse;
 import jakarta.annotation.Nullable;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -61,7 +62,38 @@ public class ExcelUtil {
         });
     }
 
-    private void createStudySheet(Workbook workbook, Study study, List<StudyStudentResponse> content) {}
+    private void createStudySheet(Workbook workbook, Study study, List<StudyStudentResponse> content) {
+        Sheet sheet = setUpStudySheet(workbook, study.getTitle(), study.getTotalWeek());
+
+        content.forEach(student -> {
+            Row studentRow = sheet.createRow(sheet.getLastRowNum() + 1);
+            studentRow.createCell(0).setCellValue(student.name());
+            studentRow.createCell(1).setCellValue(student.studentId());
+            studentRow.createCell(2).setCellValue(student.discordUsername());
+            studentRow.createCell(3).setCellValue(student.nickname());
+            studentRow.createCell(4).setCellValue(student.githubLink());
+            // todo: 수료 여부 추가
+            studentRow.createCell(5).setCellValue("X");
+            studentRow.createCell(6).setCellValue(student.isFirstRoundOutstandingStudent() ? "O" : "X");
+            studentRow.createCell(7).setCellValue(student.isSecondRoundOutstandingStudent() ? "O" : "X");
+            studentRow.createCell(8).setCellValue(student.attendanceRate());
+            studentRow.createCell(9).setCellValue(student.assignmentRate());
+            student.studyTodos().stream()
+                    .filter(StudyTodoResponse::isAssignment)
+                    .forEach(todo -> {
+                        studentRow
+                                .createCell(studentRow.getLastCellNum())
+                                .setCellValue(todo.assignmentSubmissionStatus().getValue());
+                    });
+            student.studyTodos().stream()
+                    .filter(StudyTodoResponse::isAttendance)
+                    .forEach(todo -> {
+                        studentRow
+                                .createCell(studentRow.getLastCellNum())
+                                .setCellValue(todo.attendanceStatus().getValue());
+                    });
+        });
+    }
 
     private Sheet setUpMemberSheet(Workbook workbook, String sheetName) {
         Sheet sheet = workbook.createSheet(sheetName);
@@ -71,6 +103,27 @@ public class ExcelUtil {
             Cell cell = row.createCell(i);
             cell.setCellValue(MEMBER_SHEET_HEADER[i]);
         });
+        return sheet;
+    }
+
+    private Sheet setUpStudySheet(Workbook workbook, String sheetName, long totalWeek) {
+        Sheet sheet = workbook.createSheet(sheetName);
+
+        Row row = sheet.createRow(0);
+        IntStream.range(0, STUDY_SHEET_HEADER.length).forEach(i -> {
+            Cell cell = row.createCell(i);
+            cell.setCellValue(STUDY_SHEET_HEADER[i]);
+        });
+
+        for (int i = 1; i <= totalWeek; i++) {
+            Cell cell = row.createCell(row.getLastCellNum());
+            cell.setCellValue(String.format(WEEKLY_ASSIGNMENT, i));
+        }
+
+        for (int i = 1; i <= totalWeek; i++) {
+            Cell cell = row.createCell(row.getLastCellNum());
+            cell.setCellValue(String.format(WEEKLY_ATTENDANCE, i));
+        }
         return sheet;
     }
 
