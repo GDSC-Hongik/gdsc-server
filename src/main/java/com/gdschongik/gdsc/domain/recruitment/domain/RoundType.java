@@ -1,10 +1,10 @@
 package com.gdschongik.gdsc.domain.recruitment.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@AllArgsConstructor
+@RequiredArgsConstructor
 public enum RoundType {
     FIRST("1차"),
     SECOND("2차");

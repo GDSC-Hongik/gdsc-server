@@ -51,4 +51,10 @@ public class StudyHistoryValidator {
             throw new CustomException(STUDY_HISTORY_REPOSITORY_NOT_UPDATABLE_OWNER_MISMATCH);
         }
     }
+
+    public void validateAppliedToStudy(long countStudyHistory, int studentCount) {
+        if (countStudyHistory != studentCount) {
+            throw new CustomException(STUDY_HISTORY_NOT_APPLIED_STUDENT_EXISTS);
+        }
+    }
 }

@@ -124,6 +124,7 @@ public enum ErrorCode {
     STUDY_HISTORY_REPOSITORY_NOT_UPDATABLE_ASSIGNMENT_ALREADY_SUBMITTED(
             HttpStatus.CONFLICT, "이미 제출한 과제가 있으므로 레포지토리를 수정할 수 없습니다."),
     STUDY_HISTORY_REPOSITORY_NOT_UPDATABLE_OWNER_MISMATCH(HttpStatus.CONFLICT, "레포지토리 소유자가 현재 멤버와 다릅니다."),
+    STUDY_HISTORY_NOT_APPLIED_STUDENT_EXISTS(HttpStatus.CONFLICT, "해당 스터디에 신청하지 않은 멤버가 있습니다."),
 
     // StudyAnnouncement
     STUDY_ANNOUNCEMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 스터디 공지입니다."),

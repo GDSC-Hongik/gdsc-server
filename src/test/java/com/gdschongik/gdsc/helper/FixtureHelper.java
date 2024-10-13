@@ -69,7 +69,8 @@ public class FixtureHelper {
         Recruitment recruitment = Recruitment.createRecruitment(
                 academicYear, semesterType, fee, FEE_NAME, Period.createPeriod(SEMESTER_START_DATE, SEMESTER_END_DATE));
 
-        return RecruitmentRound.create(RECRUITMENT_ROUND_NAME, startDate, endDate, recruitment, RoundType.FIRST);
+        return RecruitmentRound.create(
+                RECRUITMENT_ROUND_NAME, Period.createPeriod(startDate, endDate), recruitment, RoundType.FIRST);
     }
 
     public Membership createMembership(Member member, RecruitmentRound recruitmentRound) {

@@ -59,9 +59,7 @@ public class RecruitmentRound extends BaseSemesterEntity {
         this.roundType = roundType;
     }
 
-    public static RecruitmentRound create(
-            String name, LocalDateTime startDate, LocalDateTime endDate, Recruitment recruitment, RoundType roundType) {
-        Period period = Period.createPeriod(startDate, endDate);
+    public static RecruitmentRound create(String name, Period period, Recruitment recruitment, RoundType roundType) {
         return RecruitmentRound.builder()
                 .name(name)
                 .period(period)
