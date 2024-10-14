@@ -20,4 +20,6 @@ public interface StudyHistoryRepository extends JpaRepository<StudyHistory, Long
     Optional<StudyHistory> findByStudentAndStudyId(Member member, Long studyId);
 
     Page<StudyHistory> findByStudyId(Long studyId, Pageable pageable);
+
+    List<StudyHistory> findAllByStudyId(Long studyId);
 }

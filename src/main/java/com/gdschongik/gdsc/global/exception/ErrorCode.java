@@ -171,6 +171,9 @@ public enum ErrorCode {
     GITHUB_FILE_READ_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "깃허브 파일 읽기에 실패했습니다."),
     GITHUB_COMMIT_DATE_FETCH_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "깃허브 커밋 날짜 조회에 실패했습니다."),
     GITHUB_USER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 깃허브 유저입니다."),
+
+    // Excel
+    EXCEL_WORKSHEET_WRITE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "엑셀 워크시트 작성에 실패했습니다."),
     ;
     private final HttpStatus status;
     private final String message;

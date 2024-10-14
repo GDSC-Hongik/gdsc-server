@@ -64,6 +64,14 @@ public record StudyTodoResponse(
                 AssignmentSubmissionStatusResponse.of(assignmentHistory, studyDetail));
     }
 
+    public boolean isAttendance() {
+        return todoType == ATTENDANCE;
+    }
+
+    public boolean isAssignment() {
+        return todoType == ASSIGNMENT;
+    }
+
     @Getter
     @RequiredArgsConstructor
     public enum StudyTodoType {
