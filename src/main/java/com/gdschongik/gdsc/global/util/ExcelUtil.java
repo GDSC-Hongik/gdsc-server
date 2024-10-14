@@ -16,6 +16,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -49,18 +50,20 @@ public class ExcelUtil {
 
         memberRepository.findAllByRole(role).forEach(member -> {
             Row memberRow = sheet.createRow(sheet.getLastRowNum() + 1);
-            memberRow.createCell(0).setCellValue(member.getCreatedAt().toString());
-            memberRow.createCell(1).setCellValue(member.getName());
-            memberRow.createCell(2).setCellValue(member.getStudentId());
+            int cellIndex = 0;
+
+            memberRow.createCell(cellIndex++).setCellValue(member.getCreatedAt().toString());
+            memberRow.createCell(cellIndex++).setCellValue(member.getName());
+            memberRow.createCell(cellIndex++).setCellValue(member.getStudentId());
             memberRow
-                    .createCell(3)
+                    .createCell(cellIndex++)
                     .setCellValue(Optional.ofNullable(member.getDepartment())
                             .map(Department::getDepartmentName)
                             .orElse(""));
-            memberRow.createCell(4).setCellValue(member.getPhone());
-            memberRow.createCell(5).setCellValue(member.getEmail());
-            memberRow.createCell(6).setCellValue(member.getDiscordUsername());
-            memberRow.createCell(7).setCellValue(member.getNickname());
+            memberRow.createCell(cellIndex++).setCellValue(member.getPhone());
+            memberRow.createCell(cellIndex++).setCellValue(member.getEmail());
+            memberRow.createCell(cellIndex++).setCellValue(member.getDiscordUsername());
+            memberRow.createCell(cellIndex++).setCellValue(member.getNickname());
         });
     }
 
@@ -69,31 +72,33 @@ public class ExcelUtil {
 
         content.forEach(student -> {
             Row studentRow = sheet.createRow(sheet.getLastRowNum() + 1);
-            studentRow.createCell(0).setCellValue(student.name());
-            studentRow.createCell(1).setCellValue(student.studentId());
-            studentRow.createCell(2).setCellValue(student.discordUsername());
-            studentRow.createCell(3).setCellValue(student.nickname());
-            studentRow.createCell(4).setCellValue(student.githubLink());
+            AtomicInteger cellIndex = new AtomicInteger(0);
+
+            studentRow.createCell(cellIndex.getAndIncrement()).setCellValue(student.name());
+            studentRow.createCell(cellIndex.getAndIncrement()).setCellValue(student.studentId());
+            studentRow.createCell(cellIndex.getAndIncrement()).setCellValue(student.discordUsername());
+            studentRow.createCell(cellIndex.getAndIncrement()).setCellValue(student.nickname());
+            studentRow.createCell(cellIndex.getAndIncrement()).setCellValue(student.githubLink());
             // todo: 수료 여부 추가
-            studentRow.createCell(5).setCellValue("X");
-            studentRow.createCell(6).setCellValue(student.isFirstRoundOutstandingStudent() ? "O" : "X");
-            studentRow.createCell(7).setCellValue(student.isSecondRoundOutstandingStudent() ? "O" : "X");
-            studentRow.createCell(8).setCellValue(student.attendanceRate());
-            studentRow.createCell(9).setCellValue(student.assignmentRate());
+            studentRow.createCell(cellIndex.getAndIncrement()).setCellValue("X");
+            studentRow
+                    .createCell(cellIndex.getAndIncrement())
+                    .setCellValue(student.isFirstRoundOutstandingStudent() ? "O" : "X");
+            studentRow
+                    .createCell(cellIndex.getAndIncrement())
+                    .setCellValue(student.isSecondRoundOutstandingStudent() ? "O" : "X");
+            studentRow.createCell(cellIndex.getAndIncrement()).setCellValue(student.attendanceRate());
+            studentRow.createCell(cellIndex.getAndIncrement()).setCellValue(student.assignmentRate());
             student.studyTodos().stream()
                     .filter(StudyTodoResponse::isAssignment)
-                    .forEach(todo -> {
-                        studentRow
-                                .createCell(studentRow.getLastCellNum())
-                                .setCellValue(todo.assignmentSubmissionStatus().getValue());
-                    });
+                    .forEach(todo -> studentRow
+                            .createCell(cellIndex.getAndIncrement())
+                            .setCellValue(todo.assignmentSubmissionStatus().getValue()));
             student.studyTodos().stream()
                     .filter(StudyTodoResponse::isAttendance)
-                    .forEach(todo -> {
-                        studentRow
-                                .createCell(studentRow.getLastCellNum())
-                                .setCellValue(todo.attendanceStatus().getValue());
-                    });
+                    .forEach(todo -> studentRow
+                            .createCell(cellIndex.getAndIncrement())
+                            .setCellValue(todo.attendanceStatus().getValue()));
         });
     }
 
