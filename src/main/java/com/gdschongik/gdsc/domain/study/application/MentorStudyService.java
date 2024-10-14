@@ -25,7 +25,6 @@ import com.gdschongik.gdsc.domain.study.dto.response.StudyTodoResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.ExcelUtil;
 import com.gdschongik.gdsc.global.util.MemberUtil;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -202,7 +201,7 @@ public class MentorStudyService {
     }
 
     @Transactional(readOnly = true)
-    public byte[] createStudyExcel(Long studyId) throws IOException {
+    public byte[] createStudyExcel(Long studyId) {
         Member currentMember = memberUtil.getCurrentMember();
         Study study = studyRepository.findById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
         studyValidator.validateStudyMentor(currentMember, study);

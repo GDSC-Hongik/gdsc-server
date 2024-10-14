@@ -8,7 +8,6 @@ import com.gdschongik.gdsc.domain.study.dto.response.StudyStudentResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -72,7 +71,7 @@ public class MentorStudyController {
 
     @Operation(summary = "수강생 정보 엑셀 다운로드", description = "수강생 정보를 엑셀로 다운로드합니다.")
     @GetMapping("/{studyId}/students/excel")
-    public ResponseEntity<byte[]> createStudyWorkbook(@PathVariable Long studyId) throws IOException {
+    public ResponseEntity<byte[]> createStudyWorkbook(@PathVariable Long studyId) {
         byte[] response = mentorStudyService.createStudyExcel(studyId);
         ContentDisposition contentDisposition =
                 ContentDisposition.builder("attachment").filename("study.xls").build();

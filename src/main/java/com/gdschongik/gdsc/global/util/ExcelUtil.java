@@ -9,6 +9,8 @@ import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import com.gdschongik.gdsc.domain.study.domain.Study;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyStudentResponse;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyTodoResponse;
+import com.gdschongik.gdsc.global.exception.CustomException;
+import com.gdschongik.gdsc.global.exception.ErrorCode;
 import jakarta.annotation.Nullable;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -29,14 +31,14 @@ public class ExcelUtil {
 
     private final MemberRepository memberRepository;
 
-    public byte[] createMemberExcel() throws IOException {
+    public byte[] createMemberExcel() {
         HSSFWorkbook workbook = new HSSFWorkbook();
         createMemberSheetByRole(workbook, ALL_MEMBER_SHEET_NAME, null);
         createMemberSheetByRole(workbook, REGULAR_MEMBER_SHEET_NAME, REGULAR);
         return createByteArray(workbook);
     }
 
-    public byte[] createStudyExcel(Study study, List<StudyStudentResponse> content) throws IOException {
+    public byte[] createStudyExcel(Study study, List<StudyStudentResponse> content) {
         HSSFWorkbook workbook = new HSSFWorkbook();
         createStudySheet(workbook, study, content);
         return createByteArray(workbook);
@@ -127,10 +129,14 @@ public class ExcelUtil {
         return sheet;
     }
 
-    private byte[] createByteArray(Workbook workbook) throws IOException {
+    private byte[] createByteArray(Workbook workbook) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        workbook.write(outputStream);
-        workbook.close();
+        try {
+            workbook.write(outputStream);
+            workbook.close();
+        } catch (IOException e) {
+            throw new CustomException(ErrorCode.EXCEL_WORKSHEET_WRITE_FAILED);
+        }
         return outputStream.toByteArray();
     }
 }

@@ -18,7 +18,6 @@ import com.gdschongik.gdsc.global.exception.ErrorCode;
 import com.gdschongik.gdsc.global.util.EnvironmentUtil;
 import com.gdschongik.gdsc.global.util.ExcelUtil;
 import com.gdschongik.gdsc.global.util.MemberUtil;
-import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -66,7 +65,7 @@ public class AdminMemberService {
                 request.nickname());
     }
 
-    public byte[] createExcel() throws IOException {
+    public byte[] createExcel() {
         return excelUtil.createMemberExcel();
     }
 
