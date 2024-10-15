@@ -17,7 +17,7 @@ class MoneyInfoTest {
         Money finalPaymentAmount = Money.from(7000L);
 
         // when
-        MoneyInfo moneyInfo = MoneyInfo.create(totalAmount, discountAmount, finalPaymentAmount);
+        MoneyInfo moneyInfo = MoneyInfo.of(totalAmount, discountAmount, finalPaymentAmount);
 
         // then
         Money expectedFinalPaymentAmount = totalAmount.subtract(discountAmount);
@@ -32,7 +32,7 @@ class MoneyInfoTest {
         Money finalPaymentAmount = Money.from(8000L);
 
         // when & then
-        assertThatThrownBy(() -> MoneyInfo.create(totalAmount, discountAmount, finalPaymentAmount))
+        assertThatThrownBy(() -> MoneyInfo.of(totalAmount, discountAmount, finalPaymentAmount))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(ORDER_FINAL_PAYMENT_AMOUNT_MISMATCH.getMessage());
     }
@@ -49,8 +49,8 @@ class MoneyInfoTest {
         Money finalPaymentAmount2 = Money.from(7000L);
 
         // when
-        MoneyInfo moneyInfo1 = MoneyInfo.create(totalAmount1, discountAmount1, finalPaymentAmount1);
-        MoneyInfo moneyInfo2 = MoneyInfo.create(totalAmount2, discountAmount2, finalPaymentAmount2);
+        MoneyInfo moneyInfo1 = MoneyInfo.of(totalAmount1, discountAmount1, finalPaymentAmount1);
+        MoneyInfo moneyInfo2 = MoneyInfo.of(totalAmount2, discountAmount2, finalPaymentAmount2);
 
         // then
         assertThat(moneyInfo1).isEqualTo(moneyInfo2);
