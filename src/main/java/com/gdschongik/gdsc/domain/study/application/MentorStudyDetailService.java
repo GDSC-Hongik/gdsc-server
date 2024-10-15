@@ -4,10 +4,22 @@ import static com.gdschongik.gdsc.domain.study.domain.AssignmentSubmissionStatus
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
-import com.gdschongik.gdsc.domain.study.dao.*;
-import com.gdschongik.gdsc.domain.study.domain.*;
+import com.gdschongik.gdsc.domain.study.dao.AssignmentHistoryRepository;
+import com.gdschongik.gdsc.domain.study.dao.AttendanceRepository;
+import com.gdschongik.gdsc.domain.study.dao.StudyDetailRepository;
+import com.gdschongik.gdsc.domain.study.dao.StudyHistoryRepository;
+import com.gdschongik.gdsc.domain.study.dao.StudyRepository;
+import com.gdschongik.gdsc.domain.study.domain.Study;
+import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
+import com.gdschongik.gdsc.domain.study.domain.StudyDetailValidator;
+import com.gdschongik.gdsc.domain.study.domain.StudyHistory;
+import com.gdschongik.gdsc.domain.study.domain.StudyValidator;
 import com.gdschongik.gdsc.domain.study.dto.request.AssignmentCreateUpdateRequest;
-import com.gdschongik.gdsc.domain.study.dto.response.*;
+import com.gdschongik.gdsc.domain.study.dto.response.AssignmentResponse;
+import com.gdschongik.gdsc.domain.study.dto.response.StudyCurriculumResponse;
+import com.gdschongik.gdsc.domain.study.dto.response.StudyMentorAttendanceResponse;
+import com.gdschongik.gdsc.domain.study.dto.response.StudyStatisticsResponse;
+import com.gdschongik.gdsc.domain.study.dto.response.StudyWeekStatisticsResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import java.time.LocalDate;
