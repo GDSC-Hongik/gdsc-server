@@ -103,13 +103,12 @@ public class FixtureHelper {
     }
 
     public StudyDetail createStudyDetail(Study study, LocalDateTime startDate, LocalDateTime endDate) {
-        return StudyDetail.createStudyDetail(study, 1L, ATTENDANCE_NUMBER, Period.of(startDate, endDate));
+        return StudyDetail.create(study, 1L, ATTENDANCE_NUMBER, Period.of(startDate, endDate));
     }
 
     public StudyDetail createNewStudyDetail(
             Long id, Study study, Long week, LocalDateTime startDate, LocalDateTime endDate) {
-        StudyDetail studyDetail =
-                StudyDetail.createStudyDetail(study, week, ATTENDANCE_NUMBER, Period.of(startDate, endDate));
+        StudyDetail studyDetail = StudyDetail.create(study, week, ATTENDANCE_NUMBER, Period.of(startDate, endDate));
         ReflectionTestUtils.setField(studyDetail, "id", id);
         return studyDetail;
     }

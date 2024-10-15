@@ -71,7 +71,7 @@ public class StudyDetail extends BaseEntity {
         this.assignment = assignment;
     }
 
-    public static StudyDetail createStudyDetail(Study study, Long week, String attendanceNumber, Period period) {
+    public static StudyDetail create(Study study, Long week, String attendanceNumber, Period period) {
         return StudyDetail.builder()
                 .study(study)
                 .week(week)

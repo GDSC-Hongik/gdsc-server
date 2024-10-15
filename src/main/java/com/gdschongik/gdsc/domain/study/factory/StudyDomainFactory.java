@@ -40,6 +40,6 @@ public class StudyDomainFactory {
 
         String attendanceNumber =
                 new Random().ints(4, 0, 10).mapToObj(String::valueOf).reduce("", String::concat);
-        return StudyDetail.createStudyDetail(study, week, attendanceNumber, Period.of(startDate, endDate));
+        return StudyDetail.create(study, week, attendanceNumber, Period.of(startDate, endDate));
     }
 }
