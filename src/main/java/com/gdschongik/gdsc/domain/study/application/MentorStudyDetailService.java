@@ -1,5 +1,7 @@
 package com.gdschongik.gdsc.domain.study.application;
 
+import static com.gdschongik.gdsc.domain.study.domain.AssignmentSubmissionStatus.FAILURE;
+import static com.gdschongik.gdsc.domain.study.domain.AssignmentSubmissionStatus.SUCCESS;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
@@ -156,7 +158,7 @@ public class MentorStudyDetailService {
                     }
 
                     long attendanceCount = attendanceRepository.countByStudyDetailId(studyDetail.getId());
-                    long assignmentCount = assignmentHistoryRepository.countByStudyDetailId(studyDetail.getId());
+                    long assignmentCount = assignmentHistoryRepository.countByStudyDetailIdAndSubmissionStatusEquals(studyDetail.getId(), SUCCESS);
 
                     return StudyWeekStatisticsResponse.createOpenedWeekStatistics(
                             studyDetail.getWeek(),
@@ -178,7 +180,7 @@ public class MentorStudyDetailService {
                         weekStatistics -> weekStatistics.isCanceledWeek() ? 0 : weekStatistics.attendanceRate())
                 .sum();
 
-        return Math.round(attendanceRateSum / (double) openedWeekCount * 100);
+        return Math.round(attendanceRateSum / (double) openedWeekCount);
     }
 
     private long calculateAverageWeekAssignmentSubmitRate(
@@ -193,6 +195,6 @@ public class MentorStudyDetailService {
                                 weekStatistics.isCanceledWeek() ? 0 : weekStatistics.assignmentSubmitRate())
                         .sum();
 
-        return Math.round(assignmentSubmitRateSum / (double) openedWeekCount * 100);
+        return Math.round(assignmentSubmitRateSum / (double) openedWeekCount);
     }
 }
