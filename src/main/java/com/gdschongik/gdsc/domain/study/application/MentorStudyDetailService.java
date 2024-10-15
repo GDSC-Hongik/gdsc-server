@@ -1,6 +1,5 @@
 package com.gdschongik.gdsc.domain.study.application;
 
-import static com.gdschongik.gdsc.domain.study.domain.AssignmentSubmissionStatus.FAILURE;
 import static com.gdschongik.gdsc.domain.study.domain.AssignmentSubmissionStatus.SUCCESS;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
@@ -158,7 +157,8 @@ public class MentorStudyDetailService {
                     }
 
                     long attendanceCount = attendanceRepository.countByStudyDetailId(studyDetail.getId());
-                    long assignmentCount = assignmentHistoryRepository.countByStudyDetailIdAndSubmissionStatusEquals(studyDetail.getId(), SUCCESS);
+                    long assignmentCount = assignmentHistoryRepository.countByStudyDetailIdAndSubmissionStatusEquals(
+                            studyDetail.getId(), SUCCESS);
 
                     return StudyWeekStatisticsResponse.createOpenedWeekStatistics(
                             studyDetail.getWeek(),
@@ -176,8 +176,7 @@ public class MentorStudyDetailService {
         }
 
         long attendanceRateSum = studyWeekStatisticsResponses.stream()
-                .mapToLong(
-                        weekStatistics -> weekStatistics.isCanceledWeek() ? 0 : weekStatistics.attendanceRate())
+                .mapToLong(weekStatistics -> weekStatistics.isCanceledWeek() ? 0 : weekStatistics.attendanceRate())
                 .sum();
 
         return Math.round(attendanceRateSum / (double) openedWeekCount);
@@ -191,9 +190,9 @@ public class MentorStudyDetailService {
         }
 
         long assignmentSubmitRateSum = studyWeekStatisticsResponses.stream()
-                        .mapToLong(weekStatistics ->
-                                weekStatistics.isCanceledWeek() ? 0 : weekStatistics.assignmentSubmitRate())
-                        .sum();
+                .mapToLong(
+                        weekStatistics -> weekStatistics.isCanceledWeek() ? 0 : weekStatistics.assignmentSubmitRate())
+                .sum();
 
         return Math.round(assignmentSubmitRateSum / (double) openedWeekCount);
     }
