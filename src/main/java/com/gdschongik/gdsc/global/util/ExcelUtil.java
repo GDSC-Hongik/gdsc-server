@@ -79,8 +79,9 @@ public class ExcelUtil {
             studentRow.createCell(cellIndex.getAndIncrement()).setCellValue(student.discordUsername());
             studentRow.createCell(cellIndex.getAndIncrement()).setCellValue(student.nickname());
             studentRow.createCell(cellIndex.getAndIncrement()).setCellValue(student.githubLink());
-            // todo: 수료 여부 추가
-            studentRow.createCell(cellIndex.getAndIncrement()).setCellValue("X");
+            studentRow
+                    .createCell(cellIndex.getAndIncrement())
+                    .setCellValue(student.studyHistoryStatus().getValue());
             studentRow
                     .createCell(cellIndex.getAndIncrement())
                     .setCellValue(student.isFirstRoundOutstandingStudent() ? "O" : "X");

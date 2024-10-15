@@ -10,7 +10,7 @@ public class WorkbookConstant {
 
     // Study
     public static final String[] STUDY_SHEET_HEADER = {
-        "이름", "학번", "디스코드 유저네임", "커뮤니티 닉네임", "깃허브 링크", "수료 여부", "1차 우수 스터디원 여부", "2차 우수 스터디원 여부", "출석률", "과제 수행률"
+        "이름", "학번", "디스코드 유저네임", "커뮤니티 닉네임", "깃허브 링크", "수료 상태", "1차 우수 스터디원 여부", "2차 우수 스터디원 여부", "출석률", "과제 수행률"
     };
     public static final String WEEKLY_ASSIGNMENT = "%d주차 과제";
     public static final String WEEKLY_ATTENDANCE = "%d주차 출석";
