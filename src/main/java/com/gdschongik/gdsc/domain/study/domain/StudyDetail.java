@@ -78,7 +78,7 @@ public class StudyDetail extends BaseEntity {
                 .period(period)
                 .attendanceNumber(attendanceNumber)
                 .period(period)
-                .curriculum(Curriculum.createEmpty())
+                .curriculum(Curriculum.empty())
                 .assignment(Assignment.empty())
                 .build();
     }
@@ -135,7 +135,7 @@ public class StudyDetail extends BaseEntity {
 
     public void updateCurriculum(
             LocalTime startAt, String title, String description, Difficulty difficulty, StudyStatus status) {
-        curriculum = Curriculum.create(startAt, title, description, difficulty, status);
+        curriculum = Curriculum.of(startAt, title, description, difficulty, status);
     }
 
     public void validateAssignmentSubmittable(LocalDateTime now) {

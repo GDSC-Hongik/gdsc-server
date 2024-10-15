@@ -41,7 +41,7 @@ public class Curriculum {
         this.status = status;
     }
 
-    public static Curriculum create(
+    public static Curriculum of(
             LocalTime startAt, String title, String description, Difficulty difficulty, StudyStatus status) {
         return Curriculum.builder()
                 .startAt(startAt)
@@ -52,7 +52,7 @@ public class Curriculum {
                 .build();
     }
 
-    public static Curriculum createEmpty() {
+    public static Curriculum empty() {
         return Curriculum.builder().status(StudyStatus.NONE).build();
     }
 
