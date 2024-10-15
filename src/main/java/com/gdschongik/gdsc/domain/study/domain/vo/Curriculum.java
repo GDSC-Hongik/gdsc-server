@@ -41,11 +41,7 @@ public class Curriculum {
         this.status = status;
     }
 
-    public static Curriculum createEmptyCurriculum() {
-        return Curriculum.builder().status(StudyStatus.NONE).build();
-    }
-
-    public static Curriculum generateCurriculum(
+    public static Curriculum of(
             LocalTime startAt, String title, String description, Difficulty difficulty, StudyStatus status) {
         return Curriculum.builder()
                 .startAt(startAt)
@@ -54,6 +50,10 @@ public class Curriculum {
                 .difficulty(difficulty)
                 .status(status)
                 .build();
+    }
+
+    public static Curriculum empty() {
+        return Curriculum.builder().status(StudyStatus.NONE).build();
     }
 
     // 데이터 전달 로직

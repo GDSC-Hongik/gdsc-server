@@ -3,8 +3,8 @@ package com.gdschongik.gdsc.domain.study.domain;
 import static com.gdschongik.gdsc.global.common.constant.StudyConstant.*;
 import static org.assertj.core.api.Assertions.*;
 
+import com.gdschongik.gdsc.domain.common.vo.Period;
 import com.gdschongik.gdsc.domain.member.domain.Member;
-import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import com.gdschongik.gdsc.helper.FixtureHelper;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.Nested;
@@ -22,9 +22,7 @@ public class StudyDetailTest {
             Member mentor = fixtureHelper.createAssociateMember(1L);
             LocalDateTime now = LocalDateTime.now();
             Study study = fixtureHelper.createStudy(
-                    mentor,
-                    Period.createPeriod(now.plusDays(5), now.plusDays(10)),
-                    Period.createPeriod(now.minusDays(5), now));
+                    mentor, Period.of(now.plusDays(5), now.plusDays(10)), Period.of(now.minusDays(5), now));
             StudyDetail studyDetail = fixtureHelper.createStudyDetail(study, now, now.plusDays(7));
 
             // when
@@ -44,9 +42,7 @@ public class StudyDetailTest {
             Member mentor = fixtureHelper.createAssociateMember(1L);
             LocalDateTime now = LocalDateTime.now();
             Study study = fixtureHelper.createStudy(
-                    mentor,
-                    Period.createPeriod(now.plusDays(5), now.plusDays(10)),
-                    Period.createPeriod(now.minusDays(5), now));
+                    mentor, Period.of(now.plusDays(5), now.plusDays(10)), Period.of(now.minusDays(5), now));
             StudyDetail studyDetail = fixtureHelper.createStudyDetail(study, now, now.plusDays(7));
 
             // when

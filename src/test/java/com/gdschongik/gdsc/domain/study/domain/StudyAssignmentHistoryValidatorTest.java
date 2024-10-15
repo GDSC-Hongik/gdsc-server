@@ -4,8 +4,8 @@ import static com.gdschongik.gdsc.global.common.constant.StudyConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 
+import com.gdschongik.gdsc.domain.common.vo.Period;
 import com.gdschongik.gdsc.domain.member.domain.Member;
-import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.helper.FixtureHelper;
 import java.time.LocalDateTime;
@@ -23,8 +23,7 @@ class StudyAssignmentHistoryValidatorTest {
     }
 
     private Study createStudyWithMentor(Long mentorId) {
-        Period applicationPeriod =
-                Period.createPeriod(STUDY_START_DATETIME.minusDays(7), STUDY_START_DATETIME.minusDays(1));
+        Period applicationPeriod = Period.of(STUDY_START_DATETIME.minusDays(7), STUDY_START_DATETIME.minusDays(1));
         return fixtureHelper.createStudyWithMentor(mentorId, STUDY_ONGOING_PERIOD, applicationPeriod);
     }
 

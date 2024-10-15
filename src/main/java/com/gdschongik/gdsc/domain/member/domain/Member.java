@@ -106,8 +106,8 @@ public class Member extends BaseEntity {
         this.associateRequirement = associateRequirement;
     }
 
-    public static Member createGuestMember(String oauthId) {
-        AssociateRequirement associateRequirement = AssociateRequirement.createRequirement();
+    public static Member createGuest(String oauthId) {
+        AssociateRequirement associateRequirement = AssociateRequirement.unsatisfied();
         return Member.builder()
                 .oauthId(oauthId)
                 .role(GUEST)

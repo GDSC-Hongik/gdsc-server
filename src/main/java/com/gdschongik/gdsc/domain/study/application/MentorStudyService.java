@@ -122,8 +122,7 @@ public class MentorStudyService {
 
         studyValidator.validateStudyMentor(currentMember, study);
 
-        StudyAnnouncement studyAnnouncement =
-                StudyAnnouncement.createStudyAnnouncement(study, request.title(), request.link());
+        StudyAnnouncement studyAnnouncement = StudyAnnouncement.create(study, request.title(), request.link());
         studyAnnouncementRepository.save(studyAnnouncement);
 
         log.info("[MentorStudyService] 스터디 공지 생성: studyAnnouncementId={}", studyAnnouncement.getId());

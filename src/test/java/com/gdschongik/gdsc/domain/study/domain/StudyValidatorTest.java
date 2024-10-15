@@ -3,8 +3,8 @@ package com.gdschongik.gdsc.domain.study.domain;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 
+import com.gdschongik.gdsc.domain.common.vo.Period;
 import com.gdschongik.gdsc.domain.member.domain.Member;
-import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.helper.FixtureHelper;
 import java.time.LocalDateTime;
@@ -40,8 +40,8 @@ public class StudyValidatorTest {
             LocalDateTime assignmentCreatedDate = LocalDateTime.now().minusDays(1);
             Study study = fixtureHelper.createStudy(
                     mentor,
-                    Period.createPeriod(assignmentCreatedDate.plusDays(5), assignmentCreatedDate.plusDays(10)),
-                    Period.createPeriod(assignmentCreatedDate.minusDays(5), assignmentCreatedDate));
+                    Period.of(assignmentCreatedDate.plusDays(5), assignmentCreatedDate.plusDays(10)),
+                    Period.of(assignmentCreatedDate.minusDays(5), assignmentCreatedDate));
 
             // when & then
             assertThatThrownBy(() -> studyValidator.validateStudyMentor(currentMember, study))
@@ -57,13 +57,13 @@ public class StudyValidatorTest {
             LocalDateTime assignmentCreatedDate = LocalDateTime.now().minusDays(1);
             Study study = fixtureHelper.createStudy(
                     mentor,
-                    Period.createPeriod(assignmentCreatedDate.plusDays(5), assignmentCreatedDate.plusDays(10)),
-                    Period.createPeriod(assignmentCreatedDate.minusDays(5), assignmentCreatedDate));
+                    Period.of(assignmentCreatedDate.plusDays(5), assignmentCreatedDate.plusDays(10)),
+                    Period.of(assignmentCreatedDate.minusDays(5), assignmentCreatedDate));
 
             Study currentMentorStudy = fixtureHelper.createStudy(
                     currentMember,
-                    Period.createPeriod(assignmentCreatedDate.plusDays(5), assignmentCreatedDate.plusDays(10)),
-                    Period.createPeriod(assignmentCreatedDate.minusDays(5), assignmentCreatedDate));
+                    Period.of(assignmentCreatedDate.plusDays(5), assignmentCreatedDate.plusDays(10)),
+                    Period.of(assignmentCreatedDate.minusDays(5), assignmentCreatedDate));
 
             // when & then
             assertThat(currentMentorStudy.getMentor().getId()).isEqualTo(currentMember.getId());
@@ -80,8 +80,8 @@ public class StudyValidatorTest {
             LocalDateTime assignmentCreatedDate = LocalDateTime.now().minusDays(1);
             Study study = fixtureHelper.createStudy(
                     mentor,
-                    Period.createPeriod(assignmentCreatedDate.plusDays(5), assignmentCreatedDate.plusDays(10)),
-                    Period.createPeriod(assignmentCreatedDate.minusDays(5), assignmentCreatedDate));
+                    Period.of(assignmentCreatedDate.plusDays(5), assignmentCreatedDate.plusDays(10)),
+                    Period.of(assignmentCreatedDate.minusDays(5), assignmentCreatedDate));
 
             // when & then
             assertThatCode(() -> studyValidator.validateStudyMentor(admin, study))

@@ -10,6 +10,7 @@ import static com.gdschongik.gdsc.global.common.constant.TemporalConstant.*;
 
 import com.gdschongik.gdsc.domain.common.model.SemesterType;
 import com.gdschongik.gdsc.domain.common.vo.Money;
+import com.gdschongik.gdsc.domain.common.vo.Period;
 import com.gdschongik.gdsc.domain.coupon.domain.Coupon;
 import com.gdschongik.gdsc.domain.coupon.domain.IssuedCoupon;
 import com.gdschongik.gdsc.domain.member.domain.Member;
@@ -17,7 +18,6 @@ import com.gdschongik.gdsc.domain.membership.domain.Membership;
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.domain.recruitment.domain.RoundType;
-import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import com.gdschongik.gdsc.domain.study.domain.Study;
 import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
 import java.time.LocalDateTime;
@@ -26,7 +26,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 public class FixtureHelper {
 
     public Member createGuestMember(Long id) {
-        Member member = Member.createGuestMember(OAUTH_ID);
+        Member member = Member.createGuest(OAUTH_ID);
         ReflectionTestUtils.setField(member, "id", id);
         return member;
     }
@@ -66,24 +66,24 @@ public class FixtureHelper {
             Integer academicYear,
             SemesterType semesterType,
             Money fee) {
-        Recruitment recruitment = Recruitment.createRecruitment(
-                academicYear, semesterType, fee, FEE_NAME, Period.createPeriod(SEMESTER_START_DATE, SEMESTER_END_DATE));
+        Recruitment recruitment = Recruitment.create(
+                academicYear, semesterType, fee, FEE_NAME, Period.of(SEMESTER_START_DATE, SEMESTER_END_DATE));
 
         return RecruitmentRound.create(
-                RECRUITMENT_ROUND_NAME, Period.createPeriod(startDate, endDate), recruitment, RoundType.FIRST);
+                RECRUITMENT_ROUND_NAME, Period.of(startDate, endDate), recruitment, RoundType.FIRST);
     }
 
     public Membership createMembership(Member member, RecruitmentRound recruitmentRound) {
-        return Membership.createMembership(member, recruitmentRound);
+        return Membership.create(member, recruitmentRound);
     }
 
     public IssuedCoupon createAndIssue(Money money, Member member) {
-        Coupon coupon = Coupon.createCoupon("테스트쿠폰", money);
-        return IssuedCoupon.issue(coupon, member);
+        Coupon coupon = Coupon.create("테스트쿠폰", money);
+        return IssuedCoupon.create(coupon, member);
     }
 
     public Study createStudy(Member mentor, Period period, Period applicationPeriod) {
-        return Study.createStudy(
+        return Study.create(
                 ACADEMIC_YEAR,
                 SEMESTER_TYPE,
                 STUDY_TITLE,
@@ -103,13 +103,12 @@ public class FixtureHelper {
     }
 
     public StudyDetail createStudyDetail(Study study, LocalDateTime startDate, LocalDateTime endDate) {
-        return StudyDetail.createStudyDetail(study, 1L, ATTENDANCE_NUMBER, Period.createPeriod(startDate, endDate));
+        return StudyDetail.create(study, 1L, ATTENDANCE_NUMBER, Period.of(startDate, endDate));
     }
 
     public StudyDetail createNewStudyDetail(
             Long id, Study study, Long week, LocalDateTime startDate, LocalDateTime endDate) {
-        StudyDetail studyDetail =
-                StudyDetail.createStudyDetail(study, week, ATTENDANCE_NUMBER, Period.createPeriod(startDate, endDate));
+        StudyDetail studyDetail = StudyDetail.create(study, week, ATTENDANCE_NUMBER, Period.of(startDate, endDate));
         ReflectionTestUtils.setField(studyDetail, "id", id);
         return studyDetail;
     }

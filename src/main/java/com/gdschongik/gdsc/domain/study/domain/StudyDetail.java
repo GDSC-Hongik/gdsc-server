@@ -3,7 +3,7 @@ package com.gdschongik.gdsc.domain.study.domain;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.common.model.BaseEntity;
-import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
+import com.gdschongik.gdsc.domain.common.vo.Period;
 import com.gdschongik.gdsc.domain.study.domain.vo.Assignment;
 import com.gdschongik.gdsc.domain.study.domain.vo.Curriculum;
 import com.gdschongik.gdsc.global.exception.CustomException;
@@ -71,28 +71,28 @@ public class StudyDetail extends BaseEntity {
         this.assignment = assignment;
     }
 
-    public static StudyDetail createStudyDetail(Study study, Long week, String attendanceNumber, Period period) {
+    public static StudyDetail create(Study study, Long week, String attendanceNumber, Period period) {
         return StudyDetail.builder()
                 .study(study)
                 .week(week)
                 .period(period)
                 .attendanceNumber(attendanceNumber)
                 .period(period)
-                .curriculum(Curriculum.createEmptyCurriculum())
-                .assignment(Assignment.createEmptyAssignment())
+                .curriculum(Curriculum.empty())
+                .assignment(Assignment.empty())
                 .build();
     }
 
     public void cancelAssignment() {
-        assignment = Assignment.cancelAssignment();
+        assignment = Assignment.canceled();
     }
 
     public void publishAssignment(String title, LocalDateTime deadLine, String descriptionNotionLink) {
-        assignment = Assignment.generateAssignment(title, deadLine, descriptionNotionLink);
+        assignment = Assignment.of(title, deadLine, descriptionNotionLink);
     }
 
     public void updateAssignment(String title, LocalDateTime deadLine, String descriptionNotionLink) {
-        assignment = Assignment.generateAssignment(title, deadLine, descriptionNotionLink);
+        assignment = Assignment.of(title, deadLine, descriptionNotionLink);
     }
 
     // 데이터 전달 로직
@@ -135,7 +135,7 @@ public class StudyDetail extends BaseEntity {
 
     public void updateCurriculum(
             LocalTime startAt, String title, String description, Difficulty difficulty, StudyStatus status) {
-        curriculum = Curriculum.generateCurriculum(startAt, title, description, difficulty, status);
+        curriculum = Curriculum.of(startAt, title, description, difficulty, status);
     }
 
     public void validateAssignmentSubmittable(LocalDateTime now) {

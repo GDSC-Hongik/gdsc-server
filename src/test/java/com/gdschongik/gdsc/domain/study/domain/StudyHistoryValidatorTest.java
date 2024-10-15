@@ -4,8 +4,8 @@ import static com.gdschongik.gdsc.global.common.constant.MemberConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 
+import com.gdschongik.gdsc.domain.common.vo.Period;
 import com.gdschongik.gdsc.domain.member.domain.Member;
-import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.helper.FixtureHelper;
 import java.time.LocalDateTime;
@@ -27,8 +27,8 @@ public class StudyHistoryValidatorTest {
             Member mentor = fixtureHelper.createAssociateMember(1L);
 
             LocalDateTime now = LocalDateTime.now();
-            Period period = Period.createPeriod(now.plusDays(10), now.plusDays(15));
-            Period applicationPeriod = Period.createPeriod(now.minusDays(10), now.plusDays(5));
+            Period period = Period.of(now.plusDays(10), now.plusDays(15));
+            Period applicationPeriod = Period.of(now.minusDays(10), now.plusDays(5));
             Study study = fixtureHelper.createStudy(mentor, period, applicationPeriod);
 
             Member student = fixtureHelper.createGuestMember(2L);
@@ -46,8 +46,8 @@ public class StudyHistoryValidatorTest {
             Member mentor = fixtureHelper.createAssociateMember(1L);
 
             LocalDateTime now = LocalDateTime.now();
-            Period period = Period.createPeriod(now.plusDays(10), now.plusDays(15));
-            Period applicationPeriod = Period.createPeriod(now.minusDays(10), now.minusDays(5));
+            Period period = Period.of(now.plusDays(10), now.plusDays(15));
+            Period applicationPeriod = Period.of(now.minusDays(10), now.minusDays(5));
             Study study = fixtureHelper.createStudy(mentor, period, applicationPeriod);
 
             // when & then
@@ -62,8 +62,8 @@ public class StudyHistoryValidatorTest {
             Member mentor = fixtureHelper.createAssociateMember(1L);
 
             LocalDateTime now = LocalDateTime.now();
-            Period period = Period.createPeriod(now.minusDays(5), now.plusDays(15));
-            Period applicationPeriod = Period.createPeriod(now.minusDays(15), now.plusDays(5));
+            Period period = Period.of(now.minusDays(5), now.plusDays(15));
+            Period applicationPeriod = Period.of(now.minusDays(15), now.plusDays(5));
             Study study = fixtureHelper.createStudy(mentor, period, applicationPeriod);
 
             Study anotherStudy = fixtureHelper.createStudy(mentor, period, applicationPeriod);
@@ -87,8 +87,8 @@ public class StudyHistoryValidatorTest {
             Member mentor = fixtureHelper.createAssociateMember(1L);
 
             LocalDateTime now = LocalDateTime.now();
-            Period period = Period.createPeriod(now.plusDays(10), now.plusDays(15));
-            Period applicationPeriod = Period.createPeriod(now.minusDays(10), now.minusDays(5));
+            Period period = Period.of(now.plusDays(10), now.plusDays(15));
+            Period applicationPeriod = Period.of(now.minusDays(10), now.minusDays(5));
             Study study = fixtureHelper.createStudy(mentor, period, applicationPeriod);
 
             // when & then

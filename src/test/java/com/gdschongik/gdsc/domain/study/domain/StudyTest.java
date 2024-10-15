@@ -1,7 +1,7 @@
 package com.gdschongik.gdsc.domain.study.domain;
 
 import static com.gdschongik.gdsc.domain.member.domain.Department.D022;
-import static com.gdschongik.gdsc.domain.member.domain.Member.createGuestMember;
+import static com.gdschongik.gdsc.domain.member.domain.Member.createGuest;
 import static com.gdschongik.gdsc.global.common.constant.MemberConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.RecruitmentConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.StudyConstant.*;
@@ -9,8 +9,8 @@ import static com.gdschongik.gdsc.global.common.constant.TemporalConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.gdschongik.gdsc.domain.common.vo.Period;
 import com.gdschongik.gdsc.domain.member.domain.Member;
-import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import java.time.LocalTime;
 import org.junit.jupiter.api.Nested;
@@ -20,7 +20,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 public class StudyTest {
 
     private Member createAssociateMember(Long id) {
-        Member member = createGuestMember(OAUTH_ID);
+        Member member = createGuest(OAUTH_ID);
         member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
         member.completeUnivEmailVerification(UNIV_EMAIL);
         member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
@@ -36,11 +36,11 @@ public class StudyTest {
         @Test
         void 게스트인_회원을_멘토로_지정하면_실패한다() {
             // given
-            Member guestMember = Member.createGuestMember(OAUTH_ID);
-            Period applicationPeriod = Period.createPeriod(START_DATE.minusDays(10), START_DATE.minusDays(5));
+            Member guestMember = Member.createGuest(OAUTH_ID);
+            Period applicationPeriod = Period.of(START_DATE.minusDays(10), START_DATE.minusDays(5));
 
             // when & then
-            assertThatThrownBy(() -> Study.createStudy(
+            assertThatThrownBy(() -> Study.create(
                             ACADEMIC_YEAR,
                             SEMESTER_TYPE,
                             STUDY_TITLE,
@@ -60,11 +60,11 @@ public class StudyTest {
         void 신청기간_시작일이_스터디_시작일보다_늦으면_실패한다() {
             // given
             Member member = createAssociateMember(1L);
-            Period period = Period.createPeriod(START_DATE, END_DATE);
-            Period applicationPeriod = Period.createPeriod(START_DATE.plusDays(1), START_DATE.plusDays(2));
+            Period period = Period.of(START_DATE, END_DATE);
+            Period applicationPeriod = Period.of(START_DATE.plusDays(1), START_DATE.plusDays(2));
 
             // when & then
-            assertThatThrownBy(() -> Study.createStudy(
+            assertThatThrownBy(() -> Study.create(
                             ACADEMIC_YEAR,
                             SEMESTER_TYPE,
                             STUDY_TITLE,
@@ -84,11 +84,11 @@ public class StudyTest {
         void 온오프라인_스터디에_스터디_시각이_없으면_실패한다() {
             // given
             Member member = createAssociateMember(1L);
-            Period period = Period.createPeriod(START_DATE, END_DATE);
-            Period applicationPeriod = Period.createPeriod(START_DATE.minusDays(5), START_DATE.plusDays(3));
+            Period period = Period.of(START_DATE, END_DATE);
+            Period applicationPeriod = Period.of(START_DATE.minusDays(5), START_DATE.plusDays(3));
 
             // when & then
-            assertThatThrownBy(() -> Study.createStudy(
+            assertThatThrownBy(() -> Study.create(
                             ACADEMIC_YEAR,
                             SEMESTER_TYPE,
                             STUDY_TITLE,
@@ -108,13 +108,13 @@ public class StudyTest {
         void 온오프라인_스터디에_스터디_시작시각이_종료시각보다_늦으면_실패한다() {
             // given
             Member member = createAssociateMember(1L);
-            Period period = Period.createPeriod(START_DATE, END_DATE);
-            Period applicationPeriod = Period.createPeriod(START_DATE.minusDays(5), START_DATE.plusDays(3));
+            Period period = Period.of(START_DATE, END_DATE);
+            Period applicationPeriod = Period.of(START_DATE.minusDays(5), START_DATE.plusDays(3));
             LocalTime studyStartTime = STUDY_START_TIME;
             LocalTime studyEndTime = STUDY_START_TIME.minusHours(2);
 
             // when & then
-            assertThatThrownBy(() -> Study.createStudy(
+            assertThatThrownBy(() -> Study.create(
                             ACADEMIC_YEAR,
                             SEMESTER_TYPE,
                             STUDY_TITLE,
@@ -134,13 +134,13 @@ public class StudyTest {
         void 과제_스터디에_스터디_시각이_있으면_실패한다() {
             // given
             Member member = createAssociateMember(1L);
-            Period period = Period.createPeriod(START_DATE, END_DATE);
-            Period applicationPeriod = Period.createPeriod(START_DATE.minusDays(5), START_DATE.plusDays(3));
+            Period period = Period.of(START_DATE, END_DATE);
+            Period applicationPeriod = Period.of(START_DATE.minusDays(5), START_DATE.plusDays(3));
             LocalTime studyStartTime = STUDY_START_TIME;
             LocalTime studyEndTime = STUDY_END_TIME;
 
             // when & then
-            assertThatThrownBy(() -> Study.createStudy(
+            assertThatThrownBy(() -> Study.create(
                             ACADEMIC_YEAR,
                             SEMESTER_TYPE,
                             STUDY_TITLE,

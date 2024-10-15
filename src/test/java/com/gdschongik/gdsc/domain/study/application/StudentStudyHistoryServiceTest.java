@@ -4,9 +4,9 @@ import static com.gdschongik.gdsc.global.common.constant.StudyConstant.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import com.gdschongik.gdsc.domain.common.vo.Period;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
-import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import com.gdschongik.gdsc.domain.study.dao.AssignmentHistoryRepository;
 import com.gdschongik.gdsc.domain.study.dao.StudyHistoryRepository;
 import com.gdschongik.gdsc.domain.study.domain.AssignmentHistory;
@@ -52,8 +52,8 @@ class StudentStudyHistoryServiceTest extends IntegrationTest {
             LocalDateTime now = LocalDateTime.now(); // 통합 테스트에서는 LocalDateTime.now()를 사용해야 함
             Study study = createStudy(
                     mentor,
-                    Period.createPeriod(now.minusWeeks(1), now.plusWeeks(7)), // 스터디 기간: 1주 전 ~ 7주 후
-                    Period.createPeriod(now.minusWeeks(2), now.minusWeeks(1))); // 수강신청 기간: 2주 전 ~ 1주 전
+                    Period.of(now.minusWeeks(1), now.plusWeeks(7)), // 스터디 기간: 1주 전 ~ 7주 후
+                    Period.of(now.minusWeeks(2), now.minusWeeks(1))); // 수강신청 기간: 2주 전 ~ 1주 전
             StudyDetail studyDetail =
                     createStudyDetail(study, now.minusDays(6), now.plusDays(1)); // 1주차 기간: 6일 전 ~ 1일 후
             publishAssignment(studyDetail);

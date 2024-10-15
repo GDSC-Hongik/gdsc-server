@@ -24,7 +24,7 @@ class AdminMemberServiceTest extends IntegrationTest {
     @Test
     void status가_DELETED라면_예외_발생() {
         // given
-        Member member = Member.createGuestMember(OAUTH_ID);
+        Member member = Member.createGuest(OAUTH_ID);
         member.withdraw();
         memberRepository.save(member);
 

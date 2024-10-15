@@ -44,7 +44,7 @@ public class AssociateRequirement {
         this.infoStatus = infoStatus;
     }
 
-    public static AssociateRequirement createRequirement() {
+    public static AssociateRequirement unsatisfied() {
         return AssociateRequirement.builder()
                 .univStatus(UNSATISFIED)
                 .discordStatus(UNSATISFIED)

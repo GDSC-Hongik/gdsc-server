@@ -3,8 +3,8 @@ package com.gdschongik.gdsc.domain.study.application;
 import static com.gdschongik.gdsc.domain.study.domain.AchievementType.*;
 import static org.assertj.core.api.Assertions.*;
 
+import com.gdschongik.gdsc.domain.common.vo.Period;
 import com.gdschongik.gdsc.domain.member.domain.Member;
-import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import com.gdschongik.gdsc.domain.study.domain.Study;
 import com.gdschongik.gdsc.domain.study.domain.StudyAchievement;
 import com.gdschongik.gdsc.domain.study.dto.request.OutstandingStudentRequest;
@@ -28,10 +28,8 @@ public class MentorStudyAchievementServiceTest extends IntegrationTest {
             // given
             LocalDateTime now = LocalDateTime.now();
             Member mentor = createMentor();
-            Study study = createStudy(
-                    mentor,
-                    Period.createPeriod(now.plusDays(5), now.plusDays(10)),
-                    Period.createPeriod(now.minusDays(5), now));
+            Study study =
+                    createStudy(mentor, Period.of(now.plusDays(5), now.plusDays(10)), Period.of(now.minusDays(5), now));
 
             Member student = createRegularMember();
             createStudyHistory(student, study);
@@ -59,10 +57,8 @@ public class MentorStudyAchievementServiceTest extends IntegrationTest {
             Member student = createRegularMember();
             LocalDateTime now = LocalDateTime.now();
             Member mentor = createMentor();
-            Study study = createStudy(
-                    mentor,
-                    Period.createPeriod(now.plusDays(5), now.plusDays(10)),
-                    Period.createPeriod(now.minusDays(5), now));
+            Study study =
+                    createStudy(mentor, Period.of(now.plusDays(5), now.plusDays(10)), Period.of(now.minusDays(5), now));
             createStudyHistory(student, study);
             createStudyAchievement(student, study, FIRST_ROUND_OUTSTANDING_STUDENT);
 

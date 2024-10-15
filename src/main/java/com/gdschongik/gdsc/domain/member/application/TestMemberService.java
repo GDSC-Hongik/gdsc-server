@@ -31,7 +31,7 @@ public class TestMemberService {
             throw new CustomException(INTERNAL_SERVER_ERROR);
         }
 
-        Member guestMember = Member.createGuestMember(githubOauthId);
+        Member guestMember = Member.createGuest(githubOauthId);
         memberRepository.save(guestMember);
     }
 

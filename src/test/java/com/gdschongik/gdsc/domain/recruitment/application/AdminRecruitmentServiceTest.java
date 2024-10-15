@@ -5,11 +5,11 @@ import static com.gdschongik.gdsc.global.common.constant.TemporalConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 
+import com.gdschongik.gdsc.domain.common.vo.Period;
 import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRepository;
 import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRoundRepository;
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
-import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentCreateRequest;
 import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentRoundCreateRequest;
 import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentRoundUpdateRequest;
@@ -70,15 +70,12 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
         void 성공한다() {
             // given
             LocalDateTime now = LocalDateTime.now().withNano(0);
-            Recruitment recruitment = Recruitment.createRecruitment(
-                    ACADEMIC_YEAR, SEMESTER_TYPE, FEE, FEE_NAME, Period.createPeriod(now, now.plusMonths(3)));
+            Recruitment recruitment =
+                    Recruitment.create(ACADEMIC_YEAR, SEMESTER_TYPE, FEE, FEE_NAME, Period.of(now, now.plusMonths(3)));
             recruitmentRepository.save(recruitment);
 
             RecruitmentRound recruitmentRound = RecruitmentRound.create(
-                    RECRUITMENT_ROUND_NAME,
-                    Period.createPeriod(now.plusDays(1), now.plusDays(2)),
-                    recruitment,
-                    ROUND_TYPE);
+                    RECRUITMENT_ROUND_NAME, Period.of(now.plusDays(1), now.plusDays(2)), recruitment, ROUND_TYPE);
             recruitmentRoundRepository.save(recruitmentRound);
 
             RecruitmentRoundUpdateRequest request = new RecruitmentRoundUpdateRequest(
