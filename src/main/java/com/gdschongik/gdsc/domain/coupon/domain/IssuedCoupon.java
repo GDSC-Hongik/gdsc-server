@@ -51,7 +51,7 @@ public class IssuedCoupon extends BaseEntity {
         this.hasRevoked = hasRevoked;
     }
 
-    public static IssuedCoupon issue(Coupon coupon, Member member) {
+    public static IssuedCoupon create(Coupon coupon, Member member) {
         return IssuedCoupon.builder()
                 .coupon(coupon)
                 .member(member)

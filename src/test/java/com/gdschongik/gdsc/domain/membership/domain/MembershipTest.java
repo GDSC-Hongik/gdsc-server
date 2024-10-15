@@ -22,20 +22,20 @@ class MembershipTest {
         @Test
         void 성공한다() {
             // given
-            Member member = createGuestMember(OAUTH_ID);
+            Member member = createGuest(OAUTH_ID);
             member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
             member.completeUnivEmailVerification(UNIV_EMAIL);
             member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
             member.verifyBevy();
             member.advanceToAssociate();
 
-            Recruitment recruitment = Recruitment.createRecruitment(
+            Recruitment recruitment = Recruitment.create(
                     ACADEMIC_YEAR, SEMESTER_TYPE, FEE, FEE_NAME, Period.of(SEMESTER_START_DATE, SEMESTER_END_DATE));
             RecruitmentRound recruitmentRound =
                     RecruitmentRound.create(RECRUITMENT_ROUND_NAME, START_TO_END_PERIOD, recruitment, ROUND_TYPE);
 
             // when
-            Membership membership = Membership.createMembership(member, recruitmentRound);
+            Membership membership = Membership.create(member, recruitmentRound);
 
             // then
             assertThat(membership).isNotNull();

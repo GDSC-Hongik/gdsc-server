@@ -20,9 +20,9 @@ class IssuedCouponTest {
         @Test
         void 성공하면_사용여부는_true이다() {
             // given
-            Coupon coupon = Coupon.createCoupon(COUPON_NAME, Money.from(ONE));
-            Member member = Member.createGuestMember(OAUTH_ID);
-            IssuedCoupon issuedCoupon = IssuedCoupon.issue(coupon, member);
+            Coupon coupon = Coupon.create(COUPON_NAME, Money.from(ONE));
+            Member member = Member.createGuest(OAUTH_ID);
+            IssuedCoupon issuedCoupon = IssuedCoupon.create(coupon, member);
 
             // when
             issuedCoupon.use();
@@ -34,9 +34,9 @@ class IssuedCouponTest {
         @Test
         void 이미_사용한_쿠폰이면_실패한다() {
             // given
-            Coupon coupon = Coupon.createCoupon(COUPON_NAME, Money.from(ONE));
-            Member member = Member.createGuestMember(OAUTH_ID);
-            IssuedCoupon issuedCoupon = IssuedCoupon.issue(coupon, member);
+            Coupon coupon = Coupon.create(COUPON_NAME, Money.from(ONE));
+            Member member = Member.createGuest(OAUTH_ID);
+            IssuedCoupon issuedCoupon = IssuedCoupon.create(coupon, member);
             issuedCoupon.use();
 
             // when & then
@@ -48,9 +48,9 @@ class IssuedCouponTest {
         @Test
         void 이미_회수한_쿠폰이면_실패한다() {
             // given
-            Coupon coupon = Coupon.createCoupon(COUPON_NAME, Money.from(ONE));
-            Member member = Member.createGuestMember(OAUTH_ID);
-            IssuedCoupon issuedCoupon = IssuedCoupon.issue(coupon, member);
+            Coupon coupon = Coupon.create(COUPON_NAME, Money.from(ONE));
+            Member member = Member.createGuest(OAUTH_ID);
+            IssuedCoupon issuedCoupon = IssuedCoupon.create(coupon, member);
             issuedCoupon.revoke();
 
             // when & then
@@ -66,9 +66,9 @@ class IssuedCouponTest {
         @Test
         void 성공하면_회수여부는_true이다() {
             // given
-            Coupon coupon = Coupon.createCoupon(COUPON_NAME, Money.from(ONE));
-            Member member = Member.createGuestMember(OAUTH_ID);
-            IssuedCoupon issuedCoupon = IssuedCoupon.issue(coupon, member);
+            Coupon coupon = Coupon.create(COUPON_NAME, Money.from(ONE));
+            Member member = Member.createGuest(OAUTH_ID);
+            IssuedCoupon issuedCoupon = IssuedCoupon.create(coupon, member);
 
             // when
             issuedCoupon.revoke();
@@ -80,9 +80,9 @@ class IssuedCouponTest {
         @Test
         void 이미_회수한_발급쿠폰이면_실패한다() {
             // given
-            Coupon coupon = Coupon.createCoupon(COUPON_NAME, Money.from(ONE));
-            Member member = Member.createGuestMember(OAUTH_ID);
-            IssuedCoupon issuedCoupon = IssuedCoupon.issue(coupon, member);
+            Coupon coupon = Coupon.create(COUPON_NAME, Money.from(ONE));
+            Member member = Member.createGuest(OAUTH_ID);
+            IssuedCoupon issuedCoupon = IssuedCoupon.create(coupon, member);
             issuedCoupon.revoke();
 
             // when & then
@@ -94,9 +94,9 @@ class IssuedCouponTest {
         @Test
         void 이미_사용한_발급쿠폰이면_실패한다() {
             // given
-            Coupon coupon = Coupon.createCoupon(COUPON_NAME, Money.from(ONE));
-            Member member = Member.createGuestMember(OAUTH_ID);
-            IssuedCoupon issuedCoupon = IssuedCoupon.issue(coupon, member);
+            Coupon coupon = Coupon.create(COUPON_NAME, Money.from(ONE));
+            Member member = Member.createGuest(OAUTH_ID);
+            IssuedCoupon issuedCoupon = IssuedCoupon.create(coupon, member);
             issuedCoupon.use();
 
             // when & then

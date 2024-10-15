@@ -52,7 +52,7 @@ class OnboardingMemberServiceTest extends IntegrationTest {
         @Test
         void 기본정보_미작성시_멤버_기본정보는_모두_null이다() {
             // given
-            memberRepository.save(Member.createGuestMember(OAUTH_ID));
+            memberRepository.save(Member.createGuest(OAUTH_ID));
             logoutAndReloginAs(1L, MemberRole.ASSOCIATE);
 
             // when

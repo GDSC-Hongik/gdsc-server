@@ -26,7 +26,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 public class FixtureHelper {
 
     public Member createGuestMember(Long id) {
-        Member member = Member.createGuestMember(OAUTH_ID);
+        Member member = Member.createGuest(OAUTH_ID);
         ReflectionTestUtils.setField(member, "id", id);
         return member;
     }
@@ -66,7 +66,7 @@ public class FixtureHelper {
             Integer academicYear,
             SemesterType semesterType,
             Money fee) {
-        Recruitment recruitment = Recruitment.createRecruitment(
+        Recruitment recruitment = Recruitment.create(
                 academicYear, semesterType, fee, FEE_NAME, Period.of(SEMESTER_START_DATE, SEMESTER_END_DATE));
 
         return RecruitmentRound.create(
@@ -74,16 +74,16 @@ public class FixtureHelper {
     }
 
     public Membership createMembership(Member member, RecruitmentRound recruitmentRound) {
-        return Membership.createMembership(member, recruitmentRound);
+        return Membership.create(member, recruitmentRound);
     }
 
     public IssuedCoupon createAndIssue(Money money, Member member) {
-        Coupon coupon = Coupon.createCoupon("테스트쿠폰", money);
-        return IssuedCoupon.issue(coupon, member);
+        Coupon coupon = Coupon.create("테스트쿠폰", money);
+        return IssuedCoupon.create(coupon, member);
     }
 
     public Study createStudy(Member mentor, Period period, Period applicationPeriod) {
-        return Study.createStudy(
+        return Study.create(
                 ACADEMIC_YEAR,
                 SEMESTER_TYPE,
                 STUDY_TITLE,

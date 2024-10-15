@@ -102,7 +102,7 @@ public class Study extends BaseSemesterEntity {
         this.endTime = endTime;
     }
 
-    public static Study createStudy(
+    public static Study create(
             Integer academicYear,
             SemesterType semesterType,
             String title,

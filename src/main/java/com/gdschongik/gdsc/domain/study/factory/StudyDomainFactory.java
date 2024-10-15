@@ -17,7 +17,7 @@ public class StudyDomainFactory {
     // 새로운 스터디를 생성합니다.
     public Study createNewStudy(StudyCreateRequest request, Member mentor) {
         LocalDate endDate = request.startDate().plusWeeks(request.totalWeek()).minusDays(1);
-        return Study.createStudy(
+        return Study.create(
                 request.academicYear(),
                 request.semesterType(),
                 request.title(),

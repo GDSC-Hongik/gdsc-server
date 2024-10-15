@@ -1,7 +1,5 @@
 package com.gdschongik.gdsc.global.security;
 
-import static com.gdschongik.gdsc.global.common.constant.SecurityConstant.*;
-
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +31,7 @@ public class CustomUserService extends DefaultOAuth2UserService {
     }
 
     private Member registerMember(OAuth2User oAuth2User) {
-        Member guest = Member.createGuestMember(oAuth2User.getName());
+        Member guest = Member.createGuest(oAuth2User.getName());
         return memberRepository.save(guest);
     }
 }

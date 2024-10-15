@@ -18,7 +18,7 @@ class RecruitmentTest {
             Period period = Period.of(SEMESTER_START_DATE, SEMESTER_END_DATE);
 
             // when
-            Recruitment recruitment = Recruitment.createRecruitment(
+            Recruitment recruitment = Recruitment.create(
                     ACADEMIC_YEAR, SEMESTER_TYPE, FEE, FEE_NAME, Period.of(SEMESTER_START_DATE, SEMESTER_END_DATE));
 
             // then

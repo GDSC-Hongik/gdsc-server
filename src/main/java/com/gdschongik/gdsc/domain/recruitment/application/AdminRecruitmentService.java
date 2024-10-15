@@ -40,7 +40,7 @@ public class AdminRecruitmentService {
 
         recruitmentValidator.validateRecruitmentCreate(isRecruitmentOverlap);
 
-        Recruitment recruitment = Recruitment.createRecruitment(
+        Recruitment recruitment = Recruitment.create(
                 request.academicYear(),
                 request.semesterType(),
                 Money.from(request.fee()),
