@@ -5,6 +5,7 @@ import com.gdschongik.gdsc.domain.study.dto.request.AssignmentCreateUpdateReques
 import com.gdschongik.gdsc.domain.study.dto.response.AssignmentResponse;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyCurriculumResponse;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyMentorAttendanceResponse;
+import com.gdschongik.gdsc.domain.study.dto.response.StudyStatisticsResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -78,6 +79,13 @@ public class MentorStudyDetailController {
     public ResponseEntity<List<StudyMentorAttendanceResponse>> getAttendanceNumbers(
             @RequestParam(name = "studyId") Long studyId) {
         List<StudyMentorAttendanceResponse> response = mentorStudyDetailService.getAttendanceNumbers(studyId);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "스터디 통계 조회", description = "멘토가 자신의 스터디 출석률, 과제 제출률, 수료율에 대한 통계를 조회합니다. 휴강 주차는 계산에서 제외합니다.")
+    @GetMapping("/statistics")
+    public ResponseEntity<StudyStatisticsResponse> getStudyStatistics(@RequestParam(name = "studyId") Long studyId) {
+        StudyStatisticsResponse response = mentorStudyDetailService.getStudyStatistics(studyId);
         return ResponseEntity.ok(response);
     }
 }
