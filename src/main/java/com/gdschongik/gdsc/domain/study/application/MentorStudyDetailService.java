@@ -131,7 +131,7 @@ public class MentorStudyDetailService {
         studyValidator.validateStudyMentor(currentMember, study);
 
         List<StudyHistory> studyHistories = studyHistoryRepository.findAllByStudyId(studyId);
-        long wholeStudentCount = studyHistories.size();
+        long totalStudentCount = studyHistories.size();
         long studyCompleteStudentCount =
                 studyHistories.stream().filter(StudyHistory::isComplete).count();
 
@@ -141,14 +141,14 @@ public class MentorStudyDetailService {
                 .count();
 
         List<StudyWeekStatisticsResponse> studyWeekStatisticsResponses =
-                calculateStudyWeekStatistics(studyDetails, wholeStudentCount);
+                calculateStudyWeekStatistics(studyDetails, totalStudentCount);
 
         long averageAttendanceRate = calculateAverageWeekAttendanceRate(studyWeekStatisticsResponses, openedWeekCount);
         long averageAssignmentSubmitRate =
                 calculateAverageWeekAssignmentSubmitRate(studyWeekStatisticsResponses, openedWeekCount);
 
         return StudyStatisticsResponse.of(
-                wholeStudentCount,
+                totalStudentCount,
                 studyCompleteStudentCount,
                 averageAttendanceRate,
                 averageAssignmentSubmitRate,
@@ -156,7 +156,7 @@ public class MentorStudyDetailService {
     }
 
     private List<StudyWeekStatisticsResponse> calculateStudyWeekStatistics(
-            List<StudyDetail> studyDetails, Long wholeStudentCount) {
+            List<StudyDetail> studyDetails, Long totalStudentCount) {
 
         return studyDetails.stream()
                 .map((studyDetail -> {
@@ -164,7 +164,7 @@ public class MentorStudyDetailService {
                         return StudyWeekStatisticsResponse.createCanceledWeekStatistics(studyDetail.getWeek());
                     }
 
-                    if (wholeStudentCount == 0) {
+                    if (totalStudentCount == 0) {
                         return StudyWeekStatisticsResponse.createOpenedWeekStatistics(studyDetail.getWeek(), 0L, 0L);
                     }
 
@@ -174,8 +174,8 @@ public class MentorStudyDetailService {
 
                     return StudyWeekStatisticsResponse.createOpenedWeekStatistics(
                             studyDetail.getWeek(),
-                            Math.round(attendanceCount / (double) wholeStudentCount * 100),
-                            Math.round(assignmentCount / (double) wholeStudentCount * 100));
+                            Math.round(attendanceCount / (double) totalStudentCount * 100),
+                            Math.round(assignmentCount / (double) totalStudentCount * 100));
                 }))
                 .toList();
     }
