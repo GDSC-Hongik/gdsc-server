@@ -46,7 +46,7 @@ public class Assignment {
         this.status = status;
     }
 
-    public static Assignment create(String title, LocalDateTime deadline, String descriptionLink) {
+    public static Assignment of(String title, LocalDateTime deadline, String descriptionLink) {
         return Assignment.builder()
                 .title(title)
                 .deadline(deadline)
@@ -55,11 +55,11 @@ public class Assignment {
                 .build();
     }
 
-    public static Assignment createEmpty() {
+    public static Assignment empty() {
         return Assignment.builder().status(NONE).build();
     }
 
-    public static Assignment createCanceled() {
+    public static Assignment canceled() {
         return Assignment.builder().status(CANCELLED).build();
     }
 
