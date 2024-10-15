@@ -98,7 +98,7 @@ public class StudentStudyService {
         attendanceValidator.validateAttendance(
                 studyDetail, request.attendanceNumber(), LocalDate.now(), isAlreadyAttended, isAppliedToStudy);
 
-        Attendance attendance = Attendance.create(currentMember, studyDetail);
+        Attendance attendance = Attendance.of(currentMember, studyDetail);
         attendanceRepository.save(attendance);
 
         log.info("[StudyService] 스터디 출석: attendanceId={}, memberId={}", attendance.getId(), currentMember.getId());
