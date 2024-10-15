@@ -6,10 +6,10 @@ import java.util.List;
 public record StudyStatisticsResponse(
         @Schema(description = "스터디 전체 수강생 수") Long totalStudentCount,
         @Schema(description = "스터디 수료 수강생 수") Long completeStudentCount,
-        @Schema(description = "출석률 평균") Long averageAttendanceRate,
-        @Schema(description = "과제 제출률 평균") Long averageAssignmentSubmitRate,
+        @Schema(description = "평균 출석률") Long averageAttendanceRate,
+        @Schema(description = "평균 과제 제출률") Long averageAssignmentSubmitRate,
         @Schema(description = "스터디 수료율") Long studyCompleteRate,
-        @Schema(description = "주차별 출석 및 과제 통계") List<StudyWeekStatisticsResponse> studyWeekStatisticsResponses) {
+        @Schema(description = "주차별 출석률 및 과제 제출률") List<StudyWeekStatisticsResponse> studyWeekStatisticsResponses) {
 
     public static StudyStatisticsResponse of(
             Long totalStudentCount,

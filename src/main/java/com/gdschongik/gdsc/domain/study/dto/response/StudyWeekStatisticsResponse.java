@@ -6,7 +6,7 @@ public record StudyWeekStatisticsResponse(
         @Schema(description = "스터디 주차") Long studyWeek,
         @Schema(description = "현재 주차 출석률") Long attendanceRate,
         @Schema(description = "현재 주차 과제 제출률") Long assignmentSubmitRate,
-        @Schema(description = "스터디 주차 휴강 여부") boolean isCanceledWeek) {
+        @Schema(description = "현재 주차 휴강 여부") boolean isCanceledWeek) {
 
     public static StudyWeekStatisticsResponse createOpenedWeekStatistics(
             Long studyWeek, Long attendanceRate, Long assignmentSubmitRate) {
