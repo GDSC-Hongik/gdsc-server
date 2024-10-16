@@ -129,24 +129,19 @@ public class MentorStudyDetailService {
     public StudyStatisticsResponse getStudyStatistics(Long studyId) {
         Member currentMember = memberUtil.getCurrentMember();
         Study study = studyRepository.findById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
+        List<StudyHistory> studyHistories = studyHistoryRepository.findAllByStudyId(studyId);
+        List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyIdOrderByWeekAsc(studyId);
         studyValidator.validateStudyMentor(currentMember, study);
 
-        List<StudyHistory> studyHistories = studyHistoryRepository.findAllByStudyId(studyId);
         long totalStudentCount = studyHistories.size();
         long studyCompleteStudentCount =
                 studyHistories.stream().filter(StudyHistory::isComplete).count();
 
-        List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyIdOrderByWeekAsc(studyId);
-        long openedWeekCount = studyDetails.stream()
-                .filter(studyDetail -> studyDetail.getCurriculum().isOpen())
-                .count();
-
         List<StudyWeekStatisticsResponse> studyWeekStatisticsResponses =
                 calculateStudyWeekStatistics(studyDetails, totalStudentCount);
 
-        long averageAttendanceRate = calculateAverageWeekAttendanceRate(studyWeekStatisticsResponses, openedWeekCount);
-        long averageAssignmentSubmitRate =
-                calculateAverageWeekAssignmentSubmitRate(studyWeekStatisticsResponses, openedWeekCount);
+        long averageAttendanceRate = calculateAverageWeekAttendanceRate(studyWeekStatisticsResponses);
+        long averageAssignmentSubmitRate = calculateAverageWeekAssignmentSubmitRate(studyWeekStatisticsResponses);
 
         return StudyStatisticsResponse.of(
                 totalStudentCount,
@@ -161,52 +156,47 @@ public class MentorStudyDetailService {
 
         return studyDetails.stream()
                 .map((studyDetail -> {
-                    if (!studyDetail.getCurriculum().isOpen()) {
-                        return canceledWeekStatisticsFrom(studyDetail.getWeek());
-                    }
+                    boolean isCanceledWeek = !studyDetail.getCurriculum().isOpen();
+                    boolean isCanceledAssignment = !studyDetail.getAssignment().isOpen() | isCanceledWeek;
 
                     if (totalStudentCount == 0) {
-                        return openedWeekStatisticsOf(studyDetail.getWeek(), 0L, 0L);
+                        return of(studyDetail.getWeek(), 0L, 0L, isCanceledAssignment, isCanceledWeek);
                     }
 
                     long attendanceCount = attendanceRepository.countByStudyDetailId(studyDetail.getId());
                     long assignmentCount = assignmentHistoryRepository.countByStudyDetailIdAndSubmissionStatusEquals(
                             studyDetail.getId(), SUCCESS);
 
-                    return openedWeekStatisticsOf(
+                    return of(
                             studyDetail.getWeek(),
-                            Math.round(attendanceCount / (double) totalStudentCount * 100),
-                            Math.round(assignmentCount / (double) totalStudentCount * 100));
+                            isCanceledWeek ? 0 : Math.round(attendanceCount / (double) totalStudentCount * 100),
+                            isCanceledAssignment ? 0 : Math.round(assignmentCount / (double) totalStudentCount * 100),
+                            isCanceledAssignment,
+                            isCanceledWeek);
                 }))
                 .toList();
     }
 
-    private long calculateAverageWeekAttendanceRate(
-            List<StudyWeekStatisticsResponse> studyWeekStatisticsResponses, long openedWeekCount) {
+    private long calculateAverageWeekAttendanceRate(List<StudyWeekStatisticsResponse> studyWeekStatisticsResponses) {
 
-        if (openedWeekCount == 0) {
-            return 0;
-        }
+        double averageAttendanceRate = studyWeekStatisticsResponses.stream()
+                .filter(weekStatisticsResponse -> !weekStatisticsResponse.isCanceledWeek())
+                .mapToLong(StudyWeekStatisticsResponse::attendanceRate)
+                .average()
+                .orElse(0);
 
-        long attendanceRateSum = studyWeekStatisticsResponses.stream()
-                .mapToLong(weekStatistics -> weekStatistics.isCanceledWeek() ? 0 : weekStatistics.attendanceRate())
-                .sum();
-
-        return Math.round(attendanceRateSum / (double) openedWeekCount);
+        return Math.round(averageAttendanceRate);
     }
 
     private long calculateAverageWeekAssignmentSubmitRate(
-            List<StudyWeekStatisticsResponse> studyWeekStatisticsResponses, long openedWeekCount) {
+            List<StudyWeekStatisticsResponse> studyWeekStatisticsResponses) {
 
-        if (openedWeekCount == 0) {
-            return 0;
-        }
+        double averageAssignmentSubmitRate = studyWeekStatisticsResponses.stream()
+                .filter(studyWeekStatistics -> !studyWeekStatistics.isCanceledAssignment())
+                .mapToLong(StudyWeekStatisticsResponse::assignmentSubmitRate)
+                .average()
+                .orElse(0);
 
-        long assignmentSubmitRateSum = studyWeekStatisticsResponses.stream()
-                .mapToLong(
-                        weekStatistics -> weekStatistics.isCanceledWeek() ? 0 : weekStatistics.assignmentSubmitRate())
-                .sum();
-
-        return Math.round(assignmentSubmitRateSum / (double) openedWeekCount);
+        return Math.round(averageAssignmentSubmitRate);
     }
 }
