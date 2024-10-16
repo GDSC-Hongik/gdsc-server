@@ -156,7 +156,7 @@ public class MentorStudyDetailService {
         return studyDetails.stream()
                 .map((studyDetail -> {
                     boolean isCanceledWeek = !studyDetail.getCurriculum().isOpen();
-                    boolean isCanceledAssignment = !studyDetail.getAssignment().isOpen() | isCanceledWeek;
+                    boolean isCanceledAssignment = !studyDetail.getAssignment().isOpen() || isCanceledWeek;
 
                     if (totalStudentCount == 0) {
                         return StudyWeekStatisticsResponse.of(
