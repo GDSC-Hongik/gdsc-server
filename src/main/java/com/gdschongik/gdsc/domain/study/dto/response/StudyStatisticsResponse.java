@@ -22,7 +22,7 @@ public record StudyStatisticsResponse(
                 completeStudentCount,
                 averageAttendanceRate,
                 averageAssignmentSubmitRate,
-                Math.round(completeStudentCount / (double) totalStudentCount * 100),
+                totalStudentCount == 0 ? 0 : Math.round(completeStudentCount / (double) totalStudentCount * 100),
                 studyWeekStatisticsResponses);
     }
 }

@@ -159,7 +159,8 @@ public class MentorStudyDetailService {
                     boolean isCanceledAssignment = !studyDetail.getAssignment().isOpen() | isCanceledWeek;
 
                     if (totalStudentCount == 0) {
-                        return StudyWeekStatisticsResponse.of(studyDetail.getWeek(), 0L, 0L, isCanceledAssignment, isCanceledWeek);
+                        return StudyWeekStatisticsResponse.of(
+                                studyDetail.getWeek(), 0L, 0L, isCanceledAssignment, isCanceledWeek);
                     }
 
                     long attendanceCount = attendanceRepository.countByStudyDetailId(studyDetail.getId());
