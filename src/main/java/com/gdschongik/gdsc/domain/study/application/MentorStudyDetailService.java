@@ -1,7 +1,6 @@
 package com.gdschongik.gdsc.domain.study.application;
 
 import static com.gdschongik.gdsc.domain.study.domain.AssignmentSubmissionStatus.SUCCESS;
-import static com.gdschongik.gdsc.domain.study.dto.response.StudyWeekStatisticsResponse.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
@@ -160,14 +159,14 @@ public class MentorStudyDetailService {
                     boolean isCanceledAssignment = !studyDetail.getAssignment().isOpen() | isCanceledWeek;
 
                     if (totalStudentCount == 0) {
-                        return of(studyDetail.getWeek(), 0L, 0L, isCanceledAssignment, isCanceledWeek);
+                        return StudyWeekStatisticsResponse.of(studyDetail.getWeek(), 0L, 0L, isCanceledAssignment, isCanceledWeek);
                     }
 
                     long attendanceCount = attendanceRepository.countByStudyDetailId(studyDetail.getId());
                     long assignmentCount = assignmentHistoryRepository.countByStudyDetailIdAndSubmissionStatusEquals(
                             studyDetail.getId(), SUCCESS);
 
-                    return of(
+                    return StudyWeekStatisticsResponse.of(
                             studyDetail.getWeek(),
                             isCanceledWeek ? 0 : Math.round(attendanceCount / (double) totalStudentCount * 100),
                             isCanceledAssignment ? 0 : Math.round(assignmentCount / (double) totalStudentCount * 100),
