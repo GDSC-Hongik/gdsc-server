@@ -6,10 +6,10 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: ${SHOW_SQL:true}
+    #    show-sql: ${SHOW_SQL:true}
     properties:
       hibernate:
-        format_sql: ${FORMAT_SQL:true}
+        #        format_sql: ${FORMAT_SQL:true}
         highlight_sql: ${HIGHLIGHT_SQL:true}
     defer-datasource-initialization: true
     open-in-view: false
@@ -18,6 +18,7 @@ logging:
   level:
     com.gdschongik.gdsc.domain.*.api.*: debug
     com.gdschongik.gdsc.infra.feign: debug
-    org.hibernate.orm.jdbc.bind: trace
+    #    org.hibernate.orm.jdbc.bind: trace
     org.hibernate.SQL: debug
     org.kohsuke.github: debug
+    org.springframework.orm.jpa: DEBUG

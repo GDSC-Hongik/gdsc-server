@@ -110,6 +110,8 @@ public class WebSecurityConfig {
         http.addFilterAfter(jwtFilter(jwtService, cookieUtil), LogoutFilter.class);
 
         http.authorizeHttpRequests(authorize -> authorize
+                .requestMatchers("/tests/**")
+                .permitAll()
                 .requestMatchers("/oauth2/**")
                 .permitAll()
                 .requestMatchers("/gdsc-actuator/**")
