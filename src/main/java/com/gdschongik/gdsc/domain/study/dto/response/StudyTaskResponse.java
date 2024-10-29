@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 public record StudyTaskResponse(
         Long studyDetailId,
         @Schema(description = "현 주차수") Long week,
-        @Schema(description = "할일 타입") StudyTaskType taskType,
+        @Schema(description = "태스크 타입") StudyTaskType taskType,
         @Schema(description = "마감 시각") LocalDateTime deadLine,
         @Schema(description = "출석 상태 (출석타입일 때만 사용)") AttendanceStatusResponse attendanceStatus,
         @Schema(description = "과제 제목 (과제타입일 때만 사용)") String assignmentTitle,
