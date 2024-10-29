@@ -1,5 +1,6 @@
 package com.gdschongik.gdsc.domain.study.domain;
 
+import com.gdschongik.gdsc.domain.common.model.BaseEntity;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,7 +23,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"member_id", "study_id", "achievement_type"})})
-public class StudyAchievement {
+public class StudyAchievement extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
