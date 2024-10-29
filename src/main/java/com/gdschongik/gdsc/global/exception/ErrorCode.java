@@ -162,7 +162,7 @@ public enum ErrorCode {
     ASSIGNMENT_STUDY_NOT_APPLIED(HttpStatus.CONFLICT, "해당 스터디에 대한 수강신청 기록이 존재하지 않습니다."),
     ASSIGNMENT_SUBMIT_NOT_STARTED(HttpStatus.CONFLICT, "아직 과제가 시작되지 않았습니다."),
     ASSIGNMENT_SUBMIT_NOT_PUBLISHED(HttpStatus.CONFLICT, "아직 과제가 등록되지 않았습니다."),
-    ASSIGNMENT_SUBMIT_CANCELLED(HttpStatus.CONFLICT, "과제 휴강 주간에는 과제를 제출할 수 없습니다."),
+    ASSIGNMENT_SUBMIT_CANCELED(HttpStatus.CONFLICT, "과제 휴강 주간에는 과제를 제출할 수 없습니다."),
     ASSIGNMENT_SUBMIT_DEADLINE_PASSED(HttpStatus.CONFLICT, "과제 마감 기한이 지났습니다."),
 
     // Github

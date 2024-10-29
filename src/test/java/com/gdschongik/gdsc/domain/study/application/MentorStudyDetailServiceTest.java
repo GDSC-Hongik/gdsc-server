@@ -40,9 +40,9 @@ public class MentorStudyDetailServiceTest extends IntegrationTest {
             mentorStudyDetailService.cancelStudyAssignment(studyDetail.getId());
 
             // then
-            StudyDetail cancelledStudyDetail =
+            StudyDetail canceledStudyDetail =
                     studyDetailRepository.findById(studyDetail.getId()).get();
-            assertThat(cancelledStudyDetail.getAssignment().getStatus()).isEqualTo(StudyStatus.CANCELLED);
+            assertThat(canceledStudyDetail.getAssignment().getStatus()).isEqualTo(StudyStatus.CANCELED);
         }
     }
 }

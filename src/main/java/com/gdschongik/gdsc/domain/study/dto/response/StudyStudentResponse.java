@@ -35,10 +35,10 @@ public record StudyStudentResponse(
                 .toList();
 
         long successAssignmentsCount = countAssignmentByStatus(assignments, SUCCESS);
-        long cancelledAssignmentsCount = countAssignmentByStatus(assignments, CANCELLED);
+        long canceledAssignmentsCount = countAssignmentByStatus(assignments, CANCELED);
 
         long attendedCount = countAttendanceByStatus(attendances, AttendanceStatusResponse.ATTENDED);
-        long cancelledAttendanceCount = countAttendanceByStatus(attendances, AttendanceStatusResponse.CANCELLED);
+        long canceledAttendanceCount = countAttendanceByStatus(attendances, AttendanceStatusResponse.CANCELED);
 
         return new StudyStudentResponse(
                 studyHistory.getStudent().getId(),
@@ -51,8 +51,8 @@ public record StudyStudentResponse(
                 isOutstandingStudent(FIRST_ROUND_OUTSTANDING_STUDENT, studyAchievements),
                 isOutstandingStudent(SECOND_ROUND_OUTSTANDING_STUDENT, studyAchievements),
                 studyTodos,
-                calculateRateOrZero(successAssignmentsCount, assignments.size() - cancelledAssignmentsCount),
-                calculateRateOrZero(attendedCount, attendances.size() - cancelledAttendanceCount));
+                calculateRateOrZero(successAssignmentsCount, assignments.size() - canceledAssignmentsCount),
+                calculateRateOrZero(attendedCount, attendances.size() - canceledAttendanceCount));
     }
 
     private static boolean isOutstandingStudent(

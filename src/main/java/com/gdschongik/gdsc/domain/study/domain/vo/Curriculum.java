@@ -61,7 +61,7 @@ public class Curriculum {
         return status == StudyStatus.OPEN;
     }
 
-    public boolean isCancelled() {
-        return status == StudyStatus.CANCELLED;
+    public boolean isCanceled() {
+        return status == StudyStatus.CANCELED;
     }
 }
