@@ -8,7 +8,7 @@ import com.gdschongik.gdsc.domain.member.domain.Department;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import com.gdschongik.gdsc.domain.study.domain.Study;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyStudentResponse;
-import com.gdschongik.gdsc.domain.study.dto.response.StudyTodoResponse;
+import com.gdschongik.gdsc.domain.study.dto.response.StudyTaskResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
 import jakarta.annotation.Nullable;
@@ -90,16 +90,16 @@ public class ExcelUtil {
                     .setCellValue(student.isSecondRoundOutstandingStudent() ? "O" : "X");
             studentRow.createCell(cellIndex.getAndIncrement()).setCellValue(student.attendanceRate());
             studentRow.createCell(cellIndex.getAndIncrement()).setCellValue(student.assignmentRate());
-            student.studyTodos().stream()
-                    .filter(StudyTodoResponse::isAssignment)
-                    .forEach(todo -> studentRow
+            student.studyTasks().stream()
+                    .filter(StudyTaskResponse::isAssignment)
+                    .forEach(task -> studentRow
                             .createCell(cellIndex.getAndIncrement())
-                            .setCellValue(todo.assignmentSubmissionStatus().getValue()));
-            student.studyTodos().stream()
-                    .filter(StudyTodoResponse::isAttendance)
-                    .forEach(todo -> studentRow
+                            .setCellValue(task.assignmentSubmissionStatus().getValue()));
+            student.studyTasks().stream()
+                    .filter(StudyTaskResponse::isAttendance)
+                    .forEach(task -> studentRow
                             .createCell(cellIndex.getAndIncrement())
-                            .setCellValue(todo.attendanceStatus().getValue()));
+                            .setCellValue(task.attendanceStatus().getValue()));
         });
     }
 

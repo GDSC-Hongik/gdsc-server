@@ -54,7 +54,7 @@ public class StudentStudyDetailService {
     }
 
     @Transactional(readOnly = true)
-    public List<StudyTodoResponse> getStudyTodoList(Long studyId) {
+    public List<StudyTaskResponse> getStudyTodoList(Long studyId) {
         Member member = memberUtil.getCurrentMember();
         final List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyIdOrderByWeekAsc(studyId);
         final List<AssignmentHistory> assignmentHistories =
@@ -62,19 +62,19 @@ public class StudentStudyDetailService {
         final List<Attendance> attendances = attendanceRepository.findByMemberAndStudyId(member, studyId);
 
         LocalDate now = LocalDate.now();
-        List<StudyTodoResponse> response = new ArrayList<>();
+        List<StudyTaskResponse> response = new ArrayList<>();
         // 출석체크 정보 (개설 상태이고, 오늘이 출석체크날짜인 것)
         studyDetails.stream()
                 .filter(studyDetail -> studyDetail.getCurriculum().isOpen()
                         && studyDetail.getAttendanceDay().equals(now))
-                .forEach(studyDetail -> response.add(StudyTodoResponse.createAttendanceType(
+                .forEach(studyDetail -> response.add(StudyTaskResponse.createAttendanceType(
                         studyDetail, now, isAttended(attendances, studyDetail))));
 
         // 과제 정보 (오늘이 과제 제출 기간에 포함된 과제 정보)
         studyDetails.stream()
                 .filter(studyDetail -> studyDetail.getAssignment().isOpen()
                         && studyDetail.getAssignment().isDeadlineRemaining())
-                .forEach(studyDetail -> response.add(StudyTodoResponse.createAssignmentType(
+                .forEach(studyDetail -> response.add(StudyTaskResponse.createAssignmentType(
                         studyDetail, getSubmittedAssignment(assignmentHistories, studyDetail))));
         return response;
     }

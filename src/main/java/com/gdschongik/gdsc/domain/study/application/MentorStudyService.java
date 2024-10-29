@@ -21,7 +21,7 @@ import com.gdschongik.gdsc.domain.study.dto.request.StudyCurriculumCreateRequest
 import com.gdschongik.gdsc.domain.study.dto.request.StudyUpdateRequest;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyResponse;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyStudentResponse;
-import com.gdschongik.gdsc.domain.study.dto.response.StudyTodoResponse;
+import com.gdschongik.gdsc.domain.study.dto.response.StudyTaskResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.ExcelUtil;
 import com.gdschongik.gdsc.global.util.MemberUtil;
@@ -87,15 +87,15 @@ public class MentorStudyService {
             List<AssignmentHistory> currentAssignmentHistories =
                     assignmentHistoryMap.getOrDefault(studyHistory.getStudent().getId(), new ArrayList<>());
 
-            List<StudyTodoResponse> studyTodos = new ArrayList<>();
+            List<StudyTaskResponse> studyTasks = new ArrayList<>();
             studyDetails.forEach(studyDetail -> {
-                studyTodos.add(StudyTodoResponse.createAttendanceType(
+                studyTasks.add(StudyTaskResponse.createAttendanceType(
                         studyDetail, LocalDate.now(), isAttended(currentAttendances, studyDetail)));
-                studyTodos.add(StudyTodoResponse.createAssignmentType(
+                studyTasks.add(StudyTaskResponse.createAssignmentType(
                         studyDetail, getSubmittedAssignment(currentAssignmentHistories, studyDetail)));
             });
 
-            response.add(StudyStudentResponse.of(studyHistory, currentStudyAchievements, studyTodos));
+            response.add(StudyStudentResponse.of(studyHistory, currentStudyAchievements, studyTasks));
         });
 
         return new PageImpl<>(response, pageable, studyHistories.getTotalElements());
@@ -224,15 +224,15 @@ public class MentorStudyService {
             List<AssignmentHistory> currentAssignmentHistories =
                     assignmentHistoryMap.getOrDefault(studyHistory.getStudent().getId(), new ArrayList<>());
 
-            List<StudyTodoResponse> studyTodos = new ArrayList<>();
+            List<StudyTaskResponse> studyTasks = new ArrayList<>();
             studyDetails.forEach(studyDetail -> {
-                studyTodos.add(StudyTodoResponse.createAttendanceType(
+                studyTasks.add(StudyTaskResponse.createAttendanceType(
                         studyDetail, LocalDate.now(), isAttended(currentAttendances, studyDetail)));
-                studyTodos.add(StudyTodoResponse.createAssignmentType(
+                studyTasks.add(StudyTaskResponse.createAssignmentType(
                         studyDetail, getSubmittedAssignment(currentAssignmentHistories, studyDetail)));
             });
 
-            content.add(StudyStudentResponse.of(studyHistory, currentStudyAchievements, studyTodos));
+            content.add(StudyStudentResponse.of(studyHistory, currentStudyAchievements, studyTasks));
         });
 
         return excelUtil.createStudyExcel(study, content);
