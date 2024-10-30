@@ -4,7 +4,7 @@ import com.gdschongik.gdsc.domain.study.application.StudentStudyDetailService;
 import com.gdschongik.gdsc.domain.study.dto.response.AssignmentDashboardResponse;
 import com.gdschongik.gdsc.domain.study.dto.response.AssignmentHistoryStatusResponse;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyStudentCurriculumResponse;
-import com.gdschongik.gdsc.domain.study.dto.response.StudyTodoResponse;
+import com.gdschongik.gdsc.domain.study.dto.response.StudyTaskResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
@@ -33,8 +33,8 @@ public class StudentStudyDetailController {
 
     @Operation(summary = "내 할일 리스트 조회", description = "해당 스터디의 내 할일 리스트를 조회합니다")
     @GetMapping("/todo")
-    public ResponseEntity<List<StudyTodoResponse>> getStudyTodoList(@RequestParam(name = "studyId") Long studyId) {
-        List<StudyTodoResponse> response = studentStudyDetailService.getStudyTodoList(studyId);
+    public ResponseEntity<List<StudyTaskResponse>> getStudyTodoList(@RequestParam(name = "studyId") Long studyId) {
+        List<StudyTaskResponse> response = studentStudyDetailService.getStudyTodoList(studyId);
         return ResponseEntity.ok(response);
     }
 
