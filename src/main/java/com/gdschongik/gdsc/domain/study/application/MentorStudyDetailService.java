@@ -141,7 +141,8 @@ public class MentorStudyDetailService {
                 .toList();
 
         long averageAttendanceRate = calculateAverageWeekAttendanceRate(studyWeekStatisticsResponses);
-        long averageAssignmentSubmissionRate = calculateAverageWeekAssignmentSubmissionRate(studyWeekStatisticsResponses);
+        long averageAssignmentSubmissionRate =
+                calculateAverageWeekAssignmentSubmissionRate(studyWeekStatisticsResponses);
 
         return StudyStatisticsResponse.of(
                 totalStudentCount,
