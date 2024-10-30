@@ -7,7 +7,7 @@ public record StudyStatisticsResponse(
         @Schema(description = "스터디 전체 수강생 수") Long totalStudentCount,
         @Schema(description = "스터디 수료 수강생 수") Long completeStudentCount,
         @Schema(description = "평균 출석률") Long averageAttendanceRate,
-        @Schema(description = "평균 과제 제출률") Long averageAssignmentSubmitRate,
+        @Schema(description = "평균 과제 제출률") Long averageAssignmentSubmissionRate,
         @Schema(description = "스터디 수료율") Long studyCompleteRate,
         @Schema(description = "주차별 출석률 및 과제 제출률") List<StudyWeekStatisticsResponse> studyWeekStatisticsResponses) {
 
@@ -15,13 +15,13 @@ public record StudyStatisticsResponse(
             Long totalStudentCount,
             Long completeStudentCount,
             Long averageAttendanceRate,
-            Long averageAssignmentSubmitRate,
+            Long averageAssignmentSubmissionRate,
             List<StudyWeekStatisticsResponse> studyWeekStatisticsResponses) {
         return new StudyStatisticsResponse(
                 totalStudentCount,
                 completeStudentCount,
                 averageAttendanceRate,
-                averageAssignmentSubmitRate,
+                averageAssignmentSubmissionRate,
                 totalStudentCount == 0 ? 0 : Math.round(completeStudentCount / (double) totalStudentCount * 100),
                 studyWeekStatisticsResponses);
     }
