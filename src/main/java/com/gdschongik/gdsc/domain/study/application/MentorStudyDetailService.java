@@ -183,7 +183,7 @@ public class MentorStudyDetailService {
     private long calculateAverageWeekAttendanceRate(List<StudyWeekStatisticsResponse> studyWeekStatisticsResponses) {
 
         double averageAttendanceRate = studyWeekStatisticsResponses.stream()
-                .filter(weekStatisticsResponse -> !weekStatisticsResponse.isCanceledWeek())
+                .filter(weekStatisticsResponse -> !weekStatisticsResponse.isCurriculumCanceled())
                 .mapToLong(StudyWeekStatisticsResponse::attendanceRate)
                 .average()
                 .orElse(0);

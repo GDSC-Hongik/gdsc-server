@@ -7,14 +7,15 @@ public record StudyWeekStatisticsResponse(
         @Schema(description = "출석률") Long attendanceRate,
         @Schema(description = "과제 제출률") Long assignmentSubmissionRate,
         @Schema(description = "과제 휴강 여부") boolean isAssignmentCanceled,
-        @Schema(description = "스터디 휴강 여부") boolean isCanceledWeek) {
+        @Schema(description = "수업 휴강 여부") boolean isCurriculumCanceled) {
 
     public static StudyWeekStatisticsResponse opened(Long week, Long attendanceRate, Long assignmentSubmissionRate) {
         return new StudyWeekStatisticsResponse(week, attendanceRate, assignmentSubmissionRate, false, false);
     }
 
-    public static StudyWeekStatisticsResponse empty(Long week, boolean isCanceledAssignment, boolean isCanceledWeek) {
-        return new StudyWeekStatisticsResponse(week, 0L, 0L, isCanceledAssignment, isCanceledWeek);
+    public static StudyWeekStatisticsResponse empty(
+            Long week, boolean isAssignmentCanceled, boolean isCurriculumCanceled) {
+        return new StudyWeekStatisticsResponse(week, 0L, 0L, isAssignmentCanceled, isCurriculumCanceled);
     }
 
     public static StudyWeekStatisticsResponse canceledWeek(Long week) {
