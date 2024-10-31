@@ -153,29 +153,31 @@ public class MentorStudyDetailService {
     }
 
     private StudyWeekStatisticsResponse calculateWeekStatistics(StudyDetail studyDetail, Long totalStudentCount) {
-        boolean isCanceledWeek = !studyDetail.getCurriculum().isOpen();
-        boolean isCanceledAssignment = !studyDetail.getAssignment().isOpen() || isCanceledWeek;
+        boolean isNotOpenedCurriculum = !studyDetail.getCurriculum().isOpen();
+        boolean isNotOpenedAssignment = !studyDetail.getAssignment().isOpen() || isNotOpenedCurriculum;
 
         if (totalStudentCount == 0) {
-            return StudyWeekStatisticsResponse.empty(studyDetail.getWeek(), isCanceledAssignment, isCanceledWeek);
+            return StudyWeekStatisticsResponse.empty(
+                    studyDetail.getWeek(), isNotOpenedAssignment, isNotOpenedCurriculum);
         }
 
-        if (isCanceledWeek) {
+        if (isNotOpenedCurriculum) {
             return StudyWeekStatisticsResponse.canceledWeek(studyDetail.getWeek());
         }
 
         long attendanceCount = attendanceRepository.countByStudyDetailId(studyDetail.getId());
         long attendanceRate = Math.round(attendanceCount / (double) totalStudentCount * 100);
 
-        if (isCanceledAssignment) {
+        if (isNotOpenedAssignment) {
             return StudyWeekStatisticsResponse.assignmentCanceled(studyDetail.getWeek(), attendanceRate);
         }
 
-        long assignmentCount =
+        long successfullySubmittedAssignmentCount =
                 assignmentHistoryRepository.countByStudyDetailIdAndSubmissionStatusEquals(studyDetail.getId(), SUCCESS);
-        long assignmentRate = Math.round(assignmentCount / (double) totalStudentCount * 100);
+        long assignmentSubmissionRate =
+                Math.round(successfullySubmittedAssignmentCount / (double) totalStudentCount * 100);
 
-        return StudyWeekStatisticsResponse.opened(studyDetail.getWeek(), attendanceRate, assignmentRate);
+        return StudyWeekStatisticsResponse.opened(studyDetail.getWeek(), attendanceRate, assignmentSubmissionRate);
     }
 
     private long calculateAverageWeekAttendanceRate(List<StudyWeekStatisticsResponse> studyWeekStatisticsResponses) {
