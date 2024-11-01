@@ -82,4 +82,8 @@ public class StudyHistory extends BaseEntity {
     public boolean isWithinApplicationAndCourse() {
         return study.isWithinApplicationAndCourse();
     }
+
+    public boolean isCompleted() {
+        return studyHistoryStatus == COMPLETED;
+    }
 }
