@@ -29,7 +29,7 @@ public class StudyDetailTest {
             studyDetail.cancelAssignment();
 
             // then
-            assertThat(studyDetail.getAssignment().getStatus()).isEqualTo(StudyStatus.CANCELLED);
+            assertThat(studyDetail.getAssignment().getStatus()).isEqualTo(StudyStatus.CANCELED);
         }
     }
 

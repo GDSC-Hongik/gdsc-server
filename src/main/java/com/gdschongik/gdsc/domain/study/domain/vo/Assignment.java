@@ -1,7 +1,6 @@
 package com.gdschongik.gdsc.domain.study.domain.vo;
 
 import static com.gdschongik.gdsc.domain.study.domain.StudyStatus.*;
-import static com.gdschongik.gdsc.domain.study.domain.StudyStatus.CANCELLED;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.study.domain.StudyStatus;
@@ -60,7 +59,7 @@ public class Assignment {
     }
 
     public static Assignment canceled() {
-        return Assignment.builder().status(CANCELLED).build();
+        return Assignment.builder().status(CANCELED).build();
     }
 
     public void validateSubmittable(LocalDateTime now) {
@@ -68,8 +67,8 @@ public class Assignment {
             throw new CustomException(ASSIGNMENT_SUBMIT_NOT_PUBLISHED);
         }
 
-        if (status == CANCELLED) {
-            throw new CustomException(ASSIGNMENT_SUBMIT_CANCELLED);
+        if (status == CANCELED) {
+            throw new CustomException(ASSIGNMENT_SUBMIT_CANCELED);
         }
 
         if (now.isAfter(deadline)) {
@@ -83,8 +82,8 @@ public class Assignment {
         return status == OPEN;
     }
 
-    public boolean isCancelled() {
-        return status == CANCELLED;
+    public boolean isCanceled() {
+        return status == CANCELED;
     }
 
     public boolean isNone() {

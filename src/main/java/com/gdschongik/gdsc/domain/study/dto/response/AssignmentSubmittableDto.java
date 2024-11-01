@@ -24,8 +24,8 @@ public record AssignmentSubmittableDto(
     public static AssignmentSubmittableDto of(StudyDetail studyDetail, AssignmentHistory assignmentHistory) {
         Assignment assignment = studyDetail.getAssignment();
 
-        if (assignment.isCancelled()) {
-            return cancelledAssignment(studyDetail, assignment);
+        if (assignment.isCanceled()) {
+            return canceledAssignment(studyDetail, assignment);
         }
 
         if (assignmentHistory == null) {
@@ -45,7 +45,7 @@ public record AssignmentSubmittableDto(
                 assignmentHistory.getCommittedAt());
     }
 
-    private static AssignmentSubmittableDto cancelledAssignment(StudyDetail studyDetail, Assignment assignment) {
+    private static AssignmentSubmittableDto canceledAssignment(StudyDetail studyDetail, Assignment assignment) {
         return new AssignmentSubmittableDto(
                 studyDetail.getId(),
                 assignment.getStatus(),

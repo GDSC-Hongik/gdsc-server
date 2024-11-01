@@ -11,13 +11,13 @@ public enum AssignmentSubmissionStatusResponse {
     NOT_SUBMITTED("미제출"),
     FAILURE("제출 실패"),
     SUCCESS("제출 성공"),
-    CANCELLED("휴강");
+    CANCELED("휴강");
 
     private final String value;
 
     public static AssignmentSubmissionStatusResponse of(AssignmentHistory assignmentHistory, StudyDetail studyDetail) {
-        if (studyDetail.getAssignment().isCancelled()) {
-            return CANCELLED;
+        if (studyDetail.getAssignment().isCanceled()) {
+            return CANCELED;
         }
         if (assignmentHistory == null) {
             return NOT_SUBMITTED;

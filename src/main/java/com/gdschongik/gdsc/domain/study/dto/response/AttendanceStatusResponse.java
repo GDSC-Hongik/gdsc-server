@@ -12,13 +12,13 @@ public enum AttendanceStatusResponse {
     ATTENDED("출석"),
     NOT_ATTENDED("미출석"),
     BEFORE_ATTENDANCE("출석전"),
-    CANCELLED("휴강");
+    CANCELED("휴강");
 
     private final String value;
 
     public static AttendanceStatusResponse of(StudyDetail studyDetail, LocalDate now, boolean isAttended) {
-        if (studyDetail.getCurriculum().isCancelled()) {
-            return CANCELLED;
+        if (studyDetail.getCurriculum().isCanceled()) {
+            return CANCELED;
         }
 
         if (studyDetail.getAttendanceDay().isAfter(now)) {
