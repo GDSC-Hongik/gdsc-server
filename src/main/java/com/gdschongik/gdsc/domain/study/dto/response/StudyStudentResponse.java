@@ -2,7 +2,7 @@ package com.gdschongik.gdsc.domain.study.dto.response;
 
 import static com.gdschongik.gdsc.domain.study.domain.AchievementType.*;
 import static com.gdschongik.gdsc.domain.study.dto.response.AssignmentSubmissionStatusResponse.*;
-import static com.gdschongik.gdsc.domain.study.dto.response.StudyTodoResponse.StudyTodoType.*;
+import static com.gdschongik.gdsc.domain.study.dto.response.StudyTaskResponse.StudyTaskType.*;
 
 import com.gdschongik.gdsc.domain.study.domain.AchievementType;
 import com.gdschongik.gdsc.domain.study.domain.StudyAchievement;
@@ -21,17 +21,17 @@ public record StudyStudentResponse(
         @Schema(description = "수료 상태") StudyHistoryStatus studyHistoryStatus,
         @Schema(description = "1차 우수 스터디원") boolean isFirstRoundOutstandingStudent,
         @Schema(description = "2차 우수 스터디원") boolean isSecondRoundOutstandingStudent,
-        @Schema(description = "과제 및 출석 이력") List<StudyTodoResponse> studyTodos,
+        @Schema(description = "과제 및 출석 이력") List<StudyTaskResponse> studyTasks,
         @Schema(description = "과제 수행률") double assignmentRate,
         @Schema(description = "출석률") double attendanceRate) {
     public static StudyStudentResponse of(
-            StudyHistory studyHistory, List<StudyAchievement> studyAchievements, List<StudyTodoResponse> studyTodos) {
-        List<StudyTodoResponse> assignments = studyTodos.stream()
-                .filter(studyTodoResponse -> studyTodoResponse.todoType() == ASSIGNMENT)
+            StudyHistory studyHistory, List<StudyAchievement> studyAchievements, List<StudyTaskResponse> studyTasks) {
+        List<StudyTaskResponse> assignments = studyTasks.stream()
+                .filter(studyTaskResponse -> studyTaskResponse.taskType() == ASSIGNMENT)
                 .toList();
 
-        List<StudyTodoResponse> attendances = studyTodos.stream()
-                .filter(studyTodoResponse -> studyTodoResponse.todoType() == ATTENDANCE)
+        List<StudyTaskResponse> attendances = studyTasks.stream()
+                .filter(studyTaskResponse -> studyTaskResponse.taskType() == ATTENDANCE)
                 .toList();
 
         long successAssignmentsCount = countAssignmentByStatus(assignments, SUCCESS);
@@ -50,7 +50,7 @@ public record StudyStudentResponse(
                 studyHistory.getStudyHistoryStatus(),
                 isOutstandingStudent(FIRST_ROUND_OUTSTANDING_STUDENT, studyAchievements),
                 isOutstandingStudent(SECOND_ROUND_OUTSTANDING_STUDENT, studyAchievements),
-                studyTodos,
+                studyTasks,
                 calculateRateOrZero(successAssignmentsCount, assignments.size() - canceledAssignmentsCount),
                 calculateRateOrZero(attendedCount, attendances.size() - canceledAttendanceCount));
     }
@@ -62,15 +62,15 @@ public record StudyStudentResponse(
     }
 
     private static long countAssignmentByStatus(
-            List<StudyTodoResponse> assignments, AssignmentSubmissionStatusResponse status) {
+            List<StudyTaskResponse> assignments, AssignmentSubmissionStatusResponse status) {
         return assignments.stream()
-                .filter(studyTodoResponse -> studyTodoResponse.assignmentSubmissionStatus() == status)
+                .filter(studyTaskResponse -> studyTaskResponse.assignmentSubmissionStatus() == status)
                 .count();
     }
 
-    private static long countAttendanceByStatus(List<StudyTodoResponse> attendances, AttendanceStatusResponse status) {
+    private static long countAttendanceByStatus(List<StudyTaskResponse> attendances, AttendanceStatusResponse status) {
         return attendances.stream()
-                .filter(studyTodoResponse -> studyTodoResponse.attendanceStatus() == status)
+                .filter(studyTaskResponse -> studyTaskResponse.attendanceStatus() == status)
                 .count();
     }
 

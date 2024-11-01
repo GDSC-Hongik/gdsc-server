@@ -1,7 +1,7 @@
 package com.gdschongik.gdsc.domain.study.dto.response;
 
-import static com.gdschongik.gdsc.domain.study.dto.response.StudyTodoResponse.StudyTodoType.ASSIGNMENT;
-import static com.gdschongik.gdsc.domain.study.dto.response.StudyTodoResponse.StudyTodoType.ATTENDANCE;
+import static com.gdschongik.gdsc.domain.study.dto.response.StudyTaskResponse.StudyTaskType.ASSIGNMENT;
+import static com.gdschongik.gdsc.domain.study.dto.response.StudyTaskResponse.StudyTaskType.ATTENDANCE;
 
 import com.gdschongik.gdsc.domain.study.domain.AssignmentHistory;
 import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
@@ -11,19 +11,18 @@ import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-// todo: 활용이 다양해졌으므로 rename 필요
-public record StudyTodoResponse(
+public record StudyTaskResponse(
         Long studyDetailId,
         @Schema(description = "현 주차수") Long week,
-        @Schema(description = "할일 타입") StudyTodoType todoType,
+        @Schema(description = "태스크 타입") StudyTaskType taskType,
         @Schema(description = "마감 시각") LocalDateTime deadLine,
         @Schema(description = "출석 상태 (출석타입일 때만 사용)") AttendanceStatusResponse attendanceStatus,
         @Schema(description = "과제 제목 (과제타입일 때만 사용)") String assignmentTitle,
         @Schema(description = "과제 제출 상태 (과제타입일 때만 사용)") AssignmentSubmissionStatusResponse assignmentSubmissionStatus) {
 
-    public static StudyTodoResponse createAttendanceType(StudyDetail studyDetail, LocalDate now, boolean isAttended) {
+    public static StudyTaskResponse createAttendanceType(StudyDetail studyDetail, LocalDate now, boolean isAttended) {
         if (studyDetail.getCurriculum().isCanceled()) {
-            return new StudyTodoResponse(
+            return new StudyTaskResponse(
                     studyDetail.getId(),
                     studyDetail.getWeek(),
                     ATTENDANCE,
@@ -32,7 +31,7 @@ public record StudyTodoResponse(
                     null,
                     null);
         }
-        return new StudyTodoResponse(
+        return new StudyTaskResponse(
                 studyDetail.getId(),
                 studyDetail.getWeek(),
                 ATTENDANCE,
@@ -42,9 +41,9 @@ public record StudyTodoResponse(
                 null);
     }
 
-    public static StudyTodoResponse createAssignmentType(StudyDetail studyDetail, AssignmentHistory assignmentHistory) {
+    public static StudyTaskResponse createAssignmentType(StudyDetail studyDetail, AssignmentHistory assignmentHistory) {
         if (studyDetail.getAssignment().isCanceled()) {
-            return new StudyTodoResponse(
+            return new StudyTaskResponse(
                     studyDetail.getId(),
                     studyDetail.getWeek(),
                     ASSIGNMENT,
@@ -54,7 +53,7 @@ public record StudyTodoResponse(
                     AssignmentSubmissionStatusResponse.of(null, studyDetail));
         }
 
-        return new StudyTodoResponse(
+        return new StudyTaskResponse(
                 studyDetail.getId(),
                 studyDetail.getWeek(),
                 ASSIGNMENT,
@@ -65,16 +64,16 @@ public record StudyTodoResponse(
     }
 
     public boolean isAttendance() {
-        return todoType == ATTENDANCE;
+        return taskType == ATTENDANCE;
     }
 
     public boolean isAssignment() {
-        return todoType == ASSIGNMENT;
+        return taskType == ASSIGNMENT;
     }
 
     @Getter
     @RequiredArgsConstructor
-    public enum StudyTodoType {
+    public enum StudyTaskType {
         ATTENDANCE("출석"),
         ASSIGNMENT("과제");
 
