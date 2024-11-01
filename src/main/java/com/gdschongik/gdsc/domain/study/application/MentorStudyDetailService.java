@@ -134,7 +134,7 @@ public class MentorStudyDetailService {
 
         long totalStudentCount = studyHistories.size();
         long studyCompletedStudentCount =
-                studyHistories.stream().filter(StudyHistory::isComplete).count();
+                studyHistories.stream().filter(StudyHistory::isCompleted).count();
 
         List<StudyWeekStatisticsResponse> studyWeekStatisticsResponses = studyDetails.stream()
                 .map((studyDetail -> calculateWeekStatistics(studyDetail, totalStudentCount)))
