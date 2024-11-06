@@ -2,6 +2,7 @@ package com.gdschongik.gdsc.domain.study.dao;
 
 import static com.gdschongik.gdsc.domain.study.domain.QStudyHistory.*;
 
+import com.gdschongik.gdsc.domain.study.domain.StudyHistory;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
@@ -19,6 +20,14 @@ public class StudyHistoryCustomRepositoryImpl implements StudyHistoryCustomRepos
                 .from(studyHistory)
                 .where(eqStudyId(studyId), studyHistory.student.id.in(studentIds))
                 .fetchOne();
+    }
+
+    @Override
+    public List<StudyHistory> findAllByStudyIdAndStudentIds(Long studyId, List<Long> studentIds) {
+        return queryFactory
+                .selectFrom(studyHistory)
+                .where(eqStudyId(studyId), studyHistory.student.id.in(studentIds))
+                .fetch();
     }
 
     private BooleanExpression eqStudyId(Long studyId) {

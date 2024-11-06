@@ -33,7 +33,8 @@ public class MentorStudyHistoryService {
     public void completeStudy(Long studyId, StudyCompletionRequest request) {
         Member currentMember = memberUtil.getCurrentMember();
         Study study = studyRepository.findById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
-        List<StudyHistory> studyHistories = studyHistoryRepository.findAllById(request.studentIds());
+        List<StudyHistory> studyHistories =
+                studyHistoryRepository.findAllByStudyIdAndStudentIds(studyId, request.studentIds());
 
         studyValidator.validateStudyMentor(currentMember, study);
         studyHistoryValidator.validateAppliedToStudy(
@@ -48,7 +49,8 @@ public class MentorStudyHistoryService {
     public void withdrawStudyCompletion(Long studyId, StudyCompletionRequest request) {
         Member currentMember = memberUtil.getCurrentMember();
         Study study = studyRepository.findById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
-        List<StudyHistory> studyHistories = studyHistoryRepository.findAllById(request.studentIds());
+        List<StudyHistory> studyHistories =
+                studyHistoryRepository.findAllByStudyIdAndStudentIds(studyId, request.studentIds());
 
         studyValidator.validateStudyMentor(currentMember, study);
         studyHistoryValidator.validateAppliedToStudy(
