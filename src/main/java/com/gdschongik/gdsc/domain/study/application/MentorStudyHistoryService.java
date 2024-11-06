@@ -41,7 +41,7 @@ public class MentorStudyHistoryService {
 
         studyHistories.forEach(StudyHistory::complete);
 
-        log.info("[MentorStudyHistoryService] 스터디 수료: studyId={}, studentIds={}", studyId, request.studentIds());
+        log.info("[MentorStudyHistoryService] 스터디 수료 처리: studyId={}, studentIds={}", studyId, request.studentIds());
     }
 
     @Transactional
