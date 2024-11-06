@@ -78,6 +78,13 @@ public class StudyHistory extends BaseEntity {
         studyHistoryStatus = COMPLETED;
     }
 
+    /**
+     * 스터디 수료 철회
+     */
+    public void withdrawCompletion() {
+        studyHistoryStatus = NONE;
+    }
+
     // 데이터 전달 로직
     public boolean isWithinApplicationAndCourse() {
         return study.isWithinApplicationAndCourse();

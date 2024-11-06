@@ -55,4 +55,27 @@ public class StudyHistoryTest {
             assertThat(studyHistory.getStudyHistoryStatus()).isEqualTo(COMPLETED);
         }
     }
+
+    @Nested
+    class 스터디_수료_철회시 {
+
+        @Test
+        void 수료상태는_NONE이다() {
+            // given
+            Member student = fixtureHelper.createRegularMember(1L);
+            Member mentor = fixtureHelper.createRegularMember(2L);
+            LocalDateTime now = LocalDateTime.now();
+            Study study = fixtureHelper.createStudy(
+                    mentor, Period.of(now.plusDays(5), now.plusDays(10)), Period.of(now.minusDays(5), now));
+
+            StudyHistory studyHistory = StudyHistory.create(student, study);
+            studyHistory.complete();
+
+            // when
+            studyHistory.withdrawCompletion();
+
+            // then
+            assertThat(studyHistory.getStudyHistoryStatus()).isEqualTo(NONE);
+        }
+    }
 }
