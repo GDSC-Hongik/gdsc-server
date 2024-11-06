@@ -29,7 +29,7 @@ public class MentorStudyHistoryController {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "스터디 수료 철회", description = "스터디 수료 처리합니다.")
+    @Operation(summary = "스터디 수료 철회", description = "스터디 수료 처리를 철회합니다.")
     @PatchMapping("/withdraw-completion")
     public ResponseEntity<Void> withdrawStudyCompletion(
             @RequestParam(name = "studyId") Long studyId, @Valid @RequestBody StudyCompletionRequest request) {
