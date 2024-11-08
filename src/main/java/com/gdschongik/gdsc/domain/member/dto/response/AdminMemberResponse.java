@@ -38,12 +38,11 @@ public record AdminMemberResponse(
         }
     }
 
-    record RequirementDto(String univStatus, String discordStatus, String bevyStatus) {
+    record RequirementDto(String univStatus, String discordStatus) {
         public static RequirementDto from(AssociateRequirement associateRequirement) {
             return new RequirementDto(
                     associateRequirement.getUnivStatus().name(),
-                    associateRequirement.getDiscordStatus().name(),
-                    associateRequirement.getBevyStatus().name());
+                    associateRequirement.getDiscordStatus().name());
         }
     }
 }

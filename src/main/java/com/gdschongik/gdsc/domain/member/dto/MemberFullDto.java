@@ -57,13 +57,11 @@ public record MemberFullDto(
                     UnivVerificationStatus univStatus,
             @Schema(description = "디스코드 인증상태", implementation = RequirementStatus.class)
                     RequirementStatus discordStatus,
-            @Schema(description = "bevy 인증상태", implementation = RequirementStatus.class) RequirementStatus bevyStatus,
             @Schema(description = "회원정보 입력상태", implementation = RequirementStatus.class) RequirementStatus infoStatus) {
         public static MemberAssociateRequirementDto of(Member member, UnivVerificationStatus univVerificationStatus) {
             return new MemberAssociateRequirementDto(
                     univVerificationStatus,
                     member.getAssociateRequirement().getDiscordStatus(),
-                    member.getAssociateRequirement().getBevyStatus(),
                     member.getAssociateRequirement().getInfoStatus());
         }
     }

@@ -211,24 +211,11 @@ public class Member extends BaseEntity {
     }
 
     /**
-     * Bevy 서버와의 연동을 진행합니다.
-     * Bevy 인증상태를 인증 처리합니다.
-     */
-    public void verifyBevy() {
-        validateStatusUpdatable();
-
-        associateRequirement.verifyBevy();
-
-        registerEvent(new MemberAssociateEvent(id));
-    }
-
-    /**
      * 게스트에서 준회원으로 승급합니다.
      * 본 로직은 승급조건 충족 이벤트로 트리거됩니다. 다음 조건을 모두 충족하면 승급됩니다.
      * 조건 1 : 기본 회원정보 작성
      * 조건 2 : 재학생 인증
      * 조건 3 : 디스코드 인증
-     * 조건 4 : Bevy 인증
      */
     public void advanceToAssociate() {
         validateStatusUpdatable();
