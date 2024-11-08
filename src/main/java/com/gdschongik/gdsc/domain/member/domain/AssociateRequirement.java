@@ -31,9 +31,7 @@ public class AssociateRequirement {
 
     @Builder(access = AccessLevel.PRIVATE)
     private AssociateRequirement(
-            RequirementStatus univStatus,
-            RequirementStatus discordStatus,
-            RequirementStatus infoStatus) {
+            RequirementStatus univStatus, RequirementStatus discordStatus, RequirementStatus infoStatus) {
         this.univStatus = univStatus;
         this.discordStatus = discordStatus;
         this.infoStatus = infoStatus;
