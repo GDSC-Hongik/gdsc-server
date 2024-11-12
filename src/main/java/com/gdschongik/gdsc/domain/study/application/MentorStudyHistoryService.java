@@ -9,7 +9,7 @@ import com.gdschongik.gdsc.domain.study.domain.Study;
 import com.gdschongik.gdsc.domain.study.domain.StudyHistory;
 import com.gdschongik.gdsc.domain.study.domain.StudyHistoryValidator;
 import com.gdschongik.gdsc.domain.study.domain.StudyValidator;
-import com.gdschongik.gdsc.domain.study.dto.request.StudyCompletionRequest;
+import com.gdschongik.gdsc.domain.study.dto.request.StudyCompleteRequest;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import java.util.List;
@@ -30,11 +30,12 @@ public class MentorStudyHistoryService {
     private final StudyHistoryRepository studyHistoryRepository;
 
     @Transactional
-    public void completeStudy(Long studyId, StudyCompletionRequest request) {
+    public void completeStudy(StudyCompleteRequest request) {
         Member currentMember = memberUtil.getCurrentMember();
-        Study study = studyRepository.findById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
+        Study study =
+                studyRepository.findById(request.studyId()).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
         List<StudyHistory> studyHistories =
-                studyHistoryRepository.findAllByStudyIdAndStudentIds(studyId, request.studentIds());
+                studyHistoryRepository.findAllByStudyIdAndStudentIds(request.studyId(), request.studentIds());
 
         studyValidator.validateStudyMentor(currentMember, study);
         studyHistoryValidator.validateAppliedToStudy(
@@ -42,15 +43,19 @@ public class MentorStudyHistoryService {
 
         studyHistories.forEach(StudyHistory::complete);
 
-        log.info("[MentorStudyHistoryService] 스터디 수료 처리: studyId={}, studentIds={}", studyId, request.studentIds());
+        log.info(
+                "[MentorStudyHistoryService] 스터디 수료 처리: studyId={}, studentIds={}",
+                request.studyId(),
+                request.studentIds());
     }
 
     @Transactional
-    public void withdrawStudyCompletion(Long studyId, StudyCompletionRequest request) {
+    public void withdrawStudyCompletion(StudyCompleteRequest request) {
         Member currentMember = memberUtil.getCurrentMember();
-        Study study = studyRepository.findById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
+        Study study =
+                studyRepository.findById(request.studyId()).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
         List<StudyHistory> studyHistories =
-                studyHistoryRepository.findAllByStudyIdAndStudentIds(studyId, request.studentIds());
+                studyHistoryRepository.findAllByStudyIdAndStudentIds(request.studyId(), request.studentIds());
 
         studyValidator.validateStudyMentor(currentMember, study);
         studyHistoryValidator.validateAppliedToStudy(
@@ -58,6 +63,9 @@ public class MentorStudyHistoryService {
 
         studyHistories.forEach(StudyHistory::withdrawCompletion);
 
-        log.info("[MentorStudyHistoryService] 스터디 수료 철회: studyId={}, studentIds={}", studyId, request.studentIds());
+        log.info(
+                "[MentorStudyHistoryService] 스터디 수료 철회: studyId={}, studentIds={}",
+                request.studyId(),
+                request.studentIds());
     }
 }
