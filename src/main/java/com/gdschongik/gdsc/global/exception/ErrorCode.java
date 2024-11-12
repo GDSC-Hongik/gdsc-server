@@ -44,7 +44,6 @@ public enum ErrorCode {
     // Requirement
     UNIV_NOT_SATISFIED(HttpStatus.CONFLICT, "재학생 인증이 완료되지 않았습니다."),
     DISCORD_NOT_SATISFIED(HttpStatus.CONFLICT, "디스코드 인증이 완료되지 않았습니다."),
-    BEVY_NOT_SATISFIED(HttpStatus.CONFLICT, "GDSC Bevy 가입이 완료되지 않았습니다."),
     EMAIL_ALREADY_SATISFIED(HttpStatus.CONFLICT, "이미 이메일 인증된 회원입니다."),
     BASIC_INFO_NOT_SATISFIED(HttpStatus.CONFLICT, "기본 회원정보 작성이 완료되지 않았습니다."),
 

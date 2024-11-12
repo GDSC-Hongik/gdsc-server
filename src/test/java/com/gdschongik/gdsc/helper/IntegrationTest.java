@@ -151,7 +151,6 @@ public abstract class IntegrationTest {
         member.completeUnivEmailVerification(UNIV_EMAIL);
         member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
         member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
-        member.verifyBevy();
         member.updateDiscordId(DISCORD_ID);
 
         return memberRepository.save(member);
@@ -168,7 +167,6 @@ public abstract class IntegrationTest {
         member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
         member.completeUnivEmailVerification(UNIV_EMAIL);
         member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
-        member.verifyBevy();
         member.advanceToAssociate();
         return memberRepository.save(member);
     }

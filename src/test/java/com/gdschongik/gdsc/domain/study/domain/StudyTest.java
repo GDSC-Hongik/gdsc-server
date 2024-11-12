@@ -24,7 +24,6 @@ public class StudyTest {
         member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
         member.completeUnivEmailVerification(UNIV_EMAIL);
         member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
-        member.verifyBevy();
         member.advanceToAssociate();
         ReflectionTestUtils.setField(member, "id", id);
         return member;

@@ -50,13 +50,6 @@ public class OnboardingMemberService {
     }
 
     @Transactional
-    public void verifyBevyStatus() {
-        Member currentMember = memberUtil.getCurrentMember();
-        currentMember.verifyBevy();
-        memberRepository.save(currentMember);
-    }
-
-    @Transactional
     public void updateBasicMemberInfo(BasicMemberInfoRequest request) {
         Member currentMember = memberUtil.getCurrentMember();
         currentMember.updateBasicMemberInfo(
