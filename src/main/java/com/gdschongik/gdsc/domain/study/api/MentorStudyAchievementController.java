@@ -4,7 +4,6 @@ import com.gdschongik.gdsc.domain.study.application.MentorStudyAchievementServic
 import com.gdschongik.gdsc.domain.study.dto.request.OutstandingStudentRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,7 +24,7 @@ public class MentorStudyAchievementController {
     @Operation(summary = "우수 스터디원 지정", description = "우수 스터디원으로 지정합니다.")
     @PostMapping
     public ResponseEntity<Void> designateOutstandingStudent(
-            @RequestParam(name = "studyId") Long studyId, @Valid @RequestBody OutstandingStudentRequest request) {
+            @RequestParam(name = "studyId") Long studyId, @RequestBody OutstandingStudentRequest request) {
         mentorStudyAchievementService.designateOutstandingStudent(studyId, request);
         return ResponseEntity.ok().build();
     }
@@ -33,7 +32,7 @@ public class MentorStudyAchievementController {
     @Operation(summary = "우수 스터디원 철회", description = "우수 스터디원 지정을 철회합니다.")
     @DeleteMapping
     public ResponseEntity<Void> withdrawOutstandingStudent(
-            @RequestParam(name = "studyId") Long studyId, @Valid @RequestBody OutstandingStudentRequest request) {
+            @RequestParam(name = "studyId") Long studyId, @RequestBody OutstandingStudentRequest request) {
         mentorStudyAchievementService.withdrawOutstandingStudent(studyId, request);
         return ResponseEntity.ok().build();
     }
