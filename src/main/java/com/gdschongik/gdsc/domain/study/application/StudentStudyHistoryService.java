@@ -61,12 +61,10 @@ public class StudentStudyHistoryService {
                 .findByStudentAndStudy(currentMember, study)
                 .orElseThrow(() -> new CustomException(STUDY_HISTORY_NOT_FOUND));
 
-        boolean isAnyAssignmentSubmitted =
-                assignmentHistoryRepository.existsSubmittedAssignmentByMemberAndStudy(currentMember, study);
         GHRepository repository = githubClient.getRepository(request.repositoryLink());
         // TODO: GHRepository 등을 wrapper로 감싸서 테스트 가능하도록 변경
         studyHistoryValidator.validateUpdateRepository(
-                isAnyAssignmentSubmitted, String.valueOf(repository.getOwner().getId()), currentMember.getOauthId());
+                String.valueOf(repository.getOwner().getId()), currentMember.getOauthId());
 
         studyHistory.updateRepositoryLink(request.repositoryLink());
         studyHistoryRepository.save(studyHistory);

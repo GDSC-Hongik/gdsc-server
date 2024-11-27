@@ -17,17 +17,6 @@ public class AssignmentHistoryCustomRepositoryImpl
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public boolean existsSubmittedAssignmentByMemberAndStudy(Member member, Study study) {
-        Integer fetchOne = queryFactory
-                .selectOne()
-                .from(assignmentHistory)
-                .where(eqMember(member), eqStudy(study), isSubmitted())
-                .fetchFirst();
-
-        return fetchOne != null;
-    }
-
-    @Override
     public List<AssignmentHistory> findAssignmentHistoriesByStudentAndStudyId(Member currentMember, Long studyId) {
         return queryFactory
                 .selectFrom(assignmentHistory)

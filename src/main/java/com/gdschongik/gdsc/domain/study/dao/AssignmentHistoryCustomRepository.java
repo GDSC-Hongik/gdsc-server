@@ -7,8 +7,6 @@ import java.util.List;
 
 public interface AssignmentHistoryCustomRepository {
 
-    boolean existsSubmittedAssignmentByMemberAndStudy(Member member, Study study);
-
     List<AssignmentHistory> findAssignmentHistoriesByStudentAndStudyId(Member member, Long studyId);
 
     List<AssignmentHistory> findByStudyIdAndMemberIds(Long studyId, List<Long> memberIds);
