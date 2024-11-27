@@ -5,7 +5,6 @@ import static com.gdschongik.gdsc.domain.study.domain.QStudyDetail.studyDetail;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.study.domain.AssignmentHistory;
-import com.gdschongik.gdsc.domain.study.domain.Study;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
