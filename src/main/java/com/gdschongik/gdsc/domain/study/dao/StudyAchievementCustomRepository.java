@@ -9,4 +9,7 @@ public interface StudyAchievementCustomRepository {
 
     void deleteByStudyAndAchievementTypeAndMemberIds(
             Long studyId, AchievementType achievementType, List<Long> memberIds);
+
+    long countByStudyIdAndAchievementTypeAndStudentIds(
+            Long studyId, AchievementType achievementType, List<Long> studentIds);
 }

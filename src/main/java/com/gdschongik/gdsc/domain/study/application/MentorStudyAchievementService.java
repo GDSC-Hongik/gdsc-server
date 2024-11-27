@@ -9,6 +9,7 @@ import com.gdschongik.gdsc.domain.study.dao.StudyHistoryRepository;
 import com.gdschongik.gdsc.domain.study.dao.StudyRepository;
 import com.gdschongik.gdsc.domain.study.domain.Study;
 import com.gdschongik.gdsc.domain.study.domain.StudyAchievement;
+import com.gdschongik.gdsc.domain.study.domain.StudyAchievementValidator;
 import com.gdschongik.gdsc.domain.study.domain.StudyHistoryValidator;
 import com.gdschongik.gdsc.domain.study.domain.StudyValidator;
 import com.gdschongik.gdsc.domain.study.dto.request.OutstandingStudentRequest;
@@ -28,6 +29,7 @@ public class MentorStudyAchievementService {
     private final MemberUtil memberUtil;
     private final StudyValidator studyValidator;
     private final StudyHistoryValidator studyHistoryValidator;
+    private final StudyAchievementValidator studyAchievementValidator;
     private final StudyRepository studyRepository;
     private final StudyHistoryRepository studyHistoryRepository;
     private final StudyAchievementRepository studyAchievementRepository;
@@ -37,12 +39,16 @@ public class MentorStudyAchievementService {
     public void designateOutstandingStudent(Long studyId, OutstandingStudentRequest request) {
         Member currentMember = memberUtil.getCurrentMember();
         Study study = studyRepository.findById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
-        Long countByStudyIdAndStudentIds =
+        long countByStudyIdAndStudentIds =
                 studyHistoryRepository.countByStudyIdAndStudentIds(studyId, request.studentIds());
+        long countStudyAchievementsAlreadyExist =
+                studyAchievementRepository.countByStudyIdAndAchievementTypeAndStudentIds(
+                        studyId, request.achievementType(), request.studentIds());
 
         studyValidator.validateStudyMentor(currentMember, study);
         studyHistoryValidator.validateAppliedToStudy(
                 countByStudyIdAndStudentIds, request.studentIds().size());
+        studyAchievementValidator.validateDesignateOutstandingStudent(countStudyAchievementsAlreadyExist);
 
         List<Member> outstandingStudents = memberRepository.findAllById(request.studentIds());
         List<StudyAchievement> studyAchievements = outstandingStudents.stream()
@@ -60,10 +66,14 @@ public class MentorStudyAchievementService {
         Study study = studyRepository.findById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
         long countByStudyIdAndStudentIds =
                 studyHistoryRepository.countByStudyIdAndStudentIds(studyId, request.studentIds());
+        long countStudyAchievements = studyAchievementRepository.countByStudyIdAndAchievementTypeAndStudentIds(
+                studyId, request.achievementType(), request.studentIds());
 
         studyValidator.validateStudyMentor(currentMember, study);
         studyHistoryValidator.validateAppliedToStudy(
                 countByStudyIdAndStudentIds, request.studentIds().size());
+        studyAchievementValidator.validateWithdrawOutstandingStudent(
+                countStudyAchievements, request.studentIds().size());
 
         studyAchievementRepository.deleteByStudyAndAchievementTypeAndMemberIds(
                 studyId, request.achievementType(), request.studentIds());
