@@ -39,13 +39,7 @@ public class StudyHistoryValidator {
         }
     }
 
-    public void validateUpdateRepository(
-            boolean isAnyAssignmentSubmitted, String repositoryOwnerOauthId, String currentMemberOauthId) {
-        // 이미 제출한 과제가 있는 경우
-        if (isAnyAssignmentSubmitted) {
-            throw new CustomException(STUDY_HISTORY_REPOSITORY_NOT_UPDATABLE_ASSIGNMENT_ALREADY_SUBMITTED);
-        }
-
+    public void validateUpdateRepository(String repositoryOwnerOauthId, String currentMemberOauthId) {
         // 레포지토리 소유자가 현 멤버가 아닌 경우
         if (!repositoryOwnerOauthId.equals(currentMemberOauthId)) {
             throw new CustomException(STUDY_HISTORY_REPOSITORY_NOT_UPDATABLE_OWNER_MISMATCH);
