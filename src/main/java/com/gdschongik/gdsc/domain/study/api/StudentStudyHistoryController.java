@@ -21,7 +21,7 @@ public class StudentStudyHistoryController {
 
     private final StudentStudyHistoryService studentStudyHistoryService;
 
-    @Operation(summary = "레포지토리 입력", description = "레포지토리를 입력합니다. 이미 제출한 과제가 있다면 수정할 수 없습니다.")
+    @Operation(summary = "레포지토리 입력", description = "과제 제출 레포지토리를 입력합니다.")
     @PutMapping("/{studyId}/repository")
     public ResponseEntity<Void> updateRepository(
             @PathVariable Long studyId, @Valid @RequestBody RepositoryUpdateRequest request) throws IOException {

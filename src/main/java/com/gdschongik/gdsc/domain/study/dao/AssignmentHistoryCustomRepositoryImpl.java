@@ -5,7 +5,6 @@ import static com.gdschongik.gdsc.domain.study.domain.QStudyDetail.studyDetail;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.study.domain.AssignmentHistory;
-import com.gdschongik.gdsc.domain.study.domain.Study;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -15,17 +14,6 @@ public class AssignmentHistoryCustomRepositoryImpl
         implements AssignmentHistoryCustomRepository, AssignmentHistoryQueryMethod {
 
     private final JPAQueryFactory queryFactory;
-
-    @Override
-    public boolean existsSubmittedAssignmentByMemberAndStudy(Member member, Study study) {
-        Integer fetchOne = queryFactory
-                .selectOne()
-                .from(assignmentHistory)
-                .where(eqMember(member), eqStudy(study), isSubmitted())
-                .fetchFirst();
-
-        return fetchOne != null;
-    }
 
     @Override
     public List<AssignmentHistory> findAssignmentHistoriesByStudentAndStudyId(Member currentMember, Long studyId) {
