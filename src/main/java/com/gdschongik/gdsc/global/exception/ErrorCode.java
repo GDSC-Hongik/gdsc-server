@@ -130,7 +130,6 @@ public enum ErrorCode {
 
     // StudyAchievement
     STUDY_ACHIEVEMENT_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 우수 스터디원으로 지정된 스터디원이 존재합니다."),
-    STUDY_ACHIEVEMENT_COUNT_MISMATCH(HttpStatus.CONFLICT, "요청한 우수 스터디원 수와 실제 우수 스터디원 수가 다릅니다."),
 
     // Attendance
     ATTENDANCE_DATE_INVALID(HttpStatus.CONFLICT, "강의일이 아니면 출석체크할 수 없습니다."),

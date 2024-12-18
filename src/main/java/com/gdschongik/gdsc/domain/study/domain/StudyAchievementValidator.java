@@ -14,11 +14,4 @@ public class StudyAchievementValidator {
             throw new CustomException(STUDY_ACHIEVEMENT_ALREADY_EXISTS);
         }
     }
-
-    public void validateWithdrawOutstandingStudent(long countStudyAchievements, long countRequestedStudent) {
-        // 요청한 우수 스터디원 수와 실제 우수 스터디원 수가 다른 경우
-        if (countStudyAchievements != countRequestedStudent) {
-            throw new CustomException(STUDY_ACHIEVEMENT_COUNT_MISMATCH);
-        }
-    }
 }

@@ -66,14 +66,10 @@ public class MentorStudyAchievementService {
         Study study = studyRepository.findById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
         long countByStudyIdAndStudentIds =
                 studyHistoryRepository.countByStudyIdAndStudentIds(studyId, request.studentIds());
-        long countStudyAchievements = studyAchievementRepository.countByStudyIdAndAchievementTypeAndStudentIds(
-                studyId, request.achievementType(), request.studentIds());
 
         studyValidator.validateStudyMentor(currentMember, study);
         studyHistoryValidator.validateAppliedToStudy(
                 countByStudyIdAndStudentIds, request.studentIds().size());
-        studyAchievementValidator.validateWithdrawOutstandingStudent(
-                countStudyAchievements, request.studentIds().size());
 
         studyAchievementRepository.deleteByStudyAndAchievementTypeAndMemberIds(
                 studyId, request.achievementType(), request.studentIds());
