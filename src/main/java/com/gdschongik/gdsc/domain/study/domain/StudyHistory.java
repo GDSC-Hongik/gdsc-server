@@ -76,6 +76,7 @@ public class StudyHistory extends BaseEntity {
      */
     public void complete() {
         studyHistoryStatus = COMPLETED;
+        registerEvent(new StudyHistoryCompletedEvent(this.id));
     }
 
     /**
