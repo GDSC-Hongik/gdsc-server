@@ -43,6 +43,8 @@ public class MentorStudyHistoryService {
 
         studyHistories.forEach(StudyHistory::complete);
 
+        studyHistoryRepository.saveAll(studyHistories);
+
         log.info(
                 "[MentorStudyHistoryService] 스터디 수료 처리: studyId={}, studentIds={}",
                 request.studyId(),
@@ -62,6 +64,8 @@ public class MentorStudyHistoryService {
                 studyHistories.size(), request.studentIds().size());
 
         studyHistories.forEach(StudyHistory::withdrawCompletion);
+
+        studyHistoryRepository.saveAll(studyHistories);
 
         log.info(
                 "[MentorStudyHistoryService] 스터디 수료 철회: studyId={}, studentIds={}",
