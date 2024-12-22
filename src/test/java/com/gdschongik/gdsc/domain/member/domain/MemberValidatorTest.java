@@ -32,7 +32,7 @@ public class MemberValidatorTest {
             List<RecruitmentRound> recruitmentRounds = List.of(recruitmentRound);
 
             // when & then
-            assertThatThrownBy(() -> memberValidator.validateMemberDemote(recruitmentRounds))
+            assertThatThrownBy(() -> memberValidator.validateMemberDemote(recruitmentRounds, now))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(RECRUITMENT_ROUND_STARTDATE_ALREADY_PASSED.getMessage());
         }
@@ -41,9 +41,10 @@ public class MemberValidatorTest {
         void 해당_학기에_모집회차가_존재하지_않는다면_실패한다() {
             // given
             List<RecruitmentRound> recruitmentRounds = List.of();
+            LocalDateTime now = LocalDateTime.now();
 
             // when & then
-            assertThatThrownBy(() -> memberValidator.validateMemberDemote(recruitmentRounds))
+            assertThatThrownBy(() -> memberValidator.validateMemberDemote(recruitmentRounds, now))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(RECRUITMENT_ROUND_NOT_FOUND.getMessage());
         }

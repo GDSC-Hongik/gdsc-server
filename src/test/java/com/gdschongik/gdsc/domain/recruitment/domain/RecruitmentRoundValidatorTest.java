@@ -137,7 +137,12 @@ public class RecruitmentRoundValidatorTest {
 
             // when & then
             assertThatThrownBy(() -> recruitmentRoundValidator.validateRecruitmentRoundUpdate(
-                            START_DATE, ROUND_TWO_END_DATE, RoundType.SECOND, secondRound, List.of(firstRound)))
+                            START_DATE,
+                            ROUND_TWO_END_DATE,
+                            LocalDateTime.now(),
+                            RoundType.SECOND,
+                            secondRound,
+                            List.of(firstRound)))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(PERIOD_OVERLAP.getMessage());
         }
@@ -158,7 +163,12 @@ public class RecruitmentRoundValidatorTest {
 
             // when & then
             assertThatThrownBy(() -> recruitmentRoundValidator.validateRecruitmentRoundUpdate(
-                            ROUND_TWO_START_DATE, ROUND_TWO_END_DATE, ROUND_TYPE, secondRound, List.of(firstRound)))
+                            ROUND_TWO_START_DATE,
+                            ROUND_TWO_END_DATE,
+                            LocalDateTime.now(),
+                            ROUND_TYPE,
+                            secondRound,
+                            List.of(firstRound)))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(RECRUITMENT_ROUND_TYPE_OVERLAP.getMessage());
         }
@@ -175,7 +185,12 @@ public class RecruitmentRoundValidatorTest {
 
             // when & then
             assertThatThrownBy(() -> recruitmentRoundValidator.validateRecruitmentRoundUpdate(
-                            START_DATE, LocalDateTime.of(2024, 4, 10, 0, 0), ROUND_TYPE, firstRound, List.of()))
+                            START_DATE,
+                            LocalDateTime.of(2024, 4, 10, 0, 0),
+                            LocalDateTime.now(),
+                            ROUND_TYPE,
+                            firstRound,
+                            List.of()))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(RECRUITMENT_PERIOD_NOT_WITHIN_TWO_WEEKS.getMessage());
         }
@@ -192,7 +207,7 @@ public class RecruitmentRoundValidatorTest {
 
             // when & then
             assertThatThrownBy(() -> recruitmentRoundValidator.validateRecruitmentRoundUpdate(
-                            START_DATE, END_DATE, RoundType.SECOND, firstRound, List.of()))
+                            START_DATE, END_DATE, LocalDateTime.now(), RoundType.SECOND, firstRound, List.of()))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(ROUND_ONE_DOES_NOT_EXIST.getMessage());
         }
@@ -210,7 +225,7 @@ public class RecruitmentRoundValidatorTest {
 
             // when & then
             assertThatThrownBy(() -> recruitmentRoundValidator.validateRecruitmentRoundUpdate(
-                            START_DATE, END_DATE, ROUND_TYPE, recruitmentRound, List.of()))
+                            START_DATE, END_DATE, LocalDateTime.now(), ROUND_TYPE, recruitmentRound, List.of()))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(RECRUITMENT_ROUND_STARTDATE_ALREADY_PASSED.getMessage());
         }

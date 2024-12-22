@@ -2,6 +2,7 @@ package com.gdschongik.gdsc.global.security;
 
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -20,7 +21,7 @@ public class CustomUserService extends DefaultOAuth2UserService {
         OAuth2User oAuth2User = super.loadUser(userRequest);
 
         Member member = fetchOrCreate(oAuth2User);
-        member.updateLastLoginAt();
+        member.updateLastLoginAt(LocalDateTime.now());
         memberRepository.save(member);
 
         return new CustomOAuth2User(oAuth2User, member);

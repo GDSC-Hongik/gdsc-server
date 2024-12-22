@@ -280,8 +280,8 @@ public class Member extends BaseEntity {
 
     // 기타 상태 변경 로직
 
-    public void updateLastLoginAt() {
-        this.lastLoginAt = LocalDateTime.now();
+    public void updateLastLoginAt(LocalDateTime now) {
+        this.lastLoginAt = now;
     }
 
     public void updateDiscordId(String discordId) {

@@ -17,6 +17,7 @@ import com.gdschongik.gdsc.domain.study.dto.response.StudyResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +43,7 @@ public class StudentStudyService {
         Member currentMember = memberUtil.getCurrentMember();
         List<StudyHistory> studyHistories = studyHistoryRepository.findAllByStudent(currentMember);
         Optional<Study> appliedStudy = studyHistories.stream()
-                .filter(StudyHistory::isWithinApplicationAndCourse)
+                .filter(studyHistory -> studyHistory.isWithinApplicationAndCourse(LocalDateTime.now()))
                 .map(StudyHistory::getStudy)
                 .findFirst();
         List<StudyResponse> studyResponses = studyRepository.findAll().stream()
@@ -60,7 +61,7 @@ public class StudentStudyService {
 
         List<StudyHistory> currentMemberStudyHistories = studyHistoryRepository.findAllByStudent(currentMember);
 
-        studyHistoryValidator.validateApplyStudy(study, currentMemberStudyHistories);
+        studyHistoryValidator.validateApplyStudy(study, currentMemberStudyHistories, LocalDateTime.now());
 
         StudyHistory studyHistory = StudyHistory.create(currentMember, study);
         studyHistoryRepository.save(studyHistory);
@@ -108,7 +109,7 @@ public class StudentStudyService {
     public StudentMyCurrentStudyResponse getMyCurrentStudy() {
         Member currentMember = memberUtil.getCurrentMember();
         StudyHistory studyHistory = studyHistoryRepository.findAllByStudent(currentMember).stream()
-                .filter(StudyHistory::isWithinApplicationAndCourse)
+                .filter(sh -> sh.isWithinApplicationAndCourse(LocalDateTime.now()))
                 .findFirst()
                 .orElse(null);
         return StudentMyCurrentStudyResponse.from(studyHistory);

@@ -83,9 +83,9 @@ public class IssuedCoupon extends BaseEntity {
 
     // 상태 변경 로직
 
-    public void use() {
+    public void use(LocalDateTime now) {
         validateUsable();
-        usedAt = LocalDateTime.now();
+        usedAt = now;
     }
 
     public void revoke() {

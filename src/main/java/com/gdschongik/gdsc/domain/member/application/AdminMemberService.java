@@ -18,6 +18,7 @@ import com.gdschongik.gdsc.global.exception.ErrorCode;
 import com.gdschongik.gdsc.global.util.EnvironmentUtil;
 import com.gdschongik.gdsc.global.util.ExcelUtil;
 import com.gdschongik.gdsc.global.util.MemberUtil;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -74,7 +75,7 @@ public class AdminMemberService {
         List<RecruitmentRound> recruitmentRounds = recruitmentRoundRepository.findAllByAcademicYearAndSemesterType(
                 request.academicYear(), request.semesterType());
 
-        memberValidator.validateMemberDemote(recruitmentRounds);
+        memberValidator.validateMemberDemote(recruitmentRounds, LocalDateTime.now());
 
         List<Member> regularMembers = memberRepository.findAllByRole(MemberRole.REGULAR);
 

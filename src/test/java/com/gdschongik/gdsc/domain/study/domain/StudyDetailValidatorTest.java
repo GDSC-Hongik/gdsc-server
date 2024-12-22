@@ -57,8 +57,8 @@ public class StudyDetailValidatorTest {
                     new AssignmentCreateUpdateRequest(ASSIGNMENT_TITLE, DESCRIPTION_LINK, now.plusDays(2));
 
             // when & then
-            assertThatThrownBy(() ->
-                            studyDetailValidator.validatePublishStudyAssignment(anotherMember, studyDetail, request))
+            assertThatThrownBy(() -> studyDetailValidator.validatePublishStudyAssignment(
+                            anotherMember, studyDetail, request, now))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(STUDY_DETAIL_UPDATE_RESTRICTED_TO_MENTOR.getMessage());
         }
@@ -75,7 +75,8 @@ public class StudyDetailValidatorTest {
                     new AssignmentCreateUpdateRequest(ASSIGNMENT_TITLE, DESCRIPTION_LINK, now.minusDays(2));
 
             // when & then
-            assertThatThrownBy(() -> studyDetailValidator.validatePublishStudyAssignment(mentor, studyDetail, request))
+            assertThatThrownBy(() ->
+                            studyDetailValidator.validatePublishStudyAssignment(mentor, studyDetail, request, now))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(ASSIGNMENT_DEADLINE_INVALID.getMessage());
         }
@@ -100,8 +101,8 @@ public class StudyDetailValidatorTest {
                     new AssignmentCreateUpdateRequest(ASSIGNMENT_TITLE, DESCRIPTION_LINK, now.plusDays(3));
 
             // when & then
-            assertThatThrownBy(() ->
-                            studyDetailValidator.validateUpdateStudyAssignment(anotherMember, studyDetail, request))
+            assertThatThrownBy(() -> studyDetailValidator.validateUpdateStudyAssignment(
+                            anotherMember, studyDetail, request, now))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(STUDY_DETAIL_UPDATE_RESTRICTED_TO_MENTOR.getMessage());
         }
@@ -124,7 +125,8 @@ public class StudyDetailValidatorTest {
                     new AssignmentCreateUpdateRequest(ASSIGNMENT_TITLE, DESCRIPTION_LINK, assignmentUpdateDate);
 
             // when & then
-            assertThatThrownBy(() -> studyDetailValidator.validateUpdateStudyAssignment(mentor, studyDetail, request))
+            assertThatThrownBy(() -> studyDetailValidator.validateUpdateStudyAssignment(
+                            mentor, studyDetail, request, LocalDateTime.now()))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(STUDY_DETAIL_ASSIGNMENT_INVALID_DEADLINE.getMessage());
         }
@@ -145,7 +147,8 @@ public class StudyDetailValidatorTest {
                     new AssignmentCreateUpdateRequest(ASSIGNMENT_TITLE, DESCRIPTION_LINK, updatedDeadLine);
 
             // when & then
-            assertThatThrownBy(() -> studyDetailValidator.validateUpdateStudyAssignment(mentor, studyDetail, request))
+            assertThatThrownBy(
+                            () -> studyDetailValidator.validateUpdateStudyAssignment(mentor, studyDetail, request, now))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(STUDY_DETAIL_ASSIGNMENT_INVALID_DEADLINE.getMessage());
         }

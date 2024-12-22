@@ -193,7 +193,7 @@ class OrderValidatorTest {
             Membership membership = createMembership(currentMember, recruitmentRound);
 
             IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, currentMember);
-            issuedCoupon.use();
+            issuedCoupon.use(LocalDateTime.now());
 
             MoneyInfo moneyInfo = MoneyInfo.of(MONEY_20000_WON, MONEY_5000_WON, MONEY_15000_WON);
 
@@ -319,7 +319,7 @@ class OrderValidatorTest {
             Membership membership = createMembership(currentMember, recruitmentRound);
 
             IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, currentMember);
-            issuedCoupon.use(); // 쿠폰을 사용 불가능한 상태로 만듦
+            issuedCoupon.use(LocalDateTime.now()); // 쿠폰을 사용 불가능한 상태로 만듦
 
             Order order = Order.createPending(
                     "nanoId", membership, issuedCoupon, MoneyInfo.of(MONEY_20000_WON, MONEY_5000_WON, MONEY_15000_WON));
@@ -553,7 +553,7 @@ class OrderValidatorTest {
                     Money.ZERO);
             Membership membership = createMembership(currentMember, recruitmentRound);
             IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, currentMember);
-            issuedCoupon.use();
+            issuedCoupon.use(LocalDateTime.now());
             Optional<IssuedCoupon> optionalIssuedCoupon = Optional.of(issuedCoupon);
 
             // when & then

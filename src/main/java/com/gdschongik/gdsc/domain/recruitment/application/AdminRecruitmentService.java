@@ -16,6 +16,7 @@ import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentRoundUpdate
 import com.gdschongik.gdsc.domain.recruitment.dto.response.AdminRecruitmentResponse;
 import com.gdschongik.gdsc.domain.recruitment.dto.response.AdminRecruitmentRoundResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -100,7 +101,12 @@ public class AdminRecruitmentService {
         recruitmentRounds.remove(recruitmentRound);
 
         recruitmentRoundValidator.validateRecruitmentRoundUpdate(
-                request.startDate(), request.endDate(), request.roundType(), recruitmentRound, recruitmentRounds);
+                request.startDate(),
+                request.endDate(),
+                LocalDateTime.now(),
+                request.roundType(),
+                recruitmentRound,
+                recruitmentRounds);
 
         recruitmentRound.updateRecruitmentRound(
                 request.name(), Period.of(request.startDate(), request.endDate()), request.roundType());

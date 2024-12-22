@@ -1,6 +1,7 @@
 package com.gdschongik.gdsc.domain.order.application;
 
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
+import static java.time.LocalDateTime.*;
 
 import com.gdschongik.gdsc.domain.common.vo.Money;
 import com.gdschongik.gdsc.domain.coupon.dao.IssuedCouponRepository;
@@ -81,20 +82,20 @@ public class OrderService {
                 .findByNanoId(request.orderNanoId())
                 .orElseThrow(() -> new CustomException(ORDER_NOT_FOUND));
 
-        Optional<IssuedCoupon> issuedCoupon =
+        Optional<IssuedCoupon> optionalIssuedCoupon =
                 Optional.ofNullable(order.getIssuedCouponId()).map(this::getIssuedCoupon);
 
         Member currentMember = memberUtil.getCurrentMember();
 
         Money requestedAmount = Money.from(request.amount());
 
-        orderValidator.validateCompleteOrder(order, issuedCoupon, currentMember, requestedAmount);
+        orderValidator.validateCompleteOrder(order, optionalIssuedCoupon, currentMember, requestedAmount);
 
         var paymentRequest = new PaymentConfirmRequest(request.paymentKey(), order.getNanoId(), request.amount());
         PaymentResponse response = paymentClient.confirm(paymentRequest);
 
         order.complete(request.paymentKey(), response.approvedAt());
-        issuedCoupon.ifPresent(IssuedCoupon::use);
+        optionalIssuedCoupon.ifPresent(issuedCoupon -> issuedCoupon.use(now()));
 
         orderRepository.save(order);
 
@@ -151,7 +152,7 @@ public class OrderService {
                 .findById(request.membershipId())
                 .orElseThrow(() -> new CustomException(MEMBERSHIP_NOT_FOUND));
 
-        Optional<IssuedCoupon> issuedCoupon =
+        Optional<IssuedCoupon> optionalIssuedCoupon =
                 Optional.ofNullable(request.issuedCouponId()).map(this::getIssuedCoupon);
 
         MoneyInfo moneyInfo = MoneyInfo.of(
@@ -161,10 +162,10 @@ public class OrderService {
 
         Member currentMember = memberUtil.getCurrentMember();
 
-        orderValidator.validateFreeOrderCreate(membership, issuedCoupon, currentMember);
+        orderValidator.validateFreeOrderCreate(membership, optionalIssuedCoupon, currentMember);
 
-        Order order = Order.createFree(request.orderNanoId(), membership, issuedCoupon.orElse(null), moneyInfo);
-        issuedCoupon.ifPresent(IssuedCoupon::use);
+        Order order = Order.createFree(request.orderNanoId(), membership, optionalIssuedCoupon.orElse(null), moneyInfo);
+        optionalIssuedCoupon.ifPresent(issuedCoupon -> issuedCoupon.use(now()));
 
         orderRepository.save(order);
 

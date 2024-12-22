@@ -35,7 +35,7 @@ public class StudyHistoryValidatorTest {
             StudyHistory studyHistory = StudyHistory.create(student, study);
 
             // when & then
-            assertThatThrownBy(() -> studyHistoryValidator.validateApplyStudy(study, List.of(studyHistory)))
+            assertThatThrownBy(() -> studyHistoryValidator.validateApplyStudy(study, List.of(studyHistory), now))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(STUDY_HISTORY_DUPLICATE.getMessage());
         }
@@ -51,7 +51,7 @@ public class StudyHistoryValidatorTest {
             Study study = fixtureHelper.createStudy(mentor, period, applicationPeriod);
 
             // when & then
-            assertThatThrownBy(() -> studyHistoryValidator.validateApplyStudy(study, List.of()))
+            assertThatThrownBy(() -> studyHistoryValidator.validateApplyStudy(study, List.of(), now))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(STUDY_NOT_APPLICABLE.getMessage());
         }
@@ -72,7 +72,7 @@ public class StudyHistoryValidatorTest {
             StudyHistory studyHistory = StudyHistory.create(student, anotherStudy);
 
             // when & then
-            assertThatThrownBy(() -> studyHistoryValidator.validateApplyStudy(study, List.of(studyHistory)))
+            assertThatThrownBy(() -> studyHistoryValidator.validateApplyStudy(study, List.of(studyHistory), now))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(STUDY_HISTORY_ONGOING_ALREADY_EXISTS.getMessage());
         }

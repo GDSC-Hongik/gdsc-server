@@ -23,6 +23,7 @@ import com.gdschongik.gdsc.domain.study.dto.response.StudyWeekStatisticsResponse
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -79,7 +80,7 @@ public class MentorStudyDetailService {
                 .findById(studyDetailId)
                 .orElseThrow(() -> new CustomException(STUDY_DETAIL_NOT_FOUND));
 
-        studyDetailValidator.validatePublishStudyAssignment(currentMember, studyDetail, request);
+        studyDetailValidator.validatePublishStudyAssignment(currentMember, studyDetail, request, LocalDateTime.now());
 
         studyDetail.publishAssignment(request.title(), request.deadLine(), request.descriptionNotionLink());
         StudyDetail savedStudyDetail = studyDetailRepository.save(studyDetail);
@@ -96,7 +97,7 @@ public class MentorStudyDetailService {
                 .findById(studyDetailId)
                 .orElseThrow(() -> new CustomException(STUDY_DETAIL_NOT_FOUND));
 
-        studyDetailValidator.validateUpdateStudyAssignment(currentMember, studyDetail, request);
+        studyDetailValidator.validateUpdateStudyAssignment(currentMember, studyDetail, request, LocalDateTime.now());
 
         studyDetail.updateAssignment(request.title(), request.deadLine(), request.descriptionNotionLink());
         StudyDetail savedStudyDetail = studyDetailRepository.save(studyDetail);
