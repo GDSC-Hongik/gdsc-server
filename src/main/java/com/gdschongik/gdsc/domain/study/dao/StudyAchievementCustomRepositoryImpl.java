@@ -7,6 +7,7 @@ import com.gdschongik.gdsc.domain.study.domain.StudyAchievement;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -27,14 +28,29 @@ public class StudyAchievementCustomRepositoryImpl implements StudyAchievementCus
             Long studyId, AchievementType achievementType, List<Long> memberIds) {
         queryFactory
                 .delete(studyAchievement)
-                .where(
-                        eqStudyId(studyId),
-                        studyAchievement.achievementType.eq(achievementType),
-                        studyAchievement.student.id.in(memberIds))
+                .where(eqStudyId(studyId), eqAchievementType(achievementType), containsStudentId(memberIds))
                 .execute();
+    }
+
+    @Override
+    public long countByStudyIdAndAchievementTypeAndStudentIds(
+            Long studyId, AchievementType achievementType, List<Long> studentIds) {
+        return Objects.requireNonNull(queryFactory
+                .select(studyAchievement.count())
+                .from(studyAchievement)
+                .where(eqStudyId(studyId), eqAchievementType(achievementType), containsStudentId(studentIds))
+                .fetchOne());
     }
 
     private BooleanExpression eqStudyId(Long studyId) {
         return studyId != null ? studyAchievement.study.id.eq(studyId) : null;
+    }
+
+    private BooleanExpression eqAchievementType(AchievementType achievementType) {
+        return achievementType != null ? studyAchievement.achievementType.eq(achievementType) : null;
+    }
+
+    private BooleanExpression containsStudentId(List<Long> memberIds) {
+        return memberIds != null ? studyAchievement.student.id.in(memberIds) : null;
     }
 }
