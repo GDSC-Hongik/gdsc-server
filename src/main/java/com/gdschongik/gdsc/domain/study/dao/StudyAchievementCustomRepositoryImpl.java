@@ -7,6 +7,7 @@ import com.gdschongik.gdsc.domain.study.domain.StudyAchievement;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -34,11 +35,11 @@ public class StudyAchievementCustomRepositoryImpl implements StudyAchievementCus
     @Override
     public long countByStudyIdAndAchievementTypeAndStudentIds(
             Long studyId, AchievementType achievementType, List<Long> studentIds) {
-        return (long) queryFactory
+        return Objects.requireNonNull(queryFactory
                 .select(studyAchievement.count())
                 .from(studyAchievement)
                 .where(eqStudyId(studyId), eqAchievementType(achievementType), containsStudentId(studentIds))
-                .fetchOne();
+                .fetchOne());
     }
 
     private BooleanExpression eqStudyId(Long studyId) {
