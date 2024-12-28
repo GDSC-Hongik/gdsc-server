@@ -108,10 +108,10 @@ public class StudentStudyService {
     @Transactional(readOnly = true)
     public StudentMyCurrentStudyResponse getMyCurrentStudy() {
         Member currentMember = memberUtil.getCurrentMember();
-        StudyHistory studyHistory = studyHistoryRepository.findAllByStudent(currentMember).stream()
-                .filter(sh -> sh.isWithinApplicationAndCourse(LocalDateTime.now()))
+        StudyHistory currentStudyhistory = studyHistoryRepository.findAllByStudent(currentMember).stream()
+                .filter(studyHistory -> studyHistory.isWithinApplicationAndCourse(LocalDateTime.now()))
                 .findFirst()
                 .orElse(null);
-        return StudentMyCurrentStudyResponse.from(studyHistory);
+        return StudentMyCurrentStudyResponse.from(currentStudyhistory);
     }
 }
