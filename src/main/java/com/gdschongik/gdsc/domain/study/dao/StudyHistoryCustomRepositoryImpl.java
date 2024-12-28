@@ -6,6 +6,7 @@ import com.gdschongik.gdsc.domain.study.domain.StudyHistory;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -15,11 +16,11 @@ public class StudyHistoryCustomRepositoryImpl implements StudyHistoryCustomRepos
 
     @Override
     public long countByStudyIdAndStudentIds(Long studyId, List<Long> studentIds) {
-        return (long) queryFactory
+        return Objects.requireNonNull(queryFactory
                 .select(studyHistory.count())
                 .from(studyHistory)
                 .where(eqStudyId(studyId), studyHistory.student.id.in(studentIds))
-                .fetchOne();
+                .fetchOne());
     }
 
     @Override
