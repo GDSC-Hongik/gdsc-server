@@ -1,7 +1,5 @@
 package com.gdschongik.gdsc.domain.study.application;
 
-import static java.time.LocalDateTime.*;
-
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.study.dao.AssignmentHistoryRepository;
 import com.gdschongik.gdsc.domain.study.dao.AttendanceRepository;
@@ -16,6 +14,7 @@ import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -41,8 +40,8 @@ public class StudentStudyDetailService {
         List<AssignmentHistory> assignmentHistories =
                 assignmentHistoryRepository.findAssignmentHistoriesByStudentAndStudyId(currentMember, studyId);
         List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyIdOrderByWeekAsc(studyId).stream()
-                .filter(studyDetail ->
-                        studyDetail.getAssignment().isOpen() && studyDetail.isAssignmentDeadlineRemaining(now()))
+                .filter(studyDetail -> studyDetail.getAssignment().isOpen()
+                        && studyDetail.isAssignmentDeadlineRemaining(LocalDateTime.now()))
                 .toList();
 
         boolean isAnySubmitted = assignmentHistories.stream().anyMatch(AssignmentHistory::isSubmitted);
@@ -74,7 +73,7 @@ public class StudentStudyDetailService {
         // 과제 정보 (오늘이 과제 제출 기간에 포함된 과제 정보)
         studyDetails.stream()
                 .filter(studyDetail -> studyDetail.getAssignment().isOpen()
-                        && studyDetail.getAssignment().isDeadlineRemaining(now()))
+                        && studyDetail.getAssignment().isDeadlineRemaining(LocalDateTime.now()))
                 .forEach(studyDetail -> response.add(StudyTaskResponse.createAssignmentType(
                         studyDetail, getSubmittedAssignment(assignmentHistories, studyDetail))));
         return response;
@@ -92,7 +91,7 @@ public class StudentStudyDetailService {
                         studyDetail,
                         getSubmittedAssignment(assignmentHistories, studyDetail),
                         isAttended(attendances, studyDetail),
-                        now()))
+                        LocalDateTime.now()))
                 .toList();
     }
 
