@@ -42,8 +42,9 @@ public class StudentStudyService {
     public StudyApplicableResponse getAllApplicableStudies() {
         Member currentMember = memberUtil.getCurrentMember();
         List<StudyHistory> studyHistories = studyHistoryRepository.findAllByStudent(currentMember);
+        LocalDateTime now = LocalDateTime.now();
         Optional<Study> appliedStudy = studyHistories.stream()
-                .filter(studyHistory -> studyHistory.isWithinApplicationAndCourse(LocalDateTime.now()))
+                .filter(studyHistory -> studyHistory.isWithinApplicationAndCourse(now))
                 .map(StudyHistory::getStudy)
                 .findFirst();
         List<StudyResponse> studyResponses = studyRepository.findAll().stream()
@@ -60,8 +61,9 @@ public class StudentStudyService {
         Member currentMember = memberUtil.getCurrentMember();
 
         List<StudyHistory> currentMemberStudyHistories = studyHistoryRepository.findAllByStudent(currentMember);
+        LocalDateTime now = LocalDateTime.now();
 
-        studyHistoryValidator.validateApplyStudy(study, currentMemberStudyHistories, LocalDateTime.now());
+        studyHistoryValidator.validateApplyStudy(study, currentMemberStudyHistories, now);
 
         StudyHistory studyHistory = StudyHistory.create(currentMember, study);
         studyHistoryRepository.save(studyHistory);
@@ -92,12 +94,13 @@ public class StudentStudyService {
                 .orElseThrow(() -> new CustomException(STUDY_DETAIL_NOT_FOUND));
         final Member currentMember = memberUtil.getCurrentMember();
         final Study study = studyDetail.getStudy();
+        LocalDate now = LocalDate.now();
         final boolean isAlreadyAttended =
                 attendanceRepository.existsByStudentIdAndStudyDetailId(currentMember.getId(), studyDetailId);
         boolean isAppliedToStudy = studyHistoryRepository.existsByStudentAndStudy(currentMember, study);
 
         attendanceValidator.validateAttendance(
-                studyDetail, request.attendanceNumber(), LocalDate.now(), isAlreadyAttended, isAppliedToStudy);
+                studyDetail, request.attendanceNumber(), now, isAlreadyAttended, isAppliedToStudy);
 
         Attendance attendance = Attendance.of(currentMember, studyDetail);
         attendanceRepository.save(attendance);
@@ -108,8 +111,9 @@ public class StudentStudyService {
     @Transactional(readOnly = true)
     public StudentMyCurrentStudyResponse getMyCurrentStudy() {
         Member currentMember = memberUtil.getCurrentMember();
+        LocalDateTime now = LocalDateTime.now();
         StudyHistory currentStudyhistory = studyHistoryRepository.findAllByStudent(currentMember).stream()
-                .filter(studyHistory -> studyHistory.isWithinApplicationAndCourse(LocalDateTime.now()))
+                .filter(studyHistory -> studyHistory.isWithinApplicationAndCourse(now))
                 .findFirst()
                 .orElse(null);
         return StudentMyCurrentStudyResponse.from(currentStudyhistory);

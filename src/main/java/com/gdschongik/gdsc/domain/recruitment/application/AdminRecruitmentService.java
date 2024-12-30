@@ -100,13 +100,9 @@ public class AdminRecruitmentService {
 
         recruitmentRounds.remove(recruitmentRound);
 
+        LocalDateTime now = LocalDateTime.now();
         recruitmentRoundValidator.validateRecruitmentRoundUpdate(
-                request.startDate(),
-                request.endDate(),
-                LocalDateTime.now(),
-                request.roundType(),
-                recruitmentRound,
-                recruitmentRounds);
+                request.startDate(), request.endDate(), now, request.roundType(), recruitmentRound, recruitmentRounds);
 
         recruitmentRound.updateRecruitmentRound(
                 request.name(), Period.of(request.startDate(), request.endDate()), request.roundType());

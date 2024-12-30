@@ -74,8 +74,9 @@ public class AdminMemberService {
     public void demoteAllRegularMembersToAssociate(MemberDemoteRequest request) {
         List<RecruitmentRound> recruitmentRounds = recruitmentRoundRepository.findAllByAcademicYearAndSemesterType(
                 request.academicYear(), request.semesterType());
+        LocalDateTime now = LocalDateTime.now();
 
-        memberValidator.validateMemberDemote(recruitmentRounds, LocalDateTime.now());
+        memberValidator.validateMemberDemote(recruitmentRounds, now);
 
         List<Member> regularMembers = memberRepository.findAllByRole(MemberRole.REGULAR);
 
