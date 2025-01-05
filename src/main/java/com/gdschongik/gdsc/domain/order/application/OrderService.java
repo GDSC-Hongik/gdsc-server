@@ -1,7 +1,6 @@
 package com.gdschongik.gdsc.domain.order.application;
 
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
-import static java.time.LocalDateTime.*;
 
 import com.gdschongik.gdsc.domain.common.vo.Money;
 import com.gdschongik.gdsc.domain.coupon.dao.IssuedCouponRepository;
@@ -24,6 +23,7 @@ import com.gdschongik.gdsc.infra.feign.payment.client.PaymentClient;
 import com.gdschongik.gdsc.infra.feign.payment.dto.request.PaymentCancelRequest;
 import com.gdschongik.gdsc.infra.feign.payment.dto.request.PaymentConfirmRequest;
 import com.gdschongik.gdsc.infra.feign.payment.dto.response.PaymentResponse;
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -94,8 +94,10 @@ public class OrderService {
         var paymentRequest = new PaymentConfirmRequest(request.paymentKey(), order.getNanoId(), request.amount());
         PaymentResponse response = paymentClient.confirm(paymentRequest);
 
+        LocalDateTime now = LocalDateTime.now();
+
         order.complete(request.paymentKey(), response.approvedAt());
-        optionalIssuedCoupon.ifPresent(issuedCoupon -> issuedCoupon.use(now()));
+        optionalIssuedCoupon.ifPresent(issuedCoupon -> issuedCoupon.use(now));
 
         orderRepository.save(order);
 
@@ -164,8 +166,10 @@ public class OrderService {
 
         orderValidator.validateFreeOrderCreate(membership, optionalIssuedCoupon, currentMember);
 
+        LocalDateTime now = LocalDateTime.now();
+
         Order order = Order.createFree(request.orderNanoId(), membership, optionalIssuedCoupon.orElse(null), moneyInfo);
-        optionalIssuedCoupon.ifPresent(issuedCoupon -> issuedCoupon.use(now()));
+        optionalIssuedCoupon.ifPresent(issuedCoupon -> issuedCoupon.use(now));
 
         orderRepository.save(order);
 
