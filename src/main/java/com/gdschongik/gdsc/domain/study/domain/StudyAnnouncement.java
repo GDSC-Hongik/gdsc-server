@@ -40,7 +40,7 @@ public class StudyAnnouncement extends BaseEntity {
         this.link = link;
     }
 
-    public static StudyAnnouncement createStudyAnnouncement(Study study, String title, String link) {
+    public static StudyAnnouncement create(Study study, String title, String link) {
         return StudyAnnouncement.builder().study(study).title(title).link(link).build();
     }
 

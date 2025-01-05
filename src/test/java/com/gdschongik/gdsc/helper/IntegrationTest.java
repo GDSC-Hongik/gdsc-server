@@ -9,6 +9,7 @@ import static org.mockito.Mockito.*;
 
 import com.gdschongik.gdsc.domain.common.model.SemesterType;
 import com.gdschongik.gdsc.domain.common.vo.Money;
+import com.gdschongik.gdsc.domain.common.vo.Period;
 import com.gdschongik.gdsc.domain.coupon.dao.CouponRepository;
 import com.gdschongik.gdsc.domain.coupon.dao.IssuedCouponRepository;
 import com.gdschongik.gdsc.domain.coupon.domain.Coupon;
@@ -29,11 +30,15 @@ import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRoundRepository;
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.domain.recruitment.domain.RoundType;
-import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
+import com.gdschongik.gdsc.domain.study.dao.StudyAchievementRepository;
 import com.gdschongik.gdsc.domain.study.dao.StudyDetailRepository;
+import com.gdschongik.gdsc.domain.study.dao.StudyHistoryRepository;
 import com.gdschongik.gdsc.domain.study.dao.StudyRepository;
+import com.gdschongik.gdsc.domain.study.domain.AchievementType;
 import com.gdschongik.gdsc.domain.study.domain.Study;
+import com.gdschongik.gdsc.domain.study.domain.StudyAchievement;
 import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
+import com.gdschongik.gdsc.domain.study.domain.StudyHistory;
 import com.gdschongik.gdsc.global.security.PrincipalDetails;
 import com.gdschongik.gdsc.infra.feign.payment.client.PaymentClient;
 import com.gdschongik.gdsc.infra.github.client.GithubClient;
@@ -80,6 +85,12 @@ public abstract class IntegrationTest {
 
     @Autowired
     protected StudyDetailRepository studyDetailRepository;
+
+    @Autowired
+    protected StudyHistoryRepository studyHistoryRepository;
+
+    @Autowired
+    protected StudyAchievementRepository studyAchievementRepository;
 
     @MockBean
     protected OnboardingRecruitmentService onboardingRecruitmentService;
@@ -134,20 +145,19 @@ public abstract class IntegrationTest {
     }
 
     protected Member createMember() {
-        Member member = Member.createGuestMember(OAUTH_ID);
+        Member member = Member.createGuest(OAUTH_ID);
         memberRepository.save(member);
 
         member.completeUnivEmailVerification(UNIV_EMAIL);
         member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
         member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
-        member.verifyBevy();
         member.updateDiscordId(DISCORD_ID);
 
         return memberRepository.save(member);
     }
 
     protected Member createGuestMember() {
-        Member guestMember = Member.createGuestMember(OAUTH_ID);
+        Member guestMember = Member.createGuest(OAUTH_ID);
         return memberRepository.save(guestMember);
     }
 
@@ -157,7 +167,6 @@ public abstract class IntegrationTest {
         member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
         member.completeUnivEmailVerification(UNIV_EMAIL);
         member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
-        member.verifyBevy();
         member.advanceToAssociate();
         return memberRepository.save(member);
     }
@@ -179,7 +188,7 @@ public abstract class IntegrationTest {
         Recruitment recruitment = createRecruitment(ACADEMIC_YEAR, SEMESTER_TYPE, FEE);
 
         RecruitmentRound recruitmentRound =
-                RecruitmentRound.create(RECRUITMENT_ROUND_NAME, START_DATE, END_DATE, recruitment, ROUND_TYPE);
+                RecruitmentRound.create(RECRUITMENT_ROUND_NAME, START_TO_END_PERIOD, recruitment, ROUND_TYPE);
 
         return recruitmentRoundRepository.save(recruitmentRound);
     }
@@ -194,30 +203,31 @@ public abstract class IntegrationTest {
             Money fee) {
         Recruitment recruitment = createRecruitment(academicYear, semesterType, fee);
 
-        RecruitmentRound recruitmentRound = RecruitmentRound.create(name, startDate, endDate, recruitment, roundType);
+        RecruitmentRound recruitmentRound =
+                RecruitmentRound.create(name, Period.of(startDate, endDate), recruitment, roundType);
         return recruitmentRoundRepository.save(recruitmentRound);
     }
 
     protected Recruitment createRecruitment(Integer academicYear, SemesterType semesterType, Money fee) {
-        Recruitment recruitment = Recruitment.createRecruitment(
-                academicYear, semesterType, fee, FEE_NAME, Period.createPeriod(SEMESTER_START_DATE, SEMESTER_END_DATE));
+        Recruitment recruitment = Recruitment.create(
+                academicYear, semesterType, fee, FEE_NAME, Period.of(SEMESTER_START_DATE, SEMESTER_END_DATE));
         return recruitmentRepository.save(recruitment);
     }
 
     protected Membership createMembership(Member member, RecruitmentRound recruitmentRound) {
-        Membership membership = Membership.createMembership(member, recruitmentRound);
+        Membership membership = Membership.create(member, recruitmentRound);
         return membershipRepository.save(membership);
     }
 
     protected IssuedCoupon createAndIssue(Money money, Member member) {
-        Coupon coupon = Coupon.createCoupon("테스트쿠폰", money);
+        Coupon coupon = Coupon.create("테스트쿠폰", money);
         couponRepository.save(coupon);
-        IssuedCoupon issuedCoupon = IssuedCoupon.issue(coupon, member);
+        IssuedCoupon issuedCoupon = IssuedCoupon.create(coupon, member);
         return issuedCouponRepository.save(issuedCoupon);
     }
 
     protected Study createStudy(Member mentor, Period period, Period applicationPeriod) {
-        Study study = Study.createStudy(
+        Study study = Study.create(
                 ACADEMIC_YEAR,
                 SEMESTER_TYPE,
                 STUDY_TITLE,
@@ -234,7 +244,7 @@ public abstract class IntegrationTest {
     }
 
     protected Study createNewStudy(Member mentor, Long totalWeek, Period period, Period applicationPeriod) {
-        Study study = Study.createStudy(
+        Study study = Study.create(
                 ACADEMIC_YEAR,
                 SEMESTER_TYPE,
                 STUDY_TITLE,
@@ -251,15 +261,23 @@ public abstract class IntegrationTest {
     }
 
     protected StudyDetail createStudyDetail(Study study, LocalDateTime startDate, LocalDateTime endDate) {
-        StudyDetail studyDetail =
-                StudyDetail.createStudyDetail(study, 1L, ATTENDANCE_NUMBER, Period.createPeriod(startDate, endDate));
+        StudyDetail studyDetail = StudyDetail.create(study, 1L, ATTENDANCE_NUMBER, Period.of(startDate, endDate));
         return studyDetailRepository.save(studyDetail);
     }
 
     protected StudyDetail createNewStudyDetail(Long week, Study study, LocalDateTime startDate, LocalDateTime endDate) {
-        StudyDetail studyDetail =
-                StudyDetail.createStudyDetail(study, week, ATTENDANCE_NUMBER, Period.createPeriod(startDate, endDate));
+        StudyDetail studyDetail = StudyDetail.create(study, week, ATTENDANCE_NUMBER, Period.of(startDate, endDate));
         return studyDetailRepository.save(studyDetail);
+    }
+
+    protected StudyHistory createStudyHistory(Member member, Study study) {
+        StudyHistory studyHistory = StudyHistory.create(member, study);
+        return studyHistoryRepository.save(studyHistory);
+    }
+
+    protected StudyAchievement createStudyAchievement(Member member, Study study, AchievementType achievementType) {
+        StudyAchievement studyAchievement = StudyAchievement.create(member, study, achievementType);
+        return studyAchievementRepository.save(studyAchievement);
     }
 
     protected StudyDetail publishAssignment(StudyDetail studyDetail) {

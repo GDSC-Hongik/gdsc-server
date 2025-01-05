@@ -27,28 +27,20 @@ public class AssociateRequirement {
     private RequirementStatus discordStatus;
 
     @Enumerated(EnumType.STRING)
-    private RequirementStatus bevyStatus;
-
-    @Enumerated(EnumType.STRING)
     private RequirementStatus infoStatus;
 
     @Builder(access = AccessLevel.PRIVATE)
     private AssociateRequirement(
-            RequirementStatus univStatus,
-            RequirementStatus discordStatus,
-            RequirementStatus bevyStatus,
-            RequirementStatus infoStatus) {
+            RequirementStatus univStatus, RequirementStatus discordStatus, RequirementStatus infoStatus) {
         this.univStatus = univStatus;
         this.discordStatus = discordStatus;
-        this.bevyStatus = bevyStatus;
         this.infoStatus = infoStatus;
     }
 
-    public static AssociateRequirement createRequirement() {
+    public static AssociateRequirement unsatisfied() {
         return AssociateRequirement.builder()
                 .univStatus(UNSATISFIED)
                 .discordStatus(UNSATISFIED)
-                .bevyStatus(UNSATISFIED)
                 .infoStatus(UNSATISFIED)
                 .build();
     }
@@ -63,10 +55,6 @@ public class AssociateRequirement {
         discordStatus = SATISFIED;
     }
 
-    public void verifyBevy() {
-        bevyStatus = SATISFIED;
-    }
-
     public void verifyInfo() {
         infoStatus = SATISFIED;
     }
@@ -79,10 +67,6 @@ public class AssociateRequirement {
 
     private boolean isDiscordSatisfied() {
         return discordStatus == SATISFIED;
-    }
-
-    private boolean isBevySatisfied() {
-        return bevyStatus == SATISFIED;
     }
 
     private boolean isInfoSatisfied() {
@@ -100,10 +84,6 @@ public class AssociateRequirement {
             throw new CustomException(DISCORD_NOT_SATISFIED);
         }
 
-        if (!isBevySatisfied()) {
-            throw new CustomException(BEVY_NOT_SATISFIED);
-        }
-
         if (!isInfoSatisfied()) {
             throw new CustomException(BASIC_INFO_NOT_SATISFIED);
         }
@@ -119,7 +99,6 @@ public class AssociateRequirement {
      * 모든 준회원 조건을 강등합니다.
      */
     public void demoteAssociateRequirement() {
-        bevyStatus = UNSATISFIED;
         discordStatus = UNSATISFIED;
         infoStatus = UNSATISFIED;
         univStatus = UNSATISFIED;

@@ -37,7 +37,7 @@ public class Coupon extends BaseEntity {
         this.discountAmount = discountAmount;
     }
 
-    public static Coupon createCoupon(String name, Money discountAmount) {
+    public static Coupon create(String name, Money discountAmount) {
         validateDiscountAmountPositive(discountAmount);
         return Coupon.builder().name(name).discountAmount(discountAmount).build();
     }

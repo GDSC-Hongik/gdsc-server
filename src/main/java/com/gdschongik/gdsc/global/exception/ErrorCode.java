@@ -44,7 +44,6 @@ public enum ErrorCode {
     // Requirement
     UNIV_NOT_SATISFIED(HttpStatus.CONFLICT, "재학생 인증이 완료되지 않았습니다."),
     DISCORD_NOT_SATISFIED(HttpStatus.CONFLICT, "디스코드 인증이 완료되지 않았습니다."),
-    BEVY_NOT_SATISFIED(HttpStatus.CONFLICT, "GDSC Bevy 가입이 완료되지 않았습니다."),
     EMAIL_ALREADY_SATISFIED(HttpStatus.CONFLICT, "이미 이메일 인증된 회원입니다."),
     BASIC_INFO_NOT_SATISFIED(HttpStatus.CONFLICT, "기본 회원정보 작성이 완료되지 않았습니다."),
 
@@ -124,9 +123,13 @@ public enum ErrorCode {
     STUDY_HISTORY_REPOSITORY_NOT_UPDATABLE_ASSIGNMENT_ALREADY_SUBMITTED(
             HttpStatus.CONFLICT, "이미 제출한 과제가 있으므로 레포지토리를 수정할 수 없습니다."),
     STUDY_HISTORY_REPOSITORY_NOT_UPDATABLE_OWNER_MISMATCH(HttpStatus.CONFLICT, "레포지토리 소유자가 현재 멤버와 다릅니다."),
+    STUDY_HISTORY_NOT_APPLIED_STUDENT_EXISTS(HttpStatus.CONFLICT, "해당 스터디에 신청하지 않은 멤버가 있습니다."),
 
     // StudyAnnouncement
     STUDY_ANNOUNCEMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 스터디 공지입니다."),
+
+    // StudyAchievement
+    STUDY_ACHIEVEMENT_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 우수 스터디원으로 지정된 스터디원이 존재합니다."),
 
     // Attendance
     ATTENDANCE_DATE_INVALID(HttpStatus.CONFLICT, "강의일이 아니면 출석체크할 수 없습니다."),
@@ -161,7 +164,7 @@ public enum ErrorCode {
     ASSIGNMENT_STUDY_NOT_APPLIED(HttpStatus.CONFLICT, "해당 스터디에 대한 수강신청 기록이 존재하지 않습니다."),
     ASSIGNMENT_SUBMIT_NOT_STARTED(HttpStatus.CONFLICT, "아직 과제가 시작되지 않았습니다."),
     ASSIGNMENT_SUBMIT_NOT_PUBLISHED(HttpStatus.CONFLICT, "아직 과제가 등록되지 않았습니다."),
-    ASSIGNMENT_SUBMIT_CANCELLED(HttpStatus.CONFLICT, "과제 휴강 주간에는 과제를 제출할 수 없습니다."),
+    ASSIGNMENT_SUBMIT_CANCELED(HttpStatus.CONFLICT, "과제 휴강 주간에는 과제를 제출할 수 없습니다."),
     ASSIGNMENT_SUBMIT_DEADLINE_PASSED(HttpStatus.CONFLICT, "과제 마감 기한이 지났습니다."),
 
     // Github
@@ -170,6 +173,9 @@ public enum ErrorCode {
     GITHUB_FILE_READ_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "깃허브 파일 읽기에 실패했습니다."),
     GITHUB_COMMIT_DATE_FETCH_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "깃허브 커밋 날짜 조회에 실패했습니다."),
     GITHUB_USER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 깃허브 유저입니다."),
+
+    // Excel
+    EXCEL_WORKSHEET_WRITE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "엑셀 워크시트 작성에 실패했습니다."),
     ;
     private final HttpStatus status;
     private final String message;

@@ -3,19 +3,20 @@ package com.gdschongik.gdsc.domain.recruitment.application;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.common.vo.Money;
+import com.gdschongik.gdsc.domain.common.vo.Period;
 import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRepository;
 import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRoundRepository;
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRoundValidator;
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentValidator;
-import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentCreateRequest;
 import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentRoundCreateRequest;
 import com.gdschongik.gdsc.domain.recruitment.dto.request.RecruitmentRoundUpdateRequest;
 import com.gdschongik.gdsc.domain.recruitment.dto.response.AdminRecruitmentResponse;
 import com.gdschongik.gdsc.domain.recruitment.dto.response.AdminRecruitmentRoundResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,12 +41,12 @@ public class AdminRecruitmentService {
 
         recruitmentValidator.validateRecruitmentCreate(isRecruitmentOverlap);
 
-        Recruitment recruitment = Recruitment.createRecruitment(
+        Recruitment recruitment = Recruitment.create(
                 request.academicYear(),
                 request.semesterType(),
                 Money.from(request.fee()),
                 request.feeName(),
-                Period.createPeriod(request.semesterStartDate(), request.semesterEndDate()));
+                Period.of(request.semesterStartDate(), request.semesterEndDate()));
         recruitmentRepository.save(recruitment);
 
         log.info("[AdminRecruitmentService] 리쿠르팅 생성: recruitmentId={}", recruitment.getId());
@@ -81,7 +82,7 @@ public class AdminRecruitmentService {
                 recruitmentRoundsInThisSemester);
 
         RecruitmentRound recruitmentRound = RecruitmentRound.create(
-                request.name(), request.startDate(), request.endDate(), recruitment, request.roundType());
+                request.name(), Period.of(request.startDate(), request.endDate()), recruitment, request.roundType());
         recruitmentRoundRepository.save(recruitmentRound);
 
         log.info("[AdminRecruitmentService] 모집회차 생성: recruitmentRoundId={}", recruitmentRound.getId());
@@ -99,11 +100,12 @@ public class AdminRecruitmentService {
 
         recruitmentRounds.remove(recruitmentRound);
 
+        LocalDateTime now = LocalDateTime.now();
         recruitmentRoundValidator.validateRecruitmentRoundUpdate(
-                request.startDate(), request.endDate(), request.roundType(), recruitmentRound, recruitmentRounds);
+                request.startDate(), request.endDate(), now, request.roundType(), recruitmentRound, recruitmentRounds);
 
         recruitmentRound.updateRecruitmentRound(
-                request.name(), Period.createPeriod(request.startDate(), request.endDate()), request.roundType());
+                request.name(), Period.of(request.startDate(), request.endDate()), request.roundType());
 
         log.info("[AdminRecruitmentService] 모집회차 수정: recruitmentRoundId={}", recruitmentRoundId);
     }

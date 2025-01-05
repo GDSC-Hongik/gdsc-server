@@ -52,11 +52,11 @@ public class Membership extends BaseEntity {
         this.regularRequirement = regularRequirement;
     }
 
-    public static Membership createMembership(Member member, RecruitmentRound recruitmentRound) {
+    public static Membership create(Member member, RecruitmentRound recruitmentRound) {
         return Membership.builder()
                 .member(member)
                 .recruitmentRound(recruitmentRound)
-                .regularRequirement(RegularRequirement.createUnsatisfiedRequirement())
+                .regularRequirement(RegularRequirement.unsatisfied())
                 .build();
     }
 

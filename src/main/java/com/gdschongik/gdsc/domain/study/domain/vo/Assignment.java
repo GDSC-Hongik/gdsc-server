@@ -1,7 +1,6 @@
 package com.gdschongik.gdsc.domain.study.domain.vo;
 
 import static com.gdschongik.gdsc.domain.study.domain.StudyStatus.*;
-import static com.gdschongik.gdsc.domain.study.domain.StudyStatus.CANCELLED;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.study.domain.StudyStatus;
@@ -46,15 +45,7 @@ public class Assignment {
         this.status = status;
     }
 
-    public static Assignment createEmptyAssignment() {
-        return Assignment.builder().status(NONE).build();
-    }
-
-    public static Assignment cancelAssignment() {
-        return Assignment.builder().status(CANCELLED).build();
-    }
-
-    public static Assignment generateAssignment(String title, LocalDateTime deadline, String descriptionLink) {
+    public static Assignment of(String title, LocalDateTime deadline, String descriptionLink) {
         return Assignment.builder()
                 .title(title)
                 .deadline(deadline)
@@ -63,13 +54,21 @@ public class Assignment {
                 .build();
     }
 
+    public static Assignment empty() {
+        return Assignment.builder().status(NONE).build();
+    }
+
+    public static Assignment canceled() {
+        return Assignment.builder().status(CANCELED).build();
+    }
+
     public void validateSubmittable(LocalDateTime now) {
         if (status == NONE) {
             throw new CustomException(ASSIGNMENT_SUBMIT_NOT_PUBLISHED);
         }
 
-        if (status == CANCELLED) {
-            throw new CustomException(ASSIGNMENT_SUBMIT_CANCELLED);
+        if (status == CANCELED) {
+            throw new CustomException(ASSIGNMENT_SUBMIT_CANCELED);
         }
 
         if (now.isAfter(deadline)) {
@@ -83,22 +82,20 @@ public class Assignment {
         return status == OPEN;
     }
 
-    public boolean isCancelled() {
-        return status == CANCELLED;
+    public boolean isCanceled() {
+        return status == CANCELED;
     }
 
     public boolean isNone() {
         return status == NONE;
     }
 
-    public boolean isDeadlineRemaining() {
-        LocalDateTime now = LocalDateTime.now();
+    public boolean isDeadlineRemaining(LocalDateTime now) {
         return now.isBefore(deadline);
     }
 
-    public boolean isDeadLineThisWeek() {
+    public boolean isDeadLineThisWeek(LocalDate now) {
         // 현재 날짜와 마감일의 날짜 부분을 비교할 것이므로 LocalDate로 변환
-        LocalDate now = LocalDate.now();
         LocalDate startOfWeek = now.with(DayOfWeek.MONDAY); // 이번 주 월요일
         LocalDate endOfWeek = now.with(DayOfWeek.SUNDAY); // 이번 주 일요일
 

@@ -3,6 +3,7 @@ package com.gdschongik.gdsc.domain.study.api;
 import com.gdschongik.gdsc.domain.study.application.StudentStudyHistoryService;
 import com.gdschongik.gdsc.domain.study.dto.request.RepositoryUpdateRequest;
 import com.gdschongik.gdsc.domain.study.dto.response.AssignmentHistoryResponse;
+import com.gdschongik.gdsc.domain.study.dto.response.StudentMyCompleteStudyResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -20,7 +21,7 @@ public class StudentStudyHistoryController {
 
     private final StudentStudyHistoryService studentStudyHistoryService;
 
-    @Operation(summary = "레포지토리 입력", description = "레포지토리를 입력합니다. 이미 제출한 과제가 있다면 수정할 수 없습니다.")
+    @Operation(summary = "레포지토리 입력", description = "과제 제출 레포지토리를 입력합니다.")
     @PutMapping("/{studyId}/repository")
     public ResponseEntity<Void> updateRepository(
             @PathVariable Long studyId, @Valid @RequestBody RepositoryUpdateRequest request) throws IOException {
@@ -41,5 +42,12 @@ public class StudentStudyHistoryController {
     public ResponseEntity<Void> submitAssignment(@RequestParam(name = "studyDetailId") Long studyDetailId) {
         studentStudyHistoryService.submitAssignment(studyDetailId);
         return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "내 스터디 수료 내역 조회", description = "내가 수료한 스터디를 조회합니다.")
+    @GetMapping("/me/complete")
+    public ResponseEntity<List<StudentMyCompleteStudyResponse>> getMyCompletedStudy() {
+        List<StudentMyCompleteStudyResponse> response = studentStudyHistoryService.getMyCompletedStudies();
+        return ResponseEntity.ok(response);
     }
 }

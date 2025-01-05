@@ -69,7 +69,7 @@ public class MembershipService {
 
         membershipValidator.validateMembershipSubmit(currentMember, recruitmentRound, isMembershipDuplicate);
 
-        Membership membership = Membership.createMembership(currentMember, recruitmentRound);
+        Membership membership = Membership.create(currentMember, recruitmentRound);
         membershipRepository.save(membership);
 
         log.info("[MembershipService] 멤버십 가입 신청 접수: membershipId = {}", membership.getId());

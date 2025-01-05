@@ -8,7 +8,6 @@ import com.gdschongik.gdsc.domain.member.dto.response.AdminMemberResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
@@ -51,7 +50,7 @@ public class AdminMemberController {
 
     @Operation(summary = "회원 정보 엑셀 다운로드", description = "회원 정보를 엑셀로 다운로드합니다.")
     @GetMapping("/excel")
-    public ResponseEntity<byte[]> createWorkbook() throws IOException {
+    public ResponseEntity<byte[]> createWorkbook() {
         byte[] response = adminMemberService.createExcel();
         ContentDisposition contentDisposition =
                 ContentDisposition.builder("attachment").filename("members.xls").build();

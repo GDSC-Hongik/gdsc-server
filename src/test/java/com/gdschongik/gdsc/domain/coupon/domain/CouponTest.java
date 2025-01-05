@@ -18,7 +18,7 @@ class CouponTest {
         @Test
         void 성공한다() {
             // when
-            Coupon coupon = Coupon.createCoupon(COUPON_NAME, Money.from(ONE));
+            Coupon coupon = Coupon.create(COUPON_NAME, Money.from(ONE));
 
             // then
             assertThat(coupon).isNotNull();
@@ -30,7 +30,7 @@ class CouponTest {
             Money discountAmount = Money.from(ZERO);
 
             // when & then
-            assertThatThrownBy(() -> Coupon.createCoupon(COUPON_NAME, discountAmount))
+            assertThatThrownBy(() -> Coupon.create(COUPON_NAME, discountAmount))
                     .isInstanceOf(CustomException.class)
                     .hasMessageContaining(COUPON_DISCOUNT_AMOUNT_NOT_POSITIVE.getMessage());
         }

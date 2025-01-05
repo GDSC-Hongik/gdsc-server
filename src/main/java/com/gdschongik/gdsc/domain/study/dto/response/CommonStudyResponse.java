@@ -1,7 +1,7 @@
 package com.gdschongik.gdsc.domain.study.dto.response;
 
 import com.gdschongik.gdsc.domain.common.model.SemesterType;
-import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
+import com.gdschongik.gdsc.domain.common.vo.Period;
 import com.gdschongik.gdsc.domain.study.domain.Study;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.DayOfWeek;

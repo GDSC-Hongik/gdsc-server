@@ -5,8 +5,8 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.common.model.BaseSemesterEntity;
 import com.gdschongik.gdsc.domain.common.model.SemesterType;
+import com.gdschongik.gdsc.domain.common.vo.Period;
 import com.gdschongik.gdsc.domain.member.domain.Member;
-import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
@@ -102,7 +102,7 @@ public class Study extends BaseSemesterEntity {
         this.endTime = endTime;
     }
 
-    public static Study createStudy(
+    public static Study create(
             Integer academicYear,
             SemesterType semesterType,
             String title,
@@ -175,8 +175,7 @@ public class Study extends BaseSemesterEntity {
         return applicationPeriod.isOpen();
     }
 
-    public boolean isWithinApplicationAndCourse() {
-        LocalDateTime now = LocalDateTime.now();
+    public boolean isWithinApplicationAndCourse(LocalDateTime now) {
         return applicationPeriod.getStartDate().isBefore(now)
                 && period.getEndDate().isAfter(now);
     }

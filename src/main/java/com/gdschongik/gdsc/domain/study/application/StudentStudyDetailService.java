@@ -39,9 +39,11 @@ public class StudentStudyDetailService {
                 .orElseThrow(() -> new CustomException(ErrorCode.STUDY_HISTORY_NOT_FOUND));
         List<AssignmentHistory> assignmentHistories =
                 assignmentHistoryRepository.findAssignmentHistoriesByStudentAndStudyId(currentMember, studyId);
+
+        LocalDateTime now = LocalDateTime.now();
         List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyIdOrderByWeekAsc(studyId).stream()
                 .filter(studyDetail ->
-                        studyDetail.getAssignment().isOpen() && studyDetail.isAssignmentDeadlineRemaining())
+                        studyDetail.getAssignment().isOpen() && studyDetail.isAssignmentDeadlineRemaining(now))
                 .toList();
 
         boolean isAnySubmitted = assignmentHistories.stream().anyMatch(AssignmentHistory::isSubmitted);
@@ -54,27 +56,27 @@ public class StudentStudyDetailService {
     }
 
     @Transactional(readOnly = true)
-    public List<StudyTodoResponse> getStudyTodoList(Long studyId) {
+    public List<StudyTaskResponse> getStudyTodoList(Long studyId) {
         Member member = memberUtil.getCurrentMember();
         final List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyIdOrderByWeekAsc(studyId);
         final List<AssignmentHistory> assignmentHistories =
                 assignmentHistoryRepository.findAssignmentHistoriesByStudentAndStudyId(member, studyId);
         final List<Attendance> attendances = attendanceRepository.findByMemberAndStudyId(member, studyId);
 
-        LocalDate now = LocalDate.now();
-        List<StudyTodoResponse> response = new ArrayList<>();
+        LocalDateTime now = LocalDateTime.now();
+        List<StudyTaskResponse> response = new ArrayList<>();
         // 출석체크 정보 (개설 상태이고, 오늘이 출석체크날짜인 것)
         studyDetails.stream()
                 .filter(studyDetail -> studyDetail.getCurriculum().isOpen()
-                        && studyDetail.getAttendanceDay().equals(now))
-                .forEach(studyDetail -> response.add(StudyTodoResponse.createAttendanceType(
-                        studyDetail, now, isAttended(attendances, studyDetail))));
+                        && studyDetail.getAttendanceDay().equals(now.toLocalDate()))
+                .forEach(studyDetail -> response.add(StudyTaskResponse.createAttendanceType(
+                        studyDetail, now.toLocalDate(), isAttended(attendances, studyDetail))));
 
         // 과제 정보 (오늘이 과제 제출 기간에 포함된 과제 정보)
         studyDetails.stream()
                 .filter(studyDetail -> studyDetail.getAssignment().isOpen()
-                        && studyDetail.getAssignment().isDeadlineRemaining())
-                .forEach(studyDetail -> response.add(StudyTodoResponse.createAssignmentType(
+                        && studyDetail.getAssignment().isDeadlineRemaining(now))
+                .forEach(studyDetail -> response.add(StudyTaskResponse.createAssignmentType(
                         studyDetail, getSubmittedAssignment(assignmentHistories, studyDetail))));
         return response;
     }
@@ -85,13 +87,14 @@ public class StudentStudyDetailService {
         final List<AssignmentHistory> assignmentHistories =
                 assignmentHistoryRepository.findAssignmentHistoriesByStudentAndStudyId(member, studyId);
         final List<Attendance> attendances = attendanceRepository.findByMemberAndStudyId(member, studyId);
+        LocalDateTime now = LocalDateTime.now();
 
         return studyDetails.stream()
                 .map(studyDetail -> StudyStudentCurriculumResponse.of(
                         studyDetail,
                         getSubmittedAssignment(assignmentHistories, studyDetail),
                         isAttended(attendances, studyDetail),
-                        LocalDateTime.now()))
+                        now))
                 .toList();
     }
 
@@ -112,14 +115,15 @@ public class StudentStudyDetailService {
     @Transactional(readOnly = true)
     public List<AssignmentHistoryStatusResponse> getUpcomingAssignments(Long studyId) {
         Member currentMember = memberUtil.getCurrentMember();
+        LocalDate now = LocalDate.now();
         List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyId(studyId).stream()
                 .filter(studyDetail ->
-                        studyDetail.getAssignment().isOpen() && studyDetail.isAssignmentDeadlineThisWeek())
+                        studyDetail.getAssignment().isOpen() && studyDetail.isAssignmentDeadlineThisWeek(now))
                 .toList();
         List<AssignmentHistory> assignmentHistories =
                 assignmentHistoryRepository.findAssignmentHistoriesByStudentAndStudyId(currentMember, studyId).stream()
                         .filter(assignmentHistory ->
-                                assignmentHistory.getStudyDetail().isAssignmentDeadlineThisWeek())
+                                assignmentHistory.getStudyDetail().isAssignmentDeadlineThisWeek(now))
                         .toList();
 
         return studyDetails.stream()

@@ -38,13 +38,6 @@ public class OnboardingMemberController {
         return ResponseEntity.ok().body(response);
     }
 
-    @Operation(summary = "GDSC Bevy 연동하기", description = "GDSC Bevy 가입 상태를 업데이트합니다.")
-    @PostMapping("/me/link-bevy")
-    public ResponseEntity<Void> linkBevy() {
-        onboardingMemberService.verifyBevyStatus();
-        return ResponseEntity.ok().build();
-    }
-
     @Operation(summary = "기본 회원정보 작성", description = "기본 회원정보를 작성합니다.")
     @PostMapping("/me/basic-info")
     public ResponseEntity<Void> updateBasicMemberInfo(@Valid @RequestBody BasicMemberInfoRequest request) {

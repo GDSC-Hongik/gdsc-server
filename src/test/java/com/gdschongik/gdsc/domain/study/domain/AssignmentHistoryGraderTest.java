@@ -4,7 +4,7 @@ import static com.gdschongik.gdsc.global.common.constant.StudyConstant.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
+import com.gdschongik.gdsc.domain.common.vo.Period;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
 import com.gdschongik.gdsc.helper.FixtureHelper;
@@ -28,10 +28,8 @@ class AssignmentHistoryGraderTest {
     }
 
     private Study createStudyWithMentor(Long mentorId) {
-        Period period = Period.createPeriod(STUDY_START_DATETIME, STUDY_END_DATETIME);
-        Period applicationPeriod =
-                Period.createPeriod(STUDY_START_DATETIME.minusDays(7), STUDY_START_DATETIME.minusDays(1));
-        return fixtureHelper.createStudyWithMentor(mentorId, period, applicationPeriod);
+        Period applicationPeriod = Period.of(STUDY_START_DATETIME.minusDays(7), STUDY_START_DATETIME.minusDays(1));
+        return fixtureHelper.createStudyWithMentor(mentorId, STUDY_ONGOING_PERIOD, applicationPeriod);
     }
 
     @Nested

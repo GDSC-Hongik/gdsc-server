@@ -20,7 +20,7 @@ class MemberTest {
         @Test
         void MemberRole은_GUEST이다() {
             // given
-            Member member = Member.createGuestMember(OAUTH_ID);
+            Member member = Member.createGuest(OAUTH_ID);
 
             // when
             MemberRole role = member.getRole();
@@ -32,7 +32,7 @@ class MemberTest {
         @Test
         void MemberStatus는_NORMAL이다() {
             // given
-            Member member = Member.createGuestMember(OAUTH_ID);
+            Member member = Member.createGuest(OAUTH_ID);
 
             // when
             MemberStatus status = member.getStatus();
@@ -44,7 +44,7 @@ class MemberTest {
         @Test
         void 모든_준회원_가입조건은_인증되지_않은_상태이다() {
             // given
-            Member member = Member.createGuestMember(OAUTH_ID);
+            Member member = Member.createGuest(OAUTH_ID);
 
             // when
             AssociateRequirement requirement = member.getAssociateRequirement();
@@ -52,7 +52,6 @@ class MemberTest {
             // then
             assertThat(requirement.getUnivStatus()).isEqualTo(UNSATISFIED);
             assertThat(requirement.getDiscordStatus()).isEqualTo(UNSATISFIED);
-            assertThat(requirement.getBevyStatus()).isEqualTo(UNSATISFIED);
             assertThat(requirement.getInfoStatus()).isEqualTo(UNSATISFIED);
         }
     }
@@ -63,7 +62,7 @@ class MemberTest {
         @Test
         void 기본회원정보_작성시_준회원_가입조건중_기본정보_인증상태가_인증된다() {
             // given
-            Member member = Member.createGuestMember(OAUTH_ID);
+            Member member = Member.createGuest(OAUTH_ID);
 
             // when
             member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
@@ -76,7 +75,7 @@ class MemberTest {
         @Test
         void 재학생이메일_인증시_준회원_가입조건중_재학생이메일_인증상태가_인증된다() {
             // given
-            Member member = Member.createGuestMember(OAUTH_ID);
+            Member member = Member.createGuest(OAUTH_ID);
 
             // when
             member.completeUnivEmailVerification(UNIV_EMAIL);
@@ -89,7 +88,7 @@ class MemberTest {
         @Test
         void 디스코드_인증시_준회원_가입조건중_디스코드_인증상태가_인증된다() {
             // given
-            Member member = Member.createGuestMember(OAUTH_ID);
+            Member member = Member.createGuest(OAUTH_ID);
 
             // when
             member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
@@ -97,19 +96,6 @@ class MemberTest {
             // then
             AssociateRequirement requirement = member.getAssociateRequirement();
             assertThat(requirement.getDiscordStatus()).isEqualTo(SATISFIED);
-        }
-
-        @Test
-        void Bevy_인증시_준회원_가입조건중_Bevy_인증상태가_인증된다() {
-            // given
-            Member member = Member.createGuestMember(OAUTH_ID);
-
-            // when
-            member.verifyBevy();
-
-            // then
-            AssociateRequirement requirement = member.getAssociateRequirement();
-            assertThat(requirement.getBevyStatus()).isEqualTo(SATISFIED);
         }
     }
 
@@ -119,11 +105,10 @@ class MemberTest {
         @Test
         void 기본_회원정보_작성하지_않았으면_실패한다() {
             // given
-            Member member = Member.createGuestMember(OAUTH_ID);
+            Member member = Member.createGuest(OAUTH_ID);
 
             member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
             member.completeUnivEmailVerification(UNIV_EMAIL);
-            member.verifyBevy();
 
             // when & then
             assertThatThrownBy(member::advanceToAssociate)
@@ -134,11 +119,10 @@ class MemberTest {
         @Test
         void 디스코드_인증하지_않았으면_실패한다() {
             // given
-            Member member = Member.createGuestMember(OAUTH_ID);
+            Member member = Member.createGuest(OAUTH_ID);
 
             member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
             member.completeUnivEmailVerification(UNIV_EMAIL);
-            member.verifyBevy();
 
             // when & then
             assertThatThrownBy(member::advanceToAssociate)
@@ -147,29 +131,13 @@ class MemberTest {
         }
 
         @Test
-        void Bevy_연동하지_않았으면_실패한다() {
-            // given
-            Member member = Member.createGuestMember(OAUTH_ID);
-
-            member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
-            member.completeUnivEmailVerification(UNIV_EMAIL);
-            member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
-
-            // when & then
-            assertThatThrownBy(member::advanceToAssociate)
-                    .isInstanceOf(CustomException.class)
-                    .hasMessage(BEVY_NOT_SATISFIED.getMessage());
-        }
-
-        @Test
         void 이미_준회원으로_승급_돼있으면_실패한다() {
             // given
-            Member member = Member.createGuestMember(OAUTH_ID);
+            Member member = Member.createGuest(OAUTH_ID);
 
             member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
             member.completeUnivEmailVerification(UNIV_EMAIL);
             member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
-            member.verifyBevy();
             member.advanceToAssociate();
 
             // when & then
@@ -181,12 +149,11 @@ class MemberTest {
         @Test
         void 모든_준회원_가입조건이_인증되었으면_성공한다() {
             // given
-            Member member = Member.createGuestMember(OAUTH_ID);
+            Member member = Member.createGuest(OAUTH_ID);
 
             member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
             member.completeUnivEmailVerification(UNIV_EMAIL);
             member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
-            member.verifyBevy();
 
             // when
             member.advanceToAssociate();
@@ -202,7 +169,7 @@ class MemberTest {
         @Test
         void 이미_탈퇴한_유저면_실패한다() {
             // given
-            Member member = Member.createGuestMember(OAUTH_ID);
+            Member member = Member.createGuest(OAUTH_ID);
 
             member.withdraw();
 
@@ -215,7 +182,7 @@ class MemberTest {
         @Test
         void 회원탈퇴시_이전에_탈퇴하지_않은_유저면_성공한다() {
             // given
-            Member member = Member.createGuestMember(OAUTH_ID);
+            Member member = Member.createGuest(OAUTH_ID);
 
             // when
             member.withdraw();
@@ -230,7 +197,7 @@ class MemberTest {
         @Test
         void 탈퇴하지_않은_유저면_성공한다() {
             // given
-            Member member = Member.createGuestMember(OAUTH_ID);
+            Member member = Member.createGuest(OAUTH_ID);
 
             member.updateMemberInfo(
                     MODIFIED_STUDENT_ID, NAME, PHONE_NUMBER, D022, UNIV_EMAIL, DISCORD_USERNAME, NICKNAME);
@@ -242,7 +209,7 @@ class MemberTest {
         @Test
         void 탈퇴한_유저면_실패한다() {
             // given
-            Member member = Member.createGuestMember(OAUTH_ID);
+            Member member = Member.createGuest(OAUTH_ID);
 
             member.withdraw();
 
@@ -259,7 +226,7 @@ class MemberTest {
     @Test
     void 디스코드인증시_탈퇴한_유저면_실패한다() {
         // given
-        Member member = Member.createGuestMember(OAUTH_ID);
+        Member member = Member.createGuest(OAUTH_ID);
 
         member.withdraw();
 
@@ -271,30 +238,16 @@ class MemberTest {
                 .hasMessage(MEMBER_DELETED.getMessage());
     }
 
-    @Test
-    void Bevy인증시_탈퇴한_유저면_실패한다() {
-        // given
-        Member member = Member.createGuestMember(OAUTH_ID);
-
-        member.withdraw();
-
-        // when & then
-        assertThatThrownBy(member::verifyBevy)
-                .isInstanceOf(CustomException.class)
-                .hasMessage(MEMBER_DELETED.getMessage());
-    }
-
     @Nested
     class 정회원으로_승급_시도시 {
         @Test
         void 이미_정회원이라면_실패한다() {
             // given
-            Member member = Member.createGuestMember(OAUTH_ID);
+            Member member = Member.createGuest(OAUTH_ID);
 
             member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
             member.completeUnivEmailVerification(UNIV_EMAIL);
             member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
-            member.verifyBevy();
             member.advanceToAssociate();
             member.advanceToRegular();
 
@@ -307,7 +260,7 @@ class MemberTest {
         @Test
         void MemberRole이_GUEST_이라면_실패한다() {
             // given
-            Member member = Member.createGuestMember(OAUTH_ID);
+            Member member = Member.createGuest(OAUTH_ID);
 
             // when & then
             assertThatThrownBy(member::advanceToRegular)
@@ -318,12 +271,11 @@ class MemberTest {
         @Test
         void 준회원이라면_성공한다() {
             // given
-            Member member = Member.createGuestMember(OAUTH_ID);
+            Member member = Member.createGuest(OAUTH_ID);
 
             member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
             member.completeUnivEmailVerification(UNIV_EMAIL);
             member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
-            member.verifyBevy();
             member.advanceToAssociate();
 
             // when
@@ -340,12 +292,11 @@ class MemberTest {
         @Test
         void 성공한다() {
             // given
-            Member member = Member.createGuestMember(OAUTH_ID);
+            Member member = Member.createGuest(OAUTH_ID);
 
             member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
             member.completeUnivEmailVerification(UNIV_EMAIL);
             member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
-            member.verifyBevy();
             member.advanceToAssociate();
 
             // when
@@ -368,9 +319,8 @@ class MemberTest {
                     .extracting(
                             AssociateRequirement::getDiscordStatus,
                             AssociateRequirement::getInfoStatus,
-                            AssociateRequirement::getBevyStatus,
                             AssociateRequirement::getUnivStatus)
-                    .containsExactly(UNSATISFIED, UNSATISFIED, UNSATISFIED, UNSATISFIED);
+                    .containsExactly(UNSATISFIED, UNSATISFIED, UNSATISFIED);
         }
     }
 }

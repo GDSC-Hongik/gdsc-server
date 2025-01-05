@@ -4,7 +4,7 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.common.model.BaseSemesterEntity;
 import com.gdschongik.gdsc.domain.common.model.SemesterType;
-import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
+import com.gdschongik.gdsc.domain.common.vo.Period;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -59,9 +59,7 @@ public class RecruitmentRound extends BaseSemesterEntity {
         this.roundType = roundType;
     }
 
-    public static RecruitmentRound create(
-            String name, LocalDateTime startDate, LocalDateTime endDate, Recruitment recruitment, RoundType roundType) {
-        Period period = Period.createPeriod(startDate, endDate);
+    public static RecruitmentRound create(String name, Period period, Recruitment recruitment, RoundType roundType) {
         return RecruitmentRound.builder()
                 .name(name)
                 .period(period)
@@ -86,8 +84,7 @@ public class RecruitmentRound extends BaseSemesterEntity {
         this.roundType = roundType;
     }
 
-    public void validatePeriodNotStarted() {
-        LocalDateTime now = LocalDateTime.now();
+    public void validatePeriodNotStarted(LocalDateTime now) {
         if (now.isAfter(period.getStartDate())) {
             throw new CustomException(RECRUITMENT_ROUND_STARTDATE_ALREADY_PASSED);
         }

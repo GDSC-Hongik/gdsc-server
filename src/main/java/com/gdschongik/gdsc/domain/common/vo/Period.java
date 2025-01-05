@@ -1,20 +1,22 @@
-package com.gdschongik.gdsc.domain.recruitment.domain.vo;
+package com.gdschongik.gdsc.domain.common.vo;
 
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.persistence.Embeddable;
 import java.time.LocalDateTime;
-import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @Embeddable
+@EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Period {
+public final class Period {
+
     private LocalDateTime startDate;
 
     private LocalDateTime endDate;
@@ -25,7 +27,7 @@ public class Period {
         this.endDate = endDate;
     }
 
-    public static Period createPeriod(LocalDateTime startDate, LocalDateTime endDate) {
+    public static Period of(LocalDateTime startDate, LocalDateTime endDate) {
         validatePeriod(startDate, endDate);
         return Period.builder().startDate(startDate).endDate(endDate).build();
     }
@@ -37,6 +39,7 @@ public class Period {
     }
 
     public boolean isOpen() {
+        // TODO: now를 내부에서 선언하지 않고 파라미터로 받아서 테스트 가능하도록 변경
         LocalDateTime now = LocalDateTime.now();
         return (now.isAfter(startDate) || now.isEqual(startDate)) && (now.isBefore(endDate) || now.isEqual(startDate));
     }
@@ -45,18 +48,5 @@ public class Period {
         if (!this.endDate.isBefore(startDate) && !this.startDate.isAfter(endDate)) {
             throw new CustomException(PERIOD_OVERLAP);
         }
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Period that = (Period) o;
-        return startDate == that.startDate && endDate == that.endDate;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(startDate, endDate);
     }
 }

@@ -10,10 +10,10 @@ import static org.assertj.core.api.Assertions.*;
 
 import com.gdschongik.gdsc.domain.common.model.SemesterType;
 import com.gdschongik.gdsc.domain.common.vo.Money;
+import com.gdschongik.gdsc.domain.common.vo.Period;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
-import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.Nested;
@@ -25,11 +25,10 @@ class MembershipValidatorTest {
     MembershipValidator membershipValidator = new MembershipValidator();
 
     private Member createAssociateMember(Long id) {
-        Member member = createGuestMember(OAUTH_ID);
+        Member member = createGuest(OAUTH_ID);
         member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, EMAIL);
         member.completeUnivEmailVerification(UNIV_EMAIL);
         member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
-        member.verifyBevy();
         member.advanceToAssociate();
         ReflectionTestUtils.setField(member, "id", id);
         return member;
@@ -41,9 +40,9 @@ class MembershipValidatorTest {
             Money fee,
             LocalDateTime startDate,
             LocalDateTime endDate) {
-        Recruitment recruitment = Recruitment.createRecruitment(
-                academicYear, semesterType, fee, FEE_NAME, Period.createPeriod(SEMESTER_START_DATE, SEMESTER_END_DATE));
-        return RecruitmentRound.create(RECRUITMENT_ROUND_NAME, startDate, endDate, recruitment, ROUND_TYPE);
+        Recruitment recruitment = Recruitment.create(
+                academicYear, semesterType, fee, FEE_NAME, Period.of(SEMESTER_START_DATE, SEMESTER_END_DATE));
+        return RecruitmentRound.create(RECRUITMENT_ROUND_NAME, Period.of(startDate, endDate), recruitment, ROUND_TYPE);
     }
 
     @Nested
@@ -52,7 +51,7 @@ class MembershipValidatorTest {
         @Test
         void 역할이_GUEST라면_멤버십_가입신청에_실패한다() {
             // given
-            Member member = createGuestMember(OAUTH_ID);
+            Member member = createGuest(OAUTH_ID);
 
             RecruitmentRound recruitmentRound =
                     createRecruitmentRound(ACADEMIC_YEAR, SEMESTER_TYPE, FEE, START_DATE, END_DATE);
@@ -85,7 +84,7 @@ class MembershipValidatorTest {
             RecruitmentRound recruitmentRound =
                     createRecruitmentRound(ACADEMIC_YEAR, SEMESTER_TYPE, FEE, START_DATE, END_DATE);
 
-            Membership membership = Membership.createMembership(member, recruitmentRound);
+            Membership membership = Membership.create(member, recruitmentRound);
 
             // when & then
             assertThatThrownBy(() -> membershipValidator.validateMembershipSubmit(member, recruitmentRound, true))

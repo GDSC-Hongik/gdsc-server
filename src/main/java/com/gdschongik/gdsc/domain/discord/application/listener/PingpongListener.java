@@ -20,7 +20,7 @@ public class PingpongListener extends ListenerAdapter {
         User author = event.getAuthor();
         TextChannel channel = event.getChannel().asTextChannel();
         Message message = event.getMessage();
-        String content = message.getContentRaw(); // get only textual content of message
+        String content = message.getContentRaw();
 
         log.info("Message of {} in {}: {}", author.getName(), channel.getName(), message.getContentDisplay());
 

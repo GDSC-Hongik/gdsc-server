@@ -37,7 +37,7 @@ public class CouponService {
 
     @Transactional
     public void createCoupon(CouponCreateRequest request) {
-        Coupon coupon = Coupon.createCoupon(request.name(), Money.from(request.discountAmount()));
+        Coupon coupon = Coupon.create(request.name(), Money.from(request.discountAmount()));
         couponRepository.save(coupon);
         log.info("[CouponService] 쿠폰 생성: name={}, discountAmount={}", request.name(), request.discountAmount());
     }
@@ -59,7 +59,7 @@ public class CouponService {
         List<Member> members = memberRepository.findAllById(request.memberIds());
 
         List<IssuedCoupon> issuedCoupons = members.stream()
-                .map(member -> IssuedCoupon.issue(coupon, member))
+                .map(member -> IssuedCoupon.create(coupon, member))
                 .toList();
 
         issuedCouponRepository.saveAll(issuedCoupons);

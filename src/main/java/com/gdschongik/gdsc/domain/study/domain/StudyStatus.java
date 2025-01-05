@@ -8,7 +8,7 @@ import lombok.Getter;
 public enum StudyStatus {
     NONE("생성"),
     OPEN("개설"),
-    CANCELLED("휴강");
+    CANCELED("휴강");
 
     private final String value;
 }

@@ -42,7 +42,7 @@ public class Attendance extends BaseEntity {
         this.studyDetail = studyDetail;
     }
 
-    public static Attendance create(Member student, StudyDetail studyDetail) {
+    public static Attendance of(Member student, StudyDetail studyDetail) {
         return Attendance.builder().student(student).studyDetail(studyDetail).build();
     }
 }

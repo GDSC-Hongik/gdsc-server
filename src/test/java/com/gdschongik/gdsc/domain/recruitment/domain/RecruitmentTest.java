@@ -4,7 +4,7 @@ import static com.gdschongik.gdsc.global.common.constant.RecruitmentConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.TemporalConstant.*;
 import static org.assertj.core.api.Assertions.*;
 
-import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
+import com.gdschongik.gdsc.domain.common.vo.Period;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -15,15 +15,11 @@ class RecruitmentTest {
         @Test
         void Period가_제대로_생성된다() {
             // given
-            Period period = Period.createPeriod(SEMESTER_START_DATE, SEMESTER_END_DATE);
+            Period period = Period.of(SEMESTER_START_DATE, SEMESTER_END_DATE);
 
             // when
-            Recruitment recruitment = Recruitment.createRecruitment(
-                    ACADEMIC_YEAR,
-                    SEMESTER_TYPE,
-                    FEE,
-                    FEE_NAME,
-                    Period.createPeriod(SEMESTER_START_DATE, SEMESTER_END_DATE));
+            Recruitment recruitment = Recruitment.create(
+                    ACADEMIC_YEAR, SEMESTER_TYPE, FEE, FEE_NAME, Period.of(SEMESTER_START_DATE, SEMESTER_END_DATE));
 
             // then
             assertThat(recruitment.getSemesterPeriod().getStartDate()).isEqualTo(SEMESTER_START_DATE);

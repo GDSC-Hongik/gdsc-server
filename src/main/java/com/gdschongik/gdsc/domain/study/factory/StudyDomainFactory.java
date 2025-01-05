@@ -1,7 +1,7 @@
 package com.gdschongik.gdsc.domain.study.factory;
 
+import com.gdschongik.gdsc.domain.common.vo.Period;
 import com.gdschongik.gdsc.domain.member.domain.Member;
-import com.gdschongik.gdsc.domain.recruitment.domain.vo.Period;
 import com.gdschongik.gdsc.domain.study.domain.Study;
 import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
 import com.gdschongik.gdsc.domain.study.dto.request.StudyCreateRequest;
@@ -17,13 +17,13 @@ public class StudyDomainFactory {
     // 새로운 스터디를 생성합니다.
     public Study createNewStudy(StudyCreateRequest request, Member mentor) {
         LocalDate endDate = request.startDate().plusWeeks(request.totalWeek()).minusDays(1);
-        return Study.createStudy(
+        return Study.create(
                 request.academicYear(),
                 request.semesterType(),
                 request.title(),
                 mentor,
-                Period.createPeriod(request.startDate().atStartOfDay(), endDate.atTime(LocalTime.MAX)),
-                Period.createPeriod(
+                Period.of(request.startDate().atStartOfDay(), endDate.atTime(LocalTime.MAX)),
+                Period.of(
                         request.applicationStartDate().atStartOfDay(),
                         request.applicationEndDate().atTime(LocalTime.MAX)),
                 request.totalWeek(),
@@ -40,6 +40,6 @@ public class StudyDomainFactory {
 
         String attendanceNumber =
                 new Random().ints(4, 0, 10).mapToObj(String::valueOf).reduce("", String::concat);
-        return StudyDetail.createStudyDetail(study, week, attendanceNumber, Period.createPeriod(startDate, endDate));
+        return StudyDetail.create(study, week, attendanceNumber, Period.of(startDate, endDate));
     }
 }

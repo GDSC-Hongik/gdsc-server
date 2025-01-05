@@ -27,7 +27,7 @@ class MemberRepositoryTest extends RepositoryTest {
     private MemberRepository memberRepository;
 
     private Member getMember() {
-        Member member = Member.createGuestMember(OAUTH_ID);
+        Member member = Member.createGuest(OAUTH_ID);
         return memberRepository.save(member);
     }
 
@@ -90,7 +90,6 @@ class MemberRepositoryTest extends RepositoryTest {
             member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, UNIV_EMAIL);
             member.completeUnivEmailVerification(UNIV_EMAIL);
             member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
-            member.verifyBevy();
             member.advanceToAssociate();
 
             flushAndClearBeforeExecute();
@@ -110,7 +109,6 @@ class MemberRepositoryTest extends RepositoryTest {
             member.updateBasicMemberInfo(STUDENT_ID, NAME, PHONE_NUMBER, D022, UNIV_EMAIL);
             member.completeUnivEmailVerification(UNIV_EMAIL);
             member.verifyDiscord(DISCORD_USERNAME, NICKNAME);
-            member.verifyBevy();
             member.advanceToAssociate();
 
             flushAndClearBeforeExecute();

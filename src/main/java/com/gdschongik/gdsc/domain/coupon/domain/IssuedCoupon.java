@@ -19,6 +19,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import org.hibernate.annotations.Comment;
 
 @Entity
@@ -51,7 +52,7 @@ public class IssuedCoupon extends BaseEntity {
         this.hasRevoked = hasRevoked;
     }
 
-    public static IssuedCoupon issue(Coupon coupon, Member member) {
+    public static IssuedCoupon create(Coupon coupon, Member member) {
         return IssuedCoupon.builder()
                 .coupon(coupon)
                 .member(member)
@@ -83,9 +84,9 @@ public class IssuedCoupon extends BaseEntity {
 
     // 상태 변경 로직
 
-    public void use() {
+    public void use(@NonNull LocalDateTime now) {
         validateUsable();
-        usedAt = LocalDateTime.now();
+        usedAt = now;
     }
 
     public void revoke() {

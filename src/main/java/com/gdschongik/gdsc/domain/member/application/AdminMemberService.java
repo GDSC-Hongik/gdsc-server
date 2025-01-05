@@ -18,7 +18,7 @@ import com.gdschongik.gdsc.global.exception.ErrorCode;
 import com.gdschongik.gdsc.global.util.EnvironmentUtil;
 import com.gdschongik.gdsc.global.util.ExcelUtil;
 import com.gdschongik.gdsc.global.util.MemberUtil;
-import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -66,7 +66,7 @@ public class AdminMemberService {
                 request.nickname());
     }
 
-    public byte[] createExcel() throws IOException {
+    public byte[] createExcel() {
         return excelUtil.createMemberExcel();
     }
 
@@ -74,8 +74,9 @@ public class AdminMemberService {
     public void demoteAllRegularMembersToAssociate(MemberDemoteRequest request) {
         List<RecruitmentRound> recruitmentRounds = recruitmentRoundRepository.findAllByAcademicYearAndSemesterType(
                 request.academicYear(), request.semesterType());
+        LocalDateTime now = LocalDateTime.now();
 
-        memberValidator.validateMemberDemote(recruitmentRounds);
+        memberValidator.validateMemberDemote(recruitmentRounds, now);
 
         List<Member> regularMembers = memberRepository.findAllByRole(MemberRole.REGULAR);
 

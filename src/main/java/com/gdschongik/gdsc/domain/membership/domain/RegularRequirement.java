@@ -27,7 +27,7 @@ public class RegularRequirement {
         this.paymentStatus = paymentStatus;
     }
 
-    public static RegularRequirement createUnsatisfiedRequirement() {
+    public static RegularRequirement unsatisfied() {
         return RegularRequirement.builder()
                 .paymentStatus(RequirementStatus.UNSATISFIED)
                 .build();
