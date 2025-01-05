@@ -34,6 +34,7 @@ public class RecruitmentRoundValidator {
     public void validateRecruitmentRoundUpdate(
             LocalDateTime startDate,
             LocalDateTime endDate,
+            LocalDateTime now,
             RoundType roundType,
             RecruitmentRound currentRecruitmentRound,
             List<RecruitmentRound> otherRecruitmentRounds) {
@@ -41,7 +42,7 @@ public class RecruitmentRoundValidator {
         validatePeriodOverlap(otherRecruitmentRounds, startDate, endDate);
         validateRoundOverlap(otherRecruitmentRounds, roundType);
         validateRoundOneToTwo(currentRecruitmentRound.getRoundType(), roundType);
-        currentRecruitmentRound.validatePeriodNotStarted();
+        currentRecruitmentRound.validatePeriodNotStarted(now);
     }
 
     private void validatePeriodWithinTwoWeeks(LocalDateTime startDate, LocalDateTime endDate, Recruitment recruitment) {

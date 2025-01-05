@@ -17,6 +17,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PreRemove;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -86,8 +87,8 @@ public class StudyHistory extends BaseEntity {
     }
 
     // 데이터 전달 로직
-    public boolean isWithinApplicationAndCourse() {
-        return study.isWithinApplicationAndCourse();
+    public boolean isWithinApplicationAndCourse(LocalDateTime now) {
+        return study.isWithinApplicationAndCourse(now);
     }
 
     public boolean isCompleted() {

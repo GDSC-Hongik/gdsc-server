@@ -23,6 +23,7 @@ import com.gdschongik.gdsc.infra.feign.payment.client.PaymentClient;
 import com.gdschongik.gdsc.infra.feign.payment.dto.request.PaymentCancelRequest;
 import com.gdschongik.gdsc.infra.feign.payment.dto.request.PaymentConfirmRequest;
 import com.gdschongik.gdsc.infra.feign.payment.dto.response.PaymentResponse;
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -81,20 +82,22 @@ public class OrderService {
                 .findByNanoId(request.orderNanoId())
                 .orElseThrow(() -> new CustomException(ORDER_NOT_FOUND));
 
-        Optional<IssuedCoupon> issuedCoupon =
+        Optional<IssuedCoupon> optionalIssuedCoupon =
                 Optional.ofNullable(order.getIssuedCouponId()).map(this::getIssuedCoupon);
 
         Member currentMember = memberUtil.getCurrentMember();
 
         Money requestedAmount = Money.from(request.amount());
 
-        orderValidator.validateCompleteOrder(order, issuedCoupon, currentMember, requestedAmount);
+        orderValidator.validateCompleteOrder(order, optionalIssuedCoupon, currentMember, requestedAmount);
 
         var paymentRequest = new PaymentConfirmRequest(request.paymentKey(), order.getNanoId(), request.amount());
         PaymentResponse response = paymentClient.confirm(paymentRequest);
 
+        LocalDateTime now = LocalDateTime.now();
+
         order.complete(request.paymentKey(), response.approvedAt());
-        issuedCoupon.ifPresent(IssuedCoupon::use);
+        optionalIssuedCoupon.ifPresent(issuedCoupon -> issuedCoupon.use(now));
 
         orderRepository.save(order);
 
@@ -151,7 +154,7 @@ public class OrderService {
                 .findById(request.membershipId())
                 .orElseThrow(() -> new CustomException(MEMBERSHIP_NOT_FOUND));
 
-        Optional<IssuedCoupon> issuedCoupon =
+        Optional<IssuedCoupon> optionalIssuedCoupon =
                 Optional.ofNullable(request.issuedCouponId()).map(this::getIssuedCoupon);
 
         MoneyInfo moneyInfo = MoneyInfo.of(
@@ -161,10 +164,12 @@ public class OrderService {
 
         Member currentMember = memberUtil.getCurrentMember();
 
-        orderValidator.validateFreeOrderCreate(membership, issuedCoupon, currentMember);
+        orderValidator.validateFreeOrderCreate(membership, optionalIssuedCoupon, currentMember);
 
-        Order order = Order.createFree(request.orderNanoId(), membership, issuedCoupon.orElse(null), moneyInfo);
-        issuedCoupon.ifPresent(IssuedCoupon::use);
+        LocalDateTime now = LocalDateTime.now();
+
+        Order order = Order.createFree(request.orderNanoId(), membership, optionalIssuedCoupon.orElse(null), moneyInfo);
+        optionalIssuedCoupon.ifPresent(issuedCoupon -> issuedCoupon.use(now));
 
         orderRepository.save(order);
 

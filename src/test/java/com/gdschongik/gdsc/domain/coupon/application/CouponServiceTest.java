@@ -11,6 +11,7 @@ import com.gdschongik.gdsc.domain.coupon.dto.request.CouponCreateRequest;
 import com.gdschongik.gdsc.domain.coupon.dto.request.CouponIssueRequest;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.helper.IntegrationTest;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -181,7 +182,7 @@ class CouponServiceTest extends IntegrationTest {
             couponService.createIssuedCoupon(issueRequest);
 
             issuedCouponRepository.findById(1L).ifPresent(coupon -> {
-                coupon.use();
+                coupon.use(LocalDateTime.now());
                 issuedCouponRepository.save(coupon);
             });
 

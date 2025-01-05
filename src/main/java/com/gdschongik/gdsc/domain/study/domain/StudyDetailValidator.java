@@ -17,9 +17,9 @@ public class StudyDetailValidator {
     }
 
     public void validatePublishStudyAssignment(
-            Member member, StudyDetail studyDetail, AssignmentCreateUpdateRequest request) {
+            Member member, StudyDetail studyDetail, AssignmentCreateUpdateRequest request, LocalDateTime now) {
         validateStudyMentorAuthorization(member, studyDetail);
-        validateDeadLine(request.deadLine(), studyDetail.getPeriod().getStartDate());
+        validateDeadLine(request.deadLine(), studyDetail.getPeriod().getStartDate(), now);
     }
 
     // 해당 스터디의 멘토가 아니라면 스터디에 대한 권한이 없다.
@@ -29,17 +29,17 @@ public class StudyDetailValidator {
         }
     }
 
-    private void validateDeadLine(LocalDateTime deadline, LocalDateTime studyStartDate) {
-        if (deadline.isBefore(LocalDateTime.now()) || deadline.isBefore(studyStartDate)) {
+    private void validateDeadLine(LocalDateTime deadline, LocalDateTime studyStartDate, LocalDateTime now) {
+        if (deadline.isBefore(now) || deadline.isBefore(studyStartDate)) {
             throw new CustomException(ASSIGNMENT_DEADLINE_INVALID);
         }
     }
 
     public void validateUpdateStudyAssignment(
-            Member currentMember, StudyDetail studyDetail, AssignmentCreateUpdateRequest request) {
+            Member currentMember, StudyDetail studyDetail, AssignmentCreateUpdateRequest request, LocalDateTime now) {
 
         validateStudyMentorAuthorization(currentMember, studyDetail);
-        validateUpdateDeadline(LocalDateTime.now(), studyDetail.getAssignment().getDeadline(), request.deadLine());
+        validateUpdateDeadline(now, studyDetail.getAssignment().getDeadline(), request.deadLine());
     }
 
     /**

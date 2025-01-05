@@ -23,6 +23,7 @@ import com.gdschongik.gdsc.domain.study.dto.response.StudyWeekStatisticsResponse
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -78,8 +79,9 @@ public class MentorStudyDetailService {
         StudyDetail studyDetail = studyDetailRepository
                 .findById(studyDetailId)
                 .orElseThrow(() -> new CustomException(STUDY_DETAIL_NOT_FOUND));
+        LocalDateTime now = LocalDateTime.now();
 
-        studyDetailValidator.validatePublishStudyAssignment(currentMember, studyDetail, request);
+        studyDetailValidator.validatePublishStudyAssignment(currentMember, studyDetail, request, now);
 
         studyDetail.publishAssignment(request.title(), request.deadLine(), request.descriptionNotionLink());
         StudyDetail savedStudyDetail = studyDetailRepository.save(studyDetail);
@@ -95,8 +97,9 @@ public class MentorStudyDetailService {
         StudyDetail studyDetail = studyDetailRepository
                 .findById(studyDetailId)
                 .orElseThrow(() -> new CustomException(STUDY_DETAIL_NOT_FOUND));
+        LocalDateTime now = LocalDateTime.now();
 
-        studyDetailValidator.validateUpdateStudyAssignment(currentMember, studyDetail, request);
+        studyDetailValidator.validateUpdateStudyAssignment(currentMember, studyDetail, request, now);
 
         studyDetail.updateAssignment(request.title(), request.deadLine(), request.descriptionNotionLink());
         StudyDetail savedStudyDetail = studyDetailRepository.save(studyDetail);
@@ -115,10 +118,11 @@ public class MentorStudyDetailService {
     @Transactional(readOnly = true)
     public List<StudyMentorAttendanceResponse> getAttendanceNumbers(Long studyId) {
         List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyIdOrderByWeekAsc(studyId);
+        LocalDate now = LocalDate.now();
 
         // 출석일이 오늘 or 오늘이후인 StudyDetail
         return studyDetails.stream()
-                .filter(studyDetail -> studyDetail.isAttendanceDayNotPassed(LocalDate.now()))
+                .filter(studyDetail -> studyDetail.isAttendanceDayNotPassed(now))
                 .map(StudyMentorAttendanceResponse::from)
                 .limit(2)
                 .toList();
