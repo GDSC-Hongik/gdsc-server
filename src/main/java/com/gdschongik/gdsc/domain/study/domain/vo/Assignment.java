@@ -90,15 +90,12 @@ public class Assignment {
         return status == NONE;
     }
 
-    public boolean isDeadlineRemaining() {
-        LocalDateTime now = LocalDateTime.now();
+    public boolean isDeadlineRemaining(LocalDateTime now) {
         return now.isBefore(deadline);
     }
 
-    public boolean isDeadLineThisWeek() {
+    public boolean isDeadLineThisWeek(LocalDate now) {
         // 현재 날짜와 마감일의 날짜 부분을 비교할 것이므로 LocalDate로 변환
-        // TODO: now를 내부에서 선언하지 않고 파라미터로 받아서 테스트 가능하도록 변경
-        LocalDate now = LocalDate.now();
         LocalDate startOfWeek = now.with(DayOfWeek.MONDAY); // 이번 주 월요일
         LocalDate endOfWeek = now.with(DayOfWeek.SUNDAY); // 이번 주 일요일
 

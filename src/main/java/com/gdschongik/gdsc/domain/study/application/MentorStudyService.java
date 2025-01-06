@@ -67,6 +67,7 @@ public class MentorStudyService {
         Member currentMember = memberUtil.getCurrentMember();
         Study study = studyRepository.findById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
         studyValidator.validateStudyMentor(currentMember, study);
+        LocalDate now = LocalDate.now();
 
         List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyId(studyId);
         Page<StudyHistory> studyHistories = studyHistoryRepository.findByStudyId(studyId, pageable);
@@ -90,7 +91,7 @@ public class MentorStudyService {
             List<StudyTaskResponse> studyTasks = new ArrayList<>();
             studyDetails.forEach(studyDetail -> {
                 studyTasks.add(StudyTaskResponse.createAttendanceType(
-                        studyDetail, LocalDate.now(), isAttended(currentAttendances, studyDetail)));
+                        studyDetail, now, isAttended(currentAttendances, studyDetail)));
                 studyTasks.add(StudyTaskResponse.createAssignmentType(
                         studyDetail, getSubmittedAssignment(currentAssignmentHistories, studyDetail)));
             });
@@ -204,6 +205,7 @@ public class MentorStudyService {
         Member currentMember = memberUtil.getCurrentMember();
         Study study = studyRepository.findById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
         studyValidator.validateStudyMentor(currentMember, study);
+        LocalDate now = LocalDate.now();
 
         List<StudyDetail> studyDetails = studyDetailRepository.findAllByStudyId(studyId);
         List<StudyHistory> studyHistories = studyHistoryRepository.findAllByStudyId(studyId);
@@ -227,7 +229,7 @@ public class MentorStudyService {
             List<StudyTaskResponse> studyTasks = new ArrayList<>();
             studyDetails.forEach(studyDetail -> {
                 studyTasks.add(StudyTaskResponse.createAttendanceType(
-                        studyDetail, LocalDate.now(), isAttended(currentAttendances, studyDetail)));
+                        studyDetail, now, isAttended(currentAttendances, studyDetail)));
                 studyTasks.add(StudyTaskResponse.createAssignmentType(
                         studyDetail, getSubmittedAssignment(currentAssignmentHistories, studyDetail)));
             });

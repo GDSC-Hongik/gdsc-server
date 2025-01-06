@@ -9,6 +9,7 @@ import static org.assertj.core.api.Assertions.*;
 import com.gdschongik.gdsc.domain.common.vo.Money;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.global.exception.CustomException;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -23,9 +24,10 @@ class IssuedCouponTest {
             Coupon coupon = Coupon.create(COUPON_NAME, Money.from(ONE));
             Member member = Member.createGuest(OAUTH_ID);
             IssuedCoupon issuedCoupon = IssuedCoupon.create(coupon, member);
+            LocalDateTime now = LocalDateTime.now();
 
             // when
-            issuedCoupon.use();
+            issuedCoupon.use(now);
 
             // then
             assertThat(issuedCoupon.hasUsed()).isTrue();
@@ -37,10 +39,11 @@ class IssuedCouponTest {
             Coupon coupon = Coupon.create(COUPON_NAME, Money.from(ONE));
             Member member = Member.createGuest(OAUTH_ID);
             IssuedCoupon issuedCoupon = IssuedCoupon.create(coupon, member);
-            issuedCoupon.use();
+            LocalDateTime now = LocalDateTime.now();
+            issuedCoupon.use(now);
 
             // when & then
-            assertThatThrownBy(issuedCoupon::use)
+            assertThatThrownBy(() -> issuedCoupon.use(now))
                     .isInstanceOf(CustomException.class)
                     .hasMessageContaining(COUPON_NOT_USABLE_ALREADY_USED.getMessage());
         }
@@ -52,9 +55,10 @@ class IssuedCouponTest {
             Member member = Member.createGuest(OAUTH_ID);
             IssuedCoupon issuedCoupon = IssuedCoupon.create(coupon, member);
             issuedCoupon.revoke();
+            LocalDateTime now = LocalDateTime.now();
 
             // when & then
-            assertThatThrownBy(issuedCoupon::use)
+            assertThatThrownBy(() -> issuedCoupon.use(now))
                     .isInstanceOf(CustomException.class)
                     .hasMessageContaining(COUPON_NOT_USABLE_REVOKED.getMessage());
         }
@@ -97,7 +101,7 @@ class IssuedCouponTest {
             Coupon coupon = Coupon.create(COUPON_NAME, Money.from(ONE));
             Member member = Member.createGuest(OAUTH_ID);
             IssuedCoupon issuedCoupon = IssuedCoupon.create(coupon, member);
-            issuedCoupon.use();
+            issuedCoupon.use(LocalDateTime.now());
 
             // when & then
             assertThatThrownBy(issuedCoupon::revoke)
