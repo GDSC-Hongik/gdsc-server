@@ -13,9 +13,7 @@ public class AssociateRequirementUpdatedEventListener {
 
     private final AssociateRequirementUpdatedEventHandler associateRequirementUpdatedEventHandler;
 
-    @TransactionalEventListener(
-            phase = TransactionPhase.BEFORE_COMMIT,
-            classes = AssociateRequirementUpdatedEvent.class)
+    @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     public void handleAssociateRequirementUpdatedEvent(AssociateRequirementUpdatedEvent event) {
         associateRequirementUpdatedEventHandler.advanceToAssociate(event);
     }
