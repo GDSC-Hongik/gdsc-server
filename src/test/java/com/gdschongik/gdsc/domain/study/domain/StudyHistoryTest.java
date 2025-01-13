@@ -69,6 +69,7 @@ public class StudyHistoryTest {
                     mentor, Period.of(now.plusDays(5), now.plusDays(10)), Period.of(now.minusDays(5), now));
 
             StudyHistory studyHistory = StudyHistory.create(student, study);
+            fixtureHelper.setId(studyHistory, 1L); // TODO: 이벤트 ID 필드를 원시 타입으로 설정하는 것 vs setId를 테스트 사용 강제 간 trade-off 고민
             studyHistory.complete();
 
             // when
