@@ -12,8 +12,11 @@ import com.gdschongik.gdsc.domain.coupon.dto.request.CouponIssueRequest;
 import com.gdschongik.gdsc.domain.coupon.dto.request.IssuedCouponQueryOption;
 import com.gdschongik.gdsc.domain.coupon.dto.response.CouponResponse;
 import com.gdschongik.gdsc.domain.coupon.dto.response.IssuedCouponResponse;
+import com.gdschongik.gdsc.domain.coupon.util.CouponNameUtil;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
+import com.gdschongik.gdsc.domain.study.dao.StudyHistoryRepository;
+import com.gdschongik.gdsc.domain.study.domain.StudyHistory;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import java.util.List;
@@ -30,7 +33,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class CouponService {
 
+    private final CouponNameUtil couponNameUtil;
     private final MemberUtil memberUtil;
+    private final StudyHistoryRepository studyHistoryRepository;
     private final CouponRepository couponRepository;
     private final IssuedCouponRepository issuedCouponRepository;
     private final MemberRepository memberRepository;
@@ -86,5 +91,29 @@ public class CouponService {
                 .filter(IssuedCoupon::isUsable)
                 .map(IssuedCouponResponse::from)
                 .toList();
+    }
+
+    @Transactional
+    public void createAndIssueCouponByStudyHistories(List<Long> studyHistoryIds) {
+        List<StudyHistory> studyHistories = studyHistoryRepository.findAllById(studyHistoryIds);
+        List<Long> studentIds = studyHistories.stream()
+                .map(studyHistory -> studyHistory.getStudent().getId())
+                .toList();
+        List<Member> students = memberRepository.findAllById(studentIds);
+
+        String couponName = couponNameUtil.generateStudyCompletionCouponName(
+                studyHistories.get(0).getStudy());
+        // TODO: 요청할 때마다 새로운 쿠폰 생성되는 문제 수정: 스터디마다 하나의 쿠폰만 존재하도록 쿠폰 타입 및 참조 식별자 추가
+        Coupon coupon = Coupon.create(couponName, Money.from(5000L));
+        couponRepository.save(coupon);
+
+        List<IssuedCoupon> issuedCoupons = students.stream()
+                .map(student -> IssuedCoupon.create(coupon, student))
+                .toList();
+        issuedCouponRepository.saveAll(issuedCoupons);
+
+        log.info(
+                "[CouponService] 스터디 수료 쿠폰 발급: issuedCouponIds={}",
+                issuedCoupons.stream().map(IssuedCoupon::getId).toList());
     }
 }
