@@ -26,9 +26,8 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 public class FixtureHelper {
 
-    public <T extends BaseEntity> T setId(T entity, Long id) {
+    public <T extends BaseEntity> void setId(T entity, Long id) {
         ReflectionTestUtils.setField(entity, "id", id);
-        return entity;
     }
 
     public Member createGuestMember(Long id) {
