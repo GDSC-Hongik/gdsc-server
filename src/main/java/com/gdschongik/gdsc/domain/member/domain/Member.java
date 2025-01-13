@@ -175,7 +175,7 @@ public class Member extends BaseEntity {
 
         associateRequirement.verifyInfo();
 
-        registerEvent(new AssociateRequirementUpdatedEvent(this.id));
+        registerEvent(new MemberAssociateRequirementUpdatedEvent(this.id));
     }
 
     /**
@@ -192,7 +192,7 @@ public class Member extends BaseEntity {
 
         associateRequirement.verifyUniv();
 
-        registerEvent(new AssociateRequirementUpdatedEvent(this.id));
+        registerEvent(new MemberAssociateRequirementUpdatedEvent(this.id));
     }
 
     /**
@@ -207,7 +207,7 @@ public class Member extends BaseEntity {
 
         associateRequirement.verifyDiscord();
 
-        registerEvent(new AssociateRequirementUpdatedEvent(this.id));
+        registerEvent(new MemberAssociateRequirementUpdatedEvent(this.id));
     }
 
     /**

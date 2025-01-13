@@ -1,8 +1,8 @@
 package com.gdschongik.gdsc.domain.member.application.handler;
 
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
-import com.gdschongik.gdsc.domain.member.domain.AssociateRequirementUpdatedEvent;
 import com.gdschongik.gdsc.domain.member.domain.Member;
+import com.gdschongik.gdsc.domain.member.domain.MemberAssociateRequirementUpdatedEvent;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -12,12 +12,12 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class AssociateRequirementUpdatedEventHandler {
+public class MemberAssociateRequirementUpdatedEventHandler {
     private final MemberRepository memberRepository;
 
-    public void advanceToAssociate(AssociateRequirementUpdatedEvent associateRequirementUpdatedEvent) {
+    public void advanceToAssociate(MemberAssociateRequirementUpdatedEvent memberAssociateRequirementUpdatedEvent) {
         Member member = memberRepository
-                .findById(associateRequirementUpdatedEvent.memberId())
+                .findById(memberAssociateRequirementUpdatedEvent.memberId())
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
         try {
             member.advanceToAssociate();
