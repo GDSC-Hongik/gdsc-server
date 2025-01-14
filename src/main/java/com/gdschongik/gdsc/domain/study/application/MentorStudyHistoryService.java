@@ -6,6 +6,7 @@ import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.study.dao.StudyHistoryRepository;
 import com.gdschongik.gdsc.domain.study.dao.StudyRepository;
 import com.gdschongik.gdsc.domain.study.domain.Study;
+import com.gdschongik.gdsc.domain.study.domain.StudyHistoriesCompletedEvent;
 import com.gdschongik.gdsc.domain.study.domain.StudyHistory;
 import com.gdschongik.gdsc.domain.study.domain.StudyHistoryValidator;
 import com.gdschongik.gdsc.domain.study.domain.StudyValidator;
@@ -15,6 +16,7 @@ import com.gdschongik.gdsc.global.util.MemberUtil;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class MentorStudyHistoryService {
 
+    private final ApplicationEventPublisher applicationEventPublisher;
     private final MemberUtil memberUtil;
     private final StudyValidator studyValidator;
     private final StudyHistoryValidator studyHistoryValidator;
@@ -43,6 +46,9 @@ public class MentorStudyHistoryService {
 
         studyHistories.forEach(StudyHistory::complete);
 
+        applicationEventPublisher.publishEvent(new StudyHistoriesCompletedEvent(
+                studyHistories.stream().map(StudyHistory::getId).toList()));
+
         log.info(
                 "[MentorStudyHistoryService] 스터디 수료 처리: studyId={}, studentIds={}",
                 request.studyId(),
@@ -62,6 +68,8 @@ public class MentorStudyHistoryService {
                 studyHistories.size(), request.studentIds().size());
 
         studyHistories.forEach(StudyHistory::withdrawCompletion);
+
+        studyHistoryRepository.saveAll(studyHistories);
 
         log.info(
                 "[MentorStudyHistoryService] 스터디 수료 철회: studyId={}, studentIds={}",

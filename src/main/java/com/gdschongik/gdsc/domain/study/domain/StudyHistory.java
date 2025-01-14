@@ -84,6 +84,7 @@ public class StudyHistory extends BaseEntity {
      */
     public void withdrawCompletion() {
         studyHistoryStatus = NONE;
+        registerEvent(new StudyHistoryCompletionWithdrawnEvent(this.id));
     }
 
     // 데이터 전달 로직

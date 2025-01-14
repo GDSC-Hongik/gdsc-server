@@ -8,6 +8,7 @@ import static com.gdschongik.gdsc.global.common.constant.RecruitmentConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.StudyConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.TemporalConstant.*;
 
+import com.gdschongik.gdsc.domain.common.model.BaseEntity;
 import com.gdschongik.gdsc.domain.common.model.SemesterType;
 import com.gdschongik.gdsc.domain.common.vo.Money;
 import com.gdschongik.gdsc.domain.common.vo.Period;
@@ -24,6 +25,10 @@ import java.time.LocalDateTime;
 import org.springframework.test.util.ReflectionTestUtils;
 
 public class FixtureHelper {
+
+    public <T extends BaseEntity> void setId(T entity, Long id) {
+        ReflectionTestUtils.setField(entity, "id", id);
+    }
 
     public Member createGuestMember(Long id) {
         Member member = Member.createGuest(OAUTH_ID);
