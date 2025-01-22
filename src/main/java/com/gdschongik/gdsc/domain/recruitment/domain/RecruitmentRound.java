@@ -34,6 +34,9 @@ public class RecruitmentRound extends BaseSemesterEntity {
 
     private String name;
 
+    @Enumerated(EnumType.STRING)
+    private RoundType roundType;
+
     @Embedded
     private Period period;
 
@@ -41,32 +44,29 @@ public class RecruitmentRound extends BaseSemesterEntity {
     @JoinColumn(name = "recruitment_id")
     private Recruitment recruitment;
 
-    @Enumerated(EnumType.STRING)
-    private RoundType roundType;
-
     @Builder(access = AccessLevel.PRIVATE)
     private RecruitmentRound(
             String name,
+            RoundType roundType,
             final Period period,
-            Integer academicYear,
-            SemesterType semesterType,
             Recruitment recruitment,
-            RoundType roundType) {
+            Integer academicYear,
+            SemesterType semesterType) {
         super(academicYear, semesterType);
         this.name = name;
+        this.roundType = roundType;
         this.period = period;
         this.recruitment = recruitment;
-        this.roundType = roundType;
     }
 
-    public static RecruitmentRound create(String name, Period period, Recruitment recruitment, RoundType roundType) {
+    public static RecruitmentRound create(String name, RoundType roundType, Period period, Recruitment recruitment) {
         return RecruitmentRound.builder()
                 .name(name)
                 .period(period)
-                .academicYear(recruitment.getAcademicYear())
-                .semesterType(recruitment.getSemesterType())
                 .recruitment(recruitment)
                 .roundType(roundType)
+                .academicYear(recruitment.getAcademicYear())
+                .semesterType(recruitment.getSemesterType())
                 .build();
     }
 
