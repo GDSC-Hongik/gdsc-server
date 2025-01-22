@@ -1,5 +1,6 @@
 package com.gdschongik.gdsc.domain.order.application;
 
+import static com.gdschongik.gdsc.domain.coupon.domain.CouponType.*;
 import static com.gdschongik.gdsc.global.common.constant.OrderConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.RecruitmentConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.TemporalConstant.*;
@@ -83,7 +84,7 @@ class OrderServiceTest extends IntegrationTest {
 
             Membership membership = createMembership(member, recruitmentRound);
 
-            IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, member);
+            IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, member, ADMIN, null);
 
             // when
             var request = new OrderCreateRequest(
@@ -118,7 +119,7 @@ class OrderServiceTest extends IntegrationTest {
                     MONEY_20000_WON);
 
             Membership membership = createMembership(member, recruitmentRound);
-            IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, member);
+            IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, member, ADMIN, null);
 
             orderService.createPendingOrder(new OrderCreateRequest(
                     ORDER_NANO_ID,
@@ -159,7 +160,7 @@ class OrderServiceTest extends IntegrationTest {
                     MONEY_20000_WON);
 
             Membership membership = createMembership(member, recruitmentRound);
-            IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, member);
+            IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, member, ADMIN, null);
 
             orderService.createPendingOrder(new OrderCreateRequest(
                     ORDER_NANO_ID,
@@ -195,7 +196,7 @@ class OrderServiceTest extends IntegrationTest {
                     MONEY_20000_WON);
 
             Membership membership = createMembership(member, recruitmentRound);
-            IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, member);
+            IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, member, ADMIN, null);
 
             orderService.createPendingOrder(new OrderCreateRequest(
                     ORDER_NANO_ID,
@@ -229,7 +230,7 @@ class OrderServiceTest extends IntegrationTest {
                     MONEY_20000_WON);
 
             Membership membership = createMembership(member, recruitmentRound);
-            IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, member);
+            IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, member, ADMIN, null);
 
             orderService.createPendingOrder(new OrderCreateRequest(
                     ORDER_NANO_ID,
@@ -284,7 +285,7 @@ class OrderServiceTest extends IntegrationTest {
                     MONEY_20000_WON);
 
             Membership membership = createMembership(member, recruitmentRound);
-            IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, member);
+            IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, member, ADMIN, null);
 
             orderService.createPendingOrder(new OrderCreateRequest(
                     ORDER_NANO_ID,
@@ -364,7 +365,7 @@ class OrderServiceTest extends IntegrationTest {
                     MONEY_20000_WON);
 
             Membership membership = createMembership(member, recruitmentRound);
-            IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, member);
+            IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, member, ADMIN, null);
 
             orderService.createPendingOrder(new OrderCreateRequest(
                     ORDER_NANO_ID,
@@ -406,7 +407,7 @@ class OrderServiceTest extends IntegrationTest {
                     MONEY_20000_WON);
 
             Membership membership = createMembership(member, recruitmentRound);
-            IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, member);
+            IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, member, ADMIN, null);
 
             orderService.createPendingOrder(new OrderCreateRequest(
                     ORDER_NANO_ID,
@@ -451,7 +452,7 @@ class OrderServiceTest extends IntegrationTest {
                     MONEY_20000_WON);
 
             Membership membership = createMembership(member, recruitmentRound);
-            IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, member);
+            IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, member, ADMIN, null);
 
             orderService.createPendingOrder(new OrderCreateRequest(
                     ORDER_NANO_ID,
@@ -499,7 +500,7 @@ class OrderServiceTest extends IntegrationTest {
                     MONEY_20000_WON);
 
             Membership membership = createMembership(member, recruitmentRound);
-            IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, member);
+            IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, member, ADMIN, null);
 
             orderService.createPendingOrder(new OrderCreateRequest(
                     ORDER_NANO_ID,
@@ -544,7 +545,7 @@ class OrderServiceTest extends IntegrationTest {
                     MONEY_20000_WON);
 
             Membership membership = createMembership(member, recruitmentRound);
-            IssuedCoupon issuedCoupon = createAndIssue(MONEY_20000_WON, member);
+            IssuedCoupon issuedCoupon = createAndIssue(MONEY_20000_WON, member, ADMIN, null);
 
             var request = new OrderCreateRequest(
                     ORDER_NANO_ID,
@@ -579,7 +580,7 @@ class OrderServiceTest extends IntegrationTest {
                     MONEY_20000_WON);
 
             Membership membership = createMembership(member, recruitmentRound);
-            IssuedCoupon issuedCoupon = createAndIssue(MONEY_20000_WON, member);
+            IssuedCoupon issuedCoupon = createAndIssue(MONEY_20000_WON, member, ADMIN, null);
 
             var request = new OrderCreateRequest(
                     ORDER_NANO_ID,
@@ -612,7 +613,7 @@ class OrderServiceTest extends IntegrationTest {
                     MONEY_20000_WON);
 
             Membership membership = createMembership(member, recruitmentRound);
-            IssuedCoupon issuedCoupon = createAndIssue(MONEY_20000_WON, member);
+            IssuedCoupon issuedCoupon = createAndIssue(MONEY_20000_WON, member, ADMIN, null);
 
             var request = new OrderCreateRequest(
                     ORDER_NANO_ID,

@@ -1,6 +1,7 @@
 package com.gdschongik.gdsc.helper;
 
 import static com.gdschongik.gdsc.domain.member.domain.Department.*;
+import static com.gdschongik.gdsc.global.common.constant.CouponConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.MemberConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.RecruitmentConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.StudyConstant.*;
@@ -13,6 +14,8 @@ import com.gdschongik.gdsc.domain.common.vo.Period;
 import com.gdschongik.gdsc.domain.coupon.dao.CouponRepository;
 import com.gdschongik.gdsc.domain.coupon.dao.IssuedCouponRepository;
 import com.gdschongik.gdsc.domain.coupon.domain.Coupon;
+import com.gdschongik.gdsc.domain.coupon.domain.CouponType;
+import com.gdschongik.gdsc.domain.coupon.domain.IssuanceMethodType;
 import com.gdschongik.gdsc.domain.coupon.domain.IssuedCoupon;
 import com.gdschongik.gdsc.domain.discord.application.handler.DelegateMemberDiscordEventHandler;
 import com.gdschongik.gdsc.domain.discord.application.handler.MemberDiscordRoleRevokeHandler;
@@ -219,8 +222,8 @@ public abstract class IntegrationTest {
         return membershipRepository.save(membership);
     }
 
-    protected IssuedCoupon createAndIssue(Money money, Member member) {
-        Coupon coupon = Coupon.create("테스트쿠폰", money);
+    protected IssuedCoupon createAndIssue(Money money, Member member, CouponType couponType, Study study) {
+        Coupon coupon = Coupon.create(COUPON_NAME, money, couponType, IssuanceMethodType.AUTOMATIC, study);
         couponRepository.save(coupon);
         IssuedCoupon issuedCoupon = IssuedCoupon.create(coupon, member);
         return issuedCouponRepository.save(issuedCoupon);

@@ -61,10 +61,20 @@ public class Coupon extends BaseEntity {
         this.study = study;
     }
 
-    // todo: 파라미터 수정 필요. api 수정시 같이 처리
-    public static Coupon create(String name, Money discountAmount) {
+    public static Coupon create(
+            String name,
+            Money discountAmount,
+            CouponType couponType,
+            IssuanceMethodType issuanceMethodType,
+            Study study) {
         validateDiscountAmountPositive(discountAmount);
-        return Coupon.builder().name(name).discountAmount(discountAmount).build();
+        return Coupon.builder()
+                .name(name)
+                .discountAmount(discountAmount)
+                .couponType(couponType)
+                .issuanceMethodType(issuanceMethodType)
+                .study(study)
+                .build();
     }
 
     // 검증 로직

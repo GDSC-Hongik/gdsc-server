@@ -1,5 +1,6 @@
 package com.gdschongik.gdsc.domain.coupon.application;
 
+import static com.gdschongik.gdsc.domain.coupon.domain.CouponType.*;
 import static com.gdschongik.gdsc.global.common.constant.CouponConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import static java.math.BigDecimal.*;
@@ -34,7 +35,7 @@ class CouponServiceTest extends IntegrationTest {
         @Test
         void 성공한다() {
             // given
-            CouponCreateRequest request = new CouponCreateRequest(COUPON_NAME, ONE);
+            CouponCreateRequest request = new CouponCreateRequest(COUPON_NAME, ONE, ADMIN, null);
 
             // when
             couponService.createCoupon(request);
@@ -46,7 +47,7 @@ class CouponServiceTest extends IntegrationTest {
         @Test
         void 할인금액이_양수가_아니라면_실패한다() {
             // given
-            CouponCreateRequest request = new CouponCreateRequest(COUPON_NAME, ZERO);
+            CouponCreateRequest request = new CouponCreateRequest(COUPON_NAME, ZERO, ADMIN, null);
 
             // when & then
             assertThatThrownBy(() -> couponService.createCoupon(request))
@@ -61,7 +62,7 @@ class CouponServiceTest extends IntegrationTest {
         @Test
         void 성공한다() {
             // given
-            CouponCreateRequest request = new CouponCreateRequest(COUPON_NAME, ONE);
+            CouponCreateRequest request = new CouponCreateRequest(COUPON_NAME, ONE, ADMIN, null);
             couponService.createCoupon(request);
 
             createMember();
@@ -79,7 +80,7 @@ class CouponServiceTest extends IntegrationTest {
         @Test
         void 존재하지_않는_유저이면_제외하고_성공한다() {
             // given
-            CouponCreateRequest request = new CouponCreateRequest(COUPON_NAME, ONE);
+            CouponCreateRequest request = new CouponCreateRequest(COUPON_NAME, ONE, ADMIN, null);
             couponService.createCoupon(request);
 
             createMember();
@@ -97,7 +98,7 @@ class CouponServiceTest extends IntegrationTest {
         @Test
         void 존재하지_않는_쿠폰이면_실패한다() {
             // given
-            CouponCreateRequest request = new CouponCreateRequest(COUPON_NAME, ONE);
+            CouponCreateRequest request = new CouponCreateRequest(COUPON_NAME, ONE, ADMIN, null);
             couponService.createCoupon(request);
 
             createMember();
@@ -118,7 +119,7 @@ class CouponServiceTest extends IntegrationTest {
         @Test
         void 성공한다() {
             // given
-            CouponCreateRequest request = new CouponCreateRequest(COUPON_NAME, ONE);
+            CouponCreateRequest request = new CouponCreateRequest(COUPON_NAME, ONE, ADMIN, null);
             couponService.createCoupon(request);
 
             createMember();
@@ -137,7 +138,7 @@ class CouponServiceTest extends IntegrationTest {
         @Test
         void 존재하지_않는_발급쿠폰이면_실패한다() {
             // given
-            CouponCreateRequest request = new CouponCreateRequest(COUPON_NAME, ONE);
+            CouponCreateRequest request = new CouponCreateRequest(COUPON_NAME, ONE, ADMIN, null);
             couponService.createCoupon(request);
 
             createMember();
@@ -153,7 +154,7 @@ class CouponServiceTest extends IntegrationTest {
         @Test
         void 이미_회수한_발급쿠폰이면_실패한다() {
             // given
-            CouponCreateRequest request = new CouponCreateRequest(COUPON_NAME, ONE);
+            CouponCreateRequest request = new CouponCreateRequest(COUPON_NAME, ONE, ADMIN, null);
             couponService.createCoupon(request);
 
             createMember();
@@ -174,7 +175,7 @@ class CouponServiceTest extends IntegrationTest {
         @Test
         void 이미_사용한_발급쿠폰이면_실패한다() {
             // given
-            CouponCreateRequest request = new CouponCreateRequest(COUPON_NAME, ONE);
+            CouponCreateRequest request = new CouponCreateRequest(COUPON_NAME, ONE, ADMIN, null);
             couponService.createCoupon(request);
 
             createMember();
