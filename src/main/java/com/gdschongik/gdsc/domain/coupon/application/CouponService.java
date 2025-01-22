@@ -50,11 +50,7 @@ public class CouponService {
     public void createCoupon(CouponCreateRequest request) {
         Optional<Study> study = Optional.ofNullable(request.studyId()).flatMap(studyRepository::findById);
         Coupon coupon = Coupon.create(
-                request.name(),
-                Money.from(request.discountAmount()),
-                request.couponType(),
-                AUTOMATIC,
-                study.orElse(null));
+                request.name(), Money.from(request.discountAmount()), request.couponType(), MANUAL, study.orElse(null));
         couponRepository.save(coupon);
         log.info("[CouponService] 쿠폰 생성: name={}, discountAmount={}", request.name(), request.discountAmount());
     }
