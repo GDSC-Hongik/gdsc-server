@@ -34,10 +34,6 @@ public class Order extends BaseEntity {
     @Column(name = "orders_id")
     private Long id;
 
-    @Comment("주문상태")
-    @Enumerated(EnumType.STRING)
-    private OrderStatus status;
-
     @Comment("주문 nanoId")
     @Column(unique = true, length = 21)
     private String nanoId;
@@ -54,30 +50,34 @@ public class Order extends BaseEntity {
     @Comment("사용하려는 발급쿠폰 ID")
     private Long issuedCouponId;
 
-    @Embedded
-    private MoneyInfo moneyInfo;
-
     private String paymentKey;
 
     private ZonedDateTime approvedAt;
 
     private ZonedDateTime canceledAt;
 
+    @Comment("주문상태")
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
+
+    @Embedded
+    private MoneyInfo moneyInfo;
+
     @Builder(access = AccessLevel.PRIVATE)
     private Order(
-            OrderStatus status,
             String nanoId,
             Long memberId,
             Long membershipId,
             Long recruitmentRoundId,
             Long issuedCouponId,
+            OrderStatus status,
             MoneyInfo moneyInfo) {
-        this.status = status;
         this.nanoId = nanoId;
         this.memberId = memberId;
         this.membershipId = membershipId;
         this.recruitmentRoundId = recruitmentRoundId;
         this.issuedCouponId = issuedCouponId;
+        this.status = status;
         this.moneyInfo = moneyInfo;
 
         registerEvent(new OrderCreatedEvent(nanoId, isFree()));
@@ -90,12 +90,12 @@ public class Order extends BaseEntity {
     public static Order createPending(
             String nanoId, Membership membership, @Nullable IssuedCoupon issuedCoupon, MoneyInfo moneyInfo) {
         return Order.builder()
-                .status(OrderStatus.PENDING)
                 .nanoId(nanoId)
                 .memberId(membership.getMember().getId())
                 .membershipId(membership.getId())
                 .recruitmentRoundId(membership.getRecruitmentRound().getId())
                 .issuedCouponId(issuedCoupon != null ? issuedCoupon.getId() : null)
+                .status(OrderStatus.PENDING)
                 .moneyInfo(moneyInfo)
                 .build();
     }
@@ -104,12 +104,12 @@ public class Order extends BaseEntity {
             String nanoId, Membership membership, @Nullable IssuedCoupon issuedCoupon, MoneyInfo moneyInfo) {
         validateFreeOrder(moneyInfo);
         return Order.builder()
-                .status(OrderStatus.COMPLETED)
                 .nanoId(nanoId)
                 .memberId(membership.getMember().getId())
                 .membershipId(membership.getId())
                 .recruitmentRoundId(membership.getRecruitmentRound().getId())
                 .issuedCouponId(issuedCoupon != null ? issuedCoupon.getId() : null)
+                .status(OrderStatus.COMPLETED)
                 .moneyInfo(moneyInfo)
                 .build();
     }
