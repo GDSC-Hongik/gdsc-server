@@ -42,18 +42,6 @@ public class Study extends BaseSemesterEntity {
 
     private String title;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member mentor;
-
-    @Embedded
-    private Period period;
-
-    @Embedded
-    @AttributeOverride(name = "startDate", column = @Column(name = "application_start_date"))
-    @AttributeOverride(name = "endDate", column = @Column(name = "application_end_date"))
-    private Period applicationPeriod;
-
     @Comment("총 주차수")
     private Long totalWeek;
 
@@ -64,6 +52,12 @@ public class Study extends BaseSemesterEntity {
     @Comment("스터디 한줄 소개")
     private String introduction;
 
+    @Comment("스터디 시작 시간")
+    private LocalTime startTime;
+
+    @Comment("스터디 종료 시간")
+    private LocalTime endTime;
+
     @Enumerated(EnumType.STRING)
     private StudyType studyType;
 
@@ -71,64 +65,70 @@ public class Study extends BaseSemesterEntity {
     @Enumerated(EnumType.STRING)
     private DayOfWeek dayOfWeek;
 
-    @Comment("스터디 시작 시간")
-    private LocalTime startTime;
+    @Embedded
+    private Period period;
 
-    @Comment("스터디 종료 시간")
-    private LocalTime endTime;
+    @Embedded
+    @AttributeOverride(name = "startDate", column = @Column(name = "application_start_date"))
+    @AttributeOverride(name = "endDate", column = @Column(name = "application_end_date"))
+    private Period applicationPeriod;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member mentor;
 
     @Builder(access = AccessLevel.PRIVATE)
     private Study(
-            Integer academicYear,
-            SemesterType semesterType,
             String title,
-            Member mentor,
-            Period period,
-            Period applicationPeriod,
             Long totalWeek,
+            LocalTime startTime,
+            LocalTime endTime,
             StudyType studyType,
             DayOfWeek dayOfWeek,
-            LocalTime startTime,
-            LocalTime endTime) {
+            Period period,
+            Period applicationPeriod,
+            Member mentor,
+            Integer academicYear,
+            SemesterType semesterType) {
         super(academicYear, semesterType);
         this.title = title;
-        this.mentor = mentor;
-        this.period = period;
-        this.applicationPeriod = applicationPeriod;
         this.totalWeek = totalWeek;
-        this.studyType = studyType;
-        this.dayOfWeek = dayOfWeek;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.studyType = studyType;
+        this.dayOfWeek = dayOfWeek;
+        this.period = period;
+        this.applicationPeriod = applicationPeriod;
+        this.mentor = mentor;
     }
 
     public static Study create(
-            Integer academicYear,
-            SemesterType semesterType,
             String title,
-            Member mentor,
-            Period period,
-            Period applicationPeriod,
             Long totalWeek,
+            LocalTime startTime,
+            LocalTime endTime,
             StudyType studyType,
             DayOfWeek dayOfWeek,
-            LocalTime startTime,
-            LocalTime endTime) {
+            Period period,
+            Period applicationPeriod,
+            Member mentor,
+            Integer academicYear,
+            SemesterType semesterType) {
         validateApplicationStartDateBeforeCurriculumStartDate(applicationPeriod.getStartDate(), period.getStartDate());
         validateMentorRole(mentor);
         validateStudyTime(studyType, startTime, endTime);
         return Study.builder()
-                .academicYear(academicYear)
-                .semesterType(semesterType)
                 .title(title)
-                .mentor(mentor)
-                .period(period)
-                .applicationPeriod(applicationPeriod)
                 .totalWeek(totalWeek)
-                .studyType(studyType)
-                .dayOfWeek(dayOfWeek)
                 .startTime(startTime)
                 .endTime(endTime)
+                .studyType(studyType)
+                .dayOfWeek(dayOfWeek)
+                .period(period)
+                .applicationPeriod(applicationPeriod)
+                .mentor(mentor)
+                .academicYear(academicYear)
+                .semesterType(semesterType)
                 .build();
     }
 

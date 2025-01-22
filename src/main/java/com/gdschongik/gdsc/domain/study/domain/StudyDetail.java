@@ -28,10 +28,6 @@ public class StudyDetail extends BaseEntity {
     @Column(name = "study_detail_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "study_id")
-    private Study study;
-
     @Comment("현 주차수")
     private Long week; // TODO: Integer로 변경
 
@@ -55,31 +51,35 @@ public class StudyDetail extends BaseEntity {
     @AttributeOverride(name = "status", column = @Column(name = "assignment_status"))
     private Assignment assignment;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "study_id")
+    private Study study;
+
     @Builder(access = AccessLevel.PRIVATE)
     private StudyDetail(
-            Study study,
             Long week,
             String attendanceNumber,
             Period period,
             Curriculum curriculum,
-            Assignment assignment) {
-        this.study = study;
+            Assignment assignment,
+            Study study) {
         this.week = week;
         this.attendanceNumber = attendanceNumber;
         this.period = period;
         this.curriculum = curriculum;
         this.assignment = assignment;
+        this.study = study;
     }
 
-    public static StudyDetail create(Study study, Long week, String attendanceNumber, Period period) {
+    public static StudyDetail create(Long week, String attendanceNumber, Period period, Study study) {
         return StudyDetail.builder()
-                .study(study)
                 .week(week)
                 .period(period)
                 .attendanceNumber(attendanceNumber)
                 .period(period)
                 .curriculum(Curriculum.empty())
                 .assignment(Assignment.empty())
+                .study(study)
                 .build();
     }
 

@@ -33,6 +33,27 @@ public class Member extends BaseEntity {
     @Column(name = "member_id")
     private Long id;
 
+    private String name;
+
+    private String studentId;
+
+    private String email;
+
+    private String univEmail;
+
+    private String phone;
+
+    private String discordId;
+
+    private String discordUsername;
+
+    private String nickname;
+
+    @Column(nullable = false)
+    private String oauthId;
+
+    private LocalDateTime lastLoginAt;
+
     @Enumerated(EnumType.STRING)
     private MemberRole role;
 
@@ -45,64 +66,43 @@ public class Member extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private MemberStatus status;
 
-    private String name;
-
-    private String studentId;
-
     @Enumerated(EnumType.STRING)
     private Department department;
-
-    private String email;
-
-    private String phone;
-
-    private String discordUsername;
-
-    private String nickname;
-
-    private String discordId;
-
-    @Column(nullable = false)
-    private String oauthId;
-
-    private LocalDateTime lastLoginAt;
-
-    private String univEmail;
 
     @Embedded
     private AssociateRequirement associateRequirement;
 
     @Builder(access = AccessLevel.PRIVATE)
     private Member(
-            MemberRole role,
-            MemberManageRole manageRole,
-            MemberStudyRole studyRole,
-            MemberStatus status,
             String name,
             String studentId,
-            Department department,
             String email,
+            String univEmail,
             String phone,
             String discordUsername,
             String nickname,
             String oauthId,
             LocalDateTime lastLoginAt,
-            String univEmail,
+            MemberRole role,
+            MemberManageRole manageRole,
+            MemberStudyRole studyRole,
+            MemberStatus status,
+            Department department,
             AssociateRequirement associateRequirement) {
-        this.role = role;
-        this.manageRole = manageRole;
-        this.studyRole = studyRole;
-        this.status = status;
         this.name = name;
         this.studentId = studentId;
-        this.department = department;
         this.email = email;
+        this.univEmail = univEmail;
         this.phone = phone;
         this.discordUsername = discordUsername;
         this.nickname = nickname;
         this.oauthId = oauthId;
         this.lastLoginAt = lastLoginAt;
-        this.univEmail = univEmail;
+        this.role = role;
+        this.manageRole = manageRole;
+        this.studyRole = studyRole;
+        this.status = status;
+        this.department = department;
         this.associateRequirement = associateRequirement;
     }
 
