@@ -62,9 +62,9 @@ public class RecruitmentRound extends BaseSemesterEntity {
     public static RecruitmentRound create(String name, RoundType roundType, Period period, Recruitment recruitment) {
         return RecruitmentRound.builder()
                 .name(name)
+                .roundType(roundType)
                 .period(period)
                 .recruitment(recruitment)
-                .roundType(roundType)
                 .academicYear(recruitment.getAcademicYear())
                 .semesterType(recruitment.getSemesterType())
                 .build();
