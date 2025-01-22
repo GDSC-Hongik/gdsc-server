@@ -4,13 +4,19 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.common.model.BaseEntity;
 import com.gdschongik.gdsc.domain.common.vo.Money;
+import com.gdschongik.gdsc.domain.study.domain.Study;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,12 +37,31 @@ public class Coupon extends BaseEntity {
     @Embedded
     private Money discountAmount;
 
+    @Enumerated(EnumType.STRING)
+    private CouponType couponType;
+
+    @Enumerated(EnumType.STRING)
+    private IssuanceMethodType issuanceMethodType;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "study_id")
+    private Study study;
+
     @Builder(access = AccessLevel.PRIVATE)
-    private Coupon(String name, Money discountAmount) {
+    private Coupon(
+            String name,
+            Money discountAmount,
+            CouponType couponType,
+            IssuanceMethodType issuanceMethodType,
+            Study study) {
         this.name = name;
         this.discountAmount = discountAmount;
+        this.couponType = couponType;
+        this.issuanceMethodType = issuanceMethodType;
+        this.study = study;
     }
 
+    // todo: 파라미터 수정 필요. api 수정시 같이 처리
     public static Coupon create(String name, Money discountAmount) {
         validateDiscountAmountPositive(discountAmount);
         return Coupon.builder().name(name).discountAmount(discountAmount).build();
