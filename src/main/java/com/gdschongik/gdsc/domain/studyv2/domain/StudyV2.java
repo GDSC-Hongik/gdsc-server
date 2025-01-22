@@ -17,6 +17,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import lombok.AccessLevel;
@@ -27,6 +28,7 @@ import org.hibernate.annotations.Comment;
 
 @Getter
 @Entity
+@Table(name = "study_v2")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class StudyV2 extends BaseEntity {
 

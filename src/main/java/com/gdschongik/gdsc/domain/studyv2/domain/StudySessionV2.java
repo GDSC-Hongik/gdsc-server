@@ -12,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,6 +21,7 @@ import org.hibernate.annotations.Comment;
 
 @Getter
 @Entity
+@Table(name = "study_session_v2")
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class StudySessionV2 extends BaseEntity {
 
