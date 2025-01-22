@@ -32,6 +32,11 @@ public class IssuedCoupon extends BaseEntity {
     @Column(name = "issued_coupon_id")
     private Long id;
 
+    @Comment("회수 여부")
+    private Boolean hasRevoked;
+
+    private LocalDateTime usedAt;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "coupon_id")
     private Coupon coupon;
@@ -40,16 +45,11 @@ public class IssuedCoupon extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @Comment("회수 여부")
-    private Boolean hasRevoked;
-
-    private LocalDateTime usedAt;
-
     @Builder(access = AccessLevel.PRIVATE)
-    private IssuedCoupon(Coupon coupon, Member member, Boolean hasRevoked) {
+    private IssuedCoupon(Boolean hasRevoked, Coupon coupon, Member member) {
+        this.hasRevoked = hasRevoked;
         this.coupon = coupon;
         this.member = member;
-        this.hasRevoked = hasRevoked;
     }
 
     public static IssuedCoupon create(Coupon coupon, Member member) {
