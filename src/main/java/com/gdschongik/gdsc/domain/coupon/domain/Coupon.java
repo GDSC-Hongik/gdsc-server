@@ -41,38 +41,29 @@ public class Coupon extends BaseEntity {
     private CouponType couponType;
 
     @Enumerated(EnumType.STRING)
-    private IssuanceMethodType issuanceMethodType;
+    private IssuanceType issuanceType;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "study_id")
     private Study study;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private Coupon(
-            String name,
-            Money discountAmount,
-            CouponType couponType,
-            IssuanceMethodType issuanceMethodType,
-            Study study) {
+    private Coupon(String name, Money discountAmount, CouponType couponType, IssuanceType issuanceType, Study study) {
         this.name = name;
         this.discountAmount = discountAmount;
         this.couponType = couponType;
-        this.issuanceMethodType = issuanceMethodType;
+        this.issuanceType = issuanceType;
         this.study = study;
     }
 
     public static Coupon create(
-            String name,
-            Money discountAmount,
-            CouponType couponType,
-            IssuanceMethodType issuanceMethodType,
-            Study study) {
+            String name, Money discountAmount, CouponType couponType, IssuanceType issuanceType, Study study) {
         validateDiscountAmountPositive(discountAmount);
         return Coupon.builder()
                 .name(name)
                 .discountAmount(discountAmount)
                 .couponType(couponType)
-                .issuanceMethodType(issuanceMethodType)
+                .issuanceType(issuanceType)
                 .study(study)
                 .build();
     }

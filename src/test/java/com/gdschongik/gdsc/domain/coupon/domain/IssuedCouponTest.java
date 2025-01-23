@@ -1,7 +1,7 @@
 package com.gdschongik.gdsc.domain.coupon.domain;
 
 import static com.gdschongik.gdsc.domain.coupon.domain.CouponType.*;
-import static com.gdschongik.gdsc.domain.coupon.domain.IssuanceMethodType.*;
+import static com.gdschongik.gdsc.domain.coupon.domain.IssuanceType.*;
 import static com.gdschongik.gdsc.global.common.constant.CouponConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.MemberConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;

@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum IssuanceMethodType {
+public enum IssuanceType {
     AUTOMATIC("자동 발급"),
     MANUAL("수동 발급");
 

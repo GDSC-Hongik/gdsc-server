@@ -1,6 +1,6 @@
 package com.gdschongik.gdsc.domain.coupon.application;
 
-import static com.gdschongik.gdsc.domain.coupon.domain.IssuanceMethodType.*;
+import static com.gdschongik.gdsc.domain.coupon.domain.IssuanceType.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.common.vo.Money;
