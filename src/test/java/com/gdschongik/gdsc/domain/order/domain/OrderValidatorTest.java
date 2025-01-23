@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import com.gdschongik.gdsc.domain.common.model.SemesterType;
 import com.gdschongik.gdsc.domain.common.vo.Money;
+import com.gdschongik.gdsc.domain.coupon.domain.CouponType;
 import com.gdschongik.gdsc.domain.coupon.domain.IssuedCoupon;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.membership.domain.Membership;
@@ -45,7 +46,7 @@ class OrderValidatorTest {
     }
 
     private IssuedCoupon createAndIssue(Money money, Member member) {
-        return fixtureHelper.createAndIssue(money, member);
+        return fixtureHelper.createAndIssue(money, member, CouponType.ADMIN, null);
     }
 
     @Nested
