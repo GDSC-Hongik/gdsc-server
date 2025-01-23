@@ -1,6 +1,5 @@
 package com.gdschongik.gdsc.domain.coupon.application;
 
-import static com.gdschongik.gdsc.domain.coupon.domain.IssuanceType.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.common.vo.Money;
@@ -49,8 +48,8 @@ public class CouponService {
     @Transactional
     public void createCoupon(CouponCreateRequest request) {
         Optional<Study> study = Optional.ofNullable(request.studyId()).flatMap(studyRepository::findById);
-        Coupon coupon = Coupon.create(
-                request.name(), Money.from(request.discountAmount()), request.couponType(), MANUAL, study.orElse(null));
+        Coupon coupon = Coupon.createManual(
+                request.name(), Money.from(request.discountAmount()), request.couponType(), study.orElse(null));
         couponRepository.save(coupon);
         log.info("[CouponService] 쿠폰 생성: name={}, discountAmount={}", request.name(), request.discountAmount());
     }
@@ -112,7 +111,7 @@ public class CouponService {
 
         String couponName = couponNameUtil.generateStudyCompletionCouponName(study);
         // TODO: 요청할 때마다 새로운 쿠폰 생성되는 문제 수정: 스터디마다 하나의 쿠폰만 존재하도록 쿠폰 타입 및 참조 식별자 추가
-        Coupon coupon = Coupon.create(couponName, Money.from(5000L), CouponType.STUDY_COMPLETION, AUTOMATIC, study);
+        Coupon coupon = Coupon.createAutomatic(couponName, Money.from(5000L), CouponType.STUDY_COMPLETION, study);
         couponRepository.save(coupon);
 
         List<IssuedCoupon> issuedCoupons = students.stream()

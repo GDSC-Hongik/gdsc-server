@@ -56,14 +56,24 @@ public class Coupon extends BaseEntity {
         this.study = study;
     }
 
-    public static Coupon create(
-            String name, Money discountAmount, CouponType couponType, IssuanceType issuanceType, Study study) {
+    public static Coupon createAutomatic(String name, Money discountAmount, CouponType couponType, Study study) {
         validateDiscountAmountPositive(discountAmount);
         return Coupon.builder()
                 .name(name)
                 .discountAmount(discountAmount)
                 .couponType(couponType)
-                .issuanceType(issuanceType)
+                .issuanceType(IssuanceType.AUTOMATIC)
+                .study(study)
+                .build();
+    }
+
+    public static Coupon createManual(String name, Money discountAmount, CouponType couponType, Study study) {
+        validateDiscountAmountPositive(discountAmount);
+        return Coupon.builder()
+                .name(name)
+                .discountAmount(discountAmount)
+                .couponType(couponType)
+                .issuanceType(IssuanceType.MANUAL)
                 .study(study)
                 .build();
     }

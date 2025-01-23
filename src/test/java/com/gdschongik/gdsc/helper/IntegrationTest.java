@@ -15,7 +15,6 @@ import com.gdschongik.gdsc.domain.coupon.dao.CouponRepository;
 import com.gdschongik.gdsc.domain.coupon.dao.IssuedCouponRepository;
 import com.gdschongik.gdsc.domain.coupon.domain.Coupon;
 import com.gdschongik.gdsc.domain.coupon.domain.CouponType;
-import com.gdschongik.gdsc.domain.coupon.domain.IssuanceType;
 import com.gdschongik.gdsc.domain.coupon.domain.IssuedCoupon;
 import com.gdschongik.gdsc.domain.discord.application.handler.DelegateMemberDiscordEventHandler;
 import com.gdschongik.gdsc.domain.discord.application.handler.MemberDiscordRoleRevokeHandler;
@@ -223,7 +222,7 @@ public abstract class IntegrationTest {
     }
 
     protected IssuedCoupon createAndIssue(Money money, Member member, CouponType couponType, Study study) {
-        Coupon coupon = Coupon.create(COUPON_NAME, money, couponType, IssuanceType.AUTOMATIC, study);
+        Coupon coupon = Coupon.createAutomatic(COUPON_NAME, money, couponType, study);
         couponRepository.save(coupon);
         IssuedCoupon issuedCoupon = IssuedCoupon.create(coupon, member);
         return issuedCouponRepository.save(issuedCoupon);

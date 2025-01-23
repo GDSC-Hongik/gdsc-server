@@ -1,7 +1,6 @@
 package com.gdschongik.gdsc.domain.coupon.domain;
 
 import static com.gdschongik.gdsc.domain.coupon.domain.CouponType.*;
-import static com.gdschongik.gdsc.domain.coupon.domain.IssuanceType.*;
 import static com.gdschongik.gdsc.global.common.constant.CouponConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.MemberConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
@@ -23,7 +22,7 @@ class IssuedCouponTest {
         @Test
         void 성공하면_사용여부는_true이다() {
             // given
-            Coupon coupon = Coupon.create(COUPON_NAME, Money.from(ONE), ADMIN, AUTOMATIC, null);
+            Coupon coupon = Coupon.createAutomatic(COUPON_NAME, Money.from(ONE), ADMIN, null);
             Member member = Member.createGuest(OAUTH_ID);
             IssuedCoupon issuedCoupon = IssuedCoupon.create(coupon, member);
             LocalDateTime now = LocalDateTime.now();
@@ -38,7 +37,7 @@ class IssuedCouponTest {
         @Test
         void 이미_사용한_쿠폰이면_실패한다() {
             // given
-            Coupon coupon = Coupon.create(COUPON_NAME, Money.from(ONE), ADMIN, AUTOMATIC, null);
+            Coupon coupon = Coupon.createAutomatic(COUPON_NAME, Money.from(ONE), ADMIN, null);
             Member member = Member.createGuest(OAUTH_ID);
             IssuedCoupon issuedCoupon = IssuedCoupon.create(coupon, member);
             LocalDateTime now = LocalDateTime.now();
@@ -53,7 +52,7 @@ class IssuedCouponTest {
         @Test
         void 이미_회수한_쿠폰이면_실패한다() {
             // given
-            Coupon coupon = Coupon.create(COUPON_NAME, Money.from(ONE), ADMIN, AUTOMATIC, null);
+            Coupon coupon = Coupon.createAutomatic(COUPON_NAME, Money.from(ONE), ADMIN, null);
             Member member = Member.createGuest(OAUTH_ID);
             IssuedCoupon issuedCoupon = IssuedCoupon.create(coupon, member);
             issuedCoupon.revoke();
@@ -72,7 +71,7 @@ class IssuedCouponTest {
         @Test
         void 성공하면_회수여부는_true이다() {
             // given
-            Coupon coupon = Coupon.create(COUPON_NAME, Money.from(ONE), ADMIN, AUTOMATIC, null);
+            Coupon coupon = Coupon.createAutomatic(COUPON_NAME, Money.from(ONE), ADMIN, null);
             Member member = Member.createGuest(OAUTH_ID);
             IssuedCoupon issuedCoupon = IssuedCoupon.create(coupon, member);
 
@@ -86,7 +85,7 @@ class IssuedCouponTest {
         @Test
         void 이미_회수한_발급쿠폰이면_실패한다() {
             // given
-            Coupon coupon = Coupon.create(COUPON_NAME, Money.from(ONE), ADMIN, AUTOMATIC, null);
+            Coupon coupon = Coupon.createAutomatic(COUPON_NAME, Money.from(ONE), ADMIN, null);
             Member member = Member.createGuest(OAUTH_ID);
             IssuedCoupon issuedCoupon = IssuedCoupon.create(coupon, member);
             issuedCoupon.revoke();
@@ -100,7 +99,7 @@ class IssuedCouponTest {
         @Test
         void 이미_사용한_발급쿠폰이면_실패한다() {
             // given
-            Coupon coupon = Coupon.create(COUPON_NAME, Money.from(ONE), ADMIN, AUTOMATIC, null);
+            Coupon coupon = Coupon.createAutomatic(COUPON_NAME, Money.from(ONE), ADMIN, null);
             Member member = Member.createGuest(OAUTH_ID);
             IssuedCoupon issuedCoupon = IssuedCoupon.create(coupon, member);
             issuedCoupon.use(LocalDateTime.now());

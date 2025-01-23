@@ -1,7 +1,6 @@
 package com.gdschongik.gdsc.domain.coupon.domain;
 
 import static com.gdschongik.gdsc.domain.coupon.domain.CouponType.*;
-import static com.gdschongik.gdsc.domain.coupon.domain.IssuanceType.*;
 import static com.gdschongik.gdsc.global.common.constant.CouponConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import static java.math.BigDecimal.*;
@@ -20,7 +19,7 @@ class CouponTest {
         @Test
         void 성공한다() {
             // when
-            Coupon coupon = Coupon.create(COUPON_NAME, Money.from(ONE), ADMIN, AUTOMATIC, null);
+            Coupon coupon = Coupon.createAutomatic(COUPON_NAME, Money.from(ONE), ADMIN, null);
 
             // then
             assertThat(coupon).isNotNull();
@@ -32,7 +31,7 @@ class CouponTest {
             Money discountAmount = Money.from(ZERO);
 
             // when & then
-            assertThatThrownBy(() -> Coupon.create(COUPON_NAME, discountAmount, ADMIN, AUTOMATIC, null))
+            assertThatThrownBy(() -> Coupon.createAutomatic(COUPON_NAME, discountAmount, ADMIN, null))
                     .isInstanceOf(CustomException.class)
                     .hasMessageContaining(COUPON_DISCOUNT_AMOUNT_NOT_POSITIVE.getMessage());
         }

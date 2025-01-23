@@ -15,7 +15,6 @@ import com.gdschongik.gdsc.domain.common.vo.Money;
 import com.gdschongik.gdsc.domain.common.vo.Period;
 import com.gdschongik.gdsc.domain.coupon.domain.Coupon;
 import com.gdschongik.gdsc.domain.coupon.domain.CouponType;
-import com.gdschongik.gdsc.domain.coupon.domain.IssuanceType;
 import com.gdschongik.gdsc.domain.coupon.domain.IssuedCoupon;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.membership.domain.Membership;
@@ -85,7 +84,7 @@ public class FixtureHelper {
     }
 
     public IssuedCoupon createAndIssue(Money money, Member member, CouponType couponType, Study study) {
-        Coupon coupon = Coupon.create(COUPON_NAME, money, couponType, IssuanceType.AUTOMATIC, study);
+        Coupon coupon = Coupon.createAutomatic(COUPON_NAME, money, couponType, study);
         return IssuedCoupon.create(coupon, member);
     }
 
