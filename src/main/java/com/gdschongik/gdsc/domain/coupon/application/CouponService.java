@@ -109,10 +109,7 @@ public class CouponService {
         List<Member> students = memberRepository.findAllById(studentIds);
         Study study = studyHistories.get(0).getStudy();
 
-        String couponName = couponNameUtil.generateStudyCompletionCouponName(study);
-        // TODO: 요청할 때마다 새로운 쿠폰 생성되는 문제 수정: 스터디마다 하나의 쿠폰만 존재하도록 쿠폰 타입 및 참조 식별자 추가
-        Coupon coupon = Coupon.createAutomatic(couponName, Money.from(5000L), CouponType.STUDY_COMPLETION, study);
-        couponRepository.save(coupon);
+        Coupon coupon = findOrCreate(CouponType.STUDY_COMPLETION, study);
 
         List<IssuedCoupon> issuedCoupons = students.stream()
                 .map(student -> IssuedCoupon.create(coupon, student))
@@ -122,5 +119,13 @@ public class CouponService {
         log.info(
                 "[CouponService] 스터디 수료 쿠폰 발급: issuedCouponIds={}",
                 issuedCoupons.stream().map(IssuedCoupon::getId).toList());
+    }
+
+    private Coupon findOrCreate(CouponType couponType, Study study) {
+        return couponRepository.findByCouponTypeAndStudy(couponType, study).orElseGet(() -> {
+            String couponName = couponNameUtil.generateStudyCompletionCouponName(study);
+            Coupon coupon = Coupon.createAutomatic(couponName, Money.FIVE_THOUSAND, couponType, study);
+            return couponRepository.save(coupon);
+        });
     }
 }
