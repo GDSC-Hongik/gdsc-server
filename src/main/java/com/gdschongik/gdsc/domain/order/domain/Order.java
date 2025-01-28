@@ -88,7 +88,7 @@ public class Order extends BaseEntity {
      * 쿠폰의 경우 사용 여부를 선택할 수 있습니다.
      */
     public static Order createPending(
-            String nanoId, Membership membership, @Nullable IssuedCoupon issuedCoupon, MoneyInfo moneyInfo) {
+            String nanoId, MoneyInfo moneyInfo, Membership membership, @Nullable IssuedCoupon issuedCoupon) {
         return Order.builder()
                 .nanoId(nanoId)
                 .memberId(membership.getMember().getId())
@@ -101,7 +101,7 @@ public class Order extends BaseEntity {
     }
 
     public static Order createFree(
-            String nanoId, Membership membership, @Nullable IssuedCoupon issuedCoupon, MoneyInfo moneyInfo) {
+            String nanoId, MoneyInfo moneyInfo, Membership membership, @Nullable IssuedCoupon issuedCoupon) {
         validateFreeOrder(moneyInfo);
         return Order.builder()
                 .nanoId(nanoId)
