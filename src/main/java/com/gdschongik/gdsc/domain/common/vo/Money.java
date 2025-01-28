@@ -18,6 +18,7 @@ import lombok.NonNull;
 public final class Money {
 
     public static final Money ZERO = Money.from(BigDecimal.ZERO);
+    public static final Money FIVE_THOUSAND = Money.from(5000L);
 
     private BigDecimal amount;
 

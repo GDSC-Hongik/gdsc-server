@@ -3,6 +3,7 @@ package com.gdschongik.gdsc.helper;
 import static com.gdschongik.gdsc.domain.member.domain.Department.*;
 import static com.gdschongik.gdsc.domain.member.domain.MemberManageRole.ADMIN;
 import static com.gdschongik.gdsc.domain.member.domain.MemberStudyRole.MENTOR;
+import static com.gdschongik.gdsc.global.common.constant.CouponConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.MemberConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.RecruitmentConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.StudyConstant.*;
@@ -13,6 +14,7 @@ import com.gdschongik.gdsc.domain.common.model.SemesterType;
 import com.gdschongik.gdsc.domain.common.vo.Money;
 import com.gdschongik.gdsc.domain.common.vo.Period;
 import com.gdschongik.gdsc.domain.coupon.domain.Coupon;
+import com.gdschongik.gdsc.domain.coupon.domain.CouponType;
 import com.gdschongik.gdsc.domain.coupon.domain.IssuedCoupon;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.membership.domain.Membership;
@@ -81,8 +83,8 @@ public class FixtureHelper {
         return Membership.create(member, recruitmentRound);
     }
 
-    public IssuedCoupon createAndIssue(Money money, Member member) {
-        Coupon coupon = Coupon.create("테스트쿠폰", money);
+    public IssuedCoupon createAndIssue(Money money, Member member, CouponType couponType, Study study) {
+        Coupon coupon = Coupon.createAutomatic(COUPON_NAME, money, couponType, study);
         return IssuedCoupon.create(coupon, member);
     }
 
