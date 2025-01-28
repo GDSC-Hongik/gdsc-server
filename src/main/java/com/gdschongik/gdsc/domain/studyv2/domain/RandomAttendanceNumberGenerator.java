@@ -8,9 +8,15 @@ import lombok.SneakyThrows;
  */
 public class RandomAttendanceNumberGenerator implements AttendanceNumberGenerator {
 
+    public static final int MIN_ORIGIN = 1000;
+    public static final int MAX_BOUND = 10000;
+
     @Override
     @SneakyThrows
     public int generate() {
-        return SecureRandom.getInstanceStrong().ints(1000, 10000).findFirst().orElseThrow();
+        return SecureRandom.getInstanceStrong()
+                .ints(MIN_ORIGIN, MAX_BOUND)
+                .findFirst()
+                .orElseThrow();
     }
 }
