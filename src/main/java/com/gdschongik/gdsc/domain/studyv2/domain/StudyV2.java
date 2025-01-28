@@ -59,7 +59,7 @@ public class StudyV2 extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String descriptionNotionLink;
 
-    @Enumerated(EnumType.STRING)
+    @Embedded
     private Semester semester;
 
     @Comment("총 회차 수")
