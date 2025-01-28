@@ -1,6 +1,7 @@
 package com.gdschongik.gdsc.domain.coupon.application;
 
 import com.gdschongik.gdsc.domain.study.domain.StudyHistoriesCompletedEvent;
+import com.gdschongik.gdsc.domain.study.domain.StudyHistoryCompletionWithdrawnEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -19,5 +20,11 @@ public class CouponEventHandler {
     public void handleStudyHistoryCompletedEvent(StudyHistoriesCompletedEvent event) {
         log.info("[CouponEventHandler] 스터디 수료 이벤트 수신: studyHistoryIds={}", event.studyHistoryIds());
         couponService.createAndIssueCouponByStudyHistories(event.studyHistoryIds());
+    }
+
+    @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
+    public void handleStudyHistoryCompletionWithdrawnEvent(StudyHistoryCompletionWithdrawnEvent event) {
+        log.info("[CouponEventHandler] 스터디 수료 철회 이벤트 수신: studyHistoryId={}", event.studyHistoryId());
+        couponService.revokeStudyCompletionCouponByStudyHistoryId(event.studyHistoryId());
     }
 }
