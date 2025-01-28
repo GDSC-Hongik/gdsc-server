@@ -17,9 +17,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -85,6 +88,9 @@ public class StudyV2 extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member mentor;
+
+    @OneToMany(mappedBy = "studyV2")
+    private List<StudySessionV2> studySessions = new ArrayList<>();
 
     @Builder(access = AccessLevel.PRIVATE)
     private StudyV2(
