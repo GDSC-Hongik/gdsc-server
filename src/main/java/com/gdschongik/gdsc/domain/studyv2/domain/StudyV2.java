@@ -129,7 +129,7 @@ public class StudyV2 extends BaseEntity {
             String description,
             String descriptionNotionLink,
             Semester semester,
-            Integer totalWeek,
+            Integer totalRound,
             DayOfWeek dayOfWeek,
             LocalTime startTime,
             LocalTime endTime,
@@ -143,7 +143,7 @@ public class StudyV2 extends BaseEntity {
                 .description(description)
                 .descriptionNotionLink(descriptionNotionLink)
                 .semester(semester)
-                .totalWeek(totalWeek)
+                .totalRound(totalRound)
                 .dayOfWeek(dayOfWeek)
                 .startTime(startTime)
                 .endTime(endTime)
