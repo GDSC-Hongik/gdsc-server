@@ -88,17 +88,10 @@ public class FixtureHelper {
 
     public Study createStudy(Member mentor, Period period, Period applicationPeriod) {
         return Study.create(
-                ACADEMIC_YEAR,
-                SEMESTER_TYPE,
-                STUDY_TITLE,
-                mentor,
-                period,
-                applicationPeriod,
-                TOTAL_WEEK,
-                ONLINE_STUDY,
-                DAY_OF_WEEK,
-                STUDY_START_TIME,
-                STUDY_END_TIME);
+                STUDY_TITLE, TOTAL_WEEK, STUDY_START_TIME, STUDY_END_TIME, ONLINE_STUDY,
+                DAY_OF_WEEK, period, applicationPeriod, mentor, ACADEMIC_YEAR,
+                SEMESTER_TYPE
+        );
     }
 
     public Study createStudyWithMentor(Long mentorId, Period period, Period applicationPeriod) {
@@ -107,12 +100,13 @@ public class FixtureHelper {
     }
 
     public StudyDetail createStudyDetail(Study study, LocalDateTime startDate, LocalDateTime endDate) {
-        return StudyDetail.create(study, 1L, ATTENDANCE_NUMBER, Period.of(startDate, endDate));
+        return StudyDetail.create(1L, ATTENDANCE_NUMBER, Period.of(startDate, endDate), study);
     }
 
     public StudyDetail createNewStudyDetail(
             Long id, Study study, Long week, LocalDateTime startDate, LocalDateTime endDate) {
-        StudyDetail studyDetail = StudyDetail.create(study, week, ATTENDANCE_NUMBER, Period.of(startDate, endDate));
+        StudyDetail studyDetail = StudyDetail.create(week, ATTENDANCE_NUMBER,
+                Period.of(startDate, endDate), study);
         ReflectionTestUtils.setField(studyDetail, "id", id);
         return studyDetail;
     }

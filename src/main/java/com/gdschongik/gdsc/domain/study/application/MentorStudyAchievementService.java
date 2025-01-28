@@ -52,7 +52,7 @@ public class MentorStudyAchievementService {
 
         List<Member> outstandingStudents = memberRepository.findAllById(request.studentIds());
         List<StudyAchievement> studyAchievements = outstandingStudents.stream()
-                .map(member -> StudyAchievement.create(member, study, request.achievementType()))
+                .map(member -> StudyAchievement.create(request.achievementType(), member, study))
                 .toList();
         studyAchievementRepository.saveAll(studyAchievements);
 

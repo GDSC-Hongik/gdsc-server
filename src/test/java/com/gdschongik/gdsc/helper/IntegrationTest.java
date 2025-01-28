@@ -228,45 +228,33 @@ public abstract class IntegrationTest {
 
     protected Study createStudy(Member mentor, Period period, Period applicationPeriod) {
         Study study = Study.create(
-                ACADEMIC_YEAR,
-                SEMESTER_TYPE,
-                STUDY_TITLE,
-                mentor,
-                period,
-                applicationPeriod,
-                TOTAL_WEEK,
-                ONLINE_STUDY,
-                DAY_OF_WEEK,
-                STUDY_START_TIME,
-                STUDY_END_TIME);
+                STUDY_TITLE, TOTAL_WEEK, STUDY_START_TIME, STUDY_END_TIME, ONLINE_STUDY,
+                DAY_OF_WEEK, period, applicationPeriod, mentor, ACADEMIC_YEAR,
+                SEMESTER_TYPE
+        );
 
         return studyRepository.save(study);
     }
 
     protected Study createNewStudy(Member mentor, Long totalWeek, Period period, Period applicationPeriod) {
         Study study = Study.create(
-                ACADEMIC_YEAR,
-                SEMESTER_TYPE,
-                STUDY_TITLE,
-                mentor,
-                period,
-                applicationPeriod,
-                totalWeek,
-                ONLINE_STUDY,
-                DAY_OF_WEEK,
-                STUDY_START_TIME,
-                STUDY_END_TIME);
+                STUDY_TITLE, totalWeek, STUDY_START_TIME, STUDY_END_TIME, ONLINE_STUDY, DAY_OF_WEEK,
+                period, applicationPeriod, mentor, ACADEMIC_YEAR,
+                SEMESTER_TYPE
+        );
 
         return studyRepository.save(study);
     }
 
     protected StudyDetail createStudyDetail(Study study, LocalDateTime startDate, LocalDateTime endDate) {
-        StudyDetail studyDetail = StudyDetail.create(study, 1L, ATTENDANCE_NUMBER, Period.of(startDate, endDate));
+        StudyDetail studyDetail = StudyDetail.create(1L, ATTENDANCE_NUMBER,
+                Period.of(startDate, endDate), study);
         return studyDetailRepository.save(studyDetail);
     }
 
     protected StudyDetail createNewStudyDetail(Long week, Study study, LocalDateTime startDate, LocalDateTime endDate) {
-        StudyDetail studyDetail = StudyDetail.create(study, week, ATTENDANCE_NUMBER, Period.of(startDate, endDate));
+        StudyDetail studyDetail = StudyDetail.create(week, ATTENDANCE_NUMBER,
+                Period.of(startDate, endDate), study);
         return studyDetailRepository.save(studyDetail);
     }
 
@@ -276,7 +264,7 @@ public abstract class IntegrationTest {
     }
 
     protected StudyAchievement createStudyAchievement(Member member, Study study, AchievementType achievementType) {
-        StudyAchievement studyAchievement = StudyAchievement.create(member, study, achievementType);
+        StudyAchievement studyAchievement = StudyAchievement.create(achievementType, member, study);
         return studyAchievementRepository.save(studyAchievement);
     }
 
