@@ -30,6 +30,9 @@ public class StudySessionV2 extends BaseEntity {
     @Column(name = "study_session_v2_id")
     private Long id;
 
+    @Comment("회차 순서")
+    private Integer position;
+
     @Comment("회차 제목")
     private String title;
 
@@ -70,6 +73,7 @@ public class StudySessionV2 extends BaseEntity {
      */
     @Builder(access = AccessLevel.PRIVATE)
     private StudySessionV2(
+            Integer position,
             String title,
             String description,
             Integer lessonAttendanceNumber,
@@ -77,6 +81,7 @@ public class StudySessionV2 extends BaseEntity {
             String assignmentDescriptionLink,
             Period assignmentPeriod,
             StudyV2 studyV2) {
+        this.position = position;
         this.title = title;
         this.description = description;
         this.lessonAttendanceNumber = lessonAttendanceNumber;
