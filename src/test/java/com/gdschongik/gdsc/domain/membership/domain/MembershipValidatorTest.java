@@ -41,8 +41,8 @@ class MembershipValidatorTest {
             LocalDateTime startDate,
             LocalDateTime endDate) {
         Recruitment recruitment = Recruitment.create(
-                academicYear, semesterType, fee, FEE_NAME, Period.of(SEMESTER_START_DATE, SEMESTER_END_DATE));
-        return RecruitmentRound.create(RECRUITMENT_ROUND_NAME, Period.of(startDate, endDate), recruitment, ROUND_TYPE);
+                FEE_NAME, fee, Period.of(SEMESTER_START_DATE, SEMESTER_END_DATE), academicYear, semesterType);
+        return RecruitmentRound.create(RECRUITMENT_ROUND_NAME, ROUND_TYPE, Period.of(startDate, endDate), recruitment);
     }
 
     @Nested

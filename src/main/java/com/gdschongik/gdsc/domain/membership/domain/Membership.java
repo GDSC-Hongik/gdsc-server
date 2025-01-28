@@ -34,6 +34,9 @@ public class Membership extends BaseEntity {
     @Column(name = "membership_id")
     private Long id;
 
+    @Embedded
+    private RegularRequirement regularRequirement;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
@@ -42,14 +45,11 @@ public class Membership extends BaseEntity {
     @JoinColumn(name = "recruitment_round_id")
     private RecruitmentRound recruitmentRound;
 
-    @Embedded
-    private RegularRequirement regularRequirement;
-
     @Builder(access = AccessLevel.PRIVATE)
-    private Membership(Member member, RecruitmentRound recruitmentRound, RegularRequirement regularRequirement) {
+    private Membership(RegularRequirement regularRequirement, Member member, RecruitmentRound recruitmentRound) {
+        this.regularRequirement = regularRequirement;
         this.member = member;
         this.recruitmentRound = recruitmentRound;
-        this.regularRequirement = regularRequirement;
     }
 
     public static Membership create(Member member, RecruitmentRound recruitmentRound) {

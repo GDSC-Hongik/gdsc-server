@@ -36,14 +36,6 @@ public class AssignmentHistory extends BaseEntity {
     @Column(name = "assignment_history_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "study_detail_id")
-    private StudyDetail studyDetail;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
-
     @Column(columnDefinition = "TEXT")
     private String submissionLink;
 
@@ -59,24 +51,32 @@ public class AssignmentHistory extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private SubmissionFailureType submissionFailureType;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "study_detail_id")
+    private StudyDetail studyDetail;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
+
     @Builder(access = AccessLevel.PRIVATE)
     private AssignmentHistory(
-            StudyDetail studyDetail,
-            Member member,
             AssignmentSubmissionStatus submissionStatus,
-            SubmissionFailureType submissionFailureType) {
-        this.studyDetail = studyDetail;
-        this.member = member;
+            SubmissionFailureType submissionFailureType,
+            StudyDetail studyDetail,
+            Member member) {
         this.submissionStatus = submissionStatus;
         this.submissionFailureType = submissionFailureType;
+        this.studyDetail = studyDetail;
+        this.member = member;
     }
 
     public static AssignmentHistory create(StudyDetail studyDetail, Member member) {
         return AssignmentHistory.builder()
-                .studyDetail(studyDetail)
-                .member(member)
                 .submissionStatus(FAILURE)
                 .submissionFailureType(NOT_SUBMITTED)
+                .studyDetail(studyDetail)
+                .member(member)
                 .build();
     }
 

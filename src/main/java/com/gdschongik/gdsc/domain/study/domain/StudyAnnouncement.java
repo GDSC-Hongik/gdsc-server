@@ -24,24 +24,24 @@ public class StudyAnnouncement extends BaseEntity {
     @Column(name = "study_announcement_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "study_id")
-    private Study study;
-
     private String title;
 
     @Column(columnDefinition = "TEXT")
     private String link;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "study_id")
+    private Study study;
+
     @Builder(access = AccessLevel.PRIVATE)
-    public StudyAnnouncement(Study study, String title, String link) {
-        this.study = study;
+    public StudyAnnouncement(String title, String link, Study study) {
         this.title = title;
         this.link = link;
+        this.study = study;
     }
 
-    public static StudyAnnouncement create(Study study, String title, String link) {
-        return StudyAnnouncement.builder().study(study).title(title).link(link).build();
+    public static StudyAnnouncement create(String title, String link, Study study) {
+        return StudyAnnouncement.builder().title(title).link(link).study(study).build();
     }
 
     public void update(String title, String link) {

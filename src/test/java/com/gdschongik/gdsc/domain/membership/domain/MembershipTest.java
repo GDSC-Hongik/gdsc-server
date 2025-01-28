@@ -29,9 +29,9 @@ class MembershipTest {
             member.advanceToAssociate();
 
             Recruitment recruitment = Recruitment.create(
-                    ACADEMIC_YEAR, SEMESTER_TYPE, FEE, FEE_NAME, Period.of(SEMESTER_START_DATE, SEMESTER_END_DATE));
+                    FEE_NAME, FEE, Period.of(SEMESTER_START_DATE, SEMESTER_END_DATE), ACADEMIC_YEAR, SEMESTER_TYPE);
             RecruitmentRound recruitmentRound =
-                    RecruitmentRound.create(RECRUITMENT_ROUND_NAME, START_TO_END_PERIOD, recruitment, ROUND_TYPE);
+                    RecruitmentRound.create(RECRUITMENT_ROUND_NAME, ROUND_TYPE, START_TO_END_PERIOD, recruitment);
 
             // when
             Membership membership = Membership.create(member, recruitmentRound);

@@ -58,7 +58,7 @@ class OrderTest {
             MoneyInfo freeMoneyInfo = MoneyInfo.of(MONEY_20000_WON, MONEY_20000_WON, Money.ZERO);
 
             // when
-            Order order = Order.createFree("testNanoId", membership, null, freeMoneyInfo);
+            Order order = Order.createFree("testNanoId", freeMoneyInfo, membership, null);
 
             // then
             assertThat(order.getStatus()).isEqualTo(OrderStatus.COMPLETED);
@@ -78,7 +78,7 @@ class OrderTest {
             MoneyInfo freeMoneyInfo = MoneyInfo.of(MONEY_20000_WON, MONEY_15000_WON, MONEY_5000_WON);
 
             // when & then
-            assertThatThrownBy(() -> Order.createFree("testNanoId", membership, null, freeMoneyInfo))
+            assertThatThrownBy(() -> Order.createFree("testNanoId", freeMoneyInfo, membership, null))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(ORDER_FREE_FINAL_PAYMENT_NOT_ZERO.getMessage());
         }
@@ -100,7 +100,7 @@ class OrderTest {
             Membership membership = createMembership(currentMember, recruitmentRound);
 
             Order order = Order.createPending(
-                    "testNanoId", membership, null, MoneyInfo.of(MONEY_20000_WON, MONEY_5000_WON, MONEY_15000_WON));
+                    "testNanoId", MoneyInfo.of(MONEY_20000_WON, MONEY_5000_WON, MONEY_15000_WON), membership, null);
 
             ZonedDateTime canceledAt = ZonedDateTime.now();
 
@@ -123,7 +123,7 @@ class OrderTest {
             Membership membership = createMembership(currentMember, recruitmentRound);
 
             Order order = Order.createPending(
-                    "testNanoId", membership, null, MoneyInfo.of(MONEY_20000_WON, MONEY_5000_WON, MONEY_15000_WON));
+                    "testNanoId", MoneyInfo.of(MONEY_20000_WON, MONEY_5000_WON, MONEY_15000_WON), membership, null);
             order.complete("testPaymentKey", ZonedDateTime.now());
             order.cancel(ZonedDateTime.now());
 
@@ -148,7 +148,7 @@ class OrderTest {
             Membership membership = createMembership(currentMember, recruitmentRound);
             MoneyInfo freeMoneyInfo = MoneyInfo.of(MONEY_20000_WON, MONEY_20000_WON, Money.ZERO);
 
-            Order order = Order.createFree("testNanoId", membership, null, freeMoneyInfo);
+            Order order = Order.createFree("testNanoId", freeMoneyInfo, membership, null);
 
             ZonedDateTime canceledAt = ZonedDateTime.now();
 
@@ -171,7 +171,7 @@ class OrderTest {
             Membership membership = createMembership(currentMember, recruitmentRound);
 
             Order order = Order.createPending(
-                    "testNanoId", membership, null, MoneyInfo.of(MONEY_20000_WON, MONEY_5000_WON, MONEY_15000_WON));
+                    "testNanoId", MoneyInfo.of(MONEY_20000_WON, MONEY_5000_WON, MONEY_15000_WON), membership, null);
             order.complete("testPaymentKey", ZonedDateTime.now());
 
             ZonedDateTime canceledAt = ZonedDateTime.now();
