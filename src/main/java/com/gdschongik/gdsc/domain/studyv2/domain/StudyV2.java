@@ -6,6 +6,7 @@ import com.gdschongik.gdsc.domain.common.vo.Semester;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.study.domain.StudyType;
 import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -89,7 +90,7 @@ public class StudyV2 extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member mentor;
 
-    @OneToMany(mappedBy = "studyV2")
+    @OneToMany(mappedBy = "studyV2", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StudySessionV2> studySessions = new ArrayList<>();
 
     @Builder(access = AccessLevel.PRIVATE)
