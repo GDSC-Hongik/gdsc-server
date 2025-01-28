@@ -63,7 +63,7 @@ public class StudyV2 extends BaseEntity {
     private Semester semester;
 
     @Comment("총 회차 수")
-    private Integer totalWeek;
+    private Integer totalRound;
 
     @Comment("[메타] 스터디 요일")
     @Enumerated(EnumType.STRING)
@@ -100,7 +100,7 @@ public class StudyV2 extends BaseEntity {
             String description,
             String descriptionNotionLink,
             Semester semester,
-            Integer totalWeek,
+            Integer totalRound,
             DayOfWeek dayOfWeek,
             LocalTime startTime,
             LocalTime endTime,
@@ -113,7 +113,7 @@ public class StudyV2 extends BaseEntity {
         this.description = description;
         this.descriptionNotionLink = descriptionNotionLink;
         this.semester = semester;
-        this.totalWeek = totalWeek;
+        this.totalRound = totalRound;
         this.dayOfWeek = dayOfWeek;
         this.startTime = startTime;
         this.endTime = endTime;
