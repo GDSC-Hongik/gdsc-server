@@ -76,6 +76,12 @@ public class StudyV2 extends BaseEntity {
     @AttributeOverride(name = "endDate", column = @Column(name = "application_end_date"))
     private Period applicationPeriod;
 
+    @Comment("디스코드 채널 ID")
+    private String discordChannelId;
+
+    @Comment("디스코드 역할 ID")
+    private String discordRoleId;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member mentor;
@@ -92,6 +98,8 @@ public class StudyV2 extends BaseEntity {
             LocalTime startTime,
             LocalTime endTime,
             Period applicationPeriod,
+            String discordChannelId,
+            String discordRoleId,
             Member mentor) {
         this.type = type;
         this.title = title;
@@ -103,6 +111,8 @@ public class StudyV2 extends BaseEntity {
         this.startTime = startTime;
         this.endTime = endTime;
         this.applicationPeriod = applicationPeriod;
+        this.discordChannelId = discordChannelId;
+        this.discordRoleId = discordRoleId;
         this.mentor = mentor;
     }
 
@@ -117,6 +127,8 @@ public class StudyV2 extends BaseEntity {
             LocalTime startTime,
             LocalTime endTime,
             Period applicationPeriod,
+            String discordChannelId,
+            String discordRoleId,
             Member mentor) {
         return StudyV2.builder()
                 .type(type)
@@ -129,6 +141,8 @@ public class StudyV2 extends BaseEntity {
                 .startTime(startTime)
                 .endTime(endTime)
                 .applicationPeriod(applicationPeriod)
+                .discordChannelId(discordChannelId)
+                .discordRoleId(discordRoleId)
                 .mentor(mentor)
                 .build();
     }
