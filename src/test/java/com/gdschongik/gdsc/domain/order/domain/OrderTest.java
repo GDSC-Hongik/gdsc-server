@@ -100,8 +100,7 @@ class OrderTest {
             Membership membership = createMembership(currentMember, recruitmentRound);
 
             Order order = Order.createPending(
-                    "testNanoId", MoneyInfo.of(MONEY_20000_WON, MONEY_5000_WON, MONEY_15000_WON),
-                    membership, null);
+                    "testNanoId", MoneyInfo.of(MONEY_20000_WON, MONEY_5000_WON, MONEY_15000_WON), membership, null);
 
             ZonedDateTime canceledAt = ZonedDateTime.now();
 
@@ -124,8 +123,7 @@ class OrderTest {
             Membership membership = createMembership(currentMember, recruitmentRound);
 
             Order order = Order.createPending(
-                    "testNanoId", MoneyInfo.of(MONEY_20000_WON, MONEY_5000_WON, MONEY_15000_WON),
-                    membership, null);
+                    "testNanoId", MoneyInfo.of(MONEY_20000_WON, MONEY_5000_WON, MONEY_15000_WON), membership, null);
             order.complete("testPaymentKey", ZonedDateTime.now());
             order.cancel(ZonedDateTime.now());
 
@@ -173,8 +171,7 @@ class OrderTest {
             Membership membership = createMembership(currentMember, recruitmentRound);
 
             Order order = Order.createPending(
-                    "testNanoId", MoneyInfo.of(MONEY_20000_WON, MONEY_5000_WON, MONEY_15000_WON),
-                    membership, null);
+                    "testNanoId", MoneyInfo.of(MONEY_20000_WON, MONEY_5000_WON, MONEY_15000_WON), membership, null);
             order.complete("testPaymentKey", ZonedDateTime.now());
 
             ZonedDateTime canceledAt = ZonedDateTime.now();

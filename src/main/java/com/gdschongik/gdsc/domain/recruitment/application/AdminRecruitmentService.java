@@ -42,10 +42,11 @@ public class AdminRecruitmentService {
         recruitmentValidator.validateRecruitmentCreate(isRecruitmentOverlap);
 
         Recruitment recruitment = Recruitment.create(
-                request.feeName(), Money.from(request.fee()),
-                Period.of(request.semesterStartDate(), request.semesterEndDate()), request.academicYear(),
-                request.semesterType()
-        );
+                request.feeName(),
+                Money.from(request.fee()),
+                Period.of(request.semesterStartDate(), request.semesterEndDate()),
+                request.academicYear(),
+                request.semesterType());
         recruitmentRepository.save(recruitment);
 
         log.info("[AdminRecruitmentService] 리쿠르팅 생성: recruitmentId={}", recruitment.getId());

@@ -71,8 +71,7 @@ class AdminRecruitmentServiceTest extends IntegrationTest {
             // given
             LocalDateTime now = LocalDateTime.now().withNano(0);
             Recruitment recruitment =
-                    Recruitment.create(FEE_NAME, FEE, Period.of(now, now.plusMonths(3)),
-                            ACADEMIC_YEAR, SEMESTER_TYPE);
+                    Recruitment.create(FEE_NAME, FEE, Period.of(now, now.plusMonths(3)), ACADEMIC_YEAR, SEMESTER_TYPE);
             recruitmentRepository.save(recruitment);
 
             RecruitmentRound recruitmentRound = RecruitmentRound.create(

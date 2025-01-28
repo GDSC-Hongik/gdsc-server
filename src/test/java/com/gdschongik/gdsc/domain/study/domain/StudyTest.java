@@ -40,10 +40,17 @@ public class StudyTest {
 
             // when & then
             assertThatThrownBy(() -> Study.create(
-                    STUDY_TITLE, TOTAL_WEEK, STUDY_START_TIME, STUDY_END_TIME, ONLINE_STUDY,
-                    DAY_OF_WEEK, START_TO_END_PERIOD, applicationPeriod, guestMember, ACADEMIC_YEAR,
-                            SEMESTER_TYPE
-            ))
+                            STUDY_TITLE,
+                            TOTAL_WEEK,
+                            STUDY_START_TIME,
+                            STUDY_END_TIME,
+                            ONLINE_STUDY,
+                            DAY_OF_WEEK,
+                            START_TO_END_PERIOD,
+                            applicationPeriod,
+                            guestMember,
+                            ACADEMIC_YEAR,
+                            SEMESTER_TYPE))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(STUDY_MENTOR_IS_UNAUTHORIZED.getMessage());
         }
@@ -57,10 +64,17 @@ public class StudyTest {
 
             // when & then
             assertThatThrownBy(() -> Study.create(
-                    STUDY_TITLE, TOTAL_WEEK, STUDY_START_TIME, STUDY_END_TIME, ONLINE_STUDY,
-                    DAY_OF_WEEK, period, applicationPeriod, member, ACADEMIC_YEAR,
-                            SEMESTER_TYPE
-            ))
+                            STUDY_TITLE,
+                            TOTAL_WEEK,
+                            STUDY_START_TIME,
+                            STUDY_END_TIME,
+                            ONLINE_STUDY,
+                            DAY_OF_WEEK,
+                            period,
+                            applicationPeriod,
+                            member,
+                            ACADEMIC_YEAR,
+                            SEMESTER_TYPE))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(STUDY_APPLICATION_START_DATE_INVALID.getMessage());
         }
@@ -74,10 +88,17 @@ public class StudyTest {
 
             // when & then
             assertThatThrownBy(() -> Study.create(
-                    STUDY_TITLE, TOTAL_WEEK, null, null, ONLINE_STUDY, DAY_OF_WEEK, period,
-                    applicationPeriod, member, ACADEMIC_YEAR,
-                            SEMESTER_TYPE
-            ))
+                            STUDY_TITLE,
+                            TOTAL_WEEK,
+                            null,
+                            null,
+                            ONLINE_STUDY,
+                            DAY_OF_WEEK,
+                            period,
+                            applicationPeriod,
+                            member,
+                            ACADEMIC_YEAR,
+                            SEMESTER_TYPE))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(ON_OFF_LINE_STUDY_TIME_IS_ESSENTIAL.getMessage());
         }
@@ -93,10 +114,17 @@ public class StudyTest {
 
             // when & then
             assertThatThrownBy(() -> Study.create(
-                    STUDY_TITLE, TOTAL_WEEK, studyStartTime, studyEndTime, ONLINE_STUDY,
-                    DAY_OF_WEEK, period, applicationPeriod, member, ACADEMIC_YEAR,
-                            SEMESTER_TYPE
-            ))
+                            STUDY_TITLE,
+                            TOTAL_WEEK,
+                            studyStartTime,
+                            studyEndTime,
+                            ONLINE_STUDY,
+                            DAY_OF_WEEK,
+                            period,
+                            applicationPeriod,
+                            member,
+                            ACADEMIC_YEAR,
+                            SEMESTER_TYPE))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(STUDY_TIME_INVALID.getMessage());
         }
@@ -112,10 +140,17 @@ public class StudyTest {
 
             // when & then
             assertThatThrownBy(() -> Study.create(
-                    STUDY_TITLE, TOTAL_WEEK, studyStartTime, studyEndTime, ASSIGNMENT_STUDY,
-                    DAY_OF_WEEK, period, applicationPeriod, member, ACADEMIC_YEAR,
-                            SEMESTER_TYPE
-            ))
+                            STUDY_TITLE,
+                            TOTAL_WEEK,
+                            studyStartTime,
+                            studyEndTime,
+                            ASSIGNMENT_STUDY,
+                            DAY_OF_WEEK,
+                            period,
+                            applicationPeriod,
+                            member,
+                            ACADEMIC_YEAR,
+                            SEMESTER_TYPE))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(ASSIGNMENT_STUDY_CAN_NOT_INPUT_STUDY_TIME.getMessage());
         }

@@ -63,8 +63,7 @@ public class OrderService {
 
         orderValidator.validatePendingOrderCreate(membership, issuedCoupon, moneyInfo, currentMember);
 
-        Order order = Order.createPending(request.orderNanoId(), moneyInfo,
-                membership, issuedCoupon);
+        Order order = Order.createPending(request.orderNanoId(), moneyInfo, membership, issuedCoupon);
 
         orderRepository.save(order);
 

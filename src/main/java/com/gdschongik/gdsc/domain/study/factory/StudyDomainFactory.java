@@ -18,13 +18,19 @@ public class StudyDomainFactory {
     public Study createNewStudy(StudyCreateRequest request, Member mentor) {
         LocalDate endDate = request.startDate().plusWeeks(request.totalWeek()).minusDays(1);
         return Study.create(
-                request.title(), request.totalWeek(), request.studyStartTime(),
-                request.studyEndTime(), request.studyType(), request.dayOfWeek(),
-                Period.of(request.startDate().atStartOfDay(), endDate.atTime(LocalTime.MAX)), Period.of(
+                request.title(),
+                request.totalWeek(),
+                request.studyStartTime(),
+                request.studyEndTime(),
+                request.studyType(),
+                request.dayOfWeek(),
+                Period.of(request.startDate().atStartOfDay(), endDate.atTime(LocalTime.MAX)),
+                Period.of(
                         request.applicationStartDate().atStartOfDay(),
-                        request.applicationEndDate().atTime(LocalTime.MAX)), mentor, request.academicYear(),
-                request.semesterType()
-        );
+                        request.applicationEndDate().atTime(LocalTime.MAX)),
+                mentor,
+                request.academicYear(),
+                request.semesterType());
     }
 
     // 해당 주의 비어있는 스터디상세를 생성합니다.

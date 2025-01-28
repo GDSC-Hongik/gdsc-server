@@ -25,11 +25,11 @@ public class RecruitmentRoundValidatorTest {
         void 모집_시작일과_종료일의_연도가_입력된_학년도와_다르다면_실패한다() {
             // given
             Recruitment recruitment = Recruitment.create(
-                    FEE_NAME, FEE,
+                    FEE_NAME,
+                    FEE,
                     Period.of(LocalDateTime.of(2025, 3, 2, 0, 0), LocalDateTime.of(2025, 8, 31, 0, 0)),
                     2025,
-                    SEMESTER_TYPE
-            );
+                    SEMESTER_TYPE);
 
             // when & then
             assertThatThrownBy(() -> recruitmentRoundValidator.validateRecruitmentRoundCreate(
@@ -42,11 +42,11 @@ public class RecruitmentRoundValidatorTest {
         void 학기_시작일과_종료일의_학기가_입력된_학기와_다르다면_실패한다() {
             // given
             Recruitment recruitment = Recruitment.create(
-                    FEE_NAME, FEE,
+                    FEE_NAME,
+                    FEE,
                     Period.of(LocalDateTime.of(2024, 9, 1, 0, 0), LocalDateTime.of(2025, 2, 28, 0, 0)),
                     ACADEMIC_YEAR,
-                    SemesterType.SECOND
-            );
+                    SemesterType.SECOND);
 
             // when & then
             assertThatThrownBy(() -> recruitmentRoundValidator.validateRecruitmentRoundCreate(
