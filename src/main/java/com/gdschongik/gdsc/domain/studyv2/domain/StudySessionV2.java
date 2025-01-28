@@ -92,21 +92,10 @@ public class StudySessionV2 extends BaseEntity {
         studyV2.getStudySessions().add(this);
     }
 
-    public static void create(
-            String title,
-            String description,
-            Integer lessonAttendanceNumber,
-            Period lessonPeriod,
-            String assignmentDescriptionLink,
-            Period assignmentPeriod,
-            StudyV2 studyV2) {
+    public static void createEmpty(Integer position, Integer lessonAttendanceNumber, StudyV2 studyV2) {
         StudySessionV2.builder()
-                .title(title)
-                .description(description)
+                .position(position)
                 .lessonAttendanceNumber(lessonAttendanceNumber)
-                .lessonPeriod(lessonPeriod)
-                .assignmentDescriptionLink(assignmentDescriptionLink)
-                .assignmentPeriod(assignmentPeriod)
                 .studyV2(studyV2)
                 .build();
     }
