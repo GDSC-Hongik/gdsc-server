@@ -42,11 +42,10 @@ public class AdminRecruitmentService {
         recruitmentValidator.validateRecruitmentCreate(isRecruitmentOverlap);
 
         Recruitment recruitment = Recruitment.create(
-                request.academicYear(),
-                request.semesterType(),
-                Money.from(request.fee()),
-                request.feeName(),
-                Period.of(request.semesterStartDate(), request.semesterEndDate()));
+                request.feeName(), Money.from(request.fee()),
+                Period.of(request.semesterStartDate(), request.semesterEndDate()), request.academicYear(),
+                request.semesterType()
+        );
         recruitmentRepository.save(recruitment);
 
         log.info("[AdminRecruitmentService] 리쿠르팅 생성: recruitmentId={}", recruitment.getId());
@@ -82,7 +81,7 @@ public class AdminRecruitmentService {
                 recruitmentRoundsInThisSemester);
 
         RecruitmentRound recruitmentRound = RecruitmentRound.create(
-                request.name(), Period.of(request.startDate(), request.endDate()), recruitment, request.roundType());
+                request.name(), request.roundType(), Period.of(request.startDate(), request.endDate()), recruitment);
         recruitmentRoundRepository.save(recruitmentRound);
 
         log.info("[AdminRecruitmentService] 모집회차 생성: recruitmentRoundId={}", recruitmentRound.getId());

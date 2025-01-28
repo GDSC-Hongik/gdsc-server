@@ -188,7 +188,7 @@ public abstract class IntegrationTest {
         Recruitment recruitment = createRecruitment(ACADEMIC_YEAR, SEMESTER_TYPE, FEE);
 
         RecruitmentRound recruitmentRound =
-                RecruitmentRound.create(RECRUITMENT_ROUND_NAME, START_TO_END_PERIOD, recruitment, ROUND_TYPE);
+                RecruitmentRound.create(RECRUITMENT_ROUND_NAME, ROUND_TYPE, START_TO_END_PERIOD, recruitment);
 
         return recruitmentRoundRepository.save(recruitmentRound);
     }
@@ -204,13 +204,13 @@ public abstract class IntegrationTest {
         Recruitment recruitment = createRecruitment(academicYear, semesterType, fee);
 
         RecruitmentRound recruitmentRound =
-                RecruitmentRound.create(name, Period.of(startDate, endDate), recruitment, roundType);
+                RecruitmentRound.create(name, roundType, Period.of(startDate, endDate), recruitment);
         return recruitmentRoundRepository.save(recruitmentRound);
     }
 
     protected Recruitment createRecruitment(Integer academicYear, SemesterType semesterType, Money fee) {
         Recruitment recruitment = Recruitment.create(
-                academicYear, semesterType, fee, FEE_NAME, Period.of(SEMESTER_START_DATE, SEMESTER_END_DATE));
+                FEE_NAME, fee, Period.of(SEMESTER_START_DATE, SEMESTER_END_DATE), academicYear, semesterType);
         return recruitmentRepository.save(recruitment);
     }
 
