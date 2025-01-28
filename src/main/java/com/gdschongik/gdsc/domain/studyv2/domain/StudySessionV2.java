@@ -87,7 +87,7 @@ public class StudySessionV2 extends BaseEntity {
         studyV2.getStudySessions().add(this);
     }
 
-    public void create(
+    public static void create(
             String title,
             String description,
             Integer lessonAttendanceNumber,
