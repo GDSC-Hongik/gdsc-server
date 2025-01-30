@@ -3,6 +3,7 @@ package com.gdschongik.gdsc.domain.coupon.dao;
 import static com.gdschongik.gdsc.domain.coupon.domain.QIssuedCoupon.issuedCoupon;
 
 import com.gdschongik.gdsc.domain.coupon.dto.request.IssuedCouponQueryOption;
+import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 
@@ -14,6 +15,10 @@ public interface IssuedCouponQueryMethod {
 
     default BooleanExpression eqMemberName(String memberName) {
         return memberName != null ? issuedCoupon.coupon.name.containsIgnoreCase(memberName) : null;
+    }
+
+    default BooleanExpression eqMember(Member member) {
+        return member != null ? issuedCoupon.member.eq(member) : null;
     }
 
     default BooleanExpression eqPhone(String phone) {

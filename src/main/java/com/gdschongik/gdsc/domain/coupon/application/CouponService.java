@@ -1,5 +1,6 @@
 package com.gdschongik.gdsc.domain.coupon.application;
 
+import static com.gdschongik.gdsc.domain.coupon.domain.CouponType.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.common.vo.Money;
@@ -109,7 +110,7 @@ public class CouponService {
         List<Member> students = memberRepository.findAllById(studentIds);
         Study study = studyHistories.get(0).getStudy();
 
-        Coupon coupon = findOrCreate(CouponType.STUDY_COMPLETION, study);
+        Coupon coupon = findOrCreate(STUDY_COMPLETION, study);
 
         List<IssuedCoupon> issuedCoupons = students.stream()
                 .map(student -> IssuedCoupon.create(coupon, student))
@@ -127,5 +128,21 @@ public class CouponService {
             Coupon coupon = Coupon.createAutomatic(couponName, Money.FIVE_THOUSAND, couponType, study);
             return couponRepository.save(coupon);
         });
+    }
+
+    @Transactional
+    public void revokeStudyCompletionCouponByStudyHistoryId(long studyHistoryId) {
+        StudyHistory studyHistory = studyHistoryRepository
+                .findById(studyHistoryId)
+                .orElseThrow(() -> new CustomException(STUDY_HISTORY_NOT_FOUND));
+
+        IssuedCoupon issuedCoupon = issuedCouponRepository
+                .findUnrevokedIssuedStudyCoupon(STUDY_COMPLETION, studyHistory.getStudent(), studyHistory.getStudy())
+                .orElseThrow(() -> new CustomException(ISSUED_COUPON_NOT_FOUND));
+
+        issuedCoupon.revoke();
+        issuedCouponRepository.save(issuedCoupon);
+
+        log.info("[CouponService] 스터디 수료 쿠폰 회수: issuedCouponId={}", issuedCoupon.getId());
     }
 }
