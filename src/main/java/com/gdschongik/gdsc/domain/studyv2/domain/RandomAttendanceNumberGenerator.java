@@ -13,10 +13,10 @@ public class RandomAttendanceNumberGenerator implements AttendanceNumberGenerato
 
     @Override
     @SneakyThrows
-    public int generate() {
-        return SecureRandom.getInstanceStrong()
+    public String generate() {
+        return String.valueOf(SecureRandom.getInstanceStrong()
                 .ints(MIN_ORIGIN, MAX_BOUND)
                 .findFirst()
-                .orElseThrow();
+                .orElseThrow());
     }
 }
