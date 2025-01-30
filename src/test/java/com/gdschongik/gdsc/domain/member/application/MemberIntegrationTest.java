@@ -8,11 +8,9 @@ import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberAssociateRequirementUpdatedEvent;
 import com.gdschongik.gdsc.helper.IntegrationTest;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@Slf4j
 public class MemberIntegrationTest extends IntegrationTest {
     @Autowired
     private MemberAssociateRequirementUpdatedEventHandler memberAssociateRequirementUpdatedEventHandler;
