@@ -137,8 +137,7 @@ public class CouponService {
                 .orElseThrow(() -> new CustomException(STUDY_HISTORY_NOT_FOUND));
 
         IssuedCoupon issuedCoupon = issuedCouponRepository
-                .findNonRevokedIssuedCouponByCouponTypeAndMemberAndStudy(
-                        STUDY_COMPLETION, studyHistory.getStudent(), studyHistory.getStudy())
+                .findUnrevokedIssuedStudyCoupon(STUDY_COMPLETION, studyHistory.getStudent(), studyHistory.getStudy())
                 .orElseThrow(() -> new CustomException(ISSUED_COUPON_NOT_FOUND));
 
         issuedCoupon.revoke();
