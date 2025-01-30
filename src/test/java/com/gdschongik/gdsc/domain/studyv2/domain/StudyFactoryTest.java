@@ -15,8 +15,8 @@ class StudyFactoryTest {
 
     static class FixedAttendanceNumberGenerator implements AttendanceNumberGenerator {
         @Override
-        public int generate() {
-            return 1000;
+        public String generate() {
+            return "0000";
         }
     }
 
@@ -104,6 +104,6 @@ class StudyFactoryTest {
         // then
         assertThat(study.getStudySessions())
                 .extracting(StudySessionV2::getLessonAttendanceNumber)
-                .containsOnly(1000);
+                .containsOnly("0000");
     }
 }
