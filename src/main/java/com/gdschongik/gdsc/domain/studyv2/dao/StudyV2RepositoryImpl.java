@@ -18,6 +18,7 @@ public class StudyV2RepositoryImpl implements StudyV2CustomRepository {
                 .selectFrom(studyV2)
                 .join(studyV2.studySessions)
                 .fetchJoin()
+                .where(studyV2.id.eq(id))
                 .fetchOne());
     }
 }
