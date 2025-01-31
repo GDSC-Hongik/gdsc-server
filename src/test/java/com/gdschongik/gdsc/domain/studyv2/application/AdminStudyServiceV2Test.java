@@ -50,7 +50,7 @@ class AdminStudyServiceV2Test extends IntegrationTest {
             adminStudyService.createStudy(request);
 
             // then
-            Optional<StudyV2> optionalStudy = studyV2Repository.findById(1L);
+            Optional<StudyV2> optionalStudy = studyV2Repository.findFetchById(1L);
             assertThat(optionalStudy).isPresent();
 
             StudyV2 study = optionalStudy.get();
@@ -80,7 +80,7 @@ class AdminStudyServiceV2Test extends IntegrationTest {
             adminStudyService.createStudy(request);
 
             // then
-            StudyV2 study = studyV2Repository.findById(1L).orElseThrow();
+            StudyV2 study = studyV2Repository.findFetchById(1L).orElseThrow();
             assertThat(study.getStudySessions())
                     .extracting(StudySessionV2::getLessonAttendanceNumber)
                     .doesNotContainNull();
