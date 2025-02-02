@@ -32,10 +32,10 @@ public class RecruitmentRound extends BaseSemesterEntity {
     @Column(name = "recruitment_round_id")
     private Long id;
 
-    private String name;
-
     @Enumerated(EnumType.STRING)
     private RoundType roundType;
+
+    private String name;
 
     @Embedded
     private Period period;
@@ -46,8 +46,8 @@ public class RecruitmentRound extends BaseSemesterEntity {
 
     @Builder(access = AccessLevel.PRIVATE)
     private RecruitmentRound(
-            String name,
             RoundType roundType,
+            String name,
             final Period period,
             Recruitment recruitment,
             Integer academicYear,
@@ -61,8 +61,8 @@ public class RecruitmentRound extends BaseSemesterEntity {
 
     public static RecruitmentRound create(String name, RoundType roundType, Period period, Recruitment recruitment) {
         return RecruitmentRound.builder()
-                .name(name)
                 .roundType(roundType)
+                .name(name)
                 .period(period)
                 .recruitment(recruitment)
                 .academicYear(recruitment.getAcademicYear())
