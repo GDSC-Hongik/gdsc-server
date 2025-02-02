@@ -33,6 +33,18 @@ public class Member extends BaseEntity {
     @Column(name = "member_id")
     private Long id;
 
+    @Enumerated(EnumType.STRING)
+    private MemberStatus status;
+
+    @Enumerated(EnumType.STRING)
+    private MemberRole role;
+
+    @Enumerated(EnumType.STRING)
+    private MemberManageRole manageRole;
+
+    @Enumerated(EnumType.STRING)
+    private MemberStudyRole studyRole;
+
     private String name;
 
     private String studentId;
@@ -55,18 +67,6 @@ public class Member extends BaseEntity {
     private LocalDateTime lastLoginAt;
 
     @Enumerated(EnumType.STRING)
-    private MemberRole role;
-
-    @Enumerated(EnumType.STRING)
-    private MemberManageRole manageRole;
-
-    @Enumerated(EnumType.STRING)
-    private MemberStudyRole studyRole;
-
-    @Enumerated(EnumType.STRING)
-    private MemberStatus status;
-
-    @Enumerated(EnumType.STRING)
     private Department department;
 
     @Embedded
@@ -74,6 +74,10 @@ public class Member extends BaseEntity {
 
     @Builder(access = AccessLevel.PRIVATE)
     private Member(
+            MemberStatus status,
+            MemberRole role,
+            MemberManageRole manageRole,
+            MemberStudyRole studyRole,
             String name,
             String studentId,
             String email,
@@ -83,12 +87,12 @@ public class Member extends BaseEntity {
             String nickname,
             String oauthId,
             LocalDateTime lastLoginAt,
-            MemberRole role,
-            MemberManageRole manageRole,
-            MemberStudyRole studyRole,
-            MemberStatus status,
             Department department,
             AssociateRequirement associateRequirement) {
+        this.status = status;
+        this.role = role;
+        this.manageRole = manageRole;
+        this.studyRole = studyRole;
         this.name = name;
         this.studentId = studentId;
         this.email = email;
@@ -98,10 +102,6 @@ public class Member extends BaseEntity {
         this.nickname = nickname;
         this.oauthId = oauthId;
         this.lastLoginAt = lastLoginAt;
-        this.role = role;
-        this.manageRole = manageRole;
-        this.studyRole = studyRole;
-        this.status = status;
         this.department = department;
         this.associateRequirement = associateRequirement;
     }
@@ -109,11 +109,11 @@ public class Member extends BaseEntity {
     public static Member createGuest(String oauthId) {
         AssociateRequirement associateRequirement = AssociateRequirement.unsatisfied();
         return Member.builder()
-                .oauthId(oauthId)
+                .status(MemberStatus.NORMAL)
                 .role(GUEST)
                 .manageRole(NONE)
                 .studyRole(STUDENT)
-                .status(MemberStatus.NORMAL)
+                .oauthId(oauthId)
                 .associateRequirement(associateRequirement)
                 .build();
     }
