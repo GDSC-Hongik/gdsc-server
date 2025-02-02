@@ -40,30 +40,30 @@ public class Study extends BaseSemesterEntity {
     @Column(name = "study_id")
     private Long id;
 
+    @Enumerated(EnumType.STRING)
+    private StudyType studyType;
+
     private String title;
 
-    @Comment("총 주차수")
-    private Long totalWeek;
+    @Comment("스터디 한줄 소개")
+    private String introduction;
 
     @Comment("스터디 상세 노션 링크(Text)")
     @Column(columnDefinition = "TEXT")
     private String notionLink;
 
-    @Comment("스터디 한줄 소개")
-    private String introduction;
+    @Comment("총 주차수")
+    private Long totalWeek;
+
+    @Comment("스터디 요일")
+    @Enumerated(EnumType.STRING)
+    private DayOfWeek dayOfWeek;
 
     @Comment("스터디 시작 시간")
     private LocalTime startTime;
 
     @Comment("스터디 종료 시간")
     private LocalTime endTime;
-
-    @Enumerated(EnumType.STRING)
-    private StudyType studyType;
-
-    @Comment("스터디 요일")
-    @Enumerated(EnumType.STRING)
-    private DayOfWeek dayOfWeek;
 
     @Embedded
     private Period period;
@@ -79,36 +79,36 @@ public class Study extends BaseSemesterEntity {
 
     @Builder(access = AccessLevel.PRIVATE)
     private Study(
+            StudyType studyType,
             String title,
             Long totalWeek,
+            DayOfWeek dayOfWeek,
             LocalTime startTime,
             LocalTime endTime,
-            StudyType studyType,
-            DayOfWeek dayOfWeek,
             Period period,
             Period applicationPeriod,
             Member mentor,
             Integer academicYear,
             SemesterType semesterType) {
         super(academicYear, semesterType);
+        this.studyType = studyType;
         this.title = title;
         this.totalWeek = totalWeek;
+        this.dayOfWeek = dayOfWeek;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.studyType = studyType;
-        this.dayOfWeek = dayOfWeek;
         this.period = period;
         this.applicationPeriod = applicationPeriod;
         this.mentor = mentor;
     }
 
     public static Study create(
+            StudyType studyType,
             String title,
             Long totalWeek,
+            DayOfWeek dayOfWeek,
             LocalTime startTime,
             LocalTime endTime,
-            StudyType studyType,
-            DayOfWeek dayOfWeek,
             Period period,
             Period applicationPeriod,
             Member mentor,
@@ -118,12 +118,12 @@ public class Study extends BaseSemesterEntity {
         validateMentorRole(mentor);
         validateStudyTime(studyType, startTime, endTime);
         return Study.builder()
+                .studyType(studyType)
                 .title(title)
                 .totalWeek(totalWeek)
+                .dayOfWeek(dayOfWeek)
                 .startTime(startTime)
                 .endTime(endTime)
-                .studyType(studyType)
-                .dayOfWeek(dayOfWeek)
                 .period(period)
                 .applicationPeriod(applicationPeriod)
                 .mentor(mentor)

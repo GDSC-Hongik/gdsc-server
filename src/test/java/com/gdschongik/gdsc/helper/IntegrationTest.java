@@ -228,12 +228,10 @@ public abstract class IntegrationTest {
 
     protected Study createStudy(Member mentor, Period period, Period applicationPeriod) {
         Study study = Study.create(
-                STUDY_TITLE,
+                ONLINE_STUDY, STUDY_TITLE,
                 TOTAL_WEEK,
-                STUDY_START_TIME,
+                DAY_OF_WEEK, STUDY_START_TIME,
                 STUDY_END_TIME,
-                ONLINE_STUDY,
-                DAY_OF_WEEK,
                 period,
                 applicationPeriod,
                 mentor,
@@ -245,12 +243,10 @@ public abstract class IntegrationTest {
 
     protected Study createNewStudy(Member mentor, Long totalWeek, Period period, Period applicationPeriod) {
         Study study = Study.create(
-                STUDY_TITLE,
+                ONLINE_STUDY, STUDY_TITLE,
                 totalWeek,
-                STUDY_START_TIME,
+                DAY_OF_WEEK, STUDY_START_TIME,
                 STUDY_END_TIME,
-                ONLINE_STUDY,
-                DAY_OF_WEEK,
                 period,
                 applicationPeriod,
                 mentor,

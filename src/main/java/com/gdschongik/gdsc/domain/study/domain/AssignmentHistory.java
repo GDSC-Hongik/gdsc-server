@@ -36,20 +36,20 @@ public class AssignmentHistory extends BaseEntity {
     @Column(name = "assignment_history_id")
     private Long id;
 
-    @Column(columnDefinition = "TEXT")
-    private String submissionLink;
-
-    private String commitHash;
-
-    private Integer contentLength;
-
-    private LocalDateTime committedAt;
-
     @Enumerated(EnumType.STRING)
     private AssignmentSubmissionStatus submissionStatus;
 
     @Enumerated(EnumType.STRING)
     private SubmissionFailureType submissionFailureType;
+
+    private Integer contentLength;
+
+    @Column(columnDefinition = "TEXT")
+    private String submissionLink;
+
+    private String commitHash;
+
+    private LocalDateTime committedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "study_detail_id")

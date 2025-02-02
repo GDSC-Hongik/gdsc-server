@@ -35,11 +35,11 @@ public class StudyHistory extends BaseEntity {
     @Column(name = "study_history_id")
     private Long id;
 
-    private String repositoryLink;
-
     @Comment("수료 상태")
     @Enumerated(EnumType.STRING)
     private StudyHistoryStatus studyHistoryStatus;
+
+    private String repositoryLink;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
