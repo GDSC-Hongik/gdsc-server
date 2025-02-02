@@ -54,14 +54,14 @@ public class Order extends BaseEntity {
     @Comment("사용하려는 발급쿠폰 ID")
     private Long issuedCouponId;
 
-    @Embedded
-    private MoneyInfo moneyInfo;
-
     private String paymentKey;
 
     private ZonedDateTime approvedAt;
 
     private ZonedDateTime canceledAt;
+
+    @Embedded
+    private MoneyInfo moneyInfo;
 
     @Builder(access = AccessLevel.PRIVATE)
     private Order(
@@ -88,7 +88,7 @@ public class Order extends BaseEntity {
      * 쿠폰의 경우 사용 여부를 선택할 수 있습니다.
      */
     public static Order createPending(
-            String nanoId, Membership membership, @Nullable IssuedCoupon issuedCoupon, MoneyInfo moneyInfo) {
+            String nanoId, MoneyInfo moneyInfo, Membership membership, @Nullable IssuedCoupon issuedCoupon) {
         return Order.builder()
                 .status(OrderStatus.PENDING)
                 .nanoId(nanoId)
@@ -101,7 +101,7 @@ public class Order extends BaseEntity {
     }
 
     public static Order createFree(
-            String nanoId, Membership membership, @Nullable IssuedCoupon issuedCoupon, MoneyInfo moneyInfo) {
+            String nanoId, MoneyInfo moneyInfo, Membership membership, @Nullable IssuedCoupon issuedCoupon) {
         validateFreeOrder(moneyInfo);
         return Order.builder()
                 .status(OrderStatus.COMPLETED)

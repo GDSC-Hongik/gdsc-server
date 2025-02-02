@@ -190,7 +190,7 @@ public abstract class IntegrationTest {
         Recruitment recruitment = createRecruitment(ACADEMIC_YEAR, SEMESTER_TYPE, FEE);
 
         RecruitmentRound recruitmentRound =
-                RecruitmentRound.create(RECRUITMENT_ROUND_NAME, START_TO_END_PERIOD, recruitment, ROUND_TYPE);
+                RecruitmentRound.create(RECRUITMENT_ROUND_NAME, ROUND_TYPE, START_TO_END_PERIOD, recruitment);
 
         return recruitmentRoundRepository.save(recruitmentRound);
     }
@@ -206,13 +206,13 @@ public abstract class IntegrationTest {
         Recruitment recruitment = createRecruitment(academicYear, semesterType, fee);
 
         RecruitmentRound recruitmentRound =
-                RecruitmentRound.create(name, Period.of(startDate, endDate), recruitment, roundType);
+                RecruitmentRound.create(name, roundType, Period.of(startDate, endDate), recruitment);
         return recruitmentRoundRepository.save(recruitmentRound);
     }
 
     protected Recruitment createRecruitment(Integer academicYear, SemesterType semesterType, Money fee) {
         Recruitment recruitment = Recruitment.create(
-                academicYear, semesterType, fee, FEE_NAME, Period.of(SEMESTER_START_DATE, SEMESTER_END_DATE));
+                FEE_NAME, fee, Period.of(SEMESTER_START_DATE, SEMESTER_END_DATE), academicYear, semesterType);
         return recruitmentRepository.save(recruitment);
     }
 
@@ -230,45 +230,45 @@ public abstract class IntegrationTest {
 
     protected Study createStudy(Member mentor, Period period, Period applicationPeriod) {
         Study study = Study.create(
-                ACADEMIC_YEAR,
-                SEMESTER_TYPE,
-                STUDY_TITLE,
-                mentor,
-                period,
-                applicationPeriod,
-                TOTAL_WEEK,
                 ONLINE_STUDY,
+                STUDY_TITLE,
+                TOTAL_WEEK,
                 DAY_OF_WEEK,
                 STUDY_START_TIME,
-                STUDY_END_TIME);
+                STUDY_END_TIME,
+                period,
+                applicationPeriod,
+                mentor,
+                ACADEMIC_YEAR,
+                SEMESTER_TYPE);
 
         return studyRepository.save(study);
     }
 
     protected Study createNewStudy(Member mentor, Long totalWeek, Period period, Period applicationPeriod) {
         Study study = Study.create(
-                ACADEMIC_YEAR,
-                SEMESTER_TYPE,
-                STUDY_TITLE,
-                mentor,
-                period,
-                applicationPeriod,
-                totalWeek,
                 ONLINE_STUDY,
+                STUDY_TITLE,
+                totalWeek,
                 DAY_OF_WEEK,
                 STUDY_START_TIME,
-                STUDY_END_TIME);
+                STUDY_END_TIME,
+                period,
+                applicationPeriod,
+                mentor,
+                ACADEMIC_YEAR,
+                SEMESTER_TYPE);
 
         return studyRepository.save(study);
     }
 
     protected StudyDetail createStudyDetail(Study study, LocalDateTime startDate, LocalDateTime endDate) {
-        StudyDetail studyDetail = StudyDetail.create(study, 1L, ATTENDANCE_NUMBER, Period.of(startDate, endDate));
+        StudyDetail studyDetail = StudyDetail.create(1L, ATTENDANCE_NUMBER, Period.of(startDate, endDate), study);
         return studyDetailRepository.save(studyDetail);
     }
 
     protected StudyDetail createNewStudyDetail(Long week, Study study, LocalDateTime startDate, LocalDateTime endDate) {
-        StudyDetail studyDetail = StudyDetail.create(study, week, ATTENDANCE_NUMBER, Period.of(startDate, endDate));
+        StudyDetail studyDetail = StudyDetail.create(week, ATTENDANCE_NUMBER, Period.of(startDate, endDate), study);
         return studyDetailRepository.save(studyDetail);
     }
 
@@ -278,7 +278,7 @@ public abstract class IntegrationTest {
     }
 
     protected StudyAchievement createStudyAchievement(Member member, Study study, AchievementType achievementType) {
-        StudyAchievement studyAchievement = StudyAchievement.create(member, study, achievementType);
+        StudyAchievement studyAchievement = StudyAchievement.create(achievementType, member, study);
         return studyAchievementRepository.save(studyAchievement);
     }
 

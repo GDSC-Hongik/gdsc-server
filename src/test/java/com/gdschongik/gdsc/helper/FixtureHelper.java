@@ -73,10 +73,10 @@ public class FixtureHelper {
             SemesterType semesterType,
             Money fee) {
         Recruitment recruitment = Recruitment.create(
-                academicYear, semesterType, fee, FEE_NAME, Period.of(SEMESTER_START_DATE, SEMESTER_END_DATE));
+                FEE_NAME, fee, Period.of(SEMESTER_START_DATE, SEMESTER_END_DATE), academicYear, semesterType);
 
         return RecruitmentRound.create(
-                RECRUITMENT_ROUND_NAME, Period.of(startDate, endDate), recruitment, RoundType.FIRST);
+                RECRUITMENT_ROUND_NAME, RoundType.FIRST, Period.of(startDate, endDate), recruitment);
     }
 
     public Membership createMembership(Member member, RecruitmentRound recruitmentRound) {
@@ -90,17 +90,17 @@ public class FixtureHelper {
 
     public Study createStudy(Member mentor, Period period, Period applicationPeriod) {
         return Study.create(
-                ACADEMIC_YEAR,
-                SEMESTER_TYPE,
-                STUDY_TITLE,
-                mentor,
-                period,
-                applicationPeriod,
-                TOTAL_WEEK,
                 ONLINE_STUDY,
+                STUDY_TITLE,
+                TOTAL_WEEK,
                 DAY_OF_WEEK,
                 STUDY_START_TIME,
-                STUDY_END_TIME);
+                STUDY_END_TIME,
+                period,
+                applicationPeriod,
+                mentor,
+                ACADEMIC_YEAR,
+                SEMESTER_TYPE);
     }
 
     public Study createStudyWithMentor(Long mentorId, Period period, Period applicationPeriod) {
@@ -109,12 +109,12 @@ public class FixtureHelper {
     }
 
     public StudyDetail createStudyDetail(Study study, LocalDateTime startDate, LocalDateTime endDate) {
-        return StudyDetail.create(study, 1L, ATTENDANCE_NUMBER, Period.of(startDate, endDate));
+        return StudyDetail.create(1L, ATTENDANCE_NUMBER, Period.of(startDate, endDate), study);
     }
 
     public StudyDetail createNewStudyDetail(
             Long id, Study study, Long week, LocalDateTime startDate, LocalDateTime endDate) {
-        StudyDetail studyDetail = StudyDetail.create(study, week, ATTENDANCE_NUMBER, Period.of(startDate, endDate));
+        StudyDetail studyDetail = StudyDetail.create(week, ATTENDANCE_NUMBER, Period.of(startDate, endDate), study);
         ReflectionTestUtils.setField(studyDetail, "id", id);
         return studyDetail;
     }

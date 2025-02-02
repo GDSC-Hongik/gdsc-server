@@ -21,17 +21,17 @@ class CouponNameUtilTest {
         // given
         Member mentor = fixtureHelper.createMentor(1L);
         Study study = Study.create(
-                2025,
-                SemesterType.FIRST,
-                "기초 백엔드 스터디",
-                mentor,
-                STUDY_ONGOING_PERIOD,
-                Period.of(START_DATE.minusDays(10), START_DATE.minusDays(5)),
-                TOTAL_WEEK,
                 ONLINE_STUDY,
+                "기초 백엔드 스터디",
+                TOTAL_WEEK,
                 DAY_OF_WEEK,
                 STUDY_START_TIME,
-                STUDY_END_TIME);
+                STUDY_END_TIME,
+                STUDY_ONGOING_PERIOD,
+                Period.of(START_DATE.minusDays(10), START_DATE.minusDays(5)),
+                mentor,
+                2025,
+                SemesterType.FIRST);
 
         // when
         String couponName = couponNameUtil.generateStudyCompletionCouponName(study);

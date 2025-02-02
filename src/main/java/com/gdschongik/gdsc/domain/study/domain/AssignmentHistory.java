@@ -36,6 +36,21 @@ public class AssignmentHistory extends BaseEntity {
     @Column(name = "assignment_history_id")
     private Long id;
 
+    @Enumerated(EnumType.STRING)
+    private AssignmentSubmissionStatus submissionStatus;
+
+    @Enumerated(EnumType.STRING)
+    private SubmissionFailureType submissionFailureType;
+
+    private Integer contentLength;
+
+    @Column(columnDefinition = "TEXT")
+    private String submissionLink;
+
+    private String commitHash;
+
+    private LocalDateTime committedAt;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "study_detail_id")
     private StudyDetail studyDetail;
@@ -44,39 +59,24 @@ public class AssignmentHistory extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @Column(columnDefinition = "TEXT")
-    private String submissionLink;
-
-    private String commitHash;
-
-    private Integer contentLength;
-
-    private LocalDateTime committedAt;
-
-    @Enumerated(EnumType.STRING)
-    private AssignmentSubmissionStatus submissionStatus;
-
-    @Enumerated(EnumType.STRING)
-    private SubmissionFailureType submissionFailureType;
-
     @Builder(access = AccessLevel.PRIVATE)
     private AssignmentHistory(
-            StudyDetail studyDetail,
-            Member member,
             AssignmentSubmissionStatus submissionStatus,
-            SubmissionFailureType submissionFailureType) {
-        this.studyDetail = studyDetail;
-        this.member = member;
+            SubmissionFailureType submissionFailureType,
+            StudyDetail studyDetail,
+            Member member) {
         this.submissionStatus = submissionStatus;
         this.submissionFailureType = submissionFailureType;
+        this.studyDetail = studyDetail;
+        this.member = member;
     }
 
     public static AssignmentHistory create(StudyDetail studyDetail, Member member) {
         return AssignmentHistory.builder()
-                .studyDetail(studyDetail)
-                .member(member)
                 .submissionStatus(FAILURE)
                 .submissionFailureType(NOT_SUBMITTED)
+                .studyDetail(studyDetail)
+                .member(member)
                 .build();
     }
 

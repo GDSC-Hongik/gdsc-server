@@ -30,6 +30,9 @@ public class StudyAchievement extends BaseEntity {
     @Column(name = "study_achievement_id")
     private Long id;
 
+    @Enumerated(EnumType.STRING)
+    private AchievementType achievementType;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member student;
@@ -38,21 +41,18 @@ public class StudyAchievement extends BaseEntity {
     @JoinColumn(name = "study_id")
     private Study study;
 
-    @Enumerated(EnumType.STRING)
-    private AchievementType achievementType;
-
     @Builder(access = AccessLevel.PRIVATE)
-    private StudyAchievement(Member student, Study study, AchievementType achievementType) {
+    private StudyAchievement(AchievementType achievementType, Member student, Study study) {
+        this.achievementType = achievementType;
         this.student = student;
         this.study = study;
-        this.achievementType = achievementType;
     }
 
-    public static StudyAchievement create(Member student, Study study, AchievementType achievementType) {
+    public static StudyAchievement create(AchievementType achievementType, Member student, Study study) {
         return StudyAchievement.builder()
+                .achievementType(achievementType)
                 .student(student)
                 .study(study)
-                .achievementType(achievementType)
                 .build();
     }
 }
