@@ -40,11 +40,13 @@ public class StudyTest {
 
             // when & then
             assertThatThrownBy(() -> Study.create(
-                    ONLINE_STUDY, STUDY_TITLE,
+                            ONLINE_STUDY,
+                            STUDY_TITLE,
                             TOTAL_WEEK,
-                    DAY_OF_WEEK, STUDY_START_TIME,
+                            DAY_OF_WEEK,
+                            STUDY_START_TIME,
                             STUDY_END_TIME,
-                    START_TO_END_PERIOD,
+                            START_TO_END_PERIOD,
                             applicationPeriod,
                             guestMember,
                             ACADEMIC_YEAR,
@@ -62,11 +64,13 @@ public class StudyTest {
 
             // when & then
             assertThatThrownBy(() -> Study.create(
-                    ONLINE_STUDY, STUDY_TITLE,
+                            ONLINE_STUDY,
+                            STUDY_TITLE,
                             TOTAL_WEEK,
-                    DAY_OF_WEEK, STUDY_START_TIME,
+                            DAY_OF_WEEK,
+                            STUDY_START_TIME,
                             STUDY_END_TIME,
-                    period,
+                            period,
                             applicationPeriod,
                             member,
                             ACADEMIC_YEAR,
@@ -84,11 +88,13 @@ public class StudyTest {
 
             // when & then
             assertThatThrownBy(() -> Study.create(
-                    ONLINE_STUDY, STUDY_TITLE,
+                            ONLINE_STUDY,
+                            STUDY_TITLE,
                             TOTAL_WEEK,
-                    DAY_OF_WEEK, null,
+                            DAY_OF_WEEK,
                             null,
-                    period,
+                            null,
+                            period,
                             applicationPeriod,
                             member,
                             ACADEMIC_YEAR,
@@ -108,11 +114,13 @@ public class StudyTest {
 
             // when & then
             assertThatThrownBy(() -> Study.create(
-                    ONLINE_STUDY, STUDY_TITLE,
+                            ONLINE_STUDY,
+                            STUDY_TITLE,
                             TOTAL_WEEK,
-                    DAY_OF_WEEK, studyStartTime,
+                            DAY_OF_WEEK,
+                            studyStartTime,
                             studyEndTime,
-                    period,
+                            period,
                             applicationPeriod,
                             member,
                             ACADEMIC_YEAR,
@@ -132,11 +140,13 @@ public class StudyTest {
 
             // when & then
             assertThatThrownBy(() -> Study.create(
-                    ASSIGNMENT_STUDY, STUDY_TITLE,
+                            ASSIGNMENT_STUDY,
+                            STUDY_TITLE,
                             TOTAL_WEEK,
-                    DAY_OF_WEEK, studyStartTime,
+                            DAY_OF_WEEK,
+                            studyStartTime,
                             studyEndTime,
-                    period,
+                            period,
                             applicationPeriod,
                             member,
                             ACADEMIC_YEAR,

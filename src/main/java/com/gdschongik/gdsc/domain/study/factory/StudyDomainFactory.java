@@ -18,9 +18,11 @@ public class StudyDomainFactory {
     public Study createNewStudy(StudyCreateRequest request, Member mentor) {
         LocalDate endDate = request.startDate().plusWeeks(request.totalWeek()).minusDays(1);
         return Study.create(
-                request.studyType(), request.title(),
+                request.studyType(),
+                request.title(),
                 request.totalWeek(),
-                request.dayOfWeek(), request.studyStartTime(),
+                request.dayOfWeek(),
+                request.studyStartTime(),
                 request.studyEndTime(),
                 Period.of(request.startDate().atStartOfDay(), endDate.atTime(LocalTime.MAX)),
                 Period.of(

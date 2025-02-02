@@ -21,9 +21,11 @@ class CouponNameUtilTest {
         // given
         Member mentor = fixtureHelper.createMentor(1L);
         Study study = Study.create(
-                ONLINE_STUDY, "기초 백엔드 스터디",
+                ONLINE_STUDY,
+                "기초 백엔드 스터디",
                 TOTAL_WEEK,
-                DAY_OF_WEEK, STUDY_START_TIME,
+                DAY_OF_WEEK,
+                STUDY_START_TIME,
                 STUDY_END_TIME,
                 STUDY_ONGOING_PERIOD,
                 Period.of(START_DATE.minusDays(10), START_DATE.minusDays(5)),

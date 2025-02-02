@@ -88,9 +88,11 @@ public class FixtureHelper {
 
     public Study createStudy(Member mentor, Period period, Period applicationPeriod) {
         return Study.create(
-                ONLINE_STUDY, STUDY_TITLE,
+                ONLINE_STUDY,
+                STUDY_TITLE,
                 TOTAL_WEEK,
-                DAY_OF_WEEK, STUDY_START_TIME,
+                DAY_OF_WEEK,
+                STUDY_START_TIME,
                 STUDY_END_TIME,
                 period,
                 applicationPeriod,
