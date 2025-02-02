@@ -49,6 +49,9 @@ public class Member extends BaseEntity {
 
     private String studentId;
 
+    @Enumerated(EnumType.STRING)
+    private Department department;
+
     private String email;
 
     private String univEmail;
@@ -66,9 +69,6 @@ public class Member extends BaseEntity {
 
     private LocalDateTime lastLoginAt;
 
-    @Enumerated(EnumType.STRING)
-    private Department department;
-
     @Embedded
     private AssociateRequirement associateRequirement;
 
@@ -80,6 +80,7 @@ public class Member extends BaseEntity {
             MemberStudyRole studyRole,
             String name,
             String studentId,
+            Department department,
             String email,
             String univEmail,
             String phone,
@@ -87,7 +88,6 @@ public class Member extends BaseEntity {
             String nickname,
             String oauthId,
             LocalDateTime lastLoginAt,
-            Department department,
             AssociateRequirement associateRequirement) {
         this.status = status;
         this.role = role;
@@ -95,6 +95,7 @@ public class Member extends BaseEntity {
         this.studyRole = studyRole;
         this.name = name;
         this.studentId = studentId;
+        this.department = department;
         this.email = email;
         this.univEmail = univEmail;
         this.phone = phone;
@@ -102,7 +103,6 @@ public class Member extends BaseEntity {
         this.nickname = nickname;
         this.oauthId = oauthId;
         this.lastLoginAt = lastLoginAt;
-        this.department = department;
         this.associateRequirement = associateRequirement;
     }
 
