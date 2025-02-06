@@ -3,6 +3,7 @@ package com.gdschongik.gdsc.domain.studyv2.dto.request;
 import com.gdschongik.gdsc.domain.common.vo.Period;
 import com.gdschongik.gdsc.domain.common.vo.Semester;
 import com.gdschongik.gdsc.domain.study.domain.StudyType;
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import java.time.DayOfWeek;
@@ -16,9 +17,9 @@ public record StudyCreateRequest(
         String descriptionNotionLink,
         @NotNull Semester semester,
         @NotNull @Positive Integer totalRound,
-        DayOfWeek dayOfWeek,
-        LocalTime startTime,
-        LocalTime endTime,
+        @Nullable DayOfWeek dayOfWeek,
+        @Nullable LocalTime startTime,
+        @Nullable LocalTime endTime,
         @NotNull Period applicationPeriod,
         String discordChannelId,
         String discordRoleId) {}
