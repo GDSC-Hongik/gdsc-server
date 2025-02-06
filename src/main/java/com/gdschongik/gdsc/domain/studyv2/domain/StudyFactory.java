@@ -31,6 +31,51 @@ public class StudyFactory {
             String discordRoleId,
             Member mentor,
             AttendanceNumberGenerator attendanceNumberGenerator) {
+        if (type.isLive()) {
+            return createLive(
+                    type,
+                    title,
+                    description,
+                    descriptionNotionLink,
+                    semester,
+                    totalRound,
+                    dayOfWeek,
+                    startTime,
+                    endTime,
+                    applicationPeriod,
+                    discordChannelId,
+                    discordRoleId,
+                    mentor,
+                    attendanceNumberGenerator);
+        } else {
+            return createAssignment(
+                    title,
+                    description,
+                    descriptionNotionLink,
+                    semester,
+                    totalRound,
+                    applicationPeriod,
+                    discordChannelId,
+                    discordRoleId,
+                    mentor);
+        }
+    }
+
+    private StudyV2 createLive(
+            StudyType type,
+            String title,
+            String description,
+            String descriptionNotionLink,
+            Semester semester,
+            Integer totalRound,
+            DayOfWeek dayOfWeek,
+            LocalTime startTime,
+            LocalTime endTime,
+            Period applicationPeriod,
+            String discordChannelId,
+            String discordRoleId,
+            Member mentor,
+            AttendanceNumberGenerator attendanceNumberGenerator) {
         StudyV2 study = StudyV2.createLive(
                 type,
                 title,
@@ -48,6 +93,32 @@ public class StudyFactory {
 
         IntStream.rangeClosed(1, totalRound)
                 .forEach(round -> StudySessionV2.createEmpty(round, attendanceNumberGenerator.generate(), study));
+
+        return study;
+    }
+
+    public StudyV2 createAssignment(
+            String title,
+            String description,
+            String descriptionNotionLink,
+            Semester semester,
+            Integer totalRound,
+            Period applicationPeriod,
+            String discordChannelId,
+            String discordRoleId,
+            Member mentor) {
+        StudyV2 study = StudyV2.createAssignment(
+                title,
+                description,
+                descriptionNotionLink,
+                semester,
+                totalRound,
+                applicationPeriod,
+                discordChannelId,
+                discordRoleId,
+                mentor);
+
+        IntStream.rangeClosed(1, totalRound).forEach(round -> StudySessionV2.createEmpty(round, null, study));
 
         return study;
     }
