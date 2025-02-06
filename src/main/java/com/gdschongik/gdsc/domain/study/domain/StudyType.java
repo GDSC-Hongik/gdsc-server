@@ -11,4 +11,8 @@ public enum StudyType {
     OFFLINE("오프라인 스터디");
 
     private final String value;
+
+    public boolean isLive() {
+        return this == ONLINE || this == OFFLINE;
+    }
 }

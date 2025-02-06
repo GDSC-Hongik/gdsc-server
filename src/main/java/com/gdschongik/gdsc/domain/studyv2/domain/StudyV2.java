@@ -161,7 +161,7 @@ public class StudyV2 extends BaseEntity {
     }
 
     private static void validateLiveStudy(StudyType type) {
-        if (!(type == StudyType.ONLINE || type == StudyType.OFFLINE)) {
+        if (!type.isLive()) {
             throw new CustomException(ErrorCode.STUDY_NOT_CREATABLE_NOT_LIVE);
         }
     }
