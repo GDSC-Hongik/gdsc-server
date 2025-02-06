@@ -31,7 +31,7 @@ public class StudyFactory {
             String discordRoleId,
             Member mentor,
             AttendanceNumberGenerator attendanceNumberGenerator) {
-        StudyV2 study = StudyV2.create(
+        StudyV2 study = StudyV2.createLive(
                 type,
                 title,
                 description,

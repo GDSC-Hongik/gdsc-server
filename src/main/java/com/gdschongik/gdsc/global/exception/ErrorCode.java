@@ -107,6 +107,7 @@ public enum ErrorCode {
     STUDY_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 스터디입니다."),
     STUDY_NOT_APPLICABLE(HttpStatus.CONFLICT, "스터디 신청기간이 아닙니다."),
     STUDY_NOT_CANCELABLE_APPLICATION_PERIOD(HttpStatus.CONFLICT, "스터디 신청기간이 아니라면 취소할 수 없습니다."),
+    STUDY_NOT_CREATABLE_NOT_LIVE(HttpStatus.INTERNAL_SERVER_ERROR, "온라인 및 오프라인 타입만 라이브 스터디로 생성할 수 있습니다."),
 
     // StudyDetail
     STUDY_DETAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 스터디 상세 정보입니다."),
