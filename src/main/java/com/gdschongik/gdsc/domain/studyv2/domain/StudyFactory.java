@@ -92,7 +92,8 @@ public class StudyFactory {
                 mentor);
 
         IntStream.rangeClosed(1, totalRound)
-                .forEach(round -> StudySessionV2.createEmpty(round, attendanceNumberGenerator.generate(), study));
+                .forEach(
+                        round -> StudySessionV2.createEmptyForLive(round, attendanceNumberGenerator.generate(), study));
 
         return study;
     }
@@ -118,7 +119,7 @@ public class StudyFactory {
                 discordRoleId,
                 mentor);
 
-        IntStream.rangeClosed(1, totalRound).forEach(round -> StudySessionV2.createEmpty(round, null, study));
+        IntStream.rangeClosed(1, totalRound).forEach(round -> StudySessionV2.createEmptyForAssignment(round, study));
 
         return study;
     }
