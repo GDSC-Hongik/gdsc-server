@@ -98,7 +98,7 @@ public class StudyFactory {
         return study;
     }
 
-    public StudyV2 createAssignment(
+    private StudyV2 createAssignment(
             String title,
             String description,
             String descriptionNotionLink,
