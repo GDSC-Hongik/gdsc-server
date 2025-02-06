@@ -49,6 +49,34 @@ class StudyFactoryTest {
     }
 
     @Test
+    void 과제_스터디_생성시_라이브_세션_관련_필드가_제외된다() {
+        // given
+        Member mentor = fixtureHelper.createMentor(1L);
+
+        // when
+        StudyV2 study = studyFactory.create(
+                StudyType.ASSIGNMENT,
+                STUDY_TITLE,
+                STUDY_DESCRIPTION,
+                STUDY_DESCRIPTION_NOTION_LINK,
+                STUDY_SEMESTER,
+                TOTAL_ROUND,
+                DAY_OF_WEEK,
+                STUDY_START_TIME,
+                STUDY_END_TIME,
+                STUDY_APPLICATION_PERIOD,
+                STUDY_DISCORD_CHANNEL_ID,
+                STUDY_DISCORD_ROLE_ID,
+                mentor,
+                null);
+
+        // then
+        assertThat(study.getDayOfWeek()).isNull();
+        assertThat(study.getStartTime()).isNull();
+        assertThat(study.getEndTime()).isNull();
+    }
+
+    @Test
     void 스터디_생성시_스터디회차는_순서대로_position이_지정되어_생성된다() {
         // given
         Member mentor = fixtureHelper.createMentor(1L);
@@ -79,7 +107,7 @@ class StudyFactoryTest {
     }
 
     @Test
-    void 스터디_생성시_각_스터디회차에_출석번호가_생성된다() {
+    void 라이브_스터디_생성시_각_스터디회차에_출석번호가_생성된다() {
         // given
         Member mentor = fixtureHelper.createMentor(1L);
         AttendanceNumberGenerator generator = new FixedAttendanceNumberGenerator();
@@ -105,5 +133,33 @@ class StudyFactoryTest {
         assertThat(study.getStudySessions())
                 .extracting(StudySessionV2::getLessonAttendanceNumber)
                 .containsOnly("0000");
+    }
+
+    @Test
+    void 과제_스터디_생성시_스터디회차에_출석번호가_생성되지_않는다() {
+        // given
+        Member mentor = fixtureHelper.createMentor(1L);
+
+        // when
+        StudyV2 study = studyFactory.create(
+                StudyType.ASSIGNMENT,
+                STUDY_TITLE,
+                STUDY_DESCRIPTION,
+                STUDY_DESCRIPTION_NOTION_LINK,
+                STUDY_SEMESTER,
+                TOTAL_ROUND,
+                DAY_OF_WEEK,
+                STUDY_START_TIME,
+                STUDY_END_TIME,
+                STUDY_APPLICATION_PERIOD,
+                STUDY_DISCORD_CHANNEL_ID,
+                STUDY_DISCORD_ROLE_ID,
+                mentor,
+                null);
+
+        // then
+        assertThat(study.getStudySessions())
+                .extracting(StudySessionV2::getLessonAttendanceNumber)
+                .containsOnly((String) null);
     }
 }
