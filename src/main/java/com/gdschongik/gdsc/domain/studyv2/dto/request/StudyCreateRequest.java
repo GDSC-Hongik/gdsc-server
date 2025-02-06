@@ -22,4 +22,6 @@ public record StudyCreateRequest(
         @Nullable LocalTime endTime,
         @NotNull Period applicationPeriod,
         String discordChannelId,
-        String discordRoleId) {}
+        String discordRoleId) {
+    // TODO: 라이브 세션 관련 필드의 경우 VO로 묶기
+}
