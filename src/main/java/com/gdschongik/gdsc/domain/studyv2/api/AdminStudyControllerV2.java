@@ -20,7 +20,7 @@ public class AdminStudyControllerV2 {
 
     private final AdminStudyServiceV2 adminStudyServiceV2;
 
-    @Operation(summary = "스터디 개설", description = "스터디를 개설합니다. 빈 스터디회차를 함께 생성합니다.")
+    @Operation(summary = "스터디 개설", description = "스터디를 개설합니다. 빈 스터디회차를 함께 생성합니다. 과제 스터디의 경우 라이브 세션 관련 필드는 null이어야 합니다.")
     @PostMapping
     public ResponseEntity<Void> createStudy(@Valid @RequestBody StudyCreateRequest request) {
         adminStudyServiceV2.createStudy(request);
