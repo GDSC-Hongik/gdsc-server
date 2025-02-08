@@ -46,7 +46,7 @@ public class CouponEventHandlerTest extends IntegrationTest {
 
             // then
             IssuedCoupon issuedCoupon = issuedCouponRepository
-                    .findUnrevokedIssuedStudyCoupon(CouponType.STUDY_COMPLETION, student, study)
+                    .findFetchUnrevokedIssuedStudyCoupon(CouponType.STUDY_COMPLETION, student, study)
                     .orElseThrow();
             Coupon coupon = issuedCoupon.getCoupon();
             assertThat(coupon.getCouponType()).isEqualTo(CouponType.STUDY_COMPLETION);
@@ -74,7 +74,7 @@ public class CouponEventHandlerTest extends IntegrationTest {
 
             // then
             IssuedCoupon issuedCoupon = issuedCouponRepository
-                    .findUnrevokedIssuedStudyCoupon(CouponType.STUDY_COMPLETION, student, study)
+                    .findFetchUnrevokedIssuedStudyCoupon(CouponType.STUDY_COMPLETION, student, study)
                     .orElseThrow();
             assertThat(issuedCoupon.getCoupon().getId()).isEqualTo(coupon.getId());
         }
@@ -117,7 +117,7 @@ public class CouponEventHandlerTest extends IntegrationTest {
             couponEventHandler.handleStudyHistoryCompletedEvent(
                     new StudyHistoriesCompletedEvent(List.of(student.getId())));
             IssuedCoupon issuedCoupon = issuedCouponRepository
-                    .findUnrevokedIssuedStudyCoupon(CouponType.STUDY_COMPLETION, student, study)
+                    .findFetchUnrevokedIssuedStudyCoupon(CouponType.STUDY_COMPLETION, student, study)
                     .orElseThrow();
 
             // when

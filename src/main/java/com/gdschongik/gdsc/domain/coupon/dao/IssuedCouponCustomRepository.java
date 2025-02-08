@@ -14,4 +14,6 @@ public interface IssuedCouponCustomRepository {
     Page<IssuedCoupon> findAllIssuedCoupons(IssuedCouponQueryOption queryOption, Pageable pageable);
 
     Optional<IssuedCoupon> findUnrevokedIssuedStudyCoupon(CouponType couponType, Member member, Study study);
+
+    Optional<IssuedCoupon> findFetchUnrevokedIssuedStudyCoupon(CouponType couponType, Member member, Study study);
 }
