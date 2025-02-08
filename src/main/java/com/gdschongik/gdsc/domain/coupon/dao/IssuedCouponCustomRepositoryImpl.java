@@ -43,6 +43,7 @@ public class IssuedCouponCustomRepositoryImpl implements IssuedCouponCustomRepos
         return Optional.ofNullable(queryFactory
                 .selectFrom(issuedCoupon)
                 .leftJoin(issuedCoupon.coupon, coupon)
+                .fetchJoin()
                 .where(eqMember(member)
                         .and(coupon.study.eq(study))
                         .and(hasRevoked(false))
