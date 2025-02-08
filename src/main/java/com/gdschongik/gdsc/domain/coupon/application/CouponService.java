@@ -13,6 +13,7 @@ import com.gdschongik.gdsc.domain.coupon.dto.request.CouponCreateRequest;
 import com.gdschongik.gdsc.domain.coupon.dto.request.CouponIssueRequest;
 import com.gdschongik.gdsc.domain.coupon.dto.request.IssuedCouponQueryOption;
 import com.gdschongik.gdsc.domain.coupon.dto.response.CouponResponse;
+import com.gdschongik.gdsc.domain.coupon.dto.response.CouponTypeResponse;
 import com.gdschongik.gdsc.domain.coupon.dto.response.IssuedCouponResponse;
 import com.gdschongik.gdsc.domain.coupon.util.CouponNameUtil;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
@@ -23,6 +24,7 @@ import com.gdschongik.gdsc.domain.study.domain.Study;
 import com.gdschongik.gdsc.domain.study.domain.StudyHistory;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -144,5 +146,9 @@ public class CouponService {
         issuedCouponRepository.save(issuedCoupon);
 
         log.info("[CouponService] 스터디 수료 쿠폰 회수: issuedCouponId={}", issuedCoupon.getId());
+    }
+
+    public List<CouponTypeResponse> getCouponTypes() {
+        return Arrays.stream(CouponType.values()).map(CouponTypeResponse::from).toList();
     }
 }

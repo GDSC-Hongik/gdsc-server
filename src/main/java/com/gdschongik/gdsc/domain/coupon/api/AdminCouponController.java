@@ -5,6 +5,7 @@ import com.gdschongik.gdsc.domain.coupon.dto.request.CouponCreateRequest;
 import com.gdschongik.gdsc.domain.coupon.dto.request.CouponIssueRequest;
 import com.gdschongik.gdsc.domain.coupon.dto.request.IssuedCouponQueryOption;
 import com.gdschongik.gdsc.domain.coupon.dto.response.CouponResponse;
+import com.gdschongik.gdsc.domain.coupon.dto.response.CouponTypeResponse;
 import com.gdschongik.gdsc.domain.coupon.dto.response.IssuedCouponResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -41,6 +42,13 @@ public class AdminCouponController {
     @GetMapping
     public ResponseEntity<List<CouponResponse>> getCoupons() {
         List<CouponResponse> response = couponService.findAllCoupons();
+        return ResponseEntity.ok().body(response);
+    }
+
+    @Operation(summary = "쿠폰 종류 조회", description = "발급 가능한 모든 쿠폰 종류를 조회합니다.")
+    @GetMapping
+    public ResponseEntity<List<CouponTypeResponse>> getCouponTypes() {
+        List<CouponTypeResponse> response = couponService.getCouponTypes();
         return ResponseEntity.ok().body(response);
     }
 
