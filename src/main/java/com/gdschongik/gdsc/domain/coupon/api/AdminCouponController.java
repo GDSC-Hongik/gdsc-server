@@ -45,7 +45,7 @@ public class AdminCouponController {
         return ResponseEntity.ok().body(response);
     }
 
-    @Operation(summary = "쿠폰 종류 조회", description = "발급 가능한 모든 쿠폰 종류를 조회합니다.")
+    @Operation(summary = "쿠폰 종류 목록 조회", description = "발급 가능한 모든 쿠폰 종류 목록을 조회합니다.")
     @GetMapping("/types")
     public ResponseEntity<List<CouponTypeResponse>> getCouponTypes() {
         List<CouponTypeResponse> response = couponService.getCouponTypes();
