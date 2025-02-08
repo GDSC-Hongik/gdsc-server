@@ -10,6 +10,7 @@ import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.study.domain.Study;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -52,7 +53,7 @@ public class IssuedCouponCustomRepositoryImpl implements IssuedCouponCustomRepos
 
     @Override
     public Optional<IssuedCoupon> findFetchIssuedCoupon(
-            CouponType couponType, Member member, Study study, boolean hasRevoked) {
+            CouponType couponType, Member member, @Nullable Study study, boolean hasRevoked) {
         return Optional.ofNullable(queryFactory
                 .selectFrom(issuedCoupon)
                 .leftJoin(issuedCoupon.coupon, coupon)
