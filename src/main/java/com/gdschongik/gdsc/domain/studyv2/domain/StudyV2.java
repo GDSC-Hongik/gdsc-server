@@ -5,6 +5,8 @@ import com.gdschongik.gdsc.domain.common.vo.Period;
 import com.gdschongik.gdsc.domain.common.vo.Semester;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.study.domain.StudyType;
+import com.gdschongik.gdsc.global.exception.CustomException;
+import com.gdschongik.gdsc.global.exception.ErrorCode;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -123,7 +125,10 @@ public class StudyV2 extends BaseEntity {
         this.mentor = mentor;
     }
 
-    public static StudyV2 create(
+    /**
+     * 라이브 스터디를 생성합니다.
+     */
+    public static StudyV2 createLive(
             StudyType type,
             String title,
             String description,
@@ -137,6 +142,7 @@ public class StudyV2 extends BaseEntity {
             String discordChannelId,
             String discordRoleId,
             Member mentor) {
+        validateLiveStudy(type);
         return StudyV2.builder()
                 .type(type)
                 .title(title)
@@ -147,6 +153,39 @@ public class StudyV2 extends BaseEntity {
                 .dayOfWeek(dayOfWeek)
                 .startTime(startTime)
                 .endTime(endTime)
+                .applicationPeriod(applicationPeriod)
+                .discordChannelId(discordChannelId)
+                .discordRoleId(discordRoleId)
+                .mentor(mentor)
+                .build();
+    }
+
+    private static void validateLiveStudy(StudyType type) {
+        if (!type.isLive()) {
+            throw new CustomException(ErrorCode.STUDY_NOT_CREATABLE_NOT_LIVE);
+        }
+    }
+
+    /**
+     * 과제 스터디를 생성합니다.
+     */
+    public static StudyV2 createAssignment(
+            String title,
+            String description,
+            String descriptionNotionLink,
+            Semester semester,
+            Integer totalRound,
+            Period applicationPeriod,
+            String discordChannelId,
+            String discordRoleId,
+            Member mentor) {
+        return StudyV2.builder()
+                .type(StudyType.ASSIGNMENT)
+                .title(title)
+                .description(description)
+                .descriptionNotionLink(descriptionNotionLink)
+                .semester(semester)
+                .totalRound(totalRound)
                 .applicationPeriod(applicationPeriod)
                 .discordChannelId(discordChannelId)
                 .discordRoleId(discordRoleId)
