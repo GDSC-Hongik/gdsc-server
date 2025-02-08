@@ -51,16 +51,16 @@ public class IssuedCouponCustomRepositoryImpl implements IssuedCouponCustomRepos
     }
 
     @Override
-    public Optional<IssuedCoupon> findFetchUnrevokedIssuedStudyCoupon(
-            CouponType couponType, Member member, Study study) {
+    public Optional<IssuedCoupon> findFetchIssuedCoupon(
+            CouponType couponType, Member member, Study study, boolean hasRevoked) {
         return Optional.ofNullable(queryFactory
                 .selectFrom(issuedCoupon)
                 .leftJoin(issuedCoupon.coupon, coupon)
                 .fetchJoin()
                 .where(eqMember(member)
-                        .and(coupon.study.eq(study))
-                        .and(hasRevoked(false))
-                        .and(coupon.couponType.eq(couponType)))
+                        .and(eqStudy(study))
+                        .and(hasRevoked(hasRevoked))
+                        .and(eqCouponType(couponType)))
                 .fetchFirst());
     }
 }
