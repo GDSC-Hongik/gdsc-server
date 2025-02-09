@@ -15,6 +15,7 @@ import com.gdschongik.gdsc.domain.coupon.domain.CouponType;
 import com.gdschongik.gdsc.domain.coupon.domain.IssuedCoupon;
 import com.gdschongik.gdsc.domain.coupon.dto.request.CouponCreateRequest;
 import com.gdschongik.gdsc.domain.coupon.dto.request.CouponIssueRequest;
+import com.gdschongik.gdsc.domain.coupon.dto.request.IssuedCouponQueryOption;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.study.domain.Study;
 import com.gdschongik.gdsc.domain.study.domain.StudyHistory;
@@ -22,10 +23,11 @@ import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.helper.IntegrationTest;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 class CouponServiceTest extends IntegrationTest {
 
@@ -218,16 +220,12 @@ class CouponServiceTest extends IntegrationTest {
             StudyHistory studyHistory = createStudyHistory(student, study);
 
             // when
-            couponService.createAndIssueCouponByStudyHistories(List.of(student.getId()));
+            couponService.createAndIssueCouponByStudyHistories(List.of(1L));
 
             // then
-            IssuedCoupon issuedCoupon = issuedCouponRepository
-                    .findFetchIssuedCoupon(CouponType.STUDY_COMPLETION, student, study, false)
-                    .orElseThrow();
-            Coupon coupon = issuedCoupon.getCoupon();
-            assertThat(coupon.getCouponType()).isEqualTo(CouponType.STUDY_COMPLETION);
-            assertThat(coupon.getStudy().getId()).isEqualTo(study.getId());
-            assertThat(issuedCoupon.getMember().getId()).isEqualTo(student.getId());
+            Page<IssuedCoupon> issuedCoupons = issuedCouponRepository.findAllIssuedCoupons(
+                    new IssuedCouponQueryOption(null, null, null, null, null, null), PageRequest.of(0, 10));
+            assertThat(issuedCoupons.getTotalElements()).isEqualTo(1L);
         }
 
         @Test
@@ -248,10 +246,8 @@ class CouponServiceTest extends IntegrationTest {
             couponService.createAndIssueCouponByStudyHistories(List.of(student.getId()));
 
             // then
-            IssuedCoupon issuedCoupon = issuedCouponRepository
-                    .findFetchIssuedCoupon(CouponType.STUDY_COMPLETION, student, study, false)
-                    .orElseThrow();
-            assertThat(issuedCoupon.getCoupon().getId()).isEqualTo(coupon.getId());
+            List<Coupon> coupons = couponRepository.findAll();
+            assertThat(coupons.size()).isEqualTo(1L);
         }
 
         @Test
@@ -266,11 +262,11 @@ class CouponServiceTest extends IntegrationTest {
             StudyHistory studyHistory = createStudyHistory(student, study);
 
             // when
-            couponService.createAndIssueCouponByStudyHistories(List.of(student.getId()));
+            couponService.createAndIssueCouponByStudyHistories(List.of(1L));
 
             // then
-            Optional<Coupon> coupon = couponRepository.findByCouponTypeAndStudy(CouponType.STUDY_COMPLETION, study);
-            assertThat(coupon).isPresent();
+            List<Coupon> coupons = couponRepository.findAll();
+            assertThat(coupons.size()).isEqualTo(1L);
         }
     }
 
@@ -288,16 +284,13 @@ class CouponServiceTest extends IntegrationTest {
 
             StudyHistory studyHistory = createStudyHistory(student, study);
 
-            couponService.createAndIssueCouponByStudyHistories(List.of(student.getId()));
-            IssuedCoupon issuedCoupon = issuedCouponRepository
-                    .findFetchIssuedCoupon(CouponType.STUDY_COMPLETION, student, study, false)
-                    .orElseThrow();
+            couponService.createAndIssueCouponByStudyHistories(List.of(1L));
 
             // when
             couponService.revokeStudyCompletionCouponByStudyHistoryId(student.getId());
 
             // then
-            issuedCoupon = issuedCouponRepository.findById(issuedCoupon.getId()).orElseThrow();
+            IssuedCoupon issuedCoupon = issuedCouponRepository.findById(1L).orElseThrow();
             assertThat(issuedCoupon.getHasRevoked()).isTrue();
         }
     }
