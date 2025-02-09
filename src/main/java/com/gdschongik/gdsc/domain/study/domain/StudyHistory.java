@@ -35,11 +35,11 @@ public class StudyHistory extends BaseEntity {
     @Column(name = "study_history_id")
     private Long id;
 
-    private String repositoryLink;
-
     @Comment("수료 상태")
     @Enumerated(EnumType.STRING)
-    private StudyHistoryStatus status;
+    private StudyHistoryStatus studyHistoryStatus;
+
+    private String repositoryLink;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -50,14 +50,14 @@ public class StudyHistory extends BaseEntity {
     private Study study;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private StudyHistory(StudyHistoryStatus status, Member student, Study study) {
-        this.status = status;
+    private StudyHistory(Member student, Study study) {
+        this.studyHistoryStatus = NONE;
         this.student = student;
         this.study = study;
     }
 
     public static StudyHistory create(Member student, Study study) {
-        return StudyHistory.builder().status(NONE).student(student).study(study).build();
+        return StudyHistory.builder().student(student).study(study).build();
     }
 
     @PreRemove
@@ -76,14 +76,14 @@ public class StudyHistory extends BaseEntity {
      * 스터디 수료
      */
     public void complete() {
-        status = COMPLETED;
+        studyHistoryStatus = COMPLETED;
     }
 
     /**
      * 스터디 수료 철회
      */
     public void withdrawCompletion() {
-        status = NONE;
+        studyHistoryStatus = NONE;
         registerEvent(new StudyHistoryCompletionWithdrawnEvent(this.id));
     }
 
@@ -93,6 +93,6 @@ public class StudyHistory extends BaseEntity {
     }
 
     public boolean isCompleted() {
-        return status == COMPLETED;
+        return studyHistoryStatus == COMPLETED;
     }
 }

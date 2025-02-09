@@ -41,7 +41,7 @@ public class StudyHistoryV2 extends BaseEntity {
 
     @Comment("수료 상태")
     @Enumerated(EnumType.STRING)
-    private StudyHistoryStatus studyHistoryStatus;
+    private StudyHistoryStatus status;
 
     private String repositoryLink;
 
@@ -54,14 +54,18 @@ public class StudyHistoryV2 extends BaseEntity {
     private StudyV2 study;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private StudyHistoryV2(Member student, StudyV2 study) {
-        this.studyHistoryStatus = NONE;
+    private StudyHistoryV2(StudyHistoryStatus status, Member student, StudyV2 study) {
+        this.status = status;
         this.student = student;
         this.study = study;
     }
 
     public static StudyHistoryV2 create(Member student, StudyV2 study) {
-        return StudyHistoryV2.builder().student(student).study(study).build();
+        return StudyHistoryV2.builder()
+                .status(NONE)
+                .student(student)
+                .study(study)
+                .build();
     }
 
     @PreRemove
@@ -80,19 +84,19 @@ public class StudyHistoryV2 extends BaseEntity {
      * 스터디 수료
      */
     public void complete() {
-        studyHistoryStatus = COMPLETED;
+        this.status = COMPLETED;
     }
 
     /**
      * 스터디 수료 철회
      */
     public void withdrawCompletion() {
-        studyHistoryStatus = NONE;
+        this.status = NONE;
         registerEvent(new StudyHistoryCompletionWithdrawnEvent(this.id));
     }
 
     // 데이터 전달 로직
     public boolean isCompleted() {
-        return studyHistoryStatus == COMPLETED;
+        return this.status == COMPLETED;
     }
 }
