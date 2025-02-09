@@ -4,6 +4,7 @@ import static com.gdschongik.gdsc.domain.studyv2.domain.QStudyV2.*;
 
 import com.gdschongik.gdsc.domain.studyv2.domain.StudyV2;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 
@@ -20,5 +21,14 @@ public class StudyV2RepositoryImpl implements StudyV2CustomRepository {
                 .fetchJoin()
                 .where(studyV2.id.eq(id))
                 .fetchOne());
+    }
+
+    @Override
+    public List<StudyV2> findFetchAll() {
+        return queryFactory
+                .selectFrom(studyV2)
+                .join(studyV2.studySessions)
+                .fetchJoin()
+                .fetch();
     }
 }
