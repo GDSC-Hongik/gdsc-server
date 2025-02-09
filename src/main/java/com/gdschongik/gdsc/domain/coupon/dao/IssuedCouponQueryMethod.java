@@ -2,10 +2,8 @@ package com.gdschongik.gdsc.domain.coupon.dao;
 
 import static com.gdschongik.gdsc.domain.coupon.domain.QIssuedCoupon.issuedCoupon;
 
-import com.gdschongik.gdsc.domain.coupon.domain.CouponType;
 import com.gdschongik.gdsc.domain.coupon.dto.request.IssuedCouponQueryOption;
 import com.gdschongik.gdsc.domain.member.domain.Member;
-import com.gdschongik.gdsc.domain.study.domain.Study;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 
@@ -29,14 +27,6 @@ public interface IssuedCouponQueryMethod {
 
     default BooleanExpression eqCouponName(String couponName) {
         return couponName != null ? issuedCoupon.coupon.name.containsIgnoreCase(couponName) : null;
-    }
-
-    default BooleanExpression eqCouponType(CouponType couponType) {
-        return couponType != null ? issuedCoupon.coupon.couponType.eq(couponType) : null;
-    }
-
-    default BooleanExpression eqStudy(Study study) {
-        return study != null ? issuedCoupon.coupon.study.eq(study) : null;
     }
 
     default BooleanExpression hasUsed(Boolean hasUsed) {
