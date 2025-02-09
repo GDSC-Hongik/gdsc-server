@@ -6,14 +6,23 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import static java.math.BigDecimal.*;
 import static org.assertj.core.api.Assertions.*;
 
+import com.gdschongik.gdsc.domain.common.vo.Money;
+import com.gdschongik.gdsc.domain.common.vo.Period;
 import com.gdschongik.gdsc.domain.coupon.dao.CouponRepository;
 import com.gdschongik.gdsc.domain.coupon.dao.IssuedCouponRepository;
+import com.gdschongik.gdsc.domain.coupon.domain.Coupon;
+import com.gdschongik.gdsc.domain.coupon.domain.CouponType;
+import com.gdschongik.gdsc.domain.coupon.domain.IssuedCoupon;
 import com.gdschongik.gdsc.domain.coupon.dto.request.CouponCreateRequest;
 import com.gdschongik.gdsc.domain.coupon.dto.request.CouponIssueRequest;
+import com.gdschongik.gdsc.domain.member.domain.Member;
+import com.gdschongik.gdsc.domain.study.domain.Study;
+import com.gdschongik.gdsc.domain.study.domain.StudyHistory;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.helper.IntegrationTest;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -191,6 +200,105 @@ class CouponServiceTest extends IntegrationTest {
             assertThatThrownBy(() -> couponService.revokeIssuedCoupon(1L))
                     .isInstanceOf(CustomException.class)
                     .hasMessageContaining(COUPON_NOT_REVOKABLE_ALREADY_USED.getMessage());
+        }
+    }
+
+    @Nested
+    class 스터디_수료_쿠폰_발급시 {
+
+        @Test
+        void 발급쿠폰을_생성한다() {
+            // given
+            Member student = createRegularMember();
+            Member mentor = createMentor();
+            LocalDateTime now = LocalDateTime.now();
+            Study study =
+                    createStudy(mentor, Period.of(now.plusDays(5), now.plusDays(10)), Period.of(now.minusDays(5), now));
+
+            StudyHistory studyHistory = createStudyHistory(student, study);
+
+            // when
+            couponService.createAndIssueCouponByStudyHistories(List.of(student.getId()));
+
+            // then
+            IssuedCoupon issuedCoupon = issuedCouponRepository
+                    .findFetchIssuedCoupon(CouponType.STUDY_COMPLETION, student, study, false)
+                    .orElseThrow();
+            Coupon coupon = issuedCoupon.getCoupon();
+            assertThat(coupon.getCouponType()).isEqualTo(CouponType.STUDY_COMPLETION);
+            assertThat(coupon.getStudy().getId()).isEqualTo(study.getId());
+            assertThat(issuedCoupon.getMember().getId()).isEqualTo(student.getId());
+        }
+
+        @Test
+        void 수료_쿠폰이_이미_존재한다면_새로_생성하지_않는다() {
+            // given
+            Member student = createRegularMember();
+            Member mentor = createMentor();
+            LocalDateTime now = LocalDateTime.now();
+            Study study =
+                    createStudy(mentor, Period.of(now.plusDays(5), now.plusDays(10)), Period.of(now.minusDays(5), now));
+
+            StudyHistory studyHistory = createStudyHistory(student, study);
+
+            // when
+            Coupon coupon = couponRepository.save(
+                    Coupon.createAutomatic(COUPON_NAME, Money.FIVE_THOUSAND, CouponType.STUDY_COMPLETION, study));
+
+            couponService.createAndIssueCouponByStudyHistories(List.of(student.getId()));
+
+            // then
+            IssuedCoupon issuedCoupon = issuedCouponRepository
+                    .findFetchIssuedCoupon(CouponType.STUDY_COMPLETION, student, study, false)
+                    .orElseThrow();
+            assertThat(issuedCoupon.getCoupon().getId()).isEqualTo(coupon.getId());
+        }
+
+        @Test
+        void 수료_쿠폰이_없다면_새로_생성한다() {
+            // given
+            Member student = createRegularMember();
+            Member mentor = createMentor();
+            LocalDateTime now = LocalDateTime.now();
+            Study study =
+                    createStudy(mentor, Period.of(now.plusDays(5), now.plusDays(10)), Period.of(now.minusDays(5), now));
+
+            StudyHistory studyHistory = createStudyHistory(student, study);
+
+            // when
+            couponService.createAndIssueCouponByStudyHistories(List.of(student.getId()));
+
+            // then
+            Optional<Coupon> coupon = couponRepository.findByCouponTypeAndStudy(CouponType.STUDY_COMPLETION, study);
+            assertThat(coupon).isPresent();
+        }
+    }
+
+    @Nested
+    class 스터디_수료_쿠폰_회수시 {
+
+        @Test
+        void 발급쿠폰을_회수한다() {
+            // given
+            Member student = createRegularMember();
+            Member mentor = createMentor();
+            LocalDateTime now = LocalDateTime.now();
+            Study study =
+                    createStudy(mentor, Period.of(now.plusDays(5), now.plusDays(10)), Period.of(now.minusDays(5), now));
+
+            StudyHistory studyHistory = createStudyHistory(student, study);
+
+            couponService.createAndIssueCouponByStudyHistories(List.of(student.getId()));
+            IssuedCoupon issuedCoupon = issuedCouponRepository
+                    .findFetchIssuedCoupon(CouponType.STUDY_COMPLETION, student, study, false)
+                    .orElseThrow();
+
+            // when
+            couponService.revokeStudyCompletionCouponByStudyHistoryId(student.getId());
+
+            // then
+            issuedCoupon = issuedCouponRepository.findById(issuedCoupon.getId()).orElseThrow();
+            assertThat(issuedCoupon.getHasRevoked()).isTrue();
         }
     }
 }
