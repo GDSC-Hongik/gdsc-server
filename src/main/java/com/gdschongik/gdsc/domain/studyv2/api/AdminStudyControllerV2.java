@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "Admin Study V2", description = "스터디 V2 어드민 API입니다.")
 @RestController
-@RequestMapping("/admin/studies/v2")
+@RequestMapping("/v2/admin/studies")
 @RequiredArgsConstructor
 public class AdminStudyControllerV2 {
 
