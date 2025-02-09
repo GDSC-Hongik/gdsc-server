@@ -26,6 +26,6 @@ public record StudySessionManagerDto(
                 studySession.getLessonPeriod(),
                 studySession.getAssignmentDescriptionLink(),
                 studySession.getAssignmentPeriod(),
-                studySession.getStudyV2().getId());
+                studySession.getStudy().getId());
     }
 }

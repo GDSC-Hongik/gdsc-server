@@ -63,7 +63,7 @@ public class StudySessionV2 extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "study_v2_id")
-    private StudyV2 studyV2;
+    private StudyV2 study;
 
     /**
      * 모든 스터디회차는 인자로 전달되는 스터디 애그리거트 루트 엔티티에 종속됩니다.
@@ -80,7 +80,7 @@ public class StudySessionV2 extends BaseEntity {
             Period lessonPeriod,
             String assignmentDescriptionLink,
             Period assignmentPeriod,
-            StudyV2 studyV2) {
+            StudyV2 study) {
         this.position = position;
         this.title = title;
         this.description = description;
@@ -88,19 +88,19 @@ public class StudySessionV2 extends BaseEntity {
         this.lessonPeriod = lessonPeriod;
         this.assignmentDescriptionLink = assignmentDescriptionLink;
         this.assignmentPeriod = assignmentPeriod;
-        this.studyV2 = studyV2;
-        studyV2.getStudySessions().add(this);
+        this.study = study;
+        study.getStudySessions().add(this);
     }
 
-    public static void createEmptyForLive(Integer position, String lessonAttendanceNumber, StudyV2 studyV2) {
+    public static void createEmptyForLive(Integer position, String lessonAttendanceNumber, StudyV2 study) {
         StudySessionV2.builder()
                 .position(position)
                 .lessonAttendanceNumber(lessonAttendanceNumber)
-                .studyV2(studyV2)
+                .study(study)
                 .build();
     }
 
-    public static void createEmptyForAssignment(Integer position, StudyV2 studyV2) {
-        StudySessionV2.builder().position(position).studyV2(studyV2).build();
+    public static void createEmptyForAssignment(Integer position, StudyV2 study) {
+        StudySessionV2.builder().position(position).study(study).build();
     }
 }
