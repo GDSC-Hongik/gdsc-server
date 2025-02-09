@@ -225,7 +225,7 @@ class CouponServiceTest extends IntegrationTest {
             // then
             Page<IssuedCoupon> issuedCoupons = issuedCouponRepository.findAllIssuedCoupons(
                     new IssuedCouponQueryOption(null, null, null, null, null, null), PageRequest.of(0, 10));
-            assertThat(issuedCoupons.getTotalElements()).isEqualTo(1L);
+            assertThat(issuedCoupons).hasSize(1);
         }
 
         @Test
@@ -247,7 +247,7 @@ class CouponServiceTest extends IntegrationTest {
 
             // then
             List<Coupon> coupons = couponRepository.findAll();
-            assertThat(coupons.size()).isEqualTo(1L);
+            assertThat(coupons).hasSize(1);
         }
 
         @Test
@@ -266,7 +266,7 @@ class CouponServiceTest extends IntegrationTest {
 
             // then
             List<Coupon> coupons = couponRepository.findAll();
-            assertThat(coupons.size()).isEqualTo(1L);
+            assertThat(coupons).hasSize(1);
         }
     }
 
