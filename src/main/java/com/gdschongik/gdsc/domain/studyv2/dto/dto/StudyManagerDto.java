@@ -3,6 +3,7 @@ package com.gdschongik.gdsc.domain.studyv2.dto.dto;
 import com.gdschongik.gdsc.domain.common.vo.Period;
 import com.gdschongik.gdsc.domain.common.vo.Semester;
 import com.gdschongik.gdsc.domain.study.domain.StudyType;
+import com.gdschongik.gdsc.domain.studyv2.domain.StudyV2;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 
@@ -23,4 +24,22 @@ public record StudyManagerDto(
         Period applicationPeriod,
         String discordChannelId,
         String discordRoleId,
-        Long mentorId) {}
+        Long mentorId) {
+    public static StudyManagerDto from(StudyV2 study) {
+        return new StudyManagerDto(
+                study.getId(),
+                study.getType(),
+                study.getTitle(),
+                study.getDescription(),
+                study.getDescriptionNotionLink(),
+                study.getSemester(),
+                study.getTotalRound(),
+                study.getDayOfWeek(),
+                study.getStartTime(),
+                study.getEndTime(),
+                study.getApplicationPeriod(),
+                study.getDiscordChannelId(),
+                study.getDiscordRoleId(),
+                study.getMentor().getId());
+    }
+}
