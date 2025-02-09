@@ -9,7 +9,9 @@ import com.gdschongik.gdsc.domain.studyv2.domain.AttendanceNumberGenerator;
 import com.gdschongik.gdsc.domain.studyv2.domain.StudyFactory;
 import com.gdschongik.gdsc.domain.studyv2.domain.StudyV2;
 import com.gdschongik.gdsc.domain.studyv2.dto.request.StudyCreateRequest;
+import com.gdschongik.gdsc.domain.studyv2.dto.response.StudyManagerResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -52,5 +54,12 @@ public class AdminStudyServiceV2 {
         studyV2Repository.save(study);
 
         log.info("[AdminStudyService] 스터디 생성 완료: studyId = {}", study.getId());
+    }
+
+    @Transactional(readOnly = true)
+    public List<StudyManagerResponse> getAllStudies() {
+        return studyV2Repository.findFetchAll().stream()
+                .map(StudyManagerResponse::from)
+                .toList();
     }
 }
