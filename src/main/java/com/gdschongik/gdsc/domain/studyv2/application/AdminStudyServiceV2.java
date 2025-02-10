@@ -53,7 +53,7 @@ public class AdminStudyServiceV2 {
         memberRepository.save(mentor);
         studyV2Repository.save(study);
 
-        log.info("[AdminStudyService] 스터디 생성 완료: studyId = {}", study.getId());
+        log.info("[AdminStudyServiceV2] 스터디 생성 완료: studyId = {}", study.getId());
     }
 
     @Transactional(readOnly = true)
@@ -61,5 +61,12 @@ public class AdminStudyServiceV2 {
         return studyV2Repository.findFetchAll().stream()
                 .map(StudyManagerResponse::from)
                 .toList();
+    }
+
+    @Transactional
+    public void deleteStudy(Long studyId) {
+        studyV2Repository.deleteById(studyId);
+
+        log.info("[AdminStudyServiceV2] 스터디 삭제 완료: studyId = {}", studyId);
     }
 }
