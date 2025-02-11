@@ -109,6 +109,9 @@ public enum ErrorCode {
     STUDY_NOT_CANCELABLE_APPLICATION_PERIOD(HttpStatus.CONFLICT, "스터디 신청기간이 아니라면 취소할 수 없습니다."),
     STUDY_NOT_CREATABLE_NOT_LIVE(HttpStatus.INTERNAL_SERVER_ERROR, "온라인 및 오프라인 타입만 라이브 스터디로 생성할 수 있습니다."),
 
+    // StudySession
+    STUDY_SESSION_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 스터디 세션입니다."),
+
     // StudyDetail
     STUDY_DETAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 스터디 상세 정보입니다."),
     STUDY_DETAIL_UPDATE_RESTRICTED_TO_MENTOR(HttpStatus.CONFLICT, "해당 스터디의 멘토만 수정할 수 있습니다."),
