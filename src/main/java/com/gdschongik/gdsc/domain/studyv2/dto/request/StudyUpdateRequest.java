@@ -23,8 +23,8 @@ public record StudyUpdateRequest(
             @Nullable String assignmentDescriptionLink,
             @Nullable Period assignmentPeriod) {}
 
-    public static StudyUpdateCommand toCommand(StudyUpdateRequest request) {
-        var sessionCommands = request.studySessions().stream()
+    public StudyUpdateCommand toCommand() {
+        var sessionCommands = studySessions().stream()
                 .map(studySession -> new StudyUpdateCommand.Session(
                         studySession.studySessionId(),
                         studySession.title(),
@@ -35,12 +35,6 @@ public record StudyUpdateRequest(
                 .toList();
 
         return new StudyUpdateCommand(
-                request.title(),
-                request.description(),
-                request.descriptionNotionLink(),
-                request.dayOfWeek(),
-                request.startTime(),
-                request.endTime(),
-                sessionCommands);
+                title, description, descriptionNotionLink, dayOfWeek, startTime, endTime, sessionCommands);
     }
 }
