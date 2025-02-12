@@ -110,7 +110,7 @@ public class StudySessionV2 extends BaseEntity {
     // 데이터 변경 로직
 
     public void update(StudyUpdateCommand.Session command) {
-        validateLessonFieldNullWhenAssignmentStudy(lessonPeriod);
+        validateLessonFieldNullWhenAssignmentStudy(command.lessonPeriod());
         this.title = command.title();
         this.description = command.description();
         this.lessonPeriod = command.lessonPeriod();
