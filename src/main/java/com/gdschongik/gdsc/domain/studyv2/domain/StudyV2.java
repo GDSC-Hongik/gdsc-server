@@ -209,7 +209,7 @@ public class StudyV2 extends BaseEntity {
             getStudySession(sessionCommand.studySessionId()).update(sessionCommand);
         });
 
-        validateLessonSuccession();
+        validateLessonTimeOrderMatchesPosition();
     }
 
     private StudySessionV2 getStudySession(Long studySessionId) {
@@ -222,7 +222,7 @@ public class StudyV2 extends BaseEntity {
     /**
      * 위치에 따라 정렬된 스터디회차의 수업 진행일들의 순차성을 검증합니다.
      */
-    private void validateLessonSuccession() {
+    private void validateLessonTimeOrderMatchesPosition() {
         List<Long> sessionIdsByPosition = studySessions.stream()
                 .sorted(Comparator.comparing(StudySessionV2::getPosition))
                 .map(StudySessionV2::getId)
