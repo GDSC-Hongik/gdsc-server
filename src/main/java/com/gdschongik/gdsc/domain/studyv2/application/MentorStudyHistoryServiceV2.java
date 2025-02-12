@@ -37,10 +37,12 @@ public class MentorStudyHistoryServiceV2 {
         StudyV2 study = studyV2Repository
                 .findById(request.studyId())
                 .orElseThrow(() -> new CustomException(ErrorCode.STUDY_NOT_FOUND));
+
+        studyValidatorV2.validateStudyMentor(currentMember, study);
+
         List<StudyHistoryV2> studyHistories =
                 studyHistoryV2Repository.findAllByStudyIdAndStudentIds(request.studyId(), request.studentIds());
 
-        studyValidatorV2.validateStudyMentor(currentMember, study);
         studyHistoryValidatorV2.validateAppliedToStudy(
                 studyHistories.size(), request.studentIds().size());
 
@@ -61,10 +63,12 @@ public class MentorStudyHistoryServiceV2 {
         StudyV2 study = studyV2Repository
                 .findById(request.studyId())
                 .orElseThrow(() -> new CustomException(ErrorCode.STUDY_NOT_FOUND));
+
+        studyValidatorV2.validateStudyMentor(currentMember, study);
+
         List<StudyHistoryV2> studyHistories =
                 studyHistoryV2Repository.findAllByStudyIdAndStudentIds(request.studyId(), request.studentIds());
 
-        studyValidatorV2.validateStudyMentor(currentMember, study);
         studyHistoryValidatorV2.validateAppliedToStudy(
                 studyHistories.size(), request.studentIds().size());
 
