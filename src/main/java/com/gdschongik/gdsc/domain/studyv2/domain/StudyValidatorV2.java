@@ -7,7 +7,7 @@ import com.gdschongik.gdsc.global.annotation.DomainService;
 import com.gdschongik.gdsc.global.exception.CustomException;
 
 @DomainService
-public class StudyValidator {
+public class StudyValidatorV2 {
 
     public void validateStudyMentor(Member currentMember, StudyV2 study) {
         // 해당 스터디의 담당 멘토인지 검증

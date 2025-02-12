@@ -6,7 +6,7 @@ import com.gdschongik.gdsc.global.annotation.DomainService;
 import com.gdschongik.gdsc.global.exception.CustomException;
 
 @DomainService
-public class StudyHistoryValidator {
+public class StudyHistoryValidatorV2 {
 
     public void validateAppliedToStudy(long countStudyHistory, int studentCount) {
         if (countStudyHistory != studentCount) {
