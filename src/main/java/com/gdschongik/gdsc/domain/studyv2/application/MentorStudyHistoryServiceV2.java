@@ -56,5 +56,25 @@ public class MentorStudyHistoryServiceV2 {
     }
 
     @Transactional
-    public void withdrawStudyCompletion(StudyCompleteRequest request) {}
+    public void withdrawStudyCompletion(StudyCompleteRequest request) {
+        Member currentMember = memberUtil.getCurrentMember();
+        StudyV2 study = studyV2Repository
+                .findById(request.studyId())
+                .orElseThrow(() -> new CustomException(ErrorCode.STUDY_NOT_FOUND));
+        List<StudyHistoryV2> studyHistories =
+                studyHistoryV2Repository.findAllByStudyIdAndStudentIds(request.studyId(), request.studentIds());
+
+        studyValidator.validateStudyMentor(currentMember, study);
+        studyHistoryValidator.validateAppliedToStudy(
+                studyHistories.size(), request.studentIds().size());
+
+        studyHistories.forEach(StudyHistoryV2::withdrawCompletion);
+
+        studyHistoryV2Repository.saveAll(studyHistories);
+
+        log.info(
+                "[MentorStudyHistoryServiceV2] 스터디 수료 철회: studyId={}, studentIds={}",
+                request.studyId(),
+                request.studentIds());
+    }
 }
