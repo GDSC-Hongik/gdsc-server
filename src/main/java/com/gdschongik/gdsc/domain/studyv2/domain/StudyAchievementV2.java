@@ -23,7 +23,9 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"member_id", "study_v2_id", "achievement_type"})})
+@Table(
+        name = "study_achievement_v2",
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"member_id", "study_v2_id", "achievement_type"})})
 public class StudyAchievementV2 extends BaseEntity {
 
     @Id
