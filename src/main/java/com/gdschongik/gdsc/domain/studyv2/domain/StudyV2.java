@@ -1,12 +1,13 @@
 package com.gdschongik.gdsc.domain.studyv2.domain;
 
+import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
+
 import com.gdschongik.gdsc.domain.common.model.BaseEntity;
 import com.gdschongik.gdsc.domain.common.vo.Period;
 import com.gdschongik.gdsc.domain.common.vo.Semester;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.study.domain.StudyType;
 import com.gdschongik.gdsc.global.exception.CustomException;
-import com.gdschongik.gdsc.global.exception.ErrorCode;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -25,6 +26,7 @@ import jakarta.persistence.Table;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -162,7 +164,7 @@ public class StudyV2 extends BaseEntity {
 
     private static void validateLiveStudy(StudyType type) {
         if (!type.isLive()) {
-            throw new CustomException(ErrorCode.STUDY_NOT_CREATABLE_NOT_LIVE);
+            throw new CustomException(STUDY_NOT_CREATABLE_NOT_LIVE);
         }
     }
 
@@ -191,5 +193,49 @@ public class StudyV2 extends BaseEntity {
                 .discordRoleId(discordRoleId)
                 .mentor(mentor)
                 .build();
+    }
+
+    // 데이터 변경 로직
+
+    public void update(StudyUpdateCommand command) {
+        this.title = command.title();
+        this.description = command.description();
+        this.descriptionNotionLink = command.descriptionNotionLink();
+        this.dayOfWeek = command.dayOfWeek();
+        this.startTime = command.startTime();
+        this.endTime = command.endTime();
+
+        command.studySessions().forEach(sessionCommand -> {
+            getStudySession(sessionCommand.studySessionId()).update(sessionCommand);
+        });
+
+        validateLessonTimeOrderMatchesPosition();
+    }
+
+    private StudySessionV2 getStudySession(Long studySessionId) {
+        return studySessions.stream()
+                .filter(session -> session.getId().equals(studySessionId))
+                .findFirst()
+                .orElseThrow(() -> new CustomException(STUDY_NOT_UPDATABLE_SESSION_NOT_FOUND));
+    }
+
+    /**
+     * 위치에 따라 정렬된 스터디회차의 수업 진행일들의 순차성을 검증합니다.
+     */
+    private void validateLessonTimeOrderMatchesPosition() {
+        List<Long> sessionIdsByPosition = studySessions.stream()
+                .sorted(Comparator.comparing(StudySessionV2::getPosition))
+                .map(StudySessionV2::getId)
+                .toList();
+
+        List<Long> sessionIdsByLessonStart = studySessions.stream()
+                .sorted(Comparator.comparing(
+                        session -> session.getLessonPeriod().getStartDate()))
+                .map(StudySessionV2::getId)
+                .toList();
+
+        if (!sessionIdsByPosition.equals(sessionIdsByLessonStart)) {
+            throw new CustomException(STUDY_NOT_UPDATABLE_LESSON_PERIOD_NOT_SEQUENTIAL);
+        }
     }
 }
