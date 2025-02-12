@@ -28,7 +28,7 @@ public class StudyAchievementV2 extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "study_achievement_id")
+    @Column(name = "study_achievement_v2_id")
     private Long id;
 
     @Enumerated(EnumType.STRING)
