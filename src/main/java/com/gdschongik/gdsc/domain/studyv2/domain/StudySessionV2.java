@@ -1,7 +1,10 @@
 package com.gdschongik.gdsc.domain.studyv2.domain;
 
+import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
+
 import com.gdschongik.gdsc.domain.common.model.BaseEntity;
 import com.gdschongik.gdsc.domain.common.vo.Period;
+import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -102,5 +105,26 @@ public class StudySessionV2 extends BaseEntity {
 
     public static void createEmptyForAssignment(Integer position, StudyV2 study) {
         StudySessionV2.builder().position(position).study(study).build();
+    }
+
+    // 데이터 변경 로직
+
+    public void update(StudyUpdateCommand.Session command) {
+        validateLessonFieldNullWhenAssignmentStudy(lessonPeriod);
+        this.title = command.title();
+        this.description = command.description();
+        this.lessonPeriod = command.lessonPeriod();
+        this.assignmentDescriptionLink = command.assignmentDescriptionLink();
+        this.assignmentPeriod = command.assignmentPeriod();
+    }
+
+    private void validateLessonFieldNullWhenAssignmentStudy(Period lessonPeriodToUpdate) {
+        if (study.getType().isLive()) {
+            return;
+        }
+
+        if (lessonPeriodToUpdate != null) {
+            throw new CustomException(STUDY_NOT_UPDATABLE_LESSON_FIELD_NOT_NULL);
+        }
     }
 }
