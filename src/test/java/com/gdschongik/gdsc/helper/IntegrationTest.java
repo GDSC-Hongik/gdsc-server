@@ -41,6 +41,10 @@ import com.gdschongik.gdsc.domain.study.domain.Study;
 import com.gdschongik.gdsc.domain.study.domain.StudyAchievement;
 import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
 import com.gdschongik.gdsc.domain.study.domain.StudyHistory;
+import com.gdschongik.gdsc.domain.study.domain.StudyType;
+import com.gdschongik.gdsc.domain.studyv2.dao.StudyV2Repository;
+import com.gdschongik.gdsc.domain.studyv2.domain.StudyFactory;
+import com.gdschongik.gdsc.domain.studyv2.domain.StudyV2;
 import com.gdschongik.gdsc.global.security.PrincipalDetails;
 import com.gdschongik.gdsc.infra.feign.payment.client.PaymentClient;
 import com.gdschongik.gdsc.infra.github.client.GithubClient;
@@ -63,6 +67,9 @@ public abstract class IntegrationTest {
 
     @Autowired
     protected RedisCleaner redisCleaner;
+
+    @Autowired
+    protected StudyFactory studyFactory;
 
     @Autowired
     protected MemberRepository memberRepository;
@@ -93,6 +100,9 @@ public abstract class IntegrationTest {
 
     @Autowired
     protected StudyAchievementRepository studyAchievementRepository;
+
+    @Autowired
+    protected StudyV2Repository studyV2Repository;
 
     @MockBean
     protected OnboardingRecruitmentService onboardingRecruitmentService;
@@ -285,5 +295,27 @@ public abstract class IntegrationTest {
     protected StudyDetail publishAssignment(StudyDetail studyDetail) {
         studyDetail.publishAssignment(ASSIGNMENT_TITLE, studyDetail.getPeriod().getEndDate(), DESCRIPTION_LINK);
         return studyDetailRepository.save(studyDetail);
+    }
+
+    // StudyV2
+
+    protected StudyV2 createStudy(StudyType type, Member mentor) {
+        StudyV2 study = studyFactory.create(
+                type,
+                STUDY_TITLE,
+                STUDY_DESCRIPTION,
+                STUDY_DESCRIPTION_NOTION_LINK,
+                STUDY_SEMESTER,
+                TOTAL_ROUND,
+                DAY_OF_WEEK,
+                STUDY_START_TIME,
+                STUDY_END_TIME,
+                STUDY_APPLICATION_PERIOD,
+                STUDY_DISCORD_CHANNEL_ID,
+                STUDY_DISCORD_ROLE_ID,
+                mentor,
+                () -> "0000");
+
+        return studyV2Repository.save(study);
     }
 }
