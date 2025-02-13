@@ -23,7 +23,7 @@ class StudyV2Test {
     }
 
     @Nested
-    class 스터디_업데이트할때 {
+    class 스터디_수정할때 {
 
         @Test
         void 성공한다() {
@@ -97,7 +97,7 @@ class StudyV2Test {
     }
 
     @Nested
-    class 스터디회차의_수업_시작일시_순차성을_검증할때 {
+    class 스터디_수정시_스터디회차의_수업_시작일시_순차성을_검증할때 {
 
         private StudyUpdateCommand.Session createSession(Long sessionId, LocalDate date) {
             // 수업 시간을 null로 지정할 수 잇음
