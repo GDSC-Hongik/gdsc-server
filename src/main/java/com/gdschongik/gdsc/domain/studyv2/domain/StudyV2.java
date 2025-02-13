@@ -24,6 +24,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.DayOfWeek;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -221,21 +222,33 @@ public class StudyV2 extends BaseEntity {
 
     /**
      * 위치에 따라 정렬된 스터디회차의 수업 진행일들의 순차성을 검증합니다.
+     * lessonPeriod가 null인 초기 StudySession은 검증에서 제외됩니다.
      */
     private void validateLessonTimeOrderMatchesPosition() {
-        List<Long> sessionIdsByPosition = studySessions.stream()
+        // position 순서로 정렬
+        List<StudySessionV2> sortedSessions = studySessions.stream()
                 .sorted(Comparator.comparing(StudySessionV2::getPosition))
-                .map(StudySessionV2::getId)
                 .toList();
 
-        List<Long> sessionIdsByLessonStart = studySessions.stream()
-                .sorted(Comparator.comparing(
-                        session -> session.getLessonPeriod().getStartDate()))
-                .map(StudySessionV2::getId)
-                .toList();
+        LocalDateTime previousStartDate = null;
 
-        if (!sessionIdsByPosition.equals(sessionIdsByLessonStart)) {
-            throw new CustomException(STUDY_NOT_UPDATABLE_LESSON_PERIOD_NOT_SEQUENTIAL);
+        for (StudySessionV2 session : sortedSessions) {
+            Period currentLessonPeriod = session.getLessonPeriod();
+
+            // lessonPeriod가 null인 경우 검증 제외
+            if (currentLessonPeriod == null) {
+                continue;
+            }
+
+            LocalDateTime currentStartDate = currentLessonPeriod.getStartDate();
+
+            // 이전 시작일이 존재하고, 현재 시작일이 이전 시작일보다 과거이거나 같은 경우 실패
+            if (previousStartDate != null
+                    && (currentStartDate.isBefore(previousStartDate) || currentStartDate.isEqual(previousStartDate))) {
+                throw new CustomException(STUDY_NOT_UPDATABLE_LESSON_PERIOD_NOT_SEQUENTIAL);
+            }
+
+            previousStartDate = currentStartDate;
         }
     }
 }
