@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(
         name = "study_achievement_v2",
-        uniqueConstraints = {@UniqueConstraint(columnNames = {"member_id", "study_v2_id", "achievement_type"})})
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"member_id", "study_v2_id", "type"})})
 public class StudyAchievementV2 extends BaseEntity {
 
     @Id
@@ -34,7 +34,7 @@ public class StudyAchievementV2 extends BaseEntity {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    private AchievementType achievementType;
+    private AchievementType type;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -45,15 +45,15 @@ public class StudyAchievementV2 extends BaseEntity {
     private StudyV2 study;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private StudyAchievementV2(AchievementType achievementType, Member student, StudyV2 study) {
-        this.achievementType = achievementType;
+    private StudyAchievementV2(AchievementType type, Member student, StudyV2 study) {
+        this.type = type;
         this.student = student;
         this.study = study;
     }
 
-    public static StudyAchievementV2 create(AchievementType achievementType, Member student, StudyV2 study) {
+    public static StudyAchievementV2 create(AchievementType type, Member student, StudyV2 study) {
         return StudyAchievementV2.builder()
-                .achievementType(achievementType)
+                .type(type)
                 .student(student)
                 .study(study)
                 .build();
