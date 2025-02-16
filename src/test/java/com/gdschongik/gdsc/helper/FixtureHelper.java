@@ -23,10 +23,16 @@ import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.domain.recruitment.domain.RoundType;
 import com.gdschongik.gdsc.domain.study.domain.Study;
 import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
+import com.gdschongik.gdsc.domain.study.domain.StudyType;
+import com.gdschongik.gdsc.domain.studyv2.domain.StudyFactory;
+import com.gdschongik.gdsc.domain.studyv2.domain.StudyV2;
 import java.time.LocalDateTime;
+import java.util.concurrent.atomic.AtomicLong;
 import org.springframework.test.util.ReflectionTestUtils;
 
 public class FixtureHelper {
+
+    StudyFactory studyFactory = new StudyFactory();
 
     public <T extends BaseEntity> void setId(T entity, Long id) {
         ReflectionTestUtils.setField(entity, "id", id);
@@ -124,5 +130,32 @@ public class FixtureHelper {
         StudyDetail studyDetail = createStudyDetail(study, startDate, endDate);
         studyDetail.publishAssignment(ASSIGNMENT_TITLE, deadline, DESCRIPTION_LINK);
         return studyDetail;
+    }
+
+    // StudyV2
+
+    public StudyV2 createStudy(StudyType type, Long studyId, Long firstStudySessionId, Long mentorId) {
+        StudyV2 study = studyFactory.create(
+                type,
+                STUDY_TITLE,
+                STUDY_DESCRIPTION,
+                STUDY_DESCRIPTION_NOTION_LINK,
+                STUDY_SEMESTER,
+                TOTAL_ROUND,
+                DAY_OF_WEEK,
+                STUDY_START_TIME,
+                STUDY_END_TIME,
+                STUDY_APPLICATION_PERIOD,
+                STUDY_DISCORD_CHANNEL_ID,
+                STUDY_DISCORD_ROLE_ID,
+                createMentor(mentorId),
+                () -> "0000");
+
+        setId(study, studyId);
+
+        AtomicLong currentStudySessionId = new AtomicLong(firstStudySessionId);
+        study.getStudySessions().forEach(session -> setId(session, currentStudySessionId.getAndIncrement()));
+
+        return study;
     }
 }
