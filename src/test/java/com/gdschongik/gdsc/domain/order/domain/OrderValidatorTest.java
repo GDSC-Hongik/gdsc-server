@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import com.gdschongik.gdsc.domain.common.model.SemesterType;
 import com.gdschongik.gdsc.domain.common.vo.Money;
+import com.gdschongik.gdsc.domain.coupon.domain.CouponType;
 import com.gdschongik.gdsc.domain.coupon.domain.IssuedCoupon;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.membership.domain.Membership;
@@ -45,7 +46,7 @@ class OrderValidatorTest {
     }
 
     private IssuedCoupon createAndIssue(Money money, Member member) {
-        return fixtureHelper.createAndIssue(money, member);
+        return fixtureHelper.createAndIssue(money, member, CouponType.ADMIN, null);
     }
 
     @Nested
@@ -294,7 +295,7 @@ class OrderValidatorTest {
             Membership membership = createMembership(currentMember, recruitmentRound);
 
             Order completedOrder = Order.createPending(
-                    "nanoId", membership, null, MoneyInfo.of(MONEY_20000_WON, Money.ZERO, MONEY_20000_WON));
+                    "nanoId", MoneyInfo.of(MONEY_20000_WON, Money.ZERO, MONEY_20000_WON), membership, null);
             completedOrder.complete("paymentKey", ZonedDateTime.now());
 
             Optional<IssuedCoupon> emptyIssuedCoupon = Optional.empty();
@@ -322,7 +323,7 @@ class OrderValidatorTest {
             issuedCoupon.use(LocalDateTime.now()); // 쿠폰을 사용 불가능한 상태로 만듦
 
             Order order = Order.createPending(
-                    "nanoId", membership, issuedCoupon, MoneyInfo.of(MONEY_20000_WON, MONEY_5000_WON, MONEY_15000_WON));
+                    "nanoId", MoneyInfo.of(MONEY_20000_WON, MONEY_5000_WON, MONEY_15000_WON), membership, issuedCoupon);
 
             Optional<IssuedCoupon> optionalIssuedCoupon = Optional.of(issuedCoupon);
 
@@ -349,7 +350,7 @@ class OrderValidatorTest {
             IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, anotherMember);
 
             Order order = Order.createPending(
-                    "nanoId", membership, issuedCoupon, MoneyInfo.of(MONEY_20000_WON, MONEY_5000_WON, MONEY_15000_WON));
+                    "nanoId", MoneyInfo.of(MONEY_20000_WON, MONEY_5000_WON, MONEY_15000_WON), membership, issuedCoupon);
 
             Optional<IssuedCoupon> optionalIssuedCoupon = Optional.of(issuedCoupon);
 
@@ -374,7 +375,7 @@ class OrderValidatorTest {
             Membership membership = createMembership(anotherMember, recruitmentRound);
 
             Order order = Order.createPending(
-                    "nanoId", membership, null, MoneyInfo.of(MONEY_20000_WON, Money.ZERO, MONEY_20000_WON));
+                    "nanoId", MoneyInfo.of(MONEY_20000_WON, Money.ZERO, MONEY_20000_WON), membership, null);
 
             Optional<IssuedCoupon> emptyIssuedCoupon = Optional.empty();
 
@@ -398,7 +399,7 @@ class OrderValidatorTest {
             Membership membership = createMembership(currentMember, recruitmentRound);
 
             Order order = Order.createPending(
-                    "nanoId", membership, null, MoneyInfo.of(MONEY_20000_WON, Money.ZERO, MONEY_20000_WON));
+                    "nanoId", MoneyInfo.of(MONEY_20000_WON, Money.ZERO, MONEY_20000_WON), membership, null);
 
             Optional<IssuedCoupon> emptyIssuedCoupon = Optional.empty();
 
@@ -423,7 +424,7 @@ class OrderValidatorTest {
 
             IssuedCoupon issuedCoupon = createAndIssue(MONEY_5000_WON, currentMember);
             Order order = Order.createPending(
-                    "nanoId", membership, issuedCoupon, MoneyInfo.of(MONEY_20000_WON, MONEY_5000_WON, MONEY_15000_WON));
+                    "nanoId", MoneyInfo.of(MONEY_20000_WON, MONEY_5000_WON, MONEY_15000_WON), membership, issuedCoupon);
 
             Optional<IssuedCoupon> optionalIssuedCoupon = Optional.of(issuedCoupon);
 

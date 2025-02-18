@@ -1,0 +1,9 @@
+package com.gdschongik.gdsc.domain.studyv2.dao;
+
+import com.gdschongik.gdsc.domain.studyv2.domain.StudyHistoryV2;
+import java.util.List;
+
+public interface StudyHistoryV2CustomRepository {
+
+    List<StudyHistoryV2> findAllByStudyIdAndStudentIds(Long studyId, List<Long> studentIds);
+}

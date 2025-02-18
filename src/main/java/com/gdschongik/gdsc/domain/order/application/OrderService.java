@@ -63,7 +63,7 @@ public class OrderService {
 
         orderValidator.validatePendingOrderCreate(membership, issuedCoupon, moneyInfo, currentMember);
 
-        Order order = Order.createPending(request.orderNanoId(), membership, issuedCoupon, moneyInfo);
+        Order order = Order.createPending(request.orderNanoId(), moneyInfo, membership, issuedCoupon);
 
         orderRepository.save(order);
 
@@ -168,7 +168,7 @@ public class OrderService {
 
         LocalDateTime now = LocalDateTime.now();
 
-        Order order = Order.createFree(request.orderNanoId(), membership, optionalIssuedCoupon.orElse(null), moneyInfo);
+        Order order = Order.createFree(request.orderNanoId(), moneyInfo, membership, optionalIssuedCoupon.orElse(null));
         optionalIssuedCoupon.ifPresent(issuedCoupon -> issuedCoupon.use(now));
 
         orderRepository.save(order);

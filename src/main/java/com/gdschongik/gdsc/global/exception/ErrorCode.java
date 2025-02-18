@@ -107,6 +107,10 @@ public enum ErrorCode {
     STUDY_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 스터디입니다."),
     STUDY_NOT_APPLICABLE(HttpStatus.CONFLICT, "스터디 신청기간이 아닙니다."),
     STUDY_NOT_CANCELABLE_APPLICATION_PERIOD(HttpStatus.CONFLICT, "스터디 신청기간이 아니라면 취소할 수 없습니다."),
+    STUDY_NOT_CREATABLE_NOT_LIVE(HttpStatus.INTERNAL_SERVER_ERROR, "온라인 및 오프라인 타입만 라이브 스터디로 생성할 수 있습니다."),
+    STUDY_NOT_UPDATABLE_SESSION_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 스터디에 수정하려는 스터디 회차 ID가 존재하지 않습니다."),
+    STUDY_NOT_UPDATABLE_LESSON_FIELD_NOT_NULL(HttpStatus.CONFLICT, "과제 스터디는 수업 관련 필드를 null로 설정할 수 없습니다."),
+    STUDY_NOT_UPDATABLE_LESSON_PERIOD_NOT_SEQUENTIAL(HttpStatus.CONFLICT, "뒷 수업의 시작시간은 앞 수업의 시작시간보다 빠를 수 없습니다."),
 
     // StudyDetail
     STUDY_DETAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 스터디 상세 정보입니다."),

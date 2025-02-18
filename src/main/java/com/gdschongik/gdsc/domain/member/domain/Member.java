@@ -34,6 +34,9 @@ public class Member extends BaseEntity {
     private Long id;
 
     @Enumerated(EnumType.STRING)
+    private MemberStatus status;
+
+    @Enumerated(EnumType.STRING)
     private MemberRole role;
 
     @Enumerated(EnumType.STRING)
@@ -41,9 +44,6 @@ public class Member extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private MemberStudyRole studyRole;
-
-    @Enumerated(EnumType.STRING)
-    private MemberStatus status;
 
     private String name;
 
@@ -54,66 +54,66 @@ public class Member extends BaseEntity {
 
     private String email;
 
+    private String univEmail;
+
     private String phone;
+
+    private String discordId;
 
     private String discordUsername;
 
     private String nickname;
-
-    private String discordId;
 
     @Column(nullable = false)
     private String oauthId;
 
     private LocalDateTime lastLoginAt;
 
-    private String univEmail;
-
     @Embedded
     private AssociateRequirement associateRequirement;
 
     @Builder(access = AccessLevel.PRIVATE)
     private Member(
+            MemberStatus status,
             MemberRole role,
             MemberManageRole manageRole,
             MemberStudyRole studyRole,
-            MemberStatus status,
             String name,
             String studentId,
             Department department,
             String email,
+            String univEmail,
             String phone,
             String discordUsername,
             String nickname,
             String oauthId,
             LocalDateTime lastLoginAt,
-            String univEmail,
             AssociateRequirement associateRequirement) {
+        this.status = status;
         this.role = role;
         this.manageRole = manageRole;
         this.studyRole = studyRole;
-        this.status = status;
         this.name = name;
         this.studentId = studentId;
         this.department = department;
         this.email = email;
+        this.univEmail = univEmail;
         this.phone = phone;
         this.discordUsername = discordUsername;
         this.nickname = nickname;
         this.oauthId = oauthId;
         this.lastLoginAt = lastLoginAt;
-        this.univEmail = univEmail;
         this.associateRequirement = associateRequirement;
     }
 
     public static Member createGuest(String oauthId) {
         AssociateRequirement associateRequirement = AssociateRequirement.unsatisfied();
         return Member.builder()
-                .oauthId(oauthId)
+                .status(MemberStatus.NORMAL)
                 .role(GUEST)
                 .manageRole(NONE)
                 .studyRole(STUDENT)
-                .status(MemberStatus.NORMAL)
+                .oauthId(oauthId)
                 .associateRequirement(associateRequirement)
                 .build();
     }
@@ -175,7 +175,7 @@ public class Member extends BaseEntity {
 
         associateRequirement.verifyInfo();
 
-        registerEvent(new MemberAssociateEvent(this.id));
+        registerEvent(new MemberAssociateRequirementUpdatedEvent(this.id));
     }
 
     /**
@@ -192,7 +192,7 @@ public class Member extends BaseEntity {
 
         associateRequirement.verifyUniv();
 
-        registerEvent(new MemberAssociateEvent(this.id));
+        registerEvent(new MemberAssociateRequirementUpdatedEvent(this.id));
     }
 
     /**
@@ -207,7 +207,7 @@ public class Member extends BaseEntity {
 
         associateRequirement.verifyDiscord();
 
-        registerEvent(new MemberAssociateEvent(this.id));
+        registerEvent(new MemberAssociateRequirementUpdatedEvent(this.id));
     }
 
     /**

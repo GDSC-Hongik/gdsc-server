@@ -133,6 +133,7 @@ public class StudentStudyHistoryService {
     }
 
     private AssignmentHistory findOrCreate(Member currentMember, StudyDetail studyDetail) {
+        // todo: create로 분기할 경우 내부에서 save 호출하도록 수정
         return assignmentHistoryRepository
                 .findByMemberAndStudyDetail(currentMember, studyDetail)
                 .orElseGet(() -> AssignmentHistory.create(studyDetail, currentMember));

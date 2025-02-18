@@ -18,19 +18,19 @@ public class StudyDomainFactory {
     public Study createNewStudy(StudyCreateRequest request, Member mentor) {
         LocalDate endDate = request.startDate().plusWeeks(request.totalWeek()).minusDays(1);
         return Study.create(
-                request.academicYear(),
-                request.semesterType(),
+                request.studyType(),
                 request.title(),
-                mentor,
+                request.totalWeek(),
+                request.dayOfWeek(),
+                request.studyStartTime(),
+                request.studyEndTime(),
                 Period.of(request.startDate().atStartOfDay(), endDate.atTime(LocalTime.MAX)),
                 Period.of(
                         request.applicationStartDate().atStartOfDay(),
                         request.applicationEndDate().atTime(LocalTime.MAX)),
-                request.totalWeek(),
-                request.studyType(),
-                request.dayOfWeek(),
-                request.studyStartTime(),
-                request.studyEndTime());
+                mentor,
+                request.academicYear(),
+                request.semesterType());
     }
 
     // 해당 주의 비어있는 스터디상세를 생성합니다.
@@ -40,6 +40,6 @@ public class StudyDomainFactory {
 
         String attendanceNumber =
                 new Random().ints(4, 0, 10).mapToObj(String::valueOf).reduce("", String::concat);
-        return StudyDetail.create(study, week, attendanceNumber, Period.of(startDate, endDate));
+        return StudyDetail.create(week, attendanceNumber, Period.of(startDate, endDate), study);
     }
 }

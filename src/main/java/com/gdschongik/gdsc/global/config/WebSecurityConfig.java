@@ -120,9 +120,9 @@ public class WebSecurityConfig {
                 .permitAll()
                 .requestMatchers("/onboarding/**")
                 .authenticated()
-                .requestMatchers("/admin/**")
+                .requestMatchers("/admin/**", "/v2/admin/**")
                 .hasRole("ADMIN")
-                .requestMatchers("/mentor/**")
+                .requestMatchers("/mentor/**", "/v2/mentor/**")
                 .hasAnyRole("MENTOR", "ADMIN")
                 .anyRequest()
                 .authenticated());

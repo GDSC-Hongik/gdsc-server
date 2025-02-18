@@ -1,6 +1,7 @@
 package com.gdschongik.gdsc.helper;
 
 import static com.gdschongik.gdsc.domain.member.domain.Department.*;
+import static com.gdschongik.gdsc.global.common.constant.CouponConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.MemberConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.RecruitmentConstant.*;
 import static com.gdschongik.gdsc.global.common.constant.StudyConstant.*;
@@ -13,6 +14,7 @@ import com.gdschongik.gdsc.domain.common.vo.Period;
 import com.gdschongik.gdsc.domain.coupon.dao.CouponRepository;
 import com.gdschongik.gdsc.domain.coupon.dao.IssuedCouponRepository;
 import com.gdschongik.gdsc.domain.coupon.domain.Coupon;
+import com.gdschongik.gdsc.domain.coupon.domain.CouponType;
 import com.gdschongik.gdsc.domain.coupon.domain.IssuedCoupon;
 import com.gdschongik.gdsc.domain.discord.application.handler.DelegateMemberDiscordEventHandler;
 import com.gdschongik.gdsc.domain.discord.application.handler.MemberDiscordRoleRevokeHandler;
@@ -39,6 +41,10 @@ import com.gdschongik.gdsc.domain.study.domain.Study;
 import com.gdschongik.gdsc.domain.study.domain.StudyAchievement;
 import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
 import com.gdschongik.gdsc.domain.study.domain.StudyHistory;
+import com.gdschongik.gdsc.domain.study.domain.StudyType;
+import com.gdschongik.gdsc.domain.studyv2.dao.StudyV2Repository;
+import com.gdschongik.gdsc.domain.studyv2.domain.StudyFactory;
+import com.gdschongik.gdsc.domain.studyv2.domain.StudyV2;
 import com.gdschongik.gdsc.global.security.PrincipalDetails;
 import com.gdschongik.gdsc.infra.feign.payment.client.PaymentClient;
 import com.gdschongik.gdsc.infra.github.client.GithubClient;
@@ -61,6 +67,9 @@ public abstract class IntegrationTest {
 
     @Autowired
     protected RedisCleaner redisCleaner;
+
+    @Autowired
+    protected StudyFactory studyFactory;
 
     @Autowired
     protected MemberRepository memberRepository;
@@ -91,6 +100,9 @@ public abstract class IntegrationTest {
 
     @Autowired
     protected StudyAchievementRepository studyAchievementRepository;
+
+    @Autowired
+    protected StudyV2Repository studyV2Repository;
 
     @MockBean
     protected OnboardingRecruitmentService onboardingRecruitmentService;
@@ -188,7 +200,7 @@ public abstract class IntegrationTest {
         Recruitment recruitment = createRecruitment(ACADEMIC_YEAR, SEMESTER_TYPE, FEE);
 
         RecruitmentRound recruitmentRound =
-                RecruitmentRound.create(RECRUITMENT_ROUND_NAME, START_TO_END_PERIOD, recruitment, ROUND_TYPE);
+                RecruitmentRound.create(RECRUITMENT_ROUND_NAME, ROUND_TYPE, START_TO_END_PERIOD, recruitment);
 
         return recruitmentRoundRepository.save(recruitmentRound);
     }
@@ -204,13 +216,13 @@ public abstract class IntegrationTest {
         Recruitment recruitment = createRecruitment(academicYear, semesterType, fee);
 
         RecruitmentRound recruitmentRound =
-                RecruitmentRound.create(name, Period.of(startDate, endDate), recruitment, roundType);
+                RecruitmentRound.create(name, roundType, Period.of(startDate, endDate), recruitment);
         return recruitmentRoundRepository.save(recruitmentRound);
     }
 
     protected Recruitment createRecruitment(Integer academicYear, SemesterType semesterType, Money fee) {
         Recruitment recruitment = Recruitment.create(
-                academicYear, semesterType, fee, FEE_NAME, Period.of(SEMESTER_START_DATE, SEMESTER_END_DATE));
+                FEE_NAME, fee, Period.of(SEMESTER_START_DATE, SEMESTER_END_DATE), academicYear, semesterType);
         return recruitmentRepository.save(recruitment);
     }
 
@@ -219,8 +231,8 @@ public abstract class IntegrationTest {
         return membershipRepository.save(membership);
     }
 
-    protected IssuedCoupon createAndIssue(Money money, Member member) {
-        Coupon coupon = Coupon.create("테스트쿠폰", money);
+    protected IssuedCoupon createAndIssue(Money money, Member member, CouponType couponType, Study study) {
+        Coupon coupon = Coupon.createAutomatic(COUPON_NAME, money, couponType, study);
         couponRepository.save(coupon);
         IssuedCoupon issuedCoupon = IssuedCoupon.create(coupon, member);
         return issuedCouponRepository.save(issuedCoupon);
@@ -228,45 +240,45 @@ public abstract class IntegrationTest {
 
     protected Study createStudy(Member mentor, Period period, Period applicationPeriod) {
         Study study = Study.create(
-                ACADEMIC_YEAR,
-                SEMESTER_TYPE,
-                STUDY_TITLE,
-                mentor,
-                period,
-                applicationPeriod,
-                TOTAL_WEEK,
                 ONLINE_STUDY,
+                STUDY_TITLE,
+                TOTAL_WEEK,
                 DAY_OF_WEEK,
                 STUDY_START_TIME,
-                STUDY_END_TIME);
+                STUDY_END_TIME,
+                period,
+                applicationPeriod,
+                mentor,
+                ACADEMIC_YEAR,
+                SEMESTER_TYPE);
 
         return studyRepository.save(study);
     }
 
     protected Study createNewStudy(Member mentor, Long totalWeek, Period period, Period applicationPeriod) {
         Study study = Study.create(
-                ACADEMIC_YEAR,
-                SEMESTER_TYPE,
-                STUDY_TITLE,
-                mentor,
-                period,
-                applicationPeriod,
-                totalWeek,
                 ONLINE_STUDY,
+                STUDY_TITLE,
+                totalWeek,
                 DAY_OF_WEEK,
                 STUDY_START_TIME,
-                STUDY_END_TIME);
+                STUDY_END_TIME,
+                period,
+                applicationPeriod,
+                mentor,
+                ACADEMIC_YEAR,
+                SEMESTER_TYPE);
 
         return studyRepository.save(study);
     }
 
     protected StudyDetail createStudyDetail(Study study, LocalDateTime startDate, LocalDateTime endDate) {
-        StudyDetail studyDetail = StudyDetail.create(study, 1L, ATTENDANCE_NUMBER, Period.of(startDate, endDate));
+        StudyDetail studyDetail = StudyDetail.create(1L, ATTENDANCE_NUMBER, Period.of(startDate, endDate), study);
         return studyDetailRepository.save(studyDetail);
     }
 
     protected StudyDetail createNewStudyDetail(Long week, Study study, LocalDateTime startDate, LocalDateTime endDate) {
-        StudyDetail studyDetail = StudyDetail.create(study, week, ATTENDANCE_NUMBER, Period.of(startDate, endDate));
+        StudyDetail studyDetail = StudyDetail.create(week, ATTENDANCE_NUMBER, Period.of(startDate, endDate), study);
         return studyDetailRepository.save(studyDetail);
     }
 
@@ -276,12 +288,34 @@ public abstract class IntegrationTest {
     }
 
     protected StudyAchievement createStudyAchievement(Member member, Study study, AchievementType achievementType) {
-        StudyAchievement studyAchievement = StudyAchievement.create(member, study, achievementType);
+        StudyAchievement studyAchievement = StudyAchievement.create(achievementType, member, study);
         return studyAchievementRepository.save(studyAchievement);
     }
 
     protected StudyDetail publishAssignment(StudyDetail studyDetail) {
         studyDetail.publishAssignment(ASSIGNMENT_TITLE, studyDetail.getPeriod().getEndDate(), DESCRIPTION_LINK);
         return studyDetailRepository.save(studyDetail);
+    }
+
+    // StudyV2
+
+    protected StudyV2 createStudy(StudyType type, Member mentor) {
+        StudyV2 study = studyFactory.create(
+                type,
+                STUDY_TITLE,
+                STUDY_DESCRIPTION,
+                STUDY_DESCRIPTION_NOTION_LINK,
+                STUDY_SEMESTER,
+                TOTAL_ROUND,
+                DAY_OF_WEEK,
+                STUDY_START_TIME,
+                STUDY_END_TIME,
+                STUDY_APPLICATION_PERIOD,
+                STUDY_DISCORD_CHANNEL_ID,
+                STUDY_DISCORD_ROLE_ID,
+                mentor,
+                () -> "0000");
+
+        return studyV2Repository.save(study);
     }
 }

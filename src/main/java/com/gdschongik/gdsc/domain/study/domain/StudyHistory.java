@@ -35,6 +35,12 @@ public class StudyHistory extends BaseEntity {
     @Column(name = "study_history_id")
     private Long id;
 
+    @Comment("수료 상태")
+    @Enumerated(EnumType.STRING)
+    private StudyHistoryStatus studyHistoryStatus;
+
+    private String repositoryLink;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member student;
@@ -43,17 +49,11 @@ public class StudyHistory extends BaseEntity {
     @JoinColumn(name = "study_id")
     private Study study;
 
-    private String repositoryLink;
-
-    @Comment("수료 상태")
-    @Enumerated(EnumType.STRING)
-    private StudyHistoryStatus studyHistoryStatus;
-
     @Builder(access = AccessLevel.PRIVATE)
     private StudyHistory(Member student, Study study) {
+        this.studyHistoryStatus = NONE;
         this.student = student;
         this.study = study;
-        this.studyHistoryStatus = NONE;
     }
 
     public static StudyHistory create(Member student, Study study) {
@@ -84,6 +84,7 @@ public class StudyHistory extends BaseEntity {
      */
     public void withdrawCompletion() {
         studyHistoryStatus = NONE;
+        registerEvent(new StudyHistoryCompletionWithdrawnEvent(this.id));
     }
 
     // 데이터 전달 로직
