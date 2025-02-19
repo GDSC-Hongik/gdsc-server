@@ -48,8 +48,8 @@ public class UrlConstant {
             Stream.concat(DEV_CLIENT_URLS.stream(), LOCAL_CLIENT_URLS.stream()).toList();
 
     // 서버 URL
-    public static final String PROD_SERVER_URL = "https://api.gdschongik.com";
-    public static final String DEV_SERVER_URL = "https://dev-api.gdschongik.com";
+    public static final String PROD_SERVER_URL = "https://api.wawoo.dev";
+    public static final String DEV_SERVER_URL = "https://dev-api.wawoo.dev";
     public static final String LOCAL_SERVER_URL = "http://localhost:8080";
 
     // 기타
