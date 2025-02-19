@@ -42,8 +42,10 @@ import com.gdschongik.gdsc.domain.study.domain.StudyAchievement;
 import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
 import com.gdschongik.gdsc.domain.study.domain.StudyHistory;
 import com.gdschongik.gdsc.domain.study.domain.StudyType;
+import com.gdschongik.gdsc.domain.studyv2.dao.StudyHistoryV2Repository;
 import com.gdschongik.gdsc.domain.studyv2.dao.StudyV2Repository;
 import com.gdschongik.gdsc.domain.studyv2.domain.StudyFactory;
+import com.gdschongik.gdsc.domain.studyv2.domain.StudyHistoryV2;
 import com.gdschongik.gdsc.domain.studyv2.domain.StudyV2;
 import com.gdschongik.gdsc.global.security.PrincipalDetails;
 import com.gdschongik.gdsc.infra.feign.payment.client.PaymentClient;
@@ -103,6 +105,9 @@ public abstract class IntegrationTest {
 
     @Autowired
     protected StudyV2Repository studyV2Repository;
+
+    @Autowired
+    protected StudyHistoryV2Repository studyHistoryV2Repository;
 
     @MockBean
     protected OnboardingRecruitmentService onboardingRecruitmentService;
@@ -231,7 +236,7 @@ public abstract class IntegrationTest {
         return membershipRepository.save(membership);
     }
 
-    protected IssuedCoupon createAndIssue(Money money, Member member, CouponType couponType, Study study) {
+    protected IssuedCoupon createAndIssue(Money money, Member member, CouponType couponType, StudyV2 study) {
         Coupon coupon = Coupon.createAutomatic(COUPON_NAME, money, couponType, study);
         couponRepository.save(coupon);
         IssuedCoupon issuedCoupon = IssuedCoupon.create(coupon, member);
@@ -317,5 +322,10 @@ public abstract class IntegrationTest {
                 () -> "0000");
 
         return studyV2Repository.save(study);
+    }
+
+    protected StudyHistoryV2 createStudyHistory(Member member, StudyV2 study) {
+        StudyHistoryV2 studyHistory = StudyHistoryV2.create(member, study);
+        return studyHistoryV2Repository.save(studyHistory);
     }
 }
