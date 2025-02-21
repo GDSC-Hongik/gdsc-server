@@ -89,7 +89,7 @@ public class FixtureHelper {
         return Membership.create(member, recruitmentRound);
     }
 
-    public IssuedCoupon createAndIssue(Money money, Member member, CouponType couponType, Study study) {
+    public IssuedCoupon createAndIssue(Money money, Member member, CouponType couponType, StudyV2 study) {
         Coupon coupon = Coupon.createAutomatic(COUPON_NAME, money, couponType, study);
         return IssuedCoupon.create(coupon, member);
     }
