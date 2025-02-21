@@ -39,14 +39,15 @@ public class MentorStudyAchievementServiceV2 {
     public void designateOutstandingStudent(Long studyId, OutstandingStudentRequest request) {
         Member currentMember = memberUtil.getCurrentMember();
         StudyV2 study = studyRepository.findById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
+        studyValidator.validateStudyMentor(currentMember, study);
+
         long studyHistoryCount = studyHistoryRepository.countByStudyIdAndStudentIds(studyId, request.studentIds());
+        studyHistoryValidator.validateAppliedToStudy(
+                studyHistoryCount, request.studentIds().size());
+
         long studyAchievementsAlreadyExistCount =
                 studyAchievementRepository.countByStudyIdAndAchievementTypeAndStudentIds(
                         studyId, request.achievementType(), request.studentIds());
-
-        studyValidator.validateStudyMentor(currentMember, study);
-        studyHistoryValidator.validateAppliedToStudy(
-                studyHistoryCount, request.studentIds().size());
         studyAchievementValidator.validateDesignateOutstandingStudent(studyAchievementsAlreadyExistCount);
 
         List<Member> outstandingStudents = memberRepository.findAllById(request.studentIds());
@@ -65,9 +66,9 @@ public class MentorStudyAchievementServiceV2 {
     public void withdrawOutstandingStudent(Long studyId, OutstandingStudentRequest request) {
         Member currentMember = memberUtil.getCurrentMember();
         StudyV2 study = studyRepository.findById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
-        long studyHistoryCount = studyHistoryRepository.countByStudyIdAndStudentIds(studyId, request.studentIds());
-
         studyValidator.validateStudyMentor(currentMember, study);
+
+        long studyHistoryCount = studyHistoryRepository.countByStudyIdAndStudentIds(studyId, request.studentIds());
         studyHistoryValidator.validateAppliedToStudy(
                 studyHistoryCount, request.studentIds().size());
 
