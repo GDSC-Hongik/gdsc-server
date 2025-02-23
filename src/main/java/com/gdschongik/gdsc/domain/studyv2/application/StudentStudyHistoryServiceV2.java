@@ -44,7 +44,7 @@ public class StudentStudyHistoryServiceV2 {
         studyHistoryV2Repository.save(studyHistory);
 
         log.info(
-                "[료StudentStudyHistoryServiceV2] 레포지토리 입력 완료: studyHistoryId={}, repositoryLink={}",
+                "[StudentStudyHistoryServiceV2] 레포지토리 입력 완료: studyHistoryId={}, repositoryLink={}",
                 studyHistory.getId(),
                 request.repositoryLink());
     }
