@@ -22,8 +22,8 @@ public class StudentStudyHistoryControllerV2 {
 
     @Operation(summary = "내 레포지토리 입력", description = "나의 과제 제출 레포지토리를 입력합니다.")
     @PutMapping("/repositories/me")
-    public ResponseEntity<Void> updateRepository(@Valid @RequestBody StudyHistoryRepositoryUpdateRequest request) {
-        studentStudyHistoryServiceV2.updateRepository(request);
+    public ResponseEntity<Void> updateMyRepository(@Valid @RequestBody StudyHistoryRepositoryUpdateRequest request) {
+        studentStudyHistoryServiceV2.updateMyRepository(request);
         return ResponseEntity.ok().build();
     }
 }
