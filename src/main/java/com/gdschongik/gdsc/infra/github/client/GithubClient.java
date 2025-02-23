@@ -39,6 +39,14 @@ public class GithubClient {
         }
     }
 
+    public String getOwnerId(String repo) {
+        try {
+            return String.valueOf(getRepository(repo).getOwner().getId());
+        } catch (IOException e) {
+            throw new CustomException(GITHUB_REPOSITORY_NOT_FOUND);
+        }
+    }
+
     public String getGithubHandle(String oauthId) {
         try (GitHubConnectorResponse response = gitHubConnector.send(new GithubUserRequest(oauthId));
                 InputStream inputStream = response.bodyStream(); ) {

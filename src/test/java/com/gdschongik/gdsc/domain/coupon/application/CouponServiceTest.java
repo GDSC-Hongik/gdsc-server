@@ -7,7 +7,6 @@ import static java.math.BigDecimal.*;
 import static org.assertj.core.api.Assertions.*;
 
 import com.gdschongik.gdsc.domain.common.vo.Money;
-import com.gdschongik.gdsc.domain.common.vo.Period;
 import com.gdschongik.gdsc.domain.coupon.dao.CouponRepository;
 import com.gdschongik.gdsc.domain.coupon.dao.IssuedCouponRepository;
 import com.gdschongik.gdsc.domain.coupon.domain.Coupon;
@@ -17,8 +16,9 @@ import com.gdschongik.gdsc.domain.coupon.dto.request.CouponCreateRequest;
 import com.gdschongik.gdsc.domain.coupon.dto.request.CouponIssueRequest;
 import com.gdschongik.gdsc.domain.coupon.dto.request.IssuedCouponQueryOption;
 import com.gdschongik.gdsc.domain.member.domain.Member;
-import com.gdschongik.gdsc.domain.study.domain.Study;
-import com.gdschongik.gdsc.domain.study.domain.StudyHistory;
+import com.gdschongik.gdsc.domain.study.domain.StudyType;
+import com.gdschongik.gdsc.domain.studyv2.domain.StudyHistoryV2;
+import com.gdschongik.gdsc.domain.studyv2.domain.StudyV2;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.helper.IntegrationTest;
 import java.time.LocalDateTime;
@@ -214,10 +214,9 @@ class CouponServiceTest extends IntegrationTest {
             Member student = createRegularMember();
             Member mentor = createMentor();
             LocalDateTime now = LocalDateTime.now();
-            Study study =
-                    createStudy(mentor, Period.of(now.plusDays(5), now.plusDays(10)), Period.of(now.minusDays(5), now));
+            StudyV2 study = createStudy(StudyType.OFFLINE, mentor);
 
-            StudyHistory studyHistory = createStudyHistory(student, study);
+            StudyHistoryV2 studyHistory = createStudyHistory(student, study);
 
             // when
             couponService.createAndIssueCouponByStudyHistories(List.of(1L));
@@ -234,10 +233,9 @@ class CouponServiceTest extends IntegrationTest {
             Member student = createRegularMember();
             Member mentor = createMentor();
             LocalDateTime now = LocalDateTime.now();
-            Study study =
-                    createStudy(mentor, Period.of(now.plusDays(5), now.plusDays(10)), Period.of(now.minusDays(5), now));
+            StudyV2 study = createStudy(StudyType.OFFLINE, mentor);
 
-            StudyHistory studyHistory = createStudyHistory(student, study);
+            StudyHistoryV2 studyHistory = createStudyHistory(student, study);
 
             // when
             Coupon coupon = couponRepository.save(
@@ -256,10 +254,9 @@ class CouponServiceTest extends IntegrationTest {
             Member student = createRegularMember();
             Member mentor = createMentor();
             LocalDateTime now = LocalDateTime.now();
-            Study study =
-                    createStudy(mentor, Period.of(now.plusDays(5), now.plusDays(10)), Period.of(now.minusDays(5), now));
+            StudyV2 study = createStudy(StudyType.OFFLINE, mentor);
 
-            StudyHistory studyHistory = createStudyHistory(student, study);
+            StudyHistoryV2 studyHistory = createStudyHistory(student, study);
 
             // when
             couponService.createAndIssueCouponByStudyHistories(List.of(1L));
@@ -279,10 +276,9 @@ class CouponServiceTest extends IntegrationTest {
             Member student = createRegularMember();
             Member mentor = createMentor();
             LocalDateTime now = LocalDateTime.now();
-            Study study =
-                    createStudy(mentor, Period.of(now.plusDays(5), now.plusDays(10)), Period.of(now.minusDays(5), now));
+            StudyV2 study = createStudy(StudyType.OFFLINE, mentor);
 
-            StudyHistory studyHistory = createStudyHistory(student, study);
+            StudyHistoryV2 studyHistory = createStudyHistory(student, study);
 
             couponService.createAndIssueCouponByStudyHistories(List.of(1L));
 

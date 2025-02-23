@@ -4,7 +4,7 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.common.model.BaseEntity;
 import com.gdschongik.gdsc.domain.common.vo.Money;
-import com.gdschongik.gdsc.domain.study.domain.Study;
+import com.gdschongik.gdsc.domain.studyv2.domain.StudyV2;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"coupon_type", "study_id"})})
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"coupon_type", "study_v2_id"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Coupon extends BaseEntity {
 
@@ -47,11 +47,11 @@ public class Coupon extends BaseEntity {
     private IssuanceType issuanceType;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "study_id")
-    private Study study;
+    @JoinColumn(name = "study_v2_id")
+    private StudyV2 study;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private Coupon(String name, Money discountAmount, CouponType couponType, IssuanceType issuanceType, Study study) {
+    private Coupon(String name, Money discountAmount, CouponType couponType, IssuanceType issuanceType, StudyV2 study) {
         this.name = name;
         this.discountAmount = discountAmount;
         this.couponType = couponType;
@@ -59,7 +59,7 @@ public class Coupon extends BaseEntity {
         this.study = study;
     }
 
-    public static Coupon createAutomatic(String name, Money discountAmount, CouponType couponType, Study study) {
+    public static Coupon createAutomatic(String name, Money discountAmount, CouponType couponType, StudyV2 study) {
         validateDiscountAmountPositive(discountAmount);
         return Coupon.builder()
                 .name(name)
@@ -70,7 +70,7 @@ public class Coupon extends BaseEntity {
                 .build();
     }
 
-    public static Coupon createManual(String name, Money discountAmount, CouponType couponType, Study study) {
+    public static Coupon createManual(String name, Money discountAmount, CouponType couponType, StudyV2 study) {
         validateDiscountAmountPositive(discountAmount);
         return Coupon.builder()
                 .name(name)
