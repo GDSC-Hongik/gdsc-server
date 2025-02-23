@@ -53,5 +53,5 @@ public class UrlConstant {
     public static final String LOCAL_SERVER_URL = "http://localhost:8080";
 
     // 기타
-    public static final String ROOT_DOMAIN = "gdschongik.com";
+    public static final String ROOT_DOMAIN = "wawoo.dev";
 }
