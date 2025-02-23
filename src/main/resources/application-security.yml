@@ -28,3 +28,6 @@ jwt:
 auth:
   username: ${BASIC_AUTH_USERNAME:default}
   password: ${BASIC_AUTH_PASSWORD:default}
+
+server:
+  forward-headers-strategy: framework
