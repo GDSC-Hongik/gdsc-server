@@ -29,9 +29,10 @@ public class StudentStudyHistoryServiceV2 {
     private final StudyHistoryValidatorV2 studyHistoryValidatorV2;
 
     @Transactional
-    public void updateRepository(Long studyId, StudyHistoryRepositoryUpdateRequest request) {
+    public void updateRepository(StudyHistoryRepositoryUpdateRequest request) {
         Member currentMember = memberUtil.getCurrentMember();
-        StudyV2 study = studyV2Repository.findById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
+        StudyV2 study =
+                studyV2Repository.findById(request.studyId()).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
         StudyHistoryV2 studyHistory = studyHistoryV2Repository
                 .findByStudentAndStudy(currentMember, study)
                 .orElseThrow(() -> new CustomException(STUDY_HISTORY_NOT_FOUND));
