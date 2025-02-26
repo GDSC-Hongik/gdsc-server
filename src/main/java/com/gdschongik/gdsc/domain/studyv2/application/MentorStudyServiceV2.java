@@ -50,7 +50,7 @@ public class MentorStudyServiceV2 {
         study.update(command);
         studyV2Repository.save(study);
 
-        log.info("[MentoryStudyServiceV2] 스터디 정보 수정 완료: studyId={}", studyId);
+        log.info("[MentorStudyServiceV2] 스터디 정보 수정 완료: studyId={}", studyId);
     }
 
     @Transactional
@@ -63,7 +63,7 @@ public class MentorStudyServiceV2 {
         StudyAnnouncementV2 studyAnnouncement = StudyAnnouncementV2.create(request.title(), request.link(), study);
         studyAnnouncementV2Repository.save(studyAnnouncement);
 
-        log.info("[MentoryStudyServiceV2] 스터디 공지 생성: studyAnnouncementId={}", studyAnnouncement.getId());
+        log.info("[MentorStudyServiceV2] 스터디 공지 생성: studyAnnouncementId={}", studyAnnouncement.getId());
     }
 
     @Transactional
@@ -79,7 +79,7 @@ public class MentorStudyServiceV2 {
         studyAnnouncement.update(request.title(), request.link());
         studyAnnouncementV2Repository.save(studyAnnouncement);
 
-        log.info("[MentoryStudyServiceV2] 스터디 공지 수정 완료: studyAnnouncementId={}", studyAnnouncement.getId());
+        log.info("[MentorStudyServiceV2] 스터디 공지 수정 완료: studyAnnouncementId={}", studyAnnouncement.getId());
     }
 
     @Transactional
@@ -94,6 +94,6 @@ public class MentorStudyServiceV2 {
 
         studyAnnouncementV2Repository.delete(studyAnnouncement);
 
-        log.info("[MentoryStudyServiceV2] 스터디 공지 삭제 완료: studyAnnouncementId={}", studyAnnouncement.getId());
+        log.info("[MentorStudyServiceV2] 스터디 공지 삭제 완료: studyAnnouncementId={}", studyAnnouncement.getId());
     }
 }
