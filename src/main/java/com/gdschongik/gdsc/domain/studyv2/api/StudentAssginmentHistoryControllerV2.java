@@ -22,5 +22,6 @@ public class StudentAssginmentHistoryControllerV2 {
     @PostMapping("/submit")
     public ResponseEntity<Void> submitMyAssignment(@RequestParam(name = "studySessionId") Long studySessionId) {
         studentAssigmentHistoryServiceV2.submitAssignment(studySessionId);
+        return ResponseEntity.ok().build();
     }
 }
