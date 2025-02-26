@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/v2/assignment-histories")
 @RequiredArgsConstructor
-public class StudentAssginmentHistoryControllerV2 {
+public class StudentAssignmentHistoryControllerV2 {
 
-    private final StudentAssignmentHistoryServiceV2 studentAssigmentHistoryServiceV2;
+    private final StudentAssignmentHistoryServiceV2 studentAssignmentHistoryServiceV2;
 
     @Operation(summary = "내 과제 제출하기", description = "나의 과제를 제출합니다. 제출된 과제는 채점되어 제출내역에 반영됩니다.")
     @PostMapping("/submit")
     public ResponseEntity<Void> submitMyAssignment(@RequestParam(name = "studySessionId") Long studySessionId) {
-        studentAssigmentHistoryServiceV2.submitAssignment(studySessionId);
+        studentAssignmentHistoryServiceV2.submitAssignment(studySessionId);
         return ResponseEntity.ok().build();
     }
 }
