@@ -44,7 +44,7 @@ public class AttendanceV2 extends BaseEntity {
         this.studySession = studySession;
     }
 
-    public static AttendanceV2 of(Member student, StudySessionV2 studySession) {
+    public static AttendanceV2 create(Member student, StudySessionV2 studySession) {
         return AttendanceV2.builder()
                 .student(student)
                 .studySession(studySession)
