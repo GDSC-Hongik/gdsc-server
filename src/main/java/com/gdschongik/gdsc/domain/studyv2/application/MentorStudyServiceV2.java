@@ -23,8 +23,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class MentorStudyServiceV2 {
 
     private final MemberUtil memberUtil;
-    private final StudyV2Repository studyV2Repository;
     private final StudyValidatorV2 studyValidatorV2;
+    private final StudyV2Repository studyV2Repository;
+    private final StudyAnnouncementV2Repository studyAnnouncementV2Repository;
 
     @Transactional(readOnly = true)
     public List<StudyManagerResponse> getStudiesInCharge() {
