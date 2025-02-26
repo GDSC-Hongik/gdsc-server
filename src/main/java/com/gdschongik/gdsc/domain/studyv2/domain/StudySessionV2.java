@@ -16,6 +16,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -105,6 +106,22 @@ public class StudySessionV2 extends BaseEntity {
 
     public static void createEmptyForAssignment(Integer position, StudyV2 study) {
         StudySessionV2.builder().position(position).study(study).build();
+    }
+
+    // 데이터 전달 로직
+
+    public void validateAssignmentSubmittable(LocalDateTime now) {
+        if (assignmentPeriod == null) {
+            throw new CustomException(ASSIGNMENT_SUBMIT_NOT_PUBLISHED);
+        }
+
+        if (now.isBefore(assignmentPeriod.getStartDate())) {
+            throw new CustomException(ASSIGNMENT_SUBMIT_NOT_STARTED);
+        }
+
+        if (now.isAfter(assignmentPeriod.getEndDate())) {
+            throw new CustomException(ASSIGNMENT_SUBMIT_DEADLINE_PASSED);
+        }
     }
 
     // 데이터 변경 로직
