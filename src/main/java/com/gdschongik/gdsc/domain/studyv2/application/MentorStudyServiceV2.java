@@ -23,8 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class MentorStudyServiceV2 {
 
     private final MemberUtil memberUtil;
-    private final StudyV2Repository studyV2Repository;
     private final StudyValidatorV2 studyValidatorV2;
+    private final StudyV2Repository studyV2Repository;
 
     @Transactional(readOnly = true)
     public List<StudyManagerResponse> getStudiesInCharge() {
@@ -46,6 +46,6 @@ public class MentorStudyServiceV2 {
         study.update(command);
         studyV2Repository.save(study);
 
-        log.info("[MentoryStudyServiceV2] 스터디 정보 수정 완료: studyId={}", studyId);
+        log.info("[MentorStudyServiceV2] 스터디 정보 수정 완료: studyId={}", studyId);
     }
 }
