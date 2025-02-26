@@ -37,7 +37,7 @@ public class StudentAssignmentHistoryServiceV2 {
     private final AssignmentHistoryGraderV2 assignmentHistoryGraderV2;
 
     @Transactional
-    public void submitAssignment(Long studySessionId) {
+    public void submitMyAssignment(Long studySessionId) {
         Member currentMember = memberUtil.getCurrentMember();
         StudyV2 study = studyV2Repository
                 .findFetchBySessionId(studySessionId)
