@@ -137,6 +137,7 @@ public enum ErrorCode {
 
     // Attendance
     ATTENDANCE_DATE_INVALID(HttpStatus.CONFLICT, "강의일이 아니면 출석체크할 수 없습니다."),
+    ATTENDANCE_PERIOD_INVALID(HttpStatus.CONFLICT, "강의시간이 아니면 출석체크할 수 없습니다."),
     ATTENDANCE_NUMBER_MISMATCH(HttpStatus.CONFLICT, "출석번호가 일치하지 않습니다."),
     STUDY_DETAIL_ALREADY_ATTENDED(HttpStatus.CONFLICT, "이미 출석 처리된 스터디입니다."),
 
