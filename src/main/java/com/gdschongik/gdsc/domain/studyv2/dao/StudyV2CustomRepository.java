@@ -7,5 +7,7 @@ import java.util.Optional;
 public interface StudyV2CustomRepository {
     Optional<StudyV2> findFetchById(Long id);
 
+    Optional<StudyV2> findFetchBySessionId(Long sessionId);
+
     List<StudyV2> findFetchAll();
 }
