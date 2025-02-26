@@ -52,6 +52,7 @@ public class StudyV2 extends BaseEntity {
     @Column(name = "study_v2_id")
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     private StudyType type;
 
     @Comment("스터디 이름")
