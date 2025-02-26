@@ -29,6 +29,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -196,6 +197,18 @@ public class StudyV2 extends BaseEntity {
                 .build();
     }
 
+    // 데이터 조회 로직
+
+    public Optional<StudySessionV2> getOptionalStudySession(Long studySessionId) {
+        return studySessions.stream()
+                .filter(session -> session.getId().equals(studySessionId))
+                .findFirst();
+    }
+
+    public StudySessionV2 getStudySession(Long studySessionId) {
+        return getOptionalStudySession(studySessionId).orElseThrow(() -> new CustomException(STUDY_SESSION_NOT_FOUND));
+    }
+
     // 데이터 변경 로직
 
     public void update(StudyUpdateCommand command) {
@@ -207,16 +220,14 @@ public class StudyV2 extends BaseEntity {
         this.endTime = command.endTime();
 
         command.studySessions().forEach(sessionCommand -> {
-            getStudySession(sessionCommand.studySessionId()).update(sessionCommand);
+            getStudySessionForUpdate(sessionCommand.studySessionId()).update(sessionCommand);
         });
 
         validateLessonTimeOrderMatchesPosition();
     }
 
-    private StudySessionV2 getStudySession(Long studySessionId) {
-        return studySessions.stream()
-                .filter(session -> session.getId().equals(studySessionId))
-                .findFirst()
+    private StudySessionV2 getStudySessionForUpdate(Long studySessionId) {
+        return getOptionalStudySession(studySessionId)
                 .orElseThrow(() -> new CustomException(STUDY_NOT_UPDATABLE_SESSION_NOT_FOUND));
     }
 
