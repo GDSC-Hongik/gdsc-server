@@ -24,6 +24,16 @@ public class StudyV2RepositoryImpl implements StudyV2CustomRepository {
     }
 
     @Override
+    public Optional<StudyV2> findFetchBySessionId(Long sessionId) {
+        return Optional.ofNullable(queryFactory
+                .selectFrom(studyV2)
+                .join(studyV2.studySessions)
+                .fetchJoin()
+                .where(studyV2.studySessions.any().id.eq(sessionId))
+                .fetchOne());
+    }
+
+    @Override
     public List<StudyV2> findFetchAll() {
         return queryFactory
                 .selectFrom(studyV2)
