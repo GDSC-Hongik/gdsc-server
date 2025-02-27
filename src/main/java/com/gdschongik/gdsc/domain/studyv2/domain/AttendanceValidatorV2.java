@@ -2,8 +2,8 @@ package com.gdschongik.gdsc.domain.studyv2.domain;
 
 import static com.gdschongik.gdsc.global.exception.ErrorCode.ATTENDANCE_NUMBER_MISMATCH;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.ATTENDANCE_PERIOD_INVALID;
-import static com.gdschongik.gdsc.global.exception.ErrorCode.STUDY_DETAIL_ALREADY_ATTENDED;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.STUDY_HISTORY_NOT_FOUND;
+import static com.gdschongik.gdsc.global.exception.ErrorCode.STUDY_SESSION_ALREADY_ATTENDED;
 
 import com.gdschongik.gdsc.global.annotation.DomainService;
 import com.gdschongik.gdsc.global.exception.CustomException;
@@ -25,7 +25,7 @@ public class AttendanceValidatorV2 {
 
         // 출석체크 번호 검증
         if (isAlreadyAttended) {
-            throw new CustomException(STUDY_DETAIL_ALREADY_ATTENDED);
+            throw new CustomException(STUDY_SESSION_ALREADY_ATTENDED);
         }
 
         // 스터디 신청 여부 검증
