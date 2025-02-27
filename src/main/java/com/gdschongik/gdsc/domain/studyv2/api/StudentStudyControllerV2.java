@@ -23,12 +23,11 @@ public class StudentStudyControllerV2 {
     private final StudentStudyServiceV2 studentStudyServiceV2;
 
     @Operation(summary = "스터디 출석체크", description = "스터디에 출석체크합니다.")
-    @PostMapping("/{studyId}/attend")
+    @PostMapping("/attend")
     public ResponseEntity<Void> attend(
-            @PathVariable Long studyId,
-            @RequestParam Long studySessionId,
-            @RequestBody @Valid AttendanceCreateRequest request) {
-        studentStudyServiceV2.attend(studyId, studySessionId, request);
+            @RequestParam(name = "studySessionId") Long studySessionId,
+            @Valid @RequestBody AttendanceCreateRequest request) {
+        studentStudyServiceV2.attend(studySessionId, request);
         return ResponseEntity.ok().build();
     }
 }
