@@ -1,6 +1,9 @@
 package com.gdschongik.gdsc.domain.studyv2.domain;
 
-import com.gdschongik.gdsc.domain.study.domain.AssignmentHistory;
+import com.gdschongik.gdsc.domain.common.vo.Period;
+import com.gdschongik.gdsc.global.exception.CustomException;
+import com.gdschongik.gdsc.global.exception.ErrorCode;
+import jakarta.annotation.Nullable;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -15,9 +18,43 @@ public enum AssignmentHistoryStatus {
 
     private final String value;
 
+    /**
+     * 과제 제출 상태를 반환합니다. 제출기한 이내에 있는 제츌이력만 인자로 받습니다.
+     * 제출기한에 포함되지 않는 제출이력은 제출기한 변경 전 제출이력이므로, 판정 대상에서 제외합니다.
+     *
+     * @throws CustomException 제출기한에 포함되지 않는 제출이력을 인자로 받았을 때
+     */
     public static AssignmentHistoryStatus of(
-            AssignmentHistory assignmentHistory, StudySessionV2 studySession, LocalDateTime now) {
-        // todo
-        return null;
+            @Nullable AssignmentHistoryV2 assignmentHistory, StudySessionV2 studySession, LocalDateTime now)
+            throws CustomException {
+        validateCommittedAtWithinAssignmentPeriod(assignmentHistory, studySession);
+
+        Period assignmentPeriod = studySession.getAssignmentPeriod();
+
+        if (now.isBefore(assignmentPeriod.getStartDate())) {
+            return BEFORE_SUBMISSION;
+        }
+
+        // 과제 제출 이력이 없는 경우
+        if (assignmentHistory == null) {
+            return assignmentPeriod.isWithin(now) ? BEFORE_SUBMISSION : FAILED;
+        }
+
+        // 과제 제출 이력이 있는 경우
+        return assignmentHistory.isSucceeded() ? SUCCEEDED : FAILED;
+    }
+
+    private static void validateCommittedAtWithinAssignmentPeriod(
+            @Nullable AssignmentHistoryV2 assignmentHistory, StudySessionV2 studySession) throws CustomException {
+        if (assignmentHistory == null) {
+            return;
+        }
+
+        LocalDateTime committedAt = assignmentHistory.getCommittedAt();
+        Period assignmentPeriod = studySession.getAssignmentPeriod();
+
+        if (!assignmentPeriod.isWithin(committedAt)) {
+            throw new CustomException(ErrorCode.ASSIGNMENT_HISTORY_NOT_WITHIN_PERIOD);
+        }
     }
 }
