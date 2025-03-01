@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "Student Study V2", description = "사용자 스터디 V2 API입니다.")
+@Tag(name = "Student Study Attendance V2", description = "사용자 스터디 출석체크 V2 API입니다.")
 @RestController
-@RequestMapping("/v2/studies")
+@RequestMapping("/v2/attendances")
 @RequiredArgsConstructor
-public class StudentStudyControllerV2 {
+public class StudentAttendanceControllerV2 {
 
     private final StudentStudyServiceV2 studentStudyServiceV2;
 

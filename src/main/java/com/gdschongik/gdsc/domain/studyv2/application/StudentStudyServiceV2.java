@@ -8,13 +8,11 @@ import com.gdschongik.gdsc.domain.studyv2.dao.StudyHistoryV2Repository;
 import com.gdschongik.gdsc.domain.studyv2.dao.StudyV2Repository;
 import com.gdschongik.gdsc.domain.studyv2.domain.AttendanceV2;
 import com.gdschongik.gdsc.domain.studyv2.domain.AttendanceValidatorV2;
-import com.gdschongik.gdsc.domain.studyv2.domain.StudyHistoryV2;
 import com.gdschongik.gdsc.domain.studyv2.domain.StudySessionV2;
 import com.gdschongik.gdsc.domain.studyv2.domain.StudyV2;
 import com.gdschongik.gdsc.domain.studyv2.dto.request.AttendanceCreateRequest;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -38,10 +36,8 @@ public class StudentStudyServiceV2 {
                 .findFetchBySessionId(studySessionId)
                 .orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
         StudySessionV2 studySession = study.getStudySession(studySessionId);
-        Optional<StudyHistoryV2> optionalStudyHistory =
-                studyHistoryV2Repository.findByStudentAndStudy(currentMember, study);
 
-        boolean isAppliedToStudy = optionalStudyHistory.isPresent();
+        boolean isAppliedToStudy = studyHistoryV2Repository.existsByStudentAndStudy(currentMember, study);
         boolean isAlreadyAttended = attendanceV2Repository.existsByStudentAndStudySession(currentMember, studySession);
 
         attendanceValidatorV2.validateAttendance(
