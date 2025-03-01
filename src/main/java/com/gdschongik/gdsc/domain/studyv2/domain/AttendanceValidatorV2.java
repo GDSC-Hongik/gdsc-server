@@ -13,7 +13,17 @@ public class AttendanceValidatorV2 {
 
     public void validateAttendance(
             StudySessionV2 studySession, String attendanceNumber, boolean isAppliedToStudy, boolean isAlreadyAttended) {
-        // 출석체크 기간 검증
+        // 스터디 신청 여부 검증
+        if (!isAppliedToStudy) {
+            throw new CustomException(STUDY_HISTORY_NOT_FOUND);
+        }
+
+        // 스터디 중복 출석체크 여부 검증
+        if (isAlreadyAttended) {
+            throw new CustomException(STUDY_SESSION_ALREADY_ATTENDED);
+        }
+
+        // 출석체크 가능 기간 검증
         if (!studySession.getLessonPeriod().isOpen()) {
             throw new CustomException(ATTENDANCE_PERIOD_INVALID);
         }
@@ -21,16 +31,6 @@ public class AttendanceValidatorV2 {
         // 출석체크 번호 검증
         if (!studySession.getLessonAttendanceNumber().equals(attendanceNumber)) {
             throw new CustomException(ATTENDANCE_NUMBER_MISMATCH);
-        }
-
-        // 출석체크 번호 검증
-        if (isAlreadyAttended) {
-            throw new CustomException(STUDY_SESSION_ALREADY_ATTENDED);
-        }
-
-        // 스터디 신청 여부 검증
-        if (!isAppliedToStudy) {
-            throw new CustomException(STUDY_HISTORY_NOT_FOUND);
         }
     }
 }
