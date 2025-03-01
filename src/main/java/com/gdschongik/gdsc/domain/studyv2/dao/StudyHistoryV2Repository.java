@@ -8,6 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface StudyHistoryV2Repository extends JpaRepository<StudyHistoryV2, Long>, StudyHistoryV2CustomRepository {
     Optional<StudyHistoryV2> findByStudentAndStudy(Member student, StudyV2 study);
-
     boolean existsByStudentAndStudy(Member currentMember, StudyV2 study);
 }
