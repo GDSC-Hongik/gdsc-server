@@ -21,4 +21,5 @@ public record StudyStudentDto(
         LocalTime startTime,
         LocalTime endTime,
         Period applicationPeriod,
-        Long mentorId) {}
+        Long mentorId,
+        String mentorName) {}
