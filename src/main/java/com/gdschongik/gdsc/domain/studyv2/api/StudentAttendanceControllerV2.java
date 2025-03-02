@@ -1,6 +1,6 @@
 package com.gdschongik.gdsc.domain.studyv2.api;
 
-import com.gdschongik.gdsc.domain.studyv2.application.StudentStudyServiceV2;
+import com.gdschongik.gdsc.domain.studyv2.application.StudentAttendanceServiceV2;
 import com.gdschongik.gdsc.domain.studyv2.dto.request.AttendanceCreateRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -19,14 +19,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class StudentAttendanceControllerV2 {
 
-    private final StudentStudyServiceV2 studentStudyServiceV2;
+    private final StudentAttendanceServiceV2 studentAttendanceService;
 
     @Operation(summary = "스터디 출석체크", description = "스터디에 출석체크합니다.")
     @PostMapping("/attend")
     public ResponseEntity<Void> attend(
             @RequestParam(name = "studySessionId") Long studySessionId,
             @Valid @RequestBody AttendanceCreateRequest request) {
-        studentStudyServiceV2.attend(studySessionId, request);
+        studentAttendanceService.attend(studySessionId, request);
         return ResponseEntity.ok().build();
     }
 }

@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class StudentStudyServiceV2 {
+public class StudentAttendanceServiceV2 {
 
     private final MemberUtil memberUtil;
     private final StudyV2Repository studyV2Repository;
