@@ -38,6 +38,7 @@ public class StudyV2RepositoryImpl implements StudyV2CustomRepository {
         return queryFactory
                 .selectFrom(studyV2)
                 .join(studyV2.studySessions)
+                .fetchJoin()
                 .join(studyV2.mentor)
                 .fetchJoin()
                 .fetch();
