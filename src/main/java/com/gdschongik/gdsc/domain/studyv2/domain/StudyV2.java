@@ -22,6 +22,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
@@ -97,6 +98,7 @@ public class StudyV2 extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member mentor;
 
+    @OrderBy("position asc")
     @OneToMany(mappedBy = "study", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StudySessionV2> studySessions = new ArrayList<>();
 
