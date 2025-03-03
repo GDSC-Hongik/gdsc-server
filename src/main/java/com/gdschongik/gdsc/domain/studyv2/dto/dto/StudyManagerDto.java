@@ -24,7 +24,8 @@ public record StudyManagerDto(
         Period applicationPeriod,
         String discordChannelId,
         String discordRoleId,
-        Long mentorId) {
+        Long mentorId,
+        String mentorName) {
     public static StudyManagerDto from(StudyV2 study) {
         return new StudyManagerDto(
                 study.getId(),
@@ -40,6 +41,7 @@ public record StudyManagerDto(
                 study.getApplicationPeriod(),
                 study.getDiscordChannelId(),
                 study.getDiscordRoleId(),
-                study.getMentor().getId());
+                study.getMentor().getId(),
+                study.getMentor().getName());
     }
 }
