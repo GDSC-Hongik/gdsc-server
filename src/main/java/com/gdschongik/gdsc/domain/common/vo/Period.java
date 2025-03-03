@@ -38,6 +38,7 @@ public final class Period {
         }
     }
 
+    @Deprecated
     public boolean isOpen() {
         // TODO: now를 내부에서 선언하지 않고 파라미터로 받아서 테스트 가능하도록 변경
         LocalDateTime now = LocalDateTime.now();
@@ -48,5 +49,13 @@ public final class Period {
         if (!this.endDate.isBefore(startDate) && !this.startDate.isAfter(endDate)) {
             throw new CustomException(PERIOD_OVERLAP);
         }
+    }
+
+    /**
+     * 현재 시간이 기간 내에 있는지 확인합니다.
+     * 시작일시는 포함하고 종료일시는 포함하지 않습니다.
+     */
+    public boolean isWithin(LocalDateTime now) {
+        return now.isAfter(startDate) && now.isBefore(endDate) || now.isEqual(startDate);
     }
 }

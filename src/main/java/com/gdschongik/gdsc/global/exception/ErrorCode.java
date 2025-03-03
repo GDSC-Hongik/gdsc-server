@@ -174,6 +174,10 @@ public enum ErrorCode {
     ASSIGNMENT_SUBMIT_CANCELED(HttpStatus.CONFLICT, "과제 휴강 주간에는 과제를 제출할 수 없습니다."),
     ASSIGNMENT_SUBMIT_DEADLINE_PASSED(HttpStatus.CONFLICT, "과제 마감 기한이 지났습니다."),
 
+    // AssignmentHistory (Assignment V2)
+    ASSIGNMENT_HISTORY_NOT_WITHIN_PERIOD(
+            HttpStatus.INTERNAL_SERVER_ERROR, "제출상태 변환 시 제출기한에 포함되지 않는 제출이력을 인자로 받을 수 없습니다."),
+
     // Github
     GITHUB_REPOSITORY_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 레포지토리입니다."),
     GITHUB_CONTENT_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 파일입니다."),
