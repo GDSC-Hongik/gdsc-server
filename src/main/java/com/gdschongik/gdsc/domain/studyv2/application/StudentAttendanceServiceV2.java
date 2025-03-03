@@ -13,6 +13,7 @@ import com.gdschongik.gdsc.domain.studyv2.domain.StudyV2;
 import com.gdschongik.gdsc.domain.studyv2.dto.request.AttendanceCreateRequest;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -37,11 +38,13 @@ public class StudentAttendanceServiceV2 {
                 .orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
         StudySessionV2 studySession = study.getStudySession(studySessionId);
 
+        LocalDateTime now = LocalDateTime.now();
+
         boolean isAppliedToStudy = studyHistoryV2Repository.existsByStudentAndStudy(currentMember, study);
         boolean isAlreadyAttended = attendanceV2Repository.existsByStudentAndStudySession(currentMember, studySession);
 
         attendanceValidatorV2.validateAttendance(
-                studySession, request.attendanceNumber(), isAppliedToStudy, isAlreadyAttended);
+                studySession, request.attendanceNumber(), isAppliedToStudy, isAlreadyAttended, now);
 
         AttendanceV2 attendance = AttendanceV2.create(currentMember, studySession);
         attendanceV2Repository.save(attendance);
