@@ -3,6 +3,7 @@ package com.gdschongik.gdsc.domain.studyv2.domain;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.common.model.BaseEntity;
+import com.gdschongik.gdsc.domain.common.model.SemesterType;
 import com.gdschongik.gdsc.domain.common.vo.Period;
 import com.gdschongik.gdsc.domain.common.vo.Semester;
 import com.gdschongik.gdsc.domain.member.domain.Member;
@@ -208,6 +209,10 @@ public class StudyV2 extends BaseEntity {
 
     public StudySessionV2 getStudySession(Long studySessionId) {
         return getOptionalStudySession(studySessionId).orElseThrow(() -> new CustomException(STUDY_SESSION_NOT_FOUND));
+    }
+
+    public boolean isWithinSemester(Integer academicYear, SemesterType semesterType) {
+        return semester.equals(academicYear, semesterType);
     }
 
     // 데이터 변경 로직

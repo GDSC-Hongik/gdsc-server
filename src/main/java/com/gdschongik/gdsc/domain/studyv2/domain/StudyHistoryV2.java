@@ -3,6 +3,7 @@ package com.gdschongik.gdsc.domain.studyv2.domain;
 import static com.gdschongik.gdsc.domain.study.domain.StudyHistoryStatus.*;
 
 import com.gdschongik.gdsc.domain.common.model.BaseEntity;
+import com.gdschongik.gdsc.domain.common.model.SemesterType;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.study.domain.StudyApplyCanceledEvent;
 import com.gdschongik.gdsc.domain.study.domain.StudyHistoryCompletionWithdrawnEvent;
@@ -98,5 +99,9 @@ public class StudyHistoryV2 extends BaseEntity {
     // 데이터 전달 로직
     public boolean isCompleted() {
         return this.status == COMPLETED;
+    }
+
+    public boolean isWithinSemester(Integer academicYear, SemesterType semesterType) {
+        return study.isWithinSemester(academicYear, semesterType);
     }
 }

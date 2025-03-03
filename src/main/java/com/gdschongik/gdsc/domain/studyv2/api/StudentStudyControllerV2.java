@@ -2,7 +2,6 @@ package com.gdschongik.gdsc.domain.studyv2.api;
 
 import com.gdschongik.gdsc.domain.studyv2.application.StudentStudyServiceV2;
 import com.gdschongik.gdsc.domain.studyv2.dto.response.StudentMyCurrentStudyResponse;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
