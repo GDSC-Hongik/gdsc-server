@@ -47,7 +47,7 @@ public class StudentAttendanceServiceV2 {
         attendanceV2Repository.save(attendance);
 
         log.info(
-                "[StudentStudyServiceV2] 스터디 출석체크: attendanceId={}, memberId={}",
+                "[StudentAttendanceServiceV2] 스터디 출석체크: attendanceId={}, memberId={}",
                 attendance.getId(),
                 currentMember.getId());
     }
