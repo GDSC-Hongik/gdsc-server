@@ -45,10 +45,6 @@ public final class Period {
         return (now.isAfter(startDate) || now.isEqual(startDate)) && (now.isBefore(endDate) || now.isEqual(startDate));
     }
 
-    public boolean test(int a) {
-        return a > 5;
-    }
-
     public void validatePeriodOverlap(LocalDateTime startDate, LocalDateTime endDate) {
         if (!this.endDate.isBefore(startDate) && !this.startDate.isAfter(endDate)) {
             throw new CustomException(PERIOD_OVERLAP);
