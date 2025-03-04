@@ -7,4 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AttendanceV2Repository extends JpaRepository<AttendanceV2, Long>, AttendanceV2CustomRepository {
     boolean existsByStudentAndStudySession(Member student, StudySessionV2 studySession);
+
+    long countByStudySessionId(Long studySessionId);
 }
