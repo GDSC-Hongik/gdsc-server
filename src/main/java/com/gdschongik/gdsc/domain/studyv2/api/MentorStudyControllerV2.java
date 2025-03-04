@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "Mentor Study V2", description = "스터디 V2 멘토 API입니다.")
@@ -40,8 +39,8 @@ public class MentorStudyControllerV2 {
     }
 
     @Operation(summary = "스터디 통계 조회", description = "멘토가 자신의 스터디 출석률, 과제 제출률, 수료율에 대한 통계를 조회합니다.")
-    @GetMapping("/statistics")
-    public ResponseEntity<StudyStatisticsResponse> getStudyStatistics(@RequestParam(name = "studyId") Long studyId) {
+    @GetMapping("/{studyId}/statistics")
+    public ResponseEntity<StudyStatisticsResponse> getStudyStatistics(@PathVariable Long studyId) {
         var response = mentorStudyServiceV2.getStudyStatistics(studyId);
         return ResponseEntity.ok(response);
     }
