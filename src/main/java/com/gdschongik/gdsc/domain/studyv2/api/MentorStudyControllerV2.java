@@ -3,6 +3,7 @@ package com.gdschongik.gdsc.domain.studyv2.api;
 import com.gdschongik.gdsc.domain.studyv2.application.MentorStudyServiceV2;
 import com.gdschongik.gdsc.domain.studyv2.dto.request.StudyUpdateRequest;
 import com.gdschongik.gdsc.domain.studyv2.dto.response.StudyManagerResponse;
+import com.gdschongik.gdsc.domain.studyv2.dto.response.StudyStatisticsResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
@@ -35,5 +36,12 @@ public class MentorStudyControllerV2 {
     public ResponseEntity<Void> updateStudy(@PathVariable Long studyId, @RequestBody StudyUpdateRequest request) {
         mentorStudyServiceV2.updateStudy(studyId, request);
         return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "스터디 통계 조회", description = "멘토가 자신의 스터디 출석률, 과제 제출률, 수료율에 대한 통계를 조회합니다.")
+    @GetMapping("/{studyId}/statistics")
+    public ResponseEntity<StudyStatisticsResponse> getStudyStatistics(@PathVariable Long studyId) {
+        var response = mentorStudyServiceV2.getStudyStatistics(studyId);
+        return ResponseEntity.ok(response);
     }
 }

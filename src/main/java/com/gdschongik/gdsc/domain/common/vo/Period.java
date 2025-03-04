@@ -2,6 +2,7 @@ package com.gdschongik.gdsc.domain.common.vo;
 
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.persistence.Embeddable;
 import java.time.LocalDateTime;
@@ -39,6 +40,7 @@ public final class Period {
     }
 
     @Deprecated
+    @JsonIgnore
     public boolean isOpen() {
         // TODO: now를 내부에서 선언하지 않고 파라미터로 받아서 테스트 가능하도록 변경
         LocalDateTime now = LocalDateTime.now();
