@@ -54,7 +54,7 @@ public class StudentStudyController {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "내 수강중인 스터디 조회", description = "나의 이번 학기 수강 중인 스터디를 조회합니다.")
+    @Operation(summary = "내 수강중인 스터디 조회", description = "나의 수강 중인 스터디를 조회합니다.")
     @GetMapping("/me/ongoing")
     public ResponseEntity<StudentMyCurrentStudyResponse> getMyCurrentStudy() {
         StudentMyCurrentStudyResponse response = studentStudyService.getMyCurrentStudy();
