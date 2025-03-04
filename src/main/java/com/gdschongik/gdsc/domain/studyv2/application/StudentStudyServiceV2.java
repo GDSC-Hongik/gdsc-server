@@ -1,21 +1,20 @@
 package com.gdschongik.gdsc.domain.studyv2.application;
 
+import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.RECRUITMENT_NOT_FOUND;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRepository;
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
-import com.gdschongik.gdsc.domain.studyv2.dao.StudyHistoryV2Repository;
-import com.gdschongik.gdsc.domain.studyv2.domain.StudyHistoryV2;
-import com.gdschongik.gdsc.domain.studyv2.dto.response.StudentMyCurrentStudyResponse;
-import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
-
 import com.gdschongik.gdsc.domain.studyv2.dao.AssignmentHistoryV2Repository;
 import com.gdschongik.gdsc.domain.studyv2.dao.AttendanceV2Repository;
+import com.gdschongik.gdsc.domain.studyv2.dao.StudyHistoryV2Repository;
 import com.gdschongik.gdsc.domain.studyv2.dao.StudyV2Repository;
 import com.gdschongik.gdsc.domain.studyv2.domain.AssignmentHistoryV2;
 import com.gdschongik.gdsc.domain.studyv2.domain.AttendanceV2;
+import com.gdschongik.gdsc.domain.studyv2.domain.StudyHistoryV2;
 import com.gdschongik.gdsc.domain.studyv2.domain.StudyV2;
+import com.gdschongik.gdsc.domain.studyv2.dto.response.StudentMyCurrentStudyResponse;
 import com.gdschongik.gdsc.domain.studyv2.dto.response.StudyDashboardResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
@@ -57,14 +56,12 @@ public class StudentStudyServiceV2 {
         LocalDateTime now = LocalDateTime.now();
 
         Recruitment recruitment = recruitmentRepository
-                .findBySemesterPeriodContains(now)
+                .findBySemesterPeriodCovers(now)
                 .orElseThrow(() -> new CustomException(RECRUITMENT_NOT_FOUND));
 
-        List<StudyHistoryV2> currentStudyHistories = studyHistoryV2Repository.findAllByStudent(
-                        currentMember).stream()
+        List<StudyHistoryV2> currentStudyHistories = studyHistoryV2Repository.findAllByStudent(currentMember).stream()
                 .filter(studyHistory ->
-                        studyHistory.isWithinSemester(recruitment.getAcademicYear(),
-                                recruitment.getSemesterType()))
+                        studyHistory.isWithinSemester(recruitment.getAcademicYear(), recruitment.getSemesterType()))
                 .toList();
 
         return StudentMyCurrentStudyResponse.from(currentStudyHistories);

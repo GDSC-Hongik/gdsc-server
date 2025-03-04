@@ -5,5 +5,5 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 public interface RecruitmentCustomRepository {
-    Optional<Recruitment> findBySemesterPeriodContains(LocalDateTime date);
+    Optional<Recruitment> findBySemesterPeriodCovers(LocalDateTime date);
 }
