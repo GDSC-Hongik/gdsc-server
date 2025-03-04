@@ -33,4 +33,8 @@ public class Semester {
                 .semesterType(semesterType)
                 .build();
     }
+
+    public boolean equals(int academicYear, SemesterType semesterType) {
+        return this.academicYear == academicYear && this.semesterType == semesterType;
+    }
 }
