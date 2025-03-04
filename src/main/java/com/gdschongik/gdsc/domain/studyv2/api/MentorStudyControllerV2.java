@@ -42,7 +42,7 @@ public class MentorStudyControllerV2 {
     @Operation(summary = "스터디 통계 조회", description = "멘토가 자신의 스터디 출석률, 과제 제출률, 수료율에 대한 통계를 조회합니다.")
     @GetMapping("/statistics")
     public ResponseEntity<StudyStatisticsResponse> getStudyStatistics(@RequestParam(name = "studyId") Long studyId) {
-        StudyStatisticsResponse response = mentorStudyServiceV2.getStudyStatistics(studyId);
+        var response = mentorStudyServiceV2.getStudyStatistics(studyId);
         return ResponseEntity.ok(response);
     }
 }
