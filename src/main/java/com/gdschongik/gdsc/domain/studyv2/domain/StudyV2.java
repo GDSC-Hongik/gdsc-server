@@ -213,7 +213,7 @@ public class StudyV2 extends BaseEntity {
         return getOptionalStudySession(studySessionId).orElseThrow(() -> new CustomException(STUDY_SESSION_NOT_FOUND));
     }
 
-    public boolean isWithinSemester(Integer academicYear, SemesterType semesterType) {
+    public boolean matchesSemester(Integer academicYear, SemesterType semesterType) {
         return semester.equals(academicYear, semesterType);
     }
 

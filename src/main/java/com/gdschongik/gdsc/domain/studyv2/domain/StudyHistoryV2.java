@@ -102,6 +102,6 @@ public class StudyHistoryV2 extends BaseEntity {
     }
 
     public boolean isWithinSemester(Integer academicYear, SemesterType semesterType) {
-        return study.isWithinSemester(academicYear, semesterType);
+        return study.matchesSemester(academicYear, semesterType);
     }
 }
