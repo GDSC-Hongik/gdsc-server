@@ -30,7 +30,7 @@ public class StudentStudyControllerV2 {
     @Operation(summary = "내 수강 중인 스터디 조회", description = "나의 이번 학기 수강 중인 스터디를 조회합니다.")
     @GetMapping("/me/ongoing")
     public ResponseEntity<StudentMyCurrentStudyResponse> getMyCurrentStudies() {
-        StudentMyCurrentStudyResponse response = studentStudyServiceV2.getMyCurrentStudies();
+        var response = studentStudyServiceV2.getMyCurrentStudies();
         return ResponseEntity.ok(response);
     }
 }

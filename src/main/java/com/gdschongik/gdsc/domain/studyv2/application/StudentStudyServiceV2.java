@@ -1,7 +1,6 @@
 package com.gdschongik.gdsc.domain.studyv2.application;
 
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
-import static com.gdschongik.gdsc.global.exception.ErrorCode.RECRUITMENT_NOT_FOUND;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRepository;
