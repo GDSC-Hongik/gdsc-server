@@ -214,7 +214,7 @@ public class StudyV2 extends BaseEntity {
     }
 
     public boolean matchesSemester(Integer academicYear, SemesterType semesterType) {
-        return semester.equals(academicYear, semesterType);
+        return semester.matches(academicYear, semesterType);
     }
 
     // 데이터 변경 로직
