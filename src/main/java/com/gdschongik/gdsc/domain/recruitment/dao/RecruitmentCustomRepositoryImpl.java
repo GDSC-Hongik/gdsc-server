@@ -22,7 +22,7 @@ public class RecruitmentCustomRepositoryImpl implements RecruitmentCustomReposit
                 .fetchOne());
     }
 
-    BooleanExpression isWithinSemesterPeriod(LocalDateTime date) {
+    private BooleanExpression isWithinSemesterPeriod(LocalDateTime date) {
         return recruitment.semesterPeriod.startDate.loe(date).and(recruitment.semesterPeriod.endDate.goe(date));
     }
 }
