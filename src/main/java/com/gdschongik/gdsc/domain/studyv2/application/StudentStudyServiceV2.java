@@ -60,7 +60,7 @@ public class StudentStudyServiceV2 {
 
         List<StudyHistoryV2> currentStudyHistories = studyHistoryV2Repository.findAllByStudent(currentMember).stream()
                 .filter(studyHistory ->
-                        studyHistory.isWithinSemester(recruitment.getAcademicYear(), recruitment.getSemesterType()))
+                        studyHistory.getStudy().matchesSemester(recruitment.getAcademicYear(), recruitment.getSemesterType()))
                 .toList();
 
         return StudentMyCurrentStudyResponse.from(currentStudyHistories);

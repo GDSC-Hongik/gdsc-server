@@ -100,8 +100,4 @@ public class StudyHistoryV2 extends BaseEntity {
     public boolean isCompleted() {
         return this.status == COMPLETED;
     }
-
-    public boolean isWithinSemester(Integer academicYear, SemesterType semesterType) {
-        return study.matchesSemester(academicYear, semesterType);
-    }
 }
