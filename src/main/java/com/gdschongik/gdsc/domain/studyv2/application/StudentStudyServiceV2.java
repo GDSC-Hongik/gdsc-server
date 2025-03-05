@@ -62,4 +62,19 @@ public class StudentStudyServiceV2 {
 
         log.info("[StudentStudyService] 스터디 수강신청: studyHistoryId={}", studyHistory.getId());
     }
+
+    @Transactional
+    public void cancelStudyApply(Long studyId) {
+        Member currentMember = memberUtil.getCurrentMember();
+        StudyV2 study = studyV2Repository.findById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
+        LocalDateTime now = LocalDateTime.now();
+
+        studyHistoryValidatorV2.validateCancelStudyApply(study, now);
+
+        StudyHistoryV2 studyHistory = studyHistoryV2Repository.findByStudentAndStudy(currentMember, study)
+                .orElseThrow(() -> new CustomException(STUDY_HISTORY_NOT_FOUND));
+        studyHistoryV2Repository.delete(studyHistory);
+
+        log.info("[StudentStudyService] 스터디 수강신청 취소: appliedStudyId={}, memberId={}", study.getId(), currentMember.getId());
+    }
 }
