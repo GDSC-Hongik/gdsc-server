@@ -59,8 +59,7 @@ public class StudentStudyServiceV2 {
                 .orElseThrow(() -> new CustomException(RECRUITMENT_NOT_FOUND));
 
         List<StudyHistoryV2> currentStudyHistories = studyHistoryV2Repository.findAllByStudent(currentMember).stream()
-                .filter(studyHistory ->
-                        studyHistory.getStudy().matchesSemester(recruitment.getAcademicYear(), recruitment.getSemesterType()))
+                .filter(studyHistory -> studyHistory.getStudy().matchesSemester(recruitment.getSemester()))
                 .toList();
 
         return StudentMyCurrentStudyResponse.from(currentStudyHistories);
