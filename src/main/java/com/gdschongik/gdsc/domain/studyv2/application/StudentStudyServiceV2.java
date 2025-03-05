@@ -13,7 +13,7 @@ import com.gdschongik.gdsc.domain.studyv2.domain.AssignmentHistoryV2;
 import com.gdschongik.gdsc.domain.studyv2.domain.AttendanceV2;
 import com.gdschongik.gdsc.domain.studyv2.domain.StudyHistoryV2;
 import com.gdschongik.gdsc.domain.studyv2.domain.StudyV2;
-import com.gdschongik.gdsc.domain.studyv2.dto.response.StudentMyCurrentStudyResponse;
+import com.gdschongik.gdsc.domain.studyv2.dto.response.StudentStudyMyCurrentResponse;
 import com.gdschongik.gdsc.domain.studyv2.dto.response.StudyDashboardResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
@@ -50,7 +50,7 @@ public class StudentStudyServiceV2 {
     }
 
     @Transactional(readOnly = true)
-    public StudentMyCurrentStudyResponse getMyCurrentStudies() {
+    public StudentStudyMyCurrentResponse getMyCurrentStudies() {
         Member currentMember = memberUtil.getCurrentMember();
         LocalDateTime now = LocalDateTime.now();
 
@@ -62,6 +62,6 @@ public class StudentStudyServiceV2 {
                 .filter(studyHistory -> studyHistory.getStudy().matchesSemester(recruitment.getSemester()))
                 .toList();
 
-        return StudentMyCurrentStudyResponse.from(currentStudyHistories);
+        return StudentStudyMyCurrentResponse.from(currentStudyHistories);
     }
 }
