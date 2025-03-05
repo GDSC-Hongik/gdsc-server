@@ -5,10 +5,13 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.studyv2.dao.AssignmentHistoryV2Repository;
 import com.gdschongik.gdsc.domain.studyv2.dao.AttendanceV2Repository;
+import com.gdschongik.gdsc.domain.studyv2.dao.StudyHistoryV2Repository;
 import com.gdschongik.gdsc.domain.studyv2.dao.StudyV2Repository;
 import com.gdschongik.gdsc.domain.studyv2.domain.AssignmentHistoryV2;
 import com.gdschongik.gdsc.domain.studyv2.domain.AttendanceV2;
+import com.gdschongik.gdsc.domain.studyv2.domain.StudyHistoryV2;
 import com.gdschongik.gdsc.domain.studyv2.domain.StudyV2;
+import com.gdschongik.gdsc.domain.studyv2.dto.response.StudyApplicableResponse;
 import com.gdschongik.gdsc.domain.studyv2.dto.response.StudyDashboardResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
@@ -28,6 +31,7 @@ public class StudentStudyServiceV2 {
     private final StudyV2Repository studyV2Repository;
     private final AttendanceV2Repository attendanceV2Repository;
     private final AssignmentHistoryV2Repository assignmentHistoryV2Repository;
+    private final StudyHistoryV2Repository studyHistoryV2Repository;
 
     @Transactional(readOnly = true)
     public StudyDashboardResponse getMyStudyDashboard(Long studyId) {
@@ -40,5 +44,20 @@ public class StudentStudyServiceV2 {
         LocalDateTime now = LocalDateTime.now();
 
         return StudyDashboardResponse.of(study, attendances, assignmentHistories, now);
+    }
+
+    @Transactional(readOnly = true)
+    public StudyApplicableResponse getAllApplicableStudies() {
+        Member currentMember = memberUtil.getCurrentMember();
+        LocalDateTime now = LocalDateTime.now();
+        List<StudyHistoryV2> studyHistories = studyHistoryV2Repository.findAllByStudent(currentMember).stream()
+                .filter(studyHistory -> studyHistory.getStudy().isApplicable(now))
+                .toList();
+
+        List<StudyV2> applicableStudies = studyV2Repository.findAll().stream()
+                .filter(study -> study.isApplicable(now))
+                .toList();
+
+        return StudyApplicableResponse.of(studyHistories, applicableStudies);
     }
 }
