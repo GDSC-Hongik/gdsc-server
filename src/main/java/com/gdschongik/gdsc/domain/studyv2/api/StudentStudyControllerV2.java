@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,5 +25,12 @@ public class StudentStudyControllerV2 {
     public ResponseEntity<StudyDashboardResponse> getMyStudyDashboard(@PathVariable Long studyId) {
         var response = studentStudyServiceV2.getMyStudyDashboard(studyId);
         return ResponseEntity.ok().body(response);
+    }
+
+    @Operation(summary = "스터디 수강신청", description = "모집중인 스터디에 수강신청 합니다. 여러 스터디에 수강신청 할 수 있습니다.")
+    @PostMapping("/apply/{studyId}")
+    public ResponseEntity<Void> applyStudy(@PathVariable Long studyId) {
+        studentStudyServiceV2.applyStudy(studyId);
+        return ResponseEntity.ok().build();
     }
 }
