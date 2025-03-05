@@ -50,6 +50,7 @@ public class StudentStudyServiceV2 {
     public StudyApplicableResponse getAllApplicableStudies() {
         Member currentMember = memberUtil.getCurrentMember();
         LocalDateTime now = LocalDateTime.now();
+
         List<StudyHistoryV2> studyHistories = studyHistoryV2Repository.findAllByStudent(currentMember).stream()
                 .filter(studyHistory -> studyHistory.getStudy().isApplicable(now))
                 .toList();
