@@ -16,7 +16,6 @@ import com.gdschongik.gdsc.domain.studyv2.dto.response.StudyHistoryMyResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import com.gdschongik.gdsc.infra.github.client.GithubClient;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -97,10 +96,14 @@ public class StudentStudyHistoryServiceV2 {
 
         studyHistoryValidatorV2.validateCancelStudyApply(study, now);
 
-        StudyHistoryV2 studyHistory = studyHistoryV2Repository.findByStudentAndStudy(currentMember, study)
+        StudyHistoryV2 studyHistory = studyHistoryV2Repository
+                .findByStudentAndStudy(currentMember, study)
                 .orElseThrow(() -> new CustomException(STUDY_HISTORY_NOT_FOUND));
         studyHistoryV2Repository.delete(studyHistory);
 
-        log.info("[StudentStudyService] 스터디 수강신청 취소: appliedStudyId={}, memberId={}", study.getId(), currentMember.getId());
+        log.info(
+                "[StudentStudyService] 스터디 수강신청 취소: appliedStudyId={}, memberId={}",
+                study.getId(),
+                currentMember.getId());
     }
 }
