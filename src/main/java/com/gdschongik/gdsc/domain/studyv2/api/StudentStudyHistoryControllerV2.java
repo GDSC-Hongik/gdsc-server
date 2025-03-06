@@ -48,7 +48,7 @@ public class StudentStudyHistoryControllerV2 {
     }
 
     @Operation(summary = "스터디 수강신청 취소", description = "수강신청을 취소합니다. 스터디 수강신청 기간 중에만 취소할 수 있습니다.")
-    @DeleteMapping("apply")
+    @DeleteMapping("/apply")
     public ResponseEntity<Void> cancelStudyApply(@RequestParam("studyId") Long studyId) {
         studentStudyHistoryServiceV2.cancelStudyApply(studyId);
         return ResponseEntity.noContent().build();
