@@ -85,7 +85,7 @@ public class StudentStudyHistoryServiceV2 {
         StudyHistoryV2 studyHistory = StudyHistoryV2.create(currentMember, study);
         studyHistoryV2Repository.save(studyHistory);
 
-        log.info("[StudentStudyService] 스터디 수강신청: studyHistoryId={}", studyHistory.getId());
+        log.info("[StudentStudyHistoryServiceV2] 스터디 수강신청: studyHistoryId={}", studyHistory.getId());
     }
 
     @Transactional
@@ -102,7 +102,7 @@ public class StudentStudyHistoryServiceV2 {
         studyHistoryV2Repository.delete(studyHistory);
 
         log.info(
-                "[StudentStudyService] 스터디 수강신청 취소: appliedStudyId={}, memberId={}",
+                "[StudentStudyHistoryServiceV2] 스터디 수강신청 취소: appliedStudyId={}, memberId={}",
                 study.getId(),
                 currentMember.getId());
     }
