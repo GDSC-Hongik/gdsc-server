@@ -127,6 +127,7 @@ public class MentorStudyServiceV2 {
         StudyV2 study = studyV2Repository.findById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
         studyValidatorV2.validateStudyMentor(currentMember, study);
 
+        LocalDate now = LocalDate.now();
         Page<StudyHistoryV2> studyHistories = studyHistoryV2Repository.findByStudyId(studyId, pageable);
         List<Long> studentIds = studyHistories.stream()
                 .map(studyHistory -> studyHistory.getStudent().getId())
@@ -150,7 +151,7 @@ public class MentorStudyServiceV2 {
             List<StudyTaskResponse> studyTasks = new ArrayList<>();
             studySessions.forEach(studySession -> {
                 studyTasks.add(StudyTaskResponse.createAttendanceType(
-                        studySession, LocalDate.now(), isAttended(currentAttendances, studySession)));
+                        studySession, now, isAttended(currentAttendances, studySession)));
                 studyTasks.add(StudyTaskResponse.createAssignmentType(
                         studySession, getSubmittedAssignment(currentAssignmentHistories, studySession)));
             });
