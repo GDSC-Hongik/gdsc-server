@@ -1,6 +1,7 @@
 package com.gdschongik.gdsc.domain.studyv2.api;
 
 import com.gdschongik.gdsc.domain.studyv2.application.StudentStudyServiceV2;
+import com.gdschongik.gdsc.domain.studyv2.dto.response.StudyApplicableResponse;
 import com.gdschongik.gdsc.domain.studyv2.dto.response.StudyDashboardResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,6 +24,13 @@ public class StudentStudyControllerV2 {
     @GetMapping("/{studyId}/me/dashboard")
     public ResponseEntity<StudyDashboardResponse> getMyStudyDashboard(@PathVariable Long studyId) {
         var response = studentStudyServiceV2.getMyStudyDashboard(studyId);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @Operation(summary = "신청 가능한 스터디 조회", description = "현재 모집 중인 스터디를 조회합니다.")
+    @GetMapping("/apply")
+    public ResponseEntity<StudyApplicableResponse> getAllApplicableStudies() {
+        var response = studentStudyServiceV2.getAllApplicableStudies();
         return ResponseEntity.ok().body(response);
     }
 }
