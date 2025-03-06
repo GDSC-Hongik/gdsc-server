@@ -216,6 +216,17 @@ public class StudyV2 extends BaseEntity {
         return applicationPeriod.isWithin(date);
     }
 
+    public LocalDateTime getOpeningDate() {
+        if (type.isLive()) {
+            return studySessions.stream()
+                    .filter(studySession -> studySession.getPosition() == 1)
+                    .findFirst()
+                    .map(studySession -> studySession.getLessonPeriod().getStartDate())
+                    .orElse(null);
+        }
+        return null;
+    }
+
     // 데이터 변경 로직
 
     public void update(StudyUpdateCommand command) {
