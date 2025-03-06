@@ -89,39 +89,7 @@ public class MentorStudyServiceV2 {
                 studyRoundStatisticsDtos);
     }
 
-    private StudyRoundStatisticsDto calculateRoundStatistics(StudySessionV2 studySessionV2, Long totalStudentCount) {
-        long attendanceCount = attendanceV2Repository.countByStudySessionId(studySessionV2.getId());
-        long attendanceRate = Math.round(attendanceCount / (double) totalStudentCount * 100);
-
-        long successfullySubmittedAssignmentCount =
-                assignmentHistoryV2Repository.countByStudySessionIdAndSubmissionStatusEquals(
-                        studySessionV2.getId(), SUCCESS);
-        long assignmentSubmissionRate =
-                Math.round(successfullySubmittedAssignmentCount / (double) totalStudentCount * 100);
-
-        return StudyRoundStatisticsDto.of(studySessionV2.getPosition(), attendanceRate, assignmentSubmissionRate);
-    }
-
-    private long calculateAverageWeekAttendanceRate(List<StudyRoundStatisticsDto> studyRoundStatisticsDtos) {
-
-        double averageAttendanceRate = studyRoundStatisticsDtos.stream()
-                .mapToLong(StudyRoundStatisticsDto::attendanceRate)
-                .average()
-                .orElse(0);
-
-        return Math.round(averageAttendanceRate);
-    }
-
-    private long calculateAverageWeekAssignmentSubmissionRate(List<StudyRoundStatisticsDto> studyRoundStatisticsDtos) {
-
-        double averageAssignmentSubmissionRate = studyRoundStatisticsDtos.stream()
-                .mapToLong(StudyRoundStatisticsDto::assignmentSubmissionRate)
-                .average()
-                .orElse(0);
-
-        return Math.round(averageAssignmentSubmissionRate);
-    }
-
+    @Transactional
     public Page<MentorStudyStudentResponse> getStudyStudents(Long studyId, Pageable pageable) {
         Member currentMember = memberUtil.getCurrentMember();
         StudyV2 study = studyV2Repository.findById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
@@ -159,6 +127,39 @@ public class MentorStudyServiceV2 {
             response.add(MentorStudyStudentResponse.of(studyHistory, currentStudyAchievements, studyTasks));
         });
         return new PageImpl<>(response, pageable, studyHistories.getTotalElements());
+    }
+
+    private StudyRoundStatisticsDto calculateRoundStatistics(StudySessionV2 studySessionV2, Long totalStudentCount) {
+        long attendanceCount = attendanceV2Repository.countByStudySessionId(studySessionV2.getId());
+        long attendanceRate = Math.round(attendanceCount / (double) totalStudentCount * 100);
+
+        long successfullySubmittedAssignmentCount =
+                assignmentHistoryV2Repository.countByStudySessionIdAndSubmissionStatusEquals(
+                        studySessionV2.getId(), SUCCESS);
+        long assignmentSubmissionRate =
+                Math.round(successfullySubmittedAssignmentCount / (double) totalStudentCount * 100);
+
+        return StudyRoundStatisticsDto.of(studySessionV2.getPosition(), attendanceRate, assignmentSubmissionRate);
+    }
+
+    private long calculateAverageWeekAttendanceRate(List<StudyRoundStatisticsDto> studyRoundStatisticsDtos) {
+
+        double averageAttendanceRate = studyRoundStatisticsDtos.stream()
+                .mapToLong(StudyRoundStatisticsDto::attendanceRate)
+                .average()
+                .orElse(0);
+
+        return Math.round(averageAttendanceRate);
+    }
+
+    private long calculateAverageWeekAssignmentSubmissionRate(List<StudyRoundStatisticsDto> studyRoundStatisticsDtos) {
+
+        double averageAssignmentSubmissionRate = studyRoundStatisticsDtos.stream()
+                .mapToLong(StudyRoundStatisticsDto::assignmentSubmissionRate)
+                .average()
+                .orElse(0);
+
+        return Math.round(averageAssignmentSubmissionRate);
     }
 
     private Map<Long, List<StudyAchievementV2>> getStudyAchievementMap(Long studyId, List<Long> studentIds) {
