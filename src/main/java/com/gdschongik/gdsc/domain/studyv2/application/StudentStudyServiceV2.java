@@ -31,8 +31,6 @@ public class StudentStudyServiceV2 {
     private final StudyV2Repository studyV2Repository;
     private final AttendanceV2Repository attendanceV2Repository;
     private final AssignmentHistoryV2Repository assignmentHistoryV2Repository;
-    private final StudyHistoryV2Repository studyHistoryV2Repository;
-    private final StudyHistoryValidatorV2 studyHistoryValidatorV2;
 
     @Transactional(readOnly = true)
     public StudyDashboardResponse getMyStudyDashboard(Long studyId) {
@@ -45,36 +43,5 @@ public class StudentStudyServiceV2 {
         LocalDateTime now = LocalDateTime.now();
 
         return StudyDashboardResponse.of(study, attendances, assignmentHistories, now);
-    }
-
-    @Transactional
-    public void applyStudy(Long studyId) {
-        Member currentMember = memberUtil.getCurrentMember();
-        StudyV2 study = studyV2Repository.findById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
-
-        List<StudyHistoryV2> studyHistories = studyHistoryV2Repository.findAllByStudent(currentMember);
-        LocalDateTime now = LocalDateTime.now();
-
-        studyHistoryValidatorV2.validateApplyStudy(study, studyHistories, now);
-
-        StudyHistoryV2 studyHistory = StudyHistoryV2.create(currentMember, study);
-        studyHistoryV2Repository.save(studyHistory);
-
-        log.info("[StudentStudyService] 스터디 수강신청: studyHistoryId={}", studyHistory.getId());
-    }
-
-    @Transactional
-    public void cancelStudyApply(Long studyId) {
-        Member currentMember = memberUtil.getCurrentMember();
-        StudyV2 study = studyV2Repository.findById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
-        LocalDateTime now = LocalDateTime.now();
-
-        studyHistoryValidatorV2.validateCancelStudyApply(study, now);
-
-        StudyHistoryV2 studyHistory = studyHistoryV2Repository.findByStudentAndStudy(currentMember, study)
-                .orElseThrow(() -> new CustomException(STUDY_HISTORY_NOT_FOUND));
-        studyHistoryV2Repository.delete(studyHistory);
-
-        log.info("[StudentStudyService] 스터디 수강신청 취소: appliedStudyId={}, memberId={}", study.getId(), currentMember.getId());
     }
 }
