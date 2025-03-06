@@ -2,26 +2,25 @@ package com.gdschongik.gdsc.domain.studyv2.application;
 
 import static com.gdschongik.gdsc.domain.study.domain.AssignmentSubmissionStatus.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
+import static java.util.stream.Collectors.groupingBy;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
-import com.gdschongik.gdsc.domain.studyv2.dao.AssignmentHistoryV2Repository;
-import com.gdschongik.gdsc.domain.studyv2.dao.AttendanceV2Repository;
-import com.gdschongik.gdsc.domain.studyv2.dao.StudyHistoryV2Repository;
-import com.gdschongik.gdsc.domain.studyv2.dao.StudyV2Repository;
-import com.gdschongik.gdsc.domain.studyv2.domain.StudyHistoryV2;
-import com.gdschongik.gdsc.domain.studyv2.domain.StudySessionV2;
-import com.gdschongik.gdsc.domain.studyv2.domain.StudyUpdateCommand;
-import com.gdschongik.gdsc.domain.studyv2.domain.StudyV2;
-import com.gdschongik.gdsc.domain.studyv2.domain.StudyValidatorV2;
+import com.gdschongik.gdsc.domain.studyv2.dao.*;
+import com.gdschongik.gdsc.domain.studyv2.domain.*;
 import com.gdschongik.gdsc.domain.studyv2.dto.dto.StudyRoundStatisticsDto;
 import com.gdschongik.gdsc.domain.studyv2.dto.request.StudyUpdateRequest;
-import com.gdschongik.gdsc.domain.studyv2.dto.response.StudyManagerResponse;
-import com.gdschongik.gdsc.domain.studyv2.dto.response.StudyStatisticsResponse;
+import com.gdschongik.gdsc.domain.studyv2.dto.response.*;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +33,7 @@ public class MentorStudyServiceV2 {
     private final StudyValidatorV2 studyValidatorV2;
     private final StudyV2Repository studyV2Repository;
     private final StudyHistoryV2Repository studyHistoryV2Repository;
+    private final StudyAchievementV2Repository studyAchievementV2Repository;
     private final AttendanceV2Repository attendanceV2Repository;
     private final AssignmentHistoryV2Repository assignmentHistoryV2Repository;
 
@@ -120,5 +120,79 @@ public class MentorStudyServiceV2 {
                 .orElse(0);
 
         return Math.round(averageAssignmentSubmissionRate);
+    }
+
+    public Page<MentorStudyStudentResponse> getStudyStudents(Long studyId, Pageable pageable) {
+        Member currentMember = memberUtil.getCurrentMember();
+        StudyV2 study = studyV2Repository.findById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
+        studyValidatorV2.validateStudyMentor(currentMember, study);
+
+        Page<StudyHistoryV2> studyHistories = studyHistoryV2Repository.findByStudyId(studyId, pageable);
+        List<Long> studentIds = studyHistories.stream()
+                .map(studyHistory -> studyHistory.getStudent().getId())
+                .toList();
+        List<StudySessionV2> studySessions = study.getStudySessions();
+
+        Map<Long, List<StudyAchievementV2>> studyAchievementMap = getStudyAchievementMap(studyId, studentIds);
+        Map<Long, List<AttendanceV2>> attendanceMap = getAttendanceMap(studyId, studentIds);
+        Map<Long, List<AssignmentHistoryV2>> assignmentHistoryMap = getAssignmentHistoryMap(studyId, studentIds);
+
+        List<MentorStudyStudentResponse> response = new ArrayList<>();
+
+        studyHistories.forEach(studyHistory -> {
+            List<StudyAchievementV2> currentStudyAchievements =
+                    studyAchievementMap.getOrDefault(studyHistory.getStudent().getId(), new ArrayList<>());
+            List<AttendanceV2> currentAttendances =
+                    attendanceMap.getOrDefault(studyHistory.getStudent().getId(), new ArrayList<>());
+            List<AssignmentHistoryV2> currentAssignmentHistories =
+                    assignmentHistoryMap.getOrDefault(studyHistory.getStudent().getId(), new ArrayList<>());
+
+            List<StudyTaskResponse> studyTasks = new ArrayList<>();
+            studySessions.forEach(studySession -> {
+                studyTasks.add(StudyTaskResponse.createAttendanceType(
+                        studySession, LocalDate.now(), isAttended(currentAttendances, studySession)));
+                studyTasks.add(StudyTaskResponse.createAssignmentType(
+                        studySession, getSubmittedAssignment(currentAssignmentHistories, studySession)));
+            });
+
+            response.add(MentorStudyStudentResponse.of(studyHistory, currentStudyAchievements, studyTasks));
+        });
+        return new PageImpl<>(response, pageable, studyHistories.getTotalElements());
+    }
+
+    private Map<Long, List<StudyAchievementV2>> getStudyAchievementMap(Long studyId, List<Long> studentIds) {
+        List<StudyAchievementV2> studyAchievements =
+                studyAchievementV2Repository.findByStudyIdAndMemberIds(studyId, studentIds);
+        return studyAchievements.stream()
+                .collect(groupingBy(
+                        studyAchievement -> studyAchievement.getStudent().getId()));
+    }
+
+    private Map<Long, List<AttendanceV2>> getAttendanceMap(Long studyId, List<Long> studentIds) {
+        List<AttendanceV2> attendances = attendanceV2Repository.findByStudyIdAndMemberIds(studyId, studentIds);
+        return attendances.stream()
+                .collect(groupingBy(attendance -> attendance.getStudent().getId()));
+    }
+
+    private Map<Long, List<AssignmentHistoryV2>> getAssignmentHistoryMap(Long studyId, List<Long> studentIds) {
+        List<AssignmentHistoryV2> assignmentHistories =
+                assignmentHistoryV2Repository.findByStudyIdAndMemberIds(studyId, studentIds);
+        return assignmentHistories.stream()
+                .collect(groupingBy(
+                        assignmentHistory -> assignmentHistory.getMember().getId()));
+    }
+
+    private boolean isAttended(List<AttendanceV2> attendances, StudySessionV2 studySessionV2) {
+        return attendances.stream()
+                .anyMatch(attendance -> attendance.getStudySession().getId().equals(studySessionV2.getId()));
+    }
+
+    private AssignmentHistoryV2 getSubmittedAssignment(
+            List<AssignmentHistoryV2> assignmentHistories, StudySessionV2 studySessionV2) {
+        return assignmentHistories.stream()
+                .filter(assignmentHistory ->
+                        assignmentHistory.getStudySession().getId().equals(studySessionV2.getId()))
+                .findFirst()
+                .orElse(null);
     }
 }

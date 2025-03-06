@@ -3,6 +3,7 @@ package com.gdschongik.gdsc.domain.studyv2.dao;
 import static com.gdschongik.gdsc.domain.studyv2.domain.QStudyAchievementV2.*;
 
 import com.gdschongik.gdsc.domain.study.domain.AchievementType;
+import com.gdschongik.gdsc.domain.studyv2.domain.StudyAchievementV2;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
@@ -13,6 +14,14 @@ import lombok.RequiredArgsConstructor;
 public class StudyAchievementV2CustomRepositoryImpl implements StudyAchievementV2CustomRepository {
 
     private final JPAQueryFactory queryFactory;
+
+    @Override
+    public List<StudyAchievementV2> findByStudyIdAndMemberIds(Long studyId, List<Long> memberIds) {
+        return queryFactory
+                .selectFrom(studyAchievementV2)
+                .where(eqStudyId(studyId), containsStudentId(memberIds))
+                .fetch();
+    }
 
     @Override
     public void deleteByStudyAndAchievementTypeAndMemberIds(
