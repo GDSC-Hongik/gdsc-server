@@ -35,7 +35,7 @@ public class StudyHistoryValidatorV2 {
 
         // 이미 해당 스터디에 수강 신청한 경우
         boolean isStudyHistoryDuplicate = currentMemberStudyHistories.stream()
-                .anyMatch(studyHistory -> studyHistory.getStudy().equals(study));
+                .anyMatch(studyHistory -> studyHistory.getStudy().getId() == study.getId());
 
         if (isStudyHistoryDuplicate) {
             throw new CustomException(STUDY_HISTORY_DUPLICATE);
