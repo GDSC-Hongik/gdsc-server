@@ -13,8 +13,6 @@ public record StudyCreateRequest(
         @NotNull @Positive Long mentorId,
         @NotNull StudyType type,
         @NotNull String title,
-        String description,
-        String descriptionNotionLink,
         @NotNull Semester semester,
         @NotNull @Positive Integer totalRound,
         @Nullable DayOfWeek dayOfWeek,

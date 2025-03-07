@@ -37,8 +37,6 @@ public class AdminStudyServiceV2 {
         StudyV2 study = studyFactory.create(
                 request.type(),
                 request.title(),
-                request.description(),
-                request.descriptionNotionLink(),
                 request.semester(),
                 request.totalRound(),
                 request.dayOfWeek(),
