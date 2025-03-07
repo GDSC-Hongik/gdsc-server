@@ -5,6 +5,7 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import static java.util.stream.Collectors.groupingBy;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
+import com.gdschongik.gdsc.domain.study.domain.StudyType;
 import com.gdschongik.gdsc.domain.studyv2.dao.*;
 import com.gdschongik.gdsc.domain.studyv2.domain.*;
 import com.gdschongik.gdsc.domain.studyv2.dto.dto.StudyRoundStatisticsDto;
@@ -12,7 +13,7 @@ import com.gdschongik.gdsc.domain.studyv2.dto.request.StudyUpdateRequest;
 import com.gdschongik.gdsc.domain.studyv2.dto.response.*;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -95,7 +96,8 @@ public class MentorStudyServiceV2 {
         StudyV2 study = studyV2Repository.findById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
         studyValidatorV2.validateStudyMentor(currentMember, study);
 
-        LocalDate now = LocalDate.now();
+        LocalDateTime now = LocalDateTime.now();
+        StudyType type = study.getType();
         Page<StudyHistoryV2> studyHistories = studyHistoryV2Repository.findByStudyId(studyId, pageable);
         List<Long> studentIds = studyHistories.stream()
                 .map(studyHistory -> studyHistory.getStudent().getId())
@@ -119,9 +121,9 @@ public class MentorStudyServiceV2 {
             List<StudyTaskResponse> studyTasks = new ArrayList<>();
             studySessions.forEach(studySession -> {
                 studyTasks.add(StudyTaskResponse.createAttendanceType(
-                        studySession, now, isAttended(currentAttendances, studySession)));
+                        studySession, type, isAttended(currentAttendances, studySession), now));
                 studyTasks.add(StudyTaskResponse.createAssignmentType(
-                        studySession, getSubmittedAssignment(currentAssignmentHistories, studySession)));
+                        studySession, getSubmittedAssignment(currentAssignmentHistories, studySession), now));
             });
 
             response.add(MentorStudyStudentResponse.of(studyHistory, currentStudyAchievements, studyTasks));

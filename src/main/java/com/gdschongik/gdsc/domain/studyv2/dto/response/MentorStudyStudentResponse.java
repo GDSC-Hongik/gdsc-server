@@ -1,11 +1,12 @@
 package com.gdschongik.gdsc.domain.studyv2.dto.response;
 
 import static com.gdschongik.gdsc.domain.study.domain.AchievementType.*;
-import static com.gdschongik.gdsc.domain.studyv2.dto.response.AssignmentSubmissionStatusResponse.*;
 import static com.gdschongik.gdsc.domain.studyv2.dto.response.StudyTaskResponse.StudyTaskType.*;
 
 import com.gdschongik.gdsc.domain.study.domain.AchievementType;
 import com.gdschongik.gdsc.domain.study.domain.StudyHistoryStatus;
+import com.gdschongik.gdsc.domain.studyv2.domain.AssignmentHistoryStatus;
+import com.gdschongik.gdsc.domain.studyv2.domain.AttendanceStatus;
 import com.gdschongik.gdsc.domain.studyv2.domain.StudyAchievementV2;
 import com.gdschongik.gdsc.domain.studyv2.domain.StudyHistoryV2;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -37,8 +38,8 @@ public record MentorStudyStudentResponse(
                 .filter(studyTaskResponse -> studyTaskResponse.taskType() == ATTENDANCE)
                 .toList();
 
-        long successAssignmentsCount = countAssignmentByStatus(assignments, SUCCESS);
-        long attendedCount = countAttendanceByStatus(attendances, AttendanceStatusResponse.ATTENDED);
+        long successAssignmentsCount = countAssignmentByStatus(assignments, AssignmentHistoryStatus.SUCCEEDED);
+        long attendedCount = countAttendanceByStatus(attendances, AttendanceStatus.ATTENDED);
 
         return new MentorStudyStudentResponse(
                 studyHistory.getStudent().getId(),
@@ -60,14 +61,13 @@ public record MentorStudyStudentResponse(
         return studyAchievements.stream().anyMatch(studyAchievement -> studyAchievement.getType() == achievementType);
     }
 
-    private static long countAssignmentByStatus(
-            List<StudyTaskResponse> assignments, AssignmentSubmissionStatusResponse status) {
+    private static long countAssignmentByStatus(List<StudyTaskResponse> assignments, AssignmentHistoryStatus status) {
         return assignments.stream()
                 .filter(studyTaskResponse -> studyTaskResponse.assignmentSubmissionStatus() == status)
                 .count();
     }
 
-    private static long countAttendanceByStatus(List<StudyTaskResponse> attendances, AttendanceStatusResponse status) {
+    private static long countAttendanceByStatus(List<StudyTaskResponse> attendances, AttendanceStatus status) {
         return attendances.stream()
                 .filter(studyTaskResponse -> studyTaskResponse.attendanceStatus() == status)
                 .count();
