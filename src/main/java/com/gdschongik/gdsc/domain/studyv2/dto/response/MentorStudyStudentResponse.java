@@ -29,8 +29,8 @@ public record MentorStudyStudentResponse(
                 .filter(studyTaskDto -> studyTaskDto.taskType() == ATTENDANCE)
                 .toList();
 
-        long successAssignmentsCount = countAssignmentByStatus(assignments, AssignmentHistoryStatus.SUCCEEDED);
-        long attendedCount = countAttendanceByStatus(attendances, AttendanceStatus.ATTENDED);
+        long successAssignmentsCount = countAssignmentByStatus(assignments);
+        long attendedCount = countAttendanceByStatus(attendances);
 
         return new MentorStudyStudentResponse(
                 StudyHistoryManagerDto.from(studyHistory),
@@ -40,15 +40,15 @@ public record MentorStudyStudentResponse(
                 calculateRateOrZero(attendedCount, attendances.size()));
     }
 
-    private static long countAssignmentByStatus(List<StudyTaskDto> assignments, AssignmentHistoryStatus status) {
+    private static long countAssignmentByStatus(List<StudyTaskDto> assignments) {
         return assignments.stream()
-                .filter(studyTaskDto -> studyTaskDto.assignmentSubmissionStatus() == status)
+                .filter(studyTaskDto -> studyTaskDto.assignmentSubmissionStatus() == AssignmentHistoryStatus.SUCCEEDED)
                 .count();
     }
 
-    private static long countAttendanceByStatus(List<StudyTaskDto> attendances, AttendanceStatus status) {
+    private static long countAttendanceByStatus(List<StudyTaskDto> attendances) {
         return attendances.stream()
-                .filter(studyTaskDto -> studyTaskDto.attendanceStatus() == status)
+                .filter(studyTaskDto -> studyTaskDto.attendanceStatus() == AttendanceStatus.ATTENDED)
                 .count();
     }
 
