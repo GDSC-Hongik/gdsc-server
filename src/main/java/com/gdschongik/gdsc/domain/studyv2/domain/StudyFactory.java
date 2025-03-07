@@ -19,8 +19,6 @@ public class StudyFactory {
     public StudyV2 create(
             StudyType type,
             String title,
-            String description,
-            String descriptionNotionLink,
             Semester semester,
             Integer totalRound,
             DayOfWeek dayOfWeek,
@@ -35,8 +33,6 @@ public class StudyFactory {
             return createLive(
                     type,
                     title,
-                    description,
-                    descriptionNotionLink,
                     semester,
                     totalRound,
                     dayOfWeek,
@@ -49,23 +45,13 @@ public class StudyFactory {
                     attendanceNumberGenerator);
         } else {
             return createAssignment(
-                    title,
-                    description,
-                    descriptionNotionLink,
-                    semester,
-                    totalRound,
-                    applicationPeriod,
-                    discordChannelId,
-                    discordRoleId,
-                    mentor);
+                    title, semester, totalRound, applicationPeriod, discordChannelId, discordRoleId, mentor);
         }
     }
 
     private StudyV2 createLive(
             StudyType type,
             String title,
-            String description,
-            String descriptionNotionLink,
             Semester semester,
             Integer totalRound,
             DayOfWeek dayOfWeek,
@@ -79,8 +65,6 @@ public class StudyFactory {
         StudyV2 study = StudyV2.createLive(
                 type,
                 title,
-                description,
-                descriptionNotionLink,
                 semester,
                 totalRound,
                 dayOfWeek,
@@ -100,8 +84,6 @@ public class StudyFactory {
 
     private StudyV2 createAssignment(
             String title,
-            String description,
-            String descriptionNotionLink,
             Semester semester,
             Integer totalRound,
             Period applicationPeriod,
@@ -109,15 +91,7 @@ public class StudyFactory {
             String discordRoleId,
             Member mentor) {
         StudyV2 study = StudyV2.createAssignment(
-                title,
-                description,
-                descriptionNotionLink,
-                semester,
-                totalRound,
-                applicationPeriod,
-                discordChannelId,
-                discordRoleId,
-                mentor);
+                title, semester, totalRound, applicationPeriod, discordChannelId, discordRoleId, mentor);
 
         IntStream.rangeClosed(1, totalRound).forEach(round -> StudySessionV2.createEmptyForAssignment(round, study));
 

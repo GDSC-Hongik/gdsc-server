@@ -308,8 +308,6 @@ public abstract class IntegrationTest {
         StudyV2 study = studyFactory.create(
                 type,
                 STUDY_TITLE,
-                STUDY_DESCRIPTION,
-                STUDY_DESCRIPTION_NOTION_LINK,
                 STUDY_SEMESTER,
                 TOTAL_ROUND,
                 DAY_OF_WEEK,
