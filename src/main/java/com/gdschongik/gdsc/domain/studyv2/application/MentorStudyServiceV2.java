@@ -9,6 +9,7 @@ import com.gdschongik.gdsc.domain.study.domain.StudyType;
 import com.gdschongik.gdsc.domain.studyv2.dao.*;
 import com.gdschongik.gdsc.domain.studyv2.domain.*;
 import com.gdschongik.gdsc.domain.studyv2.dto.dto.StudyRoundStatisticsDto;
+import com.gdschongik.gdsc.domain.studyv2.dto.dto.StudyTaskDto;
 import com.gdschongik.gdsc.domain.studyv2.dto.request.StudyUpdateRequest;
 import com.gdschongik.gdsc.domain.studyv2.dto.response.*;
 import com.gdschongik.gdsc.global.exception.CustomException;
@@ -118,11 +119,11 @@ public class MentorStudyServiceV2 {
             List<AssignmentHistoryV2> currentAssignmentHistories =
                     assignmentHistoryMap.getOrDefault(studyHistory.getStudent().getId(), List.of());
 
-            List<StudyTaskResponse> studyTasks = new ArrayList<>();
+            List<StudyTaskDto> studyTasks = new ArrayList<>();
             studySessions.forEach(studySession -> {
-                studyTasks.add(StudyTaskResponse.createAttendanceType(
+                studyTasks.add(StudyTaskDto.createAttendanceType(
                         studySession, type, isAttended(currentAttendances, studySession), now));
-                studyTasks.add(StudyTaskResponse.createAssignmentType(
+                studyTasks.add(StudyTaskDto.createAssignmentType(
                         studySession, getSubmittedAssignment(currentAssignmentHistories, studySession), now));
             });
 
