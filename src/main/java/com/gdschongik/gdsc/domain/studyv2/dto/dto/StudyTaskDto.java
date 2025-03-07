@@ -1,6 +1,6 @@
-package com.gdschongik.gdsc.domain.studyv2.dto.response;
+package com.gdschongik.gdsc.domain.studyv2.dto.dto;
 
-import static com.gdschongik.gdsc.domain.studyv2.dto.response.StudyTaskResponse.StudyTaskType.*;
+import static com.gdschongik.gdsc.domain.studyv2.dto.dto.StudyTaskDto.StudyTaskType.*;
 
 import com.gdschongik.gdsc.domain.study.domain.StudyType;
 import com.gdschongik.gdsc.domain.studyv2.domain.AssignmentHistoryStatus;
@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-public record StudyTaskResponse(
+public record StudyTaskDto(
         Long studySessionId,
         @Schema(description = "현 회차수") Integer round,
         @Schema(description = "태스크 타입") StudyTaskType taskType,
@@ -21,9 +21,9 @@ public record StudyTaskResponse(
         @Schema(description = "과제 제목 (과제타입일 때만 사용)") String assignmentTitle,
         @Schema(description = "과제 제출 상태 (과제타입일 때만 사용)") AssignmentHistoryStatus assignmentSubmissionStatus) {
 
-    public static StudyTaskResponse createAttendanceType(
+    public static StudyTaskDto createAttendanceType(
             StudySessionV2 studySession, StudyType type, boolean isAttended, LocalDateTime now) {
-        return new StudyTaskResponse(
+        return new StudyTaskDto(
                 studySession.getId(),
                 studySession.getPosition(),
                 ATTENDANCE,
@@ -33,10 +33,10 @@ public record StudyTaskResponse(
                 null);
     }
 
-    public static StudyTaskResponse createAssignmentType(
+    public static StudyTaskDto createAssignmentType(
             StudySessionV2 studySession, AssignmentHistoryV2 assignmentHistory, LocalDateTime now) {
 
-        return new StudyTaskResponse(
+        return new StudyTaskDto(
                 studySession.getId(),
                 studySession.getPosition(),
                 ASSIGNMENT,
