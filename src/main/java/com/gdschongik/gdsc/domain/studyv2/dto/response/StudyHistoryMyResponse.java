@@ -9,7 +9,7 @@ import com.gdschongik.gdsc.domain.studyv2.dto.dto.StudyStudentDto;
 import java.util.List;
 
 public record StudyHistoryMyResponse(
-    StudyHistoryStudentDto studyHistory, StudyStudentDto study, List<StudyAchievementDto> achievements) {
+        StudyHistoryStudentDto studyHistory, StudyStudentDto study, List<StudyAchievementDto> achievements) {
     public static StudyHistoryMyResponse of(
             StudyHistoryV2 studyHistory, StudyV2 study, List<StudyAchievementV2> achievements) {
         return new StudyHistoryMyResponse(
