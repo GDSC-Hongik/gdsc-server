@@ -110,11 +110,11 @@ public class MentorStudyServiceV2 {
 
         studyHistories.forEach(studyHistory -> {
             List<StudyAchievementV2> currentStudyAchievements =
-                    studyAchievementMap.getOrDefault(studyHistory.getStudent().getId(), new ArrayList<>());
+                    studyAchievementMap.getOrDefault(studyHistory.getStudent().getId(), List.of());
             List<AttendanceV2> currentAttendances =
-                    attendanceMap.getOrDefault(studyHistory.getStudent().getId(), new ArrayList<>());
+                    attendanceMap.getOrDefault(studyHistory.getStudent().getId(), List.of());
             List<AssignmentHistoryV2> currentAssignmentHistories =
-                    assignmentHistoryMap.getOrDefault(studyHistory.getStudent().getId(), new ArrayList<>());
+                    assignmentHistoryMap.getOrDefault(studyHistory.getStudent().getId(), List.of());
 
             List<StudyTaskResponse> studyTasks = new ArrayList<>();
             studySessions.forEach(studySession -> {
