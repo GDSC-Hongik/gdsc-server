@@ -3,6 +3,4 @@ package com.gdschongik.gdsc.domain.studyv2.dto.request;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
-public record StudyApplyRequest(
-        @NotNull @Positive Long studyId
-) {}
+public record StudyApplyRequest(@NotNull @Positive Long studyId) {}

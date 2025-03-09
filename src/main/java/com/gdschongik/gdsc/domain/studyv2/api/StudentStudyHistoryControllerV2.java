@@ -1,8 +1,8 @@
 package com.gdschongik.gdsc.domain.studyv2.api;
 
 import com.gdschongik.gdsc.domain.studyv2.application.StudentStudyHistoryServiceV2;
-import com.gdschongik.gdsc.domain.studyv2.dto.request.StudyApplyRequest;
 import com.gdschongik.gdsc.domain.studyv2.dto.request.StudyApplyCancelRequest;
+import com.gdschongik.gdsc.domain.studyv2.dto.request.StudyApplyRequest;
 import com.gdschongik.gdsc.domain.studyv2.dto.request.StudyHistoryRepositoryUpdateRequest;
 import com.gdschongik.gdsc.domain.studyv2.dto.response.StudyHistoryMyResponse;
 import io.swagger.v3.oas.annotations.Operation;
