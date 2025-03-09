@@ -27,8 +27,8 @@ public class StudentStudyControllerV2 {
         return ResponseEntity.ok().body(response);
     }
 
-    @Operation(summary = "신청 가능한 스터디 조회", description = "현재 모집 중인 스터디를 조회합니다.")
-    @GetMapping("/apply")
+    @Operation(summary = "나의 신청 가능한 스터디 조회", description = "현재 모집 중인 스터디와 내가 신청한 스터디를 조회합니다.")
+    @GetMapping("/me/applicable")
     public ResponseEntity<StudyApplicableResponse> getAllApplicableStudies() {
         var response = studentStudyServiceV2.getAllApplicableStudies();
         return ResponseEntity.ok().body(response);
