@@ -55,11 +55,11 @@ public class StudentStudyServiceV2 {
         LocalDateTime now = LocalDateTime.now();
 
         Recruitment recruitment = recruitmentRepository
-                .findBySemesterPeriodCovers(now)
+                .findCurrentRecruitment(now)
                 .orElseThrow(() -> new CustomException(RECRUITMENT_NOT_FOUND));
 
         List<StudyHistoryV2> currentStudyHistories = studyHistoryV2Repository.findAllByStudent(currentMember).stream()
-                .filter(studyHistory -> studyHistory.getStudy().matchesSemester(recruitment.getSemester()))
+                .filter(studyHistory -> studyHistory.getStudy().getSemester().equals(recruitment.getSemester()))
                 .toList();
 
         return StudentStudyMyCurrentResponse.from(currentStudyHistories);

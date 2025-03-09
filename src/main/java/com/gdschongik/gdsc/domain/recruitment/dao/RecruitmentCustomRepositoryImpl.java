@@ -15,10 +15,10 @@ public class RecruitmentCustomRepositoryImpl implements RecruitmentCustomReposit
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Optional<Recruitment> findBySemesterPeriodCovers(LocalDateTime date) {
+    public Optional<Recruitment> findCurrentRecruitment(LocalDateTime now) {
         return Optional.ofNullable(queryFactory
                 .selectFrom(recruitment)
-                .where(isWithinSemesterPeriod(date))
+                .where(isWithinSemesterPeriod(now))
                 .fetchOne());
     }
 
