@@ -217,14 +217,15 @@ public class StudyV2 extends BaseEntity {
     }
 
     public LocalDateTime getOpeningDate() {
-        if (type.isLive()) {
-            return studySessions.stream()
-                    .filter(studySession -> studySession.getPosition() == 1)
-                    .findFirst()
-                    .map(studySession -> studySession.getLessonPeriod().getStartDate())
-                    .orElse(null);
+        if (!type.isLive()) {
+            return null;
         }
-        return null;
+
+        return studySessions.stream()
+                .filter(studySession -> studySession.getPosition() == 1)
+                .findFirst()
+                .map(studySession -> studySession.getLessonPeriod().getStartDate())
+                .orElse(null);
     }
 
     // 데이터 변경 로직
