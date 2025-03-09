@@ -212,8 +212,8 @@ public class StudyV2 extends BaseEntity {
         return getOptionalStudySession(studySessionId).orElseThrow(() -> new CustomException(STUDY_SESSION_NOT_FOUND));
     }
 
-    public boolean isApplicable(LocalDateTime date) {
-        return applicationPeriod.isWithin(date);
+    public boolean isApplicable(LocalDateTime now) {
+        return applicationPeriod.isWithin(now);
     }
 
     // 데이터 변경 로직
