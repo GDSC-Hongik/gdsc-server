@@ -7,13 +7,14 @@ import com.gdschongik.gdsc.domain.studyv2.domain.AttendanceStatus;
 import com.gdschongik.gdsc.domain.studyv2.domain.StudyAchievementV2;
 import com.gdschongik.gdsc.domain.studyv2.domain.StudyHistoryV2;
 import com.gdschongik.gdsc.domain.studyv2.dto.dto.StudyAchievementDto;
-import com.gdschongik.gdsc.domain.studyv2.dto.dto.StudyHistoryManagerDto;
+import com.gdschongik.gdsc.domain.studyv2.dto.dto.StudyHistoryDto;
 import com.gdschongik.gdsc.domain.studyv2.dto.dto.StudyTaskDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 
 public record MentorStudyStudentResponse(
         StudyHistoryManagerDto studyHistoryManager,
+        StudyHistoryDto studyHistory,
         List<StudyAchievementDto> achievements,
         @Schema(description = "과제 및 출석 이력") List<StudyTaskDto> studyTasks,
         @Schema(description = "과제 수행률") double assignmentRate,
@@ -34,6 +35,7 @@ public record MentorStudyStudentResponse(
 
         return new MentorStudyStudentResponse(
                 StudyHistoryManagerDto.from(studyHistory),
+                StudyHistoryDto.from(studyHistory),
                 studyAchievements.stream().map(StudyAchievementDto::from).toList(),
                 studyTasks,
                 calculateRateOrZero(successAssignmentsCount, assignments.size()),
