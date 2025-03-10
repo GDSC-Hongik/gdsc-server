@@ -10,9 +10,11 @@ import com.gdschongik.gdsc.domain.studyv2.domain.AssignmentHistoryV2;
 import com.gdschongik.gdsc.domain.studyv2.domain.AttendanceV2;
 import com.gdschongik.gdsc.domain.studyv2.domain.StudyV2;
 import com.gdschongik.gdsc.domain.studyv2.dto.response.StudyDashboardResponse;
+import com.gdschongik.gdsc.domain.studyv2.dto.response.StudyTodoResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,5 +42,28 @@ public class StudentStudyServiceV2 {
         LocalDateTime now = LocalDateTime.now();
 
         return StudyDashboardResponse.of(study, attendances, assignmentHistories, now);
+    }
+
+    @Transactional(readOnly = true)
+    public List<StudyTodoResponse> getMyStudyTodos(Long studyId) {
+        Member member = memberUtil.getCurrentMember();
+        StudyV2 study = studyV2Repository.findFetchById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
+        List<AttendanceV2> attendances = attendanceV2Repository.findFetchByMemberAndStudy(member, study);
+        List<AssignmentHistoryV2> assignmentHistories = assignmentHistoryV2Repository.findByMemberAndStudy(member, study);
+
+        LocalDateTime now = LocalDateTime.now();
+        List<StudyTodoResponse> response = new ArrayList<>();
+
+        // 출석체크
+        study.getStudySessions().stream()
+                .filter(studySession -> studySession.getLessonPeriod().isWithin(now))
+                .forEach(studySession -> response.add(StudyTodoResponse.attendanceType(studySession, study.getType(), attendances, now)));
+
+        // 과제
+        assignmentHistories.stream()
+                .filter(assignmentHistory -> assignmentHistory.getStudySession().getAssignmentPeriod().isWithin(now))
+                .forEach(assignmentHistory -> response.add(StudyTodoResponse.assignmentType(assignmentHistory, now)));
+
+        return response;
     }
 }
