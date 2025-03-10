@@ -1,8 +1,8 @@
 package com.gdschongik.gdsc.domain.studyv2.api;
 
 import com.gdschongik.gdsc.domain.studyv2.application.StudentStudyServiceV2;
-import com.gdschongik.gdsc.domain.studyv2.dto.response.StudyApplicableResponse;
 import com.gdschongik.gdsc.domain.studyv2.dto.response.StudentStudyMyCurrentResponse;
+import com.gdschongik.gdsc.domain.studyv2.dto.response.StudyApplicableResponse;
 import com.gdschongik.gdsc.domain.studyv2.dto.response.StudyDashboardResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
