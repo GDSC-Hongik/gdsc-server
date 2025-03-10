@@ -138,8 +138,6 @@ public class StudyV2 extends BaseEntity {
     public static StudyV2 createLive(
             StudyType type,
             String title,
-            String description,
-            String descriptionNotionLink,
             Semester semester,
             Integer totalRound,
             DayOfWeek dayOfWeek,
@@ -153,8 +151,6 @@ public class StudyV2 extends BaseEntity {
         return StudyV2.builder()
                 .type(type)
                 .title(title)
-                .description(description)
-                .descriptionNotionLink(descriptionNotionLink)
                 .semester(semester)
                 .totalRound(totalRound)
                 .dayOfWeek(dayOfWeek)
@@ -178,8 +174,6 @@ public class StudyV2 extends BaseEntity {
      */
     public static StudyV2 createAssignment(
             String title,
-            String description,
-            String descriptionNotionLink,
             Semester semester,
             Integer totalRound,
             Period applicationPeriod,
@@ -189,8 +183,6 @@ public class StudyV2 extends BaseEntity {
         return StudyV2.builder()
                 .type(StudyType.ASSIGNMENT)
                 .title(title)
-                .description(description)
-                .descriptionNotionLink(descriptionNotionLink)
                 .semester(semester)
                 .totalRound(totalRound)
                 .applicationPeriod(applicationPeriod)
