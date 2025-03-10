@@ -67,7 +67,6 @@ public class AdminStudyServiceV2 {
 
     @Transactional
     public void deleteStudy(Long studyId) {
-        // todo: coupon이 있는지 검증
         boolean isStudyLinkedToCoupons = couponRepository.existsByStudyId(studyId);
 
         studyValidatorV2.validateDeleteStudy(isStudyLinkedToCoupons);
