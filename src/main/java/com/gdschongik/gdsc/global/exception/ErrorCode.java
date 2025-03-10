@@ -112,6 +112,7 @@ public enum ErrorCode {
     STUDY_NOT_UPDATABLE_SESSION_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 스터디에 수정하려는 스터디 회차 ID가 존재하지 않습니다."),
     STUDY_NOT_UPDATABLE_LESSON_FIELD_NOT_NULL(HttpStatus.CONFLICT, "과제 스터디는 수업 관련 필드를 null로 설정할 수 없습니다."),
     STUDY_NOT_UPDATABLE_LESSON_PERIOD_NOT_SEQUENTIAL(HttpStatus.CONFLICT, "뒷 수업의 시작시간은 앞 수업의 시작시간보다 빠를 수 없습니다."),
+    STUDY_NOT_DELETABLE_COUPON_EXISTS(HttpStatus.CONFLICT, "스터디 쿠폰이 존재합니다."),
 
     // StudyDetail
     STUDY_DETAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 스터디 상세 정보입니다."),
