@@ -1,7 +1,6 @@
 package com.gdschongik.gdsc.domain.studyv2.api;
 
-import com.gdschongik.gdsc.domain.studyv2.application.CommonStudyServiceV2;
-import com.gdschongik.gdsc.domain.studyv2.dto.response.StudyAnnouncementResponse;
+import com.gdschongik.gdsc.domain.studyv2.application.StudyAnnouncementServiceV2;
 import com.gdschongik.gdsc.domain.studyv2.dto.dto.StudyAnnouncementDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -19,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class StudyAnnouncementControllerV2 {
 
-    private final CommonStudyServiceV2 commonStudyServiceV2;
+    private final StudyAnnouncementServiceV2 studyAnnouncementServiceV2;
 
     @Operation(summary = "스터디 공지 목록 조회", description = "스터디 공지 목록을 조회합니다.")
     @GetMapping("/{studyId}")

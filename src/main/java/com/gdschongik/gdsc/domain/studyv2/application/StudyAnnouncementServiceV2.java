@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class CommonStudyServiceV2 {
+public class StudyAnnouncementServiceV2 {
 
     private final StudyAnnouncementV2Repository studyAnnouncementV2Repository;
 
