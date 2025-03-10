@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
 
 public record StudyAnnouncementDto(
-        Long studyAnnounceId,
+        Long studyAnnouncementId,
         @Schema(description = "제목") String title,
         @Schema(description = "링크") String link,
         @Schema(description = "생성 일자") LocalDate createdDate) {
