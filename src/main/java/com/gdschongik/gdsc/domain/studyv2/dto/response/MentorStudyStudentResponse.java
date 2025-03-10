@@ -2,6 +2,7 @@ package com.gdschongik.gdsc.domain.studyv2.dto.response;
 
 import static com.gdschongik.gdsc.domain.studyv2.dto.dto.StudyTaskDto.StudyTaskType.*;
 
+import com.gdschongik.gdsc.domain.member.dto.MemberBasicInfoDto;
 import com.gdschongik.gdsc.domain.studyv2.domain.AssignmentHistoryStatus;
 import com.gdschongik.gdsc.domain.studyv2.domain.AttendanceStatus;
 import com.gdschongik.gdsc.domain.studyv2.domain.StudyAchievementV2;
@@ -13,7 +14,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 
 public record MentorStudyStudentResponse(
-        StudyHistoryManagerDto studyHistoryManager,
+        MemberBasicInfoDto member,
         StudyHistoryDto studyHistory,
         List<StudyAchievementDto> achievements,
         @Schema(description = "과제 및 출석 이력") List<StudyTaskDto> studyTasks,
@@ -34,7 +35,7 @@ public record MentorStudyStudentResponse(
         long attendedCount = countAttendanceByStatus(attendances);
 
         return new MentorStudyStudentResponse(
-                StudyHistoryManagerDto.from(studyHistory),
+                MemberBasicInfoDto.from(studyHistory.getStudent()),
                 StudyHistoryDto.from(studyHistory),
                 studyAchievements.stream().map(StudyAchievementDto::from).toList(),
                 studyTasks,
