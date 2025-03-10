@@ -2,7 +2,7 @@ package com.gdschongik.gdsc.domain.studyv2.application;
 
 import com.gdschongik.gdsc.domain.studyv2.dao.StudyAnnouncementV2Repository;
 import com.gdschongik.gdsc.domain.studyv2.domain.StudyAnnouncementV2;
-import com.gdschongik.gdsc.domain.studyv2.dto.response.StudyAnnouncementResponse;
+import com.gdschongik.gdsc.domain.studyv2.dto.dto.StudyAnnouncementDto;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,10 +15,10 @@ public class CommonStudyServiceV2 {
     private final StudyAnnouncementV2Repository studyAnnouncementV2Repository;
 
     @Transactional(readOnly = true)
-    public StudyAnnouncementResponse getStudyAnnouncements(Long studyId) {
+    public List<StudyAnnouncementDto> getStudyAnnouncements(Long studyId) {
         List<StudyAnnouncementV2> studyAnnouncements =
                 studyAnnouncementV2Repository.findAllByStudyIdOrderByCreatedAtDesc(studyId);
 
-        return StudyAnnouncementResponse.from(studyAnnouncements);
+        return studyAnnouncements.stream().map(StudyAnnouncementDto::from).toList();
     }
 }
