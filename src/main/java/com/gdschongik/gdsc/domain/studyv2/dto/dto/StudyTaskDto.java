@@ -16,7 +16,7 @@ public record StudyTaskDto(
         Long studySessionId,
         @Schema(description = "현 회차수") Integer round,
         @Schema(description = "태스크 타입") StudyTaskType taskType,
-        @Schema(description = "마감 시각") LocalDateTime deadLine,
+        @Schema(description = "마감 시각") LocalDateTime endDate,
         @Schema(description = "출석 상태 (출석타입일 때만 사용)") AttendanceStatus attendanceStatus,
         @Schema(description = "과제 제목 (과제타입일 때만 사용)") String assignmentTitle,
         @Schema(description = "과제 제출 상태 (과제타입일 때만 사용)") AssignmentHistoryStatus assignmentSubmissionStatus) {
