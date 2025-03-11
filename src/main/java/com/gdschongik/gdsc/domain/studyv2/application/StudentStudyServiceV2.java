@@ -14,6 +14,7 @@ import com.gdschongik.gdsc.domain.studyv2.domain.AttendanceV2;
 import com.gdschongik.gdsc.domain.studyv2.domain.StudyHistoryV2;
 import com.gdschongik.gdsc.domain.studyv2.domain.StudyV2;
 import com.gdschongik.gdsc.domain.studyv2.dto.response.StudentStudyMyCurrentResponse;
+import com.gdschongik.gdsc.domain.studyv2.dto.response.StudyApplicableResponse;
 import com.gdschongik.gdsc.domain.studyv2.dto.response.StudyDashboardResponse;
 import com.gdschongik.gdsc.domain.studyv2.dto.response.StudyTodoResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
@@ -49,6 +50,22 @@ public class StudentStudyServiceV2 {
         LocalDateTime now = LocalDateTime.now();
 
         return StudyDashboardResponse.of(study, attendances, assignmentHistories, now);
+    }
+
+    @Transactional(readOnly = true)
+    public StudyApplicableResponse getAllApplicableStudies() {
+        Member currentMember = memberUtil.getCurrentMember();
+        LocalDateTime now = LocalDateTime.now();
+
+        List<StudyHistoryV2> studyHistories = studyHistoryV2Repository.findAllByStudent(currentMember).stream()
+                .filter(studyHistory -> studyHistory.getStudy().isApplicable(now))
+                .toList();
+
+        List<StudyV2> applicableStudies = studyV2Repository.findAll().stream()
+                .filter(study -> study.isApplicable(now))
+                .toList();
+
+        return StudyApplicableResponse.of(studyHistories, applicableStudies);
     }
 
     @Transactional(readOnly = true)
