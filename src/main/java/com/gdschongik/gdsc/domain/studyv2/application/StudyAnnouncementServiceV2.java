@@ -9,7 +9,7 @@ import com.gdschongik.gdsc.domain.studyv2.dao.StudyAnnouncementV2Repository;
 import com.gdschongik.gdsc.domain.studyv2.dao.StudyHistoryV2Repository;
 import com.gdschongik.gdsc.domain.studyv2.domain.StudyAnnouncementV2;
 import com.gdschongik.gdsc.domain.studyv2.domain.StudyHistoryV2;
-import com.gdschongik.gdsc.domain.studyv2.dto.dto.StudyAnnouncementDto;
+import com.gdschongik.gdsc.domain.studyv2.dto.response.StudyAnnouncementResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import jakarta.annotation.Nullable;
@@ -29,13 +29,15 @@ public class StudyAnnouncementServiceV2 {
     private final StudyHistoryV2Repository studyHistoryV2Repository;
 
     @Transactional(readOnly = true)
-    public List<StudyAnnouncementDto> getStudyAnnouncements(@Nullable Long studyId) {
+    public List<StudyAnnouncementResponse> getStudyAnnouncements(@Nullable Long studyId) {
         if (studyId != null) {
 
             List<StudyAnnouncementV2> studyAnnouncements =
                     studyAnnouncementV2Repository.findAllByStudyIdOrderByCreatedAtDesc(studyId);
 
-            return studyAnnouncements.stream().map(StudyAnnouncementDto::from).toList();
+            return studyAnnouncements.stream()
+                    .map(StudyAnnouncementResponse::from)
+                    .toList();
         }
 
         Member currentMember = memberUtil.getCurrentMember();
@@ -53,6 +55,6 @@ public class StudyAnnouncementServiceV2 {
         List<StudyAnnouncementV2> studyAnnouncements =
                 studyAnnouncementV2Repository.findAllByStudyIdsOrderByCreatedAtDesc(currentStudyHistories);
 
-        return studyAnnouncements.stream().map(StudyAnnouncementDto::from).toList();
+        return studyAnnouncements.stream().map(StudyAnnouncementResponse::from).toList();
     }
 }
