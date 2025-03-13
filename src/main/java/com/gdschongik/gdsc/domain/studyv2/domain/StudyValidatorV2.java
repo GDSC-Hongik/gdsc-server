@@ -26,10 +26,14 @@ public class StudyValidatorV2 {
         }
     }
 
-    public void validateDeleteStudy(boolean isStudyLinkedToCoupons) {
+    public void validateDeleteStudy(boolean isStudyLinkedToCoupons, boolean isStudyLinkedToStudyHistories) {
         // 쿠폰이 생성된 스터디인지 검증
         if (isStudyLinkedToCoupons) {
             throw new CustomException(STUDY_NOT_DELETABLE_COUPON_EXISTS);
+        }
+        // 수강신청 이력이 존재하는지 검증
+        if (isStudyLinkedToStudyHistories) {
+            throw new CustomException(STUDY_NOT_DELETABLE_STUDY_HISTORY_EXISTS);
         }
     }
 }
