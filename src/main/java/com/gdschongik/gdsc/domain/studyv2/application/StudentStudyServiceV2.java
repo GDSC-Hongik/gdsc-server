@@ -83,12 +83,12 @@ public class StudentStudyServiceV2 {
 
     @Transactional(readOnly = true)
     public List<StudyTodoResponse> getMyStudyTodos(Long studyId) {
-        Member member = memberUtil.getCurrentMember();
+        Member currentMember = memberUtil.getCurrentMember();
         StudyV2 study =
                 studyV2Repository.findFetchById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
-        List<AttendanceV2> attendances = attendanceV2Repository.findFetchByMemberAndStudy(member, study);
+        List<AttendanceV2> attendances = attendanceV2Repository.findFetchByMemberAndStudy(currentMember, study);
         List<AssignmentHistoryV2> assignmentHistories =
-                assignmentHistoryV2Repository.findByMemberAndStudy(member, study);
+                assignmentHistoryV2Repository.findByMemberAndStudy(currentMember, study);
 
         LocalDateTime now = LocalDateTime.now();
         List<StudyTodoResponse> response = new ArrayList<>();
@@ -105,6 +105,42 @@ public class StudentStudyServiceV2 {
                 .forEach(studySession ->
                         response.add(StudyTodoResponse.assignmentType(studySession, assignmentHistories, now)));
 
+        return response;
+    }
+
+    @Transactional(readOnly = true)
+    public List<StudyTodoResponse> getMyStudiesTodos() {
+        Member currentMember = memberUtil.getCurrentMember();
+        LocalDateTime now = LocalDateTime.now();
+
+        Recruitment recruitment = recruitmentRepository
+                .findCurrentRecruitment(now)
+                .orElseThrow(() -> new CustomException(RECRUITMENT_NOT_FOUND));
+
+        List<StudyV2> currentStudies = studyHistoryV2Repository.findAllByStudent(currentMember).stream()
+                .map(StudyHistoryV2::getStudy)
+                .filter(study -> study.getSemester().equals(recruitment.getSemester()))
+                .toList();
+
+        List<StudyTodoResponse> response = new ArrayList<>();
+
+        currentStudies.forEach(study -> {
+            List<AttendanceV2> attendances = attendanceV2Repository.findFetchByMemberAndStudy(currentMember, study);
+            List<AssignmentHistoryV2> assignmentHistories =
+                    assignmentHistoryV2Repository.findByMemberAndStudy(currentMember, study);
+
+            // 출석체크
+            study.getStudySessions().stream()
+                    .filter(studySession -> studySession.getLessonPeriod().isWithin(now))
+                    .forEach(studySession -> response.add(
+                            StudyTodoResponse.attendanceType(studySession, study.getType(), attendances, now)));
+
+            // 과제
+            study.getStudySessions().stream()
+                    .filter(studySession -> studySession.getAssignmentPeriod().isWithin(now))
+                    .forEach(studySession ->
+                            response.add(StudyTodoResponse.assignmentType(studySession, assignmentHistories, now)));
+        });
         return response;
     }
 }

@@ -50,4 +50,11 @@ public class StudentStudyControllerV2 {
         var response = studentStudyServiceV2.getMyStudyTodos(studyId);
         return ResponseEntity.ok().body(response);
     }
+
+    @Operation(summary = "수강중인 모든 스터디의 할 일 리스트 조회", description = "나의 수강중인 모든 스터디의 할 일 리스트를 조회합니다.")
+    @GetMapping("/me/todo")
+    public ResponseEntity<List<StudyTodoResponse>> getStudiesTodoList() {
+        var response = studentStudyServiceV2.getMyStudiesTodos();
+        return ResponseEntity.ok().body(response);
+    }
 }
