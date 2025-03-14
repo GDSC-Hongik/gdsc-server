@@ -16,9 +16,7 @@ import lombok.RequiredArgsConstructor;
 public record StudyTodoResponse(
         @Schema(description = "스터디 세션 정보") StudySessionStudentDto studySession,
         @Schema(description = "할 일 타입") StudyTodoResponse.StudyTodoType todoType,
-        @Schema(description = "마감 시각")
-                LocalDateTime
-                        deadLine, // 마감 시각이 lesson 의 end 인지, assignment end 인지 판단은 프론트보다 백이 하는 것이 맞다고 생각해서 놔둠. (PR에 명시)
+        @Schema(description = "마감 시각") LocalDateTime deadLine,
         @Schema(description = "출석 상태 (출석타입일 때만 사용)") AttendanceStatus attendanceStatus,
         @Schema(description = "과제 정보 (과제타입일 때만 사용)") AssignmentHistoryDto assignmentHistory,
         @Schema(description = "과제 제출 상태 (과제타입일 때만 사용)") AssignmentHistoryStatus assignmentHistoryStatus) {
