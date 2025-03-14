@@ -8,6 +8,7 @@ import com.gdschongik.gdsc.domain.studyv2.domain.*;
 import com.gdschongik.gdsc.domain.studyv2.dto.dto.AssignmentHistoryDto;
 import com.gdschongik.gdsc.domain.studyv2.dto.dto.StudySessionStudentDto;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.annotation.Nullable;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -37,14 +38,14 @@ public record StudyTodoResponse(
         );
     }
 
-    public static StudyTodoResponse assignmentType(AssignmentHistoryV2 assignmentHistory, LocalDateTime now) {
-        StudySessionV2 studySession = assignmentHistory.getStudySession();
+    public static StudyTodoResponse assignmentType(StudySessionV2 studySession, List<AssignmentHistoryV2> assignmentHistories, LocalDateTime now) {
+        AssignmentHistoryV2 assignmentHistory = getSubmittedAssignment(assignmentHistories, studySession);
         return new StudyTodoResponse(
                 StudySessionStudentDto.of(studySession),
                 ASSIGNMENT,
                 studySession.getAssignmentPeriod().getEndDate(),
                 null,
-                AssignmentHistoryDto.from(assignmentHistory),
+                assignmentHistory != null ? AssignmentHistoryDto.from(assignmentHistory) : null,
                 AssignmentHistoryStatus.of(assignmentHistory, studySession, now)
         );
     }
@@ -52,6 +53,13 @@ public record StudyTodoResponse(
     private static boolean isAttended(StudySessionV2 studySession, List<AttendanceV2> attendances) {
         return attendances.stream()
                 .anyMatch(attendance -> attendance.getStudySession().getId().equals(studySession.getId()));
+    }
+
+    private static AssignmentHistoryV2 getSubmittedAssignment(List<AssignmentHistoryV2> assignmentHistories, StudySessionV2 studySession) {
+        return assignmentHistories.stream()
+                .filter(assignmentHistory -> assignmentHistory.getStudySession().getId().equals(studySession.getId()))
+                .findFirst()
+                .orElse(null);
     }
 
     @Getter

@@ -9,10 +9,7 @@ import com.gdschongik.gdsc.domain.studyv2.dao.AssignmentHistoryV2Repository;
 import com.gdschongik.gdsc.domain.studyv2.dao.AttendanceV2Repository;
 import com.gdschongik.gdsc.domain.studyv2.dao.StudyHistoryV2Repository;
 import com.gdschongik.gdsc.domain.studyv2.dao.StudyV2Repository;
-import com.gdschongik.gdsc.domain.studyv2.domain.AssignmentHistoryV2;
-import com.gdschongik.gdsc.domain.studyv2.domain.AttendanceV2;
-import com.gdschongik.gdsc.domain.studyv2.domain.StudyHistoryV2;
-import com.gdschongik.gdsc.domain.studyv2.domain.StudyV2;
+import com.gdschongik.gdsc.domain.studyv2.domain.*;
 import com.gdschongik.gdsc.domain.studyv2.dto.response.StudentStudyMyCurrentResponse;
 import com.gdschongik.gdsc.domain.studyv2.dto.response.StudyApplicableResponse;
 import com.gdschongik.gdsc.domain.studyv2.dto.response.StudyDashboardResponse;
@@ -100,9 +97,9 @@ public class StudentStudyServiceV2 {
                 .forEach(studySession -> response.add(StudyTodoResponse.attendanceType(studySession, study.getType(), attendances, now)));
 
         // 과제
-        assignmentHistories.stream()
-                .filter(assignmentHistory -> assignmentHistory.getStudySession().getAssignmentPeriod().isWithin(now))
-                .forEach(assignmentHistory -> response.add(StudyTodoResponse.assignmentType(assignmentHistory, now)));
+        study.getStudySessions().stream()
+                .filter(studySession -> studySession.getAssignmentPeriod().isWithin(now))
+                .forEach(studySession -> response.add(StudyTodoResponse.assignmentType(studySession, assignmentHistories, now)));
 
         return response;
     }
