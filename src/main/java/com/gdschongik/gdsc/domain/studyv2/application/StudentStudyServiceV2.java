@@ -84,9 +84,11 @@ public class StudentStudyServiceV2 {
     @Transactional(readOnly = true)
     public List<StudyTodoResponse> getMyStudyTodos(Long studyId) {
         Member member = memberUtil.getCurrentMember();
-        StudyV2 study = studyV2Repository.findFetchById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
+        StudyV2 study =
+                studyV2Repository.findFetchById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
         List<AttendanceV2> attendances = attendanceV2Repository.findFetchByMemberAndStudy(member, study);
-        List<AssignmentHistoryV2> assignmentHistories = assignmentHistoryV2Repository.findByMemberAndStudy(member, study);
+        List<AssignmentHistoryV2> assignmentHistories =
+                assignmentHistoryV2Repository.findByMemberAndStudy(member, study);
 
         LocalDateTime now = LocalDateTime.now();
         List<StudyTodoResponse> response = new ArrayList<>();
@@ -94,12 +96,14 @@ public class StudentStudyServiceV2 {
         // 출석체크
         study.getStudySessions().stream()
                 .filter(studySession -> studySession.getLessonPeriod().isWithin(now))
-                .forEach(studySession -> response.add(StudyTodoResponse.attendanceType(studySession, study.getType(), attendances, now)));
+                .forEach(studySession -> response.add(
+                        StudyTodoResponse.attendanceType(studySession, study.getType(), attendances, now)));
 
         // 과제
         study.getStudySessions().stream()
                 .filter(studySession -> studySession.getAssignmentPeriod().isWithin(now))
-                .forEach(studySession -> response.add(StudyTodoResponse.assignmentType(studySession, assignmentHistories, now)));
+                .forEach(studySession ->
+                        response.add(StudyTodoResponse.assignmentType(studySession, assignmentHistories, now)));
 
         return response;
     }
