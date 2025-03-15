@@ -47,7 +47,7 @@ public record StudyTaskDto(
                 ASSIGNMENT,
                 studySession.getAssignmentPeriod().getEndDate(),
                 null,
-                studySession.getTitle(),
+                studySession.getAssignmentTitle(),
                 AssignmentHistoryStatus.of(assignmentHistory, studySession, now));
     }
 

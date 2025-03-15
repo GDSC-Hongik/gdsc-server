@@ -17,9 +17,10 @@ public record StudyUpdateRequest(
         List<StudySessionUpdateDto> studySessions) {
     public record StudySessionUpdateDto(
             Long studySessionId,
-            String title,
+            String lessonTitle,
             String description,
             Period lessonPeriod,
+            @Nullable String assignmentTitle,
             @Nullable String assignmentDescriptionLink,
             @Nullable Period assignmentPeriod) {}
 
@@ -27,9 +28,10 @@ public record StudyUpdateRequest(
         var sessionCommands = studySessions().stream()
                 .map(studySession -> new StudyUpdateCommand.Session(
                         studySession.studySessionId(),
-                        studySession.title(),
+                        studySession.lessonTitle(),
                         studySession.description(),
                         studySession.lessonPeriod(),
+                        studySession.assignmentTitle(),
                         studySession.assignmentDescriptionLink(),
                         studySession.assignmentPeriod()))
                 .toList();

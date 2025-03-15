@@ -17,9 +17,10 @@ public record StudyUpdateCommand(
 
     public record Session(
             Long studySessionId,
-            String title,
+            String lessonTitle,
             String description,
             Period lessonPeriod,
+            @Nullable String assignmentTitle,
             @Nullable String assignmentDescriptionLink,
             @Nullable Period assignmentPeriod) {}
 }

@@ -37,13 +37,13 @@ public class StudySessionV2 extends BaseEntity {
     @Comment("회차 순서")
     private Integer position;
 
-    @Comment("회차 제목")
-    private String title;
-
     @Comment("회차 설명")
     private String description;
 
     // 수업 관련 필드
+
+    @Comment("수업 제목")
+    private String lessonTitle;
 
     @Comment("수업 출석 번호")
     private String lessonAttendanceNumber;
@@ -54,6 +54,9 @@ public class StudySessionV2 extends BaseEntity {
     private Period lessonPeriod;
 
     // 과제 관련 필드
+
+    @Comment("과제 제목")
+    private String assignmentTitle;
 
     @Comment("과제 명세 링크")
     private String assignmentDescriptionLink;
@@ -78,18 +81,20 @@ public class StudySessionV2 extends BaseEntity {
     @Builder(access = AccessLevel.PRIVATE)
     private StudySessionV2(
             Integer position,
-            String title,
+            String lessonTitle,
             String description,
             String lessonAttendanceNumber,
             Period lessonPeriod,
+            String assignmentTitle,
             String assignmentDescriptionLink,
             Period assignmentPeriod,
             StudyV2 study) {
         this.position = position;
-        this.title = title;
+        this.lessonTitle = lessonTitle;
         this.description = description;
         this.lessonAttendanceNumber = lessonAttendanceNumber;
         this.lessonPeriod = lessonPeriod;
+        this.assignmentTitle = assignmentTitle;
         this.assignmentDescriptionLink = assignmentDescriptionLink;
         this.assignmentPeriod = assignmentPeriod;
         this.study = study;
@@ -128,9 +133,10 @@ public class StudySessionV2 extends BaseEntity {
 
     public void update(StudyUpdateCommand.Session command) {
         validateLessonFieldNullWhenAssignmentStudy(command.lessonPeriod());
-        this.title = command.title();
+        this.lessonTitle = command.lessonTitle();
         this.description = command.description();
         this.lessonPeriod = command.lessonPeriod();
+        this.assignmentTitle = command.assignmentTitle();
         this.assignmentDescriptionLink = command.assignmentDescriptionLink();
         this.assignmentPeriod = command.assignmentPeriod();
     }
