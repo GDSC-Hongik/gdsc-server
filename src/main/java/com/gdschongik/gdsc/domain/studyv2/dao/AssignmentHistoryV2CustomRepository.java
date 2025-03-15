@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface AssignmentHistoryV2CustomRepository {
     List<AssignmentHistoryV2> findByMemberAndStudy(Member member, StudyV2 study);
+
+    List<AssignmentHistoryV2> findByStudyIdAndMemberIds(Long studyId, List<Long> memberIds);
 }
