@@ -30,16 +30,14 @@ public class StudyAnnouncementServiceV2 {
 
     @Transactional(readOnly = true)
     public List<StudyAnnouncementResponse> getStudyAnnouncements(@Nullable Long studyId) {
-        if (studyId != null) {
+        List<StudyAnnouncementV2> studyAnnouncements =
+                studyAnnouncementV2Repository.findAllByStudyIdOrderByCreatedAtDesc(studyId);
 
-            List<StudyAnnouncementV2> studyAnnouncements =
-                    studyAnnouncementV2Repository.findAllByStudyIdOrderByCreatedAtDesc(studyId);
+        return studyAnnouncements.stream().map(StudyAnnouncementResponse::from).toList();
+    }
 
-            return studyAnnouncements.stream()
-                    .map(StudyAnnouncementResponse::from)
-                    .toList();
-        }
-
+    @Transactional(readOnly = true)
+    public List<StudyAnnouncementResponse> getStudiesAnnouncements() {
         Member currentMember = memberUtil.getCurrentMember();
         LocalDateTime now = LocalDateTime.now();
 

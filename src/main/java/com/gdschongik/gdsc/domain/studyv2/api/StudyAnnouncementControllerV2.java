@@ -20,11 +20,17 @@ public class StudyAnnouncementControllerV2 {
 
     private final StudyAnnouncementServiceV2 studyAnnouncementServiceV2;
 
-    @Operation(summary = "스터디 공지 목록 조회", description = "스터디 공지 목록을 조회합니다. studyId가 없다면 수강중인 모든 스터디의 공지를 조회합니다.")
-    @GetMapping("/{studyId}")
-    public ResponseEntity<List<StudyAnnouncementResponse>> getStudyAnnouncements(
-            @PathVariable(required = false) Long studyId) {
+    @Operation(summary = "스터디 공지 목록 조회", description = "스터디 공지 목록을 조회합니다.")
+    @GetMapping("/{studyId}/me")
+    public ResponseEntity<List<StudyAnnouncementResponse>> getStudyAnnouncements(@PathVariable Long studyId) {
         var response = studyAnnouncementServiceV2.getStudyAnnouncements(studyId);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "수강중인 모든 스터디의 공지 목록 조회", description = "수강중인 전체 스터디의 공지 목록을 조회합니다")
+    @GetMapping("/me")
+    public ResponseEntity<List<StudyAnnouncementResponse>> getStudiesAnnouncements() {
+        var response = studyAnnouncementServiceV2.getStudiesAnnouncements();
         return ResponseEntity.ok(response);
     }
 }
