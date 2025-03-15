@@ -21,8 +21,10 @@ public record StudyTaskDto(
         @Schema(description = "과제 제목 (과제타입일 때만 사용)") String assignmentTitle,
         @Schema(description = "과제 제출 상태 (과제타입일 때만 사용)") AssignmentHistoryStatus assignmentSubmissionStatus) {
 
-    public static StudyTaskDto createAttendanceType(
-            StudySessionV2 studySession, StudyType type, boolean isAttended, LocalDateTime now) {
+    /**
+     * 출석 타입의 task를 위한 메서드입니다.
+     */
+    public static StudyTaskDto of(StudySessionV2 studySession, StudyType type, boolean isAttended, LocalDateTime now) {
         return new StudyTaskDto(
                 studySession.getId(),
                 studySession.getPosition(),
@@ -33,7 +35,10 @@ public record StudyTaskDto(
                 null);
     }
 
-    public static StudyTaskDto createAssignmentType(
+    /**
+     * 과제 타입의 task를 위한 메서드입니다.
+     */
+    public static StudyTaskDto of(
             StudySessionV2 studySession, AssignmentHistoryV2 assignmentHistory, LocalDateTime now) {
 
         return new StudyTaskDto(

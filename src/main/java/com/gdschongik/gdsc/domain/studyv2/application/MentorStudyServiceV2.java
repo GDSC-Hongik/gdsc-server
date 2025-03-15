@@ -121,9 +121,8 @@ public class MentorStudyServiceV2 {
 
             List<StudyTaskDto> studyTasks = new ArrayList<>();
             studySessions.forEach(studySession -> {
-                studyTasks.add(StudyTaskDto.createAttendanceType(
-                        studySession, type, isAttended(currentAttendances, studySession), now));
-                studyTasks.add(StudyTaskDto.createAssignmentType(
+                studyTasks.add(StudyTaskDto.of(studySession, type, isAttended(currentAttendances, studySession), now));
+                studyTasks.add(StudyTaskDto.of(
                         studySession, getSubmittedAssignment(currentAssignmentHistories, studySession), now));
             });
 
