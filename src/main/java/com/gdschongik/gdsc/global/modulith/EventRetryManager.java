@@ -2,6 +2,9 @@ package com.gdschongik.gdsc.global.modulith;
 
 import com.gdschongik.gdsc.global.property.ModulithProperty;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,7 +47,45 @@ public class EventRetryManager {
 
     private static boolean isWithinAgeRange(
             EventPublication publication, Instant oldestAllowed, Instant newestAllowed) {
+        log.info("[EventRetryManager] 이벤트 재시도: uuid={}", publication.getIdentifier());
         Instant publicationDate = publication.getPublicationDate();
         return publicationDate.isAfter(oldestAllowed) && publicationDate.isBefore(newestAllowed);
+    }
+
+    @Scheduled(fixedRateString = "${modulith.dlq-interval-minute}", timeUnit = TimeUnit.MINUTES)
+    public void logDeadLetterEvents() {
+        List<UUID> deadLetterIds = getDeadLetterIds();
+
+        if (!deadLetterIds.isEmpty()) {
+            log.warn("[EventRetryManager] 데드 레터 발생: ids={}", deadLetterIds);
+        }
+    }
+
+    private List<UUID> getDeadLetterIds() {
+        Instant now = Instant.now();
+        Instant oldestAllowed = now.minusSeconds(modulithProperty.getMaxAge());
+        List<UUID> deadLetterIds = new ArrayList<>();
+
+        incompletePublications.resubmitIncompletePublications(
+                publication -> captureDeadLetterAndAlwaysReturnFalse(publication, deadLetterIds, oldestAllowed));
+
+        return deadLetterIds;
+    }
+
+    /**
+     * 데드 레터 이벤트를 캡처하고 ID를 목록에 추가합니다.
+     * 항상 false를 반환하여 재시도를 수행하지 않습니다.
+     */
+    private static boolean captureDeadLetterAndAlwaysReturnFalse(
+            EventPublication publication, List<UUID> deadLetterIds, Instant oldestAllowed) {
+        if (isDeadLetter(publication, oldestAllowed)) {
+            deadLetterIds.add(publication.getIdentifier());
+        }
+        return false;
+    }
+
+    private static boolean isDeadLetter(EventPublication publication, Instant oldestAllowed) {
+        Instant publicationDate = publication.getPublicationDate();
+        return publicationDate.isBefore(oldestAllowed);
     }
 }
