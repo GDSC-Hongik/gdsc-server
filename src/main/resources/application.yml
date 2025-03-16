@@ -14,6 +14,7 @@ spring:
       - payment
       - github
       - sentry
+      - modulith
 
 logging:
   level:

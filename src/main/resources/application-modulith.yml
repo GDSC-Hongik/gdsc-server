@@ -1,0 +1,14 @@
+spring:
+  modulith:
+    events:
+      republish-outstanding-events-on-restart: false
+      completion-mode: update
+      jdbc:
+        schema-initialization:
+          enabled: true
+
+modulith:
+  retry-interval: ${MODULITH_RETRY_INTERVAL:5}
+  dlq-interval: ${MODULITH_DLQ_INTERVAL:60}
+  min-age: ${MODULITH_MIN_AGE:10}
+  max-age: ${MODULITH_MAX_AGE:30}
