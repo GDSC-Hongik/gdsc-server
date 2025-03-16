@@ -47,9 +47,14 @@ public class EventRetryManager {
 
     private static boolean isWithinAgeRange(
             EventPublication publication, Instant oldestAllowed, Instant newestAllowed) {
-        log.info("[EventRetryManager] 이벤트 재시도: uuid={}", publication.getIdentifier());
         Instant publicationDate = publication.getPublicationDate();
-        return publicationDate.isBefore(oldestAllowed) && publicationDate.isAfter(newestAllowed);
+        boolean shouldRetry = publicationDate.isBefore(oldestAllowed) && publicationDate.isAfter(newestAllowed);
+
+        if (shouldRetry) {
+            log.info("[EventRetryManager] 이벤트 재시도: uuid={}", publication.getIdentifier());
+        }
+
+        return shouldRetry;
     }
 
     @Scheduled(fixedRateString = "${modulith.dlq-interval-minute}", timeUnit = TimeUnit.MINUTES)
