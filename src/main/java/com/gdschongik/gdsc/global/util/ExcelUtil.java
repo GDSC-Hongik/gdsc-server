@@ -6,9 +6,16 @@ import static com.gdschongik.gdsc.global.common.constant.WorkbookConstant.*;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Department;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
+import com.gdschongik.gdsc.domain.member.dto.MemberBasicInfoDto;
+import com.gdschongik.gdsc.domain.study.domain.AchievementType;
 import com.gdschongik.gdsc.domain.study.domain.Study;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyStudentResponse;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyTaskResponse;
+import com.gdschongik.gdsc.domain.studyv2.domain.StudyV2;
+import com.gdschongik.gdsc.domain.studyv2.dto.dto.StudyAchievementDto;
+import com.gdschongik.gdsc.domain.studyv2.dto.dto.StudyHistoryDto;
+import com.gdschongik.gdsc.domain.studyv2.dto.dto.StudyTaskDto;
+import com.gdschongik.gdsc.domain.studyv2.dto.response.MentorStudyStudentResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
 import jakarta.annotation.Nullable;
@@ -40,6 +47,12 @@ public class ExcelUtil {
     }
 
     public byte[] createStudyExcel(Study study, List<StudyStudentResponse> content) {
+        HSSFWorkbook workbook = new HSSFWorkbook();
+        createStudySheet(workbook, study, content);
+        return createByteArray(workbook);
+    }
+
+    public byte[] createStudyExcel(StudyV2 study, List<MentorStudyStudentResponse> content) {
         HSSFWorkbook workbook = new HSSFWorkbook();
         createStudySheet(workbook, study, content);
         return createByteArray(workbook);
@@ -97,6 +110,50 @@ public class ExcelUtil {
                             .setCellValue(task.assignmentSubmissionStatus().getValue()));
             student.studyTasks().stream()
                     .filter(StudyTaskResponse::isAttendance)
+                    .forEach(task -> studentRow
+                            .createCell(cellIndex.getAndIncrement())
+                            .setCellValue(task.attendanceStatus().getValue()));
+        });
+    }
+
+    private void createStudySheet(Workbook workbook, StudyV2 study, List<MentorStudyStudentResponse> content) {
+        Sheet sheet = setUpStudySheet(workbook, study.getTitle(), study.getTotalRound());
+
+        content.forEach(student -> {
+            MemberBasicInfoDto member = student.member();
+            StudyHistoryDto studyHistory = student.studyHistory();
+            List<StudyAchievementDto> studyAchievements = student.achievements();
+            boolean isFirstRoundOutstandingStudent = studyAchievements.stream()
+                    .anyMatch(studyAchievementDto ->
+                            studyAchievementDto.type() == AchievementType.FIRST_ROUND_OUTSTANDING_STUDENT);
+            boolean isSecondRoundOutstandingStudent = studyAchievements.stream()
+                    .anyMatch(studyAchievementDto ->
+                            studyAchievementDto.type() == AchievementType.SECOND_ROUND_OUTSTANDING_STUDENT);
+
+            Row studentRow = sheet.createRow(sheet.getLastRowNum() + 1);
+            AtomicInteger cellIndex = new AtomicInteger(0);
+
+            studentRow.createCell(cellIndex.getAndIncrement()).setCellValue(member.name());
+            studentRow.createCell(cellIndex.getAndIncrement()).setCellValue(member.studentId());
+            studentRow.createCell(cellIndex.getAndIncrement()).setCellValue(member.discordUsername());
+            studentRow.createCell(cellIndex.getAndIncrement()).setCellValue(member.nickname());
+            studentRow.createCell(cellIndex.getAndIncrement()).setCellValue(studyHistory.githubLink());
+            studentRow
+                    .createCell(cellIndex.getAndIncrement())
+                    .setCellValue(studyHistory.status().getValue());
+            studentRow.createCell(cellIndex.getAndIncrement()).setCellValue(isFirstRoundOutstandingStudent ? "O" : "X");
+            studentRow
+                    .createCell(cellIndex.getAndIncrement())
+                    .setCellValue(isSecondRoundOutstandingStudent ? "O" : "X");
+            studentRow.createCell(cellIndex.getAndIncrement()).setCellValue(student.attendanceRate());
+            studentRow.createCell(cellIndex.getAndIncrement()).setCellValue(student.assignmentRate());
+            student.studyTasks().stream()
+                    .filter(studyTaskDto -> studyTaskDto.taskType() == StudyTaskDto.StudyTaskType.ASSIGNMENT)
+                    .forEach(task -> studentRow
+                            .createCell(cellIndex.getAndIncrement())
+                            .setCellValue(task.assignmentSubmissionStatus().getValue()));
+            student.studyTasks().stream()
+                    .filter(studyTaskDto -> studyTaskDto.taskType() == StudyTaskDto.StudyTaskType.ATTENDANCE)
                     .forEach(task -> studentRow
                             .createCell(cellIndex.getAndIncrement())
                             .setCellValue(task.attendanceStatus().getValue()));

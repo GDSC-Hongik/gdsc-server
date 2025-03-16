@@ -13,6 +13,7 @@ import com.gdschongik.gdsc.domain.studyv2.dto.dto.StudyTaskDto;
 import com.gdschongik.gdsc.domain.studyv2.dto.request.StudyUpdateRequest;
 import com.gdschongik.gdsc.domain.studyv2.dto.response.*;
 import com.gdschongik.gdsc.global.exception.CustomException;
+import com.gdschongik.gdsc.global.util.ExcelUtil;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class MentorStudyServiceV2 {
 
     private final MemberUtil memberUtil;
+    private final ExcelUtil excelUtil;
     private final StudyValidatorV2 studyValidatorV2;
     private final StudyV2Repository studyV2Repository;
     private final StudyHistoryV2Repository studyHistoryV2Repository;
@@ -129,6 +131,48 @@ public class MentorStudyServiceV2 {
             response.add(MentorStudyStudentResponse.of(studyHistory, currentStudyAchievements, studyTasks));
         });
         return new PageImpl<>(response, pageable, studyHistories.getTotalElements());
+    }
+
+    @Transactional
+    public byte[] createStudyExcel(Long studyId) {
+        Member currentMember = memberUtil.getCurrentMember();
+        StudyV2 study = studyV2Repository.findById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
+
+        studyValidatorV2.validateStudyMentor(currentMember, study);
+
+        LocalDateTime now = LocalDateTime.now();
+        StudyType type = study.getType();
+        List<StudyHistoryV2> studyHistories = studyHistoryV2Repository.findAllByStudy(study);
+        List<Long> studentIds = studyHistories.stream()
+                .map(studyHistory -> studyHistory.getStudent().getId())
+                .toList();
+        List<StudySessionV2> studySessions = study.getStudySessions();
+
+        Map<Long, List<StudyAchievementV2>> studyAchievementMap = getStudyAchievementMap(studyId, studentIds);
+        Map<Long, List<AttendanceV2>> attendanceMap = getAttendanceMap(studyId, studentIds);
+        Map<Long, List<AssignmentHistoryV2>> assignmentHistoryMap = getAssignmentHistoryMap(studyId, studentIds);
+
+        List<MentorStudyStudentResponse> content = new ArrayList<>();
+
+        studyHistories.forEach(studyHistory -> {
+            List<StudyAchievementV2> currentStudyAchievements =
+                    studyAchievementMap.getOrDefault(studyHistory.getStudent().getId(), List.of());
+            List<AttendanceV2> currentAttendances =
+                    attendanceMap.getOrDefault(studyHistory.getStudent().getId(), List.of());
+            List<AssignmentHistoryV2> currentAssignmentHistories =
+                    assignmentHistoryMap.getOrDefault(studyHistory.getStudent().getId(), List.of());
+
+            List<StudyTaskDto> studyTasks = new ArrayList<>();
+            studySessions.forEach(studySession -> {
+                studyTasks.add(StudyTaskDto.of(studySession, type, isAttended(currentAttendances, studySession), now));
+                studyTasks.add(StudyTaskDto.of(
+                        studySession, getSubmittedAssignment(currentAssignmentHistories, studySession), now));
+            });
+
+            content.add(MentorStudyStudentResponse.of(studyHistory, currentStudyAchievements, studyTasks));
+        });
+
+        return excelUtil.createStudyExcel(study, content);
     }
 
     private StudyRoundStatisticsDto calculateRoundStatistics(StudySessionV2 studySessionV2, Long totalStudentCount) {
