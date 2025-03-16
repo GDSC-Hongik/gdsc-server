@@ -3,7 +3,9 @@ package com.gdschongik.gdsc.domain.studyv2.dto.dto;
 import com.gdschongik.gdsc.domain.common.vo.Period;
 import com.gdschongik.gdsc.domain.common.vo.Semester;
 import com.gdschongik.gdsc.domain.study.domain.StudyType;
+import com.gdschongik.gdsc.domain.studyv2.domain.StudyV2;
 import java.time.DayOfWeek;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 /**
@@ -21,4 +23,24 @@ public record StudyStudentDto(
         LocalTime startTime,
         LocalTime endTime,
         Period applicationPeriod,
-        Long mentorId) {}
+        LocalDateTime openingDate,
+        Long mentorId,
+        String mentorName) {
+    public static StudyStudentDto from(StudyV2 study) {
+        return new StudyStudentDto(
+                study.getId(),
+                study.getType(),
+                study.getTitle(),
+                study.getDescription(),
+                study.getDescriptionNotionLink(),
+                study.getSemester(),
+                study.getTotalRound(),
+                study.getDayOfWeek(),
+                study.getStartTime(),
+                study.getEndTime(),
+                study.getApplicationPeriod(),
+                study.getOpeningDate(),
+                study.getMentor().getId(),
+                study.getMentor().getName());
+    }
+}

@@ -105,12 +105,14 @@ public enum ErrorCode {
     STUDY_TIME_INVALID(HttpStatus.CONFLICT, "스터디종료 시각이 스터디시작 시각보다 빠릅니다."),
     ASSIGNMENT_STUDY_CAN_NOT_INPUT_STUDY_TIME(HttpStatus.CONFLICT, "과제 스터디는 스터디 시간을 입력할 수 없습니다."),
     STUDY_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 스터디입니다."),
+    STUDY_SESSION_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 스터디 회차입니다."),
     STUDY_NOT_APPLICABLE(HttpStatus.CONFLICT, "스터디 신청기간이 아닙니다."),
     STUDY_NOT_CANCELABLE_APPLICATION_PERIOD(HttpStatus.CONFLICT, "스터디 신청기간이 아니라면 취소할 수 없습니다."),
     STUDY_NOT_CREATABLE_NOT_LIVE(HttpStatus.INTERNAL_SERVER_ERROR, "온라인 및 오프라인 타입만 라이브 스터디로 생성할 수 있습니다."),
     STUDY_NOT_UPDATABLE_SESSION_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 스터디에 수정하려는 스터디 회차 ID가 존재하지 않습니다."),
     STUDY_NOT_UPDATABLE_LESSON_FIELD_NOT_NULL(HttpStatus.CONFLICT, "과제 스터디는 수업 관련 필드를 null로 설정할 수 없습니다."),
     STUDY_NOT_UPDATABLE_LESSON_PERIOD_NOT_SEQUENTIAL(HttpStatus.CONFLICT, "뒷 수업의 시작시간은 앞 수업의 시작시간보다 빠를 수 없습니다."),
+    STUDY_NOT_DELETABLE_COUPON_EXISTS(HttpStatus.CONFLICT, "스터디 쿠폰이 존재합니다."),
 
     // StudyDetail
     STUDY_DETAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 스터디 상세 정보입니다."),
@@ -137,8 +139,10 @@ public enum ErrorCode {
 
     // Attendance
     ATTENDANCE_DATE_INVALID(HttpStatus.CONFLICT, "강의일이 아니면 출석체크할 수 없습니다."),
+    ATTENDANCE_PERIOD_INVALID(HttpStatus.CONFLICT, "강의시간이 아니면 출석체크할 수 없습니다."),
     ATTENDANCE_NUMBER_MISMATCH(HttpStatus.CONFLICT, "출석번호가 일치하지 않습니다."),
     STUDY_DETAIL_ALREADY_ATTENDED(HttpStatus.CONFLICT, "이미 출석 처리된 스터디입니다."),
+    STUDY_SESSION_ALREADY_ATTENDED(HttpStatus.CONFLICT, "이미 출석 처리된 스터디 회차입니다."),
 
     // Order
     ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, "주문이 존재하지 않습니다."),
@@ -170,6 +174,10 @@ public enum ErrorCode {
     ASSIGNMENT_SUBMIT_NOT_PUBLISHED(HttpStatus.CONFLICT, "아직 과제가 등록되지 않았습니다."),
     ASSIGNMENT_SUBMIT_CANCELED(HttpStatus.CONFLICT, "과제 휴강 주간에는 과제를 제출할 수 없습니다."),
     ASSIGNMENT_SUBMIT_DEADLINE_PASSED(HttpStatus.CONFLICT, "과제 마감 기한이 지났습니다."),
+
+    // AssignmentHistory (Assignment V2)
+    ASSIGNMENT_HISTORY_NOT_WITHIN_PERIOD(
+            HttpStatus.INTERNAL_SERVER_ERROR, "제출상태 변환 시 제출기한에 포함되지 않는 제출이력을 인자로 받을 수 없습니다."),
 
     // Github
     GITHUB_REPOSITORY_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 레포지토리입니다."),

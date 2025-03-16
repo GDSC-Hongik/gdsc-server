@@ -22,6 +22,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
@@ -29,6 +30,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -96,6 +98,7 @@ public class StudyV2 extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member mentor;
 
+    @OrderBy("position asc")
     @OneToMany(mappedBy = "study", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StudySessionV2> studySessions = new ArrayList<>();
 
@@ -135,8 +138,6 @@ public class StudyV2 extends BaseEntity {
     public static StudyV2 createLive(
             StudyType type,
             String title,
-            String description,
-            String descriptionNotionLink,
             Semester semester,
             Integer totalRound,
             DayOfWeek dayOfWeek,
@@ -150,8 +151,6 @@ public class StudyV2 extends BaseEntity {
         return StudyV2.builder()
                 .type(type)
                 .title(title)
-                .description(description)
-                .descriptionNotionLink(descriptionNotionLink)
                 .semester(semester)
                 .totalRound(totalRound)
                 .dayOfWeek(dayOfWeek)
@@ -175,8 +174,6 @@ public class StudyV2 extends BaseEntity {
      */
     public static StudyV2 createAssignment(
             String title,
-            String description,
-            String descriptionNotionLink,
             Semester semester,
             Integer totalRound,
             Period applicationPeriod,
@@ -186,8 +183,6 @@ public class StudyV2 extends BaseEntity {
         return StudyV2.builder()
                 .type(StudyType.ASSIGNMENT)
                 .title(title)
-                .description(description)
-                .descriptionNotionLink(descriptionNotionLink)
                 .semester(semester)
                 .totalRound(totalRound)
                 .applicationPeriod(applicationPeriod)
@@ -195,6 +190,34 @@ public class StudyV2 extends BaseEntity {
                 .discordRoleId(discordRoleId)
                 .mentor(mentor)
                 .build();
+    }
+
+    // 데이터 조회 로직
+
+    public Optional<StudySessionV2> getOptionalStudySession(Long studySessionId) {
+        return studySessions.stream()
+                .filter(session -> session.getId().equals(studySessionId))
+                .findFirst();
+    }
+
+    public StudySessionV2 getStudySession(Long studySessionId) {
+        return getOptionalStudySession(studySessionId).orElseThrow(() -> new CustomException(STUDY_SESSION_NOT_FOUND));
+    }
+
+    public boolean isApplicable(LocalDateTime now) {
+        return applicationPeriod.isWithin(now);
+    }
+
+    public LocalDateTime getOpeningDate() {
+        if (!type.isLive()) {
+            return null;
+        }
+
+        return studySessions.stream()
+                .filter(studySession -> studySession.getPosition() == 1)
+                .findFirst()
+                .map(studySession -> studySession.getLessonPeriod().getStartDate())
+                .orElse(null);
     }
 
     // 데이터 변경 로직
@@ -208,16 +231,14 @@ public class StudyV2 extends BaseEntity {
         this.endTime = command.endTime();
 
         command.studySessions().forEach(sessionCommand -> {
-            getStudySession(sessionCommand.studySessionId()).update(sessionCommand);
+            getStudySessionForUpdate(sessionCommand.studySessionId()).update(sessionCommand);
         });
 
         validateLessonTimeOrderMatchesPosition();
     }
 
-    private StudySessionV2 getStudySession(Long studySessionId) {
-        return studySessions.stream()
-                .filter(session -> session.getId().equals(studySessionId))
-                .findFirst()
+    private StudySessionV2 getStudySessionForUpdate(Long studySessionId) {
+        return getOptionalStudySession(studySessionId)
                 .orElseThrow(() -> new CustomException(STUDY_NOT_UPDATABLE_SESSION_NOT_FOUND));
     }
 

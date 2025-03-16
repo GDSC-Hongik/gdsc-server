@@ -5,6 +5,8 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.global.annotation.DomainService;
 import com.gdschongik.gdsc.global.exception.CustomException;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 @DomainService
@@ -22,6 +24,28 @@ public class StudyHistoryValidatorV2 {
 
         if (!Objects.equals(repositoryOwnerGithubId, currentMemberGithubId)) {
             throw new CustomException(STUDY_HISTORY_REPOSITORY_NOT_UPDATABLE_OWNER_MISMATCH);
+        }
+    }
+
+    public void validateApplyStudy(StudyV2 study, List<StudyHistoryV2> currentMemberStudyHistories, LocalDateTime now) {
+        // 스터디 수강 신청 기간이 아닌 경우
+        if (!study.isApplicable(now)) {
+            throw new CustomException(STUDY_NOT_APPLICABLE);
+        }
+
+        // 이미 해당 스터디에 수강 신청한 경우
+        boolean isStudyHistoryDuplicate = currentMemberStudyHistories.stream()
+                .anyMatch(studyHistory -> studyHistory.getStudy().getId() == study.getId());
+
+        if (isStudyHistoryDuplicate) {
+            throw new CustomException(STUDY_HISTORY_DUPLICATE);
+        }
+    }
+
+    public void validateCancelStudyApply(StudyV2 study, LocalDateTime now) {
+        // 스터디 수강신청 기간이 아닌 경우
+        if (!study.isApplicable(now)) {
+            throw new CustomException(STUDY_NOT_CANCELABLE_APPLICATION_PERIOD);
         }
     }
 }

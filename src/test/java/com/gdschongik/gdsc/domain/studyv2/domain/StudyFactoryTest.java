@@ -31,8 +31,6 @@ class StudyFactoryTest {
         StudyV2 study = studyFactory.create(
                 StudyType.OFFLINE,
                 STUDY_TITLE,
-                STUDY_DESCRIPTION,
-                STUDY_DESCRIPTION_NOTION_LINK,
                 STUDY_SEMESTER,
                 totalRound,
                 DAY_OF_WEEK,
@@ -57,8 +55,6 @@ class StudyFactoryTest {
         StudyV2 study = studyFactory.create(
                 StudyType.ASSIGNMENT,
                 STUDY_TITLE,
-                STUDY_DESCRIPTION,
-                STUDY_DESCRIPTION_NOTION_LINK,
                 STUDY_SEMESTER,
                 TOTAL_ROUND,
                 DAY_OF_WEEK,
@@ -87,8 +83,6 @@ class StudyFactoryTest {
         StudyV2 study = studyFactory.create(
                 StudyType.OFFLINE,
                 STUDY_TITLE,
-                STUDY_DESCRIPTION,
-                STUDY_DESCRIPTION_NOTION_LINK,
                 STUDY_SEMESTER,
                 totalRound,
                 DAY_OF_WEEK,
@@ -116,8 +110,6 @@ class StudyFactoryTest {
         StudyV2 study = studyFactory.create(
                 StudyType.OFFLINE,
                 STUDY_TITLE,
-                STUDY_DESCRIPTION,
-                STUDY_DESCRIPTION_NOTION_LINK,
                 STUDY_SEMESTER,
                 TOTAL_ROUND,
                 DAY_OF_WEEK,
@@ -144,8 +136,6 @@ class StudyFactoryTest {
         StudyV2 study = studyFactory.create(
                 StudyType.ASSIGNMENT,
                 STUDY_TITLE,
-                STUDY_DESCRIPTION,
-                STUDY_DESCRIPTION_NOTION_LINK,
                 STUDY_SEMESTER,
                 TOTAL_ROUND,
                 DAY_OF_WEEK,
