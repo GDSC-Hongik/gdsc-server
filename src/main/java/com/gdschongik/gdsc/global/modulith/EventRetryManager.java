@@ -32,7 +32,7 @@ public class EventRetryManager {
     private final ModulithProperty modulithProperty;
     private final IncompleteEventPublications incompletePublications;
 
-    @Scheduled(fixedRateString = "${modulith.retry-interval}", timeUnit = TimeUnit.SECONDS)
+    @Scheduled(fixedRateString = "${modulith.retry-interval-second}", timeUnit = TimeUnit.SECONDS)
     public void retryIncompleteEvents() {
         Instant now = Instant.now();
         Instant oldestAllowed = now.minusSeconds(modulithProperty.getMaxAge());
