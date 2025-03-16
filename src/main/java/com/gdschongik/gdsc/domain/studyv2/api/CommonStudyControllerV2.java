@@ -1,7 +1,7 @@
 package com.gdschongik.gdsc.domain.studyv2.api;
 
 import com.gdschongik.gdsc.domain.studyv2.application.CommonStudyServiceV2;
-import com.gdschongik.gdsc.domain.studyv2.dto.dto.StudyStudentDto;
+import com.gdschongik.gdsc.domain.studyv2.dto.dto.StudyCommonDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ public class CommonStudyControllerV2 {
 
     @Operation(summary = "스터디 기본 정보 조회", description = "스터디 기본 정보를 조회합니다.")
     @GetMapping("/{studyId}")
-    public ResponseEntity<StudyStudentDto> getStudyInformation(@PathVariable Long studyId) {
+    public ResponseEntity<StudyCommonDto> getStudyInformation(@PathVariable Long studyId) {
         var response = commonStudyService.getStudyInformation(studyId);
         return ResponseEntity.ok(response);
     }
