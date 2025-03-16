@@ -129,6 +129,22 @@ public class StudySessionV2 extends BaseEntity {
         }
     }
 
+    public boolean isAssignmentSubmittable(LocalDateTime now) {
+        if (assignmentPeriod == null) {
+            return false;
+        }
+
+        return assignmentPeriod.isWithin(now);
+    }
+
+    public boolean isAttendable(LocalDateTime now) {
+        if (lessonPeriod == null) {
+            return false;
+        }
+
+        return lessonPeriod.isWithin(now);
+    }
+
     // 데이터 변경 로직
 
     public void update(StudyUpdateCommand.Session command) {
