@@ -9,10 +9,11 @@ import com.gdschongik.gdsc.domain.studyv2.domain.StudySessionV2;
 public record StudySessionManagerDto(
         Long studySessionId,
         Integer position,
-        String title,
+        String lessonTitle,
         String description,
         String lessonAttendanceNumber,
         Period lessonPeriod,
+        String assignmentTitle,
         String assignmentDescriptionLink,
         Period assignmentPeriod,
         Long studyId) {
@@ -20,10 +21,11 @@ public record StudySessionManagerDto(
         return new StudySessionManagerDto(
                 studySession.getId(),
                 studySession.getPosition(),
-                studySession.getTitle(),
+                studySession.getLessonTitle(),
                 studySession.getDescription(),
                 studySession.getLessonAttendanceNumber(),
                 studySession.getLessonPeriod(),
+                studySession.getAssignmentTitle(),
                 studySession.getAssignmentDescriptionLink(),
                 studySession.getAssignmentPeriod(),
                 studySession.getStudy().getId());

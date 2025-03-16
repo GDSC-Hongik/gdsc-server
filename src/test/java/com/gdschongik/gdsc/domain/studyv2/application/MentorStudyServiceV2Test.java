@@ -37,7 +37,7 @@ class MentorStudyServiceV2Test extends IntegrationTest {
                     null,
                     null,
                     List.of(new StudyUpdateRequest.StudySessionUpdateDto(
-                            1L, "수정된 1회차 스터디 제목", null, null, null, null)));
+                            1L, "수정된 1회차 스터디 제목", null, null, null, null, null)));
 
             // when
             mentorStudyServiceV2.updateStudy(1L, request);
@@ -48,7 +48,7 @@ class MentorStudyServiceV2Test extends IntegrationTest {
 
             StudyV2 study = optionalStudy.get();
             assertThat(study.getTitle()).isEqualTo("수정된 제목");
-            assertThat(study.getStudySessions().get(0).getTitle()).isEqualTo("수정된 1회차 스터디 제목");
+            assertThat(study.getStudySessions().get(0).getLessonTitle()).isEqualTo("수정된 1회차 스터디 제목");
         }
     }
 }

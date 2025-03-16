@@ -40,7 +40,8 @@ class StudyV2Test {
                     null,
                     null,
                     null,
-                    List.of(new StudyUpdateCommand.Session(1L, updatedFirstSessionTitle, null, null, null, null)));
+                    List.of(new StudyUpdateCommand.Session(
+                            1L, updatedFirstSessionTitle, null, null, null, null, null)));
 
             // when
             study.update(command);
@@ -50,7 +51,7 @@ class StudyV2Test {
 
             StudySessionV2 firstSession = study.getStudySessions().get(0);
             assertThat(firstSession).isNotNull();
-            assertThat(firstSession.getTitle()).isEqualTo(updatedFirstSessionTitle);
+            assertThat(firstSession.getLessonTitle()).isEqualTo(updatedFirstSessionTitle);
         }
 
         @Test
@@ -67,7 +68,7 @@ class StudyV2Test {
                     null,
                     null,
                     null,
-                    List.of(new StudyUpdateCommand.Session(1L, null, null, lessonPeriodToUpdate, null, null)));
+                    List.of(new StudyUpdateCommand.Session(1L, null, null, lessonPeriodToUpdate, null, null, null)));
 
             // when & then
             assertThatThrownBy(() -> study.update(command))
@@ -87,7 +88,7 @@ class StudyV2Test {
                     null,
                     null,
                     null,
-                    List.of(new StudyUpdateCommand.Session(9999L, null, null, null, null, null)));
+                    List.of(new StudyUpdateCommand.Session(9999L, null, null, null, null, null, null)));
 
             // when & then
             assertThatThrownBy(() -> study.update(command))
@@ -102,13 +103,13 @@ class StudyV2Test {
         private StudyUpdateCommand.Session createSession(Long sessionId, LocalDate date) {
             // 수업 시간을 null로 지정할 수 잇음
             if (date == null) {
-                return new StudyUpdateCommand.Session(sessionId, null, null, null, null, null);
+                return new StudyUpdateCommand.Session(sessionId, null, null, null, null, null, null);
             }
 
             // 아니라면, 18:00 ~ 20:00 고정
             LocalDateTime startDateTime = date.atTime(18, 0);
             return new StudyUpdateCommand.Session(
-                    sessionId, null, null, Period.of(startDateTime, startDateTime.plusHours(2)), null, null);
+                    sessionId, null, null, Period.of(startDateTime, startDateTime.plusHours(2)), null, null, null);
         }
 
         private StudyUpdateCommand createCommand(LocalDate... dates) {
