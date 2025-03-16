@@ -41,12 +41,15 @@ public class StudentStudyServiceV2 {
         Member member = memberUtil.getCurrentMember();
         StudyV2 study =
                 studyV2Repository.findFetchById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
+        StudyHistoryV2 studyHistory = studyHistoryV2Repository
+                .findByStudentAndStudy(member, study)
+                .orElseThrow(() -> new CustomException(STUDY_HISTORY_NOT_FOUND));
         List<AttendanceV2> attendances = attendanceV2Repository.findFetchByMemberAndStudy(member, study);
         List<AssignmentHistoryV2> assignmentHistories =
                 assignmentHistoryV2Repository.findByMemberAndStudy(member, study);
         LocalDateTime now = LocalDateTime.now();
 
-        return StudyDashboardResponse.of(study, attendances, assignmentHistories, now);
+        return StudyDashboardResponse.of(study, studyHistory, attendances, assignmentHistories, now);
     }
 
     @Transactional(readOnly = true)

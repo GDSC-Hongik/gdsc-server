@@ -1,17 +1,15 @@
 package com.gdschongik.gdsc.domain.studyv2.dto.response;
 
-import com.gdschongik.gdsc.domain.studyv2.domain.AssignmentHistoryStatus;
-import com.gdschongik.gdsc.domain.studyv2.domain.AssignmentHistoryV2;
-import com.gdschongik.gdsc.domain.studyv2.domain.AttendanceV2;
-import com.gdschongik.gdsc.domain.studyv2.domain.StudySessionV2;
-import com.gdschongik.gdsc.domain.studyv2.domain.StudyV2;
+import com.gdschongik.gdsc.domain.studyv2.domain.*;
+import com.gdschongik.gdsc.domain.studyv2.dto.dto.StudyHistoryDto;
 import com.gdschongik.gdsc.domain.studyv2.dto.dto.StudySessionMyDto;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public record StudyDashboardResponse(List<StudySessionMyDto> sessions) {
+public record StudyDashboardResponse(StudyHistoryDto studyHistory, List<StudySessionMyDto> sessions) {
     public static StudyDashboardResponse of(
             StudyV2 study,
+            StudyHistoryV2 studyHistory,
             List<AttendanceV2> attendances,
             List<AssignmentHistoryV2> assignmentHistories,
             LocalDateTime now) {
@@ -24,7 +22,7 @@ public record StudyDashboardResponse(List<StudySessionMyDto> sessions) {
                         now))
                 .toList();
 
-        return new StudyDashboardResponse(studySessions);
+        return new StudyDashboardResponse(StudyHistoryDto.from(studyHistory), studySessions);
     }
 
     private static boolean isAttended(StudySessionV2 studySession, List<AttendanceV2> attendances) {
