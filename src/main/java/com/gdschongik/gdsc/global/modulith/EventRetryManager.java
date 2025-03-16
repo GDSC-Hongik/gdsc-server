@@ -85,7 +85,6 @@ public class EventRetryManager {
     }
 
     private static boolean isDeadLetter(EventPublication publication, Instant oldestAllowed) {
-        Instant publicationDate = publication.getPublicationDate();
-        return publicationDate.isBefore(oldestAllowed);
+        return publication.getPublicationDate().isBefore(oldestAllowed);
     }
 }
