@@ -48,7 +48,7 @@ public class EventRetryManager {
     private static boolean isWithinAgeRange(
             EventPublication publication, Instant oldestAllowed, Instant newestAllowed) {
         Instant publicationDate = publication.getPublicationDate();
-        boolean shouldRetry = publicationDate.isBefore(oldestAllowed) && publicationDate.isAfter(newestAllowed);
+        boolean shouldRetry = publicationDate.isAfter(oldestAllowed) && publicationDate.isBefore(newestAllowed);
 
         if (shouldRetry) {
             log.info("[EventRetryManager] 이벤트 재시도: uuid={}", publication.getIdentifier());
