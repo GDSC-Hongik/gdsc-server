@@ -101,7 +101,7 @@ public class StudentStudyServiceV2 {
 
         // 과제
         study.getStudySessions().stream()
-                .filter(studySession -> studySession.getAssignmentPeriod().isWithin(now))
+                .filter(studySession -> studySession.isAssignmentSubmittable(now))
                 .forEach(studySession ->
                         response.add(StudyTodoResponse.assignmentType(studySession, assignmentHistories, now)));
 
@@ -137,7 +137,7 @@ public class StudentStudyServiceV2 {
 
             // 과제
             study.getStudySessions().stream()
-                    .filter(studySession -> studySession.getAssignmentPeriod().isWithin(now))
+                    .filter(studySession -> studySession.isAssignmentSubmittable(now))
                     .forEach(studySession ->
                             response.add(StudyTodoResponse.assignmentType(studySession, assignmentHistories, now)));
         });
