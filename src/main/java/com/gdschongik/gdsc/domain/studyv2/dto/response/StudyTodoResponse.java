@@ -1,7 +1,6 @@
 package com.gdschongik.gdsc.domain.studyv2.dto.response;
 
-import static com.gdschongik.gdsc.domain.studyv2.dto.response.StudyTodoResponse.StudyTodoType.ASSIGNMENT;
-import static com.gdschongik.gdsc.domain.studyv2.dto.response.StudyTodoResponse.StudyTodoType.ATTENDANCE;
+import static com.gdschongik.gdsc.domain.studyv2.dto.response.StudyTodoResponse.StudyTodoType.*;
 
 import com.gdschongik.gdsc.domain.study.domain.StudyType;
 import com.gdschongik.gdsc.domain.studyv2.domain.*;
