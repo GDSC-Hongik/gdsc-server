@@ -51,14 +51,6 @@ public record StudyTaskDto(
                 AssignmentHistoryStatus.of(assignmentHistory, studySession, now));
     }
 
-    public boolean isAttendance() {
-        return taskType == ATTENDANCE;
-    }
-
-    public boolean isAssignment() {
-        return taskType == ASSIGNMENT;
-    }
-
     @Getter
     @RequiredArgsConstructor
     public enum StudyTaskType {

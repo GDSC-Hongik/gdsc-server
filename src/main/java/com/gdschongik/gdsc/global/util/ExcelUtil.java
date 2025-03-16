@@ -147,12 +147,16 @@ public class ExcelUtil {
                     .setCellValue(isSecondRoundOutstandingStudent ? "O" : "X");
             studentRow.createCell(cellIndex.getAndIncrement()).setCellValue(student.attendanceRate());
             studentRow.createCell(cellIndex.getAndIncrement()).setCellValue(student.assignmentRate());
-            student.studyTasks().stream().filter(StudyTaskDto::isAssignment).forEach(task -> studentRow
-                    .createCell(cellIndex.getAndIncrement())
-                    .setCellValue(task.assignmentSubmissionStatus().getValue()));
-            student.studyTasks().stream().filter(StudyTaskDto::isAttendance).forEach(task -> studentRow
-                    .createCell(cellIndex.getAndIncrement())
-                    .setCellValue(task.attendanceStatus().getValue()));
+            student.studyTasks().stream()
+                    .filter(studyTaskDto -> studyTaskDto.taskType() == StudyTaskDto.StudyTaskType.ASSIGNMENT)
+                    .forEach(task -> studentRow
+                            .createCell(cellIndex.getAndIncrement())
+                            .setCellValue(task.assignmentSubmissionStatus().getValue()));
+            student.studyTasks().stream()
+                    .filter(studyTaskDto -> studyTaskDto.taskType() == StudyTaskDto.StudyTaskType.ATTENDANCE)
+                    .forEach(task -> studentRow
+                            .createCell(cellIndex.getAndIncrement())
+                            .setCellValue(task.attendanceStatus().getValue()));
         });
     }
 
