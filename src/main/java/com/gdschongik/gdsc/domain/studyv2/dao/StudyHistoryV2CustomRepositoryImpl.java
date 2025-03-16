@@ -34,15 +34,4 @@ public class StudyHistoryV2CustomRepositoryImpl implements StudyHistoryV2CustomR
     private BooleanExpression eqStudyId(Long studyId) {
         return studyHistoryV2.study.id.eq(studyId);
     }
-
-    @Override
-    public boolean existsByStudyId(Long studyId) {
-        Integer fetchOne = queryFactory
-                .selectOne()
-                .from(studyHistoryV2)
-                .where(eqStudyId(studyId))
-                .fetchOne();
-
-        return fetchOne != null;
-    }
 }
