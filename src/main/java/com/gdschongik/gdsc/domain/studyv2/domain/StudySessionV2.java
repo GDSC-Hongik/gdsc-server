@@ -133,6 +133,9 @@ public class StudySessionV2 extends BaseEntity {
     }
 
     public boolean isAttendable(LocalDateTime now) {
+        if (lessonPeriod == null) {
+            return false;
+        }
         return lessonPeriod.isWithin(now);
     }
 
