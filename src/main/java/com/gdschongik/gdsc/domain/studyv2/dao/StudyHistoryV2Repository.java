@@ -5,6 +5,8 @@ import com.gdschongik.gdsc.domain.studyv2.domain.StudyHistoryV2;
 import com.gdschongik.gdsc.domain.studyv2.domain.StudyV2;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface StudyHistoryV2Repository extends JpaRepository<StudyHistoryV2, Long>, StudyHistoryV2CustomRepository {
@@ -15,4 +17,6 @@ public interface StudyHistoryV2Repository extends JpaRepository<StudyHistoryV2, 
     List<StudyHistoryV2> findAllByStudent(Member student);
 
     List<StudyHistoryV2> findAllByStudy(StudyV2 study);
+
+    Page<StudyHistoryV2> findByStudyId(Long studyId, Pageable pageable);
 }

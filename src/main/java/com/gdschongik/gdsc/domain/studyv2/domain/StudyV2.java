@@ -138,8 +138,6 @@ public class StudyV2 extends BaseEntity {
     public static StudyV2 createLive(
             StudyType type,
             String title,
-            String description,
-            String descriptionNotionLink,
             Semester semester,
             Integer totalRound,
             DayOfWeek dayOfWeek,
@@ -153,8 +151,6 @@ public class StudyV2 extends BaseEntity {
         return StudyV2.builder()
                 .type(type)
                 .title(title)
-                .description(description)
-                .descriptionNotionLink(descriptionNotionLink)
                 .semester(semester)
                 .totalRound(totalRound)
                 .dayOfWeek(dayOfWeek)
@@ -178,8 +174,6 @@ public class StudyV2 extends BaseEntity {
      */
     public static StudyV2 createAssignment(
             String title,
-            String description,
-            String descriptionNotionLink,
             Semester semester,
             Integer totalRound,
             Period applicationPeriod,
@@ -189,8 +183,6 @@ public class StudyV2 extends BaseEntity {
         return StudyV2.builder()
                 .type(StudyType.ASSIGNMENT)
                 .title(title)
-                .description(description)
-                .descriptionNotionLink(descriptionNotionLink)
                 .semester(semester)
                 .totalRound(totalRound)
                 .applicationPeriod(applicationPeriod)
@@ -210,6 +202,22 @@ public class StudyV2 extends BaseEntity {
 
     public StudySessionV2 getStudySession(Long studySessionId) {
         return getOptionalStudySession(studySessionId).orElseThrow(() -> new CustomException(STUDY_SESSION_NOT_FOUND));
+    }
+
+    public boolean isApplicable(LocalDateTime now) {
+        return applicationPeriod.isWithin(now);
+    }
+
+    public LocalDateTime getOpeningDate() {
+        if (!type.isLive()) {
+            return null;
+        }
+
+        return studySessions.stream()
+                .filter(studySession -> studySession.getPosition() == 1)
+                .findFirst()
+                .map(studySession -> studySession.getLessonPeriod().getStartDate())
+                .orElse(null);
     }
 
     // 데이터 변경 로직

@@ -1,6 +1,7 @@
 package com.gdschongik.gdsc.domain.studyv2.dao;
 
 import static com.gdschongik.gdsc.domain.studyv2.domain.QAssignmentHistoryV2.*;
+import static com.gdschongik.gdsc.domain.studyv2.domain.QStudySessionV2.*;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.studyv2.domain.AssignmentHistoryV2;
@@ -21,6 +22,16 @@ public class AssignmentHistoryV2CustomRepositoryImpl implements AssignmentHistor
                 .selectFrom(assignmentHistoryV2)
                 .innerJoin(assignmentHistoryV2.studySession)
                 .where(eqMemberId(member.getId()).and(eqStudyId(study.getId())))
+                .fetch();
+    }
+
+    @Override
+    public List<AssignmentHistoryV2> findByStudyIdAndMemberIds(Long studyId, List<Long> memberIds) {
+        return queryFactory
+                .selectFrom(assignmentHistoryV2)
+                .innerJoin(assignmentHistoryV2.studySession, studySessionV2)
+                .fetchJoin()
+                .where(assignmentHistoryV2.member.id.in(memberIds), eqStudyId(studyId))
                 .fetch();
     }
 
