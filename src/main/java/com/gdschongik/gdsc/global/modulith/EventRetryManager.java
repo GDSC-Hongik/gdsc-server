@@ -10,6 +10,20 @@ import org.springframework.modulith.events.IncompleteEventPublications;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+/**
+ * <p>스프링 모듈리스 이벤트 재시도 관리자입니다.</p>
+ *
+ * <p>짧은 시간(최대 10초) 내 처리되는 API 요청 등의 작업을 상정하고 있습니다.</p>
+ *
+ * <p>정확히 한 번(exactly-once) 실행되어야 하는 장기간 비동기 실행 작업은 재시도되지 않도록,
+ * <code>@TransactionalEventHandler()</code> 에 의해 트리거되지 않게 주의해야 합니다.</p>
+ *
+ * <p>일반 재시도: 최소 재시도 시간(기본 10초) ~ 최대 재시도 시간(기본 30초) 사이의 이벤트를
+ * 재시도 간격(기본 5초)으로 재시도합니다.</p>
+ *
+ * <p>DLQ 처리: 최대 재시도 시간(기본 30초) 이후에도 처리되지 않은 데드 레터 이벤트에 대한 처리를 수행합니다.
+ * 별도 완료 처리 혹은 DLQ 이동은 불가능합니다.</p>
+ */
 @Slf4j
 @Component
 @RequiredArgsConstructor
