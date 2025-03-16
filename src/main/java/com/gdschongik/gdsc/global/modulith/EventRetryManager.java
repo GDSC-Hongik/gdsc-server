@@ -49,7 +49,7 @@ public class EventRetryManager {
             EventPublication publication, Instant oldestAllowed, Instant newestAllowed) {
         log.info("[EventRetryManager] 이벤트 재시도: uuid={}", publication.getIdentifier());
         Instant publicationDate = publication.getPublicationDate();
-        return publicationDate.isAfter(oldestAllowed) && publicationDate.isBefore(newestAllowed);
+        return publicationDate.isBefore(oldestAllowed) && publicationDate.isAfter(newestAllowed);
     }
 
     @Scheduled(fixedRateString = "${modulith.dlq-interval-minute}", timeUnit = TimeUnit.MINUTES)
