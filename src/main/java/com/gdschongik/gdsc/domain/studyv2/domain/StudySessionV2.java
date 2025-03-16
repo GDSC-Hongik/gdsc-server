@@ -132,6 +132,10 @@ public class StudySessionV2 extends BaseEntity {
         return assignmentPeriod.isWithin(now);
     }
 
+    public boolean isAttendable(LocalDateTime now) {
+        return lessonPeriod.isWithin(now);
+    }
+
     // 데이터 변경 로직
 
     public void update(StudyUpdateCommand.Session command) {

@@ -93,17 +93,8 @@ public class StudentStudyServiceV2 {
         LocalDateTime now = LocalDateTime.now();
         List<StudyTodoResponse> response = new ArrayList<>();
 
-        // 출석체크
-        study.getStudySessions().stream()
-                .filter(studySession -> studySession.getLessonPeriod().isWithin(now))
-                .forEach(studySession -> response.add(
-                        StudyTodoResponse.attendanceType(studySession, study.getType(), attendances, now)));
-
-        // 과제
-        study.getStudySessions().stream()
-                .filter(studySession -> studySession.isAssignmentSubmittable(now))
-                .forEach(studySession ->
-                        response.add(StudyTodoResponse.assignmentType(studySession, assignmentHistories, now)));
+        response.addAll(getAttendanceTodos(study, attendances, now));
+        response.addAll(getAssignmentTodos(study, assignmentHistories, now));
 
         return response;
     }
@@ -129,18 +120,23 @@ public class StudentStudyServiceV2 {
             List<AssignmentHistoryV2> assignmentHistories =
                     assignmentHistoryV2Repository.findByMemberAndStudy(currentMember, study);
 
-            // 출석체크
-            study.getStudySessions().stream()
-                    .filter(studySession -> studySession.getLessonPeriod().isWithin(now))
-                    .forEach(studySession -> response.add(
-                            StudyTodoResponse.attendanceType(studySession, study.getType(), attendances, now)));
-
-            // 과제
-            study.getStudySessions().stream()
-                    .filter(studySession -> studySession.isAssignmentSubmittable(now))
-                    .forEach(studySession ->
-                            response.add(StudyTodoResponse.assignmentType(studySession, assignmentHistories, now)));
+            response.addAll(getAttendanceTodos(study, attendances, now));
+            response.addAll(getAssignmentTodos(study, assignmentHistories, now));
         });
         return response;
+    }
+
+    private List<StudyTodoResponse> getAttendanceTodos(StudyV2 study, List<AttendanceV2> attendances, LocalDateTime now) {
+        return study.getStudySessions().stream()
+                .filter(studySession -> studySession.isAttendable(now))
+                .map(studySession -> StudyTodoResponse.attendanceType(studySession, study.getType(), attendances, now))
+                .toList();
+    }
+
+    private List<StudyTodoResponse> getAssignmentTodos(StudyV2 study, List<AssignmentHistoryV2> assignmentHistories, LocalDateTime now) {
+        return study.getStudySessions().stream()
+                .filter(studySession -> studySession.isAssignmentSubmittable(now))
+                .map(studySession -> StudyTodoResponse.assignmentType(studySession, assignmentHistories, now))
+                .toList();
     }
 }
