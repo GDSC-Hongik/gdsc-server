@@ -136,6 +136,7 @@ public class StudySessionV2 extends BaseEntity {
         if (lessonPeriod == null) {
             return false;
         }
+
         return lessonPeriod.isWithin(now);
     }
 
