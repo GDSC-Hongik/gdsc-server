@@ -126,14 +126,16 @@ public class StudentStudyServiceV2 {
         return response;
     }
 
-    private List<StudyTodoResponse> getAttendanceTodos(StudyV2 study, List<AttendanceV2> attendances, LocalDateTime now) {
+    private List<StudyTodoResponse> getAttendanceTodos(
+            StudyV2 study, List<AttendanceV2> attendances, LocalDateTime now) {
         return study.getStudySessions().stream()
                 .filter(studySession -> studySession.isAttendable(now))
                 .map(studySession -> StudyTodoResponse.attendanceType(studySession, study.getType(), attendances, now))
                 .toList();
     }
 
-    private List<StudyTodoResponse> getAssignmentTodos(StudyV2 study, List<AssignmentHistoryV2> assignmentHistories, LocalDateTime now) {
+    private List<StudyTodoResponse> getAssignmentTodos(
+            StudyV2 study, List<AssignmentHistoryV2> assignmentHistories, LocalDateTime now) {
         return study.getStudySessions().stream()
                 .filter(studySession -> studySession.isAssignmentSubmittable(now))
                 .map(studySession -> StudyTodoResponse.assignmentType(studySession, assignmentHistories, now))
