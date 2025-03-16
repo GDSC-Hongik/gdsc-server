@@ -2,7 +2,6 @@ package com.gdschongik.gdsc.domain.studyv2.application;
 
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
-import com.gdschongik.gdsc.domain.coupon.dao.CouponRepository;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.studyv2.dao.StudyHistoryV2Repository;
@@ -14,6 +13,7 @@ import com.gdschongik.gdsc.global.exception.CustomException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,10 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class AdminStudyServiceV2 {
 
-    private final StudyValidatorV2 studyValidatorV2;
     private final StudyV2Repository studyV2Repository;
     private final MemberRepository memberRepository;
-    private final CouponRepository couponRepository;
     private final StudyHistoryV2Repository studyHistoryV2Repository;
     private final StudyFactory studyFactory;
     private final AttendanceNumberGenerator attendanceNumberGenerator;
@@ -64,14 +62,13 @@ public class AdminStudyServiceV2 {
                 .toList();
     }
 
-    @Transactional
     public void deleteStudy(Long studyId) {
-        boolean isStudyLinkedToCoupons = couponRepository.existsByStudyId(studyId);
-        boolean isStudyLinkedToStudyHistories = studyHistoryV2Repository.existsByStudyId(studyId);
-
-        studyValidatorV2.validateDeleteStudy(isStudyLinkedToCoupons, isStudyLinkedToStudyHistories);
-
-        studyV2Repository.deleteById(studyId);
+        try {
+            studyV2Repository.deleteById(studyId);
+        } catch (DataIntegrityViolationException e) {
+            log.error("[AdminStudyServiceV2] 스터디 삭제 실패: studyId = {}", studyId, e);
+            throw new CustomException(STUDY_NOT_DELETABLE_FK_CONSTRAINT);
+        }
 
         log.info("[AdminStudyServiceV2] 스터디 삭제 완료: studyId = {}", studyId);
     }
