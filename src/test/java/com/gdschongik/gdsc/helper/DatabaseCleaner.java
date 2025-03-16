@@ -54,6 +54,13 @@ public class DatabaseCleaner implements InitializingBean {
         statement.executeUpdate("SET REFERENTIAL_INTEGRITY FALSE");
 
         for (String name : tableNames) {
+            // TODO: 엔티티 이름 -> 테이블 이름 변환 로직 대신 실제 테이블 이름을 메타데이터로부터 가져오도록 개선
+            if (name.equals("default_jpa_event_publication")) {
+                name = "event_publication";
+                statement.executeUpdate(String.format("TRUNCATE TABLE %s", name));
+                continue;
+            }
+
             statement.executeUpdate(String.format("TRUNCATE TABLE %s", name));
             statement.executeUpdate(String.format("ALTER TABLE %s ALTER COLUMN %s_id RESTART WITH 1", name, name));
         }
