@@ -1,14 +1,13 @@
 package com.gdschongik.gdsc.domain.studyv2.domain;
 
+import static com.gdschongik.gdsc.global.exception.ErrorCode.ASSIGNMENT_HISTORY_NOT_WITHIN_PERIOD;
+
 import com.gdschongik.gdsc.domain.common.vo.Period;
 import com.gdschongik.gdsc.global.exception.CustomException;
-import com.gdschongik.gdsc.global.exception.ErrorCode;
 import jakarta.annotation.Nullable;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
-import static com.gdschongik.gdsc.global.exception.ErrorCode.ASSIGNMENT_HISTORY_NOT_WITHIN_PERIOD;
 
 @Getter
 @RequiredArgsConstructor
