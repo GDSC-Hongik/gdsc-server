@@ -4,7 +4,6 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
-import com.gdschongik.gdsc.domain.study.domain.Study;
 import com.gdschongik.gdsc.domain.studyv2.dao.StudyV2Repository;
 import com.gdschongik.gdsc.domain.studyv2.domain.*;
 import com.gdschongik.gdsc.domain.studyv2.dto.request.StudyCreateRequest;
