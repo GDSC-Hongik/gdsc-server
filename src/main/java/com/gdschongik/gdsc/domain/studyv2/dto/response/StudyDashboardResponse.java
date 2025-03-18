@@ -57,6 +57,10 @@ public record StudyDashboardResponse(StudyHistoryDto studyHistory, List<StudySes
         }
 
         LocalDateTime committedAt = assignmentHistory.getCommittedAt();
+        if (committedAt == null) {
+            return true;
+        }
+
         return studySession.getAssignmentPeriod().isWithin(committedAt);
     }
 }
