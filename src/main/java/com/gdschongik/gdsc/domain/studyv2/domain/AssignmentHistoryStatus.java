@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import static com.gdschongik.gdsc.global.exception.ErrorCode.ASSIGNMENT_HISTORY_NOT_WITHIN_PERIOD;
+
 @Getter
 @RequiredArgsConstructor
 public enum AssignmentHistoryStatus {
@@ -27,8 +29,6 @@ public enum AssignmentHistoryStatus {
     public static AssignmentHistoryStatus of(
             @Nullable AssignmentHistoryV2 assignmentHistory, StudySessionV2 studySession, LocalDateTime now)
             throws CustomException {
-        validateCommittedAtWithinAssignmentPeriod(assignmentHistory, studySession);
-
         Period assignmentPeriod = studySession.getAssignmentPeriod();
 
         if (now.isBefore(assignmentPeriod.getStartDate())) {
@@ -41,20 +41,21 @@ public enum AssignmentHistoryStatus {
         }
 
         // 과제 제출 이력이 있는 경우
+        validateCommittedAtWithinAssignmentPeriod(assignmentHistory, studySession);
         return assignmentHistory.isSucceeded() ? SUCCEEDED : FAILED;
     }
 
     private static void validateCommittedAtWithinAssignmentPeriod(
-            @Nullable AssignmentHistoryV2 assignmentHistory, StudySessionV2 studySession) throws CustomException {
-        if (assignmentHistory == null) {
+            AssignmentHistoryV2 assignmentHistory, StudySessionV2 studySession) throws CustomException {
+        LocalDateTime committedAt = assignmentHistory.getCommittedAt();
+        if (committedAt == null) {
             return;
         }
 
-        LocalDateTime committedAt = assignmentHistory.getCommittedAt();
         Period assignmentPeriod = studySession.getAssignmentPeriod();
 
         if (!assignmentPeriod.isWithin(committedAt)) {
-            throw new CustomException(ErrorCode.ASSIGNMENT_HISTORY_NOT_WITHIN_PERIOD);
+            throw new CustomException(ASSIGNMENT_HISTORY_NOT_WITHIN_PERIOD);
         }
     }
 }
