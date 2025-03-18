@@ -4,6 +4,7 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
+import com.gdschongik.gdsc.domain.study.domain.Study;
 import com.gdschongik.gdsc.domain.studyv2.dao.StudyV2Repository;
 import com.gdschongik.gdsc.domain.studyv2.domain.*;
 import com.gdschongik.gdsc.domain.studyv2.dto.request.StudyCreateRequest;
@@ -64,7 +65,6 @@ public class AdminStudyServiceV2 {
         try {
             studyV2Repository.deleteById(studyId);
         } catch (DataIntegrityViolationException e) {
-            log.error("[AdminStudyServiceV2] 스터디 삭제 실패: studyId = {}", studyId, e);
             throw new CustomException(STUDY_NOT_DELETABLE_FK_CONSTRAINT);
         }
 
