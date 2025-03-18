@@ -1,8 +1,9 @@
 package com.gdschongik.gdsc.domain.studyv2.domain;
 
+import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
+
 import com.gdschongik.gdsc.domain.common.vo.Period;
 import com.gdschongik.gdsc.global.exception.CustomException;
-import com.gdschongik.gdsc.global.exception.ErrorCode;
 import jakarta.annotation.Nullable;
 import java.time.LocalDateTime;
 import lombok.Getter;
@@ -51,10 +52,14 @@ public enum AssignmentHistoryStatus {
         }
 
         LocalDateTime committedAt = assignmentHistory.getCommittedAt();
+        if (committedAt == null) {
+            return;
+        }
+
         Period assignmentPeriod = studySession.getAssignmentPeriod();
 
         if (!assignmentPeriod.isWithin(committedAt)) {
-            throw new CustomException(ErrorCode.ASSIGNMENT_HISTORY_NOT_WITHIN_PERIOD);
+            throw new CustomException(ASSIGNMENT_HISTORY_NOT_WITHIN_PERIOD);
         }
     }
 }
