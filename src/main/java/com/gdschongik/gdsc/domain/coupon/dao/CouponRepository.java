@@ -8,6 +8,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CouponRepository extends JpaRepository<Coupon, Long> {
     Optional<Coupon> findByCouponTypeAndStudy(CouponType couponType, StudyV2 study);
-
-    boolean existsByStudyId(Long studyId);
 }
