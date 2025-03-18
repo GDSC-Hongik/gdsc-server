@@ -1,0 +1,98 @@
+name: PR Automation
+
+on:
+  pull_request:
+    branches: ["develop"]
+
+jobs:
+  set-pr-title-and-body:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      issues: read
+    steps:
+      - name: Set PR Title and Body
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            // 브랜치 이름 가져오기
+            const branchName = context.payload.pull_request.head.ref;
+            console.log(`Branch name: ${branchName}`);
+
+            // 브랜치 이름에서 type_name과 issue_number 추출
+            const branchPattern = /^(feature|fix|refactor|chore|test|docs)\/(\d+)-.*$/;
+            const branchMatch = branchName.match(branchPattern);
+
+            if (!branchMatch) {
+              console.log('Branch name does not match expected pattern');
+              return;
+            }
+
+            const [, typeName, issueNumber] = branchMatch;
+            console.log(`Type: ${typeName}, Issue Number: ${issueNumber}`);
+
+            // 이슈 제목 가져오기
+            try {
+              const issue = await github.rest.issues.get({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: parseInt(issueNumber)
+              });
+
+              const issueTitle = issue.data.title;
+              console.log(`Issue title: ${issueTitle}`);
+
+              // 이슈 제목에서 깃모지 제거
+              // 깃모지가 첫 번째 토큰이고 공백 하나가 뒤따른다고 가정
+              const cleanTitle = issueTitle.replace(/^([^\s]+)\s+/, '');
+              console.log(`Clean title: ${cleanTitle}`);
+
+              // type_name을 new_type_name으로 변환
+              let newTypeName = typeName;
+              if (typeName === 'feature') {
+                newTypeName = 'feat';
+              }
+
+              // PR 제목 생성
+              const prTitle = `${newTypeName}: ${cleanTitle}`;
+              console.log(`New PR title: ${prTitle}`);
+
+              // PR 본문 가져오기
+              const { data: pullRequest } = await github.rest.pulls.get({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: context.payload.pull_request.number
+              });
+
+              // PR 본문에서 #{issue_number} 플레이스홀더 치환
+              let prBody = pullRequest.body || '';
+
+              // 플레이스홀더가 있으면 실제 이슈 번호로 치환
+              if (prBody.includes('{issue_number}')) {
+                prBody = prBody.replace(/\{issue_number\}/g, issueNumber);
+                console.log('Updated PR body with issue number');
+              } else {
+                console.log('No issue number placeholder found in PR body');
+              }
+
+              // PR 제목과 본문 업데이트
+              await github.rest.pulls.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: context.payload.pull_request.number,
+                title: prTitle,
+                body: prBody
+              });
+
+              console.log('PR title and body updated successfully');
+            } catch (error) {
+              console.error(`Error: ${error.message}`);
+            }
+
+  set-assignee-and-reviewer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: kentaro-m/auto-assign-action@v2.0.0
+        with:
+          configuration-path: ".github/auto_assign_config.yml"
