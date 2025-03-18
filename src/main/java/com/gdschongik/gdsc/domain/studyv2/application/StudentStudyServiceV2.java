@@ -89,6 +89,9 @@ public class StudentStudyServiceV2 {
         Member currentMember = memberUtil.getCurrentMember();
         StudyV2 study =
                 studyV2Repository.findFetchById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
+        StudyHistoryV2 studyHistory = studyHistoryV2Repository
+                .findByStudentAndStudy(currentMember, study)
+                .orElseThrow(() -> new CustomException(STUDY_HISTORY_NOT_FOUND));
         List<AttendanceV2> attendances = attendanceV2Repository.findFetchByMemberAndStudy(currentMember, study);
         List<AssignmentHistoryV2> assignmentHistories =
                 assignmentHistoryV2Repository.findByMemberAndStudy(currentMember, study);
@@ -97,7 +100,7 @@ public class StudentStudyServiceV2 {
         List<StudyTodoResponse> response = new ArrayList<>();
 
         response.addAll(getAttendanceTodos(study, attendances, now));
-        response.addAll(getAssignmentTodos(study, assignmentHistories, now));
+        response.addAll(getAssignmentTodos(study, studyHistory, assignmentHistories, now));
 
         return response;
     }
@@ -119,12 +122,15 @@ public class StudentStudyServiceV2 {
         List<StudyTodoResponse> response = new ArrayList<>();
 
         currentStudies.forEach(study -> {
+            StudyHistoryV2 studyHistory = studyHistoryV2Repository
+                    .findByStudentAndStudy(currentMember, study)
+                    .orElseThrow(() -> new CustomException(STUDY_HISTORY_NOT_FOUND));
             List<AttendanceV2> attendances = attendanceV2Repository.findFetchByMemberAndStudy(currentMember, study);
             List<AssignmentHistoryV2> assignmentHistories =
                     assignmentHistoryV2Repository.findByMemberAndStudy(currentMember, study);
 
             response.addAll(getAttendanceTodos(study, attendances, now));
-            response.addAll(getAssignmentTodos(study, assignmentHistories, now));
+            response.addAll(getAssignmentTodos(study, studyHistory, assignmentHistories, now));
         });
         return response;
     }
@@ -133,15 +139,19 @@ public class StudentStudyServiceV2 {
             StudyV2 study, List<AttendanceV2> attendances, LocalDateTime now) {
         return study.getStudySessions().stream()
                 .filter(studySession -> studySession.isAttendable(now))
-                .map(studySession -> StudyTodoResponse.attendanceType(studySession, study.getType(), attendances, now))
+                .map(studySession -> StudyTodoResponse.attendanceType(study, studySession, attendances, now))
                 .toList();
     }
 
     private List<StudyTodoResponse> getAssignmentTodos(
-            StudyV2 study, List<AssignmentHistoryV2> assignmentHistories, LocalDateTime now) {
+            StudyV2 study,
+            StudyHistoryV2 studyHistory,
+            List<AssignmentHistoryV2> assignmentHistories,
+            LocalDateTime now) {
         return study.getStudySessions().stream()
                 .filter(studySession -> studySession.isAssignmentSubmittable(now))
-                .map(studySession -> StudyTodoResponse.assignmentType(studySession, assignmentHistories, now))
+                .map(studySession ->
+                        StudyTodoResponse.assignmentType(study, studyHistory, studySession, assignmentHistories, now))
                 .toList();
     }
 }
