@@ -8,7 +8,7 @@ import com.gdschongik.gdsc.domain.study.domain.AssignmentSubmission;
 import com.gdschongik.gdsc.domain.study.domain.AssignmentSubmissionFetchExecutor;
 import com.gdschongik.gdsc.domain.study.domain.AssignmentSubmissionFetcher;
 import com.gdschongik.gdsc.global.exception.CustomException;
-import com.gdschongik.gdsc.infra.github.GithubUserRequest;
+import com.gdschongik.gdsc.infra.github.dto.request.GithubUserRequest;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
