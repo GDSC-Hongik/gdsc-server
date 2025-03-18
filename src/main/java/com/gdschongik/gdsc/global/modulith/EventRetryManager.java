@@ -1,6 +1,5 @@
 package com.gdschongik.gdsc.global.modulith;
 
-import com.gdschongik.gdsc.global.property.ModulithProperty;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,23 +31,27 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class EventRetryManager {
 
-    private final ModulithProperty modulithProperty;
+    public static final int RETRY_INTERVAL_SECOND = 5;
+    public static final int DLQ_INTERVAL_MINUTE = 60;
+    public static final int MIN_RETRY_AGE_SECOND = 10;
+    public static final int MAX_RETRY_AGE_SECOND = 30;
+
     private final IncompleteEventPublications incompletePublications;
 
-    @Scheduled(fixedRateString = "${modulith.retry-interval-second}", timeUnit = TimeUnit.SECONDS)
+    @Scheduled(fixedRate = RETRY_INTERVAL_SECOND, timeUnit = TimeUnit.SECONDS)
     public void retryIncompleteEvents() {
         Instant now = Instant.now();
-        Instant oldestAllowed = now.minusSeconds(modulithProperty.getMaxAge());
-        Instant newestAllowed = now.minusSeconds(modulithProperty.getMinAge());
+        Instant retryRangeStart = now.minusSeconds(MAX_RETRY_AGE_SECOND);
+        Instant retryRangeEnd = now.minusSeconds(MIN_RETRY_AGE_SECOND);
 
         incompletePublications.resubmitIncompletePublications(
-                publication -> isWithinAgeRange(publication, oldestAllowed, newestAllowed));
+                publication -> isWithinRetryRange(publication, retryRangeStart, retryRangeEnd));
     }
 
-    private static boolean isWithinAgeRange(
-            EventPublication publication, Instant oldestAllowed, Instant newestAllowed) {
+    private static boolean isWithinRetryRange(
+            EventPublication publication, Instant retryRangeStart, Instant retryRangeEnd) {
         Instant publicationDate = publication.getPublicationDate();
-        boolean shouldRetry = publicationDate.isAfter(oldestAllowed) && publicationDate.isBefore(newestAllowed);
+        boolean shouldRetry = publicationDate.isAfter(retryRangeStart) && publicationDate.isBefore(retryRangeEnd);
 
         if (shouldRetry) {
             log.info("[EventRetryManager] 이벤트 재시도: uuid={}", publication.getIdentifier());
@@ -57,7 +60,7 @@ public class EventRetryManager {
         return shouldRetry;
     }
 
-    @Scheduled(fixedRateString = "${modulith.dlq-interval-minute}", timeUnit = TimeUnit.MINUTES)
+    @Scheduled(fixedRate = DLQ_INTERVAL_MINUTE, timeUnit = TimeUnit.MINUTES)
     public void logDeadLetterEvents() {
         List<UUID> deadLetterIds = getDeadLetterIds();
 
@@ -68,28 +71,28 @@ public class EventRetryManager {
 
     private List<UUID> getDeadLetterIds() {
         Instant now = Instant.now();
-        Instant oldestAllowed = now.minusSeconds(modulithProperty.getMaxAge());
+        Instant retryRangeStart = now.minusSeconds(MAX_RETRY_AGE_SECOND);
         List<UUID> deadLetterIds = new ArrayList<>();
 
         incompletePublications.resubmitIncompletePublications(
-                publication -> captureDeadLetterAndAlwaysReturnFalse(publication, deadLetterIds, oldestAllowed));
+                publication -> captureDeadLetterAndAlwaysReturnFalse(publication, deadLetterIds, retryRangeStart));
 
         return deadLetterIds;
     }
 
     /**
-     * 데드 레터 이벤트를 캡처하고 ID를 목록에 추가합니다.
+     * 재시도 시작 시점 이전의 이벤트를 데드 레터 이벤트로 판정하고, 이를 캡처하여 ID를 목록에 추가합니다.
      * 항상 false를 반환하여 재시도를 수행하지 않습니다.
      */
     private static boolean captureDeadLetterAndAlwaysReturnFalse(
-            EventPublication publication, List<UUID> deadLetterIds, Instant oldestAllowed) {
-        if (isDeadLetter(publication, oldestAllowed)) {
+            EventPublication publication, List<UUID> deadLetterIds, Instant retryRangeStart) {
+        if (isDeadLetter(publication, retryRangeStart)) {
             deadLetterIds.add(publication.getIdentifier());
         }
         return false;
     }
 
-    private static boolean isDeadLetter(EventPublication publication, Instant oldestAllowed) {
-        return publication.getPublicationDate().isBefore(oldestAllowed);
+    private static boolean isDeadLetter(EventPublication publication, Instant retryRangeStart) {
+        return publication.getPublicationDate().isBefore(retryRangeStart);
     }
 }

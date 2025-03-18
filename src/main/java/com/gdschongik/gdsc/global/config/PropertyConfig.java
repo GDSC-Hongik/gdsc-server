@@ -6,7 +6,6 @@ import com.gdschongik.gdsc.global.property.DockerProperty;
 import com.gdschongik.gdsc.global.property.EmailProperty;
 import com.gdschongik.gdsc.global.property.GithubProperty;
 import com.gdschongik.gdsc.global.property.JwtProperty;
-import com.gdschongik.gdsc.global.property.ModulithProperty;
 import com.gdschongik.gdsc.global.property.PaymentProperty;
 import com.gdschongik.gdsc.global.property.RedisProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -20,8 +19,7 @@ import org.springframework.context.annotation.Configuration;
     EmailProperty.class,
     PaymentProperty.class,
     GithubProperty.class,
-    DockerProperty.class,
-    ModulithProperty.class
+    DockerProperty.class
 })
 @Configuration
 public class PropertyConfig {}

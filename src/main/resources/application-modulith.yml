@@ -6,9 +6,3 @@ spring:
       jdbc:
         schema-initialization:
           enabled: true
-
-modulith:
-  retry-interval-second: ${MODULITH_RETRY_INTERVAL_SECOND:5}
-  dlq-interval-minute: ${MODULITH_DLQ_INTERVAL_MINUTE:60}
-  min-age: ${MODULITH_MIN_AGE:10}
-  max-age: ${MODULITH_MAX_AGE:30}
