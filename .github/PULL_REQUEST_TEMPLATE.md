@@ -1,5 +1,5 @@
 ## 🌱 관련 이슈
-- close #{issue_number}
+- {issue-close-placeholder-do-not-modify}
 
 ## 📌 작업 내용 및 특이사항
 -

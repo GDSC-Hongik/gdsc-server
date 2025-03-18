@@ -68,12 +68,12 @@ jobs:
               // PR 본문에서 #{issue_number} 플레이스홀더 치환
               let prBody = pullRequest.body || '';
 
-              // 플레이스홀더가 있으면 실제 이슈 번호로 치환
-              if (prBody.includes('{issue_number}')) {
-                prBody = prBody.replace(/\{issue_number\}/g, issueNumber);
-                console.log('Updated PR body with issue number');
+              // 플레이스홀더가 있으면 'close #{issue_number}'로 치환
+              if (prBody.includes('{issue-close-placeholder-do-not-modify}')) {
+                prBody = prBody.replace(/\{issue-close-placeholder-do-not-modify\}/g, `close #${issueNumber}`);
+                console.log('Updated PR body with issue close statement');
               } else {
-                console.log('No issue number placeholder found in PR body');
+                console.log('No issue close placeholder found in PR body');
               }
 
               // PR 제목과 본문 업데이트
