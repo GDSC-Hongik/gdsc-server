@@ -1,7 +1,6 @@
 package com.gdschongik.gdsc.domain.studyv2.api;
 
 import com.gdschongik.gdsc.domain.studyv2.application.StudentStudyServiceV2;
-import com.gdschongik.gdsc.domain.studyv2.dto.dto.StudyCommonDto;
 import com.gdschongik.gdsc.domain.studyv2.dto.dto.StudySimpleDto;
 import com.gdschongik.gdsc.domain.studyv2.dto.response.StudyApplicableResponse;
 import com.gdschongik.gdsc.domain.studyv2.dto.response.StudyDashboardResponse;
