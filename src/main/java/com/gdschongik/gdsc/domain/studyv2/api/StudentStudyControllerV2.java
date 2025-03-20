@@ -2,6 +2,7 @@ package com.gdschongik.gdsc.domain.studyv2.api;
 
 import com.gdschongik.gdsc.domain.studyv2.application.StudentStudyServiceV2;
 import com.gdschongik.gdsc.domain.studyv2.dto.dto.StudyCommonDto;
+import com.gdschongik.gdsc.domain.studyv2.dto.dto.StudySimpleDto;
 import com.gdschongik.gdsc.domain.studyv2.dto.response.StudyApplicableResponse;
 import com.gdschongik.gdsc.domain.studyv2.dto.response.StudyDashboardResponse;
 import com.gdschongik.gdsc.domain.studyv2.dto.response.StudyTodoResponse;
@@ -39,7 +40,7 @@ public class StudentStudyControllerV2 {
 
     @Operation(summary = "내 수강 중인 스터디 조회", description = "나의 이번 학기 수강 중인 스터디를 조회합니다.")
     @GetMapping("/me/ongoing")
-    public ResponseEntity<List<StudyCommonDto>> getMyCurrentStudies() {
+    public ResponseEntity<List<StudySimpleDto>> getMyCurrentStudies() {
         var response = studentStudyServiceV2.getMyCurrentStudies();
         return ResponseEntity.ok(response);
     }

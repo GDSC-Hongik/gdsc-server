@@ -10,7 +10,7 @@ import com.gdschongik.gdsc.domain.studyv2.dao.AttendanceV2Repository;
 import com.gdschongik.gdsc.domain.studyv2.dao.StudyHistoryV2Repository;
 import com.gdschongik.gdsc.domain.studyv2.dao.StudyV2Repository;
 import com.gdschongik.gdsc.domain.studyv2.domain.*;
-import com.gdschongik.gdsc.domain.studyv2.dto.dto.StudyCommonDto;
+import com.gdschongik.gdsc.domain.studyv2.dto.dto.StudySimpleDto;
 import com.gdschongik.gdsc.domain.studyv2.dto.response.StudyApplicableResponse;
 import com.gdschongik.gdsc.domain.studyv2.dto.response.StudyDashboardResponse;
 import com.gdschongik.gdsc.domain.studyv2.dto.response.StudyTodoResponse;
@@ -69,7 +69,7 @@ public class StudentStudyServiceV2 {
     }
 
     @Transactional(readOnly = true)
-    public List<StudyCommonDto> getMyCurrentStudies() {
+    public List<StudySimpleDto> getMyCurrentStudies() {
         Member currentMember = memberUtil.getCurrentMember();
         LocalDateTime now = LocalDateTime.now();
 
@@ -77,10 +77,9 @@ public class StudentStudyServiceV2 {
                 .findCurrentRecruitment(now)
                 .orElseThrow(() -> new CustomException(RECRUITMENT_NOT_FOUND));
 
-        // TODO : StudySimpleDTO 로 대체
         return studyHistoryV2Repository.findAllByStudent(currentMember).stream()
                 .filter(studyHistory -> studyHistory.getStudy().getSemester().equals(recruitment.getSemester()))
-                .map(studyHistory -> StudyCommonDto.from(studyHistory.getStudy()))
+                .map(studyHistory -> StudySimpleDto.from(studyHistory.getStudy()))
                 .toList();
     }
 
