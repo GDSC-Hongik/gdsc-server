@@ -8,7 +8,6 @@ import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.domain.studyv2.dao.StudyAnnouncementV2Repository;
 import com.gdschongik.gdsc.domain.studyv2.dao.StudyHistoryV2Repository;
 import com.gdschongik.gdsc.domain.studyv2.domain.StudyAnnouncementV2;
-import com.gdschongik.gdsc.domain.studyv2.domain.StudyHistoryV2;
 import com.gdschongik.gdsc.domain.studyv2.dto.response.StudyAnnouncementResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
@@ -45,13 +44,13 @@ public class StudyAnnouncementServiceV2 {
                 .findCurrentRecruitment(now)
                 .orElseThrow(() -> new CustomException(RECRUITMENT_NOT_FOUND));
 
-        List<Long> currentStudyHistories = studyHistoryV2Repository.findAllByStudent(currentMember).stream()
+        List<Long> currentStudyIds = studyHistoryV2Repository.findAllByStudent(currentMember).stream()
                 .filter(studyHistory -> studyHistory.getStudy().getSemester().equals(recruitment.getSemester()))
-                .map(StudyHistoryV2::getId)
+                .map(studyHistoryV2 -> studyHistoryV2.getStudy().getId())
                 .toList();
 
         List<StudyAnnouncementV2> studyAnnouncements =
-                studyAnnouncementV2Repository.findAllByStudyIdsOrderByCreatedAtDesc(currentStudyHistories);
+                studyAnnouncementV2Repository.findAllByStudyIdsOrderByCreatedAtDesc(currentStudyIds);
 
         return studyAnnouncements.stream().map(StudyAnnouncementResponse::from).toList();
     }
