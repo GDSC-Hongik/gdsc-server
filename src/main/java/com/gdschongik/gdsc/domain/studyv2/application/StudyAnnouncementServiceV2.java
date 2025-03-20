@@ -44,13 +44,13 @@ public class StudyAnnouncementServiceV2 {
                 .findCurrentRecruitment(now)
                 .orElseThrow(() -> new CustomException(RECRUITMENT_NOT_FOUND));
 
-        List<Long> currentStudyHistories = studyHistoryV2Repository.findAllByStudent(currentMember).stream()
+        List<Long> currentStudyIds = studyHistoryV2Repository.findAllByStudent(currentMember).stream()
                 .filter(studyHistory -> studyHistory.getStudy().getSemester().equals(recruitment.getSemester()))
                 .map(studyHistoryV2 -> studyHistoryV2.getStudy().getId())
                 .toList();
 
         List<StudyAnnouncementV2> studyAnnouncements =
-                studyAnnouncementV2Repository.findAllByStudyIdsOrderByCreatedAtDesc(currentStudyHistories);
+                studyAnnouncementV2Repository.findAllByStudyIdsOrderByCreatedAtDesc(currentStudyIds);
 
         return studyAnnouncements.stream().map(StudyAnnouncementResponse::from).toList();
     }
