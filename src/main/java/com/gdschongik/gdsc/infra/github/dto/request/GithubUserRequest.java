@@ -1,4 +1,4 @@
-package com.gdschongik.gdsc.infra.github;
+package com.gdschongik.gdsc.infra.github.dto.request;
 
 import static com.gdschongik.gdsc.global.common.constant.GithubConstant.*;
 

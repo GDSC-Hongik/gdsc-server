@@ -50,7 +50,7 @@ public class ObjectMapperConfig {
         return mapper;
     }
 
-    public class LocalDateSerializer extends JsonSerializer<LocalDate> {
+    static class LocalDateSerializer extends JsonSerializer<LocalDate> {
 
         @Override
         public void serialize(LocalDate value, JsonGenerator generator, SerializerProvider serializers)
@@ -59,7 +59,7 @@ public class ObjectMapperConfig {
         }
     }
 
-    public class LocalDateDeserializer extends JsonDeserializer<LocalDate> {
+    static class LocalDateDeserializer extends JsonDeserializer<LocalDate> {
         @Override
         public LocalDate deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
                 throws IOException {
@@ -67,7 +67,7 @@ public class ObjectMapperConfig {
         }
     }
 
-    public class LocalDateTimeSerializer extends JsonSerializer<LocalDateTime> {
+    static class LocalDateTimeSerializer extends JsonSerializer<LocalDateTime> {
 
         @Override
         public void serialize(LocalDateTime value, JsonGenerator generator, SerializerProvider serializers)
@@ -76,7 +76,7 @@ public class ObjectMapperConfig {
         }
     }
 
-    public class LocalDateTimeDeserializer extends JsonDeserializer<LocalDateTime> {
+    static class LocalDateTimeDeserializer extends JsonDeserializer<LocalDateTime> {
         @Override
         public LocalDateTime deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
                 throws IOException {
@@ -84,7 +84,7 @@ public class ObjectMapperConfig {
         }
     }
 
-    public class LocalTimeSerializer extends JsonSerializer<LocalTime> {
+    static class LocalTimeSerializer extends JsonSerializer<LocalTime> {
 
         @Override
         public void serialize(LocalTime value, JsonGenerator generator, SerializerProvider serializers)
@@ -100,7 +100,7 @@ public class ObjectMapperConfig {
         }
     }
 
-    public class LocalTimeDeserializer extends JsonDeserializer<LocalTime> {
+    static class LocalTimeDeserializer extends JsonDeserializer<LocalTime> {
         @Override
         public LocalTime deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
                 throws IOException {
@@ -115,7 +115,7 @@ public class ObjectMapperConfig {
         }
     }
 
-    public class ZonedDateTimeSerializer extends JsonSerializer<ZonedDateTime> {
+    static class ZonedDateTimeSerializer extends JsonSerializer<ZonedDateTime> {
         @Override
         public void serialize(ZonedDateTime value, JsonGenerator generator, SerializerProvider serializers)
                 throws IOException {
@@ -124,7 +124,7 @@ public class ObjectMapperConfig {
         }
     }
 
-    public class ZonedDateTimeDeserializer extends JsonDeserializer<ZonedDateTime> {
+    static class ZonedDateTimeDeserializer extends JsonDeserializer<ZonedDateTime> {
         @Override
         public ZonedDateTime deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
                 throws IOException {

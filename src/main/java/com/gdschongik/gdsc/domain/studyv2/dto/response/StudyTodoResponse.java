@@ -2,10 +2,11 @@ package com.gdschongik.gdsc.domain.studyv2.dto.response;
 
 import static com.gdschongik.gdsc.domain.studyv2.dto.response.StudyTodoResponse.StudyTodoType.*;
 
-import com.gdschongik.gdsc.domain.study.domain.StudyType;
 import com.gdschongik.gdsc.domain.studyv2.domain.*;
 import com.gdschongik.gdsc.domain.studyv2.dto.dto.AssignmentHistoryDto;
+import com.gdschongik.gdsc.domain.studyv2.dto.dto.StudyHistorySimpleDto;
 import com.gdschongik.gdsc.domain.studyv2.dto.dto.StudySessionStudentDto;
+import com.gdschongik.gdsc.domain.studyv2.dto.dto.StudySimpleDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,6 +14,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 public record StudyTodoResponse(
+        @Schema(description = "스터디 상세 정보") StudySimpleDto study,
+        @Schema(description = "스터디 히스토리 정보") StudyHistorySimpleDto studyHistory,
         @Schema(description = "스터디 세션 정보") StudySessionStudentDto studySession,
         @Schema(description = "할 일 타입") StudyTodoResponse.StudyTodoType todoType,
         @Schema(description = "마감 시각") LocalDateTime deadLine,
@@ -20,20 +23,28 @@ public record StudyTodoResponse(
         @Schema(description = "과제 정보 (과제타입일 때만 사용)") AssignmentHistoryDto assignmentHistory,
         @Schema(description = "과제 제출 상태 (과제타입일 때만 사용)") AssignmentHistoryStatus assignmentHistoryStatus) {
     public static StudyTodoResponse attendanceType(
-            StudySessionV2 studySession, StudyType studyType, List<AttendanceV2> attendances, LocalDateTime now) {
+            StudyV2 study, StudySessionV2 studySession, List<AttendanceV2> attendances, LocalDateTime now) {
         return new StudyTodoResponse(
+                StudySimpleDto.from(study),
+                null,
                 StudySessionStudentDto.of(studySession),
                 ATTENDANCE,
                 studySession.getLessonPeriod().getEndDate(),
-                AttendanceStatus.of(studySession, studyType, isAttended(studySession, attendances), now),
+                AttendanceStatus.of(studySession, study.getType(), isAttended(studySession, attendances), now),
                 null,
                 null);
     }
 
     public static StudyTodoResponse assignmentType(
-            StudySessionV2 studySession, List<AssignmentHistoryV2> assignmentHistories, LocalDateTime now) {
+            StudyV2 study,
+            StudyHistoryV2 studyHistory,
+            StudySessionV2 studySession,
+            List<AssignmentHistoryV2> assignmentHistories,
+            LocalDateTime now) {
         AssignmentHistoryV2 assignmentHistory = getSubmittedAssignment(assignmentHistories, studySession);
         return new StudyTodoResponse(
+                StudySimpleDto.from(study),
+                StudyHistorySimpleDto.from(studyHistory),
                 StudySessionStudentDto.of(studySession),
                 ASSIGNMENT,
                 studySession.getAssignmentPeriod().getEndDate(),

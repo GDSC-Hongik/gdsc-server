@@ -10,7 +10,7 @@ import com.gdschongik.gdsc.domain.studyv2.dao.AttendanceV2Repository;
 import com.gdschongik.gdsc.domain.studyv2.dao.StudyHistoryV2Repository;
 import com.gdschongik.gdsc.domain.studyv2.dao.StudyV2Repository;
 import com.gdschongik.gdsc.domain.studyv2.domain.*;
-import com.gdschongik.gdsc.domain.studyv2.dto.response.StudentStudyMyCurrentResponse;
+import com.gdschongik.gdsc.domain.studyv2.dto.dto.StudySimpleDto;
 import com.gdschongik.gdsc.domain.studyv2.dto.response.StudyApplicableResponse;
 import com.gdschongik.gdsc.domain.studyv2.dto.response.StudyDashboardResponse;
 import com.gdschongik.gdsc.domain.studyv2.dto.response.StudyTodoResponse;
@@ -41,12 +41,15 @@ public class StudentStudyServiceV2 {
         Member member = memberUtil.getCurrentMember();
         StudyV2 study =
                 studyV2Repository.findFetchById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
+        StudyHistoryV2 studyHistory = studyHistoryV2Repository
+                .findByStudentAndStudy(member, study)
+                .orElseThrow(() -> new CustomException(STUDY_HISTORY_NOT_FOUND));
         List<AttendanceV2> attendances = attendanceV2Repository.findFetchByMemberAndStudy(member, study);
         List<AssignmentHistoryV2> assignmentHistories =
                 assignmentHistoryV2Repository.findByMemberAndStudy(member, study);
         LocalDateTime now = LocalDateTime.now();
 
-        return StudyDashboardResponse.of(study, attendances, assignmentHistories, now);
+        return StudyDashboardResponse.of(study, studyHistory, attendances, assignmentHistories, now);
     }
 
     @Transactional(readOnly = true)
@@ -66,7 +69,7 @@ public class StudentStudyServiceV2 {
     }
 
     @Transactional(readOnly = true)
-    public StudentStudyMyCurrentResponse getMyCurrentStudies() {
+    public List<StudySimpleDto> getMyCurrentStudies() {
         Member currentMember = memberUtil.getCurrentMember();
         LocalDateTime now = LocalDateTime.now();
 
@@ -74,11 +77,10 @@ public class StudentStudyServiceV2 {
                 .findCurrentRecruitment(now)
                 .orElseThrow(() -> new CustomException(RECRUITMENT_NOT_FOUND));
 
-        List<StudyHistoryV2> currentStudyHistories = studyHistoryV2Repository.findAllByStudent(currentMember).stream()
+        return studyHistoryV2Repository.findAllByStudent(currentMember).stream()
                 .filter(studyHistory -> studyHistory.getStudy().getSemester().equals(recruitment.getSemester()))
+                .map(studyHistory -> StudySimpleDto.from(studyHistory.getStudy()))
                 .toList();
-
-        return StudentStudyMyCurrentResponse.from(currentStudyHistories);
     }
 
     @Transactional(readOnly = true)
@@ -86,6 +88,9 @@ public class StudentStudyServiceV2 {
         Member currentMember = memberUtil.getCurrentMember();
         StudyV2 study =
                 studyV2Repository.findFetchById(studyId).orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
+        StudyHistoryV2 studyHistory = studyHistoryV2Repository
+                .findByStudentAndStudy(currentMember, study)
+                .orElseThrow(() -> new CustomException(STUDY_HISTORY_NOT_FOUND));
         List<AttendanceV2> attendances = attendanceV2Repository.findFetchByMemberAndStudy(currentMember, study);
         List<AssignmentHistoryV2> assignmentHistories =
                 assignmentHistoryV2Repository.findByMemberAndStudy(currentMember, study);
@@ -94,7 +99,7 @@ public class StudentStudyServiceV2 {
         List<StudyTodoResponse> response = new ArrayList<>();
 
         response.addAll(getAttendanceTodos(study, attendances, now));
-        response.addAll(getAssignmentTodos(study, assignmentHistories, now));
+        response.addAll(getAssignmentTodos(study, studyHistory, assignmentHistories, now));
 
         return response;
     }
@@ -116,12 +121,15 @@ public class StudentStudyServiceV2 {
         List<StudyTodoResponse> response = new ArrayList<>();
 
         currentStudies.forEach(study -> {
+            StudyHistoryV2 studyHistory = studyHistoryV2Repository
+                    .findByStudentAndStudy(currentMember, study)
+                    .orElseThrow(() -> new CustomException(STUDY_HISTORY_NOT_FOUND));
             List<AttendanceV2> attendances = attendanceV2Repository.findFetchByMemberAndStudy(currentMember, study);
             List<AssignmentHistoryV2> assignmentHistories =
                     assignmentHistoryV2Repository.findByMemberAndStudy(currentMember, study);
 
             response.addAll(getAttendanceTodos(study, attendances, now));
-            response.addAll(getAssignmentTodos(study, assignmentHistories, now));
+            response.addAll(getAssignmentTodos(study, studyHistory, assignmentHistories, now));
         });
         return response;
     }
@@ -130,15 +138,19 @@ public class StudentStudyServiceV2 {
             StudyV2 study, List<AttendanceV2> attendances, LocalDateTime now) {
         return study.getStudySessions().stream()
                 .filter(studySession -> studySession.isAttendable(now))
-                .map(studySession -> StudyTodoResponse.attendanceType(studySession, study.getType(), attendances, now))
+                .map(studySession -> StudyTodoResponse.attendanceType(study, studySession, attendances, now))
                 .toList();
     }
 
     private List<StudyTodoResponse> getAssignmentTodos(
-            StudyV2 study, List<AssignmentHistoryV2> assignmentHistories, LocalDateTime now) {
+            StudyV2 study,
+            StudyHistoryV2 studyHistory,
+            List<AssignmentHistoryV2> assignmentHistories,
+            LocalDateTime now) {
         return study.getStudySessions().stream()
                 .filter(studySession -> studySession.isAssignmentSubmittable(now))
-                .map(studySession -> StudyTodoResponse.assignmentType(studySession, assignmentHistories, now))
+                .map(studySession ->
+                        StudyTodoResponse.assignmentType(study, studyHistory, studySession, assignmentHistories, now))
                 .toList();
     }
 }

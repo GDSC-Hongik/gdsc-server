@@ -11,7 +11,7 @@ import java.time.LocalTime;
 /**
  * 스터디 학생 DTO입니다. 디스코드 관련 ID가 포함되어 있지 않습니다.
  */
-public record StudyStudentDto(
+public record StudyCommonDto(
         Long studyId,
         StudyType type,
         String title,
@@ -26,8 +26,8 @@ public record StudyStudentDto(
         LocalDateTime openingDate,
         Long mentorId,
         String mentorName) {
-    public static StudyStudentDto from(StudyV2 study) {
-        return new StudyStudentDto(
+    public static StudyCommonDto from(StudyV2 study) {
+        return new StudyCommonDto(
                 study.getId(),
                 study.getType(),
                 study.getTitle(),

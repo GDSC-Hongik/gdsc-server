@@ -25,11 +25,4 @@ public class StudyValidatorV2 {
             throw new CustomException(STUDY_MENTOR_INVALID);
         }
     }
-
-    public void validateDeleteStudy(boolean isStudyLinkedToCoupons) {
-        // 쿠폰이 생성된 스터디인지 검증
-        if (isStudyLinkedToCoupons) {
-            throw new CustomException(STUDY_NOT_DELETABLE_COUPON_EXISTS);
-        }
-    }
 }

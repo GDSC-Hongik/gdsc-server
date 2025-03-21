@@ -60,4 +60,12 @@ public final class Period {
     public boolean isWithin(LocalDateTime now) {
         return now.isAfter(startDate) && now.isBefore(endDate) || now.isEqual(startDate);
     }
+
+    /**
+     * Period 객체가 비어있는지 확인합니다.
+     * 시작/종료일자가 하나라도 없으면 비어있다고 간주합니다.
+     */
+    public boolean isEmpty() {
+        return startDate == null || endDate == null;
+    }
 }
