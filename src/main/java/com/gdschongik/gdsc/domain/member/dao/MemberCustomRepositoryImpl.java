@@ -2,13 +2,16 @@ package com.gdschongik.gdsc.domain.member.dao;
 
 import static com.gdschongik.gdsc.domain.common.model.RequirementStatus.*;
 import static com.gdschongik.gdsc.domain.member.domain.QMember.*;
+import static com.gdschongik.gdsc.domain.membership.domain.QMembership.*;
 
 import com.gdschongik.gdsc.domain.common.model.RequirementStatus;
+import com.gdschongik.gdsc.domain.common.vo.Semester;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.MemberRole;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryOption;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.annotation.Nullable;
 import java.util.List;
@@ -55,6 +58,18 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository, Membe
                 .fetch();
     }
 
+    @Override
+    public List<Member> findAllAdvanceFailedMembers(@NonNull Semester semester) {
+        return queryFactory
+                .selectFrom(member)
+                .leftJoin(member, membership.member)
+                .where(
+                        eqRole(MemberRole.ASSOCIATE),
+                        membership.regularRequirement.paymentStatus.eq(SATISFIED),
+                        eqSemester(semester))
+                .fetch();
+    }
+
     /**
      * queryOption으로 정렬된 상태로id값들을 가져옵니다.
      * 이 id값들로 페이지네이션 content를 조인하는 쿼리 생성시 추가적인 정렬은 없어야하며, 정렬이 필요한경우 해당 함수에 넣어주세요.
@@ -73,5 +88,15 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository, Membe
                 .where(matchesQueryOption(queryOption), predicate)
                 .orderBy(orderSpecifiers)
                 .fetch();
+    }
+
+    private BooleanExpression eqSemester(Semester semester) {
+        return semester != null
+                ? membership
+                        .recruitmentRound
+                        .academicYear
+                        .eq(semester.getAcademicYear())
+                        .and(membership.recruitmentRound.semesterType.eq(semester.getSemesterType()))
+                : null;
     }
 }
