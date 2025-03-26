@@ -65,8 +65,8 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository, Membe
                 .leftJoin(member, membership.member)
                 .where(
                         eqRole(MemberRole.ASSOCIATE),
-                        membership.regularRequirement.paymentStatus.eq(SATISFIED),
-                        eqSemester(semester))
+                        eqSemester(semester),
+                        membership.regularRequirement.paymentStatus.eq(SATISFIED))
                 .fetch();
     }
 
