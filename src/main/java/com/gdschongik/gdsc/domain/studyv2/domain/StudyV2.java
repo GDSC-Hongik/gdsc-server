@@ -209,7 +209,6 @@ public class StudyV2 extends BaseEntity {
     }
 
     public LocalDateTime getOpeningDate() {
-        System.out.println();
         return studySessions.stream()
                 .filter(studySession -> studySession.getPosition() == 1)
                 .findFirst()
