@@ -19,6 +19,4 @@ public interface StudyHistoryV2Repository extends JpaRepository<StudyHistoryV2, 
     List<StudyHistoryV2> findAllByStudy(StudyV2 study);
 
     Page<StudyHistoryV2> findByStudyId(Long studyId, Pageable pageable);
-
-    void deleteByStudyIdAndStudentId(Long studyId, Long studentId);
 }

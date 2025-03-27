@@ -1,7 +1,7 @@
 package com.gdschongik.gdsc.domain.studyv2.application.handler;
 
+import com.gdschongik.gdsc.domain.studyv2.dao.AssignmentHistoryV2Repository;
 import com.gdschongik.gdsc.domain.studyv2.dao.AttendanceV2Repository;
-import com.gdschongik.gdsc.domain.studyv2.dao.StudyHistoryV2Repository;
 import com.gdschongik.gdsc.domain.studyv2.domain.StudyApplyCanceledEvent;
 import com.gdschongik.gdsc.domain.studyv2.domain.StudyApplyCompletedEvent;
 import com.gdschongik.gdsc.global.util.DiscordUtil;
@@ -21,7 +21,7 @@ public class StudyEventHandlerV2 {
 
     private final DiscordUtil discordUtil;
     private final AttendanceV2Repository attendanceRepository;
-    private final StudyHistoryV2Repository studyHistoryRepository;
+    private final AssignmentHistoryV2Repository assignmentHistoryRepository;
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     public void handleStudyApplyCompletedEvent(StudyApplyCompletedEvent event) {
@@ -47,6 +47,6 @@ public class StudyEventHandlerV2 {
 
         guild.removeRoleFromMember(member, studyRole).queue();
         attendanceRepository.deleteByStudyIdAndMemberId(event.studyId(), event.memberId());
-        studyHistoryRepository.deleteByStudyIdAndStudentId(event.studyId(), event.memberId());
+        assignmentHistoryRepository.deleteByStudyIdAndMemberId(event.studyId(), event.memberId());
     }
 }
