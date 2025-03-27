@@ -51,4 +51,20 @@ public class DiscordUtil {
                 .orElseThrow(() -> new CustomException(DISCORD_MEMBER_NOT_FOUND))
                 .getId();
     }
+
+    public void addStudyRoleToMember(String studyDiscordRoleId, String memberDiscordId) {
+        Guild guild = getCurrentGuild();
+        Member member = getMemberById(memberDiscordId);
+        Role studyRole = findRoleById(studyDiscordRoleId);
+
+        guild.addRoleToMember(member, studyRole).queue();
+    }
+
+    public void removeStudyRoleFromMember(String studyDiscordRoleId, String memberDiscordId) {
+        Guild guild = getCurrentGuild();
+        Member member = getMemberById(memberDiscordId);
+        Role studyRole = findRoleById(studyDiscordRoleId);
+
+        guild.removeRoleFromMember(member, studyRole).queue();
+    }
 }
