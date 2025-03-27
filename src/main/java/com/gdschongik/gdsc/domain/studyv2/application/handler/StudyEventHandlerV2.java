@@ -1,7 +1,5 @@
 package com.gdschongik.gdsc.domain.studyv2.application.handler;
 
-import com.gdschongik.gdsc.domain.studyv2.dao.AssignmentHistoryV2Repository;
-import com.gdschongik.gdsc.domain.studyv2.dao.AttendanceV2Repository;
 import com.gdschongik.gdsc.domain.studyv2.domain.StudyApplyCanceledEvent;
 import com.gdschongik.gdsc.domain.studyv2.domain.StudyApplyCompletedEvent;
 import com.gdschongik.gdsc.global.util.DiscordUtil;
@@ -17,8 +15,6 @@ import org.springframework.transaction.event.TransactionalEventListener;
 public class StudyEventHandlerV2 {
 
     private final DiscordUtil discordUtil;
-    private final AttendanceV2Repository attendanceRepository;
-    private final AssignmentHistoryV2Repository assignmentHistoryRepository;
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     public void handleStudyApplyCompletedEvent(StudyApplyCompletedEvent event) {
@@ -32,10 +28,8 @@ public class StudyEventHandlerV2 {
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     public void handleStudyApplyCanceledEvent(StudyApplyCanceledEvent event) {
-        log.info("[StudyEventHandlerV2] 수강신청 취소 이벤트 수신: memberId={}, studyId={}", event.memberId(), event.studyId());
+        log.info("[StudyEventHandlerV2] 수강신청 취소 이벤트 수신: memberDiscordId={}, studyDiscordRoleId={}", event.memberDiscordId(), event.studyDiscordRoleId());
 
-        attendanceRepository.deleteByStudyIdAndMemberId(event.studyId(), event.memberId());
-        assignmentHistoryRepository.deleteByStudyIdAndMemberId(event.studyId(), event.memberId());
         discordUtil.removeRoleFromMemberById(event.studyDiscordRoleId(), event.memberDiscordId());
     }
 }
