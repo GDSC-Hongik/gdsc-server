@@ -27,7 +27,7 @@ public class StudyEventHandlerV2 {
                 event.memberDiscordId(),
                 event.studyDiscordRoleId());
 
-        discordUtil.addStudyRoleToMember(event.studyDiscordRoleId(), event.memberDiscordId());
+        discordUtil.addRoleToMemberById(event.studyDiscordRoleId(), event.memberDiscordId());
     }
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
@@ -36,6 +36,6 @@ public class StudyEventHandlerV2 {
 
         attendanceRepository.deleteByStudyIdAndMemberId(event.studyId(), event.memberId());
         assignmentHistoryRepository.deleteByStudyIdAndMemberId(event.studyId(), event.memberId());
-        discordUtil.removeStudyRoleFromMember(event.studyDiscordRoleId(), event.memberDiscordId());
+        discordUtil.removeRoleFromMemberById(event.studyDiscordRoleId(), event.memberDiscordId());
     }
 }

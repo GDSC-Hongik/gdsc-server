@@ -52,7 +52,7 @@ public class DiscordUtil {
                 .getId();
     }
 
-    public void addStudyRoleToMember(String studyDiscordRoleId, String memberDiscordId) {
+    public void addRoleToMemberById(String studyDiscordRoleId, String memberDiscordId) {
         Guild guild = getCurrentGuild();
         Member member = getMemberById(memberDiscordId);
         Role studyRole = findRoleById(studyDiscordRoleId);
@@ -60,7 +60,7 @@ public class DiscordUtil {
         guild.addRoleToMember(member, studyRole).queue();
     }
 
-    public void removeStudyRoleFromMember(String studyDiscordRoleId, String memberDiscordId) {
+    public void removeRoleFromMemberById(String studyDiscordRoleId, String memberDiscordId) {
         Guild guild = getCurrentGuild();
         Member member = getMemberById(memberDiscordId);
         Role studyRole = findRoleById(studyDiscordRoleId);
