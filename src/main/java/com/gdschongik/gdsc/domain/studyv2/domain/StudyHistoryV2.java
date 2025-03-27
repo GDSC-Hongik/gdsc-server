@@ -7,19 +7,7 @@ import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.study.domain.StudyApplyCanceledEvent;
 import com.gdschongik.gdsc.domain.study.domain.StudyHistoryCompletionWithdrawnEvent;
 import com.gdschongik.gdsc.domain.study.domain.StudyHistoryStatus;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.PreRemove;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -66,6 +54,11 @@ public class StudyHistoryV2 extends BaseEntity {
                 .student(student)
                 .study(study)
                 .build();
+    }
+
+    @PostPersist
+    private void postPersist() {
+        registerEvent(new StudyApplyCompletedEvent(this.study.getDiscordRoleId(), this.student.getDiscordId()));
     }
 
     @PreRemove

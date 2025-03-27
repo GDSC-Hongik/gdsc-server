@@ -24,6 +24,11 @@ public class DiscordUtil {
                 .orElseThrow(() -> new CustomException(DISCORD_ROLE_NOT_FOUND));
     }
 
+    public Role findRoleById(String roleId) {
+        return Optional.ofNullable(jda.getRoleById(roleId))
+                .orElseThrow(() -> new CustomException(DISCORD_ROLE_NOT_FOUND));
+    }
+
     public Guild getCurrentGuild() {
         return jda.getGuildById(discordProperty.getServerId());
     }
