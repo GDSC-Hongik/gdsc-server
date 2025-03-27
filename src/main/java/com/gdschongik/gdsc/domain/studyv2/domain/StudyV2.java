@@ -209,14 +209,12 @@ public class StudyV2 extends BaseEntity {
     }
 
     public LocalDateTime getOpeningDate() {
-        if (!type.isLive()) {
-            return null;
-        }
-
         return studySessions.stream()
                 .filter(studySession -> studySession.getPosition() == 1)
                 .findFirst()
-                .map(studySession -> studySession.getLessonPeriod().getStartDate())
+                .map(studySession -> type.isLive()
+                        ? studySession.getLessonPeriod().getStartDate()
+                        : studySession.getAssignmentPeriod().getStartDate())
                 .orElse(null);
     }
 
