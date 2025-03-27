@@ -28,7 +28,10 @@ public class StudyEventHandlerV2 {
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     public void handleStudyApplyCanceledEvent(StudyApplyCanceledEvent event) {
-        log.info("[StudyEventHandlerV2] 수강신청 취소 이벤트 수신: memberDiscordId={}, studyDiscordRoleId={}", event.memberDiscordId(), event.studyDiscordRoleId());
+        log.info(
+                "[StudyEventHandlerV2] 수강신청 취소 이벤트 수신: memberDiscordId={}, studyDiscordRoleId={}",
+                event.memberDiscordId(),
+                event.studyDiscordRoleId());
 
         discordUtil.removeRoleFromMemberById(event.studyDiscordRoleId(), event.memberDiscordId());
     }
