@@ -4,7 +4,6 @@ import static com.gdschongik.gdsc.domain.study.domain.StudyHistoryStatus.*;
 
 import com.gdschongik.gdsc.domain.common.model.BaseEntity;
 import com.gdschongik.gdsc.domain.member.domain.Member;
-import com.gdschongik.gdsc.domain.study.domain.StudyApplyCanceledEvent;
 import com.gdschongik.gdsc.domain.study.domain.StudyHistoryCompletionWithdrawnEvent;
 import com.gdschongik.gdsc.domain.study.domain.StudyHistoryStatus;
 import jakarta.persistence.*;
@@ -63,7 +62,8 @@ public class StudyHistoryV2 extends BaseEntity {
 
     @PreRemove
     private void preRemove() {
-        registerEvent(new StudyApplyCanceledEvent(this.study.getId(), this.student.getId()));
+        registerEvent(new StudyApplyCanceledEvent(
+                this.study.getId(), this.study.getDiscordRoleId(), this.student.getId(), this.student.getDiscordId()));
     }
 
     /**
