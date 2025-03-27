@@ -20,4 +20,12 @@ public class DiscordConstant {
     public static final String COMMAND_DESCRIPTION_BATCH_DISCORD_ID = "디스코드 인증이 완료된 멤버들의 디스코드 ID를 저장합니다.";
     public static final String DEFER_MESSAGE_BATCH_DISCORD_ID = "디스코드 ID 저장 배치 작업을 진행하는 중입니다...";
     public static final String REPLY_MESSAGE_BATCH_DISCORD_ID = "디스코드 ID 저장 배치 작업이 완료되었습니다.";
+
+    // 어드민 권한 부여 커맨드
+    public static final String COMMAND_NAME_ASSIGN_ADMIN_ROLE = "어드민-권한-부여";
+    public static final String COMMAND_DESCRIPTION_ASSIGN_ADMIN_ROLE = "지정한 멤버에게 어드민 권한을 부여합니다.";
+    public static final String DEFER_MESSAGE_ASSIGN_ADMIN_ROLE = "어드민 권한 부여 작업을 진행하는 중입니다...";
+    public static final String REPLY_MESSAGE_ASSIGN_ADMIN_ROLE = "어드민 권한 부여 작업이 완료되었습니다.";
+    public static final String OPTION_NAME_ASSIGN_ADMIN_ROLE = "학번";
+    public static final String OPTION_DESCRIPTION_ASSIGN_ADMIN_ROLE = "어드민 권한을 부여할 멤버의 학번을 입력해주세요.";
 }

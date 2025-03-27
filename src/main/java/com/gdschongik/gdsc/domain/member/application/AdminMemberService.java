@@ -14,7 +14,6 @@ import com.gdschongik.gdsc.domain.membership.application.MembershipService;
 import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRoundRepository;
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.global.exception.CustomException;
-import com.gdschongik.gdsc.global.exception.ErrorCode;
 import com.gdschongik.gdsc.global.util.EnvironmentUtil;
 import com.gdschongik.gdsc.global.util.ExcelUtil;
 import com.gdschongik.gdsc.global.util.MemberUtil;
@@ -54,8 +53,7 @@ public class AdminMemberService {
 
     @Transactional
     public void updateMember(Long memberId, MemberUpdateRequest request) {
-        Member member =
-                memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
         member.updateMemberInfo(
                 request.studentId(),
                 request.name(),
@@ -98,6 +96,18 @@ public class AdminMemberService {
         membershipService.deleteMembership(member);
 
         log.info("[AdminMemberService] 게스트로 강등: demotedMemberId={}", member.getId());
+    }
+
+    @Transactional
+    public void assignAdminRole(String discordUsername, String studentId) {
+        // todo: discordUsername으로 어드민 권한 확인
+        Member member =
+                memberRepository.findByStudentId(studentId).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
+
+        member.assignToAdmin();
+        memberRepository.save(member);
+
+        log.info("[AdminMemberService] 어드민 권한 부여: memberId={}", member.getId());
     }
 
     private void validateProfile() {
