@@ -62,7 +62,8 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository, Membe
     public List<Member> findAllAdvanceFailedMembers(@NonNull Semester semester) {
         return queryFactory
                 .selectFrom(member)
-                .leftJoin(member, membership.member)
+                .leftJoin(membership)
+                .on(membership.member.eq(member))
                 .where(
                         eqRole(MemberRole.ASSOCIATE),
                         eqSemester(semester),
