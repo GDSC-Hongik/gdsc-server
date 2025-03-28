@@ -43,6 +43,8 @@ public class DiscordConfig {
                 .updateCommands()
                 .addCommands(Commands.slash(COMMAND_NAME_ISSUING_CODE, COMMAND_DESCRIPTION_ISSUING_CODE))
                 .addCommands(Commands.slash(COMMAND_NAME_BATCH_DISCORD_ID, COMMAND_DESCRIPTION_BATCH_DISCORD_ID))
+                .addCommands(
+                        Commands.slash(COMMAND_NAME_ADVANCE_FAILED_MEMBER, COMMAND_DESCRIPTION_ADVANCE_FAILED_MEMBER))
                 .queue();
 
         return jda;
