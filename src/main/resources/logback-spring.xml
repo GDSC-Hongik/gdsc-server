@@ -9,8 +9,8 @@
     <springProfile name="local">
         <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
 
-        <logger name="org.springframework.orm.jpa" level="${LOG_LEVEL_JPA:-debug}" />
-        <logger name="org.springframework.transaction" level="${LOG_LEVEL_TRANSACTION:-debug}" />
+        <logger name="org.springframework.orm.jpa" level="DEBUG" />
+        <logger name="org.springframework.transaction" level="DEBUG" />
         <logger name="org.springframework.web" level="DEBUG" />
 
         <root level="INFO">
@@ -23,7 +23,6 @@
 
         <logger name="org.springframework.orm.jpa" level="DEBUG" />
         <logger name="org.springframework.transaction" level="DEBUG" />
-
         <logger name="org.springframework.web" level="DEBUG" />
 
         <root level="INFO">
