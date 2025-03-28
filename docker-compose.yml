@@ -11,6 +11,11 @@ services:
     environment:
       - TZ=Asia/Seoul
       - DOCKER_IMAGE_TAG=${IMAGE_FULL_URL}
+    logging:
+      driver: awslogs
+      options:
+        awslogs-region: "ap-northeast-2"
+        awslogs-group: "dev-server-docker-log-group"
   redis:
     image: "redis:alpine"
     container_name: redis
