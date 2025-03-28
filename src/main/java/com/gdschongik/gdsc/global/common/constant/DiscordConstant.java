@@ -20,4 +20,10 @@ public class DiscordConstant {
     public static final String COMMAND_DESCRIPTION_BATCH_DISCORD_ID = "디스코드 인증이 완료된 멤버들의 디스코드 ID를 저장합니다.";
     public static final String DEFER_MESSAGE_BATCH_DISCORD_ID = "디스코드 ID 저장 배치 작업을 진행하는 중입니다...";
     public static final String REPLY_MESSAGE_BATCH_DISCORD_ID = "디스코드 ID 저장 배치 작업이 완료되었습니다.";
+
+    // 정회원 승급 누락자 승급 커맨드
+    public static final String COMMAND_NAME_ADVANCE_FAILED_MEMBER = "정회원-승급-누락자-승급하기";
+    public static final String COMMAND_DESCRIPTION_ADVANCE_FAILED_MEMBER = "정회원 승급 누락자를 승급합니다.";
+    public static final String DEFER_MESSAGE_ADVANCE_FAILED_MEMBER = "정회원 승급 누락자 승급 작업을 진행하는 중입니다...";
+    public static final String REPLY_MESSAGE_ADVANCE_FAILED_MEMBER = "정회원 승급 누락자 승급 작업이 완료되었습니다.";
 }
