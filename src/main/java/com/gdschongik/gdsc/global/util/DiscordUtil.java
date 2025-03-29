@@ -52,18 +52,18 @@ public class DiscordUtil {
                 .getId();
     }
 
-    public void addRoleToMemberById(String studyDiscordRoleId, String memberDiscordId) {
+    public void addRoleToMemberById(String discordRoleId, String memberDiscordId) {
         Guild guild = getCurrentGuild();
         Member member = getMemberById(memberDiscordId);
-        Role studyRole = findRoleById(studyDiscordRoleId);
+        Role studyRole = findRoleById(discordRoleId);
 
         guild.addRoleToMember(member, studyRole).queue();
     }
 
-    public void removeRoleFromMemberById(String studyDiscordRoleId, String memberDiscordId) {
+    public void removeRoleFromMemberById(String discordRoleId, String memberDiscordId) {
         Guild guild = getCurrentGuild();
         Member member = getMemberById(memberDiscordId);
-        Role studyRole = findRoleById(studyDiscordRoleId);
+        Role studyRole = findRoleById(discordRoleId);
 
         guild.removeRoleFromMember(member, studyRole).queue();
     }
