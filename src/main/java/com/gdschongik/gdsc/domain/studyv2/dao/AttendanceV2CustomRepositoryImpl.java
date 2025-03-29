@@ -36,6 +36,14 @@ public class AttendanceV2CustomRepositoryImpl implements AttendanceV2CustomRepos
                 .fetch();
     }
 
+    @Override
+    public void deleteByStudyIdAndMemberId(Long studyId, Long memberId) {
+        queryFactory
+                .delete(attendanceV2)
+                .where(eqStudyId(studyId), eqMemberId(memberId))
+                .execute();
+    }
+
     private BooleanExpression eqMemberId(Long memberId) {
         return memberId != null ? attendanceV2.student.id.eq(memberId) : null;
     }

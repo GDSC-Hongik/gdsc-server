@@ -4,7 +4,6 @@ import static com.gdschongik.gdsc.domain.study.domain.StudyHistoryStatus.*;
 
 import com.gdschongik.gdsc.domain.common.model.BaseEntity;
 import com.gdschongik.gdsc.domain.member.domain.Member;
-import com.gdschongik.gdsc.domain.study.domain.StudyApplyCanceledEvent;
 import com.gdschongik.gdsc.domain.study.domain.StudyHistoryCompletionWithdrawnEvent;
 import com.gdschongik.gdsc.domain.study.domain.StudyHistoryStatus;
 import jakarta.persistence.Column;
@@ -17,6 +16,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PostPersist;
 import jakarta.persistence.PreRemove;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
@@ -68,9 +68,14 @@ public class StudyHistoryV2 extends BaseEntity {
                 .build();
     }
 
+    @PostPersist
+    private void postPersist() {
+        registerEvent(new StudyApplyCompletedEvent(this.study.getDiscordRoleId(), this.student.getDiscordId()));
+    }
+
     @PreRemove
     private void preRemove() {
-        registerEvent(new StudyApplyCanceledEvent(this.study.getId(), this.student.getId()));
+        registerEvent(new StudyApplyCanceledEvent(this.study.getDiscordRoleId(), this.student.getDiscordId()));
     }
 
     /**

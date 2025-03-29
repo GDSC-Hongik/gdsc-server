@@ -35,6 +35,14 @@ public class AssignmentHistoryV2CustomRepositoryImpl implements AssignmentHistor
                 .fetch();
     }
 
+    @Override
+    public void deleteByStudyIdAndMemberId(Long studyId, Long memberId) {
+        queryFactory
+                .delete(assignmentHistoryV2)
+                .where(eqMemberId(memberId).and(eqStudyId(studyId)))
+                .execute();
+    }
+
     private BooleanExpression eqMemberId(Long memberId) {
         return memberId != null ? assignmentHistoryV2.member.id.eq(memberId) : null;
     }
