@@ -41,7 +41,7 @@ public class LoggingFilter extends OncePerRequestFilter {
         try {
             log.info(createHttpLogMessage(cachingRequestWrapper, response.getStatus(), elapsedTime));
         } catch (Exception e) {
-            log.error("[" + this.getClass().getSimpleName() + "] Logging 실패: 알 수 없는 이유로 로깅에 실패했습니다.");
+            log.error("[" + this.getClass().getSimpleName() + "] Logging 실패: 알 수 없는 이유로 로깅에 실패했습니다.", e);
         }
     }
 
