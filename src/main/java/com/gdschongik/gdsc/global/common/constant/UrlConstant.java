@@ -59,8 +59,8 @@ public class UrlConstant {
     // 로깅 제외 URL
     public static List<String> getLogExcludeUrlList() {
         return Arrays.asList(
-                "/fisq-actuator/health",
-                "/fisq-actuator/prometheus",
+                "/gdsc-actuator/health",
+                "/gdsc-actuator/prometheus",
                 "/swagger-ui/index.html",
                 "/swagger-ui/favicon-32x32.png",
                 "/swagger-ui/swagger-initializer.js",
