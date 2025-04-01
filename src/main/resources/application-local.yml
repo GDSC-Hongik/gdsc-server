@@ -21,3 +21,4 @@ logging:
     org.hibernate.orm.jdbc.bind: trace
     org.hibernate.SQL: debug
     org.kohsuke.github: debug
+    org.hibernate.stat: info
