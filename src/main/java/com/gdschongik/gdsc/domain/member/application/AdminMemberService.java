@@ -124,9 +124,9 @@ public class AdminMemberService {
     }
 
     @Transactional
-    public void assignAdminRole(String discordUsername, String studentId) {
+    public void assignAdminRole(String currentMemberDiscordUsername, String studentId) {
         Member currentMember = memberRepository
-                .findByDiscordUsername(discordUsername)
+                .findByDiscordUsername(currentMemberDiscordUsername)
                 .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
 
         memberValidator.validateAdminPermission(currentMember.getManageRole());
