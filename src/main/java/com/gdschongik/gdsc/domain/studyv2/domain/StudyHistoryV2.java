@@ -75,7 +75,7 @@ public class StudyHistoryV2 extends BaseEntity {
 
     @PreRemove
     private void preRemove() {
-        registerEvent(new StudyApplyCanceledEvent(this.study.getDiscordRoleId(), this.student.getDiscordId()));
+        registerEvent(new StudyApplyCanceledEvent(this.study.getDiscordRoleId(), this.student.getDiscordId(), this.study.getId(), this.student.getId()));
     }
 
     /**

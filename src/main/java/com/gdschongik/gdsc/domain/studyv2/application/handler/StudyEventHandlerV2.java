@@ -1,6 +1,7 @@
 package com.gdschongik.gdsc.domain.studyv2.application.handler;
 
 import com.gdschongik.gdsc.domain.discord.application.CommonDiscordService;
+import com.gdschongik.gdsc.domain.studyv2.application.CommonStudyServiceV2;
 import com.gdschongik.gdsc.domain.studyv2.domain.StudyApplyCanceledEvent;
 import com.gdschongik.gdsc.domain.studyv2.domain.StudyApplyCompletedEvent;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.transaction.event.TransactionalEventListener;
 public class StudyEventHandlerV2 {
 
     private final CommonDiscordService commonDiscordService;
+    private final CommonStudyServiceV2 commonStudyServiceV2;
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     public void handleStudyApplyCompletedEvent(StudyApplyCompletedEvent event) {
@@ -34,5 +36,7 @@ public class StudyEventHandlerV2 {
                 event.studyDiscordRoleId());
 
         commonDiscordService.removeStudyRoleFromMember(event.studyDiscordRoleId(), event.memberDiscordId());
+        commonStudyServiceV2.deleteAttendance(event.studyId(), event.memberId());
+        commonStudyServiceV2.deleteAssignmentHistory(event.studyId(), event.memberId());
     }
 }
