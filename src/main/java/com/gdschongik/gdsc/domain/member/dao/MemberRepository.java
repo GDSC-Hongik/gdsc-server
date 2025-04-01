@@ -14,4 +14,6 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberCus
     Optional<Member> findByDiscordUsername(String discordUsername);
 
     Optional<Member> findByOauthId(String oauthId);
+
+    Optional<Member> findByStudentId(String studentId);
 }

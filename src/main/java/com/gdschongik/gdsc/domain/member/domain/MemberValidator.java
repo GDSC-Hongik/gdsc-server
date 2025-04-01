@@ -21,4 +21,10 @@ public class MemberValidator {
         // 해당 학기의 모든 모집회차가 아직 시작되지 않았는지 검증
         recruitmentRounds.forEach(recruitmentRound -> recruitmentRound.validatePeriodNotStarted(now));
     }
+
+    public void validateAdminPermission(MemberManageRole memberManageRole) {
+        if (memberManageRole != MemberManageRole.ADMIN) {
+            throw new CustomException(INVALID_ROLE);
+        }
+    }
 }

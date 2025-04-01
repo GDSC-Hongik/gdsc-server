@@ -11,6 +11,7 @@ import lombok.SneakyThrows;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
@@ -43,6 +44,14 @@ public class DiscordConfig {
                 .updateCommands()
                 .addCommands(Commands.slash(COMMAND_NAME_ISSUING_CODE, COMMAND_DESCRIPTION_ISSUING_CODE))
                 .addCommands(Commands.slash(COMMAND_NAME_BATCH_DISCORD_ID, COMMAND_DESCRIPTION_BATCH_DISCORD_ID))
+                .addCommands(
+                        Commands.slash(COMMAND_NAME_ADVANCE_FAILED_MEMBER, COMMAND_DESCRIPTION_ADVANCE_FAILED_MEMBER))
+                .addCommands(Commands.slash(COMMAND_NAME_ASSIGN_ADMIN_ROLE, COMMAND_DESCRIPTION_ASSIGN_ADMIN_ROLE)
+                        .addOption(
+                                OptionType.STRING,
+                                OPTION_NAME_ASSIGN_ADMIN_ROLE,
+                                OPTION_DESCRIPTION_ASSIGN_ADMIN_ROLE,
+                                true))
                 .queue();
 
         return jda;

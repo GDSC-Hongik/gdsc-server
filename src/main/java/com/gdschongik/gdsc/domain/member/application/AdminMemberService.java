@@ -11,10 +11,11 @@ import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryOption;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberUpdateRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.AdminMemberResponse;
 import com.gdschongik.gdsc.domain.membership.application.MembershipService;
+import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRepository;
 import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRoundRepository;
+import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.global.exception.CustomException;
-import com.gdschongik.gdsc.global.exception.ErrorCode;
 import com.gdschongik.gdsc.global.util.EnvironmentUtil;
 import com.gdschongik.gdsc.global.util.ExcelUtil;
 import com.gdschongik.gdsc.global.util.MemberUtil;
@@ -35,6 +36,7 @@ public class AdminMemberService {
 
     private final MemberRepository memberRepository;
     private final ExcelUtil excelUtil;
+    private final RecruitmentRepository recruitmentRepository;
     private final RecruitmentRoundRepository recruitmentRoundRepository;
     private final MemberValidator memberValidator;
     private final MemberUtil memberUtil;
@@ -54,8 +56,7 @@ public class AdminMemberService {
 
     @Transactional
     public void updateMember(Long memberId, MemberUpdateRequest request) {
-        Member member =
-                memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
         member.updateMemberInfo(
                 request.studentId(),
                 request.name(),
@@ -98,6 +99,45 @@ public class AdminMemberService {
         membershipService.deleteMembership(member);
 
         log.info("[AdminMemberService] 게스트로 강등: demotedMemberId={}", member.getId());
+    }
+
+    @Transactional
+    public void advanceAllAdvanceFailedMembersToRegular(String discordUsername) {
+        Member currentMember = memberRepository
+                .findByDiscordUsername(discordUsername)
+                .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
+
+        memberValidator.validateAdminPermission(currentMember.getManageRole());
+
+        LocalDateTime now = LocalDateTime.now();
+        Recruitment recruitment = recruitmentRepository
+                .findCurrentRecruitment(now)
+                .orElseThrow(() -> new CustomException(RECRUITMENT_NOT_FOUND));
+
+        List<Member> advanceFailedMembers = memberRepository.findAllAdvanceFailedMembers(recruitment.getSemester());
+        advanceFailedMembers.forEach(Member::advanceToRegular);
+        memberRepository.saveAll(advanceFailedMembers);
+
+        log.info(
+                "[AdminMemberService] 정회원 승급 누락 멤버들을 정회원으로 승급: advancedMemberIds={}",
+                advanceFailedMembers.stream().map(Member::getId).toList());
+    }
+
+    @Transactional
+    public void assignAdminRole(String currentMemberDiscordUsername, String studentId) {
+        Member currentMember = memberRepository
+                .findByDiscordUsername(currentMemberDiscordUsername)
+                .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
+
+        memberValidator.validateAdminPermission(currentMember.getManageRole());
+
+        Member memberToAssign =
+                memberRepository.findByStudentId(studentId).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
+
+        memberToAssign.assignToAdmin();
+        memberRepository.save(memberToAssign);
+
+        log.info("[AdminMemberService] 어드민 권한 부여: memberId={}", memberToAssign.getId());
     }
 
     private void validateProfile() {

@@ -50,4 +50,18 @@ public class CommonDiscordService {
             }
         });
     }
+
+    /**
+     * 이벤트 핸들러에서 사용되므로, `@Transactional` 을 사용하지 않습니다.
+     */
+    public void addStudyRoleToMember(String studyDiscordRoleId, String memberDiscordId) {
+        discordUtil.addRoleToMemberById(studyDiscordRoleId, memberDiscordId);
+    }
+
+    /**
+     * 이벤트 핸들러에서 사용되므로, `@Transactional` 을 사용하지 않습니다.
+     */
+    public void removeStudyRoleFromMember(String studyDiscordRoleId, String memberDiscordId) {
+        discordUtil.removeRoleFromMemberById(studyDiscordRoleId, memberDiscordId);
+    }
 }

@@ -9,4 +9,6 @@ public interface AttendanceV2CustomRepository {
     List<AttendanceV2> findFetchByMemberAndStudy(Member member, StudyV2 study);
 
     List<AttendanceV2> findByStudyIdAndMemberIds(Long studyId, List<Long> memberIds);
+
+    void deleteByStudyIdAndMemberId(Long studyId, Long memberId);
 }

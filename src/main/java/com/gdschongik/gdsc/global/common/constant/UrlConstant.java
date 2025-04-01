@@ -1,5 +1,6 @@
 package com.gdschongik.gdsc.global.common.constant;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -54,4 +55,20 @@ public class UrlConstant {
 
     // 기타
     public static final String ROOT_DOMAIN = "wawoo.dev";
+
+    // 로깅 제외 URL
+    public static List<String> getLogExcludeUrlList() {
+        return Arrays.asList(
+                "/gdsc-actuator/health",
+                "/gdsc-actuator/prometheus",
+                "/swagger-ui/index.html",
+                "/swagger-ui/favicon-32x32.png",
+                "/swagger-ui/swagger-initializer.js",
+                "/v3/api-docs",
+                "/v3/api-docs/swagger-config",
+                "/swagger-ui/swagger-ui.css",
+                "/swagger-ui/index.css",
+                "/swagger-ui/swagger-ui-standalone-preset.js",
+                "/swagger-ui/swagger-ui-bundle.js");
+    }
 }

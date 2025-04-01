@@ -24,6 +24,11 @@ public class DiscordUtil {
                 .orElseThrow(() -> new CustomException(DISCORD_ROLE_NOT_FOUND));
     }
 
+    public Role findRoleById(String roleId) {
+        return Optional.ofNullable(jda.getRoleById(roleId))
+                .orElseThrow(() -> new CustomException(DISCORD_ROLE_NOT_FOUND));
+    }
+
     public Guild getCurrentGuild() {
         return jda.getGuildById(discordProperty.getServerId());
     }
@@ -45,5 +50,21 @@ public class DiscordUtil {
         return getOptionalMemberByUsername(username)
                 .orElseThrow(() -> new CustomException(DISCORD_MEMBER_NOT_FOUND))
                 .getId();
+    }
+
+    public void addRoleToMemberById(String discordRoleId, String memberDiscordId) {
+        Guild guild = getCurrentGuild();
+        Member member = getMemberById(memberDiscordId);
+        Role studyRole = findRoleById(discordRoleId);
+
+        guild.addRoleToMember(member, studyRole).queue();
+    }
+
+    public void removeRoleFromMemberById(String discordRoleId, String memberDiscordId) {
+        Guild guild = getCurrentGuild();
+        Member member = getMemberById(memberDiscordId);
+        Role studyRole = findRoleById(discordRoleId);
+
+        guild.removeRoleFromMember(member, studyRole).queue();
     }
 }
