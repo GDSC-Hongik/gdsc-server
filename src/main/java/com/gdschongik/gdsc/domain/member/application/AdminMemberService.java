@@ -125,7 +125,12 @@ public class AdminMemberService {
 
     @Transactional
     public void assignAdminRole(String discordUsername, String studentId) {
-        // todo: discordUsername으로 어드민 권한 확인
+        Member currentMember = memberRepository
+                .findByDiscordUsername(discordUsername)
+                .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
+
+        memberValidator.validateAdminPermission(currentMember.getManageRole());
+
         Member member =
                 memberRepository.findByStudentId(studentId).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
 
