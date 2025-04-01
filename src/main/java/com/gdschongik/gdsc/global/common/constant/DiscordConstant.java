@@ -21,6 +21,12 @@ public class DiscordConstant {
     public static final String DEFER_MESSAGE_BATCH_DISCORD_ID = "디스코드 ID 저장 배치 작업을 진행하는 중입니다...";
     public static final String REPLY_MESSAGE_BATCH_DISCORD_ID = "디스코드 ID 저장 배치 작업이 완료되었습니다.";
 
+    // 정회원 승급 누락자 승급 커맨드
+    public static final String COMMAND_NAME_ADVANCE_FAILED_MEMBER = "정회원-승급-누락자-승급하기";
+    public static final String COMMAND_DESCRIPTION_ADVANCE_FAILED_MEMBER = "정회원 승급 누락자를 승급합니다.";
+    public static final String DEFER_MESSAGE_ADVANCE_FAILED_MEMBER = "정회원 승급 누락자 승급 작업을 진행하는 중입니다...";
+    public static final String REPLY_MESSAGE_ADVANCE_FAILED_MEMBER = "정회원 승급 누락자 승급 작업이 완료되었습니다.";
+
     // 어드민 권한 부여 커맨드
     public static final String COMMAND_NAME_ASSIGN_ADMIN_ROLE = "어드민-권한-부여";
     public static final String COMMAND_DESCRIPTION_ASSIGN_ADMIN_ROLE = "지정한 멤버에게 어드민 권한을 부여합니다.";

@@ -11,7 +11,9 @@ import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryOption;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberUpdateRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.AdminMemberResponse;
 import com.gdschongik.gdsc.domain.membership.application.MembershipService;
+import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRepository;
 import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRoundRepository;
+import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.EnvironmentUtil;
@@ -34,6 +36,7 @@ public class AdminMemberService {
 
     private final MemberRepository memberRepository;
     private final ExcelUtil excelUtil;
+    private final RecruitmentRepository recruitmentRepository;
     private final RecruitmentRoundRepository recruitmentRoundRepository;
     private final MemberValidator memberValidator;
     private final MemberUtil memberUtil;
@@ -99,16 +102,38 @@ public class AdminMemberService {
     }
 
     @Transactional
-    public void assignAdminRole(String discordUsername, String studentId) {
-        // todo: discordUsername으로 어드민 권한 확인
-        Member member =
-                memberRepository.findByStudentId(studentId).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
+    public void advanceAllAdvanceFailedMembersToRegular(String discordUsername) {
+        Member currentMember = memberRepository
+                .findByDiscordUsername(discordUsername)
+                .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
 
-        member.assignToAdmin();
-        memberRepository.save(member);
+        memberValidator.validateAdminPermission(currentMember.getManageRole());
 
-        log.info("[AdminMemberService] 어드민 권한 부여: memberId={}", member.getId());
+        LocalDateTime now = LocalDateTime.now();
+        Recruitment recruitment = recruitmentRepository
+                .findCurrentRecruitment(now)
+                .orElseThrow(() -> new CustomException(RECRUITMENT_NOT_FOUND));
+
+        List<Member> advanceFailedMembers = memberRepository.findAllAdvanceFailedMembers(recruitment.getSemester());
+        advanceFailedMembers.forEach(Member::advanceToRegular);
+        memberRepository.saveAll(advanceFailedMembers);
+
+        log.info(
+                "[AdminMemberService] 정회원 승급 누락 멤버들을 정회원으로 승급: advancedMemberIds={}",
+                advanceFailedMembers.stream().map(Member::getId).toList());
     }
+
+	@Transactional
+	public void assignAdminRole(String discordUsername, String studentId) {
+		// todo: discordUsername으로 어드민 권한 확인
+		Member member =
+			memberRepository.findByStudentId(studentId).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
+
+		member.assignToAdmin();
+		memberRepository.save(member);
+
+		log.info("[AdminMemberService] 어드민 권한 부여: memberId={}", member.getId());
+	}
 
     private void validateProfile() {
         if (!environmentUtil.isDevAndLocalProfile()) {

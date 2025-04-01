@@ -44,12 +44,14 @@ public class DiscordConfig {
                 .updateCommands()
                 .addCommands(Commands.slash(COMMAND_NAME_ISSUING_CODE, COMMAND_DESCRIPTION_ISSUING_CODE))
                 .addCommands(Commands.slash(COMMAND_NAME_BATCH_DISCORD_ID, COMMAND_DESCRIPTION_BATCH_DISCORD_ID))
-                .addCommands(Commands.slash(COMMAND_NAME_ASSIGN_ADMIN_ROLE, COMMAND_DESCRIPTION_ASSIGN_ADMIN_ROLE)
-                        .addOption(
-                                OptionType.STRING,
-                                OPTION_NAME_ASSIGN_ADMIN_ROLE,
-                                OPTION_DESCRIPTION_ASSIGN_ADMIN_ROLE,
-                                true))
+                .addCommands(
+                        Commands.slash(COMMAND_NAME_ADVANCE_FAILED_MEMBER, COMMAND_DESCRIPTION_ADVANCE_FAILED_MEMBER))
+			.addCommands(Commands.slash(COMMAND_NAME_ASSIGN_ADMIN_ROLE, COMMAND_DESCRIPTION_ASSIGN_ADMIN_ROLE)
+				.addOption(
+					OptionType.STRING,
+					OPTION_NAME_ASSIGN_ADMIN_ROLE,
+					OPTION_DESCRIPTION_ASSIGN_ADMIN_ROLE,
+					true))
                 .queue();
 
         return jda;
