@@ -123,17 +123,17 @@ public class AdminMemberService {
                 advanceFailedMembers.stream().map(Member::getId).toList());
     }
 
-	@Transactional
-	public void assignAdminRole(String discordUsername, String studentId) {
-		// todo: discordUsername으로 어드민 권한 확인
-		Member member =
-			memberRepository.findByStudentId(studentId).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
+    @Transactional
+    public void assignAdminRole(String discordUsername, String studentId) {
+        // todo: discordUsername으로 어드민 권한 확인
+        Member member =
+                memberRepository.findByStudentId(studentId).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
 
-		member.assignToAdmin();
-		memberRepository.save(member);
+        member.assignToAdmin();
+        memberRepository.save(member);
 
-		log.info("[AdminMemberService] 어드민 권한 부여: memberId={}", member.getId());
-	}
+        log.info("[AdminMemberService] 어드민 권한 부여: memberId={}", member.getId());
+    }
 
     private void validateProfile() {
         if (!environmentUtil.isDevAndLocalProfile()) {
