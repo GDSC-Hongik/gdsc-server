@@ -131,13 +131,13 @@ public class AdminMemberService {
 
         memberValidator.validateAdminPermission(currentMember.getManageRole());
 
-        Member member =
+        Member memberToAssign =
                 memberRepository.findByStudentId(studentId).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
 
-        member.assignToAdmin();
-        memberRepository.save(member);
+        memberToAssign.assignToAdmin();
+        memberRepository.save(memberToAssign);
 
-        log.info("[AdminMemberService] 어드민 권한 부여: memberId={}", member.getId());
+        log.info("[AdminMemberService] 어드민 권한 부여: memberId={}", memberToAssign.getId());
     }
 
     private void validateProfile() {
