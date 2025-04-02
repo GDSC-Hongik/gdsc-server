@@ -4,7 +4,7 @@ import static com.gdschongik.gdsc.global.common.constant.DiscordConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 
-import com.gdschongik.gdsc.domain.discord.domain.DiscordValidator;
+import com.gdschongik.gdsc.domain.discord.domain.service.DiscordValidator;
 import com.gdschongik.gdsc.domain.discord.domain.DiscordVerificationCode;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import org.junit.jupiter.api.Nested;

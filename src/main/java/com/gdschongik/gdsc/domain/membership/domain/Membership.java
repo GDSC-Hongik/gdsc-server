@@ -5,6 +5,8 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.common.model.BaseEntity;
 import com.gdschongik.gdsc.domain.member.domain.Member;
+import com.gdschongik.gdsc.domain.membership.domain.event.MembershipPaymentRevokedEvent;
+import com.gdschongik.gdsc.domain.membership.domain.event.MembershipVerifiedEvent;
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.persistence.Column;

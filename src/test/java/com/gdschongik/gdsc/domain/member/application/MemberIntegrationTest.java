@@ -6,7 +6,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.gdschongik.gdsc.domain.member.application.handler.MemberAssociateRequirementUpdatedEventHandler;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
-import com.gdschongik.gdsc.domain.member.domain.MemberAssociateRequirementUpdatedEvent;
+import com.gdschongik.gdsc.domain.member.domain.event.MemberAssociateRequirementUpdatedEvent;
 import com.gdschongik.gdsc.helper.IntegrationTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

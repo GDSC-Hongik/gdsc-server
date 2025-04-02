@@ -9,6 +9,7 @@ import com.gdschongik.gdsc.domain.coupon.domain.CouponType;
 import com.gdschongik.gdsc.domain.coupon.domain.IssuedCoupon;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.membership.domain.Membership;
+import com.gdschongik.gdsc.domain.order.domain.service.OrderValidator;
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.helper.FixtureHelper;

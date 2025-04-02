@@ -6,7 +6,7 @@ import com.gdschongik.gdsc.domain.auth.application.JwtService;
 import com.gdschongik.gdsc.domain.auth.dto.AccessTokenDto;
 import com.gdschongik.gdsc.domain.auth.dto.RefreshTokenDto;
 import com.gdschongik.gdsc.domain.email.application.UnivEmailVerificationService;
-import com.gdschongik.gdsc.domain.email.domain.EmailVerificationStatusService;
+import com.gdschongik.gdsc.domain.email.domain.service.EmailVerificationStatusService;
 import com.gdschongik.gdsc.domain.email.domain.UnivEmailVerification;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;

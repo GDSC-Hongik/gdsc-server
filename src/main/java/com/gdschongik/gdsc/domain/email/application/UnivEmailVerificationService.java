@@ -1,7 +1,7 @@
 package com.gdschongik.gdsc.domain.email.application;
 
 import com.gdschongik.gdsc.domain.email.dao.UnivEmailVerificationRepository;
-import com.gdschongik.gdsc.domain.email.domain.UnivEmailValidator;
+import com.gdschongik.gdsc.domain.email.domain.service.UnivEmailValidator;
 import com.gdschongik.gdsc.domain.email.domain.UnivEmailVerification;
 import com.gdschongik.gdsc.domain.email.dto.request.EmailVerificationTokenDto;
 import com.gdschongik.gdsc.domain.email.dto.request.UnivEmailVerificationRequest;

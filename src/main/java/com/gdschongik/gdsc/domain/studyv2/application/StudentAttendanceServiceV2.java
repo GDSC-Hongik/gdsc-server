@@ -7,7 +7,7 @@ import com.gdschongik.gdsc.domain.studyv2.dao.AttendanceV2Repository;
 import com.gdschongik.gdsc.domain.studyv2.dao.StudyHistoryV2Repository;
 import com.gdschongik.gdsc.domain.studyv2.dao.StudyV2Repository;
 import com.gdschongik.gdsc.domain.studyv2.domain.AttendanceV2;
-import com.gdschongik.gdsc.domain.studyv2.domain.AttendanceValidatorV2;
+import com.gdschongik.gdsc.domain.studyv2.domain.service.AttendanceValidatorV2;
 import com.gdschongik.gdsc.domain.studyv2.domain.StudySessionV2;
 import com.gdschongik.gdsc.domain.studyv2.domain.StudyV2;
 import com.gdschongik.gdsc.domain.studyv2.dto.request.AttendanceCreateRequest;

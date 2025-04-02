@@ -8,7 +8,7 @@ import com.gdschongik.gdsc.domain.studyv2.dao.StudyAnnouncementV2Repository;
 import com.gdschongik.gdsc.domain.studyv2.dao.StudyV2Repository;
 import com.gdschongik.gdsc.domain.studyv2.domain.StudyAnnouncementV2;
 import com.gdschongik.gdsc.domain.studyv2.domain.StudyV2;
-import com.gdschongik.gdsc.domain.studyv2.domain.StudyValidatorV2;
+import com.gdschongik.gdsc.domain.studyv2.domain.service.StudyValidatorV2;
 import com.gdschongik.gdsc.domain.studyv2.dto.request.StudyAnnouncementCreateRequest;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
