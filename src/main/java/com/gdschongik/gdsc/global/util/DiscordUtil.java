@@ -4,11 +4,14 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.property.DiscordProperty;
+import java.time.OffsetDateTime;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 
@@ -66,5 +69,20 @@ public class DiscordUtil {
         Role studyRole = findRoleById(discordRoleId);
 
         guild.removeRoleFromMember(member, studyRole).queue();
+    }
+
+    public void sendStudyAnnouncementToChannel(
+            String channelId, String studyName, String title, String link, OffsetDateTime createdAt) {
+
+        TextChannel channel = Optional.ofNullable(jda.getTextChannelById(channelId))
+                .orElseThrow(() -> new CustomException(DISCORD_CHANNEL_NOT_FOUND));
+
+        MessageEmbed embed = new EmbedBuilder()
+                .setTitle("📣 " + title, link)
+                .setDescription(studyName + "에 새로운 공지사항이 올라왔어요!")
+                .setTimestamp(createdAt)
+                .build();
+
+        channel.sendMessageEmbeds(embed).queue();
     }
 }
