@@ -4,7 +4,7 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.property.DiscordProperty;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -72,7 +72,7 @@ public class DiscordUtil {
     }
 
     public void sendStudyAnnouncementToChannel(
-            String channelId, String studyName, String title, String link, OffsetDateTime createdAt) {
+            String channelId, String studyName, String title, String link, LocalDateTime createdAt) {
 
         TextChannel channel = Optional.ofNullable(jda.getTextChannelById(channelId))
                 .orElseThrow(() -> new CustomException(DISCORD_CHANNEL_NOT_FOUND));
