@@ -1,10 +1,12 @@
 package com.gdschongik.gdsc.domain.studyv2.application.handler;
 
 import com.gdschongik.gdsc.domain.discord.application.CommonDiscordService;
+import com.gdschongik.gdsc.domain.studyv2.domain.StudyAnnouncementCreatedEvent;
 import com.gdschongik.gdsc.domain.studyv2.domain.StudyApplyCanceledEvent;
 import com.gdschongik.gdsc.domain.studyv2.domain.StudyApplyCompletedEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.modulith.events.ApplicationModuleListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
@@ -34,5 +36,12 @@ public class StudyEventHandlerV2 {
                 event.studyDiscordRoleId());
 
         commonDiscordService.removeStudyRoleFromMember(event.studyDiscordRoleId(), event.memberDiscordId());
+    }
+
+    @ApplicationModuleListener
+    public void handleStudyAnnouncementCreatedEvent(StudyAnnouncementCreatedEvent event) {
+        log.info("[StudyEventHandlerV2] 스터디 공지사항 생성 이벤트 수신: studyAnnouncementId={}", event.studyAnnouncementId());
+
+        commonDiscordService.sendStudyAnnouncement(event.studyAnnouncementId());
     }
 }
