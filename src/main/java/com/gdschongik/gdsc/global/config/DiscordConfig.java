@@ -1,6 +1,7 @@
 package com.gdschongik.gdsc.global.config;
 
 import static com.gdschongik.gdsc.global.common.constant.DiscordConstant.*;
+import static net.dv8tion.jda.api.interactions.commands.OptionType.*;
 
 import com.gdschongik.gdsc.domain.discord.application.listener.ListenerBeanPostProcessor;
 import com.gdschongik.gdsc.global.property.DiscordProperty;
@@ -45,6 +46,12 @@ public class DiscordConfig {
                 .addCommands(Commands.slash(COMMAND_NAME_BATCH_DISCORD_ID, COMMAND_DESCRIPTION_BATCH_DISCORD_ID))
                 .addCommands(
                         Commands.slash(COMMAND_NAME_ADVANCE_FAILED_MEMBER, COMMAND_DESCRIPTION_ADVANCE_FAILED_MEMBER))
+                .addCommands(Commands.slash(COMMAND_NAME_ASSIGN_ADMIN_ROLE, COMMAND_DESCRIPTION_ASSIGN_ADMIN_ROLE)
+                        .addOption(STRING, OPTION_NAME_ASSIGN_ADMIN_ROLE, OPTION_DESCRIPTION_ASSIGN_ADMIN_ROLE, true))
+                .addCommands(Commands.slash(COMMAND_NAME_ASSIGN_STUDY_ROLE, COMMAND_DESCRIPTION_ASSIGN_STUDY_ROLE)
+                        .addOption(STRING, OPTION_NAME_STUDY_TITLE, OPTION_DESCRIPTION_STUDY_TITLE, true)
+                        .addOption(INTEGER, OPTION_NAME_STUDY_YEAR, OPTION_DESCRIPTION_STUDY_YEAR, true)
+                        .addOption(STRING, OPTION_NAME_STUDY_SEMESTER, OPTION_DESCRIPTION_STUDY_SEMESTER, true))
                 .queue();
 
         return jda;

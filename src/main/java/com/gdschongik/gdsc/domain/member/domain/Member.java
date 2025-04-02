@@ -278,6 +278,11 @@ public class Member extends BaseEntity {
         studyRole = MENTOR;
     }
 
+    public void assignToAdmin() {
+        validateStatusUpdatable();
+        manageRole = ADMIN;
+    }
+
     // 기타 상태 변경 로직
 
     public void updateLastLoginAt(LocalDateTime now) {

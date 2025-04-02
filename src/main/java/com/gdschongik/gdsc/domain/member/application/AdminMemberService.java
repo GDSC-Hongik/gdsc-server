@@ -16,7 +16,6 @@ import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRoundRepository;
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.global.exception.CustomException;
-import com.gdschongik.gdsc.global.exception.ErrorCode;
 import com.gdschongik.gdsc.global.util.EnvironmentUtil;
 import com.gdschongik.gdsc.global.util.ExcelUtil;
 import com.gdschongik.gdsc.global.util.MemberUtil;
@@ -57,8 +56,7 @@ public class AdminMemberService {
 
     @Transactional
     public void updateMember(Long memberId, MemberUpdateRequest request) {
-        Member member =
-                memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
         member.updateMemberInfo(
                 request.studentId(),
                 request.name(),
@@ -123,6 +121,23 @@ public class AdminMemberService {
         log.info(
                 "[AdminMemberService] 정회원 승급 누락 멤버들을 정회원으로 승급: advancedMemberIds={}",
                 advanceFailedMembers.stream().map(Member::getId).toList());
+    }
+
+    @Transactional
+    public void assignAdminRole(String currentMemberDiscordUsername, String studentId) {
+        Member currentMember = memberRepository
+                .findByDiscordUsername(currentMemberDiscordUsername)
+                .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
+
+        memberValidator.validateAdminPermission(currentMember.getManageRole());
+
+        Member memberToAssign =
+                memberRepository.findByStudentId(studentId).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
+
+        memberToAssign.assignToAdmin();
+        memberRepository.save(memberToAssign);
+
+        log.info("[AdminMemberService] 어드민 권한 부여: memberId={}", memberToAssign.getId());
     }
 
     private void validateProfile() {
