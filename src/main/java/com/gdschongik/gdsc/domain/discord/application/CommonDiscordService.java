@@ -4,8 +4,14 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.common.model.RequirementStatus;
 import com.gdschongik.gdsc.domain.discord.domain.service.DiscordValidator;
+import com.gdschongik.gdsc.domain.common.model.SemesterType;
+import com.gdschongik.gdsc.domain.common.vo.Semester;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
+import com.gdschongik.gdsc.domain.studyv2.dao.StudyHistoryV2Repository;
+import com.gdschongik.gdsc.domain.studyv2.dao.StudyV2Repository;
+import com.gdschongik.gdsc.domain.studyv2.domain.StudyHistoryV2;
+import com.gdschongik.gdsc.domain.studyv2.domain.StudyV2;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.DiscordUtil;
 import java.util.List;
@@ -20,6 +26,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class CommonDiscordService {
 
     private final MemberRepository memberRepository;
+    private final StudyV2Repository studyV2Repository;
+    private final StudyHistoryV2Repository studyHistoryV2Repository;
     private final DiscordUtil discordUtil;
     private final DiscordValidator discordValidator;
 
@@ -49,6 +57,26 @@ public class CommonDiscordService {
                 log.info("[CommonDiscordService] 디스코드 id 배치 실패: 사유 = {} memberId = {}", e.getMessage(), member.getId());
             }
         });
+    }
+
+    @Transactional
+    public void assignDiscordStudyRole(
+            String currentMemberDiscordUsername, String studyTitle, Integer academicYear, String semester) {
+        Member currentMember = memberRepository
+                .findByDiscordUsername(currentMemberDiscordUsername)
+                .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
+
+        discordValidator.validateAdminPermission(currentMember);
+
+        StudyV2 study = studyV2Repository
+                .findByTitleAndSemester(studyTitle, Semester.of(academicYear, SemesterType.valueOf(semester)))
+                .orElseThrow(() -> new CustomException(STUDY_NOT_FOUND));
+
+        List<StudyHistoryV2> studyHistories = studyHistoryV2Repository.findAllByStudy(study);
+        studyHistories.forEach(studyHistoryV2 -> discordUtil.addRoleToMemberById(
+                study.getDiscordRoleId(), studyHistoryV2.getStudent().getDiscordId()));
+
+        log.info("[CommonDiscordService] 스터디 디스코드 역할 부여 완료: studyId = {}", study.getId());
     }
 
     /**
