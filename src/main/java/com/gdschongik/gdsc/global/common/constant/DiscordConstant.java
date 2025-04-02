@@ -43,7 +43,7 @@ public class DiscordConstant {
     public static final String OPTION_NAME_STUDY_TITLE = "스터디-이름";
     public static final String OPTION_DESCRIPTION_STUDY_TITLE = "스터디 이름을 입력해주세요.";
     public static final String OPTION_NAME_STUDY_YEAR = "스터디-연도";
-    public static final String OPTION_DESCRIPTION_STUDY_YEAR = "연도를 입력해주세요.";
+    public static final String OPTION_DESCRIPTION_STUDY_YEAR = "연도를 입력해주세요. YYYY 형식으로 입력해주세요.";
     public static final String OPTION_NAME_STUDY_SEMESTER = "스터디-학기";
-    public static final String OPTION_DESCRIPTION_STUDY_SEMESTER = "학기를 입력해주세요.";
+    public static final String OPTION_DESCRIPTION_STUDY_SEMESTER = "학기를 입력해주세요. FIRST 혹은 SECOND로 입력해주세요.";
 }
