@@ -34,4 +34,16 @@ public class DiscordConstant {
     public static final String REPLY_MESSAGE_ASSIGN_ADMIN_ROLE = "어드민 권한 부여 작업이 완료되었습니다.";
     public static final String OPTION_NAME_ASSIGN_ADMIN_ROLE = "학번";
     public static final String OPTION_DESCRIPTION_ASSIGN_ADMIN_ROLE = "어드민 권한을 부여할 멤버의 학번을 입력해주세요.";
+
+    // 스터디 역할 부여 누락자 부여 커맨드
+    public static final String COMMAND_NAME_ASSIGN_STUDY_ROLE = "스터디-역할-부여";
+    public static final String COMMAND_DESCRIPTION_ASSIGN_STUDY_ROLE = "스터디 역할을 부여합니다.";
+    public static final String DEFER_MESSAGE_ASSIGN_STUDY_ROLE = "스터디 역할 부여 작업을 진행하는 중입니다...";
+    public static final String REPLY_MESSAGE_ASSIGN_STUDY_ROLE = "스터디 역할 부여 작업이 완료되었습니다.";
+    public static final String OPTION_NAME_STUDY_TITLE = "스터디-이름";
+    public static final String OPTION_DESCRIPTION_STUDY_TITLE = "스터디 이름을 입력해주세요.";
+    public static final String OPTION_NAME_STUDY_YEAR = "스터디-연도";
+    public static final String OPTION_DESCRIPTION_STUDY_YEAR = "연도를 입력해주세요.";
+    public static final String OPTION_NAME_STUDY_SEMESTER = "스터디-학기";
+    public static final String OPTION_DESCRIPTION_STUDY_SEMESTER = "학기를 입력해주세요.";
 }
