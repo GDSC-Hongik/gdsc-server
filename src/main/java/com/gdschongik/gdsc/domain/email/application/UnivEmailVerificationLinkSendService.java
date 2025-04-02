@@ -3,8 +3,8 @@ package com.gdschongik.gdsc.domain.email.application;
 import static com.gdschongik.gdsc.global.common.constant.EmailConstant.VERIFICATION_EMAIL_SUBJECT;
 
 import com.gdschongik.gdsc.domain.email.dao.UnivEmailVerificationRepository;
-import com.gdschongik.gdsc.domain.email.domain.service.UnivEmailValidator;
 import com.gdschongik.gdsc.domain.email.domain.UnivEmailVerification;
+import com.gdschongik.gdsc.domain.email.domain.service.UnivEmailValidator;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.global.common.constant.JwtConstant;

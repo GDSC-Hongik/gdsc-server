@@ -4,8 +4,8 @@ import static com.gdschongik.gdsc.domain.discord.domain.DiscordVerificationCode.
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.discord.dao.DiscordVerificationCodeRepository;
-import com.gdschongik.gdsc.domain.discord.domain.service.DiscordValidator;
 import com.gdschongik.gdsc.domain.discord.domain.DiscordVerificationCode;
+import com.gdschongik.gdsc.domain.discord.domain.service.DiscordValidator;
 import com.gdschongik.gdsc.domain.discord.dto.request.DiscordLinkRequest;
 import com.gdschongik.gdsc.domain.discord.dto.response.DiscordCheckDuplicateResponse;
 import com.gdschongik.gdsc.domain.discord.dto.response.DiscordCheckJoinResponse;

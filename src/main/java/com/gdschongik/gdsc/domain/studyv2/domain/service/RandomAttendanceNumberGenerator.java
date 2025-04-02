@@ -1,7 +1,6 @@
 package com.gdschongik.gdsc.domain.studyv2.domain.service;
 
 import java.security.SecureRandom;
-
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 
