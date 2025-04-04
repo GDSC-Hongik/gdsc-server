@@ -1,8 +1,8 @@
 package com.gdschongik.gdsc.domain.membership.application;
 
 import com.gdschongik.gdsc.domain.member.application.CommonMemberService;
-import com.gdschongik.gdsc.domain.membership.domain.MembershipPaymentRevokedEvent;
-import com.gdschongik.gdsc.domain.membership.domain.MembershipVerifiedEvent;
+import com.gdschongik.gdsc.domain.membership.domain.event.MembershipPaymentRevokedEvent;
+import com.gdschongik.gdsc.domain.membership.domain.event.MembershipVerifiedEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;

@@ -5,7 +5,7 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.membership.dao.MembershipRepository;
 import com.gdschongik.gdsc.domain.membership.domain.Membership;
-import com.gdschongik.gdsc.domain.membership.domain.MembershipValidator;
+import com.gdschongik.gdsc.domain.membership.domain.service.MembershipValidator;
 import com.gdschongik.gdsc.domain.order.dao.OrderRepository;
 import com.gdschongik.gdsc.domain.order.domain.Order;
 import com.gdschongik.gdsc.domain.recruitment.application.OnboardingRecruitmentService;

@@ -1,14 +1,14 @@
 package com.gdschongik.gdsc.domain.studyv2.application;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
-import com.gdschongik.gdsc.domain.study.domain.StudyHistoriesCompletedEvent;
+import com.gdschongik.gdsc.domain.study.domain.event.StudyHistoriesCompletedEvent;
 import com.gdschongik.gdsc.domain.study.dto.request.StudyCompleteRequest;
 import com.gdschongik.gdsc.domain.studyv2.dao.StudyHistoryV2Repository;
 import com.gdschongik.gdsc.domain.studyv2.dao.StudyV2Repository;
 import com.gdschongik.gdsc.domain.studyv2.domain.StudyHistoryV2;
-import com.gdschongik.gdsc.domain.studyv2.domain.StudyHistoryValidatorV2;
 import com.gdschongik.gdsc.domain.studyv2.domain.StudyV2;
-import com.gdschongik.gdsc.domain.studyv2.domain.StudyValidatorV2;
+import com.gdschongik.gdsc.domain.studyv2.domain.service.StudyHistoryValidatorV2;
+import com.gdschongik.gdsc.domain.studyv2.domain.service.StudyValidatorV2;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
 import com.gdschongik.gdsc.global.util.MemberUtil;
