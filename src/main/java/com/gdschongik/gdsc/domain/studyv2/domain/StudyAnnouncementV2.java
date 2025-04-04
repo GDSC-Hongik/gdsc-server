@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PostPersist;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -40,6 +41,11 @@ public class StudyAnnouncementV2 extends BaseEntity {
         this.title = title;
         this.link = link;
         this.study = study;
+    }
+
+    @PostPersist
+    public void onPostPersist() {
+        registerEvent(new StudyAnnouncementCreatedEvent(id));
     }
 
     public static StudyAnnouncementV2 create(String title, String link, StudyV2 study) {
