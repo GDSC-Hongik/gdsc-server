@@ -5,8 +5,6 @@ import static org.assertj.core.api.Assertions.*;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.study.domain.StudyType;
-import com.gdschongik.gdsc.domain.studyv2.domain.factory.StudyFactory;
-import com.gdschongik.gdsc.domain.studyv2.domain.service.AttendanceNumberGenerator;
 import com.gdschongik.gdsc.helper.FixtureHelper;
 import org.junit.jupiter.api.Test;
 

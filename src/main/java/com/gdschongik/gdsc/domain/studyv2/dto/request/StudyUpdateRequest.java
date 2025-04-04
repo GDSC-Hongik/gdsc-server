@@ -1,7 +1,7 @@
 package com.gdschongik.gdsc.domain.studyv2.dto.request;
 
 import com.gdschongik.gdsc.domain.common.vo.Period;
-import com.gdschongik.gdsc.domain.studyv2.domain.command.StudyUpdateCommand;
+import com.gdschongik.gdsc.domain.studyv2.domain.StudyUpdateCommand;
 import jakarta.annotation.Nullable;
 import java.time.DayOfWeek;
 import java.time.LocalTime;

@@ -46,7 +46,7 @@ import com.gdschongik.gdsc.domain.studyv2.dao.StudyHistoryV2Repository;
 import com.gdschongik.gdsc.domain.studyv2.dao.StudyV2Repository;
 import com.gdschongik.gdsc.domain.studyv2.domain.StudyHistoryV2;
 import com.gdschongik.gdsc.domain.studyv2.domain.StudyV2;
-import com.gdschongik.gdsc.domain.studyv2.domain.factory.StudyFactory;
+import com.gdschongik.gdsc.domain.studyv2.domain.StudyFactory;
 import com.gdschongik.gdsc.global.security.PrincipalDetails;
 import com.gdschongik.gdsc.infra.feign.payment.client.PaymentClient;
 import com.gdschongik.gdsc.infra.github.client.GithubClient;

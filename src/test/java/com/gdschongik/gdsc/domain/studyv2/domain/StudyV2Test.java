@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.*;
 
 import com.gdschongik.gdsc.domain.common.vo.Period;
 import com.gdschongik.gdsc.domain.study.domain.StudyType;
-import com.gdschongik.gdsc.domain.studyv2.domain.command.StudyUpdateCommand;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.helper.FixtureHelper;
 import java.time.LocalDate;

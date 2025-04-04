@@ -7,7 +7,6 @@ import com.gdschongik.gdsc.domain.common.vo.Period;
 import com.gdschongik.gdsc.domain.common.vo.Semester;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.study.domain.StudyType;
-import com.gdschongik.gdsc.domain.studyv2.domain.command.StudyUpdateCommand;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.CascadeType;

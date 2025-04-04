@@ -4,7 +4,6 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.common.model.BaseEntity;
 import com.gdschongik.gdsc.domain.common.vo.Period;
-import com.gdschongik.gdsc.domain.studyv2.domain.command.StudyUpdateCommand;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;

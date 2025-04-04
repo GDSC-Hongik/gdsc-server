@@ -1,4 +1,4 @@
-package com.gdschongik.gdsc.domain.studyv2.domain.command;
+package com.gdschongik.gdsc.domain.studyv2.domain;
 
 import com.gdschongik.gdsc.domain.common.vo.Period;
 import jakarta.annotation.Nullable;

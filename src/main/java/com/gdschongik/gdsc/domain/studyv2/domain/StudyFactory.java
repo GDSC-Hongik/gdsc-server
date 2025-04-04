@@ -1,12 +1,9 @@
-package com.gdschongik.gdsc.domain.studyv2.domain.factory;
+package com.gdschongik.gdsc.domain.studyv2.domain;
 
 import com.gdschongik.gdsc.domain.common.vo.Period;
 import com.gdschongik.gdsc.domain.common.vo.Semester;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.study.domain.StudyType;
-import com.gdschongik.gdsc.domain.studyv2.domain.StudySessionV2;
-import com.gdschongik.gdsc.domain.studyv2.domain.StudyV2;
-import com.gdschongik.gdsc.domain.studyv2.domain.service.AttendanceNumberGenerator;
 import com.gdschongik.gdsc.global.annotation.DomainFactory;
 import java.time.DayOfWeek;
 import java.time.LocalTime;

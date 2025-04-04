@@ -25,7 +25,7 @@ import com.gdschongik.gdsc.domain.study.domain.Study;
 import com.gdschongik.gdsc.domain.study.domain.StudyDetail;
 import com.gdschongik.gdsc.domain.study.domain.StudyType;
 import com.gdschongik.gdsc.domain.studyv2.domain.StudyV2;
-import com.gdschongik.gdsc.domain.studyv2.domain.factory.StudyFactory;
+import com.gdschongik.gdsc.domain.studyv2.domain.StudyFactory;
 import java.time.LocalDateTime;
 import java.util.concurrent.atomic.AtomicLong;
 import org.springframework.test.util.ReflectionTestUtils;
