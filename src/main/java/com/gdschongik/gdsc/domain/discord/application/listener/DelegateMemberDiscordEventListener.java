@@ -1,7 +1,7 @@
 package com.gdschongik.gdsc.domain.discord.application.listener;
 
 import com.gdschongik.gdsc.domain.discord.application.handler.DelegateMemberDiscordEventHandler;
-import com.gdschongik.gdsc.domain.member.domain.MemberAdvancedToRegularEvent;
+import com.gdschongik.gdsc.domain.member.domain.event.MemberAdvancedToRegularEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.modulith.events.ApplicationModuleListener;

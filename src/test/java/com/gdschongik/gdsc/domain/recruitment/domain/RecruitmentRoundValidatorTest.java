@@ -7,6 +7,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import com.gdschongik.gdsc.domain.common.model.SemesterType;
 import com.gdschongik.gdsc.domain.common.vo.Period;
+import com.gdschongik.gdsc.domain.recruitment.domain.service.RecruitmentRoundValidator;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import java.time.LocalDateTime;
 import java.util.List;

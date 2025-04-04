@@ -6,6 +6,9 @@ import static com.gdschongik.gdsc.domain.member.domain.MemberStudyRole.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.common.model.BaseEntity;
+import com.gdschongik.gdsc.domain.member.domain.event.MemberAdvancedToRegularEvent;
+import com.gdschongik.gdsc.domain.member.domain.event.MemberAssociateRequirementUpdatedEvent;
+import com.gdschongik.gdsc.domain.member.domain.event.MemberDemotedToAssociateEvent;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;

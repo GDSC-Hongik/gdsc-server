@@ -2,7 +2,7 @@ package com.gdschongik.gdsc.domain.discord.application.handler;
 
 import static com.gdschongik.gdsc.global.common.constant.DiscordConstant.*;
 
-import com.gdschongik.gdsc.domain.member.domain.MemberDemotedToAssociateEvent;
+import com.gdschongik.gdsc.domain.member.domain.event.MemberDemotedToAssociateEvent;
 import com.gdschongik.gdsc.global.util.DiscordUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -11,7 +11,7 @@ import com.gdschongik.gdsc.domain.membership.domain.Membership;
 import com.gdschongik.gdsc.domain.order.dao.OrderRepository;
 import com.gdschongik.gdsc.domain.order.domain.MoneyInfo;
 import com.gdschongik.gdsc.domain.order.domain.Order;
-import com.gdschongik.gdsc.domain.order.domain.OrderValidator;
+import com.gdschongik.gdsc.domain.order.domain.service.OrderValidator;
 import com.gdschongik.gdsc.domain.order.dto.request.OrderCancelRequest;
 import com.gdschongik.gdsc.domain.order.dto.request.OrderCompleteRequest;
 import com.gdschongik.gdsc.domain.order.dto.request.OrderCreateRequest;
