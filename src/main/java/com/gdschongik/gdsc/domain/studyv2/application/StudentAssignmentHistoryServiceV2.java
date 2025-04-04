@@ -72,6 +72,9 @@ public class StudentAssignmentHistoryServiceV2 {
     private AssignmentHistoryV2 findOrCreate(Member student, StudySessionV2 studySession) {
         return assignmentHistoryV2Repository
                 .findByMemberAndStudySession(student, studySession)
-                .orElseGet(() -> AssignmentHistoryV2.create(studySession, student));
+                .orElseGet(() -> {
+                    AssignmentHistoryV2 assignmentHistoryV2 = AssignmentHistoryV2.create(studySession, student);
+                    return assignmentHistoryV2Repository.save(assignmentHistoryV2);
+                });
     }
 }
