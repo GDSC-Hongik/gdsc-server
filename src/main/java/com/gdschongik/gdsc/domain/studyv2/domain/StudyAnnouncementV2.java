@@ -1,6 +1,8 @@
 package com.gdschongik.gdsc.domain.studyv2.domain;
 
 import com.gdschongik.gdsc.domain.common.model.BaseEntity;
+import com.gdschongik.gdsc.domain.studyv2.domain.event.StudyAnnouncementCreatedEvent;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

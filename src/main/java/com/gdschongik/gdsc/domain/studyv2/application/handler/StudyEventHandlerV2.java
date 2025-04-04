@@ -2,7 +2,7 @@ package com.gdschongik.gdsc.domain.studyv2.application.handler;
 
 import com.gdschongik.gdsc.domain.discord.application.CommonDiscordService;
 import com.gdschongik.gdsc.domain.studyv2.application.CommonStudyServiceV2;
-import com.gdschongik.gdsc.domain.studyv2.domain.StudyAnnouncementCreatedEvent;
+import com.gdschongik.gdsc.domain.studyv2.domain.event.StudyAnnouncementCreatedEvent;
 import com.gdschongik.gdsc.domain.studyv2.domain.event.StudyApplyCanceledEvent;
 import com.gdschongik.gdsc.domain.studyv2.domain.event.StudyApplyCompletedEvent;
 import lombok.RequiredArgsConstructor;
