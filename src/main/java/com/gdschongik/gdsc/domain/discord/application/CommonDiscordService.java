@@ -104,6 +104,7 @@ public class CommonDiscordService {
 
         discordUtil.sendStudyAnnouncementToChannel(
                 studyAnnouncement.getStudy().getDiscordChannelId(),
+                studyAnnouncement.getStudy().getDiscordRoleId(),
                 studyAnnouncement.getStudy().getTitle(),
                 studyAnnouncement.getTitle(),
                 studyAnnouncement.getLink(),

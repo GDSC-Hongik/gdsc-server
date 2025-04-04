@@ -72,14 +72,23 @@ public class DiscordUtil {
     }
 
     public void sendStudyAnnouncementToChannel(
-            String channelId, String studyName, String title, String link, LocalDateTime createdAt) {
+            String channelId,
+            String discordRoleId,
+            String studyName,
+            String title,
+            String link,
+            LocalDateTime createdAt) {
 
         TextChannel channel = Optional.ofNullable(jda.getTextChannelById(channelId))
                 .orElseThrow(() -> new CustomException(DISCORD_CHANNEL_NOT_FOUND));
 
+        String studyRoleMention = findRoleById(discordRoleId).getAsMention();
+
         MessageEmbed embed = new EmbedBuilder()
-                .setTitle("📣 " + title, link)
-                .setDescription(studyName + "에 새로운 공지사항이 올라왔어요!")
+                .setTitle("[" + title + "]", link)
+                .appendDescription(studyRoleMention + "\n\n")
+                .appendDescription(studyName + " 공지가 업로드 되었어요.\n")
+                .appendDescription("공지는 [와우클래스](<https://study.wawoo.dev/landing>)에서도 확인 가능해요.\n")
                 .setTimestamp(createdAt)
                 .build();
 
