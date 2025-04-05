@@ -3,7 +3,7 @@ package com.gdschongik.gdsc.domain.member.api;
 import com.gdschongik.gdsc.domain.member.application.AdminMemberService;
 import com.gdschongik.gdsc.domain.member.application.OnboardingMemberService;
 import com.gdschongik.gdsc.domain.member.application.TestMemberService;
-import com.gdschongik.gdsc.domain.member.dto.request.MemberTokenRequest;
+import com.gdschongik.gdsc.domain.member.dto.request.MemberTokenByOauthIdRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberTokenResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,10 +29,11 @@ public class TestMemberController {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "임시 토큰 생성", description = "테스트용 API입니다. oauth_id를 입력받아 해당하는 유저의 토큰을 생성합니다.")
-    @PostMapping("/token")
-    public ResponseEntity<MemberTokenResponse> createTemporaryToken(@Valid @RequestBody MemberTokenRequest request) {
-        MemberTokenResponse response = onboardingMemberService.createTemporaryToken(request);
+    @Operation(summary = "oauthId 이용 임시 토큰 생성", description = "테스트용 API입니다. oauth_id를 입력받아 해당하는 유저의 토큰을 생성합니다.")
+    @PostMapping("/token/oauthId")
+    public ResponseEntity<MemberTokenResponse> createTemporaryTokenByOauthId(
+            @Valid @RequestBody MemberTokenByOauthIdRequest request) {
+        MemberTokenResponse response = onboardingMemberService.createTemporaryTokenByOauthId(request);
         return ResponseEntity.ok().body(response);
     }
 
