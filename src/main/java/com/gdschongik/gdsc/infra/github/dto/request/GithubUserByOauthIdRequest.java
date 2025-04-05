@@ -1,6 +1,6 @@
 package com.gdschongik.gdsc.infra.github.dto.request;
 
-import static com.gdschongik.gdsc.global.common.constant.GithubConstant.*;
+import static com.gdschongik.gdsc.global.common.constant.GithubConstant.GITHUB_USER_BY_OAUTH_ID_API_URL;
 
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.kohsuke.github.connector.GitHubConnectorRequest;
 
 @RequiredArgsConstructor
-public class GithubUserRequest implements GitHubConnectorRequest {
+public class GithubUserByOauthIdRequest implements GitHubConnectorRequest {
 
     private final String oauthId;
 
@@ -45,7 +45,7 @@ public class GithubUserRequest implements GitHubConnectorRequest {
     @Override
     public URL url() {
         try {
-            return new URL(GITHUB_USER_API_URL.formatted(oauthId));
+            return new URL(GITHUB_USER_BY_OAUTH_ID_API_URL.formatted(oauthId));
         } catch (MalformedURLException e) {
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
