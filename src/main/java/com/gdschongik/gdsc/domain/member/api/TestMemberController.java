@@ -3,6 +3,7 @@ package com.gdschongik.gdsc.domain.member.api;
 import com.gdschongik.gdsc.domain.member.application.AdminMemberService;
 import com.gdschongik.gdsc.domain.member.application.OnboardingMemberService;
 import com.gdschongik.gdsc.domain.member.application.TestMemberService;
+import com.gdschongik.gdsc.domain.member.dto.request.MemberTokenByGithubHandleRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberTokenByOauthIdRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberTokenResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,6 +35,14 @@ public class TestMemberController {
     public ResponseEntity<MemberTokenResponse> createTemporaryTokenByOauthId(
             @Valid @RequestBody MemberTokenByOauthIdRequest request) {
         MemberTokenResponse response = onboardingMemberService.createTemporaryTokenByOauthId(request);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @Operation(summary = "깃허브 핸들 이용 임시 토큰 생성", description = "테스트용 API입니다. 깃허브 핸들명을 입력받아 해당하는 유저의 토큰을 생성합니다.")
+    @PostMapping("/token/github-handle")
+    public ResponseEntity<MemberTokenResponse> createTemporaryTokenByGithubHandle(
+            @Valid @RequestBody MemberTokenByGithubHandleRequest request) {
+        MemberTokenResponse response = onboardingMemberService.createTemporaryTokenByGithubHandle(request);
         return ResponseEntity.ok().body(response);
     }
 
