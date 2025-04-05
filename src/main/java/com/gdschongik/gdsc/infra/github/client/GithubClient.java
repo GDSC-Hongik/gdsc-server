@@ -8,6 +8,7 @@ import com.gdschongik.gdsc.domain.study.domain.AssignmentSubmission;
 import com.gdschongik.gdsc.domain.study.domain.AssignmentSubmissionFetchExecutor;
 import com.gdschongik.gdsc.domain.study.domain.AssignmentSubmissionFetcher;
 import com.gdschongik.gdsc.global.exception.CustomException;
+import com.gdschongik.gdsc.infra.github.dto.request.GithubUserByHandleRequest;
 import com.gdschongik.gdsc.infra.github.dto.request.GithubUserByOauthIdRequest;
 import java.io.IOException;
 import java.io.InputStream;
@@ -53,6 +54,18 @@ public class GithubClient {
                 InputStream inputStream = response.bodyStream(); ) {
             // api가 login이라는 이름으로 사용자의 github handle을 반환합니다.
             return (String) new ObjectMapper().readValue(inputStream, Map.class).get("login");
+        } catch (IOException e) {
+            throw new CustomException(GITHUB_USER_NOT_FOUND);
+        }
+    }
+
+    // github handle -> oauthId를 가져오는 메서드
+    public String getOauthId(String githubHandle) {
+        try (GitHubConnectorResponse response = gitHubConnector.send(new GithubUserByHandleRequest(githubHandle));
+                InputStream inputStream = response.bodyStream(); ) {
+            // api가 id라는 이름으로 사용자의 oauth id를 반환합니다.
+            return String.valueOf(
+                    new ObjectMapper().readValue(inputStream, Map.class).get("id"));
         } catch (IOException e) {
             throw new CustomException(GITHUB_USER_NOT_FOUND);
         }
