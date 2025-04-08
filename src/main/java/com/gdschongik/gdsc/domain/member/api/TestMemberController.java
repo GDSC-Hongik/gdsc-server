@@ -34,7 +34,7 @@ public class TestMemberController {
     @PostMapping("/token/oauthId")
     public ResponseEntity<MemberTokenResponse> createTemporaryTokenByOauthId(
             @Valid @RequestBody MemberTokenByOauthIdRequest request) {
-        MemberTokenResponse response = onboardingMemberService.createTemporaryTokenByOauthId(request);
+        var response = onboardingMemberService.createTemporaryTokenByOauthId(request);
         return ResponseEntity.ok().body(response);
     }
 
@@ -42,7 +42,7 @@ public class TestMemberController {
     @PostMapping("/token/github-handle")
     public ResponseEntity<MemberTokenResponse> createTemporaryTokenByGithubHandle(
             @Valid @RequestBody MemberTokenByGithubHandleRequest request) {
-        MemberTokenResponse response = onboardingMemberService.createTemporaryTokenByGithubHandle(request);
+        var response = onboardingMemberService.createTemporaryTokenByGithubHandle(request);
         return ResponseEntity.ok().body(response);
     }
 
