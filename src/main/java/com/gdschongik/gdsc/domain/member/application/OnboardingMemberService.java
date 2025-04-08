@@ -12,7 +12,8 @@ import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.dto.UnivVerificationStatus;
 import com.gdschongik.gdsc.domain.member.dto.request.BasicMemberInfoRequest;
-import com.gdschongik.gdsc.domain.member.dto.request.MemberTokenRequest;
+import com.gdschongik.gdsc.domain.member.dto.request.MemberTokenByGithubHandleRequest;
+import com.gdschongik.gdsc.domain.member.dto.request.MemberTokenByOauthIdRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberBasicInfoResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberDashboardResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberTokenResponse;
@@ -25,6 +26,7 @@ import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.security.MemberAuthInfo;
 import com.gdschongik.gdsc.global.util.EnvironmentUtil;
 import com.gdschongik.gdsc.global.util.MemberUtil;
+import com.gdschongik.gdsc.infra.github.client.GithubClient;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -43,6 +45,7 @@ public class OnboardingMemberService {
     private final MemberRepository memberRepository;
     private final EnvironmentUtil environmentUtil;
     private final EmailVerificationStatusService emailVerificationStatusService;
+    private final GithubClient githubClient;
 
     public MemberUnivStatusResponse checkUnivVerificationStatus() {
         Member currentMember = memberUtil.getCurrentMember();
@@ -76,12 +79,26 @@ public class OnboardingMemberService {
                 member, univVerificationStatus, currentRecruitmentRound.orElse(null), myMembership.orElse(null));
     }
 
-    public MemberTokenResponse createTemporaryToken(MemberTokenRequest request) {
+    public MemberTokenResponse createTemporaryTokenByOauthId(MemberTokenByOauthIdRequest request) {
         validateProfile();
 
         final Member member = memberRepository
                 .findByOauthId(request.oauthId())
                 .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
+
+        AccessTokenDto accessTokenDto = jwtService.createAccessToken(MemberAuthInfo.from(member));
+        RefreshTokenDto refreshTokenDto = jwtService.createRefreshToken(member.getId());
+
+        return new MemberTokenResponse(accessTokenDto.tokenValue(), refreshTokenDto.tokenValue());
+    }
+
+    public MemberTokenResponse createTemporaryTokenByGithubHandle(MemberTokenByGithubHandleRequest request) {
+        validateProfile();
+
+        final String oauthId = githubClient.getOauthId(request.githubHandle());
+
+        final Member member =
+                memberRepository.findByOauthId(oauthId).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
 
         AccessTokenDto accessTokenDto = jwtService.createAccessToken(MemberAuthInfo.from(member));
         RefreshTokenDto refreshTokenDto = jwtService.createRefreshToken(member.getId());
