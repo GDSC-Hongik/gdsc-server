@@ -13,7 +13,6 @@ import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.dto.UnivVerificationStatus;
 import com.gdschongik.gdsc.domain.member.dto.request.BasicMemberInfoRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberTokenByGithubHandleRequest;
-import com.gdschongik.gdsc.domain.member.dto.request.MemberTokenByOauthIdRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberBasicInfoResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberDashboardResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberTokenResponse;
@@ -77,19 +76,6 @@ public class OnboardingMemberService {
 
         return MemberDashboardResponse.of(
                 member, univVerificationStatus, currentRecruitmentRound.orElse(null), myMembership.orElse(null));
-    }
-
-    public MemberTokenResponse createTemporaryTokenByOauthId(MemberTokenByOauthIdRequest request) {
-        validateProfile();
-
-        final Member member = memberRepository
-                .findByOauthId(request.oauthId())
-                .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
-
-        AccessTokenDto accessTokenDto = jwtService.createAccessToken(MemberAuthInfo.from(member));
-        RefreshTokenDto refreshTokenDto = jwtService.createRefreshToken(member.getId());
-
-        return new MemberTokenResponse(accessTokenDto.tokenValue(), refreshTokenDto.tokenValue());
     }
 
     public MemberTokenResponse createTemporaryTokenByGithubHandle(MemberTokenByGithubHandleRequest request) {
