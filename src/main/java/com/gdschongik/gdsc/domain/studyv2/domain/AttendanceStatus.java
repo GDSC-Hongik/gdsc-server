@@ -22,7 +22,9 @@ public enum AttendanceStatus {
             return NOT_LIVE;
         }
 
-        if (studySession.getLessonPeriod().getStartDate().isAfter(now)) {
+        LocalDateTime startDate = studySession.getLessonPeriod().getStartDate();
+
+        if (startDate == null || startDate.isAfter(now)) {
             return BEFORE_ATTENDANCE;
         }
 
