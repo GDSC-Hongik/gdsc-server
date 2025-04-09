@@ -1,5 +1,6 @@
 package com.gdschongik.gdsc.domain.studyv2.domain;
 
+import com.gdschongik.gdsc.domain.common.vo.Period;
 import com.gdschongik.gdsc.domain.study.domain.StudyType;
 import java.time.LocalDateTime;
 import lombok.Getter;
@@ -22,9 +23,9 @@ public enum AttendanceStatus {
             return NOT_LIVE;
         }
 
-        LocalDateTime startDate = studySession.getLessonPeriod().getStartDate();
+        Period lessonPeriod = studySession.getLessonPeriod();
 
-        if (startDate == null || startDate.isAfter(now)) {
+        if (lessonPeriod.isEmpty() || lessonPeriod.getStartDate().isAfter(now)) {
             return BEFORE_ATTENDANCE;
         }
 

@@ -31,9 +31,7 @@ public enum AssignmentHistoryStatus {
             throws CustomException {
 
         // 제출기한이 설정되지 않았을 경우
-        if (studySession.getAssignmentPeriod() == null
-                || studySession.getAssignmentPeriod().getStartDate() == null
-                || studySession.getAssignmentPeriod().getEndDate() == null) {
+        if (studySession.getAssignmentPeriod() == null || studySession.getAssignmentPeriod().isEmpty()) {
             return BEFORE_SUBMISSION;
         }
 
