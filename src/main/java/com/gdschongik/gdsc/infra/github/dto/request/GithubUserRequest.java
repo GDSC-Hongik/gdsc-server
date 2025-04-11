@@ -47,7 +47,7 @@ public class GithubUserRequest implements GitHubConnectorRequest {
         try {
             return new URL(GITHUB_USER_API_URL.formatted(oauthId));
         } catch (MalformedURLException e) {
-            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
+            throw new CustomException(ErrorCode.INTERNAL_ERROR);
         }
     }
 

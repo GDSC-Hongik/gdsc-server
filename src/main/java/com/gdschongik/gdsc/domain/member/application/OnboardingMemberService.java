@@ -91,7 +91,7 @@ public class OnboardingMemberService {
 
     private void validateProfile() {
         if (!environmentUtil.isDevAndLocalProfile()) {
-            throw new CustomException(FORBIDDEN);
+            throw new CustomException(FORBIDDEN_ACCESS);
         }
     }
 }

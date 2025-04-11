@@ -9,25 +9,25 @@ import org.springframework.http.HttpStatus;
 @Getter
 @AllArgsConstructor
 public enum ErrorCode {
-    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "내부 서버 에러가 발생했습니다. 관리자에게 문의 바랍니다."),
+    INTERNAL_ERROR(INTERNAL_SERVER_ERROR, "내부 서버 에러가 발생했습니다. 관리자에게 문의 바랍니다."),
     METHOD_ARGUMENT_NULL(BAD_REQUEST, "인자는 null이 될 수 없습니다."),
     METHOD_ARGUMENT_NOT_VALID(BAD_REQUEST, "인자가 유효하지 않습니다."),
     REGEX_VIOLATION(BAD_REQUEST, "정규표현식을 위반했습니다."),
-    FORBIDDEN(HttpStatus.FORBIDDEN, "접근 권한이 없습니다."),
+    FORBIDDEN_ACCESS(FORBIDDEN, "접근 권한이 없습니다."),
 
     // Auth
     INVALID_JWT_TOKEN(UNAUTHORIZED, "유효하지 않은 JWT 토큰입니다."),
     EXPIRED_JWT_TOKEN(UNAUTHORIZED, "만료된 JWT 토큰입니다."),
-    AUTH_NOT_EXIST(HttpStatus.INTERNAL_SERVER_ERROR, "시큐리티 인증 정보가 존재하지 않습니다."),
-    AUTH_NOT_PARSABLE(HttpStatus.INTERNAL_SERVER_ERROR, "시큐리티 인증 정보 파싱에 실패했습니다."),
+    AUTH_NOT_EXIST(INTERNAL_SERVER_ERROR, "시큐리티 인증 정보가 존재하지 않습니다."),
+    AUTH_NOT_PARSABLE(INTERNAL_SERVER_ERROR, "시큐리티 인증 정보 파싱에 실패했습니다."),
     INVALID_PASSWORD(UNAUTHORIZED, "비밀번호가 일치하지 않습니다."),
-    INVALID_ROLE(HttpStatus.FORBIDDEN, "권한이 없습니다."),
+    INVALID_ROLE(FORBIDDEN, "권한이 없습니다."),
 
     // Parameter
     INVALID_QUERY_PARAMETER(BAD_REQUEST, "잘못된 쿼리 파라미터입니다."),
 
     // Money
-    MONEY_AMOUNT_NOT_NULL(HttpStatus.INTERNAL_SERVER_ERROR, "금액은 null이 될 수 없습니다."),
+    MONEY_AMOUNT_NOT_NULL(INTERNAL_SERVER_ERROR, "금액은 null이 될 수 없습니다."),
 
     // Period
     PERIOD_OVERLAP(CONFLICT, "기간이 중복됩니다."),
@@ -60,12 +60,12 @@ public enum ErrorCode {
     INVALID_EMAIL_VERIFICATION_TOKEN(UNAUTHORIZED, "유효하지 않은 이메일 인증 토큰입니다."),
 
     // Discord
-    DISCORD_INVALID_CODE_RANGE(HttpStatus.INTERNAL_SERVER_ERROR, "디스코드 인증코드는 4자리 숫자여야 합니다."),
+    DISCORD_INVALID_CODE_RANGE(INTERNAL_SERVER_ERROR, "디스코드 인증코드는 4자리 숫자여야 합니다."),
     DISCORD_CODE_NOT_FOUND(NOT_FOUND, "해당 유저네임으로 발급된 디스코드 인증코드가 존재하지 않습니다."),
     DISCORD_CODE_MISMATCH(CONFLICT, "디스코드 인증코드가 일치하지 않습니다."),
     DISCORD_ROLE_NOT_FOUND(NOT_FOUND, "디스코드 역할을 찾을 수 없습니다."),
-    DISCORD_NOT_SIGNUP(HttpStatus.INTERNAL_SERVER_ERROR, "아직 가입신청서를 작성하지 않은 회원입니다."),
-    DISCORD_NICKNAME_NOTNULL(HttpStatus.INTERNAL_SERVER_ERROR, "닉네임은 빈 값이 될 수 없습니다."),
+    DISCORD_NOT_SIGNUP(INTERNAL_SERVER_ERROR, "아직 가입신청서를 작성하지 않은 회원입니다."),
+    DISCORD_NICKNAME_NOTNULL(INTERNAL_SERVER_ERROR, "닉네임은 빈 값이 될 수 없습니다."),
     DISCORD_MEMBER_NOT_FOUND(NOT_FOUND, "디스코드 멤버를 찾을 수 없습니다."),
 
     // Membership
@@ -101,7 +101,7 @@ public enum ErrorCode {
     // Study
     STUDY_APPLICATION_START_DATE_INVALID(CONFLICT, "스터디 신청기간 시작일이 스터디 시작일보다 빠릅니다."),
     STUDY_MENTOR_IS_UNAUTHORIZED(CONFLICT, "게스트인 회원은 멘토로 지정할 수 없습니다."),
-    STUDY_ACCESS_NOT_ALLOWED(HttpStatus.FORBIDDEN, "관리자 또는 멘토 역할이 아닌 회원은 이 작업을 수행할 수 없습니다."),
+    STUDY_ACCESS_NOT_ALLOWED(FORBIDDEN, "관리자 또는 멘토 역할이 아닌 회원은 이 작업을 수행할 수 없습니다."),
     STUDY_MENTOR_INVALID(CONFLICT, "사용자가 해당 스터디의 멘토가 아닙니다."),
     ON_OFF_LINE_STUDY_TIME_IS_ESSENTIAL(CONFLICT, "온오프라인 스터디는 스터디 시간이 필요합니다."),
     STUDY_TIME_INVALID(CONFLICT, "스터디종료 시각이 스터디시작 시각보다 빠릅니다."),
@@ -110,7 +110,7 @@ public enum ErrorCode {
     STUDY_SESSION_NOT_FOUND(NOT_FOUND, "존재하지 않는 스터디 회차입니다."),
     STUDY_NOT_APPLICABLE(CONFLICT, "스터디 신청기간이 아닙니다."),
     STUDY_NOT_CANCELABLE_APPLICATION_PERIOD(CONFLICT, "스터디 신청기간이 아니라면 취소할 수 없습니다."),
-    STUDY_NOT_CREATABLE_NOT_LIVE(HttpStatus.INTERNAL_SERVER_ERROR, "온라인 및 오프라인 타입만 라이브 스터디로 생성할 수 있습니다."),
+    STUDY_NOT_CREATABLE_NOT_LIVE(INTERNAL_SERVER_ERROR, "온라인 및 오프라인 타입만 라이브 스터디로 생성할 수 있습니다."),
     STUDY_NOT_UPDATABLE_SESSION_NOT_FOUND(NOT_FOUND, "해당 스터디에 수정하려는 스터디 회차 ID가 존재하지 않습니다."),
     STUDY_NOT_UPDATABLE_LESSON_FIELD_NOT_NULL(CONFLICT, "과제 스터디는 수업 관련 필드를 null로 설정할 수 없습니다."),
     STUDY_NOT_UPDATABLE_LESSON_PERIOD_NOT_SEQUENTIAL(CONFLICT, "뒷 수업의 시작시간은 앞 수업의 시작시간보다 빠를 수 없습니다."),
@@ -160,8 +160,7 @@ public enum ErrorCode {
     ORDER_COMPLETED_PAID_NOT_FOUND(NOT_FOUND, "존재하지 않는 주문이거나, 완료되지 않은 유료 주문입니다."),
     ORDER_CANCEL_NOT_COMPLETED(CONFLICT, "완료되지 않은 주문은 취소할 수 없습니다."),
     ORDER_CANCEL_FREE_ORDER(CONFLICT, "무료 주문은 취소할 수 없습니다."),
-    ORDER_CANCEL_RESPONSE_NOT_FOUND(
-            HttpStatus.INTERNAL_SERVER_ERROR, "주문 결제가 취소되었지만, 응답에 취소 정보가 존재하지 않습니다. 관리자에게 문의 바랍니다."),
+    ORDER_CANCEL_RESPONSE_NOT_FOUND(INTERNAL_SERVER_ERROR, "주문 결제가 취소되었지만, 응답에 취소 정보가 존재하지 않습니다. 관리자에게 문의 바랍니다."),
     ORDER_FREE_FINAL_PAYMENT_NOT_ZERO(CONFLICT, "무료 주문의 최종결제금액은 0원이어야 합니다."),
 
     // Order - MoneyInfo
@@ -177,18 +176,17 @@ public enum ErrorCode {
     ASSIGNMENT_SUBMIT_DEADLINE_PASSED(CONFLICT, "과제 마감 기한이 지났습니다."),
 
     // AssignmentHistory (Assignment V2)
-    ASSIGNMENT_HISTORY_NOT_WITHIN_PERIOD(
-            HttpStatus.INTERNAL_SERVER_ERROR, "제출상태 변환 시 제출기한에 포함되지 않는 제출이력을 인자로 받을 수 없습니다."),
+    ASSIGNMENT_HISTORY_NOT_WITHIN_PERIOD(INTERNAL_SERVER_ERROR, "제출상태 변환 시 제출기한에 포함되지 않는 제출이력을 인자로 받을 수 없습니다."),
 
     // Github
     GITHUB_REPOSITORY_NOT_FOUND(NOT_FOUND, "존재하지 않는 레포지토리입니다."),
     GITHUB_CONTENT_NOT_FOUND(NOT_FOUND, "존재하지 않는 파일입니다."),
-    GITHUB_FILE_READ_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "깃허브 파일 읽기에 실패했습니다."),
-    GITHUB_COMMIT_DATE_FETCH_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "깃허브 커밋 날짜 조회에 실패했습니다."),
+    GITHUB_FILE_READ_FAILED(INTERNAL_SERVER_ERROR, "깃허브 파일 읽기에 실패했습니다."),
+    GITHUB_COMMIT_DATE_FETCH_FAILED(INTERNAL_SERVER_ERROR, "깃허브 커밋 날짜 조회에 실패했습니다."),
     GITHUB_USER_NOT_FOUND(NOT_FOUND, "존재하지 않는 깃허브 유저입니다."),
 
     // Excel
-    EXCEL_WORKSHEET_WRITE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "엑셀 워크시트 작성에 실패했습니다."),
+    EXCEL_WORKSHEET_WRITE_FAILED(INTERNAL_SERVER_ERROR, "엑셀 워크시트 작성에 실패했습니다."),
     ;
     private final HttpStatus status;
     private final String message;

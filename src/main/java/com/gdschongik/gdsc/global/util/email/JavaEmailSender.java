@@ -47,7 +47,7 @@ public class JavaEmailSender implements MailSender {
             message.setText(content, "utf-8", "html");
             message.setFrom(getInternetAddress());
         } catch (MessagingException e) {
-            throwCustomExceptionWithAdditionalMessage(ErrorCode.INTERNAL_SERVER_ERROR, e.getMessage());
+            throwCustomExceptionWithAdditionalMessage(ErrorCode.INTERNAL_ERROR, e.getMessage());
         }
     }
 
