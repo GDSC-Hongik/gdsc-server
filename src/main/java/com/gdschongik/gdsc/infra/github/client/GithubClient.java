@@ -15,7 +15,6 @@ import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Map;
-import lombok.RequiredArgsConstructor;
 import org.kohsuke.github.GHCommit;
 import org.kohsuke.github.GHContent;
 import org.kohsuke.github.GHRepository;
@@ -25,11 +24,17 @@ import org.kohsuke.github.connector.GitHubConnectorResponse;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
 public class GithubClient {
 
     private final GitHub github;
-    private final GitHubConnector gitHubConnector = GitHubConnector.DEFAULT;
+    private final ObjectMapper objectMapper;
+    private final GitHubConnector gitHubConnector;
+
+    public GithubClient(GitHub github, ObjectMapper objectMapper) {
+        this.github = github;
+        this.objectMapper = objectMapper;
+        this.gitHubConnector = GitHubConnector.DEFAULT;
+    }
 
     public GHRepository getRepository(String repo) {
         try {
@@ -53,7 +58,7 @@ public class GithubClient {
         try (GitHubConnectorResponse response = gitHubConnector.send(new GithubUserByOauthIdRequest(oauthId));
                 InputStream inputStream = response.bodyStream(); ) {
             // api가 login이라는 이름으로 사용자의 github handle을 반환합니다.
-            return (String) new ObjectMapper().readValue(inputStream, Map.class).get("login");
+            return (String) objectMapper.readValue(inputStream, Map.class).get("login");
         } catch (IOException e) {
             throw new CustomException(GITHUB_USER_NOT_FOUND);
         }
@@ -64,8 +69,7 @@ public class GithubClient {
         try (GitHubConnectorResponse response = gitHubConnector.send(new GithubUserByHandleRequest(githubHandle));
                 InputStream inputStream = response.bodyStream(); ) {
             // api가 id라는 이름으로 사용자의 oauth id를 반환합니다.
-            return String.valueOf(
-                    new ObjectMapper().readValue(inputStream, Map.class).get("id"));
+            return String.valueOf(objectMapper.readValue(inputStream, Map.class).get("id"));
         } catch (IOException e) {
             throw new CustomException(GITHUB_USER_NOT_FOUND);
         }
