@@ -1,6 +1,6 @@
 package com.gdschongik.gdsc.domain.study.application;
 
-import com.gdschongik.gdsc.domain.study.domain.StudyApplyCanceledEvent;
+import com.gdschongik.gdsc.domain.study.domain.event.StudyApplyCanceledEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

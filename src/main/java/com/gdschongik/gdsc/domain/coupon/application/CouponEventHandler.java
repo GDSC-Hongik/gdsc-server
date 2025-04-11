@@ -1,7 +1,7 @@
 package com.gdschongik.gdsc.domain.coupon.application;
 
-import com.gdschongik.gdsc.domain.study.domain.StudyHistoriesCompletedEvent;
-import com.gdschongik.gdsc.domain.study.domain.StudyHistoryCompletionWithdrawnEvent;
+import com.gdschongik.gdsc.domain.study.domain.event.StudyHistoriesCompletedEvent;
+import com.gdschongik.gdsc.domain.study.domain.event.StudyHistoryCompletionWithdrawnEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

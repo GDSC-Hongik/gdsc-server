@@ -67,6 +67,7 @@ public enum ErrorCode {
     DISCORD_NOT_SIGNUP(INTERNAL_SERVER_ERROR, "아직 가입신청서를 작성하지 않은 회원입니다."),
     DISCORD_NICKNAME_NOTNULL(INTERNAL_SERVER_ERROR, "닉네임은 빈 값이 될 수 없습니다."),
     DISCORD_MEMBER_NOT_FOUND(NOT_FOUND, "디스코드 멤버를 찾을 수 없습니다."),
+    DISCORD_CHANNEL_NOT_FOUND(NOT_FOUND, "디스코드 채널을 찾을 수 없습니다."),
 
     // Membership
     PAYMENT_NOT_SATISFIED(CONFLICT, "회비 납부가 완료되지 않았습니다."),

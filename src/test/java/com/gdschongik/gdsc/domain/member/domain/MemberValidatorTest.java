@@ -6,6 +6,7 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 
 import com.gdschongik.gdsc.domain.common.vo.Period;
+import com.gdschongik.gdsc.domain.member.domain.service.MemberValidator;
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.global.exception.CustomException;

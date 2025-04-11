@@ -4,6 +4,8 @@ import static com.gdschongik.gdsc.domain.study.domain.StudyHistoryStatus.*;
 
 import com.gdschongik.gdsc.domain.common.model.BaseEntity;
 import com.gdschongik.gdsc.domain.member.domain.Member;
+import com.gdschongik.gdsc.domain.study.domain.event.StudyApplyCanceledEvent;
+import com.gdschongik.gdsc.domain.study.domain.event.StudyHistoryCompletionWithdrawnEvent;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

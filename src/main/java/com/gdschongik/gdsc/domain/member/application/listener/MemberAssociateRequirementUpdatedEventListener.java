@@ -1,7 +1,7 @@
 package com.gdschongik.gdsc.domain.member.application.listener;
 
 import com.gdschongik.gdsc.domain.member.application.handler.MemberAssociateRequirementUpdatedEventHandler;
-import com.gdschongik.gdsc.domain.member.domain.MemberAssociateRequirementUpdatedEvent;
+import com.gdschongik.gdsc.domain.member.domain.event.MemberAssociateRequirementUpdatedEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;

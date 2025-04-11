@@ -8,6 +8,8 @@ import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.study.domain.StudyType;
 import com.gdschongik.gdsc.domain.studyv2.dao.*;
 import com.gdschongik.gdsc.domain.studyv2.domain.*;
+import com.gdschongik.gdsc.domain.studyv2.domain.StudyUpdateCommand;
+import com.gdschongik.gdsc.domain.studyv2.domain.service.StudyValidatorV2;
 import com.gdschongik.gdsc.domain.studyv2.dto.dto.StudyRoundStatisticsDto;
 import com.gdschongik.gdsc.domain.studyv2.dto.dto.StudyTaskDto;
 import com.gdschongik.gdsc.domain.studyv2.dto.request.StudyUpdateRequest;

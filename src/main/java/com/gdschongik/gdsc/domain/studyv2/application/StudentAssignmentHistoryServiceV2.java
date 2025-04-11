@@ -7,12 +7,12 @@ import com.gdschongik.gdsc.domain.study.domain.AssignmentSubmissionFetcher;
 import com.gdschongik.gdsc.domain.studyv2.dao.AssignmentHistoryV2Repository;
 import com.gdschongik.gdsc.domain.studyv2.dao.StudyHistoryV2Repository;
 import com.gdschongik.gdsc.domain.studyv2.dao.StudyV2Repository;
-import com.gdschongik.gdsc.domain.studyv2.domain.AssignmentHistoryGraderV2;
 import com.gdschongik.gdsc.domain.studyv2.domain.AssignmentHistoryV2;
-import com.gdschongik.gdsc.domain.studyv2.domain.AssignmentHistoryValidatorV2;
 import com.gdschongik.gdsc.domain.studyv2.domain.StudyHistoryV2;
 import com.gdschongik.gdsc.domain.studyv2.domain.StudySessionV2;
 import com.gdschongik.gdsc.domain.studyv2.domain.StudyV2;
+import com.gdschongik.gdsc.domain.studyv2.domain.service.AssignmentHistoryGraderV2;
+import com.gdschongik.gdsc.domain.studyv2.domain.service.AssignmentHistoryValidatorV2;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import com.gdschongik.gdsc.infra.github.client.GithubClient;
@@ -72,6 +72,9 @@ public class StudentAssignmentHistoryServiceV2 {
     private AssignmentHistoryV2 findOrCreate(Member student, StudySessionV2 studySession) {
         return assignmentHistoryV2Repository
                 .findByMemberAndStudySession(student, studySession)
-                .orElseGet(() -> AssignmentHistoryV2.create(studySession, student));
+                .orElseGet(() -> {
+                    AssignmentHistoryV2 assignmentHistoryV2 = AssignmentHistoryV2.create(studySession, student);
+                    return assignmentHistoryV2Repository.save(assignmentHistoryV2);
+                });
     }
 }

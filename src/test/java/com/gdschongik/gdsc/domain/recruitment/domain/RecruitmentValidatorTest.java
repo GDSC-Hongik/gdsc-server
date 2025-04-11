@@ -3,6 +3,7 @@ package com.gdschongik.gdsc.domain.recruitment.domain;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 
+import com.gdschongik.gdsc.domain.recruitment.domain.service.RecruitmentValidator;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import org.junit.jupiter.api.Test;
 

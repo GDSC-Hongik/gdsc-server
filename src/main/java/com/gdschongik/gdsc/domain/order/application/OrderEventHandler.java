@@ -1,9 +1,9 @@
 package com.gdschongik.gdsc.domain.order.application;
 
 import com.gdschongik.gdsc.domain.membership.application.MembershipService;
-import com.gdschongik.gdsc.domain.order.domain.OrderCanceledEvent;
-import com.gdschongik.gdsc.domain.order.domain.OrderCompletedEvent;
-import com.gdschongik.gdsc.domain.order.domain.OrderCreatedEvent;
+import com.gdschongik.gdsc.domain.order.domain.event.OrderCanceledEvent;
+import com.gdschongik.gdsc.domain.order.domain.event.OrderCompletedEvent;
+import com.gdschongik.gdsc.domain.order.domain.event.OrderCreatedEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

@@ -21,6 +21,7 @@ public enum AssignmentHistoryStatus {
 
     /**
      * 과제 제출 상태를 반환합니다. 제출기한 이내에 있는 제츌이력만 인자로 받습니다.
+     * 제출기한이 설정되지 않았을 경우, 판정 대상에서 제외합니다.
      * 제출기한에 포함되지 않는 제출이력은 제출기한 변경 전 제출이력이므로, 판정 대상에서 제외합니다.
      *
      * @throws CustomException 제출기한에 포함되지 않는 제출이력을 인자로 받았을 때
@@ -28,6 +29,13 @@ public enum AssignmentHistoryStatus {
     public static AssignmentHistoryStatus of(
             @Nullable AssignmentHistoryV2 assignmentHistory, StudySessionV2 studySession, LocalDateTime now)
             throws CustomException {
+
+        // 제출기한이 설정되지 않았을 경우
+        if (studySession.getAssignmentPeriod() == null
+                || studySession.getAssignmentPeriod().isEmpty()) {
+            return BEFORE_SUBMISSION;
+        }
+
         validateCommittedAtWithinAssignmentPeriod(assignmentHistory, studySession);
 
         Period assignmentPeriod = studySession.getAssignmentPeriod();

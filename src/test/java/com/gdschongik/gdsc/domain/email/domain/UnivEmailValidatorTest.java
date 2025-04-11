@@ -3,6 +3,7 @@ package com.gdschongik.gdsc.domain.email.domain;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 
+import com.gdschongik.gdsc.domain.email.domain.service.UnivEmailValidator;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.exception.ErrorCode;
 import org.junit.jupiter.api.DisplayName;

@@ -9,7 +9,7 @@ import com.gdschongik.gdsc.domain.study.dao.StudyHistoryRepository;
 import com.gdschongik.gdsc.domain.study.dao.StudyRepository;
 import com.gdschongik.gdsc.domain.study.domain.Study;
 import com.gdschongik.gdsc.domain.study.domain.StudyAnnouncement;
-import com.gdschongik.gdsc.domain.study.domain.StudyValidator;
+import com.gdschongik.gdsc.domain.study.domain.service.StudyValidator;
 import com.gdschongik.gdsc.domain.study.dto.response.CommonStudyResponse;
 import com.gdschongik.gdsc.domain.study.dto.response.StudyAnnouncementResponse;
 import com.gdschongik.gdsc.global.exception.CustomException;
