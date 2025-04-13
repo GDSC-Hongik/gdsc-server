@@ -82,6 +82,20 @@ public class WebSecurityConfig {
 
     @Bean
     @Order(2)
+    public SecurityFilterChain basicAuthFilterChain(HttpSecurity http) throws Exception {
+        defaultFilterChain(http);
+
+        http.securityMatcher("/study-announcements/webhook")
+                .oauth2Login(AbstractHttpConfigurer::disable)
+                .httpBasic(withDefaults());
+
+        http.authorizeHttpRequests(authorize -> authorize.anyRequest().hasRole("WEBHOOK"));
+
+        return http.build();
+    }
+
+    @Bean
+    @Order(3)
     @ConditionalOnProfile(PROD)
     public SecurityFilterChain prometheusFilterChain(HttpSecurity http) throws Exception {
         defaultFilterChain(http);
@@ -134,7 +148,7 @@ public class WebSecurityConfig {
     public InMemoryUserDetailsManager inMemoryUserDetailsManager() {
         UserDetails user = User.withUsername(basicAuthProperty.getUsername())
                 .password(passwordEncoder().encode(basicAuthProperty.getPassword()))
-                .roles("SWAGGER")
+                .roles("SWAGGER", "WEBHOOK")
                 .build();
         return new InMemoryUserDetailsManager(user);
     }
