@@ -47,7 +47,7 @@ public class GithubUserByHandleRequest implements GitHubConnectorRequest {
         try {
             return new URL(GITHUB_USER_BY_HANDLE_API_URL.formatted(githubHandle));
         } catch (MalformedURLException e) {
-            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
+            throw new CustomException(ErrorCode.INTERNAL_ERROR);
         }
     }
 

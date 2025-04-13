@@ -30,8 +30,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleException(Exception e) {
         log.error("INTERNAL_SERVER_ERROR : {}", e.getMessage());
-        return ResponseEntity.status(ErrorCode.INTERNAL_SERVER_ERROR.getStatus())
-                .body(ErrorResponse.of(ErrorCode.INTERNAL_SERVER_ERROR));
+        return ResponseEntity.status(ErrorCode.INTERNAL_ERROR.getStatus())
+                .body(ErrorResponse.of(ErrorCode.INTERNAL_ERROR));
     }
 
     @Override
