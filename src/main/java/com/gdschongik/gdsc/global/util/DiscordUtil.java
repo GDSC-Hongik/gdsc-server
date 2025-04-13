@@ -84,7 +84,6 @@ public class DiscordUtil {
             String title,
             String link,
             LocalDateTime createdAt) {
-
         TextChannel channel = Optional.ofNullable(jda.getTextChannelById(channelId))
                 .orElseThrow(() -> new CustomException(DISCORD_CHANNEL_NOT_FOUND));
 
