@@ -13,9 +13,9 @@ import lombok.RequiredArgsConstructor;
 import org.kohsuke.github.connector.GitHubConnectorRequest;
 
 @RequiredArgsConstructor
-public class GithubUserRequest implements GitHubConnectorRequest {
+public class GithubUserByHandleRequest implements GitHubConnectorRequest {
 
-    private final String oauthId;
+    private final String githubHandle;
 
     @Override
     public String method() {
@@ -45,9 +45,9 @@ public class GithubUserRequest implements GitHubConnectorRequest {
     @Override
     public URL url() {
         try {
-            return new URL(GITHUB_USER_API_URL.formatted(oauthId));
+            return new URL(GITHUB_USER_BY_HANDLE_API_URL.formatted(githubHandle));
         } catch (MalformedURLException e) {
-            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
+            throw new CustomException(ErrorCode.INTERNAL_ERROR);
         }
     }
 

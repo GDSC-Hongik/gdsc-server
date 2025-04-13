@@ -4,7 +4,11 @@ import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.property.DiscordProperty;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -17,6 +21,8 @@ import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 
 @RequiredArgsConstructor
 public class DiscordUtil {
+
+    public static final String IMAGE_GENERATOR_URL = "https://image.wawoo.dev/api/v1/study-announcement";
 
     private final JDA jda;
     private final DiscordProperty discordProperty;
@@ -78,20 +84,74 @@ public class DiscordUtil {
             String title,
             String link,
             LocalDateTime createdAt) {
-
         TextChannel channel = Optional.ofNullable(jda.getTextChannelById(channelId))
                 .orElseThrow(() -> new CustomException(DISCORD_CHANNEL_NOT_FOUND));
 
         String studyRoleMention = findRoleById(discordRoleId).getAsMention();
+        String theme = determineThemeByStudyName(studyName);
 
         MessageEmbed embed = new EmbedBuilder()
-                .setTitle("[" + title + "]", link)
+                .setTitle("[" + title + "]")
                 .appendDescription(studyRoleMention + "\n\n")
                 .appendDescription(studyName + " 공지가 업로드 되었어요.\n")
                 .appendDescription("공지는 [와우클래스](<https://study.wawoo.dev/landing>)에서도 확인 가능해요.\n")
-                .setTimestamp(createdAt)
+                .appendDescription(String.format("## [► 공지 확인하러 가기](<%s>)\n", link))
+                .setTimestamp(convertKstToUtc(createdAt))
+                .setImage(buildImageUrl(studyName, title, createdAt, theme))
                 .build();
 
         channel.sendMessageEmbeds(embed).queue();
+    }
+
+    private Instant convertKstToUtc(LocalDateTime kstCreatedAt) {
+        return kstCreatedAt
+                .atZone(ZoneId.of("Asia/Seoul"))
+                .withZoneSameInstant(ZoneId.of("UTC"))
+                .toInstant();
+    }
+
+    private String determineThemeByStudyName(String studyName) {
+        if (studyName.contains("프론트엔드")) {
+            return "react";
+        }
+        if (studyName.contains("백엔드")) {
+            return "spring";
+        }
+        if (studyName.contains("인공지능")) {
+            return "ai";
+        }
+
+        String[] availableThemes = {"indigo", "rose", "emerald", "amber"};
+
+        int hash = 0;
+        for (int i = 0; i < studyName.length(); i++) {
+            hash = (hash + studyName.charAt(i)) % 1000;
+        }
+
+        int themeIndex = hash % availableThemes.length;
+        return availableThemes[themeIndex];
+    }
+
+    private String buildImageUrl(String studyName, String title, LocalDateTime dateTime, String theme) {
+        String encodedTitle = URLEncoder.encode(title, StandardCharsets.UTF_8);
+        String encodedStudy = URLEncoder.encode(studyName, StandardCharsets.UTF_8);
+
+        StringBuilder urlBuilder = new StringBuilder(IMAGE_GENERATOR_URL)
+                .append("?title=")
+                .append(encodedTitle)
+                .append("&study=")
+                .append(encodedStudy);
+
+        if (dateTime != null) {
+            String encodedDate = URLEncoder.encode(dateTime.toString(), StandardCharsets.UTF_8);
+            urlBuilder.append("&date=").append(encodedDate);
+        }
+
+        if (theme != null && !theme.isEmpty()) {
+            String encodedTheme = URLEncoder.encode(theme, StandardCharsets.UTF_8);
+            urlBuilder.append("&theme=").append(encodedTheme);
+        }
+
+        return urlBuilder.toString();
     }
 }

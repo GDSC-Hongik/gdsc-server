@@ -28,7 +28,7 @@ public class TestMemberService {
         String githubOauthId = getGithubOauthId(githubHandle);
 
         if (memberRepository.findByOauthId(githubOauthId).isPresent()) {
-            throw new CustomException(INTERNAL_SERVER_ERROR);
+            throw new CustomException(INTERNAL_ERROR);
         }
 
         Member guestMember = Member.createGuest(githubOauthId);
@@ -42,7 +42,7 @@ public class TestMemberService {
                         .retrieve()
                         .body(GithubUser.class))
                 .map(GithubUser::id)
-                .orElseThrow(() -> new CustomException(INTERNAL_SERVER_ERROR));
+                .orElseThrow(() -> new CustomException(INTERNAL_ERROR));
     }
 
     private record GithubUser(String id) {}
