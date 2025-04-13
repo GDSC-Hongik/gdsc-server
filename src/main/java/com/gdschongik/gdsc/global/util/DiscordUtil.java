@@ -89,8 +89,7 @@ public class DiscordUtil {
                 .orElseThrow(() -> new CustomException(DISCORD_CHANNEL_NOT_FOUND));
 
         String studyRoleMention = findRoleById(discordRoleId).getAsMention();
-
-        String theme = "indigo"; // 디폴트 값
+        String theme = determineThemeByStudyName(studyName);
 
         MessageEmbed embed = new EmbedBuilder()
                 .setTitle("[" + title + "]")
@@ -110,6 +109,28 @@ public class DiscordUtil {
                 .atZone(ZoneId.of("Asia/Seoul"))
                 .withZoneSameInstant(ZoneId.of("UTC"))
                 .toInstant();
+    }
+
+    private String determineThemeByStudyName(String studyName) {
+        if (studyName.contains("프론트엔드")) {
+            return "react";
+        }
+        if (studyName.contains("백엔드")) {
+            return "spring";
+        }
+        if (studyName.contains("인공지능")) {
+            return "ai";
+        }
+
+        String[] availableThemes = {"indigo", "rose", "emerald", "amber"};
+
+        int hash = 0;
+        for (int i = 0; i < studyName.length(); i++) {
+            hash = (hash + studyName.charAt(i)) % 1000;
+        }
+
+        int themeIndex = hash % availableThemes.length;
+        return availableThemes[themeIndex];
     }
 
     private String buildImageUrl(String studyName, String title, LocalDateTime dateTime, String theme) {
