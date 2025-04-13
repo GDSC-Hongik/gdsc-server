@@ -10,15 +10,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "Study Announcement Webhook", description = "스터디 공지 Webhook API입니다.")
+@Tag(name = "Study Webhook", description = "스터디 웹훅 API입니다.")
 @RestController
-@RequestMapping("/study-announcements/webhook")
+@RequestMapping("/webhook/study")
 @RequiredArgsConstructor
-public class StudyAnnouncementWebhookController {
+public class StudyWebhookController {
 
-    @Operation(summary = "스터디 공지 Webhook", description = "스터디 공지 Webhook API입니다.")
+    @Operation(summary = "스터디 노션 웹훅 처리", description = "공지 및 과제 발행 요청 웹훅을 처리합니다.")
     @PostMapping
-    public ResponseEntity<Void> getStudyAnnouncementWebhook(@RequestBody NotionWebhookRequest request) {
+    public ResponseEntity<Void> handleStudyWebhook(@RequestBody NotionWebhookRequest request) {
         System.out.println("request = " + request);
         return ResponseEntity.ok().build();
     }

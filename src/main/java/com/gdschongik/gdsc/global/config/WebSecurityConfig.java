@@ -85,7 +85,7 @@ public class WebSecurityConfig {
     public SecurityFilterChain basicAuthFilterChain(HttpSecurity http) throws Exception {
         defaultFilterChain(http);
 
-        http.securityMatcher("/study-announcements/webhook")
+        http.securityMatcher("/webhook/**")
                 .oauth2Login(AbstractHttpConfigurer::disable)
                 .httpBasic(withDefaults());
 
