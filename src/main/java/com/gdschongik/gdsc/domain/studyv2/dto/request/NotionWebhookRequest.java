@@ -36,7 +36,13 @@ public record NotionWebhookRequest(Source source, Data data) {
 
         public record Parent(String type, @JsonProperty("database_id") String databaseId) {}
 
-        public record Properties(@JsonProperty("clean-url") RichTextProperty cleanUrl, Study study, Title title) {
+        public record Properties(
+                @JsonProperty("clean-url") RichTextProperty cleanUrl,
+                Title title,
+                Semester semester,
+                Study study,
+                Type type) {
+
             public record RichTextProperty(String id, String type, @JsonProperty("rich_text") List<RichText> richText) {
                 public record RichText(
                         String type,
@@ -56,7 +62,15 @@ public record NotionWebhookRequest(Source source, Data data) {
                 }
             }
 
+            public record Semester(String id, String type, Select select) {
+                public record Select(String id, String name, String color) {}
+            }
+
             public record Study(String id, String type, Select select) {
+                public record Select(String id, String name, String color) {}
+            }
+
+            public record Type(String id, String type, Select select) {
                 public record Select(String id, String name, String color) {}
             }
 
