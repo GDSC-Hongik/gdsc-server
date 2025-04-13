@@ -1,11 +1,36 @@
 package com.gdschongik.gdsc.domain.studyv2.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gdschongik.gdsc.domain.common.model.SemesterType;
+import com.gdschongik.gdsc.domain.common.vo.Semester;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
 public record NotionWebhookRequest(Source source, Data data) {
+
+    public Semester getSemester() {
+        String rawSemester = data.properties.semester.select.name; // ex: "2025-1"
+        String[] semesterParts = rawSemester.split("-");
+
+        int academicYear = Integer.parseInt(semesterParts[0]);
+        SemesterType semesterType = semesterParts[1].equals("1") ? SemesterType.FIRST : SemesterType.SECOND;
+
+        return Semester.of(academicYear, semesterType);
+    }
+
+    public String getTitle() {
+        return data.properties.title.title.get(0).plainText;
+    }
+
+    public String getStudyName() {
+        return data.properties.study.select.name;
+    }
+
+    public String getCleanUrl() {
+        return data.properties.cleanUrl.richText.get(0).plainText; // ex: "/25-1/beginner-study/notice/1"
+    }
+
     public record Source(
             String type,
             @JsonProperty("automation_id") UUID automationId,
