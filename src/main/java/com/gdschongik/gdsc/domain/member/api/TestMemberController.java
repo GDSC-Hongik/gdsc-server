@@ -19,8 +19,6 @@ import org.springframework.web.bind.annotation.*;
 public class TestMemberController {
 
     private final TestMemberService testMemberService;
-    private final OnboardingMemberService onboardingMemberService;
-    private final AdminMemberService adminMemberService;
 
     @Operation(summary = "게스트 회원 생성", description = "테스트용 API입니다. 깃허브 핸들명을 입력받아 임시 회원을 생성합니다.")
     @PostMapping
@@ -33,14 +31,14 @@ public class TestMemberController {
     @PostMapping("/token/github-handle")
     public ResponseEntity<MemberTokenResponse> createTemporaryTokenByGithubHandle(
             @Valid @RequestBody MemberTokenByGithubHandleRequest request) {
-        var response = onboardingMemberService.createTemporaryTokenByGithubHandle(request);
+        var response = testMemberService.createTemporaryTokenByGithubHandle(request);
         return ResponseEntity.ok().body(response);
     }
 
     @Operation(summary = "게스트로 강등", description = "테스트용 API입니다. 현재 멤버 역할을 게스트로 강등시키기 위해 사용합니다.")
     @PatchMapping("/demotion")
     public ResponseEntity<Void> demoteToGuest() {
-        adminMemberService.demoteToGuestAndRegularRequirementToUnsatisfied();
+        testMemberService.demoteToGuestAndRegularRequirementToUnsatisfied();
         return ResponseEntity.ok().build();
     }
 }
