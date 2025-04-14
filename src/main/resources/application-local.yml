@@ -15,9 +15,9 @@ spring:
 
 logging:
   level:
-    com.gdschongik.gdsc.domain.*.api.*: debug
-    com.gdschongik.gdsc.infra.feign: debug
-    org.hibernate.orm.jdbc.bind: trace
-    org.hibernate.SQL: debug
-    org.kohsuke.github: debug
-    org.hibernate.stat: info
+    com.gdschongik.gdsc.domain.*.api.*: ${LOG_LEVEL_API:debug}
+    com.gdschongik.gdsc.infra.feign: ${LOG_LEVEL_FEIGN:debug}
+    org.hibernate.orm.jdbc.bind: ${LOG_LEVEL_HIBERNATE_BIND:trace}
+    org.hibernate.SQL: ${LOG_LEVEL_HIBERNATE_SQL:debug}
+    org.kohsuke.github: ${LOG_LEVEL_KOHSUKE_GITHUB:debug}
+    org.hibernate.stat: ${LOG_LEVEL_HIBERNATE_STAT:info}
