@@ -3,6 +3,8 @@ package com.gdschongik.gdsc.domain.studyv2.dto.request;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gdschongik.gdsc.domain.common.model.SemesterType;
 import com.gdschongik.gdsc.domain.common.vo.Semester;
+import com.gdschongik.gdsc.global.exception.CustomException;
+import com.gdschongik.gdsc.global.exception.ErrorCode;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -14,7 +16,14 @@ public record NotionWebhookRequest(Source source, Data data) {
         String[] semesterParts = rawSemester.split("-");
 
         int academicYear = Integer.parseInt(semesterParts[0]);
-        SemesterType semesterType = semesterParts[1].equals("1") ? SemesterType.FIRST : SemesterType.SECOND;
+        String rawSemesterType = semesterParts[1];
+
+        SemesterType semesterType;
+        switch (rawSemesterType) {
+            case "1" -> semesterType = SemesterType.FIRST;
+            case "2" -> semesterType = SemesterType.SECOND;
+            default -> throw new CustomException(ErrorCode.METHOD_ARGUMENT_NOT_VALID);
+        }
 
         return Semester.of(academicYear, semesterType);
     }
