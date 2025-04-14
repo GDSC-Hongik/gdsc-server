@@ -55,6 +55,7 @@ public class UrlConstant {
 
     // 기타
     public static final String ROOT_DOMAIN = "wawoo.dev";
+    public static final String STUDY_ANNOUNCEMENT_DOMAIN = "https://www.gdschongik.com";
 
     // 로깅 제외 URL
     public static List<String> getLogExcludeUrlList() {
