@@ -6,7 +6,6 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: ${SHOW_SQL:true}
     properties:
       hibernate:
         format_sql: ${FORMAT_SQL:true}

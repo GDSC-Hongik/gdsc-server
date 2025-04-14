@@ -3,9 +3,6 @@
     <include resource="org/springframework/boot/logging/logback/defaults.xml" />
     <timestamp key="BY_DATE" datePattern="yyyy-MM-dd" />
 
-    <!-- Common log level settings -->
-    <logger name="com.gdschongik.gdsc.domain.*.api.*" level="DEBUG" />
-
     <springProfile name="local">
         <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
 
