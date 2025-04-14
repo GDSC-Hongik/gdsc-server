@@ -1,5 +1,6 @@
 package com.gdschongik.gdsc.domain.member.application;
 
+import static com.gdschongik.gdsc.global.common.constant.EnvironmentConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
 import com.gdschongik.gdsc.domain.auth.application.JwtService;
@@ -10,6 +11,7 @@ import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberTokenByGithubHandleRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberTokenResponse;
 import com.gdschongik.gdsc.domain.membership.application.MembershipService;
+import com.gdschongik.gdsc.global.annotation.ConditionalOnProfile;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.security.MemberAuthInfo;
 import com.gdschongik.gdsc.global.util.MemberUtil;
@@ -22,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@ConditionalOnProfile({LOCAL, DEV})
 public class TestMemberService {
 
     private final MembershipService membershipService;

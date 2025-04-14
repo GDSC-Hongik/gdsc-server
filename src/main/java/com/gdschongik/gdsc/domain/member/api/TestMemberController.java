@@ -1,10 +1,11 @@
 package com.gdschongik.gdsc.domain.member.api;
 
-import com.gdschongik.gdsc.domain.member.application.AdminMemberService;
-import com.gdschongik.gdsc.domain.member.application.OnboardingMemberService;
+import static com.gdschongik.gdsc.global.common.constant.EnvironmentConstant.*;
+
 import com.gdschongik.gdsc.domain.member.application.TestMemberService;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberTokenByGithubHandleRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberTokenResponse;
+import com.gdschongik.gdsc.global.annotation.ConditionalOnProfile;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/test/members")
 @RequiredArgsConstructor
+@ConditionalOnProfile({LOCAL, DEV})
 public class TestMemberController {
 
     private final TestMemberService testMemberService;
