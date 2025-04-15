@@ -3,14 +3,11 @@
     <include resource="org/springframework/boot/logging/logback/defaults.xml" />
     <timestamp key="BY_DATE" datePattern="yyyy-MM-dd" />
 
-    <!-- Common log level settings -->
-    <logger name="com.gdschongik.gdsc.domain.*.api.*" level="DEBUG" />
-
     <springProfile name="local">
         <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
 
-        <logger name="org.springframework.orm.jpa" level="DEBUG" />
-        <logger name="org.springframework.transaction" level="DEBUG" />
+        <logger name="org.springframework.orm.jpa" level="${LOG_LEVEL_JPA:DEBUG}" />
+        <logger name="org.springframework.transaction" level="${LOG_LEVEL_TRANSACTION:DEBUG}" />
         <logger name="org.springframework.web" level="DEBUG" />
 
         <root level="INFO">
