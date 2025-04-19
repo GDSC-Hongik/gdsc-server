@@ -98,6 +98,9 @@ public class StudyV2 extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member mentor;
 
+    @Comment("과제 최소 글자수")
+    private Integer minAssignmentContentLength;
+
     @OrderBy("position asc")
     @OneToMany(mappedBy = "study", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StudySessionV2> studySessions = new ArrayList<>();
@@ -116,7 +119,8 @@ public class StudyV2 extends BaseEntity {
             Period applicationPeriod,
             String discordChannelId,
             String discordRoleId,
-            Member mentor) {
+            Member mentor,
+            Integer minAssignmentContentLength) {
         this.type = type;
         this.title = title;
         this.description = description;
@@ -130,6 +134,7 @@ public class StudyV2 extends BaseEntity {
         this.discordChannelId = discordChannelId;
         this.discordRoleId = discordRoleId;
         this.mentor = mentor;
+        this.minAssignmentContentLength = minAssignmentContentLength;
     }
 
     /**
