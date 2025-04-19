@@ -14,6 +14,7 @@ public record StudyUpdateRequest(
         DayOfWeek dayOfWeek,
         LocalTime startTime,
         LocalTime endTime,
+        Integer minAssignmentContentLength,
         List<StudySessionUpdateDto> studySessions) {
     public record StudySessionUpdateDto(
             Long studySessionId,
@@ -37,6 +38,13 @@ public record StudyUpdateRequest(
                 .toList();
 
         return new StudyUpdateCommand(
-                title, description, descriptionNotionLink, dayOfWeek, startTime, endTime, sessionCommands);
+                title,
+                description,
+                descriptionNotionLink,
+                dayOfWeek,
+                startTime,
+                endTime,
+                minAssignmentContentLength,
+                sessionCommands);
     }
 }

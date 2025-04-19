@@ -236,6 +236,7 @@ public class StudyV2 extends BaseEntity {
         this.dayOfWeek = command.dayOfWeek();
         this.startTime = command.startTime();
         this.endTime = command.endTime();
+        this.minAssignmentContentLength = command.minAssignmentContentLength();
 
         command.studySessions().forEach(sessionCommand -> {
             getStudySessionForUpdate(sessionCommand.studySessionId()).update(sessionCommand);
