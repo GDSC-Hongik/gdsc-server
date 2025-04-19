@@ -151,7 +151,8 @@ public class StudyV2 extends BaseEntity {
             Period applicationPeriod,
             String discordChannelId,
             String discordRoleId,
-            Member mentor) {
+            Member mentor,
+            Integer minAssignmentContentLength) {
         validateLiveStudy(type);
         return StudyV2.builder()
                 .type(type)
@@ -165,6 +166,7 @@ public class StudyV2 extends BaseEntity {
                 .discordChannelId(discordChannelId)
                 .discordRoleId(discordRoleId)
                 .mentor(mentor)
+                .minAssignmentContentLength(minAssignmentContentLength)
                 .build();
     }
 
@@ -184,7 +186,8 @@ public class StudyV2 extends BaseEntity {
             Period applicationPeriod,
             String discordChannelId,
             String discordRoleId,
-            Member mentor) {
+            Member mentor,
+            Integer minAssignmentContentLength) {
         return StudyV2.builder()
                 .type(StudyType.ASSIGNMENT)
                 .title(title)
@@ -194,6 +197,7 @@ public class StudyV2 extends BaseEntity {
                 .discordChannelId(discordChannelId)
                 .discordRoleId(discordRoleId)
                 .mentor(mentor)
+                .minAssignmentContentLength(minAssignmentContentLength)
                 .build();
     }
 
