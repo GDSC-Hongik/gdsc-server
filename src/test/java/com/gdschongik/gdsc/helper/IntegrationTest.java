@@ -317,7 +317,8 @@ public abstract class IntegrationTest {
                 STUDY_DISCORD_CHANNEL_ID,
                 STUDY_DISCORD_ROLE_ID,
                 mentor,
-                () -> "0000");
+                () -> "0000",
+                MIN_ASSIGNMENT_CONTENT_LENGTH);
 
         return studyV2Repository.save(study);
     }

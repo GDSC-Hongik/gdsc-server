@@ -40,7 +40,8 @@ class StudyFactoryTest {
                 STUDY_DISCORD_CHANNEL_ID,
                 STUDY_DISCORD_ROLE_ID,
                 mentor,
-                generator);
+                generator,
+                MIN_ASSIGNMENT_CONTENT_LENGTH);
 
         // then
         assertThat(study.getStudySessions()).hasSize(8);
@@ -64,7 +65,8 @@ class StudyFactoryTest {
                 STUDY_DISCORD_CHANNEL_ID,
                 STUDY_DISCORD_ROLE_ID,
                 mentor,
-                null);
+                null,
+                MIN_ASSIGNMENT_CONTENT_LENGTH);
 
         // then
         assertThat(study.getDayOfWeek()).isNull();
@@ -92,7 +94,8 @@ class StudyFactoryTest {
                 STUDY_DISCORD_CHANNEL_ID,
                 STUDY_DISCORD_ROLE_ID,
                 mentor,
-                generator);
+                generator,
+                MIN_ASSIGNMENT_CONTENT_LENGTH);
 
         // then
         assertThat(study.getStudySessions())
@@ -119,7 +122,8 @@ class StudyFactoryTest {
                 STUDY_DISCORD_CHANNEL_ID,
                 STUDY_DISCORD_ROLE_ID,
                 mentor,
-                generator);
+                generator,
+                MIN_ASSIGNMENT_CONTENT_LENGTH);
 
         // then
         assertThat(study.getStudySessions())
@@ -145,7 +149,8 @@ class StudyFactoryTest {
                 STUDY_DISCORD_CHANNEL_ID,
                 STUDY_DISCORD_ROLE_ID,
                 mentor,
-                null);
+                null,
+                MIN_ASSIGNMENT_CONTENT_LENGTH);
 
         // then
         assertThat(study.getStudySessions())

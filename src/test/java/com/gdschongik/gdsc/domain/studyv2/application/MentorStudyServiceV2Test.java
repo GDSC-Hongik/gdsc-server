@@ -1,5 +1,6 @@
 package com.gdschongik.gdsc.domain.studyv2.application;
 
+import static com.gdschongik.gdsc.global.common.constant.StudyConstant.MIN_ASSIGNMENT_CONTENT_LENGTH;
 import static org.assertj.core.api.Assertions.*;
 
 import com.gdschongik.gdsc.domain.member.domain.Member;
@@ -36,6 +37,7 @@ class MentorStudyServiceV2Test extends IntegrationTest {
                     null,
                     null,
                     null,
+                    MIN_ASSIGNMENT_CONTENT_LENGTH,
                     List.of(new StudyUpdateRequest.StudySessionUpdateDto(
                             1L, "수정된 1회차 스터디 제목", null, null, null, null, null)));
 
