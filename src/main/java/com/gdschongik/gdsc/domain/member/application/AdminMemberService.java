@@ -10,15 +10,12 @@ import com.gdschongik.gdsc.domain.member.dto.request.MemberDemoteRequest;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberQueryOption;
 import com.gdschongik.gdsc.domain.member.dto.request.MemberUpdateRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.AdminMemberResponse;
-import com.gdschongik.gdsc.domain.membership.application.MembershipService;
 import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRepository;
 import com.gdschongik.gdsc.domain.recruitment.dao.RecruitmentRoundRepository;
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.global.exception.CustomException;
-import com.gdschongik.gdsc.global.util.EnvironmentUtil;
 import com.gdschongik.gdsc.global.util.ExcelUtil;
-import com.gdschongik.gdsc.global.util.MemberUtil;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -39,9 +36,6 @@ public class AdminMemberService {
     private final RecruitmentRepository recruitmentRepository;
     private final RecruitmentRoundRepository recruitmentRoundRepository;
     private final MemberValidator memberValidator;
-    private final MemberUtil memberUtil;
-    private final EnvironmentUtil environmentUtil;
-    private final MembershipService membershipService;
 
     public Page<AdminMemberResponse> searchMembers(MemberQueryOption queryOption, Pageable pageable) {
         Page<Member> members = memberRepository.searchMembers(queryOption, pageable);
@@ -91,17 +85,6 @@ public class AdminMemberService {
     }
 
     @Transactional
-    public void demoteToGuestAndRegularRequirementToUnsatisfied() {
-        validateProfile();
-        Member member = memberUtil.getCurrentMember();
-        member.demoteToGuest();
-
-        membershipService.deleteMembership(member);
-
-        log.info("[AdminMemberService] 게스트로 강등: demotedMemberId={}", member.getId());
-    }
-
-    @Transactional
     public void advanceAllAdvanceFailedMembersToRegular(String discordUsername) {
         Member currentMember = memberRepository
                 .findByDiscordUsername(discordUsername)
@@ -138,11 +121,5 @@ public class AdminMemberService {
         memberRepository.save(memberToAssign);
 
         log.info("[AdminMemberService] 어드민 권한 부여: memberId={}", memberToAssign.getId());
-    }
-
-    private void validateProfile() {
-        if (!environmentUtil.isDevAndLocalProfile()) {
-            throw new CustomException(FORBIDDEN_ACCESS);
-        }
     }
 }
