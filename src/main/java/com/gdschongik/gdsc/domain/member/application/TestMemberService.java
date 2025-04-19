@@ -64,6 +64,6 @@ public class TestMemberService {
 
         membershipService.deleteMembership(member);
 
-        log.info("[AdminMemberService] 게스트로 강등: demotedMemberId={}", member.getId());
+        log.info("[TestMemberService] 게스트로 강등: demotedMemberId={}", member.getId());
     }
 }
