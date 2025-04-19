@@ -1,5 +1,6 @@
 package com.gdschongik.gdsc.domain.studyv2.domain;
 
+import static com.gdschongik.gdsc.global.common.constant.StudyConstant.MIN_ASSIGNMENT_CONTENT_LENGTH;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 
@@ -40,6 +41,7 @@ class StudyV2Test {
                     null,
                     null,
                     null,
+                    MIN_ASSIGNMENT_CONTENT_LENGTH,
                     List.of(new StudyUpdateCommand.Session(
                             1L, updatedFirstSessionTitle, null, null, null, null, null)));
 
@@ -68,6 +70,7 @@ class StudyV2Test {
                     null,
                     null,
                     null,
+                    MIN_ASSIGNMENT_CONTENT_LENGTH,
                     List.of(new StudyUpdateCommand.Session(1L, null, null, lessonPeriodToUpdate, null, null, null)));
 
             // when & then
@@ -88,6 +91,7 @@ class StudyV2Test {
                     null,
                     null,
                     null,
+                    MIN_ASSIGNMENT_CONTENT_LENGTH,
                     List.of(new StudyUpdateCommand.Session(9999L, null, null, null, null, null, null)));
 
             // when & then
@@ -116,7 +120,7 @@ class StudyV2Test {
             List<StudyUpdateCommand.Session> sessions = IntStream.range(0, dates.length)
                     .mapToObj(i -> createSession((long) (i + 1), dates[i]))
                     .toList();
-            return new StudyUpdateCommand(null, null, null, null, null, null, sessions);
+            return new StudyUpdateCommand(null, null, null, null, null, null, MIN_ASSIGNMENT_CONTENT_LENGTH, sessions);
         }
 
         @Test

@@ -147,7 +147,8 @@ public class FixtureHelper {
                 STUDY_DISCORD_CHANNEL_ID,
                 STUDY_DISCORD_ROLE_ID,
                 createMentor(mentorId),
-                () -> "0000");
+                () -> "0000",
+                MIN_ASSIGNMENT_CONTENT_LENGTH);
 
         setId(study, studyId);
 

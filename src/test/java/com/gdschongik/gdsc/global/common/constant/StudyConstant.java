@@ -31,6 +31,7 @@ public class StudyConstant {
     public static final String ATTENDANCE_NUMBER = "1234";
 
     // Assignment
+    public static final int MIN_ASSIGNMENT_CONTENT_LENGTH = 200;
     public static final String ASSIGNMENT_TITLE = "testTitle";
     public static final String DESCRIPTION_LINK = "www.link.com";
 
