@@ -3,18 +3,19 @@ package com.gdschongik.gdsc.domain.studyv2.dto.request;
 import com.gdschongik.gdsc.domain.common.vo.Period;
 import com.gdschongik.gdsc.domain.studyv2.domain.StudyUpdateCommand;
 import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.NotNull;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.List;
 
 public record StudyUpdateRequest(
-        String title,
+        @NotNull String title,
         String description,
         String descriptionNotionLink,
         DayOfWeek dayOfWeek,
         LocalTime startTime,
         LocalTime endTime,
-        Integer minAssignmentLength,
+        @NotNull Integer minAssignmentLength,
         List<StudySessionUpdateDto> studySessions) {
     public record StudySessionUpdateDto(
             Long studySessionId,
