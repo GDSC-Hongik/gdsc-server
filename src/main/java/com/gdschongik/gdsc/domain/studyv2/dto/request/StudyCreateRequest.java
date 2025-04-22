@@ -21,6 +21,6 @@ public record StudyCreateRequest(
         @NotNull Period applicationPeriod,
         String discordChannelId,
         String discordRoleId,
-        @NotNull Integer minAssignmentContentLength) {
+        @NotNull Integer minAssignmentLength) {
     // TODO: 라이브 세션 관련 필드의 경우 VO로 묶기
 }

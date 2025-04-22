@@ -26,7 +26,7 @@ public record StudyCommonDto(
         LocalDateTime openingDate,
         Long mentorId,
         String mentorName,
-        Integer minAssignmentContentLength) {
+        Integer minAssignmentLength) {
     public static StudyCommonDto from(StudyV2 study) {
         return new StudyCommonDto(
                 study.getId(),
@@ -43,6 +43,6 @@ public record StudyCommonDto(
                 study.getOpeningDate(),
                 study.getMentor().getId(),
                 study.getMentor().getName(),
-                study.getMinAssignmentContentLength());
+                study.getMinAssignmentLength());
     }
 }

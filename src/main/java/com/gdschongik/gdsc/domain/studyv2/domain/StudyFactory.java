@@ -29,7 +29,7 @@ public class StudyFactory {
             String discordRoleId,
             Member mentor,
             AttendanceNumberGenerator attendanceNumberGenerator,
-            Integer minAssignmentContentCount) {
+            Integer minAssignmentLength) {
         if (type.isLive()) {
             return createLive(
                     type,
@@ -44,7 +44,7 @@ public class StudyFactory {
                     discordRoleId,
                     mentor,
                     attendanceNumberGenerator,
-                    minAssignmentContentCount);
+                    minAssignmentLength);
         } else {
             return createAssignment(
                     title,
@@ -54,7 +54,7 @@ public class StudyFactory {
                     discordChannelId,
                     discordRoleId,
                     mentor,
-                    minAssignmentContentCount);
+                    minAssignmentLength);
         }
     }
 
@@ -71,7 +71,7 @@ public class StudyFactory {
             String discordRoleId,
             Member mentor,
             AttendanceNumberGenerator attendanceNumberGenerator,
-            Integer minAssignmentContentCount) {
+            Integer minAssignmentLength) {
         StudyV2 study = StudyV2.createLive(
                 type,
                 title,
@@ -84,7 +84,7 @@ public class StudyFactory {
                 discordChannelId,
                 discordRoleId,
                 mentor,
-                minAssignmentContentCount);
+                minAssignmentLength);
 
         IntStream.rangeClosed(1, totalRound)
                 .forEach(
@@ -101,7 +101,7 @@ public class StudyFactory {
             String discordChannelId,
             String discordRoleId,
             Member mentor,
-            Integer minAssignmentContentCount) {
+            Integer minAssignmentLength) {
         StudyV2 study = StudyV2.createAssignment(
                 title,
                 semester,
@@ -110,7 +110,7 @@ public class StudyFactory {
                 discordChannelId,
                 discordRoleId,
                 mentor,
-                minAssignmentContentCount);
+                minAssignmentLength);
 
         IntStream.rangeClosed(1, totalRound).forEach(round -> StudySessionV2.createEmptyForAssignment(round, study));
 

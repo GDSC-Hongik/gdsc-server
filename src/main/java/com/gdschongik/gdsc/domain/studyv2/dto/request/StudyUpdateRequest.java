@@ -14,7 +14,7 @@ public record StudyUpdateRequest(
         DayOfWeek dayOfWeek,
         LocalTime startTime,
         LocalTime endTime,
-        Integer minAssignmentContentLength,
+        Integer minAssignmentLength,
         List<StudySessionUpdateDto> studySessions) {
     public record StudySessionUpdateDto(
             Long studySessionId,
@@ -44,7 +44,7 @@ public record StudyUpdateRequest(
                 dayOfWeek,
                 startTime,
                 endTime,
-                minAssignmentContentLength,
+                minAssignmentLength,
                 sessionCommands);
     }
 }

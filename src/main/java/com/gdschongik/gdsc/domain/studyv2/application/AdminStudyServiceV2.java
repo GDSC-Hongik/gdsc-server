@@ -48,7 +48,7 @@ public class AdminStudyServiceV2 {
                 request.discordRoleId(),
                 mentor,
                 attendanceNumberGenerator,
-                request.minAssignmentContentLength());
+                request.minAssignmentLength());
 
         memberRepository.save(mentor);
         studyV2Repository.save(study);

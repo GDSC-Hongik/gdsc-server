@@ -26,7 +26,7 @@ public record StudyManagerDto(
         String discordRoleId,
         Long mentorId,
         String mentorName,
-        Integer minAssignmentContentLength) {
+        Integer minAssignmentLength) {
     public static StudyManagerDto from(StudyV2 study) {
         return new StudyManagerDto(
                 study.getId(),
@@ -44,6 +44,6 @@ public record StudyManagerDto(
                 study.getDiscordRoleId(),
                 study.getMentor().getId(),
                 study.getMentor().getName(),
-                study.getMinAssignmentContentLength());
+                study.getMinAssignmentLength());
     }
 }

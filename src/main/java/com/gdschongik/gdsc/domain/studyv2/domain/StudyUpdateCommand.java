@@ -13,7 +13,7 @@ public record StudyUpdateCommand(
         DayOfWeek dayOfWeek,
         LocalTime startTime,
         LocalTime endTime,
-        Integer minAssignmentContentLength,
+        Integer minAssignmentLength,
         List<Session> studySessions) {
 
     public record Session(
