@@ -57,7 +57,7 @@ public class StudentAssignmentHistoryServiceV2 {
                 githubClient.getLatestAssignmentSubmissionFetcher(repositoryLink, studySession.getPosition());
         AssignmentHistoryV2 assignmentHistory = findOrCreate(currentMember, studySession);
 
-        assignmentHistoryGraderV2.judge(fetcher, assignmentHistory);
+        assignmentHistoryGraderV2.judge(fetcher, assignmentHistory, study.getMinAssignmentLength());
 
         assignmentHistoryV2Repository.save(assignmentHistory);
 

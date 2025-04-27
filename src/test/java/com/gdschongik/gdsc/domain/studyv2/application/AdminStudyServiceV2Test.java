@@ -42,7 +42,8 @@ class AdminStudyServiceV2Test extends IntegrationTest {
                     STUDY_END_TIME,
                     STUDY_APPLICATION_PERIOD,
                     STUDY_DISCORD_CHANNEL_ID,
-                    STUDY_DISCORD_ROLE_ID);
+                    STUDY_DISCORD_ROLE_ID,
+                    MIN_ASSIGNMENT_CONTENT_LENGTH);
 
             // when
             adminStudyService.createStudy(request);
@@ -70,7 +71,8 @@ class AdminStudyServiceV2Test extends IntegrationTest {
                     STUDY_END_TIME,
                     STUDY_APPLICATION_PERIOD,
                     STUDY_DISCORD_CHANNEL_ID,
-                    STUDY_DISCORD_ROLE_ID);
+                    STUDY_DISCORD_ROLE_ID,
+                    MIN_ASSIGNMENT_CONTENT_LENGTH);
 
             // when
             adminStudyService.createStudy(request);
@@ -97,7 +99,8 @@ class AdminStudyServiceV2Test extends IntegrationTest {
                     STUDY_END_TIME,
                     STUDY_APPLICATION_PERIOD,
                     STUDY_DISCORD_CHANNEL_ID,
-                    STUDY_DISCORD_ROLE_ID);
+                    STUDY_DISCORD_ROLE_ID,
+                    MIN_ASSIGNMENT_CONTENT_LENGTH);
 
             // when
             adminStudyService.createStudy(request);
