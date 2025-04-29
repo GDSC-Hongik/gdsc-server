@@ -98,6 +98,9 @@ public class StudyV2 extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member mentor;
 
+    @Comment("과제 최소 글자수")
+    private Integer minAssignmentLength;
+
     @OrderBy("position asc")
     @OneToMany(mappedBy = "study", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StudySessionV2> studySessions = new ArrayList<>();
@@ -116,7 +119,8 @@ public class StudyV2 extends BaseEntity {
             Period applicationPeriod,
             String discordChannelId,
             String discordRoleId,
-            Member mentor) {
+            Member mentor,
+            Integer minAssignmentLength) {
         this.type = type;
         this.title = title;
         this.description = description;
@@ -130,6 +134,7 @@ public class StudyV2 extends BaseEntity {
         this.discordChannelId = discordChannelId;
         this.discordRoleId = discordRoleId;
         this.mentor = mentor;
+        this.minAssignmentLength = minAssignmentLength;
     }
 
     /**
@@ -146,7 +151,8 @@ public class StudyV2 extends BaseEntity {
             Period applicationPeriod,
             String discordChannelId,
             String discordRoleId,
-            Member mentor) {
+            Member mentor,
+            Integer minAssignmentLength) {
         validateLiveStudy(type);
         return StudyV2.builder()
                 .type(type)
@@ -160,6 +166,7 @@ public class StudyV2 extends BaseEntity {
                 .discordChannelId(discordChannelId)
                 .discordRoleId(discordRoleId)
                 .mentor(mentor)
+                .minAssignmentLength(minAssignmentLength)
                 .build();
     }
 
@@ -179,7 +186,8 @@ public class StudyV2 extends BaseEntity {
             Period applicationPeriod,
             String discordChannelId,
             String discordRoleId,
-            Member mentor) {
+            Member mentor,
+            Integer minAssignmentLength) {
         return StudyV2.builder()
                 .type(StudyType.ASSIGNMENT)
                 .title(title)
@@ -189,6 +197,7 @@ public class StudyV2 extends BaseEntity {
                 .discordChannelId(discordChannelId)
                 .discordRoleId(discordRoleId)
                 .mentor(mentor)
+                .minAssignmentLength(minAssignmentLength)
                 .build();
     }
 
@@ -227,6 +236,7 @@ public class StudyV2 extends BaseEntity {
         this.dayOfWeek = command.dayOfWeek();
         this.startTime = command.startTime();
         this.endTime = command.endTime();
+        this.minAssignmentLength = command.minAssignmentLength();
 
         command.studySessions().forEach(sessionCommand -> {
             getStudySessionForUpdate(sessionCommand.studySessionId()).update(sessionCommand);

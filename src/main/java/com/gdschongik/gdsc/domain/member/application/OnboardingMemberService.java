@@ -1,10 +1,5 @@
 package com.gdschongik.gdsc.domain.member.application;
 
-import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
-
-import com.gdschongik.gdsc.domain.auth.application.JwtService;
-import com.gdschongik.gdsc.domain.auth.dto.AccessTokenDto;
-import com.gdschongik.gdsc.domain.auth.dto.RefreshTokenDto;
 import com.gdschongik.gdsc.domain.email.application.UnivEmailVerificationService;
 import com.gdschongik.gdsc.domain.email.domain.UnivEmailVerification;
 import com.gdschongik.gdsc.domain.email.domain.service.EmailVerificationStatusService;
@@ -12,20 +7,14 @@ import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.dto.UnivVerificationStatus;
 import com.gdschongik.gdsc.domain.member.dto.request.BasicMemberInfoRequest;
-import com.gdschongik.gdsc.domain.member.dto.request.MemberTokenByGithubHandleRequest;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberBasicInfoResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberDashboardResponse;
-import com.gdschongik.gdsc.domain.member.dto.response.MemberTokenResponse;
 import com.gdschongik.gdsc.domain.member.dto.response.MemberUnivStatusResponse;
 import com.gdschongik.gdsc.domain.membership.application.MembershipService;
 import com.gdschongik.gdsc.domain.membership.domain.Membership;
 import com.gdschongik.gdsc.domain.recruitment.application.OnboardingRecruitmentService;
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
-import com.gdschongik.gdsc.global.exception.CustomException;
-import com.gdschongik.gdsc.global.security.MemberAuthInfo;
-import com.gdschongik.gdsc.global.util.EnvironmentUtil;
 import com.gdschongik.gdsc.global.util.MemberUtil;
-import com.gdschongik.gdsc.infra.github.client.GithubClient;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -40,11 +29,8 @@ public class OnboardingMemberService {
     private final OnboardingRecruitmentService onboardingRecruitmentService;
     private final MembershipService membershipService;
     private final UnivEmailVerificationService univEmailVerificationService;
-    private final JwtService jwtService;
     private final MemberRepository memberRepository;
-    private final EnvironmentUtil environmentUtil;
     private final EmailVerificationStatusService emailVerificationStatusService;
-    private final GithubClient githubClient;
 
     public MemberUnivStatusResponse checkUnivVerificationStatus() {
         Member currentMember = memberUtil.getCurrentMember();
@@ -76,25 +62,5 @@ public class OnboardingMemberService {
 
         return MemberDashboardResponse.of(
                 member, univVerificationStatus, currentRecruitmentRound.orElse(null), myMembership.orElse(null));
-    }
-
-    public MemberTokenResponse createTemporaryTokenByGithubHandle(MemberTokenByGithubHandleRequest request) {
-        validateProfile();
-
-        final String oauthId = githubClient.getOauthId(request.githubHandle());
-
-        final Member member =
-                memberRepository.findByOauthId(oauthId).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
-
-        AccessTokenDto accessTokenDto = jwtService.createAccessToken(MemberAuthInfo.from(member));
-        RefreshTokenDto refreshTokenDto = jwtService.createRefreshToken(member.getId());
-
-        return new MemberTokenResponse(accessTokenDto.tokenValue(), refreshTokenDto.tokenValue());
-    }
-
-    private void validateProfile() {
-        if (!environmentUtil.isDevAndLocalProfile()) {
-            throw new CustomException(FORBIDDEN_ACCESS);
-        }
     }
 }
