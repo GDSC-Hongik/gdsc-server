@@ -39,7 +39,7 @@ public class AttendanceValidatorTest {
             assertThatThrownBy(() -> attendanceValidator.validateAttendance(
                             studyDetail, ATTENDANCE_NUMBER, attendanceDay.plusDays(1), false, true))
                     .isInstanceOf(CustomException.class)
-                    .hasMessage(STUDY_SESSION_NOT_ATTENDABLE_DATE.getMessage());
+                    .hasMessage(STUDY_SESSION_NOT_ATTENDABLE_DATE_MISMATCH.getMessage());
         }
 
         @Test
