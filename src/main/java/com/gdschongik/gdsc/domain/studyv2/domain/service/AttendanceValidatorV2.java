@@ -1,9 +1,9 @@
 package com.gdschongik.gdsc.domain.studyv2.domain.service;
 
 import static com.gdschongik.gdsc.global.exception.ErrorCode.ATTENDANCE_NUMBER_MISMATCH;
-import static com.gdschongik.gdsc.global.exception.ErrorCode.STUDY_SESSION_NOT_ATTENDABLE_PERIOD;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.STUDY_HISTORY_NOT_FOUND;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.STUDY_SESSION_ALREADY_ATTENDED;
+import static com.gdschongik.gdsc.global.exception.ErrorCode.STUDY_SESSION_NOT_ATTENDABLE_PERIOD;
 
 import com.gdschongik.gdsc.domain.studyv2.domain.StudySessionV2;
 import com.gdschongik.gdsc.global.annotation.DomainService;
