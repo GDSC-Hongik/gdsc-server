@@ -19,7 +19,7 @@ public class AttendanceValidator {
         // 출석체크 날짜 검증
         LocalDate attendanceDay = studyDetail.getAttendanceDay();
         if (!attendanceDay.equals(date)) {
-            throw new CustomException(ATTENDANCE_DATE_INVALID);
+            throw new CustomException(STUDY_SESSION_NOT_ATTENDABLE_DATE_MISMATCH);
         }
 
         // 출석체크 번호 검증
