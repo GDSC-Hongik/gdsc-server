@@ -141,7 +141,7 @@ public enum ErrorCode {
 
     // Attendance
     STUDY_SESSION_NOT_ATTENDABLE_DATE_MISMATCH(CONFLICT, "강의일이 아니면 출석체크할 수 없습니다."),
-    STUDY_SESSION_NOT_ATTENDABLE_PERIOD(CONFLICT, "강의 시간이 아니면 출석체크할 수 없습니다."),
+    STUDY_SESSION_NOT_ATTENDABLE_PERIOD_MISMATCH(CONFLICT, "강의 시간이 아니면 출석체크할 수 없습니다."),
     ATTENDANCE_NUMBER_MISMATCH(CONFLICT, "출석번호가 일치하지 않습니다."),
     STUDY_DETAIL_ALREADY_ATTENDED(CONFLICT, "이미 출석 처리된 스터디입니다."),
     STUDY_SESSION_ALREADY_ATTENDED(CONFLICT, "이미 출석 처리된 스터디 회차입니다."),
