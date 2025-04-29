@@ -7,6 +7,7 @@ import com.gdschongik.gdsc.domain.studyv2.dto.response.StudyManagerResponse;
 import com.gdschongik.gdsc.domain.studyv2.dto.response.StudyStatisticsResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -38,7 +39,8 @@ public class MentorStudyControllerV2 {
 
     @Operation(summary = "스터디 정보 변경", description = "스터디 정보를 변경합니다.")
     @PutMapping("/{studyId}")
-    public ResponseEntity<Void> updateStudy(@PathVariable Long studyId, @RequestBody StudyUpdateRequest request) {
+    public ResponseEntity<Void> updateStudy(
+            @PathVariable Long studyId, @RequestBody @Valid StudyUpdateRequest request) {
         mentorStudyServiceV2.updateStudy(studyId, request);
         return ResponseEntity.ok().build();
     }
