@@ -44,11 +44,7 @@ public class RecruitmentRound extends BaseEntity {
     private Recruitment recruitment;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private RecruitmentRound(
-            RoundType roundType,
-            String name,
-            final Period period,
-            Recruitment recruitment) {
+    private RecruitmentRound(RoundType roundType, String name, final Period period, Recruitment recruitment) {
         this.name = name;
         this.roundType = roundType;
         this.period = period;

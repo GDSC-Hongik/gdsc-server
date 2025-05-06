@@ -11,6 +11,7 @@ import static org.mockito.Mockito.*;
 import com.gdschongik.gdsc.domain.common.model.SemesterType;
 import com.gdschongik.gdsc.domain.common.vo.Money;
 import com.gdschongik.gdsc.domain.common.vo.Period;
+import com.gdschongik.gdsc.domain.common.vo.Semester;
 import com.gdschongik.gdsc.domain.coupon.dao.CouponRepository;
 import com.gdschongik.gdsc.domain.coupon.dao.IssuedCouponRepository;
 import com.gdschongik.gdsc.domain.coupon.domain.Coupon;
@@ -227,7 +228,10 @@ public abstract class IntegrationTest {
 
     protected Recruitment createRecruitment(Integer academicYear, SemesterType semesterType, Money fee) {
         Recruitment recruitment = Recruitment.create(
-                FEE_NAME, fee, Period.of(SEMESTER_START_DATE, SEMESTER_END_DATE), academicYear, semesterType);
+                FEE_NAME,
+                fee,
+                Period.of(SEMESTER_START_DATE, SEMESTER_END_DATE),
+                Semester.of(academicYear, semesterType));
         return recruitmentRepository.save(recruitment);
     }
 

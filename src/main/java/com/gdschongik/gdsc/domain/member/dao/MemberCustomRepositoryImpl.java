@@ -95,9 +95,12 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository, Membe
         return semester != null
                 ? membership
                         .recruitmentRound
+                        .recruitment
+                        .semester
                         .academicYear
                         .eq(semester.getAcademicYear())
-                        .and(membership.recruitmentRound.semesterType.eq(semester.getSemesterType()))
+                        .and(membership.recruitmentRound.recruitment.semester.semesterType.eq(
+                                semester.getSemesterType()))
                 : null;
     }
 }
