@@ -2,8 +2,7 @@ package com.gdschongik.gdsc.domain.recruitment.domain;
 
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 
-import com.gdschongik.gdsc.domain.common.model.BaseSemesterEntity;
-import com.gdschongik.gdsc.domain.common.model.SemesterType;
+import com.gdschongik.gdsc.domain.common.model.BaseEntity;
 import com.gdschongik.gdsc.domain.common.vo.Period;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import jakarta.persistence.Column;
@@ -25,7 +24,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class RecruitmentRound extends BaseSemesterEntity {
+public class RecruitmentRound extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,10 +48,7 @@ public class RecruitmentRound extends BaseSemesterEntity {
             RoundType roundType,
             String name,
             final Period period,
-            Recruitment recruitment,
-            Integer academicYear,
-            SemesterType semesterType) {
-        super(academicYear, semesterType);
+            Recruitment recruitment) {
         this.name = name;
         this.roundType = roundType;
         this.period = period;
@@ -65,8 +61,6 @@ public class RecruitmentRound extends BaseSemesterEntity {
                 .name(name)
                 .period(period)
                 .recruitment(recruitment)
-                .academicYear(recruitment.getAcademicYear())
-                .semesterType(recruitment.getSemesterType())
                 .build();
     }
 
