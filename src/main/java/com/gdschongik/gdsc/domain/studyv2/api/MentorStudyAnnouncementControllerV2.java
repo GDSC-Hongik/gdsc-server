@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "Mentor Study Announcement V2", description = "스터디 공지 V2 멘토 API입니다.")
+@Tag(name = "Study Announcement V2 - Mentor", description = "스터디 공지 V2 멘토 API입니다.")
 @RestController
 @RequestMapping("/v2/mentor/study-announcements")
 @RequiredArgsConstructor

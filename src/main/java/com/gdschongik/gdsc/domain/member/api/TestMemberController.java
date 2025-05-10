@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "Test Member", description = "회원 테스트용 API입니다. dev 환경에서만 사용 가능합니다")
+@Tag(name = "Member - Test", description = "회원 테스트용 API입니다. local,dev 환경에서만 사용 가능합니다")
 @RestController
 @RequestMapping("/test/members")
 @RequiredArgsConstructor
