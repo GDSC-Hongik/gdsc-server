@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "Common Study", description = "공통 스터디 API입니다.")
+@Deprecated
+@Tag(name = "Study V1 - Common", description = "공통 스터디 API입니다.")
 @RestController
 @RequestMapping("/common/studies")
 @RequiredArgsConstructor

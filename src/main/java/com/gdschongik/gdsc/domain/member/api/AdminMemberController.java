@@ -17,7 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "Admin Member", description = "어드민 회원 관리 API입니다.")
+@Tag(name = "Member - Admin", description = "어드민 회원 관리 API입니다.")
 @RestController
 @RequestMapping("/admin/members")
 @RequiredArgsConstructor

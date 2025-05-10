@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "Mentor StudyAchievement", description = "멘토 스터디 우수 스터디원 관리 API입니다.")
+@Deprecated
+@Tag(name = "Study Achievement V1 - Mentor", description = "멘토 스터디 우수 스터디원 관리 API입니다.")
 @RestController
 @RequestMapping("/mentor/study-achievements")
 @RequiredArgsConstructor

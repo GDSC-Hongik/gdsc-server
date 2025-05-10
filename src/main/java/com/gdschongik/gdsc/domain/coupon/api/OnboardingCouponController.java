@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "Onboarding Coupon", description = "온보딩 쿠폰 API입니다.")
+@Tag(name = "Coupon - Onboarding", description = "온보딩 쿠폰 API입니다.")
 @RestController
 @RequestMapping("/onboarding/coupons")
 @RequiredArgsConstructor
