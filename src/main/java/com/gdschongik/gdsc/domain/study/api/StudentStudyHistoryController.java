@@ -13,7 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "Student Study History", description = "사용자 스터디 수강 이력 API입니다.")
+@Deprecated
+@Tag(name = "Study History V1 - Student", description = "사용자 스터디 수강 이력 API입니다.")
 @RestController
 @RequestMapping("/study-history")
 @RequiredArgsConstructor

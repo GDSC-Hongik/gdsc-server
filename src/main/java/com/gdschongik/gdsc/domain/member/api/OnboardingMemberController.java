@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "Onboarding Member", description = "회원 온보딩 API입니다.")
+@Tag(name = "Member - Onboarding", description = "회원 온보딩 API입니다.")
 @RestController
 @RequestMapping("/onboarding/members")
 @RequiredArgsConstructor

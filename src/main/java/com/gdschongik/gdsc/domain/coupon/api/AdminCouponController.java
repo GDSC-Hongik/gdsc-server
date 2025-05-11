@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "Admin Coupon", description = "어드민 쿠폰 관리 API입니다.")
+@Tag(name = "Coupon - Admin", description = "어드민 쿠폰 관리 API입니다.")
 @RestController
 @RequestMapping("/admin/coupons")
 @RequiredArgsConstructor

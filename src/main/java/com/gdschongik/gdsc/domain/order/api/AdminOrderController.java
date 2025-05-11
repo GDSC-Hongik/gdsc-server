@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "Admin Order", description = "주문 어드민 API입니다.")
+@Tag(name = "Order - Admin", description = "주문 어드민 API입니다.")
 @RestController
 @RequestMapping("/admin/orders")
 @RequiredArgsConstructor

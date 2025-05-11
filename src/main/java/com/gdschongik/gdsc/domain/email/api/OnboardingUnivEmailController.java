@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "Univ Email", description = "학교 인증 메일 인증 API입니다.")
+@Tag(name = "Email - Onboarding", description = "학교 인증 메일 인증 API입니다.")
 @RestController
 @RequestMapping("/onboarding")
 @RequiredArgsConstructor

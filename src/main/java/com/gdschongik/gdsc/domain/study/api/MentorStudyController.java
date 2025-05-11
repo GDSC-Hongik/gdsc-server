@@ -17,7 +17,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "Mentor Study", description = "멘토 스터디 API입니다.")
+@Deprecated
+@Tag(name = "Study V1 - Mentor", description = "멘토 스터디 API입니다.")
 @RestController
 @RequestMapping("/mentor/studies")
 @RequiredArgsConstructor
