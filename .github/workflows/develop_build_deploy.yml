@@ -81,23 +81,14 @@ jobs:
           push: true
           tags: ${{ steps.metadata.outputs.tags }}
 
-      # AWS 로그인
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
+      # docker-compose.yml 파일을 EC2에 복사
+      - name: Copy docker-compose.yml to EC2
+        uses: appleboy/scp-action@master
         with:
-          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
-          aws-region: ap-northeast-2
-          output-config: true
-
-      # 복사 경로 환경변수 설정
-      - name: Set up S3 copy path
-        env:
-          S3_DEPLOY_BUCKET_NAME: ${{ secrets.S3_DEPLOY_BUCKET_NAME }}
-        run: echo "S3_COPY_PATH=$(echo s3://${S3_DEPLOY_BUCKET_NAME}/gdsc/docker-compose-dev.yml)" >> $GITHUB_ENV
-
-      # S3로 docker-compose 파일 전송
-      - name: Copy docker-compose file to S3
-        run: aws s3 cp docker-compose.yml ${{ env.S3_COPY_PATH }}
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          source: "docker-compose.yml"
 
       # EC2로 배포
       - name: Deploy to EC2 Server
@@ -111,7 +102,6 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           envs: IMAGE_FULL_URL # docker-compose.yml 에서 사용할 환경 변수
           script: |
-            aws s3 cp ${{ env.S3_COPY_PATH }} docker-compose.yml
             echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
             docker pull ${{ env.IMAGE_FULL_URL }}
             docker compose up -d
