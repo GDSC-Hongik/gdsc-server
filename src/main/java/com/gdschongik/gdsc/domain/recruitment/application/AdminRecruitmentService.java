@@ -66,12 +66,13 @@ public class AdminRecruitmentService {
 
     @Transactional
     public void createRecruitmentRound(RecruitmentRoundCreateRequest request) {
+        Semester semester = Semester.of(request.academicYear(), request.semesterType());
+
         Recruitment recruitment = recruitmentRepository
-                .findBySemester(Semester.of(request.academicYear(), request.semesterType()))
+                .findBySemester(semester)
                 .orElseThrow(() -> new CustomException(RECRUITMENT_NOT_FOUND));
 
-        List<RecruitmentRound> recruitmentRoundsInThisSemester = recruitmentRoundRepository.findAllBySemester(
-                Semester.of(request.academicYear(), request.semesterType()));
+        List<RecruitmentRound> recruitmentRoundsInThisSemester = recruitmentRoundRepository.findAllBySemester(semester);
 
         recruitmentRoundValidator.validateRecruitmentRoundCreate(
                 request.startDate(),
