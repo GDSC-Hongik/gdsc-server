@@ -75,7 +75,7 @@ public class WebSecurityConfig {
         http.authorizeHttpRequests(
                 environmentUtil.isDevProfile()
                         ? authorize -> authorize.anyRequest().authenticated()
-                        : authorize -> authorize.anyRequest().authenticated());
+                        : authorize -> authorize.anyRequest().permitAll());
 
         return http.build();
     }
