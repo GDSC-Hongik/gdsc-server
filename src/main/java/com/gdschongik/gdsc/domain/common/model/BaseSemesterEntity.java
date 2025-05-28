@@ -1,6 +1,5 @@
 package com.gdschongik.gdsc.domain.common.model;
 
-import com.gdschongik.gdsc.domain.common.vo.Semester;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.MappedSuperclass;
@@ -19,8 +18,4 @@ public abstract class BaseSemesterEntity extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private SemesterType semesterType;
-
-    public Semester getSemester() {
-        return Semester.of(academicYear, semesterType);
-    }
 }

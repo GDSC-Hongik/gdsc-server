@@ -46,8 +46,8 @@ public class OrderCustomRepositoryImpl implements OrderCustomRepository, OrderQu
     private QOrderAdminResponse getOrderAdminResponse() {
         return new QOrderAdminResponse(
                 order.id,
-                recruitmentRound.academicYear,
-                recruitmentRound.semesterType,
+                recruitmentRound.recruitment.semester.academicYear,
+                recruitmentRound.recruitment.semester.semesterType,
                 member.name,
                 order.status,
                 member.studentId,

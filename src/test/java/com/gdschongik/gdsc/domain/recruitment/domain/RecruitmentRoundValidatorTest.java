@@ -5,8 +5,8 @@ import static com.gdschongik.gdsc.global.common.constant.TemporalConstant.*;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 
-import com.gdschongik.gdsc.domain.common.model.SemesterType;
 import com.gdschongik.gdsc.domain.common.vo.Period;
+import com.gdschongik.gdsc.domain.common.vo.Semester;
 import com.gdschongik.gdsc.domain.recruitment.domain.service.RecruitmentRoundValidator;
 import com.gdschongik.gdsc.global.exception.CustomException;
 import java.time.LocalDateTime;
@@ -29,8 +29,7 @@ public class RecruitmentRoundValidatorTest {
                     FEE_NAME,
                     FEE,
                     Period.of(LocalDateTime.of(2025, 3, 2, 0, 0), LocalDateTime.of(2025, 8, 31, 0, 0)),
-                    2025,
-                    SEMESTER_TYPE);
+                    Semester.of(2025, SEMESTER_TYPE));
 
             // when & then
             assertThatThrownBy(() -> recruitmentRoundValidator.validateRecruitmentRoundCreate(
@@ -46,8 +45,7 @@ public class RecruitmentRoundValidatorTest {
                     FEE_NAME,
                     FEE,
                     Period.of(LocalDateTime.of(2024, 9, 1, 0, 0), LocalDateTime.of(2025, 2, 28, 0, 0)),
-                    ACADEMIC_YEAR,
-                    SemesterType.SECOND);
+                    SEMESTER);
 
             // when & then
             assertThatThrownBy(() -> recruitmentRoundValidator.validateRecruitmentRoundCreate(
@@ -59,8 +57,7 @@ public class RecruitmentRoundValidatorTest {
         @Test
         void 모집_시작일과_종료일이_학기_시작일로부터_2주_이내에_있지_않다면_실패한다() {
             // given
-            Recruitment recruitment =
-                    Recruitment.create(FEE_NAME, FEE, START_TO_END_PERIOD, ACADEMIC_YEAR, SEMESTER_TYPE);
+            Recruitment recruitment = Recruitment.create(FEE_NAME, FEE, START_TO_END_PERIOD, SEMESTER);
 
             // when & then
             assertThatThrownBy(() -> recruitmentRoundValidator.validateRecruitmentRoundCreate(
@@ -72,8 +69,7 @@ public class RecruitmentRoundValidatorTest {
         @Test
         void 학년도_학기_차수가_모두_중복되면_실패한다() {
             // given
-            Recruitment recruitment =
-                    Recruitment.create(FEE_NAME, FEE, START_TO_END_PERIOD, ACADEMIC_YEAR, SEMESTER_TYPE);
+            Recruitment recruitment = Recruitment.create(FEE_NAME, FEE, START_TO_END_PERIOD, SEMESTER);
 
             RecruitmentRound recruitmentRound =
                     RecruitmentRound.create(RECRUITMENT_ROUND_NAME, ROUND_TYPE, START_TO_END_PERIOD, recruitment);
@@ -92,8 +88,7 @@ public class RecruitmentRoundValidatorTest {
         @Test
         void RoundType_1차가_없을때_2차를_생성하려_하면_실패한다() {
             // given
-            Recruitment recruitment =
-                    Recruitment.create(FEE_NAME, FEE, START_TO_END_PERIOD, ACADEMIC_YEAR, SEMESTER_TYPE);
+            Recruitment recruitment = Recruitment.create(FEE_NAME, FEE, START_TO_END_PERIOD, SEMESTER);
 
             // when & then
             assertThatThrownBy(() -> recruitmentRoundValidator.validateRecruitmentRoundCreate(
@@ -105,8 +100,7 @@ public class RecruitmentRoundValidatorTest {
         @Test
         void 기간이_중복되는_모집회차가_있다면_실패한다() {
             // given
-            Recruitment recruitment =
-                    Recruitment.create(FEE_NAME, FEE, START_TO_END_PERIOD, ACADEMIC_YEAR, SEMESTER_TYPE);
+            Recruitment recruitment = Recruitment.create(FEE_NAME, FEE, START_TO_END_PERIOD, SEMESTER);
 
             RecruitmentRound recruitmentRound =
                     RecruitmentRound.create(RECRUITMENT_ROUND_NAME, ROUND_TYPE, START_TO_END_PERIOD, recruitment);
@@ -125,8 +119,7 @@ public class RecruitmentRoundValidatorTest {
         @Test
         void 기간이_중복되는_모집회차가_있다면_실패한다() {
             // given
-            Recruitment recruitment =
-                    Recruitment.create(FEE_NAME, FEE, START_TO_END_PERIOD, ACADEMIC_YEAR, SEMESTER_TYPE);
+            Recruitment recruitment = Recruitment.create(FEE_NAME, FEE, START_TO_END_PERIOD, SEMESTER);
 
             RecruitmentRound firstRound =
                     RecruitmentRound.create(RECRUITMENT_ROUND_NAME, ROUND_TYPE, START_TO_END_PERIOD, recruitment);
@@ -151,8 +144,7 @@ public class RecruitmentRoundValidatorTest {
         @Test
         void 차수가_중복되는_모집회차가_있다면_실패한다() {
             // given
-            Recruitment recruitment =
-                    Recruitment.create(FEE_NAME, FEE, START_TO_END_PERIOD, ACADEMIC_YEAR, SEMESTER_TYPE);
+            Recruitment recruitment = Recruitment.create(FEE_NAME, FEE, START_TO_END_PERIOD, SEMESTER);
 
             RecruitmentRound firstRound =
                     RecruitmentRound.create(RECRUITMENT_ROUND_NAME, ROUND_TYPE, START_TO_END_PERIOD, recruitment);
@@ -177,8 +169,7 @@ public class RecruitmentRoundValidatorTest {
         @Test
         void 모집_시작일과_종료일이_학기_시작일로부터_2주_이내에_있지_않다면_실패한다() {
             // given
-            Recruitment recruitment =
-                    Recruitment.create(FEE_NAME, FEE, START_TO_END_PERIOD, ACADEMIC_YEAR, SEMESTER_TYPE);
+            Recruitment recruitment = Recruitment.create(FEE_NAME, FEE, START_TO_END_PERIOD, SEMESTER);
 
             RecruitmentRound firstRound =
                     RecruitmentRound.create(RECRUITMENT_ROUND_NAME, ROUND_TYPE, START_TO_END_PERIOD, recruitment);
@@ -199,8 +190,7 @@ public class RecruitmentRoundValidatorTest {
         @Test
         void RoundType_1차를_2차로_수정하려_하면_실패한다() {
             // given
-            Recruitment recruitment =
-                    Recruitment.create(FEE_NAME, FEE, START_TO_END_PERIOD, ACADEMIC_YEAR, SEMESTER_TYPE);
+            Recruitment recruitment = Recruitment.create(FEE_NAME, FEE, START_TO_END_PERIOD, SEMESTER);
 
             RecruitmentRound firstRound =
                     RecruitmentRound.create(RECRUITMENT_ROUND_NAME, ROUND_TYPE, START_TO_END_PERIOD, recruitment);
@@ -216,8 +206,7 @@ public class RecruitmentRoundValidatorTest {
         @Test
         void 모집_시작일이_지났다면_수정_실패한다() {
             // given
-            Recruitment recruitment =
-                    Recruitment.create(FEE_NAME, FEE, START_TO_END_PERIOD, ACADEMIC_YEAR, SEMESTER_TYPE);
+            Recruitment recruitment = Recruitment.create(FEE_NAME, FEE, START_TO_END_PERIOD, SEMESTER);
 
             RecruitmentRound recruitmentRound =
                     RecruitmentRound.create(RECRUITMENT_ROUND_NAME, ROUND_TYPE, START_TO_END_PERIOD, recruitment);
