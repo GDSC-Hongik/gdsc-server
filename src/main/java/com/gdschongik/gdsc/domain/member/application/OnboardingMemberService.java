@@ -17,9 +17,11 @@ import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -62,5 +64,15 @@ public class OnboardingMemberService {
 
         return MemberDashboardResponse.of(
                 member, univVerificationStatus, currentRecruitmentRound.orElse(null), myMembership.orElse(null));
+    }
+
+    public void attemptAdvanceToAssociate(long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow();
+
+        member.advanceToAssociate();
+
+        memberRepository.save(member);
+
+        log.info("[OnboardingMemberService] 준회원 승급 완료: memberId={}", member.getId());
     }
 }
