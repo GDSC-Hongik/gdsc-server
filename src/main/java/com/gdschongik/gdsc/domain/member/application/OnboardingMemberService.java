@@ -66,6 +66,7 @@ public class OnboardingMemberService {
                 member, univVerificationStatus, currentRecruitmentRound.orElse(null), myMembership.orElse(null));
     }
 
+    @Transactional
     public void attemptAdvanceToAssociate(long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow();
 
