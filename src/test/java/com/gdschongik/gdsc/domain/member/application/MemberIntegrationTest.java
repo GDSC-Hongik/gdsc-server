@@ -24,7 +24,8 @@ public class MemberIntegrationTest extends IntegrationTest {
         Member member = createMember();
 
         // when
-        memberEventHandler.advanceToAssociate(new MemberAssociateRequirementUpdatedEvent(member.getId()));
+        memberEventHandler.handleMemberAssociateRequirementUpdatedEvent(
+                new MemberAssociateRequirementUpdatedEvent(member.getId()));
         member = memberRepository.save(member);
 
         // then
