@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class MemberAssociateRequirementUpdatedEventHandler {
+public class MemberEventHandler {
     private final MemberRepository memberRepository;
 
     public void advanceToAssociate(MemberAssociateRequirementUpdatedEvent memberAssociateRequirementUpdatedEvent) {

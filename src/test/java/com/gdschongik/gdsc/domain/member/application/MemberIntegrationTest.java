@@ -3,7 +3,7 @@ package com.gdschongik.gdsc.domain.member.application;
 import static com.gdschongik.gdsc.domain.member.domain.MemberRole.ASSOCIATE;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.gdschongik.gdsc.domain.member.application.handler.MemberAssociateRequirementUpdatedEventHandler;
+import com.gdschongik.gdsc.domain.member.application.handler.MemberEventHandler;
 import com.gdschongik.gdsc.domain.member.dao.MemberRepository;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.member.domain.event.MemberAssociateRequirementUpdatedEvent;
@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class MemberIntegrationTest extends IntegrationTest {
     @Autowired
-    private MemberAssociateRequirementUpdatedEventHandler memberAssociateRequirementUpdatedEventHandler;
+    private MemberEventHandler memberEventHandler;
 
     @Autowired
     private MemberRepository memberRepository;
@@ -24,8 +24,7 @@ public class MemberIntegrationTest extends IntegrationTest {
         Member member = createMember();
 
         // when
-        memberAssociateRequirementUpdatedEventHandler.advanceToAssociate(
-                new MemberAssociateRequirementUpdatedEvent(member.getId()));
+        memberEventHandler.advanceToAssociate(new MemberAssociateRequirementUpdatedEvent(member.getId()));
         member = memberRepository.save(member);
 
         // then
