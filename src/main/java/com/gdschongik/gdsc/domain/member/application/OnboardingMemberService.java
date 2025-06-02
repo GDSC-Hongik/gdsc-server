@@ -1,5 +1,7 @@
 package com.gdschongik.gdsc.domain.member.application;
 
+import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
+
 import com.gdschongik.gdsc.domain.email.application.UnivEmailVerificationService;
 import com.gdschongik.gdsc.domain.email.domain.UnivEmailVerification;
 import com.gdschongik.gdsc.domain.email.domain.service.EmailVerificationStatusService;
@@ -14,6 +16,7 @@ import com.gdschongik.gdsc.domain.membership.application.MembershipService;
 import com.gdschongik.gdsc.domain.membership.domain.Membership;
 import com.gdschongik.gdsc.domain.recruitment.application.OnboardingRecruitmentService;
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
+import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -68,7 +71,7 @@ public class OnboardingMemberService {
 
     @Transactional
     public void attemptAdvanceToAssociate(long memberId) {
-        Member member = memberRepository.findById(memberId).orElseThrow();
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
 
         member.advanceToAssociate();
 
