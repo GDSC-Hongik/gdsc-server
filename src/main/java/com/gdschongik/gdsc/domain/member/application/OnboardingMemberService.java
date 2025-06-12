@@ -1,5 +1,7 @@
 package com.gdschongik.gdsc.domain.member.application;
 
+import static com.gdschongik.gdsc.global.exception.ErrorCode.*;
+
 import com.gdschongik.gdsc.domain.email.application.UnivEmailVerificationService;
 import com.gdschongik.gdsc.domain.email.domain.UnivEmailVerification;
 import com.gdschongik.gdsc.domain.email.domain.service.EmailVerificationStatusService;
@@ -14,12 +16,15 @@ import com.gdschongik.gdsc.domain.membership.application.MembershipService;
 import com.gdschongik.gdsc.domain.membership.domain.Membership;
 import com.gdschongik.gdsc.domain.recruitment.application.OnboardingRecruitmentService;
 import com.gdschongik.gdsc.domain.recruitment.domain.RecruitmentRound;
+import com.gdschongik.gdsc.global.exception.CustomException;
 import com.gdschongik.gdsc.global.util.MemberUtil;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -62,5 +67,16 @@ public class OnboardingMemberService {
 
         return MemberDashboardResponse.of(
                 member, univVerificationStatus, currentRecruitmentRound.orElse(null), myMembership.orElse(null));
+    }
+
+    @Transactional
+    public void attemptAdvanceToAssociate(long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
+
+        member.advanceToAssociate();
+
+        memberRepository.save(member);
+
+        log.info("[OnboardingMemberService] 준회원 승급 완료: memberId={}", member.getId());
     }
 }

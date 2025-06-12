@@ -120,8 +120,8 @@ public class WebSecurityConfig {
         http.exceptionHandling(exception ->
                 exception.authenticationEntryPoint((request, response, authException) -> response.setStatus(401)));
 
-        http.addFilterAfter(jwtExceptionFilter(objectMapper), LogoutFilter.class);
-        http.addFilterAfter(jwtFilter(jwtService, cookieUtil), LogoutFilter.class);
+        http.addFilterAfter(new JwtExceptionFilter(objectMapper), LogoutFilter.class);
+        http.addFilterAfter(new JwtFilter(jwtService, cookieUtil), LogoutFilter.class);
 
         http.authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/oauth2/**")
@@ -171,16 +171,6 @@ public class WebSecurityConfig {
     @Bean
     public CustomSuccessHandler customSuccessHandler(JwtService jwtService, CookieUtil cookieUtil) {
         return new CustomSuccessHandler(jwtService, cookieUtil);
-    }
-
-    @Bean
-    public JwtFilter jwtFilter(JwtService jwtService, CookieUtil cookieUtil) {
-        return new JwtFilter(jwtService, cookieUtil);
-    }
-
-    @Bean
-    public JwtExceptionFilter jwtExceptionFilter(ObjectMapper objectMapper) {
-        return new JwtExceptionFilter(objectMapper);
     }
 
     @Bean

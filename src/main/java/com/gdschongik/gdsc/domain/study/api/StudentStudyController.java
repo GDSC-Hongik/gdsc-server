@@ -17,7 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "Student Study", description = "사용자 스터디 API입니다.")
+@Deprecated
+@Tag(name = "Study V1 - Student", description = "사용자 스터디 API입니다.")
 @RestController
 @RequestMapping("/studies")
 @RequiredArgsConstructor

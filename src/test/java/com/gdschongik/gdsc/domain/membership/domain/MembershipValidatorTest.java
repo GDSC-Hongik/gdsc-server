@@ -11,6 +11,7 @@ import static org.assertj.core.api.Assertions.*;
 import com.gdschongik.gdsc.domain.common.model.SemesterType;
 import com.gdschongik.gdsc.domain.common.vo.Money;
 import com.gdschongik.gdsc.domain.common.vo.Period;
+import com.gdschongik.gdsc.domain.common.vo.Semester;
 import com.gdschongik.gdsc.domain.member.domain.Member;
 import com.gdschongik.gdsc.domain.membership.domain.service.MembershipValidator;
 import com.gdschongik.gdsc.domain.recruitment.domain.Recruitment;
@@ -42,7 +43,10 @@ class MembershipValidatorTest {
             LocalDateTime startDate,
             LocalDateTime endDate) {
         Recruitment recruitment = Recruitment.create(
-                FEE_NAME, fee, Period.of(SEMESTER_START_DATE, SEMESTER_END_DATE), academicYear, semesterType);
+                FEE_NAME,
+                fee,
+                Period.of(SEMESTER_START_DATE, SEMESTER_END_DATE),
+                Semester.of(academicYear, semesterType));
         return RecruitmentRound.create(RECRUITMENT_ROUND_NAME, ROUND_TYPE, Period.of(startDate, endDate), recruitment);
     }
 

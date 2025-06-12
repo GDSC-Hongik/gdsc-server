@@ -5,6 +5,7 @@ import static com.gdschongik.gdsc.global.common.constant.TemporalConstant.*;
 import static org.assertj.core.api.Assertions.*;
 
 import com.gdschongik.gdsc.domain.common.vo.Period;
+import com.gdschongik.gdsc.domain.common.vo.Semester;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +20,10 @@ class RecruitmentTest {
 
             // when
             Recruitment recruitment = Recruitment.create(
-                    FEE_NAME, FEE, Period.of(SEMESTER_START_DATE, SEMESTER_END_DATE), ACADEMIC_YEAR, SEMESTER_TYPE);
+                    FEE_NAME,
+                    FEE,
+                    Period.of(SEMESTER_START_DATE, SEMESTER_END_DATE),
+                    Semester.of(ACADEMIC_YEAR, SEMESTER_TYPE));
 
             // then
             assertThat(recruitment.getSemesterPeriod().getStartDate()).isEqualTo(SEMESTER_START_DATE);

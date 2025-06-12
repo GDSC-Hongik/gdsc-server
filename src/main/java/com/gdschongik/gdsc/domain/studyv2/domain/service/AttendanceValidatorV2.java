@@ -1,9 +1,9 @@
 package com.gdschongik.gdsc.domain.studyv2.domain.service;
 
 import static com.gdschongik.gdsc.global.exception.ErrorCode.ATTENDANCE_NUMBER_MISMATCH;
-import static com.gdschongik.gdsc.global.exception.ErrorCode.ATTENDANCE_PERIOD_INVALID;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.STUDY_HISTORY_NOT_FOUND;
 import static com.gdschongik.gdsc.global.exception.ErrorCode.STUDY_SESSION_ALREADY_ATTENDED;
+import static com.gdschongik.gdsc.global.exception.ErrorCode.STUDY_SESSION_NOT_ATTENDABLE_PERIOD_MISMATCH;
 
 import com.gdschongik.gdsc.domain.studyv2.domain.StudySessionV2;
 import com.gdschongik.gdsc.global.annotation.DomainService;
@@ -31,7 +31,7 @@ public class AttendanceValidatorV2 {
 
         // 출석체크 가능 기간 검증
         if (!studySession.getLessonPeriod().isWithin(now)) {
-            throw new CustomException(ATTENDANCE_PERIOD_INVALID);
+            throw new CustomException(STUDY_SESSION_NOT_ATTENDABLE_PERIOD_MISMATCH);
         }
 
         // 출석체크 번호 검증

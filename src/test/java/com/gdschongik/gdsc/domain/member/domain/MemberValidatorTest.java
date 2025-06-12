@@ -25,8 +25,7 @@ public class MemberValidatorTest {
         @Test
         void 해당_학기에_이미_시작된_모집기간이_있다면_실패한다() {
             // given
-            Recruitment recruitment =
-                    Recruitment.create(FEE_NAME, FEE, START_TO_END_PERIOD, ACADEMIC_YEAR, SEMESTER_TYPE);
+            Recruitment recruitment = Recruitment.create(FEE_NAME, FEE, START_TO_END_PERIOD, SEMESTER);
             LocalDateTime now = LocalDateTime.now();
             RecruitmentRound recruitmentRound = RecruitmentRound.create(
                     RECRUITMENT_ROUND_NAME, ROUND_TYPE, Period.of(now.minusDays(1), now.plusDays(1)), recruitment);

@@ -21,7 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "Mentor StudyDetail", description = "멘토 스터디 상세 관리 API입니다.")
+@Deprecated
+@Tag(name = "Study Detail V1- Mentor", description = "멘토 스터디 상세 관리 API입니다.")
 @RestController
 @RequestMapping("/mentor/study-details")
 @RequiredArgsConstructor

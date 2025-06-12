@@ -19,7 +19,7 @@ public record AdminRecruitmentResponse(
 
         return new AdminRecruitmentResponse(
                 recruitment.getId(),
-                SemesterFormatter.format(recruitment),
+                SemesterFormatter.format(recruitment.getSemester()),
                 recruitment.getSemesterPeriod().getStartDate(),
                 recruitment.getSemesterPeriod().getEndDate(),
                 String.format("%s원", decimalFormat.format(recruitment.getFee().getAmount())),

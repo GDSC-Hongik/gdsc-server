@@ -17,7 +17,7 @@ public record AdminRecruitmentRoundResponse(
 
         return new AdminRecruitmentRoundResponse(
                 recruitmentRound.getId(),
-                SemesterFormatter.format(recruitmentRound),
+                SemesterFormatter.format(recruitmentRound.getRecruitment().getSemester()),
                 recruitmentRound.getPeriod().getStartDate(),
                 recruitmentRound.getPeriod().getEndDate(),
                 recruitmentRound.getName(),

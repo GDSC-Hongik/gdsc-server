@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class StudyAnnouncementServiceV2 {
+public class StudentStudyAnnouncementServiceV2 {
 
     private final MemberUtil memberUtil;
     private final RecruitmentRepository recruitmentRepository;

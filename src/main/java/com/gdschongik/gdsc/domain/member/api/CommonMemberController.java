@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "Common Member", description = "공통 멤버 API입니다.")
+@Tag(name = "Member - Common", description = "공통 멤버 API입니다.")
 @RestController
 @RequestMapping("/common/members")
 @RequiredArgsConstructor
