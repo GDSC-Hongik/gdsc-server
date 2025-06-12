@@ -44,7 +44,7 @@ public class RecruitmentRoundValidator {
         validatePeriodWithinTwoWeeks(startDate, endDate, currentRecruitmentRound.getRecruitment());
         validatePeriodOverlap(otherRecruitmentRounds, startDate, endDate);
         validateRoundOverlap(otherRecruitmentRounds, roundType);
-        validateRoundOneToTwo(currentRecruitmentRound.getRoundType(), roundType);
+        validateFirstRoundModification(currentRecruitmentRound.getRoundType(), roundType);
         currentRecruitmentRound.validatePeriodNotStarted(now);
     }
 
@@ -78,16 +78,17 @@ public class RecruitmentRoundValidator {
                 });
     }
 
-    // 1차 모집이 없는데 2차 모집을 생성하려고 하는 경우
+    // 1차 모집이 없는데 2차 또는 3차 모집을 생성하려고 하는 경우
     private void validateRoundOneExist(List<RecruitmentRound> recruitmentRounds, RoundType roundType) {
-        if (roundType.isSecond() && recruitmentRounds.stream().noneMatch(RecruitmentRound::isFirstRound)) {
+        if ((roundType.isSecond() || roundType.isThird())
+                && recruitmentRounds.stream().noneMatch(RecruitmentRound::isFirstRound)) {
             throw new CustomException(ROUND_ONE_DOES_NOT_EXIST);
         }
     }
 
-    // 1차 모집을 비워둬서는 안되므로, 1차 모집을 2차 모집으로 수정하려고 하는 경우 예외 발생
-    private void validateRoundOneToTwo(RoundType previousRoundType, RoundType newRoundType) {
-        if (previousRoundType.isFirst() && newRoundType.isSecond()) {
+    // 1차 모집을 비워둬서는 안되므로, 1차 모집을 다른 차수로 수정하려고 하는 경우 예외 발생
+    private void validateFirstRoundModification(RoundType previousRoundType, RoundType newRoundType) {
+        if (previousRoundType.isFirst() && (newRoundType.isSecond() || newRoundType.isThird())) {
             throw new CustomException(ROUND_ONE_DOES_NOT_EXIST);
         }
     }

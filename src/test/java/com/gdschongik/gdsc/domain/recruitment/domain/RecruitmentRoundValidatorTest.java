@@ -98,6 +98,18 @@ public class RecruitmentRoundValidatorTest {
         }
 
         @Test
+        void RoundType_1차가_없을때_3차를_생성하려_하면_실패한다() {
+            // given
+            Recruitment recruitment = Recruitment.create(FEE_NAME, FEE, START_TO_END_PERIOD, SEMESTER);
+
+            // when & then
+            assertThatThrownBy(() -> recruitmentRoundValidator.validateRecruitmentRoundCreate(
+                            ROUND_THREE_START_DATE, ROUND_THREE_END_DATE, RoundType.THIRD, recruitment, List.of()))
+                    .isInstanceOf(CustomException.class)
+                    .hasMessage(ROUND_ONE_DOES_NOT_EXIST.getMessage());
+        }
+
+        @Test
         void 기간이_중복되는_모집회차가_있다면_실패한다() {
             // given
             Recruitment recruitment = Recruitment.create(FEE_NAME, FEE, START_TO_END_PERIOD, SEMESTER);
@@ -199,6 +211,22 @@ public class RecruitmentRoundValidatorTest {
             // when & then
             assertThatThrownBy(() -> recruitmentRoundValidator.validateRecruitmentRoundUpdate(
                             START_DATE, END_DATE, LocalDateTime.now(), RoundType.SECOND, firstRound, List.of()))
+                    .isInstanceOf(CustomException.class)
+                    .hasMessage(ROUND_ONE_DOES_NOT_EXIST.getMessage());
+        }
+
+        @Test
+        void RoundType_1차를_3차로_수정하려_하면_실패한다() {
+            // given
+            Recruitment recruitment = Recruitment.create(FEE_NAME, FEE, START_TO_END_PERIOD, SEMESTER);
+
+            RecruitmentRound firstRound =
+                    RecruitmentRound.create(RECRUITMENT_ROUND_NAME, ROUND_TYPE, START_TO_END_PERIOD, recruitment);
+            ReflectionTestUtils.setField(firstRound, "id", 1L);
+
+            // when & then
+            assertThatThrownBy(() -> recruitmentRoundValidator.validateRecruitmentRoundUpdate(
+                            START_DATE, END_DATE, LocalDateTime.now(), RoundType.THIRD, firstRound, List.of()))
                     .isInstanceOf(CustomException.class)
                     .hasMessage(ROUND_ONE_DOES_NOT_EXIST.getMessage());
         }

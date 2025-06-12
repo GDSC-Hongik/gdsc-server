@@ -7,7 +7,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum RoundType {
     FIRST("1차"),
-    SECOND("2차");
+    SECOND("2차"),
+    THIRD("3차");
 
     private final String value;
 
@@ -17,5 +18,9 @@ public enum RoundType {
 
     public boolean isSecond() {
         return this == SECOND;
+    }
+
+    public boolean isThird() {
+        return this == THIRD;
     }
 }
