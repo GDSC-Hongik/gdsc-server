@@ -3,6 +3,8 @@ package com.gdschongik.gdsc.domain.member.dao;
 import static com.gdschongik.gdsc.domain.common.model.RequirementStatus.*;
 import static com.gdschongik.gdsc.domain.member.domain.QMember.*;
 import static com.gdschongik.gdsc.domain.membership.domain.QMembership.*;
+import static com.gdschongik.gdsc.domain.recruitment.domain.QRecruitment.*;
+import static com.gdschongik.gdsc.domain.recruitment.domain.QRecruitmentRound.*;
 
 import com.gdschongik.gdsc.domain.common.model.RequirementStatus;
 import com.gdschongik.gdsc.domain.common.vo.Semester;
@@ -64,6 +66,10 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository, Membe
                 .selectFrom(member)
                 .leftJoin(membership)
                 .on(membership.member.eq(member))
+                .leftJoin(recruitmentRound)
+                .on(membership.recruitmentRound.eq(recruitmentRound))
+                .leftJoin(recruitment)
+                .on(recruitmentRound.recruitment.eq(recruitment))
                 .where(
                         eqRole(MemberRole.ASSOCIATE),
                         eqSemester(semester),
@@ -93,14 +99,11 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository, Membe
 
     private BooleanExpression eqSemester(Semester semester) {
         return semester != null
-                ? membership
-                        .recruitmentRound
-                        .recruitment
+                ? recruitment
                         .semester
                         .academicYear
                         .eq(semester.getAcademicYear())
-                        .and(membership.recruitmentRound.recruitment.semester.semesterType.eq(
-                                semester.getSemesterType()))
+                        .and(recruitment.semester.semesterType.eq(semester.getSemesterType()))
                 : null;
     }
 }
