@@ -120,8 +120,6 @@ public class StudySessionV2 extends BaseEntity {
             throw new CustomException(ASSIGNMENT_SUBMIT_NOT_PUBLISHED);
         }
 
-        assignmentPeriod.validatePeriodDateIsNotNull();
-
         if (now.isBefore(assignmentPeriod.getStartDate())) {
             throw new CustomException(ASSIGNMENT_SUBMIT_NOT_STARTED);
         }
@@ -136,8 +134,6 @@ public class StudySessionV2 extends BaseEntity {
             return false;
         }
 
-        assignmentPeriod.validatePeriodDateIsNotNull();
-
         return assignmentPeriod.isWithin(now);
     }
 
@@ -145,8 +141,6 @@ public class StudySessionV2 extends BaseEntity {
         if (lessonPeriod == null) {
             return false;
         }
-
-        lessonPeriod.validatePeriodDateIsNotNull();
 
         return lessonPeriod.isWithin(now);
     }

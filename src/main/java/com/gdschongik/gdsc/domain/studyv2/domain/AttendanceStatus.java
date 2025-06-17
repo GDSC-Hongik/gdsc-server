@@ -25,13 +25,7 @@ public enum AttendanceStatus {
 
         Period lessonPeriod = studySession.getLessonPeriod();
 
-        if (lessonPeriod == null) {
-            return BEFORE_ATTENDANCE;
-        }
-
-        lessonPeriod.validatePeriodDateIsNotNull();
-
-        if (lessonPeriod.getStartDate().isAfter(now)) {
+        if (lessonPeriod == null || lessonPeriod.getStartDate().isAfter(now)) {
             return BEFORE_ATTENDANCE;
         }
 

@@ -37,7 +37,6 @@ public enum AssignmentHistoryStatus {
 
         Period assignmentPeriod = studySession.getAssignmentPeriod();
 
-        assignmentPeriod.validatePeriodDateIsNotNull();
         validateCommittedAtWithinAssignmentPeriod(assignmentHistory, studySession);
 
         if (now.isBefore(assignmentPeriod.getStartDate())) {

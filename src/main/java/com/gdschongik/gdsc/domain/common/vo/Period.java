@@ -34,6 +34,10 @@ public final class Period {
     }
 
     private static void validatePeriod(LocalDateTime startDate, LocalDateTime endDate) {
+        if (startDate == null || endDate == null) {
+            throw new CustomException(PERIOD_DATE_NOT_NULL);
+        }
+
         if (startDate.isAfter(endDate) || startDate.isEqual(endDate)) {
             throw new CustomException(DATE_PRECEDENCE_INVALID);
         }

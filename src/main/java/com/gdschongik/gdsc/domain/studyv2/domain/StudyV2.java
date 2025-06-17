@@ -270,8 +270,6 @@ public class StudyV2 extends BaseEntity {
                 continue;
             }
 
-            currentLessonPeriod.validatePeriodDateIsNotNull();
-
             LocalDateTime currentStartDate = currentLessonPeriod.getStartDate();
 
             // 이전 시작일이 존재하고, 현재 시작일이 이전 시작일보다 과거이거나 같은 경우 실패
