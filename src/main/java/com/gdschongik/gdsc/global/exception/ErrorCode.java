@@ -31,6 +31,7 @@ public enum ErrorCode {
 
     // Period
     PERIOD_OVERLAP(CONFLICT, "기간이 중복됩니다."),
+    PERIOD_DATE_NOT_NULL(BAD_REQUEST, "시작일, 종료일은 null이 될 수 없습니다."),
 
     // Member
     MEMBER_NOT_FOUND(NOT_FOUND, "존재하지 않는 커뮤니티 멤버입니다."),

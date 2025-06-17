@@ -116,9 +116,11 @@ public class StudySessionV2 extends BaseEntity {
     // 데이터 전달 로직
 
     public void validateAssignmentSubmittable(LocalDateTime now) {
-        if (assignmentPeriod == null || assignmentPeriod.isEmpty()) {
+        if (assignmentPeriod == null) {
             throw new CustomException(ASSIGNMENT_SUBMIT_NOT_PUBLISHED);
         }
+
+        assignmentPeriod.validatePeriodDateIsNotNull();
 
         if (now.isBefore(assignmentPeriod.getStartDate())) {
             throw new CustomException(ASSIGNMENT_SUBMIT_NOT_STARTED);
@@ -130,17 +132,21 @@ public class StudySessionV2 extends BaseEntity {
     }
 
     public boolean isAssignmentSubmittable(LocalDateTime now) {
-        if (assignmentPeriod == null || assignmentPeriod.isEmpty()) {
+        if (assignmentPeriod == null) {
             return false;
         }
+
+        assignmentPeriod.validatePeriodDateIsNotNull();
 
         return assignmentPeriod.isWithin(now);
     }
 
     public boolean isAttendable(LocalDateTime now) {
-        if (lessonPeriod == null || lessonPeriod.isEmpty()) {
+        if (lessonPeriod == null) {
             return false;
         }
+
+        lessonPeriod.validatePeriodDateIsNotNull();
 
         return lessonPeriod.isWithin(now);
     }

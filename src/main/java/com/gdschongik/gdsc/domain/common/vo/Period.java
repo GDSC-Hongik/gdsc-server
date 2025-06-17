@@ -53,20 +53,17 @@ public final class Period {
         }
     }
 
+    public void validatePeriodDateIsNotNull() {
+        if (startDate == null || endDate == null) {
+            throw new CustomException(PERIOD_DATE_NOT_NULL);
+        }
+    }
+
     /**
      * 현재 시간이 기간 내에 있는지 확인합니다.
      * 시작일시는 포함하고 종료일시는 포함하지 않습니다.
      */
     public boolean isWithin(LocalDateTime now) {
         return now.isAfter(startDate) && now.isBefore(endDate) || now.isEqual(startDate);
-    }
-
-    /**
-     * Period 객체가 비어있는지 확인합니다.
-     * 시작/종료일자가 하나라도 없으면 비어있다고 간주합니다.
-     */
-    @JsonIgnore
-    public boolean isEmpty() {
-        return startDate == null || endDate == null;
     }
 }
