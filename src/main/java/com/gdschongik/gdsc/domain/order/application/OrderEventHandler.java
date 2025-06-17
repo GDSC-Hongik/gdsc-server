@@ -22,6 +22,7 @@ public class OrderEventHandler {
                 "[OrderEventHandler] 주문 생성 이벤트 수신: nanoId={}, isFree={}",
                 orderCreatedEvent.nanoId(),
                 orderCreatedEvent.isFree());
+        // TODO: 히스토리 파악 후 내부에서 isFree 필터링하도록 변경
         if (orderCreatedEvent.isFree()) {
             membershipService.verifyPaymentStatus(orderCreatedEvent.nanoId());
         }
